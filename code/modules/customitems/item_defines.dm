@@ -106,11 +106,11 @@
 
 /obj/item/weapon/folder/fluff/may_notebook //May Izumi's Notebook - May Izumi - lk600 - DONE
 	name = "May Izumi's Notebook"
-	desc = "A pink notebook that is covered in hearts and little manger stickers. It is filled with lots of questions, replies and conversations from her past. It has 'May Izumi' printed on the front."
+	desc = "A pink notebook that is covered in hearts and little manga stickers. It is filled with lots of questions, replies and conversations from her past. It has 'May Izumi' printed on the front."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "izumi_notebook"
 
-/obj/item/clothing/under/dress/fluff/olivia_uniform //Waitress Uniform - Olivia Conrad - meowykins - DONE
+/obj/item/clothing/under/dress/fluff/olivia_uniform //Waitress Uniform - Olivia Conrad - meowykins - INVESTIGATE
 	name = "Waitress Uniform"
 	desc = "A modest uniform. the name-tag reads 'Olivia Conrad'."
 	icon = 'icons/obj/custom_items.dmi'
@@ -125,7 +125,7 @@
 	icon_state = "olivia_flower"
 	item_state = "olivia_flower"
 
-/obj/item/clothing/under/rank/fluff/steven_unfirom //Naval Working Uniform - Steven Machnaughton - sgtsammac - DONE
+/obj/item/clothing/under/rank/fluff/steven_unfirom //Naval Working Uniform - Steven Machnaughton - sgtsammac - INVESTIGATE
 	name = "Naval Working Uniform"
 	desc = "A working unfirom of the NanoTrasen Navy."
 	icon = 'icons/obj/custom_items.dmi'
@@ -264,3 +264,81 @@
                                 M.put_in_l_hand(src)
                 src.add_fingerprint(usr)
                 return
+
+/obj/item/clothing/mask/cigarette/pipe/fluff/tool_pipe //Worn pipe - Michael Tool - mrimatool - DONE
+	name = "worn pipe"
+	desc = "A worn wooden pipe with the initials S.F. scratched into the base."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "toolpipeoff"
+	item_state = "pipeoff"
+	icon_on = "toolpipeon"  //Note - these are in masks.dmi
+	icon_off = "pipeoff"
+	smoketime = 100
+
+/obj/item/weapon/reagent_containers/food/drinks/flask/fluff/tool_flask //Worn flask - Michael Tool - mrimatool - DONE
+	name = "worn flask"
+	desc = "A metal flask wrapped in a leather fashion."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "tool_flask"
+	volume = 60
+
+/obj/item/weapon/melee/baton/fluff/omnivac_baton //Tiger Claw - Zander Moon - omnivac - DONE
+	name = "Tiger Claw"
+	desc = "A small energy dagger given to Golden Tigers meant to incapacitate people quickly."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "tigerclaw"
+	item_state = "tigerclaw"
+
+/obj/item/weapon/melee/baton/fluff/omnivac_baton/update_icon()
+	if(status)
+		icon_state = "tigerclaw_active"
+		item_state = "tigerclaw_active"
+	else
+		icon_state = "tigerclaw"
+		item_state = "tigerclaw"
+
+/obj/item/weapon/melee/baton/fluff/omnivac_baton/attack_self(mob/user as mob)
+	if(status && (CLUMSY in user.mutations) && prob(50))
+		user << "\red You grab the [src] on the wrong side."
+		user.Weaken(30)
+		charges--
+		if(charges < 1)
+			status = 0
+			update_icon()
+		return
+	if(charges > 0)
+		status = !status
+		user << "<span class='notice'>\The [src] is now [status ? "on" : "off"].</span>"
+		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
+		update_icon()
+	else
+		status = 0
+		user << "<span class='warning'>\The [src] is out of charge.</span>"
+	add_fingerprint(user)
+
+/obj/item/device/modkit/fluff/omnivac_modkit //Ornate box - Zander Moon - omnivac - SPRITE
+	name = "ornate box"
+	desc = "An ornate box, containing the handle of an energy blade."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "omni_modkit"
+	parts = MODKIT_HELMET
+	from_helmet = /obj/item/weapon/melee
+	to_helmet = /obj/item/weapon/melee/baton/fluff/omnivac_baton
+
+/obj/item/clothing/head/soft/fluff/nebula_cap //Black baseball cap - Roxy Wallace - nebulaflare - DONE
+	name = "black baseball cap"
+	desc = "A black baseball cap."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "nebula_cap"
+	item_color = "nebula_cap"
+
+/obj/item/clothing/head/beret/centcom/officer/fluff/mirkoloio_beret //Navy beret - Fabian Goellstein - mirkoloio - DONE
+	name = "navy beret"
+	desc = "A NanoTrasen Navy beret, it has the name Goellstein inside of it. It has the NT Navy insignia on it."
+
+/obj/item/device/pda/fluff/meowykins_pda //Data-Tablet - Miyako Yukimura - meowykins - DONE
+	name = "Data-tablet"
+	desc = "A black data-tablet"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "meowykins_pda"
+	slot_flags = SLOT_ID | SLOT_BELT

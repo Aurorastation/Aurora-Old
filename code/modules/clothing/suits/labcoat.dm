@@ -92,6 +92,15 @@
 			if("coatwhite-hood")
 				src.icon_state = "coatwhite"
 				usr << "You unbutton the coat and pull off the hood."
+			if("raieed_labcoat_open")
+				src.icon_state = "raieed_labcoat_top"
+				usr << "You button up the labcoat's first button."
+			if("raieed_labcoat_top")
+				src.icon_state = "raieed_labcoat_all"
+				usr << "You fully button the labcoat."
+			if("raieed_labcoat_all")
+				src.icon_state = "raieed_labcoat_open"
+				usr << "You unbutton the labcoat."
 			else
 				usr << "You attempt to button-up the velcro on your [src], before promptly realising how retarded you are."
 				return

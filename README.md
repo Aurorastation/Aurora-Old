@@ -1,6 +1,6 @@
-# baystation12
+# Aurorastation
 
-[Website](http://baystation12.net/) - [Code](http://github.com/Baystation12/Baystation12/) - [IRC](http://baystation12.net/forums/viewtopic.php?f=12&t=5088)
+[Aurorastation Forums](http://auroraserver.freeforums.net/)
 
 ---
 
@@ -73,3 +73,9 @@ The SQL backend for the library and stats tracking requires a MySQL server.  You
 ### IRC Bot Setup
 
 Included in the repo is an IRC bot capable of relaying adminhelps to a specified IRC channel/server (thanks to Skibiliano).  Instructions for bot setup are included in the /bot/ folder along with the bot/relay script itself.
+
+---
+
+### NOTICE:
+
+This is a project based on the [Baystation12](http://baystation12.net/) code for Space Station 13, which can be located here, lisenced under GPL3. The original, unmodified Baystation 12 code can be found [here](https://github.com/Baystation12/Baystation12).
