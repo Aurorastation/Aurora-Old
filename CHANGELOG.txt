@@ -1,0 +1,67 @@
+0.1.0.
+RELEASE DROPPED
+
+0.1.1.
+UPGRADED TO NEW BAYSTATION 12 BASE CODE
+REVERTED ALL SPRITES TO BAYSTATION 12 ORIGINALS
+
+Added new sprite to - Security Armour
+Added new sprite to - Security Helmet
+Added new sprite to - Riot Helmet
+Added new sprite to - Riot Armour
+Added new sprite to - Riot Shield
+Added new sprite to - Warden's Jacket
+Added new sprite to - Head of Security Trenchcoat [RENAMED TO HEAD OF SECURITY JACKET]
+Added new sprite to - Jensen Jacket [RENAMED TO ARMOURED TRENCHCOAT]
+Added new sprite to - Security RIG Suit
+Added new sprite to - Security RIG Helmet
+Added new sprite to - Red/Blue Forensic Jacket [CLARIFICATION: kept Tool's black sprites]
+Added new sprite to - Engineering/Security Tape [RENAMED TO HOLOTAPE || CLARIFICATION: kept LK's holotape sprites]
+Modified the bar/kitchen area to include a dining area
+Modified the research shuttle dock to include air vents
+Modified engineering secure storage
+Modified the engine room [CLARIFICATION: Bay's code has a supermatter engine, removed that and replaced it with singularity. Supermatter will be reintroduced as something special in the next update]
+Added Wittme's custom toolbelt
+Added Nikolai's custom zippo and cigar tin
+Added Faithskirata's custom wallet [NOTICE: Lacks ID sprite]
+Added Gollee's custom necklace
+Added Leore's custom trenchcoat
+Added Deltascout's custom items
+
+0.1.2.
+Added cameras to the Engine and SMES rooms
+Added a missing sprite to the Riot Shield
+Added Heavy Duty Flashlights [CLARIFICATION: limited supply for Engineering and Security, higher brightness/luminosity. Added to protolathe designs.]
+Added Telecomms Traffic Computer Circuit to the Circuit Printer designs
+Added Anomaly Scanners to the Xenoarcheology gear
+Added the Supermatter Engine Testing Facility onto the asteroid
+Replaced the broken chem dispenser on the Research Outpost with a functioning one
+Modified access to multiple airlocks in order to fulfill intended functionality
+Modified the Telescience module
+Modified Beam projectile damage values [CLARIFICATION: standard laser damage was upped to 40, the remainder was unmodified. This nulled the value of advanced energy weapons]
+Modified the Damp Rag to be usable with more chemicals
+Modified Faith's Wallet in an attempt to fix it [NOTE: require's testing ingame, please provide feedback ASAP]
+
+0.1.3.
+Upgraded to the newest Baystation12 code as of 19FEB2014
+
+Added a whole slew of custom items, purpose to clear the backlog (Potential errors exist, specifically with the uniforms. Please allow me time to locate and fix. If you notice anything, let me know!)
+Added resprites for Engineer Jumpsuits [Sgtsammac]
+Added resprites for Atmospherics Jumpsuits [Sgtsammac]
+Added resprites for Engineering RIG [Dae Tactica]
+Added resprites for Mining RIG [Dae Tactica]
+Added resprites for Spacesuit (soft) [Dae Tactica]
+Added resprites for Prosthetic Limbs [Dae Tactica]
+Added resprites for PDAs
+Added USP-38 (NanoTrasen Naval Security service sidearm)
+Added Stunrod (Same function as stunbaton, to be developed further)
+Added Dark and White Winter Coats [Dae Tactica]
+Added Green Plaid Skirt [Meowness]
+Added pill bottles 
+Modified the holodamage done by Tasers (specifically tasers)
+Modified the holodamage done by all other energy weapons on stun
+Modified the Supermatter Testing Facility [Yeahchris]
+Modified Virology [Yeahchris]
+Modified the materials and tech required for the prototyping of a Heavy Duty Flashlight
+Modified the materials and tech required for the printing of Telecomms Traffic Circuitboard
+Fixed a few minor errors in the map (Namely with the IAA office and engineering)
