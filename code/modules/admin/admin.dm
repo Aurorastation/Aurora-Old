@@ -1167,3 +1167,32 @@ proc/move_alien_ship()
 	else
 		alien_ship_location = 1
 	return
+
+/client/proc/cmd_admin_wind(mob/M as mob in mob_list)
+	set category = null
+	set name = "Wind Player"
+	/*if(!holder)
+		src << "Only moderators or higher may use this command."
+		return */ // I think this is unnecessary. - Dalekfodder
+
+
+	if(alert("Wind [M]?",,"Yes","No")!="Yes")
+		return
+
+	M.SetWeakened(200)
+
+	log_admin("[key_name(usr)] winded [key_name(M)]!")
+	message_admins("[key_name_admin(usr)] winded [key_name_admin(M)]!", 1)
+	// feedback_add_details("admin_verb","WIND") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	// Chop chop.
+	return
+
+/client/proc/cmd_admin_unwind(mob/M as mob in mob_list)
+	set category = null
+	set name = "Unwind Player"
+
+	M.SetWeakened(0)
+
+	log_admin("[key_name(usr)] unwinded [key_name(M)]!")
+	message_admins("[key_name_admin(usr)] unwinded [key_name_admin(M)]!", 1)
+	return
