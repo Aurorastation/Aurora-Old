@@ -115,7 +115,7 @@
 	item_state = "heavyflashlight"
 	flags = FPRINT | TABLEPASS | CONDUCT
 	brightness_on = 7
-	w_class = 4
+	w_class = 3
 
 // the desk lamps are a bit special
 /obj/item/device/flashlight/lamp
