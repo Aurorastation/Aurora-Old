@@ -34,3 +34,7 @@
 
 /area/shuttle/engineering/outpost
 	icon_state = "shuttle"
+
+/area/engi/gas
+	name = "Test Facility Gas Disposal"
+	icon_state = "atmos"
