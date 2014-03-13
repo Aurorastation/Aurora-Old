@@ -1604,6 +1604,13 @@ datum
 			required_reagents = list("vodka" = 2, "vermouth" = 1)
 			result_amount = 3
 
+		vodkacola
+			name = "Vodka Cola"
+			id = "vodkacola"
+			result = "vodkacola"
+			required_reagents = list("vodka" = 1, "cola" = 1)
+			result_amount = 2
+
 		white_russian
 			name = "White Russian"
 			id = "whiterussian"
@@ -2049,3 +2056,10 @@ datum
 			result = "suidream"
 			required_reagents = list("space_up" = 2, "bluecuracao" = 1, "melonliquor" = 1)
 			result_amount = 4
+
+		vodkacola
+			name= "Vodka Cola"
+			id= "vodkacola"
+			result = "vodkacola"
+			required_reagents = list("cola" = 1, "vodka" = 1)
+			result_amount = 2

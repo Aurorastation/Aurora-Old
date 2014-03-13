@@ -3511,6 +3511,13 @@ datum
 			dizzy_adj = 4
 			slurr_adj = 3
 
+		ethanol/vodkacola
+			name = "Vodka Cola"
+			id= "vodkacola"
+			description = "Glass of Vodka and... Cola?"
+			color = "#3E1B00"
+			boozepwr = 3
+
 		ethanol/ginfizz
 			name = "Gin Fizz"
 			id = "ginfizz"
