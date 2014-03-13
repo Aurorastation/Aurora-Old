@@ -202,11 +202,11 @@
 		src.force = on_damage
 		src.damtype = "fire"
 		processing_objects += src
-		
-		
-		
+
+
+
 /obj/item/device/flashlight/emp
-origin_tech = "magnets=4;syndicate=5"
+	origin_tech = "magnets=4;syndicate=5"
 
 var/emp_max_charges = 4
 var/emp_cur_charges = 4
@@ -234,20 +234,21 @@ var/charge_tick = 0
 
 /obj/item/device/flashlight/emp/attack(mob/living/M as mob, mob/living/user as mob)
 	if(on && user.zone_sel.selecting == "eyes") // call original attack proc only if aiming at the eyes
-	..()
+		..()
 	return
 
 /obj/item/device/flashlight/emp/afterattack(atom/A as mob|obj, mob/user, proximity)
 	if(!proximity) return
 	if (emp_cur_charges > 0)
-	emp_cur_charges -= 1
-	A.visible_message("<span class='danger'>[user] blinks \the [src] at \the [A].", \
-	"<span class='userdanger'>[user] blinks \the [src] at \the [A].")
-	if(ismob(A))
-	var/mob/M = A
-	add_logs(user, M, "attacked", object="EMP-light")
-	user << "\The [src] now has [emp_cur_charges] charge\s."
-	A.emp_act(1)
+		emp_cur_charges -= 1
+		A.visible_message("<span class='danger'>[user] blinks the [src] at the [A].", \
+											"<span class='userdanger'>[user] blinks the [src] at the [A].")
+		if(ismob(A))
+			var/mob/M = A
+			log_attack("<font color='red'>[usr] attacked [M] with flashlight</font>") //add_logs(user, M, "attacked", object="EMP-light")
+		user << "\The [src] now has [emp_cur_charges] charge\s."                          // BE ASHAMED. TG DEVS.
+		A.emp_act(1)
 	else
-	user << "<span class='warning'>\The [src] needs time to recharge!</span>"
+		user << "<span class='warning'>\The [src] needs time to recharge!</span>"
 	return
+// This code... Gave me cancer... -Dalekfodder
