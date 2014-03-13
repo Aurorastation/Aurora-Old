@@ -202,10 +202,10 @@
 		src.force = on_damage
 		src.damtype = "fire"
 		processing_objects += src
-		
-		
-		
-/obj/item/device/flashlight/emp
+
+
+
+/*/obj/item/device/flashlight/emp
 origin_tech = "magnets=4;syndicate=5"
 
 var/emp_max_charges = 4
@@ -250,4 +250,4 @@ var/charge_tick = 0
 	A.emp_act(1)
 	else
 	user << "<span class='warning'>\The [src] needs time to recharge!</span>"
-	return
+	return*/

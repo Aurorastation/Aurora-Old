@@ -160,7 +160,8 @@
 		new /obj/item/weapon/grenade/empgrenade(src)
 		new /obj/item/weapon/grenade/empgrenade(src)
 		new /obj/item/weapon/grenade/empgrenade(src)
-		new /obj/item/device/flashlight/emp/(src)(src)
+		new /obj/item/weapon/grenade/empgrenade(src)
+//		new /obj/item/device/flashlight/emp/(src)(src) Waiting on fix of the EMP Flashlight
 
 
 /obj/item/weapon/storage/box/trackimp
