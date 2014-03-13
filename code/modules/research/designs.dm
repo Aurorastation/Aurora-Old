@@ -1366,7 +1366,7 @@ datum/design/implant_loyal
 	req_tech = list("materials" = 2, "biotech" = 3)
 	build_type = PROTOLATHE
 	materials = list("$metal" = 7000, "$glass" = 7000)
-	build_path = "/obj/item/weapon/implant/loyalty"
+	build_path = "/obj/item/weapon/implantcase/loyalty"
 
 datum/design/implant_chem
 	name = "chemical implant"
@@ -1375,7 +1375,7 @@ datum/design/implant_chem
 	req_tech = list("materials" = 2, "biotech" = 3)
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
-	build_path = "/obj/item/weapon/implant/chem"
+	build_path = "/obj/item/weapon/implantcase/chem"
 
 datum/design/implant_free
 	name = "freedom implant"
@@ -1384,7 +1384,16 @@ datum/design/implant_free
 	req_tech = list("syndicate" = 2, "biotech" = 3)
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
-	build_path = "/obj/item/weapon/implant/freedom"
+	build_path = "/obj/item/weapon/implantcase/freedom"
+	
+datum/design/implant_death_alarm
+	name = "death alarm implant"
+	desc = "Alerts others to your death."
+	id = "implant_death_alarm"
+	req_tech = list("materials" = 2, "biotech" = 3)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 50, "$glass" = 50)
+	build_path = "/obj/item/weapon/implantcase/death_alarm"
 
 datum/design/chameleon
 	name = "Chameleon Jumpsuit"
@@ -1479,7 +1488,7 @@ datum/design/rapidsyringe
 	build_type = PROTOLATHE
 	materials = list("$metal" = 5000, "$glass" = 1000)
 	build_path = "/obj/item/weapon/gun/syringe/rapidsyringe"
-/*
+
 datum/design/largecrossbow
 	name = "Energy Crossbow"
 	desc = "A weapon favoured by syndicate infiltration teams."
@@ -1488,7 +1497,7 @@ datum/design/largecrossbow
 	build_type = PROTOLATHE
 	materials = list("$metal" = 5000, "$glass" = 1000, "$uranium" = 1000, "$silver" = 1000)
 	build_path = "/obj/item/weapon/gun/energy/crossbow/largecrossbow"
-*/
+
 datum/design/temp_gun
 	name = "Temperature Gun"
 	desc = "A gun that shoots temperature bullet energythings to change temperature."//Change it if you want
@@ -1719,7 +1728,7 @@ datum/design/borg_syndicate_module
 /////////////PDA and Radio stuff/////////
 /////////////////////////////////////////
 datum/design/binaryencrypt
-	name = "Binary Encrpytion Key"
+	name = "Binary Encryption Key"
 	desc = "An encyption key for a radio headset.  Contains cypherkeys."
 	id = "binaryencrypt"
 	req_tech = list("syndicate" = 2)
