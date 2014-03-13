@@ -129,7 +129,7 @@
 		..()
 		return
 		
-/obj/item/weapon/implantcase/death_alarm
+/obj/item/weapon/implantcase/freedom
 	name = "Glass Case- 'Freedom'"
 	desc = "A case containing a freedom implant."
 	icon = 'icons/obj/items.dmi'
