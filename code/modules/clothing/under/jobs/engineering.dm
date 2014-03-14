@@ -35,32 +35,32 @@
 //Down below follows a partial attempt at getting the rolldown verb for jumpsuits.
 //Issue: Sprites vanishing again... Hueh - Skull132
 
-/*/obj/item/clothing/under/rank/verb/rolldown()
-	set name = "Roll Down Jumpsuit"
-	set category = "Object"
-	set src in usr
-
-	if(!usr.canmove || usr.stat || usr.restrained())
-		return 0
-
-	switch(icon_state)
-		if("atmos")
-			src.icon_state = "atmos_rd"
-			src.item_state = "atmos_rd"
-			usr << "You roll down the jumpsuit."
-		if("atmos_rd")
-			src.icon_state = "atmos"
-			src.item_state = "atmos"
-			usr << "You roll the jumpsuit back up."
-		if("engine")
-			src.icon_state = "engine_rd"
-			src.item_state = "engine_rd"
-			usr << "You roll down the jumpsuit."
-		if("engine_rd")
-			src.icon_state = "engine"
-			src.item_state = "engine"
-			usr << "You roll the jumpsuit back up."
-		else
-			usr << "You attempt to roll down your [src], before promptly realising how retarded you are."
-			return
-	usr.update_inv_w_uniform()/*
+///obj/item/clothing/under/rank/verb/rolldown()
+//	set name = "Roll Down Jumpsuit"
+//	set category = "Object"
+//	set src in usr
+//
+//	if(!usr.canmove || usr.stat || usr.restrained())
+//		return 0
+//
+//	switch(icon_state)
+//		if("atmos")
+//			src.icon_state = "atmos_rd"
+//			src.item_state = "atmos_rd"
+//			usr << "You roll down the jumpsuit."
+//		if("atmos_rd")
+//			src.icon_state = "atmos"
+//			src.item_state = "atmos"
+//			usr << "You roll the jumpsuit back up."
+//		if("engine")
+//			src.icon_state = "engine_rd"
+//			src.item_state = "engine_rd"
+//			usr << "You roll down the jumpsuit."
+//		if("engine_rd")
+//			src.icon_state = "engine"
+//			src.item_state = "engine"
+//			usr << "You roll the jumpsuit back up."
+//		else
+//			usr << "You attempt to roll down your [src], before promptly realising how retarded you are."
+//			return
+//	usr.update_inv_w_uniform()
