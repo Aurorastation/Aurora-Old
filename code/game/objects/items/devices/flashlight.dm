@@ -204,7 +204,7 @@
 		processing_objects += src
 		
 		
-		
+/*		
 /obj/item/device/flashlight/emp
 	origin_tech = "magnets=4;syndicate=5"
 
@@ -248,3 +248,4 @@
 	else
 		user << "<span class='warning'>\The [src] needs time to recharge!</span>"
 	return
+*/
