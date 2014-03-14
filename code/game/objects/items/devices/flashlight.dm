@@ -205,8 +205,8 @@
 
 
 
-/*/obj/item/device/flashlight/emp
-origin_tech = "magnets=4;syndicate=5"
+/obj/item/device/flashlight/emp
+	origin_tech = "magnets=4;syndicate=5"
 
 var/emp_max_charges = 4
 var/emp_cur_charges = 4
@@ -232,22 +232,50 @@ var/charge_tick = 0
 	..()
 	return
 
+/obj/item/device/flashlight/emp/verb/empburst()
+	set name = "EMP"
+	set desc = "EMP burst out of the Flashlight"
+	set category = "Object"
+
+/*	var/emp_last_fired = 0   // Stolen from guns.
+	var/emp_fire_delay = 10  // Stolen from tools-- Dalekfodder (I HATE TIMERS HATE)
+*/
+
+	if(emp_cur_charges <= 0)
+		usr << "<span class='warning'>\The flashlight needs time to recharge!</span>"
+		return
+	else
+		for(var/atom/A as mob|obj in view(4))
+			usr.visible_message("<font color='red'>[usr] activates the Portable EMP Generator!</font>")
+			A.emp_act(1)
+			emp_cur_charges -=4
+			return
+	return
+/*
+	if(world.time >= emp_last_fired + emp_fire_delay)
+		emp_last_fired = world.time
+	else
+		if (world.tim	e % 3)
+			usr << ("<span class='warning'>Flashlight is not ready to fire again!")
+		return 0
+*/ // Keeping this out for a while.
+
 /obj/item/device/flashlight/emp/attack(mob/living/M as mob, mob/living/user as mob)
 	if(on && user.zone_sel.selecting == "eyes") // call original attack proc only if aiming at the eyes
-	..()
+		..()
 	return
 
 /obj/item/device/flashlight/emp/afterattack(atom/A as mob|obj, mob/user, proximity)
 	if(!proximity) return
 	if (emp_cur_charges > 0)
-	emp_cur_charges -= 1
-	A.visible_message("<span class='danger'>[user] blinks \the [src] at \the [A].", \
-	"<span class='userdanger'>[user] blinks \the [src] at \the [A].")
-	if(ismob(A))
-	var/mob/M = A
-	add_logs(user, M, "attacked", object="EMP-light")
-	user << "\The [src] now has [emp_cur_charges] charge\s."
-	A.emp_act(1)
+		emp_cur_charges -= 1
+		A.visible_message("<span class='danger'>[user] blinks the [src] at the [A].", \
+											"<span class='userdanger'>[user] blinks the [src] at the [A].")
+
+		user << "The [src] now has [emp_cur_charges] charges."
+		A.emp_act(1)
 	else
-	user << "<span class='warning'>\The [src] needs time to recharge!</span>"
-	return*/
+		user << "<span class='warning'>\The [src] needs time to recharge!</span>"
+	return
+// This code... Gave me cancer... -Dalekfodder
+
