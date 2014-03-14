@@ -160,7 +160,7 @@
 		new /obj/item/weapon/grenade/empgrenade(src)
 		new /obj/item/weapon/grenade/empgrenade(src)
 		new /obj/item/weapon/grenade/empgrenade(src)
-		new /obj/item/device/flashlight/emp/(src)
+		//new /obj/item/device/flashlight/emp/(src)
 
 
 /obj/item/weapon/storage/box/trackimp
