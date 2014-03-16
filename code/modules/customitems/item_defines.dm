@@ -115,8 +115,8 @@
 	desc = "A modest uniform. the name-tag reads 'Olivia Conrad'."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "olivia_skirt"
-	item_color = "black"
-	item_state = "olivia_skirt_s"
+	item_color = "olivia_skirt"
+	item_state = "olivia_skirt"
 
 /obj/item/clothing/head/hairflower/fluff/olivia_flower //White Flower - Olivia Conrad - meowykins - DONE
 	name = "White flower"
