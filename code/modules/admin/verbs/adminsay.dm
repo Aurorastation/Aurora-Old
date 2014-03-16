@@ -35,3 +35,21 @@
 	for(var/client/C in admins)
 		if((R_ADMIN|R_MOD) & C.holder.rights)
 			C << "<span class='[color]'><span class='prefix'>MOD:</span> <EM>[key_name(src,1)]</EM> (<A HREF='?src=\ref[C.holder];adminplayerobservejump=\ref[mob]'>JMP</A>): <span class='message'>[msg]</span></span>"
+
+/client/proc/cmd_dev_say(msg as text)
+	set category = "Developer"
+	set name = "Desay"
+	set hidden = 1
+
+	if(!check_rights(R_DEV)) return
+
+	msg = copytext(sanitize(msg), 1, MAX_MESSAGE_LEN)
+	if(!msg)	return
+
+	log_admin("[key_name(src)] : [msg]")
+
+	if(check_rights(R_DEV,0))
+		msg = "<span class='devsay'><span class='prefix'>DEV:</span> <EM>[key_name(usr, 1)]</EM>: <span class='message'>[msg]</span></span>"
+		for(var/client/C in admins)
+			if(R_DEV & C.holder.rights)
+				C << msg
