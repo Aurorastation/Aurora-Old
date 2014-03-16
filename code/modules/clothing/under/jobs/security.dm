@@ -171,6 +171,7 @@
 	name = "Naval Head of Security Uniform"
 	desc = "A service uniform worn by a Head of Security of the NanoTrasen Naval branch."
 	icon_state = "hosdnavyclothes"
+	item_state = "hosdnavyclothes"
 	item_color = "hosdnavyclothes"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	flags = FPRINT | TABLEPASS
