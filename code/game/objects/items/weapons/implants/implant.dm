@@ -341,6 +341,30 @@ the implant may become unstable and either pre-maturely inject the subject or si
 			ticker.mode:remove_revolutionary(H.mind)
 		H << "\blue You feel a surge of loyalty towards Nanotrasen."
 		return 1
+/*
+	implanted(mob/M)
+		if(!istype(M, /mob/living/carbon/human))	return 0
+		var/mob/living/carbon/human/H = M
+		if(H.mind in ticker.mode:cult)
+			ticker.mode:remove_cultist(M.mind)
+		H << "\blue The implant robs you of your faith in Nar-Sie, leaving only obedience to NanoTrasen."
+		return 1
+
+//Alternatively!  This is the null-rod deconversion, if the above doesn't work.  There's two things down there and I don't know if that's okay.
+/*
+	if (M.stat !=2)
+		if((M.mind in ticker.mode.cult) && prob(33))
+			M << "\red The power of [src] clears your mind of the cult's influence!"
+			user << "\red You wave [src] over [M]'s head and see their eyes become clear, their mind returning to normal."
+			ticker.mode.remove_cultist(M.mind)
+			for(var/mob/O in viewers(M, null))
+				O.show_message(text("\red [] waves [] over []'s head.", user, src, M), 1)
+*/
+
+
+
+*/
+
 
 
 /obj/item/weapon/implant/adrenalin
