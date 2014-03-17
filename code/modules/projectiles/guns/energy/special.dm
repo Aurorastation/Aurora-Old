@@ -200,7 +200,9 @@ obj/item/weapon/gun/energy/staff/focus
 	desc = "A specialized firearm designed to fire lethal bolts of toxins."
 	icon_state = "toxgun"
 	fire_sound = 'sound/effects/stealthoff.ogg'
-	w_class = 3.0
+	fire_delay = 0
+	w_class = 2.0
+	cell_type = "/obj/item/weapon/cell/crap"
 	origin_tech = "combat=5;plasmatech=4"
 	projectile_type = "/obj/item/projectile/energy/plasma"
 
