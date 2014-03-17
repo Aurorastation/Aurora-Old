@@ -2,7 +2,7 @@
 	name = "force bolt"
 	icon = 'icons/obj/projectiles.dmi'
 	icon_state = "ice_1"
-	damage = 20
+	damage = 40
 	flag = "energy"
 	embed = 1
 
