@@ -49,8 +49,7 @@
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
 						O.show_message(text("\red <B>[] has tackled down []!</B>", M, src), 1)
-				if (prob(25))
-					M.Weaken(rand(2,4))
+					M.Weaken(5)
 			else
 				if (prob(80))
 					playsound(loc, 'sound/weapons/slash.ogg', 25, 1, -1)
