@@ -56,7 +56,7 @@
 			src.sight |= SEE_MOBS
 			src.sight |= SEE_OBJS
 			src.see_in_dark = 8
-			src.see_invisible = SEE_INVISIBLE_MINIMUM
+			src.see_invisible = SEE_INVISIBLE_LEVEL_TWO //to make the AI able to see EVERYTHING in the dark, use this: SEE_INVISIBLE_MINIMUM Currently neglected because I'm not a fan of this idea, warrants further discussion. -Skull132
 
 			var/area/home = get_area(src)
 			if(!home)	return//something to do with malf fucking things up I guess. <-- aisat is gone. is this still necessary? ~Carn
