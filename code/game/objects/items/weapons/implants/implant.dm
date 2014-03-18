@@ -341,7 +341,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 			ticker.mode:remove_revolutionary(H.mind)
 		H << "\blue You feel a surge of loyalty towards Nanotrasen."
 		return 1
-/*
+
 	implanted(mob/M)
 		if(!istype(M, /mob/living/carbon/human))	return 0
 		var/mob/living/carbon/human/H = M
@@ -363,7 +363,6 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 
 
-*/
 
 
 
