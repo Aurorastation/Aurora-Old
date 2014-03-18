@@ -1,4 +1,3 @@
-
 /obj/item/clothing/glasses
 	name = "glasses"
 	icon = 'icons/obj/clothing/glasses.dmi'
@@ -36,6 +35,7 @@
 	item_state = "glasses"
 	origin_tech = "magnets=2"
 	darkness_view = 3
+	vision_flags = 32 //Very hacky way of doing it.  I don't know what it means.  But I did guess-and-check numbers until it worked.  So. 
 
 /obj/item/clothing/glasses/eyepatch
 	name = "eyepatch"

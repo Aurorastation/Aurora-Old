@@ -125,20 +125,20 @@ var/intercom_range_display_status = 0
 	feedback_add_details("admin_verb","mIRD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 var/list/debug_verbs = list (
-	/client/proc/do_not_use_these       
-        ,/client/proc/camera_view    
+	/client/proc/do_not_use_these
+        ,/client/proc/camera_view
         ,/client/proc/sec_camera_report
-        ,/client/proc/intercom_view    
-        ,/client/proc/air_status 
-        ,/client/proc/Cell 
-        ,/client/proc/atmosscan 
-        ,/client/proc/powerdebug 
+        ,/client/proc/intercom_view
+        ,/client/proc/air_status
+        ,/client/proc/Cell
+        ,/client/proc/atmosscan
+        ,/client/proc/powerdebug
         ,/client/proc/count_objects_on_z_level
         ,/client/proc/count_objects_all
         ,/client/proc/cmd_assume_direct_control
         ,/client/proc/jump_to_dead_group
         ,/client/proc/startSinglo
-        ,/client/proc/ticklag       
+        ,/client/proc/ticklag
         ,/client/proc/cmd_admin_grantfullaccess
         ,/client/proc/kaboom
         ,/client/proc/splash
@@ -168,7 +168,7 @@ var/list/debug_verbs = list (
 	set category = "Debug"
 	set name = "Debug verbs"
 
-	if(!check_rights(R_DEBUG)) return
+	if(!check_rights(R_DEBUG|R_DEV)) return
 
 	verbs += debug_verbs
 
@@ -178,7 +178,7 @@ var/list/debug_verbs = list (
 	set category = "Debug"
 	set name = "Hide Debug verbs"
 
-	if(!check_rights(R_DEBUG)) return
+	if(!check_rights(R_DEBUG|R_DEV)) return
 
 	verbs -= debug_verbs
 
@@ -194,7 +194,7 @@ var/list/debug_verbs = list (
 	testZAScolors_zones += Z
 	if(recurse_level > 10)
 		return
-	var/icon/yellow = new('icons/misc/debug_group.dmi', "yellow") 
+	var/icon/yellow = new('icons/misc/debug_group.dmi', "yellow")
 
 	for(var/turf/T in Z.contents)
 		images += image(yellow, T, "zasdebug", TURF_LAYER)
@@ -203,13 +203,13 @@ var/list/debug_verbs = list (
 		if(connected in testZAScolors_zones)
 			continue
 		recurse_zone(connected,recurse_level+1)
-	
+
 
 /client/proc/testZAScolors()
 	set category = "ZAS"
 	set name = "Check ZAS connections"
 
-	if(!check_rights(R_DEBUG)) return
+	if(!check_rights(R_DEBUG|R_DEV)) return
 	testZAScolors_remove()
 
 	var/turf/location = get_turf(usr)
@@ -219,10 +219,10 @@ var/list/debug_verbs = list (
 		return
 
 	var/icon/red = new('icons/misc/debug_group.dmi', "red")		//created here so we don't have to make thousands of these.
-	var/icon/green = new('icons/misc/debug_group.dmi', "green") 
-	var/icon/blue = new('icons/misc/debug_group.dmi', "blue") 
+	var/icon/green = new('icons/misc/debug_group.dmi', "green")
+	var/icon/blue = new('icons/misc/debug_group.dmi', "blue")
 
-	if(!usedZAScolors)	
+	if(!usedZAScolors)
 		usr << "ZAS Test Colors"
 		usr << "Green = Zone you are standing in"
 		usr << "Blue = Connected zone to the zone you are standing in"
@@ -235,7 +235,7 @@ var/list/debug_verbs = list (
 		images += image(green, T,"zasdebug", TURF_LAYER)
 		testZAScolors_turfs += T
 	for(var/zone/Z in location.zone.connected_zones)
-		testZAScolors_zones += Z		
+		testZAScolors_zones += Z
 		for(var/turf/T in Z.contents)
 			images += image(blue, T,"zasdebug",TURF_LAYER)
 			testZAScolors_turfs += T
