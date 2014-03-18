@@ -121,6 +121,8 @@
 	slot_flags = SLOT_BACK
 	w_class = 4
 	m_amt = 2000
+	cell_type = "/obj/item/weapon/cell/high"
+	charge_cost = 500 //odd numbers due to a requirement to have 20 shots. Easiest way.
 	origin_tech = "combat=3;magnets=2"
 	projectile_type = "/obj/item/projectile/beam"
 	fire_delay_wielded = 6 //6 is normal fire_delay
