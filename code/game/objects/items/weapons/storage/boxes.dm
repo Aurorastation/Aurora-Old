@@ -478,3 +478,25 @@
 		new /obj/item/weapon/light/tube(src)
 	for(var/i = 0; i < 7; i++)
 		new /obj/item/weapon/light/bulb(src)
+
+/obj/item/weapon/storage/box/walkingcane
+	name = "cane"
+	desc = "A cane used by a true gentlemen. Or a clown."
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "cane"
+	item_state = "stick"
+	flags = FPRINT | TABLEPASS| CONDUCT
+	force = 5.0
+	throwforce = 7.0
+	w_class = 2.0
+	m_amt = 50
+	attack_verb = list("bludgeoned", "whacked", "disciplined", "thrashed")
+	can_hold = list(
+		"/obj/item/weapon/canesword")
+	storage_slots = 1
+	max_w_class = 4
+	max_combined_w_class = 4
+
+	New()
+		..()
+		new /obj/item/weapon/canesword(src)

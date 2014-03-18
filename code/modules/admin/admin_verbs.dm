@@ -104,10 +104,13 @@ var/list/admin_verbs_fun = list(
 	/client/proc/editappear
 	)
 var/list/admin_verbs_dev = list(
+	/datum/admins/proc/restart,
+	/datum/admins/proc/delay,
 	/client/proc/giveruntimelog,
 	/client/proc/getruntimelog,
 	/client/proc/cmd_admin_list_open_jobs,
 	/client/proc/Debug2,
+	/client/proc/admin_ghost,
 	/client/proc/kill_air,
 	/client/proc/ZASSettings,
 	/client/proc/cmd_debug_make_powernets,

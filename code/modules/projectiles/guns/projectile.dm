@@ -17,6 +17,8 @@
 	var/load_method = SPEEDLOADER //0 = Single shells or quick loader, 1 = box, 2 = magazine
 	var/obj/item/ammo_magazine/empty_mag = null
 
+	isHandgun()
+		return 0
 
 /obj/item/weapon/gun/projectile/New()
 	..()

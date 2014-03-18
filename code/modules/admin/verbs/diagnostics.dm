@@ -134,7 +134,7 @@
 	set name = "Reload Admins"
 	set category = "Debug"
 
-	if(!check_rights(R_SERVER))	return
+	if(!check_rights(R_SERVER|R_DEV))	return
 
 	message_admins("[usr] manually reloaded admins")
 	load_admins()

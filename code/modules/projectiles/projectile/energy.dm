@@ -64,7 +64,7 @@
 	icon_state = "energy"
 	damage = 20
 	damage_type = TOX
-	irradiate = 20
+	irradiate = 40
 
 /obj/item/projectile/energy/electrode/instant
 	name = "electrode"
