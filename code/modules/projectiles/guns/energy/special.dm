@@ -1,3 +1,4 @@
+/* Snip-snip - no longer needed due to erifles.dm
 /obj/item/weapon/gun/energy/ionrifle
 	name = "ion rifle"
 	desc = "A man portable anti-armor weapon designed to disable mechanical threats"
@@ -16,6 +17,7 @@
 		update_icon()
 	else
 		return
+*/
 
 /obj/item/weapon/gun/energy/decloner
 	name = "biological demolecularisor"
@@ -127,6 +129,9 @@ obj/item/weapon/gun/energy/staff
 		update_icon()
 		return
 
+	isHandgun()
+		return 1
+
 /obj/item/weapon/gun/energy/meteorgun
 	name = "meteor gun"
 	desc = "For the love of god, make sure you're aiming this the right way!"
@@ -206,6 +211,10 @@ obj/item/weapon/gun/energy/staff/focus
 	origin_tech = "combat=5;plasmatech=4"
 	projectile_type = "/obj/item/projectile/energy/plasma"
 
+	isHandgun()
+		return 1
+
+/* Snip-snip - no longer needed due to erifles.dm
 /obj/item/weapon/gun/energy/sniperrifle
 	name = "L.W.A.P. Sniper Rifle"
 	desc = "A rifle constructed of lightweight materials, fitted with a SMART aiming-system scope."
@@ -226,7 +235,7 @@ obj/item/weapon/gun/energy/staff/focus
 
 
 /*
-This is called from 
+This is called from
 modules/mob/mob_movement.dm if you move you will be zoomed out
 modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 */
@@ -257,4 +266,5 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 			usr.button_pressed_F12(1)
 		zoom = 0
 	usr << "<font color='[zoom?"blue":"red"]'>Zoom mode [zoom?"en":"dis"]abled.</font>"
-	return
+	return */
+

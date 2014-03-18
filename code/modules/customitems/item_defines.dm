@@ -195,6 +195,7 @@
 	item_state = "skull_harness2"
 	slots = 2
 
+/*
 /obj/item/clothing/tie/storage/knifeharness/fluff/skull132_harness/attackby(var/obj/item/O as obj, mob/user as mob)
 	..()
 	update()
@@ -219,6 +220,7 @@
 	..()
 	new /obj/item/weapon/hatchet/unathiknife(hold)
 	new /obj/item/weapon/hatchet/unathiknife(hold)
+*/
 
 /obj/item/weapon/disk/fluff/nebula_chip //data chip - Roxy Wallace - nebulaflare - DONE
 	name = "data chip"

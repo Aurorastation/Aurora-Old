@@ -69,6 +69,8 @@
 					desc = initial(desc)
 					user << "<span class='warning'>You remove the modifications on [src]! Now it will fire .38 rounds.</span>"
 
+	isHandgun()
+		return 1
 
 /obj/item/weapon/gun/projectile/detective/semiauto
 	desc = "A cheap Martian knock-off of a Colt M1911. Uses less-than-lethal .45 rounds."
@@ -99,6 +101,9 @@
 	icon_state = "mateba"
 	origin_tech = "combat=2;materials=2"
 
+	isHandgun()
+		return 1
+
 // A gun to play Russian Roulette!
 // You can spin the chamber to randomize the position of the bullet.
 
@@ -107,6 +112,9 @@
 	desc = "A Russian made revolver. Uses .357 ammo. It has a single slot in it's chamber for a bullet."
 	max_shells = 6
 	origin_tech = "combat=2;materials=2"
+
+	isHandgun()
+		return 1
 
 /obj/item/weapon/gun/projectile/russian/New()
 	Spin()
