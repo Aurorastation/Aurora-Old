@@ -1,25 +1,32 @@
 /obj/item/weapon/gun/energy/laser
-	name = "laser gun"
+	name = "laser rifle"
 	desc = "a basic weapon designed kill with concentrated energy bolts"
 	icon_state = "laser"
 	item_state = "laser"
 	fire_sound = 'sound/weapons/Laser.ogg'
-	w_class = 3.0
+	slot_flags = SLOT_BACK
+	w_class = 4
 	m_amt = 2000
 	origin_tech = "combat=3;magnets=2"
 	projectile_type = "/obj/item/projectile/beam"
 
+//can't snip, required elsewhere.
 /obj/item/weapon/gun/energy/laser/practice
 	name = "practice laser gun"
 	desc = "A modified version of the basic laser gun, this one fires less concentrated energy bolts designed for target practice."
 	projectile_type = "/obj/item/projectile/beam/practice"
 	clumsy_check = 0
 
+	isHandgun()
+		return 1
+
 obj/item/weapon/gun/energy/laser/retro
 	name ="retro laser"
 	icon_state = "retro"
 	desc = "An older model of the basic lasergun, no longer used by Nanotrasen's security or military forces. Nevertheless, it is still quite deadly and easy to maintain, making it a favorite amongst pirates and other outlaws."
 
+	isHandgun()
+		return 1
 
 /obj/item/weapon/gun/energy/laser/captain
 	icon_state = "caplaser"
@@ -28,6 +35,8 @@ obj/item/weapon/gun/energy/laser/retro
 	origin_tech = null
 	var/charge_tick = 0
 
+	isHandgun()
+		return 1
 
 	New()
 		..()

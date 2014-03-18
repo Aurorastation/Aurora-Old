@@ -609,8 +609,8 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	name = "Weapons crate"
 	contains = list(/obj/item/weapon/melee/baton,
 					/obj/item/weapon/melee/baton,
-					/obj/item/weapon/gun/energy/laser,
-					/obj/item/weapon/gun/energy/laser,
+					/obj/item/weapon/gun/energy/rifle/laser,
+					/obj/item/weapon/gun/energy/rifle/laser,
 					/obj/item/weapon/gun/energy/taser,
 					/obj/item/weapon/gun/energy/taser,
 					/obj/item/weapon/storage/box/flashbangs,
@@ -699,8 +699,8 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	name = "Energy marksman crate"
 	contains = list(/obj/item/clothing/suit/armor/laserproof,
 					/obj/item/clothing/suit/armor/laserproof,
-					/obj/item/weapon/gun/energy/sniperrifle,
-					/obj/item/weapon/gun/energy/sniperrifle)
+					/obj/item/weapon/gun/energy/rifle/sniperrifle,
+					/obj/item/weapon/gun/energy/rifle/sniperrifle)
 	cost = 50
 	containertype = /obj/structure/closet/crate/secure
 	containername = "Energy marksman crate"

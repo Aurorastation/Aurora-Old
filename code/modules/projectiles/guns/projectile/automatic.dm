@@ -11,8 +11,8 @@
 
 	fire_delay = 0
 
-	isHandgun()
-		return 0
+//	isHandgun()
+//		return 0
 
 
 /obj/item/weapon/gun/projectile/automatic/mini_uzi

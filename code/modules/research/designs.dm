@@ -1385,7 +1385,7 @@ datum/design/implant_free
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/implantcase/freedom"
-	
+
 datum/design/implant_death_alarm
 	name = "death alarm implant"
 	desc = "Alerts others to your death."
@@ -1457,7 +1457,7 @@ datum/design/lasercannon
 	req_tech = list("combat" = 4, "materials" = 3, "powerstorage" = 3)
 	build_type = PROTOLATHE
 	materials = list("$metal" = 10000, "$glass" = 1000, "$diamond" = 2000)
-	build_path = "/obj/item/weapon/gun/energy/lasercannon"
+	build_path = "/obj/item/weapon/gun/energy/rifle/lasercannon"
 	locked = 1
 
 datum/design/decloner

@@ -9,6 +9,9 @@
 	projectile_type = "/obj/item/projectile/energy/electrode/high"
 	cell_type = "/obj/item/weapon/cell/crap"
 
+	isHandgun()
+		return 1
+
 /obj/item/weapon/gun/energy/taser/cyborg
 	name = "taser gun"
 	desc = "A small, low capacity gun used for non-lethal takedowns."
@@ -57,7 +60,8 @@
 	projectile_type = "/obj/item/projectile/energy/electrode"
 	cell_type = "/obj/item/weapon/cell"
 
-
+	isHandgun()
+		return 1
 
 /obj/item/weapon/gun/energy/crossbow
 	name = "mini energy-crossbow"
@@ -96,7 +100,8 @@
 	update_icon()
 		return
 
-
+	isHandgun()
+		return 1
 
 /obj/item/weapon/gun/energy/crossbow/largecrossbow
 	name = "Energy Crossbow"

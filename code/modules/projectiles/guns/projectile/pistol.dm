@@ -9,7 +9,8 @@
 	origin_tech = "combat=2;materials=2;syndicate=8"
 	ammo_type = "/obj/item/ammo_casing/c45"
 
-
+	isHandgun()
+		return 1
 
 /obj/item/weapon/gun/projectile/deagle
 	name = "desert eagle"
@@ -26,6 +27,8 @@
 		update_icon()
 		return
 
+	isHandgun()
+		return 1
 
 	afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag)
 		..()
@@ -84,6 +87,9 @@
 			icon_state = "gyropistol"
 		return
 
+	isHandgun()
+		return 1
+
 /obj/item/weapon/gun/projectile/pistol
 	name = "\improper Stechtkin pistol"
 	desc = "A small, easily concealable gun. Uses 9mm rounds."
@@ -95,6 +101,9 @@
 	origin_tech = "combat=2;materials=2;syndicate=2"
 	ammo_type = "/obj/item/ammo_casing/c9mm"
 	load_method = 2
+
+	isHandgun()
+		return 1
 
 /obj/item/weapon/gun/projectile/pistol/New()
 	..()

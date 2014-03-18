@@ -115,8 +115,8 @@
 	desc = "A modest uniform. the name-tag reads 'Olivia Conrad'."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "olivia_skirt"
-	item_color = "black"
-	item_state = "olivia_skirt_s"
+	item_color = "olivia_skirt"
+	item_state = "olivia_skirt"
 
 /obj/item/clothing/head/hairflower/fluff/olivia_flower //White Flower - Olivia Conrad - meowykins - DONE
 	name = "White flower"
@@ -195,6 +195,7 @@
 	item_state = "skull_harness2"
 	slots = 2
 
+/*
 /obj/item/clothing/tie/storage/knifeharness/fluff/skull132_harness/attackby(var/obj/item/O as obj, mob/user as mob)
 	..()
 	update()
@@ -219,6 +220,7 @@
 	..()
 	new /obj/item/weapon/hatchet/unathiknife(hold)
 	new /obj/item/weapon/hatchet/unathiknife(hold)
+*/
 
 /obj/item/weapon/disk/fluff/nebula_chip //data chip - Roxy Wallace - nebulaflare - DONE
 	name = "data chip"
