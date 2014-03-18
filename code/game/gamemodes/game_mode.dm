@@ -39,11 +39,14 @@
 /obj/item/weapon/storage/box/emps:3:5 EMP Grenades;
 Whitespace:Seperator;
 Stealthy and Inconspicuous Weapons;
+/obj/item/weapon/storage/box/walkingcane:5:Disguised Sword;
 /obj/item/weapon/pen/paralysis:3:Paralysis Pen;
 /obj/item/weapon/soap/syndie:1:Syndicate Soap;
 /obj/item/weapon/cartridge/syndicate:3:Detomatix PDA Cartridge;
 Whitespace:Seperator;
 Stealth and Camouflage Items;
+/obj/item/weapon/storage/box/syndie_kit/masks:1:Disguised Breathe Mask;
+/obj/item/weapon/storage/box/syndie_kit/masks_gas:2:Disguised Gasmask;
 /obj/item/clothing/under/chameleon:3:Chameleon Jumpsuit;
 /obj/item/clothing/shoes/syndigaloshes:2:No-Slip Syndicate Shoes;
 /obj/item/weapon/card/id/syndicate:2:Agent ID card;
