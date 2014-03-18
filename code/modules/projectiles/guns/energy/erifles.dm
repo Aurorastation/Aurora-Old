@@ -33,14 +33,14 @@
 /obj/item/weapon/gun/energy/rifle/proc/unwield()
 	wielded = 0
 	fire_delay = fire_delay_unwielded
-	name = "[initial(name)]"
-	update_icon()
+//	name = "[initial(name)]"
+//	update_icon()
 
 /obj/item/weapon/gun/energy/rifle/proc/wield()
 	wielded = 1
 	fire_delay = fire_delay_wielded
-	name = "[initial(name)] (Wielded)"
-	update_icon()
+//	name = "[initial(name)] (Wielded)"
+//	update_icon()
 
 /obj/item/weapon/gun/energy/rifle/mob_can_equip(M as mob, slot)
 	//Cannot equip wielded items.
@@ -58,8 +58,10 @@
 			O.unwield()
 	return	unwield()
 
+/*
 /obj/item/weapon/gun/energy/rifle/update_icon()
 	return
+*/
 
 /obj/item/weapon/gun/energy/rifle/pickup(mob/user)
 	unwield()
@@ -119,6 +121,8 @@
 	slot_flags = SLOT_BACK
 	w_class = 4
 	m_amt = 2000
+	cell_type = "/obj/item/weapon/cell/high"
+	charge_cost = 500 //odd numbers due to a requirement to have 20 shots. Easiest way.
 	origin_tech = "combat=3;magnets=2"
 	projectile_type = "/obj/item/projectile/beam"
 	fire_delay_wielded = 6 //6 is normal fire_delay
