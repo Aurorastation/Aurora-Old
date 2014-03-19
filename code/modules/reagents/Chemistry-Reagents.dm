@@ -1627,10 +1627,10 @@ datum
 		toxin/destabilizer 
 			name = "Genetic Destabilizer"
 			id = "destabilizer"
-			description = "A highly toxic chemical."
+			description = "Causes severe damage to genetic data."
 			reagent_state = LIQUID
 			toxpwr = 0
-			custom_metabolism = 0.05
+			custom_metabolism = 0.1
 
 			on_mob_life(var/mob/living/M as mob)
 				if(!M) M = holder.my_atom
