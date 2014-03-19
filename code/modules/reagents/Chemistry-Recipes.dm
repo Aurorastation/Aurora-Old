@@ -127,6 +127,13 @@ datum
 		//	required_reagents = list("hydrogen" = 1, "carbon" = 1, "nitrogen" = 1)
 		//	result_amount = 1
 
+		destabilizer
+			name = "Genetic Destabilizer"
+			id = "destabilizer"
+			result = "destabilizer"
+			required_reagents = list("clonexadone" = 1, "mutagen" = 1)
+			result_amount = 2
+
 		water //I can't believe we never had this.
 			name = "Water"
 			id = "water"
