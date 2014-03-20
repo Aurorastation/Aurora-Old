@@ -131,8 +131,8 @@ datum
 			name = "Genetic Destabilizer"
 			id = "destabilizer"
 			result = "destabilizer"
-			required_reagents = list("clonexadone" = 1, "mutagen" = 1)
-			result_amount = 2
+			required_reagents = list("clonexadone" = 1, "mutagen" = 1, "lexorin" = 1)
+			result_amount = 3
 
 		water //I can't believe we never had this.
 			name = "Water"
