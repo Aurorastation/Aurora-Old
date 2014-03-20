@@ -90,6 +90,17 @@
 						/obj/item/mecha_parts/part/durand_right_leg,
 						/obj/item/mecha_parts/part/durand_armour
 					),
+
+	"Exoskeleton"=list(
+						/obj/item/mecha_parts/chassis/exoskeleton,
+						/obj/item/mecha_parts/part/hydraulicspack,
+						/obj/item/mecha_parts/part/electricalpack
+
+
+
+
+					),
+
 /*	"H.O.N.K"=list(
 						/obj/item/mecha_parts/chassis/honker,
 						/obj/item/mecha_parts/part/honker_torso,
@@ -115,6 +126,8 @@
 //						/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar/mousetrap_mortar
 //						/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar
 //						/obj/item/mecha_parts/mecha_equipment/weapon/honker
+						/obj/item/mecha_parts/mecha_equipment/weapon/energy/laserexo,
+						/obj/item/mecha_parts/mecha_equipment/weapon/energy/taserexo,
 						),
 
 	"Robotic Upgrade Modules" = list(
