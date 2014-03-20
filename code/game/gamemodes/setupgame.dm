@@ -69,14 +69,14 @@
 	//testing("Assigning DNA blocks:")
 
 	// Standard muts, imported from older code above.
-	BLINDBLOCK         = getAssignedBlock("BLIND",         numsToAssign)
-	DEAFBLOCK          = getAssignedBlock("DEAF",          numsToAssign)
+	//BLINDBLOCK         = getAssignedBlock("BLIND",         numsToAssign)
+	//DEAFBLOCK          = getAssignedBlock("DEAF",          numsToAssign)
 	HULKBLOCK          = getAssignedBlock("HULK",          numsToAssign, DNA_HARD_BOUNDS)
 	TELEBLOCK          = getAssignedBlock("TELE",          numsToAssign, DNA_HARD_BOUNDS)
 	FIREBLOCK          = getAssignedBlock("FIRE",          numsToAssign, DNA_HARDER_BOUNDS)
 	XRAYBLOCK          = getAssignedBlock("XRAY",          numsToAssign, DNA_HARDER_BOUNDS)
 	CLUMSYBLOCK        = getAssignedBlock("CLUMSY",        numsToAssign)
-	FAKEBLOCK          = getAssignedBlock("FAKE",          numsToAssign)
+	//FAKEBLOCK          = getAssignedBlock("FAKE",          numsToAssign)
 
 	// UNUSED!
 	//COUGHBLOCK         = getAssignedBlock("COUGH",         numsToAssign)
@@ -94,7 +94,7 @@
 	//REMOTETALKBLOCK    = getAssignedBlock("REMOTETALK",    numsToAssign, DNA_HARDER_BOUNDS)
 	MORPHBLOCK         = getAssignedBlock("MORPH",         numsToAssign, DNA_HARDER_BOUNDS)
 	//COLDBLOCK          = getAssignedBlock("COLD",          numsToAssign)
-	HALLUCINATIONBLOCK = getAssignedBlock("HALLUCINATION", numsToAssign)
+	//HALLUCINATIONBLOCK = getAssignedBlock("HALLUCINATION", numsToAssign)
 	NOPRINTSBLOCK      = getAssignedBlock("NOPRINTS",      numsToAssign, DNA_HARD_BOUNDS)
 	SHOCKIMMUNITYBLOCK = getAssignedBlock("SHOCKIMMUNITY", numsToAssign)
 	SMALLSIZEBLOCK     = getAssignedBlock("SMALLSIZE",     numsToAssign, DNA_HARD_BOUNDS)
