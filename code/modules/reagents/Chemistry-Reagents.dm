@@ -1586,7 +1586,7 @@ datum
 				if(!M) M = holder.my_atom
 				if(prob(33))
 					M.take_organ_damage(1*REM, 0)
-				M.adjustOxyLoss(3)
+				M.adjustOxyLoss(4)
 				if(prob(20)) M.emote("gasp")
 				..()
 				return
@@ -1623,7 +1623,22 @@ datum
 				M.sleeping += 1
 				..()
 				return
+				
+		toxin/destabilizer 
+			name = "Genetic Destabilizer"
+			id = "destabilizer"
+			description = "Causes severe damage to genetic data."
+			reagent_state = LIQUID
+			toxpwr = 0
+			custom_metabolism = 0.1
 
+			on_mob_life(var/mob/living/M as mob)
+				if(!M) M = holder.my_atom
+				M.adjustCloneLoss(6) //High but still knocks out slower than mutagen.
+				..()
+				return
+				
+				
 		chefspecial
 			// Quiet and lethal, needs atleast 4 units in the person before they'll die
 			name = "Chef's Special"
