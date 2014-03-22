@@ -9,8 +9,7 @@
 //
 //If this works... All I can say is: I expected this to be tonnes harder.
 //
-//TO DO: Find more rifle-y energy weapons
-//Start removing old weapons (comment out) if applicable, that way duplicates are avoided.
+//TO DO: Fix the onmob things
 //
 //CONTAINS:
 //Laser Rifle
@@ -29,16 +28,20 @@
 	var/fire_delay_wielded = 0 //so that we're dealing with fire_delay modification
 	var/wieldsound = null
 	var/unwieldsound = null
+	var/force_unwielded = 0 //Force modification, because striking someone with a rifle held in two hands -hurts-
+	var/force_wielded = 0
 
 /obj/item/weapon/gun/energy/rifle/proc/unwield()
 	wielded = 0
 	fire_delay = fire_delay_unwielded
+	force = force_unwielded
 //	name = "[initial(name)]"
 //	update_icon()
 
 /obj/item/weapon/gun/energy/rifle/proc/wield()
 	wielded = 1
 	fire_delay = fire_delay_wielded
+	force = force_wielded
 //	name = "[initial(name)] (Wielded)"
 //	update_icon()
 
@@ -121,12 +124,13 @@
 	slot_flags = SLOT_BACK
 	w_class = 4
 	m_amt = 2000
-	cell_type = "/obj/item/weapon/cell/high"
-	charge_cost = 500 //odd numbers due to a requirement to have 20 shots. Easiest way.
+	charge_cost = 50 //odd numbers due to a requirement to have 20 shots. Easiest way.
 	origin_tech = "combat=3;magnets=2"
 	projectile_type = "/obj/item/projectile/beam"
 	fire_delay_wielded = 6 //6 is normal fire_delay
 	fire_delay_unwielded = 24 //4x difference, let's be an arse about this, and push the issue
+	force_wielded = 10 //10 is amped force, due to better grip
+	force_unwielded = 5 //5 is normal force
 
 /*
 /obj/item/weapon/gun/energy/rifle/laser/update_icon()  //Currently only here to fuck with the on-mob icons.
@@ -162,6 +166,8 @@ Commenting out right now, due to a lack of sprites existing. I hate on-mob weapo
 	projectile_type = "/obj/item/projectile/ion"
 	fire_delay_wielded = 6 //6 is normal fire_delay
 	fire_delay_unwielded = 24 //4x difference, let's be an arse about this, and push the issue
+	force_wielded = 10
+	force_unwielded = 5
 
 /obj/item/weapon/gun/energy/rifle/ionrifle/emp_act(severity)
 	if(severity <= 2)
