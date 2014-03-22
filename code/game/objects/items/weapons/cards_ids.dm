@@ -171,6 +171,7 @@
 		del(W)
 		return
 */
+
 /obj/item/weapon/card/id/verb/read()
 	set name = "Read ID Card"
 	set category = "Object"
