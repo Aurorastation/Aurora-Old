@@ -824,7 +824,7 @@ datum/objective/heist/loot
 				target_amount = 4
 				loot = "four energy guns"
 			if(7)
-				target = /obj/item/weapon/gun/energy/laser
+				target = /obj/item/weapon/gun/energy/rifle/laser
 				target_amount = 2
 				loot = "two laser guns"
 			if(8)
