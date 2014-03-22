@@ -1,12 +1,12 @@
 /obj/mecha/exoskeleton/exoskeleton
-	name = ""
+	name = "exoskeleton"
 	desc = ""
-	icon_state = "" // need this
-	initial_icon = "" // need this
+	icon_state = "ripley" // need this
+	initial_icon = "ripley" // need this
 	step_in = 2
 	max_temperature = 7000 // DON'T FORGET TO TEST THIS
 	health = 200
-//	wreckage =  // need icon
+	wreckage =  /obj/effect/decal/mecha_wreckage/ripley
 	internal_damage_threshold = 35
 	deflect_chance = 25
 	step_energy_drain = 4
@@ -99,10 +99,20 @@
 					holder.icon_state = "hud_imp_chem"
 					C.images += holder
 
-/obj/mecha/combat/melee_action(target as obj|mob|turf)
+/obj/mecha/exoskeleton/exoskeleton/melee_action(target as obj|mob|turf)
+	force = 30
+	var/melee_cooldown2 = 10
+	var/melee_can_hit2 = 1
+//	var/list/destroyable_obj = list(/obj/mecha, /obj/structure/window, /obj/structure/grille, /turf/simulated/wall)
+	internal_damage_threshold = 50
+	maint_access = 0
+	//add_req_access = 0
+	//operation_req_access = list(access_hos)
+	damage_absorption = list("brute"=0.7,"fire"=1,"bullet"=0.7,"laser"=0.85,"energy"=1,"bomb"=0.8)
+
 	if(internal_damage&MECHA_INT_CONTROL_LOST)
 		target = safepick(oview(1,src))
-	if(!melee_can_hit || !istype(target, /atom)) return
+	if(!melee_can_hit2 || !istype(target, /atom)) return
 	if(istype(target, /mob/living))
 		var/mob/living/M = target
 		if(src.occupant.a_intent == "hurt")
@@ -164,9 +174,9 @@
 			src.occupant_message("You push [target] out of the way.")
 			src.visible_message("[src] pushes [target] out of the way.")
 
-		melee_can_hit = 0
-		if(do_after(melee_cooldown))
-			melee_can_hit = 1
+		melee_can_hit2 = 0
+		if(do_after(melee_cooldown2))
+			melee_can_hit2 = 1
 		return
 
 	else
@@ -177,13 +187,13 @@
 					src.visible_message("<font color='red'><b>[src.name] hits [target]</b></font>")
 					if(!istype(target, /turf/simulated/wall))
 						target:attackby(src,src.occupant)
-					else if(prob(5))
+/*					else if(prob(5))
 						target:dismantle_wall(1)
 						src.occupant_message("\blue You smash through the wall.")
 						src.visible_message("<b>[src.name] smashes through the wall</b>")
-						playsound(src, 'sound/weapons/smash.ogg', 50, 1)
-					melee_can_hit = 0
-					if(do_after(melee_cooldown))
-						melee_can_hit = 1
+						playsound(src, 'sound/weapons/smash.ogg', 50, 1)*/
+					melee_can_hit2 = 0
+					if(do_after(melee_cooldown2))
+						melee_can_hit2 = 1
 					break
 	return
