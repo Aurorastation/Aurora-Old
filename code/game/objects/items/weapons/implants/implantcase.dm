@@ -128,7 +128,7 @@
 		src.imp = new /obj/item/weapon/implant/death_alarm( src )
 		..()
 		return
-		
+
 /obj/item/weapon/implantcase/freedom
 	name = "Glass Case- 'Freedom'"
 	desc = "A case containing a freedom implant."
@@ -150,8 +150,8 @@
 		src.imp = new /obj/item/weapon/implant/adrenalin( src )
 		..()
 		return
-		
-/obj/item/weapon/implant/dexplosive
+
+/obj/item/weapon/implantcase/dexplosive
 	name = "Glass Case- 'Death Explosive'"
 	desc = "A case containing a suicide implant."
 	icon = 'icons/obj/items.dmi'
@@ -161,8 +161,8 @@
 		src.imp = new /obj/item/weapon/implant/dexplosive( src )
 		..()
 		return
-		
-/obj/item/weapon/implant/compressed
+
+/obj/item/weapon/implantcase/compressed
 	name = "Glass Case- 'Compressed Matter'"
 	desc = "A case containing a compressed matter implant."
 	icon = 'icons/obj/items.dmi'
