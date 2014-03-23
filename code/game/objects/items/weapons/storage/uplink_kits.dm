@@ -117,3 +117,25 @@
 	new /obj/item/clothing/suit/space/syndicate(src)
 	new /obj/item/clothing/head/helmet/space/syndicate(src)
 	return
+
+/obj/item/weapon/storage/box/syndie_kit/masks //Needs to be added for uplink usage. - Skull132
+	name = "boxed masquarade masks"
+
+/obj/item/weapon/storage/box/syndie_kit/masks/New()
+	..()
+	new /obj/item/clothing/mask/horsehead(src)
+	new /obj/item/clothing/mask/pig(src)
+	new /obj/item/clothing/mask/luchador(src)
+	new /obj/item/clothing/mask/luchador/rudos(src)
+	new /obj/item/clothing/mask/luchador/tecnicos(src)
+	return
+
+/obj/item/weapon/storage/box/syndie_kit/masks_gas //Needs to be added for uplink usage. - Skull132
+	name = "disguised gas masks"
+
+/obj/item/weapon/storage/box/syndie_kit/masks/New()
+	..()
+	new /obj/item/clothing/mask/gas/monkeymask(src)
+	new /obj/item/clothing/mask/gas/owl_mask(src)
+	new /obj/item/clothing/mask/gas/plaguedoctor(src)
+	return

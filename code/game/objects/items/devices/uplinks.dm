@@ -30,7 +30,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 	for(var/D in ItemList)
 		var/list/O = text2list(D, ":")
 		if(O.len>0)
-			valid_items += O[1]		
+			valid_items += O[1]
 
 
 
@@ -141,6 +141,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 	if(uses > 4)
 		randomItems.Add("/obj/item/weapon/gun/energy/crossbow") //Energy Crossbow
 		randomItems.Add("/obj/item/device/powersink") //Powersink
+		randomItems.Add("/obj/item/weapon/storage/box/walkingcane")
 
 	if(uses > 3)
 		randomItems.Add("/obj/item/weapon/melee/energy/sword") //Energy Sword
@@ -172,10 +173,12 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		randomItems.Add("/obj/item/ammo_magazine/a357") //Revolver ammo
 		randomItems.Add("/obj/item/clothing/shoes/syndigaloshes") //No-Slip Syndicate Shoes
 		randomItems.Add("/obj/item/weapon/plastique") //C4
+		randomItems.Add("/obj/item/weapon/storage/box/syndie_kit/masks_gas")
 
 	if(uses > 0)
 		randomItems.Add("/obj/item/weapon/soap/syndie") //Syndicate Soap
 		randomItems.Add("/obj/item/weapon/storage/toolbox/syndicate") //Syndicate Toolbox
+		randomItems.Add("/obj/item/weapon/storage/box/syndie_kit/masks")
 
 	if(!randomItems.len)
 		del(randomItems)
@@ -192,7 +195,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 				uses -= 7
 			if("/obj/item/weapon/gun/projectile")
 				uses -= 6
-			if("/obj/item/weapon/gun/energy/crossbow" , "/obj/item/device/powersink")
+			if("/obj/item/weapon/gun/energy/crossbow" , "/obj/item/device/powersink" , "/obj/item/weapon/storage/box/walkingcane")
 				uses -= 5
 			if("/obj/item/weapon/melee/energy/sword" , "/obj/item/clothing/mask/gas/voice" , "/obj/item/device/chameleon")
 				uses -= 4
@@ -200,9 +203,9 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 			"/obj/item/weapon/card/emag" , "/obj/item/weapon/storage/box/syndie_kit/space" , "/obj/item/device/encryptionkey/binary" , \
 			"/obj/item/weapon/storage/box/syndie_kit/imp_freedom" , "/obj/item/clothing/glasses/thermal/syndi")
 				uses -= 3
-			if("/obj/item/ammo_magazine/a357" , "/obj/item/clothing/shoes/syndigaloshes" , "/obj/item/weapon/plastique", "/obj/item/weapon/card/id/syndicate")
+			if("/obj/item/ammo_magazine/a357" , "/obj/item/clothing/shoes/syndigaloshes" , "/obj/item/weapon/plastique", "/obj/item/weapon/card/id/syndicate" , "/obj/item/weapon/storage/box/syndie_kit/masks_gas")
 				uses -= 2
-			if("/obj/item/weapon/soap/syndie" , "/obj/item/weapon/storage/toolbox/syndicate")
+			if("/obj/item/weapon/soap/syndie" , "/obj/item/weapon/storage/toolbox/syndicate" , "/obj/item/weapon/storage/box/syndie_kit/masks")
 				uses -= 1
 		del(randomItems)
 		return buyItem
@@ -266,6 +269,14 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 			feedback_add_details("traitor_uplink_items_bought","SP")
 		if("/obj/item/weapon/storage/toolbox/syndicate")
 			feedback_add_details("traitor_uplink_items_bought","ST")
+		if("/obj/item/weapon/storage/box/walkingcane")
+			feedback_add_details("traitor_uplink_items_bought","WC")
+		if("/obj/item/weapon/storage/box/syndie_kit/masks_gas")
+			feedback_add_details("traitor_uplink_items_bought","GM")
+		if("/obj/item/weapon/storage/box/syndie_kit/masks")
+			feedback_add_details("traitor_uplink_items_bought","MM")
+
+
 
 /obj/item/device/uplink/Topic(href, href_list)
 	if (href_list["buy_item"])

@@ -103,6 +103,33 @@ var/list/admin_verbs_fun = list(
 	/client/proc/set_ooc,
 	/client/proc/editappear
 	)
+var/list/admin_verbs_dev = list(
+	/datum/admins/proc/restart,
+	/datum/admins/proc/delay,
+	/client/proc/giveruntimelog,
+	/client/proc/getruntimelog,
+	/client/proc/cmd_admin_list_open_jobs,
+	/client/proc/Debug2,
+	/client/proc/admin_ghost,
+	/client/proc/kill_air,
+	/client/proc/ZASSettings,
+	/client/proc/cmd_debug_make_powernets,
+	/client/proc/kill_airgroup,
+	/client/proc/debug_controller,
+	/client/proc/cmd_debug_mob_lists,
+	/client/proc/cmd_admin_delete,
+	/client/proc/cmd_debug_del_all,
+	/client/proc/cmd_debug_tog_aliens,
+	/client/proc/air_report,
+	/client/proc/reload_admins,
+	/client/proc/restart_controller,
+	/client/proc/enable_debug_verbs,
+	/client/proc/callproc,
+	/client/proc/toggledebuglogs,
+	/client/proc/SDQL_query,
+	/client/proc/SDQL2_query,
+	/client/proc/cmd_dev_say
+)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom,		/*allows us to spawn instances*/
 	/client/proc/respawn_character
@@ -262,6 +289,7 @@ var/list/admin_verbs_mod = list(
 		if(holder.rights & R_SOUNDS)		verbs += admin_verbs_sounds
 		if(holder.rights & R_SPAWN)			verbs += admin_verbs_spawn
 		if(holder.rights & R_MOD)			verbs += admin_verbs_mod
+		if(holder.rights & R_DEV)			verbs += admin_verbs_dev
 
 /client/proc/remove_admin_verbs()
 	verbs.Remove(

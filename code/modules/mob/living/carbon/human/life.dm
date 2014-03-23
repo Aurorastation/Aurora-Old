@@ -1064,7 +1064,7 @@
 				E = get_visible_implants(0)
 				if(!E.len)
 					embedded_flag = 0
-				
+
 
 			//Eyes
 			if(sdisabilities & BLIND)	//disabled-blind, doesn't get better on its own
@@ -1202,8 +1202,8 @@
 			if(healths)		healths.icon_state = "health7"	//DEAD healthmeter
 			if(client)
 				if(client.view != world.view)
-					if(locate(/obj/item/weapon/gun/energy/sniperrifle, contents))
-						var/obj/item/weapon/gun/energy/sniperrifle/s = locate() in src
+					if(locate(/obj/item/weapon/gun/energy/rifle/sniperrifle, contents))
+						var/obj/item/weapon/gun/energy/rifle/sniperrifle/s = locate() in src
 						if(s.zoom)
 							s.zoom()
 

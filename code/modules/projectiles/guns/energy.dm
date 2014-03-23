@@ -10,6 +10,9 @@
 	var/projectile_type = "/obj/item/projectile/beam/practice"
 	var/modifystate
 
+	isHandgun()
+		return 0
+
 	emp_act(severity)
 		power_supply.use(round(power_supply.maxcharge / severity))
 		update_icon()

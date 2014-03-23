@@ -609,8 +609,8 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	name = "Weapons crate"
 	contains = list(/obj/item/weapon/melee/baton,
 					/obj/item/weapon/melee/baton,
-					/obj/item/weapon/gun/energy/laser,
-					/obj/item/weapon/gun/energy/laser,
+					/obj/item/weapon/gun/energy/rifle/laser,
+					/obj/item/weapon/gun/energy/rifle/laser,
 					/obj/item/weapon/gun/energy/taser,
 					/obj/item/weapon/gun/energy/taser,
 					/obj/item/weapon/storage/box/flashbangs,
@@ -699,8 +699,8 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	name = "Energy marksman crate"
 	contains = list(/obj/item/clothing/suit/armor/laserproof,
 					/obj/item/clothing/suit/armor/laserproof,
-					/obj/item/weapon/gun/energy/sniperrifle,
-					/obj/item/weapon/gun/energy/sniperrifle)
+					/obj/item/weapon/gun/energy/rifle/sniperrifle,
+					/obj/item/weapon/gun/energy/rifle/sniperrifle)
 	cost = 50
 	containertype = /obj/structure/closet/crate/secure
 	containername = "Energy marksman crate"
@@ -1051,3 +1051,84 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	containername = "Beekeeping crate"
 	access = access_hydroponics
 	group = "Hydroponics"
+
+//My foray into encryption key crates. - Duck
+/datum/supply_packs/sec_keys
+	name = "Security Encryption Keys"
+	contains = list(/obj/item/device/encryptionkey/headset_sec,
+					/obj/item/device/encryptionkey/headset_sec,
+					/obj/item/device/encryptionkey/headset_sec,
+					/obj/item/device/encryptionkey/headset_sec,
+					/obj/item/device/encryptionkey/headset_sec)
+	cost = 20
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Security Encryption Keys"
+	group = "Operations"
+	access = access_security
+
+/datum/supply_packs/sci_keys
+	name = "Science Encryption Keys"
+	contains = list(/obj/item/device/encryptionkey/headset_sci,
+					/obj/item/device/encryptionkey/headset_sci,
+					/obj/item/device/encryptionkey/headset_sci,
+					/obj/item/device/encryptionkey/headset_sci,
+					/obj/item/device/encryptionkey/headset_sci)
+	cost = 20
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Science Encryption Keys"
+	group = "Operations"
+	access = access_research
+
+/datum/supply_packs/eng_keys
+	name = "Engineering Encryption Keys"
+	contains = list(/obj/item/device/encryptionkey/headset_eng,
+					/obj/item/device/encryptionkey/headset_eng,
+					/obj/item/device/encryptionkey/headset_eng,
+					/obj/item/device/encryptionkey/headset_eng,
+					/obj/item/device/encryptionkey/headset_eng)
+	cost = 20
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Engineering Encryption Keys"
+	group = "Operations"
+	access = access_engine
+
+/datum/supply_packs/med_keys
+	name = "Medical Encryption Keys"
+	contains = list(/obj/item/device/encryptionkey/headset_med,
+					/obj/item/device/encryptionkey/headset_med,
+					/obj/item/device/encryptionkey/headset_med,
+					/obj/item/device/encryptionkey/headset_med,
+					/obj/item/device/encryptionkey/headset_med)
+	cost = 20
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Medical Encryption Keys"
+	group = "Operations"
+	access = access_medical
+
+
+/datum/supply_packs/cargo_keys
+	name = "Cargo Encryption Keys"
+	contains = list(/obj/item/device/encryptionkey/headset_cargo,
+					/obj/item/device/encryptionkey/headset_cargo,
+					/obj/item/device/encryptionkey/headset_cargo,
+					/obj/item/device/encryptionkey/headset_cargo,
+					/obj/item/device/encryptionkey/headset_cargo)
+	cost = 20
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Cargo Encryption Keys"
+	group = "Operations"
+	access = access_cargo
+
+/datum/supply_packs/head_keys
+	name = "Head Encryption Keys"
+	contains = list(/obj/item/device/encryptionkey/heads/captain,
+					/obj/item/device/encryptionkey/heads/rd,
+					/obj/item/device/encryptionkey/heads/hos,
+					/obj/item/device/encryptionkey/heads/ce,
+					/obj/item/device/encryptionkey/heads/cmo,
+					/obj/item/device/encryptionkey/heads/hop)
+	cost = 50
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Head Encryption Keys"
+	group = "Operations"
+	access = access_heads

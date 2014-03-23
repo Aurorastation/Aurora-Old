@@ -103,13 +103,13 @@
 					check_anomalies = 0
 					shot_delay = 30
 
-				if(/obj/item/weapon/gun/energy/laser/practice)
+				if(/obj/item/weapon/gun/energy/rifle/laser/practice)
 					projectile = /obj/item/projectile/beam/practice
 					eprojectile = /obj/item/projectile/beam
 					iconholder = null
 					reqpower = 100
 
-				if(/obj/item/weapon/gun/energy/pulse_rifle)
+				if(/obj/item/weapon/gun/energy/rifle/pulse_rifle)
 					projectile = /obj/item/projectile/beam/pulse
 					eprojectile = projectile
 					iconholder = null
@@ -121,7 +121,7 @@
 					iconholder = 1
 					reqpower = 700
 
-				if(/obj/item/weapon/gun/energy/ionrifle)
+				if(/obj/item/weapon/gun/energy/rifle/ionrifle)
 					projectile = /obj/item/projectile/ion
 					eprojectile = projectile
 					iconholder = 1
@@ -139,7 +139,7 @@
 					iconholder = 1
 					reqpower = 200
 
-				if(/obj/item/weapon/gun/energy/lasercannon)
+				if(/obj/item/weapon/gun/energy/rifle/lasercannon)
 					projectile = /obj/item/projectile/beam/heavylaser
 					eprojectile = projectile
 					iconholder = null
@@ -163,7 +163,7 @@
 					iconholder = null
 					reqpower = 50
 
-				if(/obj/item/weapon/gun/energy/laser)
+				if(/obj/item/weapon/gun/energy/rifle/laser)
 					projectile = /obj/item/projectile/beam
 					eprojectile = projectile
 					iconholder = null

@@ -1,7 +1,7 @@
 /client/proc/Debug2()
 	set category = "Debug"
 	set name = "Debug-Game"
-	if(!check_rights(R_DEBUG))	return
+	if(!check_rights(R_DEBUG|R_DEV))	return
 
 	if(Debug2)
 		Debug2 = 0
@@ -29,7 +29,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	set category = "Debug"
 	set name = "Advanced ProcCall"
 
-	if(!check_rights(R_DEBUG)) return
+	if(!check_rights(R_DEBUG|R_DEV)) return
 
 	spawn(0)
 		var/target = null
@@ -407,7 +407,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	set name = "Assume direct control"
 	set desc = "Direct intervention"
 
-	if(!check_rights(R_DEBUG|R_ADMIN))	return
+	if(!check_rights(R_DEBUG|R_ADMIN|R_DEV))	return
 	if(M.ckey)
 		if(alert("This mob is being controlled by [M.ckey]. Are you sure you wish to assume control of it? [M.ckey] will be made a ghost.",,"Yes","No") != "Yes")
 			return
@@ -588,7 +588,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			M.equip_to_slot_or_del(new /obj/item/clothing/suit/armor/vest(M), slot_wear_suit)
 			M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/thunderdome(M), slot_head)
 
-			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/pulse_rifle/destroyer(M), slot_r_hand)
+			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/rifle/pulse_rifle/destroyer(M), slot_r_hand)
 			M.equip_to_slot_or_del(new /obj/item/weapon/kitchenknife(M), slot_l_hand)
 			M.equip_to_slot_or_del(new /obj/item/weapon/grenade/smokebomb(M), slot_r_store)
 

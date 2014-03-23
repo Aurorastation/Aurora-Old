@@ -141,12 +141,12 @@
 
 /obj/item/clothing/suit/storage/labcoat/coat_dark
 	name = "Dark Winter Coat"
-	desc = "Placeholder"
+	desc = "A soft dark coat, with fur on the edges of the hood."
 	icon_state = "coatdark"
 	item_state = "coatdark"
 
 /obj/item/clothing/suit/storage/labcoat/coat_white
-	name = "Dark Winter Coat"
-	desc = "Placeholder"
+	name = "White Winter Coat"
+	desc = "A soft white coat, with fur on the edges of the hood."
 	icon_state = "coatwhite"
 	item_state = "coatwhite"

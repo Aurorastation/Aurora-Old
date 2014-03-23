@@ -146,3 +146,14 @@
 	throwforce = 15
 	w_class = 3
 	attack_verb = list("jabbed","stabbed","ripped")
+
+/obj/item/weapon/canesword
+	name = "cane sword"
+	sharp = 1
+	desc = "A thin, sharp blade with an elegant handle."
+	icon_state = "canesword"
+	item_state = "canesword"
+	force = 20
+	throwforce = 10
+	w_class = 4 //there ain't no way in fuck you're shuving this inside your rucksack. No way.
+	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")

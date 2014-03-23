@@ -126,7 +126,7 @@ var/list/forbidden_varedit_object_types = list(
 			L += var_value
 
 /client/proc/mod_list(var/list/L)
-	if(!check_rights(R_VAREDIT))	return
+	if(!check_rights(R_VAREDIT|R_DEV))	return
 
 	if(!istype(L,/list)) src << "Not a List."
 
@@ -147,7 +147,7 @@ var/list/forbidden_varedit_object_types = list(
 	var/dir
 
 	if(variable in locked)
-		if(!check_rights(R_DEBUG))	return
+		if(!check_rights(R_DEBUG|R_DEV))	return
 
 	if(isnull(variable))
 		usr << "Unable to determine variable type."
@@ -266,7 +266,7 @@ var/list/forbidden_varedit_object_types = list(
 
 
 /client/proc/modify_variables(var/atom/O, var/param_var_name = null, var/autodetect_class = 0)
-	if(!check_rights(R_VAREDIT))	return
+	if(!check_rights(R_VAREDIT|R_DEV))	return
 
 	var/list/locked = list("vars", "key", "ckey", "client", "firemut", "ishulk", "telekinesis", "xray", "virus", "cuffed", "ka", "last_eaten", "icon", "icon_state", "mutantrace")
 
@@ -285,7 +285,7 @@ var/list/forbidden_varedit_object_types = list(
 			return
 
 		if(param_var_name == "holder" || (param_var_name in locked))
-			if(!check_rights(R_DEBUG))	return
+			if(!check_rights(R_DEBUG|R_DEV))	return
 
 		variable = param_var_name
 
@@ -343,7 +343,7 @@ var/list/forbidden_varedit_object_types = list(
 		var_value = O.vars[variable]
 
 		if(variable == "holder" || (variable in locked))
-			if(!check_rights(R_DEBUG))	return
+			if(!check_rights(R_DEBUG|R_DEV))	return
 
 	if(!autodetect_class)
 
