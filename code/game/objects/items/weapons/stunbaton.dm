@@ -138,7 +138,7 @@
 
 /obj/item/weapon/melee/baton/stunrod
 	name = "stun rod"
-	desc = "A less-than-lethal weapon used to deal with high threat situations."
+	desc = "A more-than-lethal weapon used to deal with high threat situations."
 	icon_state = "stunrod"
 	item_state = "stunrod"
 	flags = FPRINT | TABLEPASS
@@ -147,7 +147,7 @@
 	throwforce = 8
 	w_class = 3
 
-	origin_tech = "combat=4"
+	origin_tech = "combat=4,illegal=2"
 
 	suicide_act(mob/user)
 		viewers(user) << "\red <b>[user] is putting the live [src.name] in \his mouth! It looks like \he's trying to commit suicide.</b>"
@@ -165,7 +165,6 @@
 	if(status && (CLUMSY in user.mutations) && prob(50))
 		user << "\red You grab the [src] on the wrong side and burn yourself."
 		user.Weaken(40)
-//		user.damage(10,BURN,"chest")
 		charges--
 		if(charges < 1)
 			status = 0
@@ -184,7 +183,7 @@
 /obj/item/weapon/melee/baton/stunrod/attack(mob/M as mob, mob/user as mob)
 	if(status && (CLUMSY in user.mutations) && prob(50))
 		user << "<span class='danger'>You accidentally hit yourself with the [src]!</span>"
-		user.Weaken(40)
+		user.Weaken(20)
 //		user.apply_damage(10,BURN)
 		charges--
 		if(charges < 1)
@@ -199,8 +198,8 @@
 
 	if(user.a_intent == "hurt")
 		if(!..()) return
-		//H.apply_effect(5, WEAKEN, 0)
-		H.apply_damage(10, BURN)
+		H.apply_effect(5, WEAKEN, 0)
+		H.apply_damage(15, BURN)
 		H.visible_message("<span class='danger'>[M] has been beaten with the [src] by [user]!</span>")
 
 		user.attack_log += "\[[time_stamp()]\]<font color='red'> Beat [H.name] ([H.ckey]) with [src.name]</font>"
@@ -213,9 +212,10 @@
 		return
 
 	if(status)
-		H.apply_effect(20, STUN, 0)
-		H.apply_effect(20, WEAKEN, 0)
-		H.apply_effect(20, STUTTER, 0)
+		H.apply_effect(5, STUN, 0)
+		H.apply_effect(5, WEAKEN, 0)
+		H.apply_effect(5, STUTTER, 0)
+		H.apply_damage(15, BURN)
 		user.lastattacked = M
 		H.lastattacker = user
 		if(isrobot(src.loc))
@@ -243,9 +243,10 @@
 		if(istype(hit_atom, /mob/living))
 			var/mob/living/carbon/human/H = hit_atom
 			if(status)
-				H.apply_effect(20, STUN, 0)
-				H.apply_effect(20, WEAKEN, 0)
-				H.apply_effect(20, STUTTER, 0)
+				H.apply_effect(5, STUN, 0)
+				H.apply_effect(5, WEAKEN, 0)
+				H.apply_effect(5, STUTTER, 0)
+				H.apply_damage(15, BURN)
 				charges--
 
 				for(var/mob/M in player_list) if(M.key == src.fingerprintslast)
