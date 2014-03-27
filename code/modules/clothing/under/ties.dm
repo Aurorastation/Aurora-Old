@@ -294,11 +294,21 @@
 /obj/item/weapon/storage/box/holobadge
 	name = "holobadge box"
 	desc = "A box claiming to contain holobadges."
+	storage_slots = 10
+	max_w_class = 2
+	max_combined_w_class = 20
+	can_hold = list(
+		"/obj/item/clothing/tie/holobadge",
+		"/obj/item/clothing/tie/holobadge/cord")
 	New()
 		new /obj/item/clothing/tie/holobadge(src)
 		new /obj/item/clothing/tie/holobadge(src)
 		new /obj/item/clothing/tie/holobadge(src)
 		new /obj/item/clothing/tie/holobadge(src)
+		new /obj/item/clothing/tie/holobadge(src)
+		new /obj/item/clothing/tie/holobadge(src)
+		new /obj/item/clothing/tie/holobadge(src)
+		new /obj/item/clothing/tie/holobadge/cord(src)
 		new /obj/item/clothing/tie/holobadge/cord(src)
 		new /obj/item/clothing/tie/holobadge/cord(src)
 		..()
