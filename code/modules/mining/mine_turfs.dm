@@ -176,7 +176,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 						//just pull the surrounding rock out
 						excavate_find(0, F)
 
-				if( excavation_level + P.excavation_amount >= 900 ) //Because I am tired of finding one million billion debris everywhere with nothing in it.
+				if( excavation_level + P.excavation_amount >= 100 ) //Keep it at 100, it's a bit more complicated that this, and caused issues. -Skull132
 					//if players have been excavating this turf, leave some rocky debris behind
 					var/obj/structure/boulder/B
 					if(artifact_find)
