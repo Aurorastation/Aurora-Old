@@ -176,7 +176,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 						//just pull the surrounding rock out
 						excavate_find(0, F)
 
-				if( excavation_level + P.excavation_amount >= 100 )
+				if( excavation_level + P.excavation_amount >= 900 ) //Because I am tired of finding one million billion debris everywhere with nothing in it.
 					//if players have been excavating this turf, leave some rocky debris behind
 					var/obj/structure/boulder/B
 					if(artifact_find)
@@ -283,7 +283,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 		var/turf/simulated/floor/plating/airless/asteroid/N = ChangeTurf(/turf/simulated/floor/plating/airless/asteroid)
 		N.fullUpdateMineralOverlays()
 
-		if(rand(1,500) == 1)
+		if(rand(1,50) == 1)
 			visible_message("<span class='notice'>An old dusty crate was buried within!</span>")
 			new /obj/structure/closet/crate/secure/loot(src)
 
