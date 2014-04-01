@@ -187,9 +187,9 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 								B.artifact_find = artifact_find
 						else
 							artifact_debris(1)
-					else if(prob(15))
+					/*else if(prob(15))
 						//empty boulder
-						B = new(src)
+						B = new(src)*/
 
 					if(B)
 						GetDrilled(0)
