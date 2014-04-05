@@ -3,6 +3,7 @@
  *		Bartender
  *		Janitor
  *		Lawyer
+ *		ERT
  */
 
 /*
@@ -74,3 +75,19 @@
 	new /obj/item/clothing/suit/storage/lawyer/purpjacket(src)
 	new /obj/item/clothing/shoes/brown(src)
 	new /obj/item/clothing/shoes/black(src)
+
+/*
+ * ERT
+ */
+/obj/structure/closet/ertcloset
+	name = "Response Team Locker"
+	desc = "It's a storage unit for Response Team Clothing."
+	icon_state = "ertclosed"
+	icon_closed = "ertclosed"
+	icon_opened = "ertopen"
+
+/obj/structure/closet/ertcloset/New()
+	new /obj/item/clothing/mask/balaclava(src)
+	new /obj/item/clothing/gloves/combat(src)
+	new /obj/item/clothing/shoes/combat(src)
+	new /obj/item/device/radio/headset/ert(src)

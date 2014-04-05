@@ -127,6 +127,13 @@ datum
 		//	required_reagents = list("hydrogen" = 1, "carbon" = 1, "nitrogen" = 1)
 		//	result_amount = 1
 
+		destabilizer
+			name = "Genetic Destabilizer"
+			id = "destabilizer"
+			result = "destabilizer"
+			required_reagents = list("clonexadone" = 1, "mutagen" = 1, "lexorin" = 1)
+			result_amount = 3
+
 		water //I can't believe we never had this.
 			name = "Water"
 			id = "water"
@@ -485,7 +492,7 @@ datum
 			name = "Potassium Chlorophoride"
 			id = "potassium_chlorophoride"
 			result = "potassium_chlorophoride"
-			required_reagents = list("potassium_chloride" = 1, "plasma" = 1, "chloral_hydrate" = 1)
+			required_reagents = list("potassium_chloride" = 1, "plasma" = 1, "chloralhydrate" = 1)
 			result_amount = 4
 
 		stoxin

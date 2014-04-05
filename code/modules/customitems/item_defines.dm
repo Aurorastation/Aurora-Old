@@ -110,7 +110,7 @@
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "izumi_notebook"
 
-/obj/item/clothing/under/dress/fluff/olivia_uniform //Waitress Uniform - Olivia Conrad - meowykins - INVESTIGATE
+/obj/item/clothing/under/dress/fluff/olivia_uniform //Waitress Uniform - Olivia Conrad - meowykins - DONE
 	name = "Waitress Uniform"
 	desc = "A modest uniform. the name-tag reads 'Olivia Conrad'."
 	icon = 'icons/obj/custom_items.dmi'
@@ -129,9 +129,9 @@
 	name = "Naval Working Uniform"
 	desc = "A working unfirom of the NanoTrasen Navy."
 	icon = 'icons/obj/custom_items.dmi'
-	icon_state = "steven_unfirom"
-	item_color = "black"
-	item_state = "steven_uniform_s"
+	icon_state = "steven_uniform"
+	item_color = "steven_uniform"
+	item_state = "steven_uniform"
 
 /obj/item/weapon/coin/fluff/sphere_coin //Rusty Coin - Yusani Thomas - f_sphere - DONE
 	name = "Rusty Coin"
@@ -195,6 +195,7 @@
 	item_state = "skull_harness2"
 	slots = 2
 
+/*
 /obj/item/clothing/tie/storage/knifeharness/fluff/skull132_harness/attackby(var/obj/item/O as obj, mob/user as mob)
 	..()
 	update()
@@ -219,6 +220,7 @@
 	..()
 	new /obj/item/weapon/hatchet/unathiknife(hold)
 	new /obj/item/weapon/hatchet/unathiknife(hold)
+*/
 
 /obj/item/weapon/disk/fluff/nebula_chip //data chip - Roxy Wallace - nebulaflare - DONE
 	name = "data chip"

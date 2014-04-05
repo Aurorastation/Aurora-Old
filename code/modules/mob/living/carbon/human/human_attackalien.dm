@@ -39,18 +39,17 @@
 			apply_damage(damage, BRUTE, affecting, armor_block)
 			if (damage >= 25)
 				visible_message("\red <B>[M] has wounded [src]!</B>")
-				apply_effect(rand(0.5,3), WEAKEN, armor_block)
+				apply_effect(rand(3, 4), WEAKEN, armor_block)
 			updatehealth()
 
 		if("disarm")
 			if (prob(80))
 				playsound(loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
-				Weaken(rand(0.5,3))
+				Weaken(5)
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
 						O.show_message(text("\red <B>[] has tackled down []!</B>", M, src), 1)
-				if (prob(25))
-					M.Weaken(rand(2,4))
+					
 			else
 				if (prob(80))
 					playsound(loc, 'sound/weapons/slash.ogg', 25, 1, -1)

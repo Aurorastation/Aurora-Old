@@ -112,9 +112,9 @@ var/global/normal_ooc_colour = "#002eb8"
 		return
 
 	if(!holder)
-		if(!ooc_allowed)
+/*		if(!ooc_allowed)
 			src << "\red OOC is globally muted"
-			return
+			return */
 		if(!dooc_allowed && (mob.stat == DEAD))
 			usr << "\red OOC for dead mobs has been turned off."
 			return

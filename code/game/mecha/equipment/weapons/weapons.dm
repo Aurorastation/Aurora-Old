@@ -315,3 +315,19 @@
 	var/obj/item/device/assembly/mousetrap/M = AM
 	M.secured = 1
 	..()
+
+/obj/item/mecha_parts/mecha_equipment/weapon/energy/taserexo
+	name = "Heavy Duty Exoskeleton Tasergun"
+	icon_state = "mecha_taser"
+	energy_drain = 25
+	equip_cooldown = 10
+	projectile = /obj/item/projectile/energy/electrode
+	fire_sound = 'sound/weapons/Taser.ogg'
+
+/obj/item/mecha_parts/mecha_equipment/weapon/energy/laserexo
+	equip_cooldown = 8
+	name = "Exoskeleton Immolater Weapon"
+	icon_state = "mecha_laser"
+	energy_drain = 30
+	projectile = /obj/item/projectile/beam
+	fire_sound = 'sound/weapons/Laser.ogg'

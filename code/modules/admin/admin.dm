@@ -652,7 +652,7 @@ var/global/floorIsLava = 0
 
 	dat += "<BR>"
 
-	if(check_rights(R_DEBUG,0))
+	if(check_rights(R_DEBUG|R_DEV,0))
 		dat += {"
 			<B>Security Level Elevated</B><BR>
 			<BR>
@@ -840,7 +840,7 @@ var/global/floorIsLava = 0
 	set desc="Delay the game start/end"
 	set name="Delay"
 
-	if(!check_rights(R_SERVER))	return
+	if(!check_rights(R_SERVER|R_DEV))	return
 	if (!ticker || ticker.current_state != GAME_STATE_PREGAME)
 		ticker.delay_end = !ticker.delay_end
 		log_admin("[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].")

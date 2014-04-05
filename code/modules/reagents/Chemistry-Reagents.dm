@@ -1586,7 +1586,7 @@ datum
 				if(!M) M = holder.my_atom
 				if(prob(33))
 					M.take_organ_damage(1*REM, 0)
-				M.adjustOxyLoss(3)
+				M.adjustOxyLoss(4)
 				if(prob(20)) M.emote("gasp")
 				..()
 				return
@@ -1623,6 +1623,46 @@ datum
 				M.sleeping += 1
 				..()
 				return
+
+		toxin/destabilizer
+			name = "Genetic Destabilizer"
+			id = "destabilizer"
+			description = "Causes severe damage to genetic data."
+			reagent_state = LIQUID
+			toxpwr = 0
+			custom_metabolism = 0.1
+
+			on_mob_life(var/mob/living/M as mob)
+				if(!M) M = holder.my_atom
+				M.adjustCloneLoss(6) //High but still knocks out slower than mutagen.
+				..()
+				return
+
+
+		chefspecial
+			// Quiet and lethal, needs atleast 4 units in the person before they'll die
+			name = "Chef's Special"
+			id = "chefspecial"
+			description = "An extremely toxic chemical that will surely end in death."
+			reagent_state = LIQUID
+			color = "#CF3600" // rgb: 207, 54, 0
+			custom_metabolism = 0.39
+
+			on_mob_life(var/mob/living/M as mob)
+				var/random = rand(150,180)
+				if(!M) M = holder.my_atom
+				if(!data) data = 1
+				switch(data)
+					if(0 to 5)
+						..()
+				if(data >= random)
+					if(M.stat != DEAD)
+						M.death(0)
+						M.attack_log += "\[[time_stamp()]\]<font color='red'>Died a quick and painless death by <font color='green'>Chef Excellence's Special Sauce</font>.</font>"
+				data++
+				return
+
+
 
 		toxin/minttoxin
 			name = "Mint Toxin"
@@ -1743,16 +1783,17 @@ datum
 				if(!M) M = holder.my_atom
 				if(!data) data = 1
 				switch(data)
-					if(1 to 12)
-						if(prob(5))	M.emote("yawn")
-					if(12 to 15)
+					if(1 to 5)
+						if(prob(20))	M.emote("yawn")
+					if(5 to 10)
 						M.eye_blurry = max(M.eye_blurry, 10)
-					if(15 to 49)
-						if(prob(50))
+					if(10 to 15)
+						if(prob(25))
 							M.Weaken(2)
 						M.drowsyness  = max(M.drowsyness, 20)
-					if(50 to INFINITY)
-						M.Weaken(20)
+					if(15 to INFINITY)
+						if(prob(75))
+							M.Weaken(20)
 						M.drowsyness  = max(M.drowsyness, 30)
 				data++
 				..()
