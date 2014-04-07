@@ -1623,8 +1623,8 @@ datum
 				M.sleeping += 1
 				..()
 				return
-				
-		toxin/destabilizer 
+
+		toxin/destabilizer
 			name = "Genetic Destabilizer"
 			id = "destabilizer"
 			description = "Causes severe damage to genetic data."
@@ -1637,8 +1637,8 @@ datum
 				M.adjustCloneLoss(6) //High but still knocks out slower than mutagen.
 				..()
 				return
-				
-				
+
+
 		chefspecial
 			// Quiet and lethal, needs atleast 4 units in the person before they'll die
 			name = "Chef's Special"
@@ -1783,16 +1783,17 @@ datum
 				if(!M) M = holder.my_atom
 				if(!data) data = 1
 				switch(data)
-					if(1 to 12)
-						if(prob(5))	M.emote("yawn")
-					if(12 to 15)
+					if(1 to 5)
+						if(prob(20))	M.emote("yawn")
+					if(5 to 10)
 						M.eye_blurry = max(M.eye_blurry, 10)
-					if(15 to 49)
-						if(prob(50))
+					if(10 to 15)
+						if(prob(25))
 							M.Weaken(2)
 						M.drowsyness  = max(M.drowsyness, 20)
-					if(50 to INFINITY)
-						M.Weaken(20)
+					if(15 to INFINITY)
+						if(prob(75))
+							M.Weaken(20)
 						M.drowsyness  = max(M.drowsyness, 30)
 				data++
 				..()
