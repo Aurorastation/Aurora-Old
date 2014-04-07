@@ -32,7 +32,7 @@
 			if("smg")
 				new /obj/item/weapon/gun/projectile/automatic/c20r(get_turf(H))
 			if("nuclear")
-				new /obj/item/weapon/gun/energy/gun/nuclear(get_turf(H))
+				new /obj/item/weapon/gun/energy/rifle/gun/nuclear(get_turf(H))
 			if("deagle")
 				new /obj/item/weapon/gun/projectile/deagle/camo(get_turf(H))
 			if("gyrojet")
