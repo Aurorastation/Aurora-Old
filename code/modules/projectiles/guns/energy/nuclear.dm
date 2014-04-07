@@ -130,6 +130,7 @@
 /obj/item/weapon/gun/energy/gun/pistol
 	name = "energy pistol"
 	desc = "A basic energy-based pistol with two settings: Stun and kill."
+	icon = 'icons/obj/gun.dmi'
 	icon_state = "epistolstun100"
 	item_state = null	//so the human update icon uses the icon_state instead.
 	fire_sound = 'sound/weapons/Taser.ogg'
