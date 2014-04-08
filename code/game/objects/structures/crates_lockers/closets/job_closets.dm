@@ -88,7 +88,13 @@
 
 /obj/structure/closet/ertcloset/New()
 	new /obj/item/clothing/gloves/combat(src)
+	new /obj/item/clothing/gloves/combat(src)
+	new /obj/item/clothing/gloves/combat(src)
 	new /obj/item/clothing/shoes/combat(src)
+	new /obj/item/clothing/shoes/combat(src)
+	new /obj/item/clothing/shoes/combat(src)
+	new /obj/item/device/radio/headset/ert(src)
+	new /obj/item/device/radio/headset/ert(src)
 	new /obj/item/device/radio/headset/ert(src)
 	new /obj/item/clothing/under/rank/ert_soldier(src)
 	new /obj/item/clothing/under/rank/ert_soldier(src)
