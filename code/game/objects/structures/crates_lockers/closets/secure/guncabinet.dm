@@ -3,10 +3,10 @@
 	req_access = list(access_armory)
 	icon = 'icons/obj/guncabinet.dmi'
 	icon_state = "base"
-	icon_off ="base"
-	icon_broken ="base"
-	icon_locked ="base"
-	icon_closed ="base"
+	icon_off = "base"
+	icon_broken = "base"
+	icon_locked = "base"
+	icon_closed = "base"
 	icon_opened = "base"
 
 /obj/structure/closet/secure_closet/guncabinet/New()
@@ -40,7 +40,7 @@
 					shottas--
 					gun.icon_state = "projectile"
 
-				gun.pixel_x = i*4
+//				gun.pixel_x = i*4 Trying some fixes to make the guncabinets less retarded -- Skull132
 				overlays += gun
 
 		overlays += icon(src.icon,"door")

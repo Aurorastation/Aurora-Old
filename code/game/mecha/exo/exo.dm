@@ -1,8 +1,8 @@
 /obj/mecha/exoskeleton/exoskeletonother
-	name = "Exo"
-	desc = "Exoing Exo"
-	icon_state = "ripley" // need this
-	initial_icon = "ripley" // need this
+	name = "Exoskeleton Mk. I"
+	desc = "A prototype currently in development for special response and other purposes."
+	icon_state = "exosuit" // need this
+	initial_icon = "exosuit" // need this
 	step_in = 2
 	max_temperature = 20000 // DON'T FORGET TO TEST THIS
 	health = 300

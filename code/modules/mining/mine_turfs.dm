@@ -187,9 +187,9 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 								B.artifact_find = artifact_find
 						else
 							artifact_debris(1)
-					else if(prob(15))
+					/*else if(prob(15))
 						//empty boulder
-						B = new(src)
+						B = new(src)*/
 
 					if(B)
 						GetDrilled(0)
@@ -283,7 +283,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 		var/turf/simulated/floor/plating/airless/asteroid/N = ChangeTurf(/turf/simulated/floor/plating/airless/asteroid)
 		N.fullUpdateMineralOverlays()
 
-		if(rand(1,50) == 1)
+		if(rand(1,65) == 1)
 			visible_message("<span class='notice'>An old dusty crate was buried within!</span>")
 			new /obj/structure/closet/crate/secure/loot(src)
 
