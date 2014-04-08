@@ -61,10 +61,10 @@
 			O.unwield()
 	return	unwield()
 
-/*
+
 /obj/item/weapon/gun/energy/rifle/update_icon()
 	return
-*/
+
 
 /obj/item/weapon/gun/energy/rifle/pickup(mob/user)
 	unwield()
@@ -295,7 +295,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 				projectile_type = "/obj/item/projectile/beam/pulse"
 		return
 
-///////////PULSE RIFLE///////////////
+///////////PULSE DESTROYER///////////////
 //For the love of fuck, NEVER USE THIS WEAPON
 
 /obj/item/weapon/gun/energy/rifle/pulse_rifle/destroyer
@@ -305,3 +305,126 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 
 	attack_self(mob/living/user as mob)
 		user << "\red [src.name] has three settings, and they are all DESTROY."
+
+///////////ENERGY RIFLE///////////////
+
+/obj/item/weapon/gun/energy/rifle/gun
+	name = "energy rifle"
+	desc = "A basic energy-based rifle with two settings: Stun and kill."
+	icon = 'icons/obj/erifle.dmi'
+	icon_state = "eriflestun100"
+	item_state = null	//so the human update icon uses the icon_state instead.
+	fire_sound = 'sound/weapons/Taser.ogg'
+
+	charge_cost = 50 //How much energy is needed to fire.
+	projectile_type = "/obj/item/projectile/energy/electrode"
+	origin_tech = "combat=3;magnets=2"
+	modifystate = "eriflestun"
+
+	fire_delay_wielded = 4 //6 is normal fire_delay
+	fire_delay_unwielded = 24 //4x difference, let's be an arse about this, and push the issue
+	force_wielded = 10 //10 is amped force, due to better grip
+	force_unwielded = 5 //5 is normal force
+
+	var/mode = 0 //0 = stun, 1 = kill
+
+
+	attack_self(mob/living/user as mob)
+		switch(mode)
+			if(0)
+				mode = 1
+				charge_cost = 50
+				fire_sound = 'sound/weapons/Laser.ogg'
+				user << "\red [src.name] is now set to kill."
+				projectile_type = "/obj/item/projectile/beam"
+				modifystate = "eriflekill"
+			if(1)
+				mode = 0
+				charge_cost = 50
+				fire_sound = 'sound/weapons/Taser.ogg'
+				user << "\red [src.name] is now set to stun."
+				projectile_type = "/obj/item/projectile/energy/electrode"
+				modifystate = "eriflestun"
+		update_icon()
+
+/*
+This. Will be a pain. For future refence, shall we? -- Skull132
+
+/obj/item/weapon/gun/energy/rifle/gun/attack_hand(mob/user as mob)
+	if(loc == user)
+		if(scoped)
+			if(user.l_hand != src && user.r_hand != src)
+				..()
+				return
+			user << "<span class='notice'>You detach [scoped] from [src].</span>"
+			user.put_in_hands(scoped)
+			var/scoped = 0
+			update_icon()
+			return
+	..()
+
+/obj/item/weapon/gun/energy/rifle/gun/attackby(obj/item/I as obj, mob/user as mob)
+	if(istype(I, /obj/item/weapon/scope))
+		if(user.l_hand != src && user.r_hand != src)	//if we're not in his hands
+			user << "<span class='notice'>You'll need [src] in your hands to do that.</span>"
+			return
+		user.drop_item()
+		user << "<span class='notice'>You attach [I] onto [src].</span>"
+		scoped = I	//dodgy?
+		var/scoped = 1
+		I.loc = src		//put the silencer into the gun
+		update_icon()
+		return
+	..()
+
+/obj/item/weapon/gun/energy/rifle/gun/update_icon()
+	..()
+	if(scoped)
+		if(mode = 0)
+			modifystate = "eriflescopestun"
+		else
+			modifystate = "eriflescopekill"
+	else
+		if(mode = 0)
+			modifystate = "eriflestun"
+		else
+			modifystate = "eriflekill"
+
+/obj/item/weapon/scope
+	name = "scope"
+	desc = "a scope"
+	icon = 'icons/obj/erfile.dmi'
+	icon_state = "scope"
+	w_class = 2
+
+/obj/item/weapon/gun/energy/rifle/gun/verb/zoom()
+	set category = "Object"
+	set name = "Use Rifle Scope"
+	set popup_menu = 0
+	if(scoped = 0)
+		usr << "You need a scope to look down and focus your aim."
+		return
+	if(usr.stat || !(istype(usr,/mob/living/carbon/human)))
+		usr << "You are unable to focus down the scope of the rifle."
+		return
+	if(!zoom && global_hud.darkMask[1] in usr.client.screen)
+		usr << "Your welding equipment gets in the way of you looking down the scope"
+		return
+	if(!zoom && usr.get_active_hand() != src)
+		usr << "You are too distracted to look down the scope, perhaps if it was in your active hand this might work better"
+		return
+
+	if(usr.client.view == world.view)
+		if(!usr.hud_used.hud_shown)
+			usr.button_pressed_F12(1)	// If the user has already limited their HUD this avoids them having a HUD when they zoom in
+		usr.button_pressed_F12(1)
+		usr.client.view = 12
+		zoom = 1
+	else
+		usr.client.view = world.view
+		if(!usr.hud_used.hud_shown)
+			usr.button_pressed_F12(1)
+		zoom = 0
+	usr << "<font color='[zoom?"blue":"red"]'>Zoom mode [zoom?"en":"dis"]abled.</font>"
+	return*/
+
