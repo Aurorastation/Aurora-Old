@@ -344,3 +344,15 @@
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "meowykins_pda"
 	slot_flags = SLOT_ID | SLOT_BELT
+
+/obj/item/weapon/storage/toolbox/mechanical/fluff/kaylee_toolbox //Kaylee's toolbox - Kaylee Summers - yeahchris - DONE
+	name = "Kaylee's toolbox"
+	desc = "A battered old red toolbox with fading paint. It used to have a name written on it in marker, but it has long since faded to the point of illegibility."
+	icon_state = "red"
+	item_state = "toolbox_red"
+
+/obj/item/clothing/under/dress/fluff/heather_skirt //Black skirt - Heather Wyatt - meowykins - DONE
+	name = "black skirt"
+	desc = "A plain black and grey skirt"
+	icon_state = "plaid_black"
+	item_color = "plaid_black"
