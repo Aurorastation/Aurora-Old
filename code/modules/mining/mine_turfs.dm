@@ -487,10 +487,10 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 	if(dug)
 		return
 	new/obj/item/weapon/ore/glass(src)
+/*	new/obj/item/weapon/ore/glass(src)
 	new/obj/item/weapon/ore/glass(src)
 	new/obj/item/weapon/ore/glass(src)
-	new/obj/item/weapon/ore/glass(src)
-	new/obj/item/weapon/ore/glass(src)
+	new/obj/item/weapon/ore/glass(src)*/
 	dug = 1
 	icon_plating = "asteroid_dug"
 	icon_state = "asteroid_dug"
