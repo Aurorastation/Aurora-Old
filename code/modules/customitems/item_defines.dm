@@ -356,3 +356,17 @@
 	desc = "A plain black and grey skirt"
 	icon_state = "plaid_black"
 	item_color = "plaid_black"
+
+/obj/item/clothing/gloves/swat/fluff/hawk_gloves //Sharpshooter gloves - Hawk Silverstone - nebulaflare - DONE
+	desc = "These tactical gloves are tailor made for a marksman."
+	name = "\improper Sharpshooter Gloves"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "hawk_gloves"
+	item_state = "swat_gl"
+
+/obj/item/clothing/suit/storage/fluff/fabian_coat //NT Navy coat - Fabian Goellstein - mirkoloio - DONE
+	name = "NT Navy coat"
+	desc = "A working coat of the NanoTrasen Navy. The nameplate carries the letters 'GOELLSTEIN'."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "fabian_coat_open"
+	item_state = "fabian_coat_open"
