@@ -218,3 +218,7 @@
 				welder_salvage += part
 				parts -= part
 		return
+
+/obj/effect/decal/mecha_wreckage/exoskeleton
+	name = "Useless Exoskeleton"
+	icon_state = "exosuit-broken"

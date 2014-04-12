@@ -48,11 +48,14 @@
 
 	var/msg = ""
 	var/modmsg = ""
+	var/custommsg = ""
 	var/num_mods_online = 0
 	var/num_admins_online = 0
+	var/num_custom_online = 0
+
 	if(holder)
 		for(var/client/C in admins)
-			if(R_ADMIN & C.holder.rights || !(R_MOD & C.holder.rights))
+			if(R_ADMIN & C.holder.rights)
 				msg += "\t[C] is a [C.holder.rank]"
 
 				if(C.holder.fakekey)
@@ -70,7 +73,7 @@
 				msg += "\n"
 
 				num_admins_online++
-			else
+			else if(R_MOD & C.holder.rights)
 				modmsg += "\t[C] is a [C.holder.rank]"
 
 				if(isobserver(C.mob))
@@ -85,15 +88,33 @@
 				modmsg += "\n"
 				num_mods_online++
 
+			else
+				custommsg += "\t[C] is a [C.holder.rank]"
+
+				if(isobserver(C.mob))
+					custommsg += " - Observing"
+				else if(istype(C.mob,/mob/new_player))
+					custommsg += " - Lobby"
+				else
+					custommsg += " - Playing"
+
+				if(C.is_afk())
+					custommsg += " (AFK)"
+				custommsg += "\n"
+				num_custom_online++
+
 	else
 		for(var/client/C in admins)
-			if(R_ADMIN & C.holder.rights || !(R_MOD & C.holder.rights))
+			if(R_ADMIN & C.holder.rights)
 				if(!C.holder.fakekey)
 					msg += "\t[C] is a [C.holder.rank]\n"
 					num_admins_online++
-			else
+			else if(R_MOD & C.holder.rights)
 				modmsg += "\t[C] is a [C.holder.rank]\n"
 				num_mods_online++
+			else
+				custommsg += "\t[C] is a [C.holder.rank]\n"
+				num_custom_online++
 
-	msg = "<b>Current Admins ([num_admins_online]):</b>\n" + msg + "\n<b> Current Moderators([num_mods_online]):</b>\n" + modmsg
+	msg = "<b>Current Admins ([num_admins_online]):</b>\n" + msg + "\n<b> Current Moderators([num_mods_online]):</b>\n" + modmsg + "\n<b> Current Custom Ranks([num_custom_online]):</b>\n" + custommsg
 	src << msg

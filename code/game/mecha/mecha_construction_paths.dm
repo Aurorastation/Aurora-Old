@@ -586,7 +586,7 @@
 		const_holder.density = 1
 		spawn()
 			del src
-		return
+		return 0
 
 
 /datum/construction/reversible/mecha/firefighter
@@ -888,7 +888,7 @@
 		const_holder.density = 1
 		spawn()
 			del src
-		return
+		return 0
 
 /datum/construction/reversible/mecha/durand
 	result = "/obj/mecha/combat/durand"
@@ -1391,9 +1391,9 @@
 
 	spawn_result()
 		var/obj/item/mecha_parts/chassis/const_holder = holder
-		const_holder.construct = new /datum/construction/reversible/mecha/odysseus(const_holder)
+		const_holder.construct = new /datum/construction/reversible/mecha/exoskeleton(const_holder)
 		const_holder.icon = 'icons/mecha/mech_construction.dmi'
-		const_holder.icon_state = "odysseus0"
+		const_holder.icon_state = "exoskeleton0"
 		const_holder.density = 1
 		spawn()
 			del src
@@ -1401,7 +1401,7 @@
 
 
 /datum/construction/reversible/mecha/exoskeleton
-	result = "/obj/mecha/working/exoskeleton"
+	result = "/obj/mecha/combat/exoskeleton"
 	steps = list(
 					//1
 					list("key"=/obj/item/weapon/weldingtool,
@@ -1412,52 +1412,41 @@
 					 		"backkey"=/obj/item/weapon/crowbar,
 					 		"desc"="External armor is installed."),
 					 //3
-					 list("key"=/obj/item/mecha_parts/part/exoskeletonarmor,
-					 		"backkey"=/obj/item/weapon/weldingtool,
-					 		"desc"="Internal armor is welded."),
-					 //4
 					 list("key"=/obj/item/weapon/weldingtool,
 					 		"backkey"=/obj/item/weapon/wrench,
 					 		"desc"="Internal armor is wrenched"),
-					 //5
+					 //4
 					 list("key"=/obj/item/weapon/wrench,
 					 		"backkey"=/obj/item/weapon/crowbar,
 					 		"desc"="Internal armor is installed"),
-					 //6
+					 //5
 					 list("key"=/obj/item/stack/sheet/metal,
 					 		"backkey"=/obj/item/weapon/screwdriver,
 					 		"desc"="Central control module is secured"),
-					 //7
+					 //6
 					 list("key"=/obj/item/weapon/screwdriver,
 					 		"backkey"=/obj/item/weapon/crowbar,
 					 		"desc"="Central control module is installed"),
-					 //8
+					 //7
 					 list("key"=/obj/item/weapon/circuitboard/mecha/exoskeleton/main,
 					 		"backkey"=/obj/item/weapon/screwdriver,
 					 		"desc"="The wiring is adjusted"),
-					 //9
-					 list("key"=/obj/item/mecha_parts/part/electricalpack,
-					 		"backkey"=/obj/item/weapon/screwdriver,
-					 		"desc"="Electrical Pack"),
-					 //10
+					 //8
 					 list("key"=/obj/item/weapon/wirecutters,
 					 		"backkey"=/obj/item/weapon/screwdriver,
 					 		"desc"="The wiring is added"),
-					 //11
+					 //9
 					 list("key"=/obj/item/weapon/cable_coil,
 					 		"backkey"=/obj/item/weapon/screwdriver,
 					 		"desc"="The hydraulic systems are active."),
-					 //12
+					 //11
 					 list("key"=/obj/item/weapon/screwdriver,
 					 		"backkey"=/obj/item/weapon/wrench,
 					 		"desc"="The hydraulic systems are connected."),
-					 //13
+					 //12
 					 list("key"=/obj/item/weapon/wrench,
 					 		"backkey"=/obj/item/weapon/screwdriver,
-					 		"desc"="The hydraulic systems are disconnected."),
-					 //14
-					 list("key"=/obj/item/mecha_parts/part/hydraulicspack,
-					 		"desc"="Hydraulic pack disconnected."),
+					 		"desc"="The hydraulic systems are disconnected.")
 					)
 
 	action(atom/used_atom,mob/user as mob)
@@ -1469,106 +1458,93 @@
 
 		//TODO: better messages.
 		switch(index)
-			if(14)
-				user.visible_message("[user] installs [holder] hydraulics pack", "You install [holder] hydraulics pack.")
-			if(13)
-				if(diff==FORWARD)
-					user.visible_message("[user] connects [holder] hydraulic systems", "You connect [holder] hydraulic systems.")
-					holder.icon_state = ""
-				else
-					user.visible_message("[user] removes [holder] hydraulics pack", "You remove [holder] hydraulics pack.")
-					holder.icon_state = ""
 			if(12)
-				if(diff==FORWARD)
-					user.visible_message("[user] activates [holder] hydraulic systems.", "You activate [holder] hydraulic systems.")
-					holder.icon_state = ""
-				else
-					user.visible_message("[user] disconnects [holder] hydraulic systems", "You disconnect [holder] hydraulic systems.")
-					holder.icon_state = ""
+				user.visible_message("[user] installs [holder] hydraulics pack", "You install [holder] hydraulics pack.")
+				holder.icon_state = "exoskeleton1"
 			if(11)
 				if(diff==FORWARD)
-					user.visible_message("[user] adds the wiring to [holder].", "You add the wiring to [holder].")
-					holder.icon_state = ""
+					user.visible_message("[user] connects [holder] hydraulic systems", "You connect [holder] hydraulic systems.")
+					holder.icon_state = "exoskeleton2"
 				else
-					user.visible_message("[user] deactivates [holder] hydraulic systems.", "You deactivate [holder] hydraulic systems.")
-					holder.icon_state = ""
+					user.visible_message("[user] removes [holder] hydraulics pack", "You remove [holder] hydraulics pack.")
+					holder.icon_state = "exoskeleton0"
 			if(10)
 				if(diff==FORWARD)
+					user.visible_message("[user] activates [holder] hydraulic systems.", "You activate [holder] hydraulic systems.")
+					holder.icon_state = "exoskeleton3"
+				else
+					user.visible_message("[user] disconnects [holder] hydraulic systems", "You disconnect [holder] hydraulic systems.")
+					holder.icon_state = "exoskeleton1"
+			if(9)
+				if(diff==FORWARD)
+					user.visible_message("[user] adds the wiring to [holder].", "You add the wiring to [holder].")
+					holder.icon_state = "exoskeleton4"
+				else
+					user.visible_message("[user] deactivates [holder] hydraulic systems.", "You deactivate [holder] hydraulic systems.")
+					holder.icon_state = "exoskeleton2"
+			if(8)
+				if(diff==FORWARD)
 					user.visible_message("[user] adjusts the wiring of [holder].", "You adjust the wiring of [holder].")
-					holder.icon_state = ""
+					holder.icon_state = "exoskeleton5"
 				else
 					user.visible_message("[user] removes the wiring from [holder].", "You remove the wiring from [holder].")
 					var/obj/item/weapon/cable_coil/coil = new /obj/item/weapon/cable_coil(get_turf(holder))
 					coil.amount = 4
-					holder.icon_state = ""
-			if(9)
-				if(diff==FORWARD)
-					user.visible_message("[user] install [holder] electrical systems", "You install [holder] electrical systems.")
-					holder.icon_state = ""
-				else
-					user.visible_message("[user] unfastens [holder] wiring", "You unfasten [holder] wiring systems.")
-					holder.icon_state = ""
-			if(8)
+					holder.icon_state = "exoskeleton3"
+			if(7)
 				if(diff==FORWARD)
 					user.visible_message("[user] installs the central control module into [holder].", "You install the central computer mainboard into [holder].")
 					del used_atom
-					holder.icon_state = ""
+					holder.icon_state = "exoskeleton7"
 				else
 					user.visible_message("[user] disconnects the wiring of [holder].", "You disconnect the wiring of [holder].")
-					holder.icon_state = ""
-			if(7)
+					holder.icon_state = "exoskeleton5"
+			if(6)
 				if(diff==FORWARD)
 					user.visible_message("[user] secures the mainboard.", "You secure the mainboard.")
-					holder.icon_state = ""
+					holder.icon_state = "exoskeleton8"
 				else
 					user.visible_message("[user] removes the central control module from [holder].", "You remove the central computer mainboard from [holder].")
 					new /obj/item/weapon/circuitboard/mecha/ripley/main(get_turf(holder))
-					holder.icon_state = ""
-			if(6)
-				if(diff==FORWARD)
-					user.visible_message("[user] installs internal armor layer to [holder].", "You install internal armor layer to [holder].")
-					holder.icon_state = ""
-				else
-					user.visible_message("[user] unfastens the peripherals control module.", "You unfasten the peripherals control module.")
-					holder.icon_state = ""
+					holder.icon_state = "exoskeleton6"
 			if(5)
 				if(diff==FORWARD)
 					user.visible_message("[user] secures internal armor layer.", "You secure internal armor layer.")
-					holder.icon_state = ""
+					holder.icon_state = "exoskeleton10"
 				else
 					user.visible_message("[user] pries internal armor layer from [holder].", "You prie internal armor layer from [holder].")
 					var/obj/item/stack/sheet/metal/MS = new /obj/item/stack/sheet/metal(get_turf(holder))
 					MS.amount = 5
-					holder.icon_state = ""
+					holder.icon_state = "exoskeleton8"
 			if(4)
 				if(diff==FORWARD)
 					user.visible_message("[user] welds internal armor layer to [holder].", "You weld the internal armor layer to [holder].")
-					holder.icon_state = ""
+					holder.icon_state = "exoskeleton11"
 				else
 					user.visible_message("[user] unfastens the internal armor layer.", "You unfasten the internal armor layer.")
-					holder.icon_state = ""
+					holder.icon_state = "exoskeleton9"
 			if(3)
 				if(diff==FORWARD)
 					user.visible_message("[user] installs external reinforced armor layer to [holder].", "You install external reinforced armor layer to [holder].")
-					holder.icon_state = ""
+					holder.icon_state = "exoskeleton12"
 				else
 					user.visible_message("[user] cuts internal armor layer from [holder].", "You cut the internal armor layer from [holder].")
-					holder.icon_state = ""
+					holder.icon_state = "exoskeleton10"
 			if(2)
 				if(diff==FORWARD)
 					user.visible_message("[user] secures armor layer.", "You secure the reinforced armor layer.")
-					holder.icon_state = ""
+					holder.icon_state = "exoskeleton13"
 				else
 					user.visible_message("[user] pries the armor layer from [holder].", "You prie the armor layer from [holder].")
 					var/obj/item/stack/sheet/plasteel/MS = new /obj/item/stack/sheet/plasteel(get_turf(holder))
 					MS.amount = 5
-					holder.icon_state = ""
+					holder.icon_state = "exoskeleton11"
 			if(1)
 				if(diff==FORWARD)
 					user.visible_message("[user] welds the armor layer to [holder].", "You weld the armor layer to [holder].")
 				else
 					user.visible_message("[user] unfastens the armor layer.", "You unfasten the armor layer.")
-					holder.icon_state = ""
+					holder.icon_state = "exoskeleton12"
 		return 1
 
 	spawn_result()
