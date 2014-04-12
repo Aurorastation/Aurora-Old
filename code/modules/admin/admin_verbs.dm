@@ -56,6 +56,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/investigate_show,		/*various admintools for investigation. Such as a singulo grief-log*/
 	/client/proc/secrets,
 	/datum/admins/proc/toggleooc,		/*toggles ooc on/off for everyone*/
+	/datum/admins/proc/togglelooc,
 	/datum/admins/proc/toggleoocdead,	/*toggles ooc on/off for everyone who is dead*/
 	/datum/admins/proc/toggledsay,		/*toggles dsay on/off for everyone*/
 	/client/proc/game_panel,			/*game panel, allows to change game-mode etc*/
@@ -104,6 +105,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/editappear
 	)
 var/list/admin_verbs_dev = list(
+	/client/proc/togglebuildmodeself,
 	/datum/admins/proc/restart,
 	/datum/admins/proc/delay,
 	/client/proc/giveruntimelog,
@@ -259,6 +261,8 @@ var/list/admin_verbs_hideable = list(
 	/proc/release
 	)
 var/list/admin_verbs_mod = list(
+	/client/proc/cmd_admin_wind,
+	/client/proc/cmd_admin_unwind,
 	/client/proc/cmd_admin_pm_context,	/*right-click adminPM interface*/
 	/client/proc/cmd_admin_pm_panel,	/*admin-pm list*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game.*/
