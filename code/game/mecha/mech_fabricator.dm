@@ -93,6 +93,7 @@
 
 	"Exoskeleton"=list(
 						/obj/item/mecha_parts/chassis/exoskeleton,
+						/obj/item/mecha_parts/part/exoskeletonarmor,
 						/obj/item/mecha_parts/part/hydraulicspack,
 						/obj/item/mecha_parts/part/electricalpack
 

@@ -1,16 +1,17 @@
-/obj/mecha/exoskeleton/exoskeleton
-	name = "exoskeleton"
-	desc = ""
-	icon_state = "ripley" // need this
-	initial_icon = "ripley" // need this
+/obj/mecha/combat/exoskeleton
+	name = "Exoskeleton Mk. I"
+	desc = "A prototype currently in development for special response and other purposes."
+	icon_state = "exosuit" // need this
+	initial_icon = "exosuit" // need this
 	step_in = 2
 	max_temperature = 7000 // DON'T FORGET TO TEST THIS
 	health = 200
-	wreckage =  /obj/effect/decal/mecha_wreckage/ripley
+	wreckage =  /obj/effect/decal/mecha_wreckage/exoskeleton
 	internal_damage_threshold = 35
 	deflect_chance = 25
 	step_energy_drain = 4
 	var/obj/item/clothing/glasses/hud/security/mech/hud
+	max_equip = 3
 
 	New()
 		..()
@@ -99,7 +100,7 @@
 					holder.icon_state = "hud_imp_chem"
 					C.images += holder
 
-/obj/mecha/exoskeleton/exoskeleton/melee_action(target as obj|mob|turf)
+/*/obj/mecha/exoskeleton/exoskeleton/melee_action(target as obj|mob|turf)
 	force = 30
 	var/melee_cooldown2 = 10
 	var/melee_can_hit2 = 1
@@ -179,12 +180,12 @@
 			melee_can_hit2 = 1
 		return
 
-	else
+/*	else
 		if(damtype == "brute")
 			for(var/target_type in src.destroyable_obj)
 				if(istype(target, target_type) && hascall(target, "attackby"))
 					src.occupant_message("You hit [target].")
-					src.visible_message("<font color='red'><b>[src.name] hits [target]</b></font>")
+					src.visible_message("<font color='red'><b>[src.name] hits [target] for no damage.</b></font>")
 					if(!istype(target, /turf/simulated/wall))
 						target:attackby(src,src.occupant)
 /*					else if(prob(5))
@@ -196,4 +197,4 @@
 					if(do_after(melee_cooldown2))
 						melee_can_hit2 = 1
 					break
-	return
+	return */ */
