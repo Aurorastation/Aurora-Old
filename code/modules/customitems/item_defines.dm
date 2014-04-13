@@ -370,3 +370,46 @@
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "fabian_coat_open"
 	item_state = "fabian_coat_open"
+
+	verb/toggle()
+		set name = "Toggle coat zipper"
+		set category = "Object"
+		set src in usr
+
+		if(!usr.canmove || usr.stat || usr.restrained())
+			return 0
+
+		switch(icon_state)
+			if("fabian_coat_open")
+				src.icon_state = "fabian_coat_closed"
+				usr << "You zip the coat's zipper shut."
+			if("fabian_coat_closed")
+				src.icon_state = "fabian_coat_open"
+				usr << "You unzip the coat's zipper."
+			else
+				usr << "You attempt to button-up the velcro on your [src], before promptly realising how retarded you are."
+				return
+		usr.update_inv_wear_suit()	//so our overlays update
+
+/obj/item/weapon/pen/fluff/eliza_pen //Fountain pen - Eliza Pond - forgottentraveller - SPRITE
+	desc = "A pen with an outer cylinder of black obsidian with gold metal clip. Monogrammed with silver inlay 'V.M.'"
+	name = "elegant pen"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "eliza_pen"
+	item_state = "pen"
+	var/ink = 1
+
+/obj/item/weapon/pen/fluff/eliza_pen/attack_self(mob/user)
+	switch(ink)
+		if(1)
+			ink = 2
+			colour = "blue"
+			user << "<span class='notice'>You cycle the pen to use the blue ink cartridge.</span>"
+		if(2)
+			ink = 3
+			colour = "red"
+			user << "<span class='notice'>You cycle the pen to use the red ink cartridge.</span>"
+		if(3)
+			ink = 1
+			colour = "black"
+			user << "<span class='notice'>You cycle the pen to use the black ink cartridge.</span>"
