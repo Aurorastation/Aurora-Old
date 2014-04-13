@@ -146,14 +146,74 @@
 /obj/item/weapon/reagent_containers/spray/chemsprayer
 	name = "chem sprayer"
 	desc = "A utility used to spray large amounts of reagent in a given area."
-	icon = 'icons/obj/gun.dmi'
+	icon = 'icons/obj/chemsprayer.dmi'
 	icon_state = "chemsprayer"
 	item_state = "chemsprayer"
 	throwforce = 3
-	w_class = 3.0
+	w_class = 4.0
+	slot_flags = SLOT_BACK
 	volume = 600
 	origin_tech = "combat=3;materials=3;engineering=3"
 
+/obj/item/weapon/chemsprayerframe
+	name = "chem sprayer frame"
+	desc = "A metal frame lacking almost any items required to showcase its full potential."
+	icon = 'icons/obj/chemsprayer.dmi'
+	icon_state = "chemsprayerframe"
+	item_state = "chemsprayer"
+	var/build_step = 0
+	w_class = 4.0
+/*
+
+CODE THIS WHENENEVER YOU'RE -NOT- TIRED, SKULL!
+
+/obj/item/weapon/chemsprayerframe/complete
+	name = "chem sprayer frame"
+	desc = "A metal frame with a metal superstructure built on it."
+	icon_state = "chemsprayerframecomplete"
+
+/obj/item/weapon/chemsprayerframe/onetank
+	name = "chem sprayer frame"
+	desc = "A metal frame with a single pressure vessel attached to it."
+	icon_state = "chemsprayeronetank"
+
+/obj/item/weapon/chemsprayerframe/twotank
+	name = "chem sprayer frame"
+	desc = "A metal frame with two pressure vessel attached to it."
+	icon_state = "chemsprayertwotank"
+
+/obj/item/weapon/chemsprayerframe/beaker
+	name = "chem sprayer frame"
+	desc = "A metal frame with two pressure vessels and a reagent container attached to it."
+	icon_state = "chemsprayerbeaker"
+
+/obj/item/weapon/chemsprayerframe/electronics
+	name = "chem sprayer frame"
+	desc = "A metal frame with a set of electronics rigged to the existing machinery."
+	icon_state = "chemsprayerelectronics"
+
+/obj/item/weapon/reagent_containers/spray/chemsprayer/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	..()
+	switch(build_step)
+		if(0)
+			if(istype(W, /obj/item/device/healthanalyzer))
+				user.drop_item()
+				del(W)
+				src.build_step++
+				user << "<span class='notice'>You add the health sensor to [src].</span>"
+				src.name = "First aid/robot arm/health analyzer assembly"
+				src.overlays += image('icons/obj/aibots.dmi', "na_scanner")
+		if(1)
+			if(isprox(W))
+				user.drop_item()
+				del(W)
+				src.build_step++
+				user << "<span class='notice'>You complete the Medibot! Beep boop.</span>"
+				var/turf/T = get_turf(src)
+				var/obj/machinery/bot/medbot/S = new /obj/machinery/bot/medbot(T)
+				S.name = src.created_name
+				user.drop_from_inventory(src)
+				del(src) */
 
 //this is a big copypasta clusterfuck, but it's still better than it used to be!
 /obj/item/weapon/reagent_containers/spray/chemsprayer/afterattack(atom/A as mob|obj, mob/user as mob)

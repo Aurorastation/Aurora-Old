@@ -235,7 +235,7 @@
 						new /obj/item/stack/sheet/glass(output.loc)
 						new /obj/item/stack/sheet/glass(output.loc)
 						new /obj/item/stack/sheet/glass(output.loc)*/
-						new /obj/item/stack/sheet/glass( output.loc, 5)
+						new /obj/item/stack/sheet/glass( output.loc, 2)
 					else
 						on = 0
 					continue
@@ -296,7 +296,7 @@
 						new /obj/item/stack/sheet/mineral/plasma(output.loc)
 						new /obj/item/stack/sheet/mineral/plasma(output.loc)
 						new /obj/item/stack/sheet/mineral/plasma(output.loc)*/
-						new /obj/item/stack/sheet/mineral/plasma( output.loc, 5)
+						new /obj/item/stack/sheet/mineral/plasma( output.loc, 2)
 					else
 						on = 0
 					continue
@@ -320,7 +320,7 @@
 						new /obj/item/stack/sheet/metal(output.loc)
 						new /obj/item/stack/sheet/metal(output.loc)
 						new /obj/item/stack/sheet/metal(output.loc)*/
-						new /obj/item/stack/sheet/metal( output.loc, 5)
+						new /obj/item/stack/sheet/metal( output.loc, 2)
 					else
 						on = 0
 					continue
@@ -333,7 +333,7 @@
 						new /obj/item/stack/sheet/plasteel(output.loc)
 						new /obj/item/stack/sheet/plasteel(output.loc)
 						new /obj/item/stack/sheet/plasteel(output.loc)*/
-						new /obj/item/stack/sheet/plasteel( output.loc, 5)
+						new /obj/item/stack/sheet/plasteel( output.loc, 2)
 					else
 						on = 0
 					continue
@@ -357,7 +357,7 @@
 						new /obj/item/stack/sheet/glass/plasmaglass(output.loc)
 						new /obj/item/stack/sheet/glass/plasmaglass(output.loc)
 						new /obj/item/stack/sheet/glass/plasmaglass(output.loc)*/
-						new /obj/item/stack/sheet/glass/plasmaglass( output.loc, 5)
+						new /obj/item/stack/sheet/glass/plasmaglass( output.loc, 2)
 					else
 						on = 0
 				if (selected_glass == 1 && selected_gold == 0 && selected_silver == 0 && selected_diamond == 0 && selected_plasma == 1 && selected_uranium == 0 && selected_iron == 1 && selected_clown == 0)
@@ -370,7 +370,7 @@
 						new /obj/item/stack/sheet/glass/plasmarglass(output.loc)
 						new /obj/item/stack/sheet/glass/plasmarglass(output.loc)
 						new /obj/item/stack/sheet/glass/plasmarglass(output.loc)*/
-						new /obj/item/stack/sheet/glass/plasmarglass( output.loc, 5)
+						new /obj/item/stack/sheet/glass/plasmarglass( output.loc, 2)
 					else
 						on = 0
 					continue
