@@ -80,18 +80,6 @@
 			if("labgreen_all")
 				src.icon_state = "labgreen_open"
 				usr << "You unbotton the labcoat."
-			if("coatdark")
-				src.icon_state = "coatdark-hood"
-				usr << "You button up the coat and pull on the hood."
-			if("coatdark-hood")
-				src.icon_state = "coatdark"
-				usr << "You unbutton the coat and pull off the hood."
-			if("coatwhite")
-				src.icon_state = "coatwhite-hood"
-				usr << "You button up the coat and pull on the hood."
-			if("coatwhite-hood")
-				src.icon_state = "coatwhite"
-				usr << "You unbutton the coat and pull off the hood."
 			if("raieed_labcoat_open")
 				src.icon_state = "raieed_labcoat_top"
 				usr << "You button up the labcoat's first button."
@@ -101,6 +89,12 @@
 			if("raieed_labcoat_all")
 				src.icon_state = "raieed_labcoat_open"
 				usr << "You unbutton the labcoat."
+			if("fabian_coat_open")
+				src.icon_state = "fabian_coat_closed"
+				usr << "You button up the coat's buttons."
+			if("fabian_coat_closed")
+				src.icon_state = "fabian_coat_open"
+				usr << "You unbutton the coat's buttons."
 			else
 				usr << "You attempt to button-up the velcro on your [src], before promptly realising how retarded you are."
 				return
@@ -138,15 +132,3 @@
 	name = "Scientist Labcoat"
 	desc = "A suit that protects against minor chemical spills. Has a purple stripe on the shoulder."
 	icon_state = "labcoat_tox_open"
-
-/obj/item/clothing/suit/storage/labcoat/coat_dark
-	name = "Dark Winter Coat"
-	desc = "A soft dark coat, with fur on the edges of the hood."
-	icon_state = "coatdark"
-	item_state = "coatdark"
-
-/obj/item/clothing/suit/storage/labcoat/coat_white
-	name = "White Winter Coat"
-	desc = "A soft white coat, with fur on the edges of the hood."
-	icon_state = "coatwhite"
-	item_state = "coatwhite"

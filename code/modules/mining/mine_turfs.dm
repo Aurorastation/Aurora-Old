@@ -283,7 +283,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 		var/turf/simulated/floor/plating/airless/asteroid/N = ChangeTurf(/turf/simulated/floor/plating/airless/asteroid)
 		N.fullUpdateMineralOverlays()
 
-		if(rand(1,65) == 1)
+		if(rand(1,75) == 1)
 			visible_message("<span class='notice'>An old dusty crate was buried within!</span>")
 			new /obj/structure/closet/crate/secure/loot(src)
 
@@ -487,10 +487,10 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 	if(dug)
 		return
 	new/obj/item/weapon/ore/glass(src)
+/*	new/obj/item/weapon/ore/glass(src)
 	new/obj/item/weapon/ore/glass(src)
 	new/obj/item/weapon/ore/glass(src)
-	new/obj/item/weapon/ore/glass(src)
-	new/obj/item/weapon/ore/glass(src)
+	new/obj/item/weapon/ore/glass(src)*/
 	dug = 1
 	icon_plating = "asteroid_dug"
 	icon_state = "asteroid_dug"

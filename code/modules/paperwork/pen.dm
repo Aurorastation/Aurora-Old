@@ -62,6 +62,10 @@
 	slot_flags = SLOT_BELT
 	origin_tech = "materials=2;syndicate=5"
 
+/obj/item/weapon/pen/sleepypen/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	if (istype(O, /obj/item/weapon/screwdriver))
+		user << "<span class='notice'>You unfasten the back of the pen, revealing a small conpartment capable of holding liquid.</span>"
+
 
 /obj/item/weapon/pen/sleepypen/New()
 	var/datum/reagents/R = new/datum/reagents(30) //Used to be 300
@@ -89,6 +93,9 @@
 	slot_flags = SLOT_BELT
 	origin_tech = "materials=2;syndicate=5"
 
+/obj/item/weapon/pen/paralysis/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	if (istype(O, /obj/item/weapon/screwdriver))
+		user << "<span class='notice'>You unfasten the back of the pen, revealing a small conpartment capable of holding liquid.</span>"
 
 /obj/item/weapon/pen/paralysis/attack(mob/M as mob, mob/user as mob)
 	if(!(istype(M,/mob)))
@@ -103,8 +110,9 @@
 	var/datum/reagents/R = new/datum/reagents(50)
 	reagents = R
 	R.my_atom = src
-	R.add_reagent("zombiepowder", 10)
+/*	R.add_reagent("zombiepowder", 10)
 	R.add_reagent("impedrezene", 25)
-	R.add_reagent("cryptobiolin", 15)
+	R.add_reagent("cryptobiolin", 15)*/
+	R.add_reagent("stoxin", 15)
 	..()
 	return
