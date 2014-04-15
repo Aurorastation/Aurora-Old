@@ -273,7 +273,17 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	fire_delay_wielded = 25
 	fire_delay_unwielded = 75
 
-	attack_self(mob/living/user as mob)
+//	attack_self(mob/living/user as mob)
+//Let's do some magical things, make this a verb, yes?
+//Needs some testing done, primary concerns: useability (when restrained, etc.) and icon updating
+	verb/toggle()
+		set name = "Switch weapon mode"
+		set category = "Object"
+		set src in usr
+		
+		if(!usr.canmove || usr.stat || usr.restrained())
+			return 0
+		
 		switch(mode)
 			if(2)
 				mode = 0
@@ -329,7 +339,15 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	var/mode = 0 //0 = stun, 1 = kill
 
 
-	attack_self(mob/living/user as mob)
+//	attack_self(mob/living/user as mob)
+	verb/toggle()
+		set name = "Switch weapon mode"
+		set category = "Object"
+		set src in usr
+		
+		if(!usr.canmove || usr.stat || usr.restrained())
+			return 0
+		
 		switch(mode)
 			if(0)
 				mode = 1
