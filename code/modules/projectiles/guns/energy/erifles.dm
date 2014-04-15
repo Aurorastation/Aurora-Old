@@ -31,6 +31,14 @@
 	var/force_unwielded = 0 //Force modification, because striking someone with a rifle held in two hands -hurts-
 	var/force_wielded = 0
 
+	update_icon()
+		var/ratio = power_supply.charge / power_supply.maxcharge
+		ratio = round(ratio, 0.25) * 100
+		if(modifystate)
+			icon_state = "[modifystate][ratio]"
+		else
+			icon_state = "[initial(icon_state)][ratio]"
+
 /obj/item/weapon/gun/energy/rifle/proc/unwield()
 	wielded = 0
 	fire_delay = fire_delay_unwielded
@@ -280,28 +288,28 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 		set name = "Switch weapon mode"
 		set category = "Object"
 		set src in usr
-		
+
 		if(!usr.canmove || usr.stat || usr.restrained())
 			return 0
-		
+
 		switch(mode)
 			if(2)
 				mode = 0
 				charge_cost = 100
 				fire_sound = 'sound/weapons/Taser.ogg'
-				user << "\red [src.name] is now set to stun."
+				usr << "\red [src.name] is now set to stun."
 				projectile_type = "/obj/item/projectile/energy/electrode"
 			if(0)
 				mode = 1
 				charge_cost = 100
 				fire_sound = 'sound/weapons/Laser.ogg'
-				user << "\red [src.name] is now set to kill."
+				usr << "\red [src.name] is now set to kill."
 				projectile_type = "/obj/item/projectile/beam"
 			if(1)
 				mode = 2
 				charge_cost = 200
 				fire_sound = 'sound/weapons/pulse.ogg'
-				user << "\red [src.name] is now set to DESTROY."
+				usr << "\red [src.name] is now set to DESTROY."
 				projectile_type = "/obj/item/projectile/beam/pulse"
 		return
 
@@ -344,23 +352,23 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 		set name = "Switch weapon mode"
 		set category = "Object"
 		set src in usr
-		
+
 		if(!usr.canmove || usr.stat || usr.restrained())
 			return 0
-		
+
 		switch(mode)
 			if(0)
 				mode = 1
 				charge_cost = 50
 				fire_sound = 'sound/weapons/Laser.ogg'
-				user << "\red [src.name] is now set to kill."
+				usr << "\red [src.name] is now set to kill."
 				projectile_type = "/obj/item/projectile/beam"
 				modifystate = "eriflekill"
 			if(1)
 				mode = 0
 				charge_cost = 50
 				fire_sound = 'sound/weapons/Taser.ogg'
-				user << "\red [src.name] is now set to stun."
+				usr << "\red [src.name] is now set to stun."
 				projectile_type = "/obj/item/projectile/energy/electrode"
 				modifystate = "eriflestun"
 		update_icon()
