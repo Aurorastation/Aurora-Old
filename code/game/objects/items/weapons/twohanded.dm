@@ -148,7 +148,7 @@
 	throw_range = 5
 	w_class = 2.0
 	force_unwielded = 3
-	force_wielded = 50
+	force_wielded = 30
 	wieldsound = 'sound/weapons/saberon.ogg'
 	unwieldsound = 'sound/weapons/saberoff.ogg'
 	flags = FPRINT | TABLEPASS | NOSHIELD
@@ -165,7 +165,7 @@
 		user << "\red You twirl around a bit before losing your balance and impaling yourself on the [src]."
 		user.take_organ_damage(20,25)
 		return
-	if((wielded) && prob(95))
+	if((wielded) && prob(50))
 		spawn(0)
 			for(var/i in list(1,2,4,8,4,2,1,2,4,8,4,2))
 				user.dir = i

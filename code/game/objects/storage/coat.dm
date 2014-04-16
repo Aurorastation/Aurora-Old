@@ -217,11 +217,13 @@
 			O.emp_act(severity)
 	..()
 
+/*
+
 /obj/item/clothing/suit/hear_talk(mob/M, var/msg)
 	for (var/atom/A in src)
 		if(istype(A,/obj/))
 			var/obj/O = A
-			O.hear_talk(M, msg)
+			O.hear_talk(M, msg) */
 
 /obj/item/clothing/suit/storage/wintercoat
 	name = "Dark Winter Coat"
