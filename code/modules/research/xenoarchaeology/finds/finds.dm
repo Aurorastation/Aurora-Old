@@ -324,8 +324,8 @@
 		if(26)
 			//energy gun
 			var/spawn_type = pick(\
-			/obj/item/weapon/gun/energy/rifle/laser/practice,\
-			/obj/item/weapon/gun/energy/rifle/laser,\
+			/obj/item/weapon/gun/energy/laser/practice,\
+			/obj/item/weapon/gun/energy/laser,\
 			/obj/item/weapon/gun/energy/xray,\
 			/obj/item/weapon/gun/energy/laser/captain)
 			if(spawn_type)
