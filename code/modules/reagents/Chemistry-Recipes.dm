@@ -459,17 +459,15 @@ datum
 			id = "chemsmoke"
 			result = null
 			required_reagents = list("potassium" = 1, "sugar" = 1, "phosphorus" = 1)
-			result_amount = null
+			result_amount = 0.4
 			secondary = 1
 			on_reaction(var/datum/reagents/holder, var/created_volume)
 				var/location = get_turf(holder.my_atom)
 				var/datum/effect/effect/system/smoke_spread/chem/S = new /datum/effect/effect/system/smoke_spread/chem
 				S.attach(location)
-				S.set_up(holder, 10, 0, location)
+				S.set_up(holder, created_volume, 0, location)
 				playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
 				spawn(0)
-					S.start()
-					sleep(10)
 					S.start()
 				holder.clear_reagents()
 				return
@@ -858,7 +856,7 @@ datum
 					var/list/flashers = list()
 					for(var/mob/living/carbon/human/M in viewers(TO, null))
 						if(M:eyecheck() <= 0)
-							flick("e_flash", M.flash) // flash dose faggots
+							flick("e_flash", M.flash)
 							flashers += M
 
 					var/y_distance = TO.y - FROM.y
@@ -1556,7 +1554,7 @@ datum
 			name = "Space Beer"
 			id = "spacebeer"
 			result = "beer"
-			required_reagents = list("flour" = 10)
+			required_reagents = list("cornoil" = 10)
 			required_catalysts = list("enzyme" = 5)
 			result_amount = 10
 

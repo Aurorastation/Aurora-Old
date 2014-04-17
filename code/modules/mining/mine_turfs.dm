@@ -176,7 +176,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 						//just pull the surrounding rock out
 						excavate_find(0, F)
 
-				if( excavation_level + P.excavation_amount >= 100 ) //Keep it at 100, it's a bit more complicated that this, and caused issues. -Skull132
+				if( excavation_level + P.excavation_amount >= 100 )
 					//if players have been excavating this turf, leave some rocky debris behind
 					var/obj/structure/boulder/B
 					if(artifact_find)
@@ -187,9 +187,9 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 								B.artifact_find = artifact_find
 						else
 							artifact_debris(1)
-					/*else if(prob(15))
+					else if(prob(15))
 						//empty boulder
-						B = new(src)*/
+						B = new(src)
 
 					if(B)
 						GetDrilled(0)
@@ -487,10 +487,10 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 	if(dug)
 		return
 	new/obj/item/weapon/ore/glass(src)
-/*	new/obj/item/weapon/ore/glass(src)
 	new/obj/item/weapon/ore/glass(src)
 	new/obj/item/weapon/ore/glass(src)
-	new/obj/item/weapon/ore/glass(src)*/
+	new/obj/item/weapon/ore/glass(src)
+	new/obj/item/weapon/ore/glass(src)
 	dug = 1
 	icon_plating = "asteroid_dug"
 	icon_state = "asteroid_dug"
