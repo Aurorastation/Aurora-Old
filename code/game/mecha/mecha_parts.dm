@@ -397,9 +397,10 @@
 ///////// Exoskeleton
 
 
-
 /obj/item/mecha_parts/chassis/exoskeleton
 	name = "Exoskeleton Chassis"
+	icon = 'icons/mecha/mech_construction.dmi'
+	icon_state = "exoskeleton0"
 
 	New()
 		..()
@@ -407,14 +408,16 @@
 
 /obj/item/mecha_parts/part/exoskeletonarmor
 	name="Exoskeleton Armor"
-	icon_state = ""
+	icon = 'icons/obj/clothing/suits.dmi'
+	icon_state = "riot"
 	construction_time = 120
 	construction_cost = list("metal"=30000)
 	origin_tech = "programming=3;materials=2"
 
 /obj/item/mecha_parts/part/hydraulicspack
 	name="Exoskeleton Hydraulics Pack"
-	icon_state = ""
+	icon = 'icons/obj/device.dmi'
+	icon_state = "modkit"
 	construction_time = 90
 	construction_cost = list("metal"=20000,"glass"=6000)
 	origin_tech = "programming=3;materials=2;engineering=2"
@@ -422,7 +425,8 @@
 /obj/item/mecha_parts/part/electricalpack
 	name="Exoskeleton Power Generator Pack"
 	desc="Contains power unit and processing core for modifications."
-	icon_state = ""
+	icon = 'icons/obj/device.dmi'
+	icon_state = "modkit"
 	origin_tech = "programming=3;materials=2;engineering=2"
 	construction_time = 90
 	construction_cost = list("metal"=25000)
@@ -448,7 +452,7 @@
 
 	exoskeleton/main
 		name = "Exoskeleton Circuit Board"
-		icon_state = "" // put something here.
+		icon_state = "mainboard" // put something here.
 
 	ripley
 		origin_tech = "programming=3"
