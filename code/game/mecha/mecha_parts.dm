@@ -448,7 +448,7 @@
 
 	exoskeleton/main
 		name = "Exoskeleton Circuit Board"
-		icon_state = "mcontroller" // put something here.
+		icon_state = "" // put something here.
 
 	ripley
 		origin_tech = "programming=3"

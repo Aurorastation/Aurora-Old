@@ -718,14 +718,6 @@ datum/design/honker_targ
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = "/obj/item/weapon/circuitboard/mecha/honker/targeting"
 
-datum/design/exoskeleton
-	name = "Circuit Design (\"Exoskeleton\" Circuit Board)"
-	desc = "Allows for the construction of a \"Exoskeleton\" Circuit Board."
-	id = "exo_board"
-	req_tech = list("programming" = 4, "combat" = 2)
-	materials = list("$glass" = 2000, "sacid" = 20)
-	build_path = "/obj/item/weapon/circuitboard/mecha/exoskeleton/main"
-
 ////////////////////////////////////////
 /////////// Mecha Equpment /////////////
 ////////////////////////////////////////
