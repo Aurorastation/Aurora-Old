@@ -844,6 +844,7 @@
 #include "code\modules\clothing\under\jobs\ert.dm"
 #include "code\modules\clothing\under\jobs\medsci.dm"
 #include "code\modules\clothing\under\jobs\security.dm"
+#include "code\modules\customitems\baystation_fluff.dm"
 #include "code\modules\customitems\item_defines.dm"
 #include "code\modules\customitems\item_spawning.dm"
 #include "code\modules\destilery\main.dm"
