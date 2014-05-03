@@ -508,3 +508,16 @@
 		..()
 		reagents.add_reagent("cola", 50)
 		on_reagent_change()
+
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/verb/empty()
+
+	set name = "Empty Glass"
+	set category = "Object"
+	set src in usr
+
+	if (alert(usr, "Are you sure you want to empty that?", "Empty Glass:", "Yes", "No") != "Yes")
+		return
+	if(isturf(usr.loc))
+		usr << "<span class='notice'>You empty \the [src] onto the floor.</span>"
+		reagents.reaction(usr.loc)
+		spawn(5) src.reagents.clear_reagents()
