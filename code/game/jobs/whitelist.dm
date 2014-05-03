@@ -38,8 +38,8 @@ var/list/whitelist = list()
 		return 1
 //	if(species == "machine" || species == "Machine")
 //		return 1
-	if(check_rights(R_ADMIN, 0))
-		return 1
+//	if(check_rights(R_ADMIN, 0))
+//		return 1
 	if(!alien_whitelist)
 		return 0
 	if(M && species)
