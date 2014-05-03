@@ -141,12 +141,14 @@
 
 /obj/item/weapon/weldingtool/fluff/dae_welder //Custom built welding tool - Atalanta Cascadia - daetactica - DONE
 	name = "welding tool"
+	desc = "A makeshift welding tool, seemingly made from old engine parts. It has a small sentence in what looks to be greek etched into its surface."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "welder"
+	item_state = null
 
 /obj/item/weapon/reagent_containers/glass/rag/fluff/rusty_handkerchief //handkerchief - Janet Fisher - rustysh4ckleford - DONE
 	name = "Handkerchief"
-	desc = "An ordinary handkerchief. It has what looks to be a washed out bloodstain on it."
+	desc = "An ordinary handkerchief. It looks well used."
 	w_class = 1
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "janet_handkerchief"
@@ -242,6 +244,11 @@
 	storage_slots = 1
 	max_combined_w_class = 1
 	max_w_class = 1
+	w_class = 2
+	New()
+		..()
+		new /obj/item/weapon/disk/fluff/nebula_chip(src)
+		return
 
 /obj/item/weapon/storage/fluff/nebula_glasses/proc/can_use()
         if(!ismob(loc)) return 0
@@ -391,7 +398,7 @@
 				return
 		usr.update_inv_wear_suit()	//so our overlays update
 
-/obj/item/weapon/pen/fluff/eliza_pen //Fountain pen - Eliza Pond - forgottentraveller - SPRITE
+/obj/item/weapon/pen/fluff/eliza_pen //Fountain pen - Eliza Pond - forgottentraveller - DONE
 	desc = "A pen with an outer cylinder of black obsidian with gold metal clip. Monogrammed with silver inlay 'V.M.'"
 	name = "elegant pen"
 	icon = 'icons/obj/custom_items.dmi'
@@ -413,3 +420,56 @@
 			ink = 1
 			colour = "black"
 			user << "<span class='notice'>You cycle the pen to use the black ink cartridge.</span>"
+
+/obj/item/device/fluff/amy_player //Music player - Amy Heris - gollee - DONE
+	name = "music player"
+	desc = "An olive green HF24 in pristine condition, there is a small engraving on the back, reading 'To Amy, I will always be here for you, Varan.'"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "amy_player_off"
+	item_state = "electornic"
+	slot_flags = SLOT_BELT | SLOT_EARS | SLOT_ID
+	w_class = 1
+	var/playing = 0
+	var/emped = 0
+	var/fixed = 0
+
+//Totally damned surprised this worked on the first go. Huh, well, it works! Considering integration into main code as well. - Skull132
+/obj/item/device/fluff/amy_player/emp_act(severity)
+	emped = 1
+	icon_state = "amy_player_broken"
+	playing = 0
+
+/obj/item/device/fluff/amy_player/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	if (emped == 1)
+		if(istype(O, /obj/item/weapon/screwdriver) && fixed == 0)
+			fixed = 1
+			user << "<span class='notice'>You unfasten the back panel.</span>"
+		if(istype(O, /obj/item/device/multitool) && fixed == 1)
+			fixed = 0
+			user << "<span class='notice'>You quickly pulse a few fires, and reset the screen and device.</span>"
+			emped = 0
+			icon_state = "amy_player_off"
+	else
+		user << "<span class='notice'>You see little reason to start hacking into the player's wiring.</span>"
+
+/obj/item/device/fluff/amy_player/attack_self(mob/user)
+	if(emped)
+		user << "<span class='notice'>The screen flickers and blinks with errors. It looks like it's about to give up the ghost.</span>"
+	else
+		switch(playing)
+			if(0)
+				playing = 1
+				icon_state = "amy_player_on"
+				user << "<span class='notice'>You turn on the music player, selecting a song. A song called '[pick("Lord of Light","Second Chance","Redoubt", "Affinity","Dream Spark")]' starts playing through the earbuds as the device sparks to life.</span>"
+			if(1)
+				playing = 0
+				icon_state = "amy_player_off"
+				user << "<span class='notice'>You turn off the music player.</span>"
+
+/* 	Song list, from Gollee:
+/	"Lord of Light"
+/	"Second Chance"
+/	"Redoubt"
+/	"Affinity"
+/	"Dream Spark"
+*/
