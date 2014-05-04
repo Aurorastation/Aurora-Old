@@ -449,8 +449,9 @@
 			user << "<span class='notice'>You quickly pulse a few fires, and reset the screen and device.</span>"
 			emped = 0
 			icon_state = "amy_player_off"
-	else
-		user << "<span class='notice'>You see little reason to start hacking into the player's wiring.</span>"
+	return
+//	else
+//		user << "<span class='notice'>You see little reason to start hacking into the player's wiring.</span>"
 
 /obj/item/device/fluff/amy_player/attack_self(mob/user)
 	if(emped)
