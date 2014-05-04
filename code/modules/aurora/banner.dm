@@ -3,6 +3,7 @@
 /obj/structure/banner
 	name = "Corporate Banner"
 	desc = "A blue flag emblazoned with a golden logo of Nanotrasen hanging from a wooden stand."
+	anchored = 1
 	density = 1
 	layer = 9
 	icon = 'icons/obj/banner.dmi'
@@ -14,18 +15,17 @@
 	set name = "Toggle Banner"
 
 	if(!usr.canmove || usr.stat || usr.restrained())
-		return
-
-	else
-		usr << "<span class='warning'>This mob type can't use this verb.</span>"
+		return 0
 
 	switch(icon_state)
 		if("banner_down")
-			if("banner_down")
-				src.icon_state = "banner_up"
-				usr << "You scroll the cloth up."
-			if("banner_up")
-				src.icon_state = "banner_down"
-				usr << "You let the cloth hang loose."
+			src.icon_state = "banner_up"
+			usr << "You scroll the cloth up."
+		if("banner_up")
+			src.icon_state = "banner_down"
+			usr << "You let the cloth hang loose."
+		else
+			usr << "You feel slightly dumber."
+			return
 
 	src.update_icon()
