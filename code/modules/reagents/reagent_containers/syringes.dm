@@ -263,6 +263,18 @@
 		src.add_fingerprint(usr)
 		src.update_icon()
 
+/obj/item/weapon/reagent_containers/syringe/verb/empty()
+
+	set name = "Empty Syringe"
+	set category = "Object"
+	set src in usr
+
+	if (alert(usr, "Are you sure you want to empty that?", "Empty Syringe:", "Yes", "No") != "Yes")
+		return
+	if(isturf(usr.loc))
+		usr << "<span class='notice'>You empty \the [src] onto the floor.</span>"
+		reagents.reaction(usr.loc)
+		spawn(5) src.reagents.clear_reagents()
 
 /obj/item/weapon/reagent_containers/ld50_syringe
 	name = "Lethal Injection Syringe"

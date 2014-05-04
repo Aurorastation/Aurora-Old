@@ -25,3 +25,6 @@
 /area/security/cell_block/Cell_4
 	name = "Cell Four"
 	icon_state = "brig"
+/area/prison/gas_chamber
+	name = "Gas Chamber"
+	icon_state = "brig"

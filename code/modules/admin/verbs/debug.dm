@@ -552,9 +552,14 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		"red wizard",
 		"marisa wizard",
 		"emergency response team",
+		"ert trooper",
+		"ert leading trooper",
+		"ert sub officer",
+		"ert commander",
 		"nanotrasen representative",
 		"nanotrasen officer",
-		"nanotrasen captain"
+		"nanotrasen captain",
+		"shadowling"
 		)
 	var/dresscode = input("Select dress for [M]", "Robust quick dress shop") as null|anything in dresspacks
 	if (isnull(dresscode))
@@ -818,7 +823,8 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			M.equip_if_possible(W, slot_wear_id)
 
 		if("emergency response team")
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/centcom_officer(M), slot_w_uniform)
+			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/ert(M), slot_w_uniform)
+			M.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/ert(M), slot_wear_suit)
 			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/swat(M), slot_shoes)
 			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/swat(M), slot_gloves)
 			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(M), slot_l_ear)
@@ -832,6 +838,82 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			W.access = get_all_accesses()
 			W.access += get_all_centcom_access()
 			W.assignment = "Emergency Response Team"
+			W.registered_name = M.real_name
+			M.equip_to_slot_or_del(W, slot_wear_id)
+
+		if("ert trooper")
+			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/ert/soldier(M), slot_w_uniform)
+			M.equip_to_slot_or_del(new /obj/item/clothing/suit/armor/vest/ert_soldier(M), slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/swat(M), slot_shoes)
+			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/swat(M), slot_gloves)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(M), slot_l_ear)
+			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun(M), slot_belt)
+			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(M), slot_glasses)
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(M), slot_back)
+
+			var/obj/item/weapon/card/id/W = new(M)
+			W.name = "[M.real_name]'s ID Card"
+			W.icon_state = "centcom"
+			W.access = get_all_accesses()
+			W.access += get_ert_access()
+			W.assignment = "ERT Trooper"
+			W.registered_name = M.real_name
+			M.equip_to_slot_or_del(W, slot_wear_id)
+
+		if("ert leading trooper")
+			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/ert/nco(M), slot_w_uniform)
+			M.equip_to_slot_or_del(new /obj/item/clothing/suit/armor/vest/ert_nco(M), slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/swat(M), slot_shoes)
+			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/swat(M), slot_gloves)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(M), slot_l_ear)
+			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun(M), slot_belt)
+			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(M), slot_glasses)
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(M), slot_back)
+
+			var/obj/item/weapon/card/id/W = new(M)
+			W.name = "[M.real_name]'s ID Card"
+			W.icon_state = "centcom"
+			W.access = get_all_accesses()
+			W.access += get_ert_access()
+			W.assignment = "ERT Leading Trooper"
+			W.registered_name = M.real_name
+			M.equip_to_slot_or_del(W, slot_wear_id)
+
+		if("ert sub officer")
+			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/ert/officer(M), slot_w_uniform)
+			M.equip_to_slot_or_del(new  /obj/item/clothing/suit/armor/vest/ert_officer(M), slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/swat(M), slot_shoes)
+			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/swat(M), slot_gloves)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(M), slot_l_ear)
+			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun(M), slot_belt)
+			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(M), slot_glasses)
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(M), slot_back)
+
+			var/obj/item/weapon/card/id/W = new(M)
+			W.name = "[M.real_name]'s ID Card"
+			W.icon_state = "centcom"
+			W.access = get_all_accesses()
+			W.access += get_ert_access()
+			W.assignment = "ERT Sub-Officer"
+			W.registered_name = M.real_name
+			M.equip_to_slot_or_del(W, slot_wear_id)
+
+		if("ert commander")
+			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/ert/commander(M), slot_w_uniform)
+			M.equip_to_slot_or_del(new /obj/item/clothing/suit/armor/vest/ert_commander(M), slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/swat(M), slot_shoes)
+			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/swat(M), slot_gloves)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(M), slot_l_ear)
+			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun(M), slot_belt)
+			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(M), slot_glasses)
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(M), slot_back)
+
+			var/obj/item/weapon/card/id/W = new(M)
+			W.name = "[M.real_name]'s ID Card"
+			W.icon_state = "centcom"
+			W.access = get_all_accesses()
+			W.access += get_ert_access()
+			W.assignment = "ERT Commander"
 			W.registered_name = M.real_name
 			M.equip_to_slot_or_del(W, slot_wear_id)
 
@@ -854,6 +936,26 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			W.access = get_all_accesses()
 			W.access += get_all_centcom_access()
 			W.assignment = "Special Operations Officer"
+			W.registered_name = M.real_name
+			M.equip_to_slot_or_del(W, slot_wear_id)
+
+		if("shadowling")
+			M.equip_to_slot_or_del(new /obj/item/clothing/suit/armor/swat/officer(M), slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/space_ninja(M), slot_shoes)
+			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/space_ninja(M), slot_gloves)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/syndicate(M), slot_l_ear)
+			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/night(M), slot_glasses)
+			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/xray(M), slot_belt)
+			M.equip_to_slot_or_del(new /obj/item/weapon/grenade/empgrenade(M), slot_r_store)
+			M.equip_to_slot_or_del(new /obj/item/weapon/shield/energy(M), slot_l_store)
+			M.equip_to_slot_or_del(new /obj/item/toy/katana(M), slot_back)
+
+			var/obj/item/weapon/card/id/syndicate/W = new(src) //Untrackable by AI
+			W.name = "[M.real_name]'s ID Card"
+			W.icon_state = "id"
+			W.access = get_all_accesses()//They get full station access because obviously the syndicate has HAAAX, and can make special IDs for their most elite members.
+			W.access += list(access_cent_general, access_cent_specops, access_cent_living, access_cent_storage, access_syndicate)//Let's add their forged CentCom access and syndicate access.
+			W.assignment = "Shadowling"
 			W.registered_name = M.real_name
 			M.equip_to_slot_or_del(W, slot_wear_id)
 
