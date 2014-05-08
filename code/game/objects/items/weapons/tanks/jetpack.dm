@@ -96,6 +96,12 @@
 		air_contents.adjust((6*ONE_ATMOSPHERE)*volume/(R_IDEAL_GAS_EQUATION*T20C))
 		return
 
+/obj/item/weapon/tank/jetpack/oxygen/syndicate
+	name = "syndicate jetpack (Oxygen)"
+	desc = "An offensive looking jetpack, meant for military combat."
+	icon_state = "jetpack-black"
+	item_state = "jetpack-black"
+
 /obj/item/weapon/tank/jetpack/carbondioxide
 	name = "Jetpack (Carbon Dioxide)"
 	desc = "A tank of compressed carbon dioxide for use as propulsion in zero-gravity areas. Painted black to indicate that it should not be used as a source for internals."

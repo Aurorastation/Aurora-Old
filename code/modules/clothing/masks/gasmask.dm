@@ -25,11 +25,13 @@
 	icon_state = "swat"
 	siemens_coefficient = 0.7
 
+/*
 /obj/item/clothing/mask/gas/syndicate
 	name = "syndicate mask"
 	desc = "A close-fitting tactical mask that can be connected to an air supply."
 	icon_state = "swat"
 	siemens_coefficient = 0.7
+*/
 
 /obj/item/clothing/mask/gas/voice
 	name = "gas mask"
@@ -46,6 +48,12 @@
 	item_state = "s-ninja_mask"
 	vchange = 1
 	siemens_coefficient = 0.2
+
+/obj/item/clothing/mask/gas/voice/syndicate
+	name = "syndicate mask"
+	desc = "A close-fitting tactical mask that can be connected to an air supply."
+	icon_state = "swat"
+	siemens_coefficient = 0.7
 
 /obj/item/clothing/mask/gas/clown_hat
 	name = "clown wig and mask"
