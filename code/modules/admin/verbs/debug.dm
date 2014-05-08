@@ -547,6 +547,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		"assassin",
 		"death commando",
 		"syndicate commando",
+		"syndicate operator",
 		"special ops officer",
 		"blue wizard",
 		"red wizard",
@@ -940,7 +941,8 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			M.equip_to_slot_or_del(W, slot_wear_id)
 
 		if("shadowling")
-			M.equip_to_slot_or_del(new /obj/item/clothing/suit/armor/swat/officer(M), slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/space_ninja(M), slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/under/syndicate/combat(M), slot_w_uniform)
 			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/space_ninja(M), slot_shoes)
 			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/space_ninja(M), slot_gloves)
 			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/syndicate(M), slot_l_ear)
@@ -948,7 +950,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/xray(M), slot_belt)
 			M.equip_to_slot_or_del(new /obj/item/weapon/grenade/empgrenade(M), slot_r_store)
 			M.equip_to_slot_or_del(new /obj/item/weapon/shield/energy(M), slot_l_store)
-			M.equip_to_slot_or_del(new /obj/item/toy/katana(M), slot_back)
+			M.equip_to_slot_or_del(new /obj/item/weapon/katana(M), slot_back)
 
 			var/obj/item/weapon/card/id/syndicate/W = new(src) //Untrackable by AI
 			W.name = "[M.real_name]'s ID Card"
@@ -1013,10 +1015,60 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			W.registered_name = M.real_name
 			M.equip_to_slot_or_del(W, slot_wear_id)
 
+			/*		var/obj/item/weapon/storage/secure/briefcase/sec_briefcase = new(M)
+			for(var/obj/item/briefcase_item in sec_briefcase)
+				del(briefcase_item)
+			for(var/i=3, i>0, i--)
+				sec_briefcase.contents += new /obj/item/weapon/spacecash/c1000
+			sec_briefcase.contents += new /obj/item/weapon/gun/energy/crossbow
+			sec_briefcase.contents += new /obj/item/weapon/gun/projectile/mateba
+			sec_briefcase.contents += new /obj/item/ammo_magazine/a357
+			sec_briefcase.contents += new /obj/item/weapon/plastique
+			M.equip_to_slot_or_del(sec_briefcase, slot_l_hand) */
+
+		if("syndicate operator")
+
+			var/obj/item/clothing/under/syndicate/combat/tac_uniform = new(M)
+			tac_uniform.hastie = new /obj/item/clothing/tie/storage/black_vest(tac_uniform)
+			M.equip_to_slot_or_del(tac_uniform, slot_w_uniform)
+
+			M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/syndi(M), slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots(M), slot_shoes)
+			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/combat(M), slot_gloves)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/syndicate(M), slot_l_ear)
+			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/night(M), slot_glasses)
+			M.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/voice/syndicate(M), slot_wear_mask)
+			M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/rig/syndi(M), slot_head)
+
+			var/obj/item/weapon/storage/belt/security/tactical/tac_belt = new(M)
+			tac_belt.contents += new /obj/item/ammo_magazine/a12mm
+			tac_belt.contents += new /obj/item/ammo_magazine/a12mm
+			tac_belt.contents += new /obj/item/ammo_magazine/a12mm
+			tac_belt.contents += new /obj/item/weapon/handcuffs
+			tac_belt.contents += new /obj/item/weapon/plastique
+			tac_belt.contents += new /obj/item/weapon/plastique
+			tac_belt.contents += new /obj/item/weapon/grenade/flashbang
+			tac_belt.contents += new /obj/item/weapon/grenade/smokebomb
+			M.equip_to_slot_or_del(tac_belt, slot_belt)
+
+			M.equip_to_slot_or_del(new /obj/item/weapon/grenade/empgrenade(M), slot_l_store)
+			M.equip_to_slot_or_del(new /obj/item/weapon/handcuffs(M), slot_r_store)
+			M.equip_to_slot_or_del(new /obj/item/weapon/tank/jetpack/oxygen/syndicate(M), slot_back)
+			M.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/automatic/c20r(M), slot_s_store)
+
+			var/obj/item/weapon/card/id/syndicate/W = new(src) //Untrackable by AI
+			W.name = "[M.real_name]'s ID Card"
+			W.icon_state = "id"
+			W.access = get_all_accesses()//They get full station access because obviously the syndicate has HAAAX, and can make special IDs for their most elite members.
+			W.access += list(access_cent_general, access_cent_specops, access_cent_living, access_cent_storage, access_syndicate)//Let's add their forged CentCom access and syndicate access.
+			W.assignment = "Field Operator"
+			W.registered_name = M.real_name
+			M.equip_to_slot_or_del(W, slot_wear_id)
+
 	M.regenerate_icons()
 
 	log_admin("[key_name(usr)] changed the equipment of [key_name(M)] to [dresscode].")
-	message_admins("\blue [key_name_admin(usr)] changed the equipment of [key_name_admin(M)] to [dresscode]..", 1)
+	message_admins("\blue [key_name_admin(usr)] changed the equipment of [key_name_admin(M)] to [dresscode].", 1)
 	return
 
 /client/proc/startSinglo()
