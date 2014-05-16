@@ -73,6 +73,30 @@
 		new /obj/item/clothing/mask/surgical(src)
 		new /obj/item/clothing/mask/surgical(src)
 
+/obj/item/weapon/storage/box/lastrequest
+	name = "Last Request package"
+	desc = "Hope you're hungry for lead."
+	icon_state = "lastreq"
+	storage_slots = 4
+
+	New()
+		..()
+		new /obj/item/clothing/glasses/sunglasses/blindfold(src)
+		new /obj/item/weapon/lighter/zippo(src)
+		new /obj/item/weapon/storage/fancy/cigarettes/dromedaryco(src)
+		new /obj/item/weapon/reagent_containers/food/drinks/cans/waterbottle(src)
+
+
+/obj/item/weapon/storage/box/transplant
+	name = "Transplant Storage Unit"
+	desc = "Self-Cooling storage unit to keep your organs fresher than the prince of bel-air."
+	icon_state = "transplantbox_closed"
+	storage_slots = 6
+
+	New()
+		..()
+
+
 
 /obj/item/weapon/storage/box/syringes
 	name = "box of syringes"
