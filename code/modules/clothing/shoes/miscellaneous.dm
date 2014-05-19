@@ -89,6 +89,13 @@
 	item_color = "hosred"
 	siemens_coefficient = 0.7
 
+/obj/item/clothing/shoes/work_boots
+	name = "Steel Toe Boots"
+	desc = "Steel Toe cap working boots for engineers and miners."
+	icon_state = "steelboots"
+	item_state = "steelboots"
+	siemens_coefficient = 0.7
+
 /obj/item/clothing/shoes/cult
 	name = "boots"
 	desc = "A pair of boots worn by the followers of Nar-Sie."
