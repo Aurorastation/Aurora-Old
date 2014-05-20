@@ -105,7 +105,6 @@ var/list/admin_verbs_fun = list(
 	/client/proc/editappear
 	)
 var/list/admin_verbs_dev = list(
-	/client/proc/dsay,
 	/client/proc/togglebuildmodeself,
 	/datum/admins/proc/restart,
 	/datum/admins/proc/delay,

@@ -21,7 +21,7 @@ var/global/normal_ooc_colour = "#002eb8"
 		src << "\red You have OOC muted."
 		return
 
-	if(!holder && holder.rights & R_DEV)
+	if(!holder)
 		if(!ooc_allowed)
 			src << "\red OOC is globally muted"
 			return

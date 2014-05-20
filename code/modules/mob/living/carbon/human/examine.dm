@@ -245,10 +245,7 @@
 	if(!key && brain_op_stage != 4 && stat != DEAD)
 		msg += "<span class='deadsay'>[t_He] [t_is] totally catatonic. The stresses of life in deep-space must have been too much for [t_him]. Any recovery is unlikely</span>\n"
 	else if(!client && brain_op_stage != 4 && stat != DEAD)
-		if(species == "Machine" || species == "machine")
-			msg += "Unit appears to be inactive.\n"
-		else
-			msg += "[t_He] [t_has] suddenly fallen asleep.\n"
+		msg += "[t_He] [t_has] suddenly fallen asleep.\n"
 
 	var/list/wound_flavor_text = list()
 	var/list/is_destroyed = list()
