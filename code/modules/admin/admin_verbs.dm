@@ -10,6 +10,7 @@ var/list/admin_verbs_default = list(
 //	/client/proc/deadchat				/*toggles deadchat on/off*/
 	)
 var/list/admin_verbs_admin = list(
+	/client/proc/alertlevels,
 	/client/proc/cmd_admin_wind,
 	/client/proc/cmd_admin_unwind,
 	/client/proc/player_panel,			/*shows an interface for all players, with links to various panels (old style)*/
@@ -105,6 +106,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/editappear
 	)
 var/list/admin_verbs_dev = list(
+	/client/proc/dsay,
 	/client/proc/togglebuildmodeself,
 	/datum/admins/proc/restart,
 	/datum/admins/proc/delay,
@@ -810,3 +812,27 @@ var/list/admin_verbs_mod = list(
 
 	log_admin("[key_name(usr)] told everyone to man up and deal with it.")
 	message_admins("\blue [key_name_admin(usr)] told everyone to man up and deal with it.", 1)
+
+
+/client/proc/alertlevels()
+	set category = "Admin"
+	set name = "Alert Levels"
+	set desc = "Changing alert levels haven't been easier."
+
+	var/list/L = list(
+		"Green",
+		"Blue",
+		"Red",
+		"Delta",
+	)
+
+	var/input = input("Select the alert level.", "Alert Level", null, null) in L
+	switch(input)
+		if("Green")
+			set_security_level(SEC_LEVEL_GREEN)
+		if("Blue")
+			set_security_level(SEC_LEVEL_BLUE)
+		if("Red")
+			set_security_level(SEC_LEVEL_RED)
+		if("Delta")
+			set_security_level(SEC_LEVEL_DELTA)

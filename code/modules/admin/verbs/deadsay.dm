@@ -25,6 +25,8 @@
 
 	if (src.holder.rights & R_ADMIN)
 		stafftype = "ADMIN"
+	if (src.holder.rights & R_DEV)
+		stafftype = "DEV" // lol I find it necessary k? <.<
 
 	msg = copytext(sanitize(msg), 1, MAX_MESSAGE_LEN)
 	log_admin("[key_name(src)] : [msg]")
