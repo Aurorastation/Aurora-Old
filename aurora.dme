@@ -63,6 +63,7 @@
 #define FILE_DIR "sound/machines"
 #define FILE_DIR "sound/mecha"
 #define FILE_DIR "sound/misc"
+#define FILE_DIR "sound/mp3"
 #define FILE_DIR "sound/music"
 #define FILE_DIR "sound/music/halloween"
 #define FILE_DIR "sound/piano"
