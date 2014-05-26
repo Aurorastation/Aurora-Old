@@ -421,17 +421,31 @@
 			colour = "black"
 			user << "<span class='notice'>You cycle the pen to use the black ink cartridge.</span>"
 
-/obj/item/device/fluff/amy_player //Music player - Amy Heris - gollee - DONE
+/obj/item/device/fluff/amy_player //Music player - Amy Heris - gollee - DONE - Modding
 	name = "music player"
 	desc = "An olive green HF24 in pristine condition, there is a small engraving on the back, reading 'To Amy, I will always be here for you, Varan.'"
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "amy_player_off"
 	item_state = "electornic"
-	slot_flags = SLOT_BELT | SLOT_EARS | SLOT_ID
+	slot_flags = SLOT_BELT | SLOT_ID // | SLOT_EARS  wut
 	w_class = 1
 	var/playing = 0
 	var/emped = 0
 	var/fixed = 0
+	var/list/songs = list("Lord of Light",
+	"Second Chance",
+	"Redoubt",
+	"Affinity",
+	"Dream Spark"
+	)
+/obj/item/clothing/ears/headphone
+	name = "Headphone"
+	desc = "Headphones made for special players..."
+	icon_state = "earmuffs"
+	item_state = "earmuffs"
+	slot_flags = SLOT_EARS //| SLOT_TWOEARS
+
+
 
 //Totally damned surprised this worked on the first go. Huh, well, it works! Considering integration into main code as well. - Skull132
 /obj/item/device/fluff/amy_player/emp_act(severity)
@@ -449,24 +463,60 @@
 			user << "<span class='notice'>You quickly pulse a few fires, and reset the screen and device.</span>"
 			emped = 0
 			icon_state = "amy_player_off"
+
+
 	return
 //	else
 //		user << "<span class='notice'>You see little reason to start hacking into the player's wiring.</span>"
 
 /obj/item/device/fluff/amy_player/attack_self(mob/user)
 	if(emped)
-		user << "<span class='notice'>The screen flickers and blinks with errors. It looks like it's about to give up the ghost.</span>"
+		user<< "<span class='notice'>The screen flickers and blinks with errors. It looks like it's about to give up the ghost.</span>"
+	else if(playing == 0)
+		var/mob/living/carbon/human/M = usr
+		var/pickedsong = input("Select the song you want to play.","Songs", null, null) in songs
+		if(istype(M.l_ear, /obj/item/clothing/ears/headphone) || istype(M.r_ear, /obj/item/clothing/ears/headphone))
+			switch(pickedsong)
+				if("Dream Spark")
+					usr << sound('sound/mp3/dreamspark.ogg')
+				if("Second Chance")
+					usr << sound('sound/mp3/secondchance.ogg')
+				if("Redoubt")
+					usr << sound('sound/mp3/redoubt.ogg')
+				if("Affinity")
+					usr << sound('sound/mp3/affinity.ogg')
+				if("Lord of Light")
+					usr << sound('sound/mp3/lordoflight.ogg')
+		else
+			for(var/mob/I in view())
+				switch(pickedsong)
+					if("Dream Spark")
+						I << sound('sound/mp3/dreamspark.ogg')
+					if("Second Chance")
+						I << sound('sound/mp3/secondchance.ogg')
+					if("Redoubt")
+						I << sound('sound/mp3/redoubt.ogg')
+					if("Affinity")
+						I << sound('sound/mp3/affinity.ogg')
+					if("Lord of Light")
+						I << sound('sound/mp3/lordoflight.ogg')
+		user << "<span class='notice'>You turn on the music player, selecting a song. A song called '[pickedsong]' starts playing through the earbuds as the device sparks to life.</span>"
+		icon_state = "amy_player_on"
+		playing = 1
 	else
-		switch(playing)
-			if(0)
+		user << "<span class='notice'>You turn off the music player.</span>"
+		playing = 0
+
+
+/*			if(0)
 				playing = 1
 				icon_state = "amy_player_on"
 				user << "<span class='notice'>You turn on the music player, selecting a song. A song called '[pick("Lord of Light","Second Chance","Redoubt", "Affinity","Dream Spark")]' starts playing through the earbuds as the device sparks to life.</span>"
 			if(1)
 				playing = 0
 				icon_state = "amy_player_off"
-				user << "<span class='notice'>You turn off the music player.</span>"
-
+				user << "<span class='notice'>You turn off the music player.</span>"*/
+ // Respect.
 /* 	Song list, from Gollee:
 /	"Lord of Light"
 /	"Second Chance"
