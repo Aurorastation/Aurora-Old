@@ -22,7 +22,7 @@
 	var/explosion_in_progress = 0 //sit back and relax
 	var/list/datum/mind/modePlayer = new
 	var/list/restricted_jobs = list()	// Jobs it doesn't make sense to be.  I.E chaplain or AI cultist
-	var/list/protected_jobs = list()	// Jobs that can't be tratiors because
+	var/list/protected_jobs = list()	// Jobs that can't be traitors because
 	var/required_players = 0
 	var/required_players_secret = 0 //Minimum number of players for that game mode to be chose in Secret
 	var/required_enemies = 0
@@ -46,6 +46,7 @@ Stealthy and Inconspicuous Weapons;
 /obj/item/weapon/cartridge/syndicate:3:Detomatix PDA Cartridge;
 Whitespace:Seperator;
 Stealth and Camouflage Items;
+/obj/item/weapon/storage/box/syndie_kit/chameleon:3:Chameleon Kit;
 /obj/item/weapon/storage/box/syndie_kit/masks:1:Disguised Breathe Mask;
 /obj/item/weapon/storage/box/syndie_kit/masks_gas:2:Disguised Gasmask;
 /obj/item/clothing/under/chameleon:3:Chameleon Jumpsuit;
@@ -252,7 +253,7 @@ Implants;
 	for (var/obj/machinery/computer/communications/comm in machines)
 		if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
 			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
-			intercept.name = "paper - 'Cent. Com. Status Summary'"
+			intercept.name = "Cent. Com. Status Summary"
 			intercept.info = intercepttext
 
 			comm.messagetitle.Add("Cent. Com. Status Summary")

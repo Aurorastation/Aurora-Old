@@ -34,7 +34,7 @@
 
 //Down below follows a partial attempt at getting the rolldown verb for jumpsuits.
 //Issue: Sprites vanishing again... Hueh - Skull132
-
+/*
 /obj/item/clothing/under/rank/verb/rolldown()
 	set name = "Roll Down Jumpsuit"
 	set category = "Object"
@@ -67,4 +67,5 @@
 		else
 			usr << "You attempt to roll down your [src], before promptly realising how stupid it would be for you to expose your chest."
 			return
-	usr.update_inv_w_uniform()
+	usr.update_inv_w_uniform() */
+
