@@ -179,6 +179,16 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	containername = "Emergency crate"
 	group = "Engineering"
 
+/datum/supply_packs/inflatable
+	name = "Inflatable barriers"
+	contains = list(/obj/item/weapon/storage/briefcase/inflatable,
+					/obj/item/weapon/storage/briefcase/inflatable,
+					/obj/item/weapon/storage/briefcase/inflatable)
+	cost = 20
+	containertype = /obj/structure/closet/crate
+	containername = "Inflatable Barrier Crate"
+	group = "Engineering"
+
 /datum/supply_packs/janitor
 	name = "Janitorial supplies"
 	contains = list(/obj/item/weapon/reagent_containers/glass/bucket,
@@ -766,14 +776,14 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	group = "Security"
 
 /datum/supply_packs/securitybarriers
-	name = "Shield Generators"
+	name = "Wall shield Generators"
 	contains = list(/obj/machinery/shieldwallgen,
 					/obj/machinery/shieldwallgen,
 					/obj/machinery/shieldwallgen,
 					/obj/machinery/shieldwallgen)
 	cost = 20
 	containertype = /obj/structure/closet/crate/secure
-	containername = "Shield Generators crate"
+	containername = "wall shield generators crate"
 	access = access_teleporter
 	group = "Security"
 
@@ -1002,10 +1012,28 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 
 /datum/supply_packs/shield_gen
 	contains = list(/obj/item/weapon/circuitboard/shield_gen)
-	name = "Experimental shield generator circuitry"
+	name = "Bubble shield generator circuitry"
 	cost = 50
 	containertype = /obj/structure/closet/crate/secure
-	containername = "Experimental shield generator"
+	containername = "bubble shield generator circuitry crate"
+	group = "Engineering"
+	access = access_ce
+
+/datum/supply_packs/shield_gen_ex
+	contains = list(/obj/item/weapon/circuitboard/shield_gen_ex)
+	name = "Hull shield generator circuitry"
+	cost = 50
+	containertype = /obj/structure/closet/crate/secure
+	containername = "hull shield generator circuitry crate"
+	group = "Engineering"
+	access = access_ce
+
+/datum/supply_packs/shield_cap
+	contains = list(/obj/item/weapon/circuitboard/shield_cap)
+	name = "Bubble shield capacitor circuitry"
+	cost = 50
+	containertype = /obj/structure/closet/crate/secure
+	containername = "shield capacitor circuitry crate"
 	group = "Engineering"
 	access = access_ce
 
@@ -1027,15 +1055,6 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	containername = "Supermatter shard crate (CAUTION)"
 	access = access_ce
 	group = "Engineering" */
-
-/datum/supply_packs/shield_cap
-	contains = list(/obj/item/weapon/circuitboard/shield_cap)
-	name = "Experimental shield capacitor circuitry"
-	cost = 50
-	containertype = /obj/structure/closet/crate/secure
-	containername = "Experimental shield capacitor"
-	group = "Engineering"
-	access = access_ce
 
 /datum/supply_packs/eftpos
 	contains = list(/obj/item/device/eftpos)
@@ -1084,13 +1103,10 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 /datum/supply_packs/bee_keeper
 	name = "Beekeeping crate"
 	contains = list(/obj/item/beezeez,
-					/obj/item/beezeez,
 					/obj/item/weapon/bee_net,
 					/obj/item/apiary,
-					/obj/item/queen_bee,
-					/obj/item/queen_bee,
 					/obj/item/queen_bee)
-	cost = 20
+	cost = 40
 	containertype = /obj/structure/closet/crate/hydroponics
 	containername = "Beekeeping crate"
 	access = access_hydroponics
