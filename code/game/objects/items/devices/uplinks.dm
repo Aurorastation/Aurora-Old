@@ -30,7 +30,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 	for(var/D in ItemList)
 		var/list/O = text2list(D, ":")
 		if(O.len>0)
-			valid_items += O[1]
+			valid_items += O[1]		
 
 
 

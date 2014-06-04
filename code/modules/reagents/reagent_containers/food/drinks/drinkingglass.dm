@@ -1,5 +1,5 @@
-
-
+ 
+ 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass
 	name = "glass"
 	desc = "Your standard drinking glass."
@@ -18,10 +18,6 @@
 		if (reagents.reagent_list.len > 0)
 			//mrid = R.get_master_reagent_id()
 			switch(reagents.get_master_reagent_id())
-				if("tea")
-					icon_state = "teacup"
-					name = "Cup of Tea"
-					desc = "A cup of hot tea"
 				if("beer")
 					icon_state = "beerglass"
 					name = "Beer glass"

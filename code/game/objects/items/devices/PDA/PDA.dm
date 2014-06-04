@@ -10,7 +10,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	icon = 'icons/obj/pda.dmi'
 	icon_state = "pda"
 	item_state = "electronic"
-	w_class = 1.0
+	w_class = 2.0
 	flags = FPRINT | TABLEPASS
 	slot_flags = SLOT_ID | SLOT_BELT
 
@@ -83,8 +83,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	icon_state = "pda-j"
 	ttone = "slip"
 
-/obj/item/device/pda/toxins
-	default_cartridge = /obj/item/weapon/cartridge/signal/toxins
+/obj/item/device/pda/science
+	default_cartridge = /obj/item/weapon/cartridge/signal/science
 	icon_state = "pda-tox"
 	ttone = "boom"
 
@@ -338,7 +338,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		return
 
 	lastmode = mode
-		
+
 	var/title = "Personal Data Assistant"
 
 	var/data[0]  // This is the data that will be sent to the PDA
@@ -367,7 +367,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		if(mode in cartmodes)
 			data["records"] = cartridge.create_NanoUI_values()
 
-		if(mode == 0)	
+		if(mode == 0)
 			cartdata["name"] = cartridge.name
 			cartdata["access"] = list(\
 					"access_security" = cartridge.access_security,\
@@ -556,7 +556,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			mode = 1
 		if("2")//Messenger
 			mode = 2
-		if("21")//Read messeges
+		if("21")//Read messages
 			mode = 21
 		if("3")//Atmos scan
 			mode = 3
@@ -818,7 +818,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		message += "You feel a searing heat! Your [P] is burning!"
 	if(i>=20 && i<=25) //EMP
 		empulse(P.loc, 3, 6, 1)
-		message += "Your [P] emits a wave of electomagnetic energy!"
+		message += "Your [P] emits a wave of electromagnetic energy!"
 	if(i>=25 && i<=40) //Smoke
 		var/datum/effect/effect/system/smoke_spread/chem/S = new /datum/effect/effect/system/smoke_spread/chem
 		S.attach(P.loc)
@@ -895,7 +895,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/obj/machinery/message_server/useMS = null
 	if(message_servers)
 		for (var/obj/machinery/message_server/MS in message_servers)
-		//PDAs are now dependant on the Message Server.
+		//PDAs are now dependent on the Message Server.
 			if(MS.active)
 				useMS = MS
 				break
@@ -914,7 +914,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					t = Gibberish(t, signal.data["compression"] + 50)
 
 	if(useMS && useTC) // only send the message if it's stable
-		if(useTC != 2) // Does our recepient have a broadcaster on their level?
+		if(useTC != 2) // Does our recipient have a broadcaster on their level?
 			U << "ERROR: Cannot reach recipient."
 			return
 		useMS.send_pda_message("[P.owner]","[owner]","[t]")
@@ -957,7 +957,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 		if(L)
 			L << "\icon[P] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)"
-			nanomanager.update_user_uis(L, P) // Update the recieving user's PDA UI so that they can see the new message
+			nanomanager.update_user_uis(L, P) // Update the receiving user's PDA UI so that they can see the new message
 
 		nanomanager.update_user_uis(U, P) // Update the sending user's PDA UI so that they can see the new message
 
@@ -1293,7 +1293,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		var/newcart = pick(	/obj/item/weapon/cartridge/engineering,
 							/obj/item/weapon/cartridge/security,
 							/obj/item/weapon/cartridge/medical,
-							/obj/item/weapon/cartridge/signal/toxins,
+							/obj/item/weapon/cartridge/signal/science,
 							/obj/item/weapon/cartridge/quartermaster)
 		new newcart(src)
 

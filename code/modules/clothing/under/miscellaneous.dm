@@ -330,8 +330,8 @@
 	item_color = "plaid_purple"
 
 /obj/item/clothing/under/dress/plaid_green
-	name = "blue purple skirt"
-	desc = "A preppy greed skirt with a white blouse."
+	name = "green skirt"
+	desc = "A preppy green skirt with a white blouse."
 	icon_state = "plaid_green"
 	item_color = "plaid_green"
 
