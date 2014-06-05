@@ -57,6 +57,10 @@
 		name = "Short Hair"	  // try to capatilize the names please~
 		icon_state = "hair_a" // you do not need to define _s or _l sub-states, game automatically does this for you
 
+	shortalt
+		name = "Short Hair Alt"
+		icon_state = "hair_short_alt"
+
 	cut
 		name = "Cut Hair"
 		icon_state = "hair_c"
@@ -117,6 +121,10 @@
 	ponytail3
 		name = "Ponytail 3"
 		icon_state = "hair_ponytail3"
+
+	ponytail4
+		name = "Ponytail 4"
+		icon_state = "hair_ponytail4"
 
 	sideponytail
 		name = "Side Ponytail"
@@ -273,6 +281,11 @@
 		icon_state = "hair_himecut"
 		gender = FEMALE
 
+	himecut_alt
+		name = "Hime Cut Alt"
+		icon_state = "hair_himecut_alt"
+		gender = FEMALE
+
 	braid
 		name = "Floorlength Braid"
 		icon_state = "hair_braid"
@@ -306,6 +319,21 @@
 		name = "Balding Hair"
 		icon_state = "hair_e"
 		gender = MALE // turnoff!
+
+	bun
+		name = "Bun"
+		icon_state = "hair_bun"
+		gender = FEMALE
+
+	bangs
+		name = "Bangs"
+		icon_state = "hair_bangs"
+		gender = FEMALE
+
+	bangsalt
+		name = "Bangs Short"
+		icon_state = "hair_bangs_alt"
+		gender = FEMALE
 
 	bald
 		name = "Bald"
