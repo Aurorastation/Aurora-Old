@@ -16,8 +16,9 @@
 
 	harm_intent_damage = 2
 
-	maxHealth = 30
-	health = 30
+	maxHealth = 1000
+	health = 1000
+	universal_speak =1
 
 	stop_automated_movement = 1
 	animate_movement = SYNC_STEPS
@@ -50,11 +51,11 @@
 		icon_living = "spacewormhead"
 		icon_dead = "spacewormdead"
 
-		maxHealth = 20
-		health = 20
+		maxHealth = 750
+		health = 750
 
-		melee_damage_lower = 10
-		melee_damage_upper = 15
+		melee_damage_lower = 30
+		melee_damage_upper = 40
 		attacktext = "bites"
 
 		animate_movement = SLIDE_STEPS

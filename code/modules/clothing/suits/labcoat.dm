@@ -100,6 +100,36 @@
 				return
 		usr.update_inv_wear_suit()	//so our overlays update
 
+/obj/item/clothing/suit/storage/labcoat/red
+	name = "red labcoat"
+	desc = "A suit that protects against minor chemical spills. This one is red."
+	icon_state = "red_labcoat_open"
+	item_state = "red_labcoat"
+
+/obj/item/clothing/suit/storage/labcoat/blue
+	name = "blue labcoat"
+	desc = "A suit that protects against minor chemical spills. This one is blue."
+	icon_state = "blue_labcoat_open"
+	item_state = "blue_labcoat"
+
+/obj/item/clothing/suit/storage/labcoat/purple
+	name = "purple labcoat"
+	desc = "A suit that protects against minor chemical spills. This one is purple."
+	icon_state = "purple_labcoat_open"
+	item_state = "purple_labcoat"
+
+/obj/item/clothing/suit/storage/labcoat/orange
+	name = "orange labcoat"
+	desc = "A suit that protects against minor chemical spills. This one is orange."
+	icon_state = "orange_labcoat_open"
+	item_state = "orange_labcoat"
+
+/obj/item/clothing/suit/storage/labcoat/green
+	name = "green labcoat"
+	desc = "A suit that protects against minor chemical spills. This one is green."
+	icon_state = "green_labcoat_open"
+	item_state = "green_labcoat"
+
 /obj/item/clothing/suit/storage/labcoat/cmo
 	name = "chief medical officer's labcoat"
 	desc = "Bluer than the standard model."
@@ -113,22 +143,22 @@
 	item_state = "labgreen_open"
 
 /obj/item/clothing/suit/storage/labcoat/genetics
-	name = "Geneticist Labcoat"
+	name = "Geneticist labcoat"
 	desc = "A suit that protects against minor chemical spills. Has a blue stripe on the shoulder."
 	icon_state = "labcoat_gen_open"
 
 /obj/item/clothing/suit/storage/labcoat/chemist
-	name = "Chemist Labcoat"
+	name = "Chemist labcoat"
 	desc = "A suit that protects against minor chemical spills. Has an orange stripe on the shoulder."
 	icon_state = "labcoat_chem_open"
 
 /obj/item/clothing/suit/storage/labcoat/virologist
-	name = "Virologist Labcoat"
+	name = "Virologist labcoat"
 	desc = "A suit that protects against minor chemical spills. Offers slightly more protection against biohazards than the standard model. Has a green stripe on the shoulder."
 	icon_state = "labcoat_vir_open"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 60, rad = 0)
 
 /obj/item/clothing/suit/storage/labcoat/science
-	name = "Scientist Labcoat"
+	name = "Scientist labcoat"
 	desc = "A suit that protects against minor chemical spills. Has a purple stripe on the shoulder."
 	icon_state = "labcoat_tox_open"

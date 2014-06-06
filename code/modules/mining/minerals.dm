@@ -30,37 +30,37 @@ mineral
 
 mineral/uranium
 	name = "Uranium"
-	result_amount = 1
+	result_amount = 5
 	spread_chance = 10
 	ore = /obj/item/weapon/ore/uranium
 
 mineral/iron
 	name = "Iron"
-	result_amount = 1
+	result_amount = 5
 	spread_chance = 25
 	ore = /obj/item/weapon/ore/iron
 
 mineral/diamond
 	name = "Diamond"
-	result_amount = 1
+	result_amount = 5
 	spread_chance = 10
 	ore = /obj/item/weapon/ore/diamond
 
 mineral/gold
 	name = "Gold"
-	result_amount = 1
+	result_amount = 5
 	spread_chance = 10
 	ore = /obj/item/weapon/ore/gold
 
 mineral/silver
 	name = "Silver"
-	result_amount = 1
+	result_amount = 5
 	spread_chance = 10
 	ore = /obj/item/weapon/ore/silver
 
 mineral/plasma
 	name = "Plasma"
-	result_amount = 1
+	result_amount = 5
 	spread_chance = 25
 	ore = /obj/item/weapon/ore/plasma
 
