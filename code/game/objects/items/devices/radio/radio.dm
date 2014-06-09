@@ -218,12 +218,13 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	del(A)
 	return
 
-/obj/item/device/radio/talk_into(mob/living/M as mob, message, channel, var/verb = "says", var/datum/language/speaking = null)
+/obj/item/device/radio/talk_into(mob/living/M as mob, message, channel, var/verb = "says", var/datum/language/speaking = null, var/mob/living/carbon/A = usr)
 	if(!on) return // the device has to be on
 	//  Fix for permacell radios, but kinda eh about actually fixing them.
 	if(!M || !message) return
+	if(A.handcuffed) return
 
-	//  Uncommenting this. To the above comment:
+	//  Uncommenting this. To the above comme	nt:
 	// 	The permacell radios aren't suppose to be able to transmit, this isn't a bug and this "fix" is just making radio wires useless. -Giacom
 	if(!(src.wires & WIRE_TRANSMIT)) // The device has to have all its wires and shit intact
 		return
@@ -233,7 +234,7 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 
 		/* Quick introduction:
 			This new radio system uses a very robust FTL signaling technology unoriginally
-			dubbed "subspace" which is somewhat similar to 'blue-space' but can't
+			dubbed "subspace" which is somewhat similar to 'blue-space' but can'tw
 			actually transmit large mass. Headsets are the only radio devices capable
 			of sending subspace transmissions to the Communications Satellite.
 
@@ -761,10 +762,10 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 				continue
 			src.channels += ch_name
 			src.channels[ch_name] += keyslot.channels[ch_name]
-			
+
 		if(keyslot.syndie)
 			src.syndie = 1
-	
+
 
 	for (var/ch_name in src.channels)
 		if(!radio_controller)
