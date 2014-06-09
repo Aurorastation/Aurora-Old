@@ -1237,7 +1237,7 @@ datum
 					O.show_message(text("\red The contents of the slime core harden and begin to emit a warm, bright light."), 1)
 				var/obj/item/device/flashlight/slime/F = new /obj/item/device/flashlight/slime
 				F.loc = get_turf(holder.my_atom)
-			
+
 //Purple
 
 		slimepsteroid
@@ -1848,7 +1848,91 @@ datum
 			required_reagents = list("grapejuice" = 2, "cola" = 1)
 			result_amount = 3
 
+//////////////////////////SKULL'S BOOZE///////////////////////
 
+		daiquiri
+			name = "Daiquiri"
+			id = "daiquiri"
+			result = "daiquiri"
+			required_reagents = list("limejuice" = 1, "rum" = 1)
+			result_amount = 2
+
+		icepick
+			name = "Ice Pick"
+			id = "icepick"
+			result = "icepick"
+			required_reagents = list("icetea" = 1, "vodka" = 1)
+			result_amount = 2
+
+		puosseecafe
+			name = "Puossee-Cafe"
+			id = "puosseecafe"
+			result = "puosseecafe"
+			required_reagents = list("brandy" = 1, "chartreusegreen" = 1, "chartreuseyellow" = 1, "cremewhite" = 1, "grenadine" = 1)
+			result_amount = 5
+
+		mintjulep
+			name = "Mint Julep"
+			id = "mintjulep"
+			result = "mintjulep"
+			required_reagents = list("water" = 1, "whiskey" = 1, "ice" = 1)
+			result_amount = 2
+
+		johncollins
+			name = "John Collins"
+			id = "johncollins"
+			result = "johncollins"
+			required_reagents = list("whiskeysoda" = 2, "orangejuice" = 1, "grenadine" = 1, "ice" = 1)
+			result_amount = 5
+
+		gimlet
+			name = "Gimlet"
+			id = "gimlet"
+			result = "gimlet"
+			required_reagents = list("limejuice" = 1, "gin" = 1, "sodawater" = 1)
+			result_amount = 3
+
+		starsandstripes
+			name = "Stars and Stripes"
+			id = "starsandstripes"
+			result = "starsandstripes"
+			required_reagents = list("cream" = 1, "cremeyvette" = 1, "grenadine" = 1)
+			result_amount = 3
+
+/*		metropolitan				MISSING SPRITE!
+			name = "Metropolitan"
+			id = "metropolitan"
+			result = "metropolitan"
+			required_reagents = list("brandy" = 1, "vermouth" = 1, "grenadine" = 1)
+			result_amount = 3 */
+
+		caruso
+			name = "Caruso"
+			id = "caruso"
+			result = "caruso"
+			required_reagents = list("martini" = 2, "cremewhite" = 1)
+			result_amount = 3
+
+		aprilshower
+			name = "April Shower"
+			id = "aprilshower"
+			result = "aprilshower"
+			required_reagents = list("brandy" = 1, "chartreuseyellow" = 1, "orangejuice" = 1)
+			result_amount = 3
+
+		carthusiansazerac
+			name = "Carthusian Sazerac"
+			id = "carthusiansazerac"
+			result = "carthusiansazerac"
+			required_reagents = list("whiskey" = 1, "chartreusegreen" = 1, "grenadine" = 1, "absinthe" = 1)
+			result_amount = 4
+
+		deweycocktail
+			name = "Dewey Cocktail"
+			id = "deweycocktail"
+			result = "deweycocktail"
+			required_reagents = list("cremeyvette" = 1, "gin" = 1, "grenadine" = 1)
+			result_amount = 3
 
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 

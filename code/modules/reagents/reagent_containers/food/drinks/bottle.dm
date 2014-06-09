@@ -276,6 +276,48 @@
 		..()
 		reagents.add_reagent("pwine", 100)
 
+//////////////////////////SKULL'S BOOZE///////////////////////
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/chartreusegreen
+	name = "Green Chartreuse"
+	desc = "A green, strong liqueur."
+	icon_state = "chartreusegreenbottle"
+	New()
+		..()
+		reagents.add_reagent("chartreusegreen", 100)
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/chartreuseyellow
+	name = "Yellow Chartreuse"
+	desc = "A yellow, strong liqueur."
+	icon_state = "chartreuseyellowbottle"
+	New()
+		..()
+		reagents.add_reagent("chartreuseyellow", 100)
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/cremewhite
+	name = "White Creme de Menthe"
+	desc = "Mint-flavoured alcohol, in a bottle."
+	icon_state = "whitecremebottle"
+	New()
+		..()
+		reagents.add_reagent("cremewhite", 100)
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/cremeyvette
+	name = "Creme de Yvette"
+	desc = "Berry-flavoured alcohol, in a bottle."
+	icon_state = "cremedeyvettebottle"
+	New()
+		..()
+		reagents.add_reagent("cremeyvette", 100)
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/brandy
+	name = "Brandy"
+	desc = "Cheap knock off for cognac."
+	icon_state = "brandybottle"
+	New()
+		..()
+		reagents.add_reagent("brandy", 100)
+
 //////////////////////////JUICES AND STUFF ///////////////////////
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/orangejuice
