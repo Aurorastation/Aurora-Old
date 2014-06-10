@@ -218,11 +218,18 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	del(A)
 	return
 
-/obj/item/device/radio/talk_into(mob/living/M as mob, message, channel, var/verb = "says", var/datum/language/speaking = null, var/mob/living/carbon/A = usr)
+/obj/item/device/radio/talk_into(mob/living/M as mob, message, channel, var/verb = "says", var/datum/language/speaking = null)
 	if(!on) return // the device has to be on
 	//  Fix for permacell radios, but kinda eh about actually fixing them.
 	if(!M || !message) return
-	if(A.handcuffed) return
+
+	var/mob/living/carbon/Q = usr
+	for(Q) // YES. Q. DONT ASK.
+		if(Q.handcuffed)
+			return
+		else
+			continue
+
 
 	//  Uncommenting this. To the above comment:
 	// 	The permacell radios aren't suppose to be able to transmit, this isn't a bug and this "fix" is just making radio wires useless. -Giacom
@@ -762,10 +769,10 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 				continue
 			src.channels += ch_name
 			src.channels[ch_name] += keyslot.channels[ch_name]
-			
+
 		if(keyslot.syndie)
 			src.syndie = 1
-	
+
 
 	for (var/ch_name in src.channels)
 		if(!radio_controller)
