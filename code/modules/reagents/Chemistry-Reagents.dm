@@ -3753,5 +3753,143 @@ datum
 				..()
 				return
 
+//////////////////////////SKULL'S BOOZE///////////////////////
+
+		ethanol/daiquiri
+			name = "Daiquiri"
+			id = "daiquiri"
+			description = "A splendid looking cocktail."
+			color = "#664300" // rgb: 102, 67, 0
+			boozepwr = 2
+
+		ethanol/icepick
+			name = "Ice Pick"
+			id = "icepick"
+			description = "Big. And red. Hmm..."
+			color = "#664300" // rgb: 102, 67, 0
+			boozepwr = 1
+
+		ethanol/puosseecafe
+			name = "Puossee-Cafe"
+			id = "puosseecafe"
+			description = "Smells of the French and liquore."
+			color = "#664300" // rgb: 102, 67, 0
+			boozepwr = 2
+
+		ethanol/mintjulep
+			name = "Mint Julep"
+			id = "mintjulep"
+			description = "As old as time itself, but how does it taste?"
+			color = "#664300" // rgb: 102, 67, 0
+			boozepwr = 1
+
+		ethanol/johncollins
+			name = "John Collins"
+			id = "johncollins"
+			description = "Crystal clear, yellow, and smells of gin. How could this go wrong?"
+			color = "#664300" // rgb: 102, 67, 0
+			boozepwr = 3
+
+		ethanol/gimlet
+			name = "Gimlet"
+			id = "gimlet"
+			description = "Small, elegant, and kicks."
+			color = "#664300" // rgb: 102, 67, 0
+			boozepwr = 3
+
+		ethanol/starsandstripes
+			name = "Stars and Stripes"
+			id = "starsandstripes"
+			description = "Someone, somewhere, is saluting."
+			color = "#664300" // rgb: 102, 67, 0
+			boozepwr = 1
+
+		ethanol/metropolitan
+			name = "Metropolitan"
+			id = "metropolitan"
+			description = "What more could you ask for?"
+			color = "#664300" // rgb: 102, 67, 0
+			boozepwr = 2
+
+		ethanol/caruso
+			name = "Caruso"
+			id = "caruso"
+			description = "Green, almost alien."
+			color = "#664300"
+			boozepwr = 2
+
+		ethanol/aprilshower
+			name = "April Shower"
+			id = "aprilshower"
+			description = "Smells of brandy."
+			color = "#664300"
+			boozepwr = 2
+
+		ethanol/carthusiansazerac
+			name = "Carthusian Sazerac"
+			id = "carthusiansazerac"
+			description = "Whiskey and... Syrup?"
+			color = "#664300"
+			boozepwr = 3
+
+		ethanol/deweycocktail
+			name = "Dewey Cocktail"
+			id = "deweycocktail"
+			description = "Colours, look at all the colours!"
+			color = "#664300"
+			boozepwr = 2
+
+		ethanol/chartreusegreen
+			name = "Green Chartreuse"
+			id = "chartreusegreen"
+			description = "A green, strong liqueur."
+			color = "#664300" //FIND PROPER COLOURS!
+			boozepwr = 5
+			dizzy_adj = 4
+			slur_start = 15			//amount absorbed after which mob starts slurring
+			confused_start = 30		//amount absorbed after which mob starts confusing directions
+
+		ethanol/chartreuseyellow
+			name = "Yellow Chartreuse"
+			id = "chartreuseyellow"
+			description = "A yellow, strong liqueur."
+			color = "#664300" //FIND PROPER COLOURS!
+			boozepwr = 5
+			dizzy_adj = 4
+			slur_start = 15			//amount absorbed after which mob starts slurring
+			confused_start = 30		//amount absorbed after which mob starts confusing directions
+
+		ethanol/cremewhite
+			name = "White Creme de Menthe"
+			id = "cremewhite"
+			description = "Mint-flavoured alcohol, in a bottle."
+			color = "#664300" //FIND PROPER COLOURS!
+			boozepwr = 2
+			dizzy_adj = 2
+			slur_start = 35			//amount absorbed after which mob starts slurring
+			confused_start = 140	//amount absorbed after which mob starts confusing directions
+
+		ethanol/cremeyvette
+			name = "Creme de Yvette"
+			id = "cremeyvette"
+			description = "Berry-flavoured alcohol, in a bottle."
+			color = "#664300" //FIND PROPER COLOURS!
+			boozepwr = 2
+			dizzy_adj = 2
+			slur_start = 35			//amount absorbed after which mob starts slurring
+			confused_start = 140	//amount absorbed after which mob starts confusing directions
+
+		ethanol/brandy
+			name = "Brandy"
+			id = "brandy"
+			description = "Cheap knock off for cognac."
+			color = "#664300" //FIND PROPER COLOURS!
+			boozepwr = 2
+			dizzy_adj = 2
+			slur_start = 35			//amount absorbed after which mob starts slurring
+			confused_start = 140	//amount absorbed after which mob starts confusing directions
+
+
+
 // Undefine the alias for REAGENTS_EFFECT_MULTIPLER
 #undef REM
