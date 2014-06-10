@@ -325,12 +325,12 @@
 		icon_state = "hair_bun"
 		gender = FEMALE
 
-	bangs
+	bangshuman
 		name = "Bangs"
 		icon_state = "hair_bangs"
 		gender = FEMALE
 
-	bangsalt
+	bangshumanalt
 		name = "Bangs Short"
 		icon_state = "hair_bangs_alt"
 		gender = FEMALE
