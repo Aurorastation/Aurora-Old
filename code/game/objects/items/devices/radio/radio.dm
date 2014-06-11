@@ -223,6 +223,14 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	//  Fix for permacell radios, but kinda eh about actually fixing them.
 	if(!M || !message) return
 
+	var/mob/living/carbon/Q = usr
+	for(Q) // YES. Q. DONT ASK.
+		if(Q.handcuffed)
+			return
+		else
+			continue
+
+
 	//  Uncommenting this. To the above comment:
 	// 	The permacell radios aren't suppose to be able to transmit, this isn't a bug and this "fix" is just making radio wires useless. -Giacom
 	if(!(src.wires & WIRE_TRANSMIT)) // The device has to have all its wires and shit intact
@@ -761,10 +769,10 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 				continue
 			src.channels += ch_name
 			src.channels[ch_name] += keyslot.channels[ch_name]
-			
+
 		if(keyslot.syndie)
 			src.syndie = 1
-	
+
 
 	for (var/ch_name in src.channels)
 		if(!radio_controller)
