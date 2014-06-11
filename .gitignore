@@ -4,3 +4,12 @@
 *.rsc
 *.dmb
 *.lk
+data/mode.txt
+maps/backup/bay.dmm
+maps/bay.dmm
+maps/bay.dmm
+maps/chris.dmm
+maps/sam.dmm
+maps/tgstation2.dmm.bak
+*.bak
+maps/newmedical tgstation2.dmm

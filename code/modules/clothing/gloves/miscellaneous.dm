@@ -32,7 +32,7 @@
 /obj/item/clothing/gloves/combat //Combined effect of SWAT gloves and insulated gloves
 	desc = "These tactical gloves are somewhat fire and impact resistant."
 	name = "combat gloves"
-	icon_state = "black"
+	icon_state = "combat"
 	item_state = "swat_gl"
 	siemens_coefficient = 0
 	permeability_coefficient = 0.05

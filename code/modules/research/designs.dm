@@ -223,6 +223,15 @@ datum/design/robocontrol
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = "/obj/item/weapon/circuitboard/robotics"
 
+datum/design/dronecontrol
+	name = "Circuit Design (Drone Control Console)"
+	desc = "Allows for the construction of circuit boards used to build a Drone Control console."
+	id = "dronecontrol"
+	req_tech = list("programming" = 4)
+	build_type = IMPRINTER
+	materials = list("$glass" = 2000, "sacid" = 20)
+	build_path = "/obj/item/weapon/circuitboard/drone_control"
+
 datum/design/clonecontrol
 	name = "Circuit Design (Cloning Machine Console)"
 	desc = "Allows for the construction of circuit boards used to build a new Cloning Machine console."
@@ -717,6 +726,15 @@ datum/design/honker_targ
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = "/obj/item/weapon/circuitboard/mecha/honker/targeting"
+
+datum/design/exoskeleton
+	name = "Circuit Design (\"Exoskeleton\" Control Module)"
+	desc = "Allows for the construction of a \"Exoskeleton\" Control Module."
+	id = "exoskeleton"
+	req_tech = list("programming" = 4, "combat" = 2)
+	build_type = IMPRINTER
+	materials = list("$glass" = 2000, "sacid" = 20)
+	build_path = "/obj/item/weapon/circuitboard/mecha/exoskeleton/main"
 
 ////////////////////////////////////////
 /////////// Mecha Equpment /////////////
@@ -1474,7 +1492,7 @@ datum/design/nuclear_gun
 	build_type = PROTOLATHE
 	materials = list("$metal" = 5000, "$glass" = 1000, "$uranium" = 500)
 	reliability_base = 76
-	build_path = "/obj/item/weapon/gun/energy/gun/nuclear"
+	build_path = "/obj/item/weapon/gun/energy/rifle/gun/nuclear"
 	locked = 1
 
 datum/design/stunrevolver

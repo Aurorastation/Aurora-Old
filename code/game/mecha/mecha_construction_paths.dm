@@ -586,7 +586,7 @@
 		const_holder.density = 1
 		spawn()
 			del src
-		return 0
+		return
 
 
 /datum/construction/reversible/mecha/firefighter
@@ -888,7 +888,7 @@
 		const_holder.density = 1
 		spawn()
 			del src
-		return 0
+		return
 
 /datum/construction/reversible/mecha/durand
 	result = "/obj/mecha/combat/durand"

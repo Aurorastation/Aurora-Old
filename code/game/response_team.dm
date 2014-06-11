@@ -283,7 +283,8 @@ proc/trigger_armed_response_team(var/force = 0)
 	equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(src), slot_l_ear)
 
 	//Replaced with new ERT uniform
-	equip_to_slot_or_del(new /obj/item/clothing/under/rank/centcom_officer(src), slot_w_uniform)
+	equip_to_slot_or_del(new /obj/item/clothing/under/rank/ert(src), slot_w_uniform)
+	equip_to_slot_or_del(new /obj/item/clothing/suit/storage/ert(src), slot_wear_suit)
 	equip_to_slot_or_del(new /obj/item/clothing/shoes/swat(src), slot_shoes)
 	equip_to_slot_or_del(new /obj/item/clothing/gloves/swat(src), slot_gloves)
 	equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(src), slot_glasses)

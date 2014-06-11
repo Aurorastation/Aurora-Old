@@ -18,10 +18,6 @@
 		if (reagents.reagent_list.len > 0)
 			//mrid = R.get_master_reagent_id()
 			switch(reagents.get_master_reagent_id())
-				if("tea")
-					icon_state = "teacup"
-					name = "Cup of Tea"
-					desc = "A cup of hot tea"
 				if("beer")
 					icon_state = "beerglass"
 					name = "Beer glass"
@@ -486,6 +482,74 @@
 					icon_state = "pwineglass"
 					name = "Glass of ???"
 					desc = "A black ichor with an oily purple sheer on top. Are you sure you should drink this?"
+				if("daiquiri")
+					icon_state = "daiquiri"
+					name = "Glass of Daiquiri"
+					desc = "A splendid looking cocktail."
+				if("icepick")
+					icon_state = "icepick"
+					name = "Glass of Ice Pick"
+					desc = "Big. And red. Hmm..."
+				if("puosseecafe")
+					icon_state = "pousseecafe"
+					name = "Glass of Puossee-Cafe"
+					desc = "Smells of French and liquore."
+				if("mintjulep")
+					icon_state = "mintjulep"
+					name = "Glass of Mint Julep"
+					desc = "As old as time itself, but how does it taste?"
+				if("johncollins")
+					icon_state = "johnscollins"
+					name = "Glass of John Collins"
+					desc = "Named after a man, perhaps?"
+				if("gimlet")
+					icon_state = "gimlet"
+					name = "Glass of Gimlet"
+					desc = "Small, elegant, and packs a punch."
+				if("starsandstripes")
+					icon_state = "starsandstripes"
+					name = "Glass of Stars and Stripes"
+					desc = "Someone, somewhere, is saluting."
+				if("metropolitan")
+					icon_state = "metropolitan"
+					name = "Glass of Metropolitan"
+					desc = "What more could you ask for?"
+				if("caruso")
+					icon_state = "caruso"
+					name = "Glass of Caruso"
+					desc = "Green, almost alien."
+				if("aprilshower")
+					icon_state = "aprilshower"
+					name = "April Shower"
+					desc = "Smells of brandy."
+				if("carthusiansazerac")
+					icon_state = "carthusiansazerac"
+					name = "Carthusian Sazerac"
+					desc = "Whiskey and... Syrup?"
+				if("deweycocktail")
+					icon_state = "deweycocktail"
+					name = "Glass of the Dewey Cocktail"
+					desc = "Colours, look at all of the colours!"
+				if("chartreusegreen")
+					icon_state = "greenchartreuseglass"
+					name = "Glass of Chartreuse Green"
+					desc = "A strong, green liqueur."
+				if("chartreuseyellow")
+					icon_state = "chartreuseyellowglass"
+					name = "Glass of Chartreuse Yellow"
+					desc = "A strong, yellow liqueur."
+				if("cremewhite")
+					icon_state = "whitecremeglass"
+					name = "Glass of White Creme de Menthe"
+					desc = "Mint-flavoured alcohol."
+				if("cremeyvette")
+					icon_state = "cremedeyvetteglass"
+					name = "Creme de Yvette"
+					desc = "Berry-flavoured alcohol."
+				if("brandy")
+					icon_state = "brandyglass"
+					name = "Brandy"
+					desc = "Cheap knock off for cognac."
 				else
 					icon_state ="glass_brown"
 					name = "Glass of ..what?"
@@ -508,3 +572,16 @@
 		..()
 		reagents.add_reagent("cola", 50)
 		on_reagent_change()
+
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/verb/empty()
+
+	set name = "Empty Glass"
+	set category = "Object"
+	set src in usr
+
+	if (alert(usr, "Are you sure you want to empty that?", "Empty Glass:", "Yes", "No") != "Yes")
+		return
+	if(isturf(usr.loc))
+		usr << "<span class='notice'>You empty \the [src] onto the floor.</span>"
+		reagents.reaction(usr.loc)
+		spawn(5) src.reagents.clear_reagents()

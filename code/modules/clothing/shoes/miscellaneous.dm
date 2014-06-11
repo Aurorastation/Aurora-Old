@@ -89,6 +89,13 @@
 	item_color = "hosred"
 	siemens_coefficient = 0.7
 
+/obj/item/clothing/shoes/work_boots
+	name = "Steel Toe Boots"
+	desc = "Steel Toe cap working boots for engineers and miners."
+	icon_state = "steelboots"
+	item_state = "steelboots"
+	siemens_coefficient = 0.7
+
 /obj/item/clothing/shoes/cult
 	name = "boots"
 	desc = "A pair of boots worn by the followers of Nar-Sie."
@@ -114,12 +121,14 @@
 	icon_state = "slippers"
 	item_state = "slippers"
 	species_restricted = null
+	w_class = 2
 
 /obj/item/clothing/shoes/slippers_worn
 	name = "worn bunny slippers"
 	desc = "Fluffy..."
 	icon_state = "slippers_worn"
 	item_state = "slippers_worn"
+	w_class = 2
 
 /obj/item/clothing/shoes/laceup
 	name = "laceup shoes"
