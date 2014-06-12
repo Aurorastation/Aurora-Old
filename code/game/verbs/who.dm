@@ -48,6 +48,8 @@
 
 	var/msg = ""
 	var/modmsg = ""
+	var/devmsg = ""
+	var/num_devs_online = 0
 	var/num_mods_online = 0
 	var/num_admins_online = 0
 	if(holder)
@@ -88,6 +90,20 @@
 					modmsg += " (AFK)"
 				modmsg += "\n"
 				num_mods_online++
+			else if(R_DEV & C.holder.rights)
+				devmsg += "\t[C] is a [C.holder.rank]"
+
+				if(isobserver(C.mob))
+					devmsg += " - Observing"
+				else if(istype(C.mob,/mob/new_player))
+					devmsg += " - Lobby"
+				else
+					devmsg += " - Playing"
+
+				if(C.is_afk())
+					modmsg += " (AFK)"
+				devmsg += "\n"
+				num_devs_online++
 
 	else
 		for(var/client/C in admins)
@@ -98,6 +114,9 @@
 			else if (R_MOD & C.holder.rights)
 				modmsg += "\t[C] is a [C.holder.rank]\n"
 				num_mods_online++
+			else if(R_DEV & C.holder.rights)
+				devmsg += "\t[C] is a [C.holder.rank]\n"
+				num_devs_online++
 
-	msg = "<b>Current Admins ([num_admins_online]):</b>\n" + msg + "\n<b> Current Moderators([num_mods_online]):</b>\n" + modmsg
+	msg = "<b>Current Admins ([num_admins_online]):</b>\n" + msg + "\n<b> Current Moderators([num_mods_online]):</b>\n" + modmsg + "\n<b> Current Moderators([num_devs_online]):</b>\n" + devmsg
 	src << msg
