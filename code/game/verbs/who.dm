@@ -118,5 +118,5 @@
 				devmsg += "\t[C] is a [C.holder.rank]\n"
 				num_devs_online++
 
-	msg = "<b>Current Admins ([num_admins_online]):</b>\n" + msg + "\n<b> Current Moderators([num_mods_online]):</b>\n" + modmsg + "\n<b> Current Moderators([num_devs_online]):</b>\n" + devmsg
+	msg = "<b>Current Admins ([num_admins_online]):</b>\n" + msg + "\n<b> Current Moderators([num_mods_online]):</b>\n" + modmsg + "\n<b> Current Developers([num_devs_online]):</b>\n" + devmsg
 	src << msg
