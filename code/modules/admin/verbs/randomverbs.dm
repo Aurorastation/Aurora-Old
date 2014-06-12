@@ -73,20 +73,25 @@
 
 	var/age = alert(src, "Age check", "Show accounts yonger then _____ days","7", "30" , "All")
 
-	if(age == "All") 
+	if(age == "All")
 		age = 9999999
 	else
 		age = text2num(age)
 
 	var/missing_ages = 0
 	var/msg = ""
+
+	var/highlight_special_characters = 1
+//	if(is_mentor(usr.client))
+//		highlight_special_characters = 0
+
 	for(var/client/C in clients)
 		if(C.player_age == "Requires database")
 			missing_ages = 1
 			continue
 		if(C.player_age < age)
-			msg += "[key_name_admin(C)]: account is [C.player_age] days old<br>"
-	
+			msg += "[key_name(C, 1, 1, highlight_special_characters)]: account is [C.player_age] days old<br>"
+
 	if(missing_ages)
 		src << "Some accounts did not have proper ages set in their clients.  This function requires database to be present"
 
@@ -259,7 +264,7 @@ Ccomp's first proc.
 
 /client/proc/get_ghosts(var/notify = 0,var/what = 2)
 	// what = 1, return ghosts ass list.
-	// what = 2, return mob list	
+	// what = 2, return mob list
 
 	var/list/mobs = list()
 	var/list/ghosts = list()
@@ -295,22 +300,22 @@ Ccomp's first proc.
 		src << "Hrm, appears you didn't select a ghost"		// Sanity check, if no ghosts in the list we don't want to edit a null variable and cause a runtime error.
 		return
 
-	var/mob/dead/observer/G = ghosts[target]					
-	if(G.has_enabled_antagHUD && config.antag_hud_restricted)	
+	var/mob/dead/observer/G = ghosts[target]
+	if(G.has_enabled_antagHUD && config.antag_hud_restricted)
 		var/response = alert(src, "Are you sure you wish to allow this individual to play?","Ghost has used AntagHUD","Yes","No")
-		if(response == "No") return	
+		if(response == "No") return
 	G.timeofdeath=-19999						/* time of death is checked in /mob/verb/abandon_mob() which is the Respawn verb.
 									   timeofdeath is used for bodies on autopsy but since we're messing with a ghost I'm pretty sure
 									   there won't be an autopsy.
 									*/
-	G.has_enabled_antagHUD = 2	
+	G.has_enabled_antagHUD = 2
 	G.can_reenter_corpse = 1
 
 	G:show_message(text("\blue <B>You may now respawn.  You should roleplay as if you learned nothing about the round during your time with the dead.</B>"), 1)
 	log_admin("[key_name(usr)] allowed [key_name(G)] to bypass the 30 minute respawn limit")
 	message_admins("Admin [key_name_admin(usr)] allowed [key_name_admin(G)] to bypass the 30 minute respawn limit", 1)
 
-	 
+
 /client/proc/toggle_antagHUD_use()
 	set category = "Server"
 	set name = "Toggle antagHUD usage"
@@ -326,7 +331,7 @@ Ccomp's first proc.
 			if(g.antagHUD)
 				g.antagHUD = 0						// Disable it on those that have it enabled
 				g.has_enabled_antagHUD = 2				// We'll allow them to respawn
-				g << "\red <B>The Administrator has disabled AntagHUD </B>"    
+				g << "\red <B>The Administrator has disabled AntagHUD </B>"
 		config.antag_hud_allowed = 0
 		src << "\red <B>AntagHUD usage has been disabled</B>"
 		action = "disabled"
@@ -338,8 +343,8 @@ Ccomp's first proc.
 		config.antag_hud_allowed = 1
 		action = "enabled"
 		src << "\blue <B>AntagHUD usage has been enabled</B>"
-		
-	
+
+
 	log_admin("[key_name(usr)] has [action] antagHUD usage for observers")
 	message_admins("Admin [key_name_admin(usr)] has [action] antagHUD usage for observers", 1)
 
@@ -356,7 +361,7 @@ Ccomp's first proc.
 		for(var/mob/dead/observer/g in get_ghosts())
 			g << "\blue <B>The administrator has lifted restrictions on joining the round if you use AntagHUD</B>"
 		action = "lifted restrictions"
-		config.antag_hud_restricted = 0		
+		config.antag_hud_restricted = 0
 		src << "\blue <B>AntagHUD restrictions have been lifted</B>"
 	else
 		for(var/mob/dead/observer/g in get_ghosts())
@@ -370,7 +375,7 @@ Ccomp's first proc.
 
 	log_admin("[key_name(usr)] has [action] on joining the round if they use AntagHUD")
 	message_admins("Admin [key_name_admin(usr)] has [action] on joining the round if they use AntagHUD", 1)
-	
+
 
 
 
