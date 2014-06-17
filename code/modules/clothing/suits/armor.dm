@@ -264,14 +264,3 @@
 	blood_overlay_type = "armor"
 	flags = FPRINT | TABLEPASS | ONESIZEFITSALL
 	armor = list(melee = 65, bullet = 25, laser = 65, energy = 25, bomb = 35, bio = 0, rad = 0)
-
-/obj/item/clothing/suit/exoskeletonvest
-	name = "Exoskeleton MK. IV"
-	desc = "A patchwork of hydraulic piping, wires and plates of metal."
-	icon_state = ""
-	item_state = ""
-	blood_overlay_type = "armor"
-	w_class = 4
-	armor = list(melee = 80, bullet = 10, laser = 10, energy = 10, bomb = 70, bio = 0, rad = 0)
-	slowdown = -1
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS

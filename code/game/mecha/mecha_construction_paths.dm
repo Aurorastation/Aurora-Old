@@ -1373,7 +1373,7 @@
 		..()
 		feedback_inc("mecha_odysseus_created",1)
 		return
-
+/*
 /datum/construction/mecha/exoskeleton_chasis
 	steps = list(list("key"=/obj/item/mecha_parts/part/exoskeletonarmor),//1
 					 list("key"=/obj/item/mecha_parts/part/electricalpack),//2
@@ -1398,8 +1398,8 @@
 		spawn()
 			del src
 		return
-
-
+*/
+/*
 /datum/construction/reversible/mecha/exoskeleton
 	result = "/obj/mecha/combat/exoskeleton"
 	steps = list(
@@ -1550,5 +1550,5 @@
 	spawn_result()
 		..()
 		feedback_inc("mecha_exoskeleton_created",1)
-		return
+		return*/
 
