@@ -726,7 +726,7 @@ datum/design/honker_targ
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = "/obj/item/weapon/circuitboard/mecha/honker/targeting"
-
+/*
 datum/design/exoskeleton
 	name = "Circuit Design (\"Exoskeleton\" Control Module)"
 	desc = "Allows for the construction of a \"Exoskeleton\" Control Module."
@@ -735,7 +735,7 @@ datum/design/exoskeleton
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = "/obj/item/weapon/circuitboard/mecha/exoskeleton/main"
-
+*/
 ////////////////////////////////////////
 /////////// Mecha Equpment /////////////
 ////////////////////////////////////////

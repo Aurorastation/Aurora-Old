@@ -395,7 +395,7 @@
 	construction_cost = list("metal"=15000)*/
 
 ///////// Exoskeleton
-
+/*
 
 /obj/item/mecha_parts/chassis/exoskeleton
 	name = "Exoskeleton Chassis"
@@ -430,7 +430,7 @@
 	origin_tech = "programming=3;materials=2;engineering=2"
 	construction_time = 90
 	construction_cost = list("metal"=25000)
-
+*/
 
 ///////// Circuitboards
 
