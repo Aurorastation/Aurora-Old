@@ -524,3 +524,102 @@
 /	"Affinity"
 /	"Dream Spark"
 */
+
+/obj/item/device/fluff/sten_synth //VoiceOS.V2 - Sten Asval - vtol - DONE
+	name = "VoiceOS.V2"
+	desc = "A text-to-speech device with an appearance that is not too futuristic. It looks slim and light. On the back of it there are initials in silver: SA."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "synth"
+	item_state = "radio"
+	w_class = 2.0
+	flags = FPRINT | TABLEPASS | CONDUCT
+	slot_flags = SLOT_GLOVES
+
+	var/spamcheck = 0
+	var/emagged = 0
+	var/insults = 0
+	var/list/insultmsg = list("BOB'S A PERVERT!", "I HATE YOU ALL!", "ALL SECURITY TO SHOOT ME ON SIGHT!", "I HAVE A BOMB!", "CAPTAIN IS A COMDOM!", "FOR THE SYNDICATE!")
+	var/list/empmsg = list("Lusty Xenomorph Maid", "Tajara Nymphomaniac Se'xual Hea'Ling", "Uneth Hermaphrodite Tai'L S'ex", "Skrellian Pornstar Hen-Tai")
+	var/emped = 0
+
+	verb/synth()
+		set name = "Use voice synth"
+		set category = "Object"
+		set src in usr
+
+		if (usr.client)
+			if(usr.client.prefs.muted & MUTE_IC)
+				src << "\red You cannot speak in IC (muted)."
+				return
+		if(!ishuman(usr))
+			usr << "\red You don't know how to use this!"
+			return
+		if(emped)
+			for(var/mob/O in (viewers(usr)))
+				O.show_message("<B>[usr]</B>'s voice synth starts showing obscene images of [pick(empmsg)], coupled with excessive moaning and questionable noises.",2)
+			spawn(rand(5,30))
+				for(var/mob/O in (viewers(usr)))
+					O.show_message("<B>[usr]</B>'s voice synth starts sparking and finally explodes.",2)
+				var/turf/T = get_turf(src.loc)
+				explosion(T, 0, 0, 0, 1)
+				del(src)
+			return
+		if(spamcheck)
+			usr << "\red \The [src] needs to recharge!"
+			return
+
+		var/message = copytext(sanitize(input(usr, "Type a message?", "VoiceOS.V2", null)  as text),1,MAX_MESSAGE_LEN)
+		if(!message)
+			return
+	//	message = capitalize(message)
+		if ((src.loc == usr && usr.stat == 0))
+			if(emagged)
+				if(insults)
+					for(var/mob/O in (viewers(usr)))
+						O.show_message("<B>[usr]</B>'s voice synth blurts out, <FONT size=3>\"[pick(insultmsg)]\"</FONT>",2) // 2 stands for hearable message
+					insults--
+				else
+					usr << "\red *BZZZZzzzzzt*"
+			else
+				for(var/mob/O in (viewers(usr)))
+					O.show_message("<B>[usr]</B>'s voice synth rasps, \"[message]\"",2) // 2 stands for hearable message
+
+			spamcheck = 1
+			spawn(20)
+				spamcheck = 0
+			return
+
+	attackby(obj/item/I, mob/usr)
+		if(istype(I, /obj/item/weapon/card/emag) && !emagged)
+			usr << "\red You overload \the [src]'s voice synthesizer."
+			emagged = 1
+			insults = rand(1, 3)//to prevent dickflooding
+			return
+		return
+
+	emp_act(severity)
+		emped = 1
+		return
+
+/obj/item/toy/fluff/brenna_rock //Memento rock - Brenna Noton - mikalhvi - DONE
+	name = "memento rock"
+	desc = "A rounded-off chunk of a NanoTransen claimed asteroid." //I'm sorry. Too much description, nixed all of it.
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "rock"
+	item_state = ""
+	w_class = 2.0
+	force = 2
+	throwforce = 4
+	attack_verb = list("bashed", "struck", "smashed", "bonked", "clobbered")
+
+	attack(mob/M as mob, mob/user as mob)
+		if(M == user)
+			user << "You take a lick of the sandstone rock."
+			if(prob(15))
+				spawn(5)
+					var/mob/living/carbon/human/H = M
+					user << "Whilist attempting to lick the rock, you accidentally swallow it."
+					H.apply_damage(rand(10,40), OXY)
+					del(src)
+		else
+			..()
