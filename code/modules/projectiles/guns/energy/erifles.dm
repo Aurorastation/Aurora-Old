@@ -31,13 +31,14 @@
 	var/force_unwielded = 0 //Force modification, because striking someone with a rifle held in two hands -hurts-
 	var/force_wielded = 0
 
-	update_icon()
-		var/ratio = power_supply.charge / power_supply.maxcharge
-		ratio = round(ratio, 0.25) * 100
-		if(modifystate)
-			icon_state = "[modifystate][ratio]"
-		else
-			icon_state = "[initial(icon_state)][ratio]"
+/obj/item/weapon/gun/energy/rifle/update_icon()
+	var/ratio = power_supply.charge / power_supply.maxcharge
+	ratio = round(ratio, 0.25) * 100
+	if(modifystate)
+		icon_state = "[modifystate][ratio]"
+	else
+		icon_state = "[initial(icon_state)][ratio]"
+	return
 
 /obj/item/weapon/gun/energy/rifle/proc/unwield()
 	wielded = 0
@@ -68,11 +69,6 @@
 		if(istype(O))
 			O.unwield()
 	return	unwield()
-
-
-/obj/item/weapon/gun/energy/rifle/update_icon()
-	return
-
 
 /obj/item/weapon/gun/energy/rifle/pickup(mob/user)
 	unwield()
@@ -114,6 +110,7 @@
 	w_class = 5.0
 	icon = 'icons/obj/weapons.dmi' //mainly because we can't have nice things, right? Right.
 	icon_state = "offhand"
+	item_state = "nothing" //Overrides item_state in /obj/item/weapon/gun
 	name = "offhand"
 
 	unwield()
@@ -210,6 +207,7 @@ Commenting out right now, due to a lack of sprites existing. I hate on-mob weapo
 
 /obj/item/weapon/gun/energy/rifle/sniperrifle/dropped(mob/user)
 	user.client.view = world.view
+	..()
 
 ///obj/item/weapon/gun/energy/rifle/sniperrifle/update_icon()  //Currently only here to fuck with the on-mob icons.
 //	icon_state = "sniper[wielded]"
