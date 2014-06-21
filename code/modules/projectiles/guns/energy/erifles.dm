@@ -119,6 +119,9 @@
 	wield()
 		del(src)
 
+/obj/item/weapon/gun/energy/rifle/offhand/mob_can_equip(M as mob, slot)
+	return 0 //Because you can't equip your hand yet somehow you can
+
 ///////////LASER RIFLE//////////////
 /obj/item/weapon/gun/energy/rifle/laser
 	name = "laser rifle"
