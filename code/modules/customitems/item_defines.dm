@@ -92,7 +92,7 @@
 
 /obj/item/clothing/shoes/sandal/fluff/raieed_sandals //Treasured Sandals - Raieed Amari - nikolaithebeast - DONE
 	name = "Treasured Sandals"
-	desc = "A pair of black sandals, which seem to hold the entire on themselves."
+	desc = "A pair of black sandals, which seem to hold the entire world on themselves."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "raieed_sandals"
 	item_state = "raieed_sandals"
@@ -601,7 +601,7 @@
 		emped = 1
 		return
 
-/obj/item/toy/fluff/brenna_rock //Memento rock - Brenna Noton - mikalhvi - DONE
+/obj/item/fluff/brenna_rock //Memento rock - Brenna Noton - mikalhvi - DONE
 	name = "memento rock"
 	desc = "A rounded-off chunk of a NanoTransen claimed asteroid." //I'm sorry. Too much description, nixed all of it.
 	icon = 'icons/obj/custom_items.dmi'
@@ -612,14 +612,46 @@
 	throwforce = 4
 	attack_verb = list("bashed", "struck", "smashed", "bonked", "clobbered")
 
-	attack(mob/M as mob, mob/user as mob)
+	attack(mob/living/carbon/human/M as mob, mob/user as mob)
 		if(M == user)
 			user << "You take a lick of the sandstone rock."
-			if(prob(15))
-				spawn(5)
-					var/mob/living/carbon/human/H = M
+			if(prob(5))
+				spawn(10)
 					user << "Whilist attempting to lick the rock, you accidentally swallow it."
-					H.apply_damage(rand(10,40), OXY)
+					M.apply_damage(rand(10,40), OXY)
 					del(src)
 		else
 			..()
+
+/obj/item/fluff/iris_bracelets //Silver bracelets - Iris Kilur - gollee - DONE
+	name = "silver bracelets"
+	desc = "Two silver bracelets, the scrolled one oversetting the other."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "iris_bracelets"
+	item_state = ""
+	w_class = 1.0
+	slot_flags = SLOT_GLOVES
+
+/obj/item/luff/delivander_ring //Old wedding ring - Delivander Starbreeze - gollee - DONE
+	name = "old wedding ring"
+	desc = "A tarnished gold ring, there is writing inside it, “To Liura, forever.”"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "delivander_ring"
+	item_state = ""
+	w_class = 1.0
+	slot_flags = SLOT_GLOVES
+
+/obj/item/clothing/head/welding/fluff/buck_mask //Blue Panther's welding mask - Buck Bradely - bluesp34r - DONE
+	name = "Blue Panther's welding mask"
+	desc = "A welding mask. This one in particular has a hand-painted, blue jungle cat face on it. It looks absolutely ferocious!"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "bluepanther"
+	item_state = "bluepanther"
+
+/obj/item/clothing/gloves/fluff/amy_gloves //Red fingerless gloves - Amy Tilley - lk600 - GET SPRITE
+	name = "Red fingerless gloves"
+	desc = "A pair of red and black fingerless gloves that stretch up the arm. They look to be made of a soft wool and are well worn."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = ""
+	item_state = ""
+	clipped = 1
