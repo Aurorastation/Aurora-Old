@@ -70,7 +70,6 @@ var/list/admin_verbs_admin = list(
 	/client/proc/free_slot,			/*frees slot for chosen job*/
 	/client/proc/cmd_admin_change_custom_event,
 	/client/proc/cmd_admin_rejuvenate,
-	/client/proc/toggleattacklogs,
 	/client/proc/toggledebuglogs,
 	/client/proc/toggleghostwriters,
 	/client/proc/toggledrones,
@@ -273,6 +272,7 @@ var/list/admin_verbs_mod = list(
 	/client/proc/cmd_admin_pm_context,	/*right-click adminPM interface*/
 	/client/proc/cmd_admin_pm_panel,	/*admin-pm list*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game.*/
+	/client/proc/toggleattacklogs,
 	/client/proc/toggledebuglogs,
 	/datum/admins/proc/PlayerNotes,
 	/client/proc/admin_ghost,			/*allows us to ghost/reenter body at will*/
@@ -905,4 +905,23 @@ var/list/admin_verbs_mod = list(
 		if("Red")
 			set_security_level(SEC_LEVEL_RED)
 		if("Delta")
+			if (alert(usr, "Everyone will die, there is no cancelling.", "Are you sure you want Code Delta?", "Yes", "No") != "Yes") //Confirmation box incase of miss-clicks
+				return
 			set_security_level(SEC_LEVEL_DELTA)
+			ticker.mode:explosion_in_progress = 1
+			for(var/mob/M in player_list)
+				M << 'sound/machines/Alarm.ogg'
+			for(var/i = 600 to 1 step -1) //TODO: Change this for a normal timer?
+				for (var/obj/machinery/status_display/SD in machines)
+					SD.set_picture("redalert") //A bug here makes a cool flashing alert signs. Keep?
+				sleep(10)
+				if(i <= 7)
+					world << i+3 //Adding 3 to make the cinematic match with the timer
+			enter_allowed = 0
+			if(ticker)
+				for(var/mob/M in player_list)
+					M << 'sound/effects/Explosion2.ogg'
+				ticker.station_explosion_cinematic(0,null) //Can't fully test auto restart on test server.
+				if(ticker.mode)
+					ticker.mode:station_was_nuked = 1
+					ticker.mode:explosion_in_progress = 0
