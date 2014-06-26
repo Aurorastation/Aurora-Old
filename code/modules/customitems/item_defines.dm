@@ -632,7 +632,7 @@
 	w_class = 1.0
 	slot_flags = SLOT_GLOVES
 
-/obj/item/luff/delivander_ring //Old wedding ring - Delivander Starbreeze - gollee - DONE
+/obj/item/fluff/delivander_ring //Old wedding ring - Delivander Starbreeze - gollee - DONE
 	name = "old wedding ring"
 	desc = "A tarnished gold ring, there is writing inside it, “To Liura, forever.”"
 	icon = 'icons/obj/custom_items.dmi'
@@ -655,3 +655,36 @@
 	icon_state = ""
 	item_state = ""
 	clipped = 1
+
+/obj/item/clothing/tie/storage/fluff/cecillia_locket
+	name = "Old Locket"
+	desc = ""
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "cecillia_locket0"
+	item_state = "cecillia_locket0"
+	slots = 1
+
+/obj/item/weapon/reagent_containers/pill/cecillia_pill
+	name = "Cici's moonshine pill"
+	desc = "Smells of home-made remedies."
+	icon_state = "pill8"
+	New()
+		..()
+		reagents.add_reagent("space_drugs", 5)
+		reagents.add_reagent("paroxetine", 5)
+
+/obj/item/clothing/tie/storage/fluff/cecillia_locket/proc/update()
+	var/count = 0
+	for(var/obj/item/I in hold)
+		if(istype(I,/obj/item/weapon/reagent_containers/pill))
+			count++
+	if(count>1) count = 1
+	item_state = "cecillia_locket[count]"
+	icon_state = item_state
+	item_color = item_state
+
+	if(istype(loc, /obj/item/clothing))
+		var/obj/item/clothing/U = loc
+		if(istype(U.loc, /mob/living/carbon/human))
+			var/mob/living/carbon/human/H = U.loc
+			H.update_inv_w_uniform()
