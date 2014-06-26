@@ -315,7 +315,7 @@
 	var/obj/item/device/assembly/mousetrap/M = AM
 	M.secured = 1
 	..()
-
+/*
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/taserexo
 	name = "Heavy Duty Exoskeleton Tasergun"
 	icon_state = "mecha_taser"
@@ -343,7 +343,7 @@
 			return 0
 		else
 			return ..()
-
+*/
 /obj/item/mecha_parts/mecha_equipment/handcuffs
 	name = "handcuffs"
 	desc = "Use this to keep prisoners in line."

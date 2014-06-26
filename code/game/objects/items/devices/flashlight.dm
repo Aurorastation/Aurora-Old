@@ -127,6 +127,7 @@
 	brightness_on = 2
 	w_class = 1
 
+
 // the desk lamps are a bit special
 /obj/item/device/flashlight/lamp
 	name = "desk lamp"

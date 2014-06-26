@@ -36,6 +36,7 @@
 	var/screen = "main"
 	var/opened = 0
 	var/temp
+	var/output_dir = SOUTH	//the direction relative to the fabber at which completed parts appear.
 	var/list/part_sets = list( //set names must be unique
 	"Robot"=list(
 						/obj/item/robot_parts/robot_suit,
@@ -90,19 +91,7 @@
 						/obj/item/mecha_parts/part/durand_right_leg,
 						/obj/item/mecha_parts/part/durand_armour
 					),
-
-/*	"Exoskeleton"=list(
-						/obj/item/mecha_parts/chassis/exoskeleton,
-						/obj/item/mecha_parts/part/exoskeletonarmor,
-						/obj/item/mecha_parts/part/hydraulicspack,
-						/obj/item/mecha_parts/part/electricalpack
-
-
-
-
-					),*/
-
-/*	"H.O.N.K"=list(
+	/*"H.O.N.K"=list(
 						/obj/item/mecha_parts/chassis/honker,
 						/obj/item/mecha_parts/part/honker_torso,
 						/obj/item/mecha_parts/part/honker_head,
@@ -111,25 +100,6 @@
 						/obj/item/mecha_parts/part/honker_left_leg,
 						/obj/item/mecha_parts/part/honker_right_leg
 						), */
-	"Exosuit Equipment"=list(
-						/obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp,
-						/obj/item/mecha_parts/mecha_equipment/tool/drill,
-						/obj/item/mecha_parts/mecha_equipment/tool/extinguisher,
-						/obj/item/mecha_parts/mecha_equipment/tool/cable_layer,
-						/obj/item/mecha_parts/mecha_equipment/tool/sleeper,
-						/obj/item/mecha_parts/mecha_equipment/tool/syringe_gun,
-						/obj/item/mecha_parts/chassis/firefighter,
-						///obj/item/mecha_parts/mecha_equipment/repair_droid,
-						/obj/item/mecha_parts/mecha_equipment/generator,
-						///obj/item/mecha_parts/mecha_equipment/jetpack, //TODO MECHA JETPACK SPRITE MISSING
-						/obj/item/mecha_parts/mecha_equipment/weapon/energy/taser,
-						/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg,
-//						/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar/mousetrap_mortar
-//						/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar
-//						/obj/item/mecha_parts/mecha_equipment/weapon/honker
-						/obj/item/mecha_parts/mecha_equipment/weapon/energy/laserexo,
-						/obj/item/mecha_parts/mecha_equipment/weapon/energy/taserexo,
-						),
 
 	"Robotic Upgrade Modules" = list(
 						/obj/item/borg/upgrade/reset,
@@ -392,7 +362,7 @@
 	src.overlays -= "fab-active"
 	src.desc = initial(src.desc)
 	if(being_built)
-		src.being_built.Move(get_step(src,SOUTH))
+		src.being_built.Move(get_step(src,output_dir))
 		src.visible_message("\icon[src] <b>[src]</b> beeps, \"The following has been completed: [src.being_built] is built\".")
 		src.being_built = null
 	src.updateUsrDialog()
