@@ -68,7 +68,7 @@ proc/airborne_can_reach(turf/source, turf/target)
 	if ("[disease.uniqueID]" in M.virus2)
 		return
 	// if one of the antibodies in the mob's body matches one of the disease's antigens, don't infect
-	if(M.antibodies & disease.antigen != 0)
+	if((M.antibodies & disease.antigen) != 0)
 		return
 	if(M.reagents.has_reagent("spaceacillin"))
 		return
