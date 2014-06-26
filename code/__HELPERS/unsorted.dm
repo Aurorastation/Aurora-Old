@@ -1275,8 +1275,21 @@ proc/is_hot(obj/item/W as obj)
 
 	return 0
 
-//Is this even used for anything besides balloons? Yes I took out the W:lit stuff because : really shouldnt be used.
-/proc/is_sharp(obj/item/W as obj)		// For the record, WHAT THE HELL IS THIS METHOD OF DOING IT?
+//Whether or not the given item counts as sharp in terms of dealing damage
+/proc/is_sharp(obj/O as obj)
+	if (!O) return 0
+	if (O.sharp) return 1
+	if (O.edge) return 1
+	return 0
+
+//Whether or not the given item counts as cutting with an edge in terms of removing limbs
+/proc/has_edge(obj/O as obj)
+	if (!O) return 0
+	if (O.edge) return 1
+	return 0
+
+//Returns 1 if the given item is capable of popping things like balloons, inflatable barriers, or cutting police tape.
+/proc/can_puncture(obj/item/W as obj)		// For the record, WHAT THE HELL IS THIS METHOD OF DOING IT?
 	if(!W) return 0
 	if(W.sharp) return 1
 	return ( \
