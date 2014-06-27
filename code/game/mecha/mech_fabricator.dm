@@ -101,6 +101,24 @@
 						/obj/item/mecha_parts/part/honker_right_leg
 						), */
 
+	"Exosuit Equipment"=list(
+						/obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp,
+						/obj/item/mecha_parts/mecha_equipment/tool/drill,
+						/obj/item/mecha_parts/mecha_equipment/tool/extinguisher,
+						/obj/item/mecha_parts/mecha_equipment/tool/cable_layer,
+						/obj/item/mecha_parts/mecha_equipment/tool/sleeper,
+						/obj/item/mecha_parts/mecha_equipment/tool/syringe_gun,
+						/obj/item/mecha_parts/chassis/firefighter,
+						///obj/item/mecha_parts/mecha_equipment/repair_droid,
+						/obj/item/mecha_parts/mecha_equipment/generator,
+						///obj/item/mecha_parts/mecha_equipment/jetpack, //TODO MECHA JETPACK SPRITE MISSING
+						/obj/item/mecha_parts/mecha_equipment/weapon/energy/taser,
+						/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg,
+//						/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar/mousetrap_mortar
+//						/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar
+//						/obj/item/mecha_parts/mecha_equipment/weapon/honker
+						),
+
 	"Robotic Upgrade Modules" = list(
 						/obj/item/borg/upgrade/reset,
 						/obj/item/borg/upgrade/rename,
