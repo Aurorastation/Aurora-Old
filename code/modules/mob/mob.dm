@@ -705,6 +705,8 @@ note dizziness decrements automatically in the mob's Life() proc.
 				stat(null,"Tick-[master_controller.ticker_cost]\tALL-[master_controller.total_cost]")
 			else
 				stat(null,"MasterController-ERROR")
+			if(delta_level:active)
+				stat(null,"Delta Countdown-[delta_level.timeleft()]")
 
 	if(listed_turf && client)
 		if(get_dist(listed_turf,src) > 1)
