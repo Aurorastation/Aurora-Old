@@ -652,16 +652,17 @@
 	name = "Red fingerless gloves"
 	desc = "A pair of red and black fingerless gloves that stretch up the arm. They look to be made of a soft wool and are well worn."
 	icon = 'icons/obj/custom_items.dmi'
-	icon_state = ""
-	item_state = ""
+	icon_state = "amy_gloves"
+	item_state = "amy_gloves"
 	clipped = 1
 
 /obj/item/clothing/tie/storage/fluff/cecillia_locket
-	name = "Old Locket"
-	desc = ""
+	name = "old locket"
+	desc = "A dark metal locket, it seems at least sixty years old. The photo that was once inside is gone."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "cecillia_locket0"
 	item_state = "cecillia_locket0"
+	item_color = "cecillia_locket0"
 	slots = 1
 
 /obj/item/weapon/reagent_containers/pill/cecillia_pill
@@ -673,10 +674,15 @@
 		reagents.add_reagent("space_drugs", 5)
 		reagents.add_reagent("paroxetine", 5)
 
+
+/obj/item/clothing/tie/storage/fluff/cecillia_locket/attackby(/*var/obj/item/O as obj, mob/user as mob*/)
+	..()
+	update()
+
 /obj/item/clothing/tie/storage/fluff/cecillia_locket/proc/update()
 	var/count = 0
 	for(var/obj/item/I in hold)
-		if(istype(I,/obj/item/weapon/reagent_containers/pill))
+		if(istype(I,/obj/item/weapon/reagent_containers/pill/))
 			count++
 	if(count>1) count = 1
 	item_state = "cecillia_locket[count]"
@@ -688,3 +694,16 @@
 		if(istype(U.loc, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = U.loc
 			H.update_inv_w_uniform()
+
+/obj/item/clothing/tie/storage/fluff/cecillia_locket/New()
+		..()
+		new /obj/item/weapon/reagent_containers/pill/cecillia_pill(src)
+		return
+
+/obj/item/clothing/glasses/regular/fluff/cecillia_glasses
+	name = "red prescription glasses"
+	desc = "These glasses have been prescribed for a terrible pair of eyes."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "cecillia_glasses"
+	item_state = "cecillia_glasses"
+
