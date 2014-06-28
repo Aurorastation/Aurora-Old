@@ -151,6 +151,7 @@
 #include "code\controllers\_DynamicAreaLighting_TG.dm"
 #include "code\controllers\autotransfer.dm"
 #include "code\controllers\configuration.dm"
+#include "code\controllers\delta_level.dm"
 #include "code\controllers\failsafe.dm"
 #include "code\controllers\hooks-defs.dm"
 #include "code\controllers\hooks.dm"

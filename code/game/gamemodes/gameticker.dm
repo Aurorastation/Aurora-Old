@@ -309,6 +309,8 @@ var/global/datum/controller/gameticker/ticker
 
 		emergency_shuttle.process()
 
+		delta_level.process()
+
 		var/mode_finished = mode.check_finished() || (emergency_shuttle.location == 2 && emergency_shuttle.alert == 1)
 		if(!mode.explosion_in_progress && mode_finished)
 			current_state = GAME_STATE_FINISHED
