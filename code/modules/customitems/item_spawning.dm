@@ -80,7 +80,7 @@
 							M.equip_if_possible(Pda, slot_l_store, 0)
 						ok = M.equip_if_possible(I, slot_belt, 0)*/
 				else if(istype(Item,/obj/item/clothing/glasses))
-					if(M.ckey == "skull132" && M.real_name == "Cecillia Lambert")
+					if(M.ckey == "casperf1" && M.real_name == "Cecillia Lambert")
 						ok = 1
 						del(Item)
 						goto skip
@@ -90,6 +90,17 @@
 							del(B)
 							M.glasses=null
 						ok = M.equip_if_possible(Item, slot_glasses, 0)
+/*				else if(istype(Item,/obj/item/device/pda))
+					if(M.ckey == "meowykins" && M.real_name == "Miyako Yukimura")
+						ok = 1
+						del(Item)
+						goto skip
+					var/obj/item/device/pda/fluff/meowykins_pda/I = Item
+					if(istype(M.l_store,/obj/item/device/pda))
+						for(var/obj/item/device/pda/B in M)
+							del(B)
+							M.pda=null
+						ok = M.equip_if_possible(Item, slot_l_store,0)*/
 				else if(istype(M.back,/obj/item/weapon/storage) && M.back:contents.len < M.back:storage_slots) // Try to place it in something on the mob's back
 					Item.loc = M.back
 					ok = 1
