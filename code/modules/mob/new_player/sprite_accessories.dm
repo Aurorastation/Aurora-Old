@@ -327,12 +327,12 @@
 
 	bangshuman
 		name = "Bangs"
-		icon_state = "hair_bangs"
+		icon_state = "hair_hbangs"
 		gender = FEMALE
 
 	bangshumanalt
 		name = "Bangs Short"
-		icon_state = "hair_bangs_alt"
+		icon_state = "hair_hbangs_alt"
 		gender = FEMALE
 
 	bald
