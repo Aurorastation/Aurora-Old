@@ -1,5 +1,5 @@
 //
-//	Please check gun.dm for infomation on making a weapon able to be used with two hands
+//	Please check gun.dm for infomation on making a weapon two handed
 //	- SoundScopes
 //
 
@@ -39,12 +39,6 @@
 		if(!wielded)
 			user << "<span class='warning'>You need to use two hands to fire this.</span>"
 			return 0
-		..()
-
-	attack(mob/living/M as mob, mob/living/user as mob, def_zone)
-		if(!wielded)
-			user << "<span class='warning'>You need to use two hands to fire this.</span>"
-			return ..()
 		..()
 
 	attack_self(mob/living/user as mob)
@@ -130,12 +124,6 @@
 			return 0
 		..()
 
-/*	attack(mob/living/M as mob, mob/living/user as mob, def_zone)
-		if(!wielded)
-			user << "<span class='warning'>You need to use two hands to fire this.</span>"
-			return ..()
-		..()
-*/
 	attack_self(mob/living/user as mob)
 		if(!(locate(/obj/item/ammo_casing/shotgun) in src) && !loaded.len)
 			user << "<span class='notice'>\The [src] is empty.</span>"
@@ -182,6 +170,5 @@
 
 /obj/item/weapon/gun/projectile/shotgun/ui_action_click()
 	if( src in usr )
-		world << "Request Toggle"
 		toggle_wield(usr)
 	return
