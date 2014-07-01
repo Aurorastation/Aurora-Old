@@ -21,106 +21,26 @@
 //Pulse Destroyed -- you use this, and I'll kill you
 //
 //--Skull132
+//
+//	Please check gun.dm for infomation on making a weapon able to be used with two hands
+//	- SoundScopes
 
 /obj/item/weapon/gun/energy/rifle
-	var/wielded = 0
-	var/fire_delay_unwielded = 0
-	var/fire_delay_wielded = 0 //so that we're dealing with fire_delay modification
-	var/wieldsound = null
-	var/unwieldsound = null
-	var/force_unwielded = 0 //Force modification, because striking someone with a rifle held in two hands -hurts-
-	var/force_wielded = 0
+	can_wield()
+		return 1
 
-/obj/item/weapon/gun/energy/rifle/update_icon()
-	var/ratio = power_supply.charge / power_supply.maxcharge
-	ratio = round(ratio, 0.25) * 100
-	if(modifystate)
-		icon_state = "[modifystate][ratio]"
-	else
-		icon_state = "[initial(icon_state)][ratio]"
-	return
-
-/obj/item/weapon/gun/energy/rifle/proc/unwield()
-	wielded = 0
-	fire_delay = fire_delay_unwielded
-	force = force_unwielded
-//	name = "[initial(name)]"
-//	update_icon()
-
-/obj/item/weapon/gun/energy/rifle/proc/wield()
-	wielded = 1
-	fire_delay = fire_delay_wielded
-	force = force_wielded
-//	name = "[initial(name)] (Wielded)"
-//	update_icon()
-
-/obj/item/weapon/gun/energy/rifle/mob_can_equip(M as mob, slot)
-	//Cannot equip wielded items.
-	if(wielded)
-		M << "<span class='warning'>Lower the [initial(name)] first!</span>"
-		return 0
-
-	return ..()
-
-/obj/item/weapon/gun/energy/rifle/dropped(mob/user as mob)
-	//handles unwielding a twohanded weapon when dropped as well as clearing up the offhand
-	if(user)
-		var/obj/item/weapon/gun/energy/rifle/O = user.get_inactive_hand()
-		if(istype(O))
-			O.unwield()
-	return	unwield()
-
-/obj/item/weapon/gun/energy/rifle/pickup(mob/user)
-	unwield()
+	update_icon()
+		var/ratio = power_supply.charge / power_supply.maxcharge
+		ratio = round(ratio, 0.25) * 100
+		if(modifystate)
+			icon_state = "[modifystate][ratio]"
+		else
+			icon_state = "[initial(icon_state)][ratio]"
+		return
 
 /obj/item/weapon/gun/energy/rifle/attack_self(mob/user as mob)
-	if( istype(user,/mob/living/carbon/monkey) )
-		user << "<span class='warning'>It's too heavy for you to stabilize properly.</span>"
-		return
-
+	toggle_wield(user)
 	..()
-	if(wielded) //Trying to unwield it
-		unwield()
-		user << "<span class='notice'>You are no-longer stabilizing the [name] with both hands.</span>"
-		if (src.unwieldsound)
-			playsound(src.loc, unwieldsound, 50, 1)
-
-		var/obj/item/weapon/gun/energy/rifle/offhand/O = user.get_inactive_hand()
-		if(O && istype(O))
-			O.unwield()
-		return
-
-	else //Trying to wield it
-		if(user.get_inactive_hand())
-			user << "<span class='warning'>You need your other hand to be empty</span>"
-			return
-		wield()
-		user << "<span class='notice'>You stabilize the [initial(name)] with both hands.</span>"
-		if (src.wieldsound)
-			playsound(src.loc, wieldsound, 50, 1)
-
-		var/obj/item/weapon/gun/energy/rifle/offhand/O = new(user) ////Let's reserve his other hand~
-		O.name = "[initial(name)] - offhand"
-		O.desc = "Your second grip on the [initial(name)]"
-		user.put_in_inactive_hand(O)
-		return
-
-///////////OFFHAND///////////////
-/obj/item/weapon/gun/energy/rifle/offhand
-	w_class = 5.0
-	icon = 'icons/obj/weapons.dmi' //mainly because we can't have nice things, right? Right.
-	icon_state = "offhand"
-	item_state = "nothing" //Overrides item_state in /obj/item/weapon/gun
-	name = "offhand"
-
-	unwield()
-		del(src)
-
-	wield()
-		del(src)
-
-/obj/item/weapon/gun/energy/rifle/offhand/mob_can_equip(M as mob, slot)
-	return 0 //Because you can't equip your hand yet somehow you can
 
 ///////////LASER RIFLE//////////////
 /obj/item/weapon/gun/energy/rifle/laser

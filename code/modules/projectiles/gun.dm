@@ -33,6 +33,18 @@
 	var/fire_delay = 6
 	var/last_fired = 0
 
+	var/wielded = 0
+
+	var/fire_delay_unwielded = 0 //If these are set it will change the respected fields, if not they are ignored
+	var/fire_delay_wielded = 0 //so that we're dealing with fire_delay modification
+	var/wieldsound = null
+	var/unwieldsound = null
+	var/force_unwielded = 0 //Force modification, because striking someone with a rifle held in two hands -hurts-
+	var/force_wielded = 0
+
+	proc/can_wield() //Override in order to make a weapon two handed, remember to add toggle_wield(mob/user as mob) in the weapon somewhere
+		return 0	//Override /Fire(..) to force the weapon to be two handed
+
 	proc/ready_to_fire()
 		if(world.time >= last_fired + fire_delay)
 			last_fired = world.time
@@ -180,6 +192,11 @@
 		playsound(src.loc, 'sound/weapons/empty.ogg', 100, 1)
 
 /obj/item/weapon/gun/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
+	var/obj/item/weapon/gun/O = user.get_active_hand()
+	if(istype(O,/obj/item/weapon/gun/projectile/shotgun)) //Since you need two hands to fire a shotgun this will make you hit yourself if you try with one hand.
+		if(!wielded)
+			return ..()
+
 	//Suicide handling.
 	if (M == user && user.zone_sel.selecting == "mouth" && !mouthshoot)
 		mouthshoot = 1
@@ -194,7 +211,7 @@
 				playsound(user, fire_sound, 10, 1)
 			else
 				playsound(user, fire_sound, 50, 1)
-			if(istype(in_chamber, /obj/item/projectile/beam/lastertag))		
+			if(istype(in_chamber, /obj/item/projectile/beam/lastertag))
 				user.show_message("<span class = 'warning'>You feel rather silly, trying to commit suicide with a toy.</span>")
 				mouthshoot = 0
 				return
@@ -226,3 +243,98 @@
 			return
 	else
 		return ..() //Pistolwhippin'
+
+//Wielding weapons
+/obj/item/weapon/gun/proc/toggle_wield(mob/user as mob)
+	if(!can_wield())
+		return
+
+	if( istype(user,/mob/living/carbon/monkey) )
+		user << "<span class='warning'>It's too heavy for you to stabilize properly.</span>"
+		return
+	if(wielded) //Trying to unwield it
+		unwield()
+		user << "<span class='notice'>You are no-longer stabilizing the [name] with both hands.</span>"
+		if (src.unwieldsound)
+			playsound(src.loc, unwieldsound, 50, 1)
+
+		var/obj/item/weapon/gun/offhand/O = user.get_inactive_hand()
+		if(O && istype(O))
+			O.unwield()
+		return
+
+	else //Trying to wield it
+		if(user.get_inactive_hand())
+			user << "<span class='warning'>You need your other hand to be empty</span>"
+			return
+		wield()
+		user << "<span class='notice'>You stabilize the [initial(name)] with both hands.</span>"
+		if (src.wieldsound)
+			playsound(src.loc, wieldsound, 50, 1)
+
+		var/obj/item/weapon/gun/offhand/O = new(user) ////Let's reserve his other hand~
+		O.name = "[initial(name)] - offhand"
+		O.desc = "Your second grip on the [initial(name)]"
+		user.put_in_inactive_hand(O)
+	return
+
+/obj/item/weapon/gun/mob_can_equip(M as mob, slot)
+	//Cannot equip wielded items.
+	if(can_wield())
+		if(wielded)
+			M << "<span class='warning'>Lower the [initial(name)] first!</span>"
+			return 0
+
+	return ..()
+
+/obj/item/weapon/gun/dropped(mob/living/user as mob)
+	//handles unwielding a twohanded weapon when dropped as well as clearing up the offhand
+	if(can_wield())
+		if(user)
+			var/obj/item/weapon/gun/O = user.get_inactive_hand()
+			if(istype(O))
+				O.unwield()
+		return	unwield()
+
+/obj/item/weapon/gun/pickup(mob/user)
+	if(can_wield())
+		unwield()
+
+/obj/item/weapon/gun/proc/unwield()
+	wielded = 0
+	if(force_unwielded && force_wielded)
+		force = force_unwielded
+	if(fire_delay_unwielded && fire_delay_wielded)
+		fire_delay = fire_delay_unwielded
+
+/obj/item/weapon/gun/proc/wield()
+	wielded = 1
+	if(force_wielded)
+		force = force_wielded
+	if(fire_delay_wielded)
+		fire_delay = fire_delay_wielded
+
+///////////OFFHAND///////////////
+/obj/item/weapon/gun/offhand
+	w_class = 5.0
+	icon = 'icons/obj/weapons.dmi' //mainly because we can't have nice things, right? Right.
+	icon_state = "offhand"
+	item_state = "nothing" //Overrides item_state in /obj/item/weapon/gun
+	name = "offhand"
+
+	unwield()
+		del(src)
+
+	wield()
+		del(src)
+
+	dropped(mob/living/user as mob)
+		if(user)
+			var/obj/item/weapon/gun/O = user.get_inactive_hand()
+			if(istype(O))
+				user << "<span class='notice'>You are no-longer stabilizing the [name] with both hands.</span>"
+				O.unwield()
+				unwield()
+
+/obj/item/weapon/gun/offhand/mob_can_equip(M as mob, slot)
+	return 0 //Because you can't equip your hand yet somehow you can
