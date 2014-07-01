@@ -340,3 +340,47 @@
 	icon_state = "swim_red"
 	item_color = "swim_red"
 	siemens_coefficient = 1
+
+/obj/item/clothing/suit/wintercoat
+	name = "Dark Winter Coat"
+	desc = "A soft dark coat, with fur on the edges of the hood."
+	icon_state = "coatdark"
+	item_state = "coatdark"
+
+/obj/item/clothing/suit/wintercoat/white
+	name = "White Winter Coat"
+	desc = "A soft white coat, with fur on the edges of the hood."
+	icon_state = "coatwhite"
+	item_state = "coatwhite"
+
+/obj/item/clothing/suit/wintercoat/verb/toggle()
+	set name = "Toggle wintercoat hood"
+	set category = "Object"
+	set src in usr
+
+	if(!usr.canmove || usr.stat || usr.restrained())
+		return 0
+
+	switch(icon_state)
+		if("coatdark")
+			src.icon_state = "coatdark-hood"
+			usr << "You button up the coat and pull on the hood."
+		if("coatdark-hood")
+			src.icon_state = "coatdark"
+			usr << "You unbutton the coat and pull off the hood."
+		if("coatwhite")
+			src.icon_state = "coatwhite-hood"
+			usr << "You button up the coat and pull on the hood."
+		if("coatwhite-hood")
+			src.icon_state = "coatwhite"
+			usr << "You unbutton the coat and pull off the hood."
+		if("temple_coat")
+			src.icon_state = "temple_coat-hood"
+			usr << "You button up the coat and pull on the hood."
+		if("temple_coat-hood")
+			src.icon_state = "temple_coat"
+			usr << "You unbutton the coat and pull off the hood."
+		else
+			usr << "You attempt to button-up the velcro on your [src], before promptly realising how retarded you are."
+			return
+	usr.update_inv_wear_suit()	//so our overlays update
