@@ -648,7 +648,7 @@
 	icon_state = "bluepanther"
 	item_state = "bluepanther"
 
-/obj/item/clothing/gloves/fluff/amy_gloves //Red fingerless gloves - Amy Tilley - lk600 - GET SPRITE
+/obj/item/clothing/gloves/fluff/amy_gloves //Red fingerless gloves - Amy Tilley - lk600 - DONE
 	name = "Red fingerless gloves"
 	desc = "A pair of red and black fingerless gloves that stretch up the arm. They look to be made of a soft wool and are well worn."
 	icon = 'icons/obj/custom_items.dmi'
@@ -656,7 +656,7 @@
 	item_state = "amy_gloves"
 	clipped = 1
 
-/obj/item/clothing/tie/storage/fluff/cecillia_locket
+/obj/item/clothing/tie/storage/fluff/cecillia_locket //Old locket - Cecillia Lambert - casperf1 - DONE
 	name = "old locket"
 	desc = "A dark metal locket, it seems at least sixty years old. The photo that was once inside is gone."
 	icon = 'icons/obj/custom_items.dmi'
@@ -697,13 +697,19 @@
 
 /obj/item/clothing/tie/storage/fluff/cecillia_locket/New()
 		..()
-		new /obj/item/weapon/reagent_containers/pill/cecillia_pill(src)
+		new /obj/item/weapon/reagent_containers/pill/cecillia_pill(hold)
 		return
 
-/obj/item/clothing/glasses/regular/fluff/cecillia_glasses
+/obj/item/clothing/glasses/regular/fluff/cecillia_glasses //Red prescription glasses - Cecillia Lamber - casperf1 - DONE
 	name = "red prescription glasses"
 	desc = "These glasses have been prescribed for a terrible pair of eyes."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "cecillia_glasses"
 	item_state = "cecillia_glasses"
 
+/obj/item/clothing/suit/wintercoat/fluff/temple_coat //Red coat - Temple Zorion - deatacita - DONE
+	name = "red coat"
+	desc = "An old red and black winter-coat, there looks to be spots of dried blood on it."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "temple_coat"
+	item_state = "temple_coat"
