@@ -375,7 +375,7 @@
 	var/miss_sound = 'sound/weapons/punchmiss.ogg'
 	var/sharp = 0
 	var/edge = 0
-	
+
 /datum/unarmed_attack/punch
 	attack_verb = list("punch")
 
@@ -394,3 +394,24 @@
 /datum/unarmed_attack/claws/armalis
 	attack_verb = list("slash", "claw")
 	damage = 10	//they're huge! they should do a little more damage, i'd even go for 15-20 maybe...
+
+/datum/species/kocasslani
+	name = "Kocasslani"
+	icobase = 'icons/mob/human_races/r_kocasslani.dmi'
+	deform = 'icons/mob/human_races/r_def_kocasslani.dmi'
+	language = "Sini"
+	darksight = 8
+
+	cold_level_1 = 160 //Default 260
+	cold_level_2 = 100 //Default 200
+	cold_level_3 = 60 //Default 120
+
+	heat_level_1 = 300 //Default 360
+	heat_level_2 = 360 //Default 400
+	heat_level_3 = 800 //Default 1000
+
+	flags = IS_WHITELISTED | HAS_LIPS | HAS_UNDERWEAR
+
+/*	blood_color = "#659CEF"
+	flesh_color = "#D3AA8E"
+*/
