@@ -320,6 +320,24 @@
 		..()
 		reagents.add_reagent("brandy", 100)
 
+//////////////////////////REQUESTED BY DEA - DALEK////////////////
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/guinnes
+	name = "Guinness"
+	desc = "A bottle of good old Guinnes"
+	icon_state = "guinnes_bottle"
+	New()
+		..()
+		reagents.add_reagent("guinnes", 100)
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/drambuie
+	name = "Drambuie"
+	desc = "A bottle of Drambuie"
+	icon_state = "drambuie_bottle"
+	New()
+		..()
+		reagents.add_reagent("drambuie", 100)
+
 //////////////////////////JUICES AND STUFF ///////////////////////
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/orangejuice
