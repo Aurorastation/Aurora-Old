@@ -73,6 +73,13 @@
 	colour = "rough"
 	key = "3"
 
+/datum/language/sini
+	name = "Sini"
+	desc = "Kocasslani traditional language"
+	speech_verb = "sings"
+	colour = "skrell"
+	key = "z"
+
 // Language handling.
 /mob/proc/add_language(var/language)
 

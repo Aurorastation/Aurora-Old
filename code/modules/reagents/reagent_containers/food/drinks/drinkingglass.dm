@@ -550,6 +550,30 @@
 					icon_state = "brandyglass"
 					name = "Brandy"
 					desc = "Cheap knock off for cognac."
+				if("guinnes")
+					icon_state = "guinnes_glass"
+					name = "Glass of Guinness"
+					desc = "A glass of Guinness"
+				if("drambuie")
+					icon_state = "drambuieglass"
+					name = "Glass of Drambuie"
+					desc = "A glass of Drambuie"
+				if("blindrussian")
+					icon_state = "blindrussian"
+					name = "Glass of Blind Russian"
+					desc = "You can't even see!"
+				if("tallrussian")
+					icon_state = "tallblackrussian"
+					name = "Glass of Tall Black Russian"
+					desc = "Black Russian but taller"
+				if("rustynail")
+					icon_state = "rustynail"
+					name = "Glass of Rusty Nail"
+					desc = "Smells like lemon"
+				if("oldfashioned")
+					icon_state = "oldfashioned"
+					name = "Glass of Old Fashioned"
+					desc = "Looks really old"
 				else
 					icon_state ="glass_brown"
 					name = "Glass of ..what?"
