@@ -51,7 +51,7 @@
 		name = "Bald"
 		icon_state = "bald"
 		gender = MALE
-		species_allowed = list("Human","Unathi")
+		species_allowed = list("Human","Unathi","Kocasslani")
 
 	short
 		name = "Short Hair"	  // try to capatilize the names please~
@@ -431,7 +431,7 @@
 		name = "Shaved"
 		icon_state = "bald"
 		gender = NEUTER
-		species_allowed = list("Human","Unathi","Tajaran","Skrell","Vox","Machine")
+		species_allowed = list("Human","Unathi","Tajaran","Skrell","Vox","Machine","Kocasslani")
 
 	watson
 		name = "Watson Mustache"
@@ -633,6 +633,31 @@
 		icon_state = "vox_shortquills"
 		species_allowed = list("Vox")
 
+	kocasslani_m_1
+		name = "Kocasslani Male 1"
+		icon_state = "kocasslani_m_hair1"
+		species_allowed = list("Kocasslani")
+
+	kocasslani_m_2
+		name = "Kocasslani Male 2"
+		icon_state = "kocasslani_m_hair2"
+		species_allowed = list("Kocasslani")
+
+	kocasslani_f_1
+		name = "Kocasslani Female 1"
+		icon_state = "kocasslani_f_hair1"
+		species_allowed = list("Kocasslani")
+
+	kocasslani_f_2
+		name = "Kocasslani Female 2"
+		icon_state = "kocasslani_f_hair2"
+		species_allowed = list("Kocasslani")
+
+	kocasslani_f_3
+		name = "Kocasslani Female 3"
+		icon_state = "kocasslani_f_hair3"
+		species_allowed = list("Kocasslani")
+
 /datum/sprite_accessory/facial_hair
 
 	taj_sideburns
@@ -698,3 +723,9 @@
 		icon_state = "default"
 		icon = 'icons/mob/human_races/r_skrell.dmi'
 		species_allowed = list("Skrell")
+
+	kocasslani
+		name = "Default Kocasslani skin"
+		icon_state = "default"
+		icon = 'icons/mob/human_races/r_kocasslani.dmi'
+		species_allowed = list("Kocasslani")

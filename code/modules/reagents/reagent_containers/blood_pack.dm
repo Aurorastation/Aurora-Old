@@ -18,11 +18,25 @@
 		update_icon()
 
 	update_icon()
-		var/percent = round((reagents.total_volume / volume) * 100)
-		switch(percent)
-			if(0 to 9)			icon_state = "empty"
-			if(10 to 50) 		icon_state = "half"
-			if(51 to INFINITY)	icon_state = "full"
+
+
+
+
+/*
+		if(blood_type != "K")
+			var/percent = round((reagents.total_volume / volume) * 100)
+			switch(percent)
+				if(0 to 9)			icon_state = "empty"
+				if(10 to 50) 		icon_state = "half"
+				if(51 to INFINITY)	icon_state = "full"
+		else
+			var/percent2 = round((reagents.total_volume / volume) * 100)
+			switch(percent2)
+				if(0 to 9)			icon_state = "empty"
+				if(10 to 50) 		icon_state = "kocas_half"
+				if(51 to INFINITY)	icon_state = "kocas_full"
+
+*/
 
 /obj/item/weapon/reagent_containers/blood/APlus
 	blood_type = "A+"

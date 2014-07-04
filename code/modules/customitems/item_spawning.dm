@@ -96,6 +96,11 @@
 						del(Item)
 						goto skip
 					var/obj/item/device/pda/fluff/meowykins_pda/I = Item
+					if(istype(M.belt,/obj/item/device/pda))
+						for(var/obj/item/device/pda/B in M)
+							del(B)
+							M.belt=null
+						ok = M.equip_if_possible(I, slot_belt,0)
 					if(istype(M.l_store,/obj/item/device/pda))
 						for(var/obj/item/device/pda/B in M)
 							del(B)

@@ -3903,6 +3903,53 @@ datum
 			slur_start = 35			//amount absorbed after which mob starts slurring
 			confused_start = 140	//amount absorbed after which mob starts confusing directions
 
+///////////////////////////////
+///////////////////////////////
+//Dea's Request - Dalekfodder// Lol ART
+///////////////////////////////
+///////////////////////////////
+
+		ethanol/guinnes
+			name = "Guinness"
+			id = "guinnes"
+			description = "Special Guinnes drink"
+			color = ""  // dunno
+			boozepwr = 3
+
+		ethanol/drambuie
+			name = "Drambuie"
+			id = "drambuie"
+			description = "A drink that smells like whiskey but tastes different" // LOL.
+			color = "#2E6671" // dunno
+			boozepwr = 4
+
+		ethanol/oldfashioned
+			name = "Old Fashioned"
+			id = "oldfashion"
+			description = "That looks like from sixties"
+			color = "#2E6671"
+			boozepwr = 3
+
+		ethanol/blindrussian
+			name = "Blind Russian"
+			id = "blindrussian"
+			description = "You can't see?"
+			color = "#2E6671"
+			boozepwr = 5
+
+		ethanol/rustynail
+			name = "Rusty Nail"
+			id = "rustynail"
+			description = "Smells like lemon"
+			color = "#2E6671"
+			boozepwr = 4
+
+		ethanol/tallrussian
+			name = "Tall Black Russian"
+			id = "tallrussian"
+			description = "Just like black russian but taller"
+			color = "#2E6671"
+			boozepwr = 5
 
 
 // Undefine the alias for REAGENTS_EFFECT_MULTIPLER
