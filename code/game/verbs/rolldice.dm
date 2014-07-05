@@ -5,7 +5,7 @@
 
 	var/list/choice = list(10, 20, 50, 100)
 	var/input = input("Select the Dice you want!", "Dice", null, null) in choice
-	var/conclusion = "[src] rolls [rand(1,input)] out of [input]!"
+	var/conclusion = "[usr] rolls [rand(1,input)] out of [input]!"
 
 	for(var/mob/O in viewers(src))
 		O << conclusion
