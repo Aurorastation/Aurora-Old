@@ -110,9 +110,9 @@
 				afk_traitors += 1
 
 		if(afk_traitors > afk_traitor_count)
-			log_debug("debug: Traitors are afk, forcing a new traitor")
+			log_debug("DEBUG: Traitors are afk, forcing a new traitor")
 			need_new_traitor = 1
-			log_debug("debug: afk_traitors = [afk_traitors] | afk_traitor_count = [afk_traitor_count]")
+			log_debug("DEBUG: afk_traitors = [afk_traitors] | afk_traitor_count = [afk_traitor_count]")
 			afk_traitors = afk_traitor_count
 
 //		var/r = rand(5)
@@ -130,18 +130,18 @@
 			//message_admins("Number of Traitors is below maximum.  Rolling for new Traitor.")
 			//message_admins("The probability of a new traitor is [traitor_prob]%")
 
-			if(prob(traitor_prob))
+			if(prob(traitor_prob) || need_new_traitor)
 				message_admins("Making a new Traitor.")
 				if(!possible_traitors.len)
 					if(need_new_traitor)
-						log_debug("debug: No potential traitors.  Cancelling new traitor.")
+						log_debug("DEBUG: No potential traitors.  Cancelling new traitor.")
 					message_admins("No potential traitors.  Cancelling new traitor.")
 					traitorcheckloop()
 					return
 				var/mob/living/newtraitor = pick(possible_traitors)
 				//message_admins("[newtraitor.real_name] is the new Traitor.")
 				if(need_new_traitor)
-					log_debug("Traitor forced and selected")
+					log_debug("DEBUG: Traitor forced and selected")
 
 				if (!config.objectives_disabled)
 					forge_traitor_objectives(newtraitor.mind)
