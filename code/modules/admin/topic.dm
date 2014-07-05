@@ -2070,6 +2070,9 @@
 				if(aliens_allowed)
 					create_xeno()
 			if("spiders")
+				if(!spider_limit_bypass) //Allow the admin to disable the max spider limit. Once enabled it's on for the round.
+					if (alert(usr, "Bypass the spider limit? This only needs to be done once", "Bypass?", "Yes", "No") == "Yes") //Let admins cause havoc if they want
+						spider_limit_bypass = 1
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SL")
 				new /datum/event/spider_infestation

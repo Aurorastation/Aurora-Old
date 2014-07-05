@@ -1,3 +1,7 @@
+/var/global/total_spiders = 0
+/var/global/spider_can_spawn = 1
+/var/global/spider_limit_bypass = 0
+
 //generic procs copied from obj/effect/alien
 /obj/effect/spider
 	name = "web"
@@ -186,9 +190,11 @@
 	if(isturf(loc) && amount_grown > 0)
 		amount_grown += rand(0,2)
 		if(amount_grown >= 100)
-			var/spawn_type = pick(typesof(/mob/living/simple_animal/hostile/giant_spider))
-			new spawn_type(src.loc)
-			del(src)
+			amount_grown = 101 //To avoid growing too much
+			if(spider_can_spawn || spider_limit_bypass)
+				var/spawn_type = pick(typesof(/mob/living/simple_animal/hostile/giant_spider))
+				new spawn_type(src.loc)
+				del(src)
 
 /obj/effect/decal/cleanable/spiderling_remains
 	name = "spiderling remains"
