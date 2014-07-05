@@ -674,31 +674,17 @@
 		reagents.add_reagent("space_drugs", 5)
 		reagents.add_reagent("paroxetine", 5)
 
-
-/obj/item/clothing/tie/storage/fluff/cecillia_locket/attackby(/*var/obj/item/O as obj, mob/user as mob*/)
-	..()
-	update()
-
-/obj/item/clothing/tie/storage/fluff/cecillia_locket/proc/update()
-	var/count = 0
-	for(var/obj/item/I in hold)
-		if(istype(I,/obj/item/weapon/reagent_containers/pill/))
-			count++
-	if(count>1) count = 1
-	item_state = "cecillia_locket[count]"
-	icon_state = item_state
-	item_color = item_state
-
-	if(istype(loc, /obj/item/clothing))
-		var/obj/item/clothing/U = loc
-		if(istype(U.loc, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = U.loc
-			H.update_inv_w_uniform()
-
 /obj/item/clothing/tie/storage/fluff/cecillia_locket/New()
 		..()
 		new /obj/item/weapon/reagent_containers/pill/cecillia_pill(hold)
 		return
+
+/obj/item/weapon/storage/backpack/satchel/fluff/cecillia_satchel //Satchel-bag - Cecillia Lambert - casperf1 - SPRITE
+	name = "satchel-bag"
+	desc = "This looks old, is not yours and if you're wearing it, the original owner is probably dead."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "cecillia_satchel"
+	item_state = "cecillia_satchel"
 
 /obj/item/clothing/glasses/regular/fluff/cecillia_glasses //Red prescription glasses - Cecillia Lamber - casperf1 - DONE
 	name = "red prescription glasses"
@@ -713,3 +699,22 @@
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "temple_coat"
 	item_state = "temple_coat"
+
+/obj/item/clothing/shoes/jackboots/fluff/peter_boots //Worn boots - Peter Thrushwood - farcry11 - DONE
+	name = "worn boots"
+	desc = "A worn pair of combat boots. They look walked-around in."
+
+/obj/item/clothing/gloves/brown/fluff/peter_gloves //Cropped driving hloves - Peter Thrushwood - farcry11 - DONE
+	name = "cropped driving gloves"
+	desc = "A pair of high quality, fingerless driving gloves made of faux leather and faux velvet-leathern without and velvet within."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "peter_gloves"
+	item_state = "peter gloves"
+	clipped = 1
+
+/obj/item/clothing/under/fluff/peter_shirt //Plaid shirt - Peter Thrushwood - farcry11 - DONE
+	name = "plaid shirt"
+	desc = "A worn and rugged looking plaid button-up overshirt. The initials 'P.T.' are scrawled in pen on the neck tag."
+	icon_state = "sl_suit"
+	item_state = "sl_suit"
+	item_color = "sl_suit"
