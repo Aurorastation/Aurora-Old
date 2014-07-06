@@ -133,6 +133,7 @@ var/list/admin_verbs_dev = list(
 	/client/proc/restart_controller,
 	/client/proc/enable_debug_verbs,
 	/client/proc/callproc,
+	/client/proc/toggleattacklogs,
 	/client/proc/toggledebuglogs,
 	/client/proc/SDQL_query,
 	/client/proc/SDQL2_query,
@@ -273,6 +274,7 @@ var/list/admin_verbs_mod = list(
 	/client/proc/cmd_admin_pm_context,	/*right-click adminPM interface*/
 	/client/proc/cmd_admin_pm_panel,	/*admin-pm list*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game.*/
+	/client/proc/toggleattacklogs,
 	/client/proc/toggledebuglogs,
 	/datum/admins/proc/PlayerNotes,
 	/client/proc/admin_ghost,			/*allows us to ghost/reenter body at will*/
@@ -608,22 +610,22 @@ var/list/admin_verbs_mod = list(
 	feedback_add_details("admin_verb","GD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] gave [key_name(T)] the disease [D].")
 	message_admins("\blue [key_name_admin(usr)] gave [key_name(T)] the disease [D].", 1)
-	
+
 /client/proc/give_disease2(mob/T as mob in mob_list) // -- Giacom
 	set category = "Fun"
 	set name = "Give Disease"
 	set desc = "Gives a Disease to a mob."
-	
+
 	var/datum/disease2/disease/D = new /datum/disease2/disease()
-	
+
 	var/greater = ((input("Is this a lesser or greater disease?", "Give Disease") in list("Lesser", "Greater")) == "Greater")
-	
+
 	D.makerandom(greater)
 	if (!greater)
 		D.infectionchance = 1
-		
+
 	D.infectionchance = input("How virulent is this disease? (1-100)", "Give Disease", D.infectionchance) as num
-	
+
 	if(istype(T,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = T
 		if (H.species)
@@ -632,7 +634,7 @@ var/list/admin_verbs_mod = list(
 		var/mob/living/carbon/monkey/M = T
 		D.affected_species = list(M.greaterform)
 	infect_virus2(T,D,1)
-	
+
 	feedback_add_details("admin_verb","GD2") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] gave [key_name(T)] a [(greater)? "greater":"lesser"] disease2 with infection chance [D.infectionchance].")
 	message_admins("\blue [key_name_admin(usr)] gave [key_name(T)] a [(greater)? "greater":"lesser"] disease2 with infection chance [D.infectionchance].", 1)
@@ -905,4 +907,8 @@ var/list/admin_verbs_mod = list(
 		if("Red")
 			set_security_level(SEC_LEVEL_RED)
 		if("Delta")
+			if (alert(usr, "Everyone will die, there is no cancelling yet.", "Are you sure you want Code Delta?", "Yes", "No") != "Yes") //Confirmation box incase of miss-clicks
+				return
 			set_security_level(SEC_LEVEL_DELTA)
+			delta_level:active = 1
+			delta_level.activate()

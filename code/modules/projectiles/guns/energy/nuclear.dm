@@ -36,6 +36,7 @@
 /obj/item/weapon/gun/energy/rifle/gun/nuclear
 	name = "Advanced Energy Gun"
 	desc = "An energy gun with an experimental miniaturized reactor."
+	icon = 'icons/obj/gun.dmi' //Overrides .../rifle
 	icon_state = "nucgun"
 
 	origin_tech = "combat=3;materials=5;powerstorage=3"

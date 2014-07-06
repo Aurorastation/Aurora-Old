@@ -1934,6 +1934,38 @@ datum
 			required_reagents = list("cremeyvette" = 1, "gin" = 1, "grenadine" = 1)
 			result_amount = 3
 
+
+// DEA's Request - Dalekfodder ///
+		rustynail
+			name = "Rusty Nail"
+			id = "rustynail"
+			result = "rustynail"
+			required_reagents = list("whiskey" = 1, "gin" = 1, "drambuie" = 1)
+			result_amount = 2
+
+		oldfashioned
+			name = "Old Fashioned"
+			id = "oldfashioned"
+			result = "oldfashioned"
+			required_reagents = list("bluecuracao" = 1, "gin" = 1, "grenadine" = 1, "ice" = 1)
+			result_amount = 4
+
+		blindrussian
+			name = "Blind Russian"
+			id = "blindrussian"
+			result = "blindrussian"
+			required_reagents = list("kahlua" = 1, "irishcream" = 1, "cream" = 1)
+			result_amount = 2
+
+		tallrussian
+			name = "Tall Black Russian"
+			id = "tallrussian"
+			result = "tallrussian"
+			required_reagents = list("vodka" = 1, "kahlua" = 1, "cola" = 1)
+
+			result_amount = 3
+
+
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 
 		sbiten
