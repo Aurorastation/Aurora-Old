@@ -107,6 +107,7 @@
 	item_state = ""
 	flags = FPRINT | TABLEPASS | CONDUCT
 	brightness_on = 2
+	w_class = 1
 
 /obj/item/device/flashlight/heavy
 	name = "heavy duty flashlight"
@@ -116,6 +117,16 @@
 	flags = FPRINT | TABLEPASS | CONDUCT
 	brightness_on = 7
 	w_class = 3
+
+/obj/item/device/flashlight/drone
+	name = "low-power flashlight"
+	desc = "A miniature lamp, that might be used by small robots."
+	icon_state = "penlight"
+	item_state = ""
+	flags = FPRINT | TABLEPASS | CONDUCT
+	brightness_on = 2
+	w_class = 1
+
 
 // the desk lamps are a bit special
 /obj/item/device/flashlight/lamp
@@ -279,3 +290,25 @@ var/charge_tick = 0
 	return
 // This code... Gave me cancer... -Dalekfodder
 
+		
+/obj/item/device/flashlight/slime
+	gender = PLURAL
+	name = "glowing slime extract"
+	desc = "A glowing ball of what appears to be amber."
+	icon = 'icons/obj/lighting.dmi'
+	icon_state = "floor1" //not a slime extract sprite but... something close enough!
+	item_state = "slime"
+	w_class = 1
+	m_amt = 0
+	g_amt = 0
+	brightness_on = 6
+	on = 1 //Bio-luminesence has one setting, on.
+	
+/obj/item/device/flashlight/slime/New()
+	SetLuminosity(brightness_on)
+	spawn(1) //Might be sloppy, but seems to be necessary to prevent further runtimes and make these work as intended... don't judge me!
+		update_brightness()
+		icon_state = initial(icon_state)
+	
+/obj/item/device/flashlight/slime/attack_self(mob/user)
+	return //Bio-luminescence does not toggle.

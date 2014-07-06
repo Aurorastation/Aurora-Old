@@ -5,9 +5,11 @@
 /datum/game_mode/traitor/autotraitor
 	name = "AutoTraitor"
 	config_tag = "extend-a-traitormongous"
+	restricted_jobs = list("Cyborg", "Internal Affairs Agent", "Head of Security", "Captain") //To ensure the setting stay from /traitor
 
 	var/list/possible_traitors
 	var/num_players = 0
+	var/afk_traitor_count = 0
 
 /datum/game_mode/traitor/autotraitor/announce()
 	..()
@@ -87,7 +89,7 @@
 				playercount += 1
 			if (player.client && player.mind && player.mind.special_role && player.stat != 2)
 				traitorcount += 1
-			if (player.client && player.mind && !player.mind.special_role && player.stat != 2 && (player.client && player.client.prefs.be_special & BE_TRAITOR) && !jobban_isbanned(player, "Syndicate"))
+			if (player.client && player.mind && !player.mind.special_role && player.stat != 2 && (player.client && player.client.prefs.be_special & BE_TRAITOR) && !jobban_isbanned(player, "Syndicate") && !player.client.is_afk())
 				possible_traitors += player
 		for(var/datum/mind/player in possible_traitors)
 			for(var/job in restricted_jobs)
@@ -100,6 +102,19 @@
 //		for(var/mob/living/traitorlist in possible_traitors)
 //			message_admins("[traitorlist.real_name]")
 
+		var/afk_traitors = 0
+		var/need_new_traitor = 0
+
+		for(var/mob/living/player in traitors)
+			if(player.client.is_afk())
+				afk_traitors += 1
+
+		if(afk_traitors > afk_traitor_count)
+			log_debug("DEBUG: Traitors are afk, forcing a new traitor")
+			need_new_traitor = 1
+			log_debug("DEBUG: afk_traitors = [afk_traitors] | afk_traitor_count = [afk_traitor_count]")
+			afk_traitors = afk_traitor_count
+
 //		var/r = rand(5)
 //		var/target_traitors = 1
 		var/max_traitors = 1
@@ -110,20 +125,26 @@
 			traitor_prob += 50
 
 
-		if(traitorcount < max_traitors)
+
+		if(traitorcount < max_traitors || need_new_traitor)
 			//message_admins("Number of Traitors is below maximum.  Rolling for new Traitor.")
 			//message_admins("The probability of a new traitor is [traitor_prob]%")
 
-			if(prob(traitor_prob))
+			if(prob(traitor_prob) || need_new_traitor)
 				message_admins("Making a new Traitor.")
 				if(!possible_traitors.len)
+					if(need_new_traitor)
+						log_debug("DEBUG: No potential traitors.  Cancelling new traitor.")
 					message_admins("No potential traitors.  Cancelling new traitor.")
 					traitorcheckloop()
 					return
 				var/mob/living/newtraitor = pick(possible_traitors)
 				//message_admins("[newtraitor.real_name] is the new Traitor.")
+				if(need_new_traitor)
+					log_debug("DEBUG: Traitor forced and selected")
 
-				forge_traitor_objectives(newtraitor.mind)
+				if (!config.objectives_disabled)
+					forge_traitor_objectives(newtraitor.mind)
 
 				if(istype(newtraitor, /mob/living/silicon))
 					add_law_zero(newtraitor)
@@ -134,11 +155,15 @@
 				newtraitor << "\red <B>ATTENTION:</B> \black It is time to pay your debt to the Syndicate..."
 				newtraitor << "<B>You are now a traitor.</B>"
 				newtraitor.mind.special_role = "traitor"
+				newtraitor.hud_updateflag |= 1 << SPECIALROLE_HUD
 				var/obj_count = 1
 				newtraitor << "\blue Your current objectives:"
-				for(var/datum/objective/objective in newtraitor.mind.objectives)
-					newtraitor << "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
-					obj_count++
+				if(!config.objectives_disabled)
+					for(var/datum/objective/objective in newtraitor.mind.objectives)
+						newtraitor << "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
+						obj_count++
+				else
+					newtraitor << "<i>You have been selected this round as an antagonist- <font color=blue>Within the rules,</font> try to act as an opposing force to the crew- This can be via corporate payoff, personal motives, or maybe just being a dick. Further RP and try to make sure other players have </i>fun<i>! If you are confused or at a loss, always adminhelp, and before taking extreme actions, please try to also contact the administration! Think through your actions and make the roleplay immersive! <b>Please remember all rules aside from those without explicit exceptions apply to antagonist.</i></b>"
 			//else
 				//message_admins("No new traitor being added.")
 		//else
@@ -183,16 +208,20 @@
 			//message_admins("The probability of a new traitor is [traitor_prob]%")
 			if(prob(traitor_prob))
 				message_admins("New traitor roll passed.  Making a new Traitor.")
-				forge_traitor_objectives(character.mind)
+				if (!config.objectives_disabled)
+					forge_traitor_objectives(character.mind)
 				equip_traitor(character)
 				traitors += character.mind
 				character << "\red <B>You are the traitor.</B>"
 				character.mind.special_role = "traitor"
-				var/obj_count = 1
-				character << "\blue Your current objectives:"
-				for(var/datum/objective/objective in character.mind.objectives)
-					character << "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
-					obj_count++
+				if (config.objectives_disabled)
+					character << "<i>You have been selected this round as an antagonist- <font color=blue>Within the rules,</font> try to act as an opposing force to the crew- This can be via corporate payoff, personal motives, or maybe just being a dick. Further RP and try to make sure other players have </i>fun<i>! If you are confused or at a loss, always adminhelp, and before taking extreme actions, please try to also contact the administration! Think through your actions and make the roleplay immersive! <b>Please remember all rules aside from those without explicit exceptions apply to antagonist.</i></b>"
+				else
+					var/obj_count = 1
+					character << "\blue Your current objectives:"
+					for(var/datum/objective/objective in character.mind.objectives)
+						character << "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
+						obj_count++
 			//else
 				//message_admins("New traitor roll failed.  No new traitor.")
 	//else

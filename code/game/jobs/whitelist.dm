@@ -26,7 +26,7 @@ var/list/whitelist = list()
 /proc/load_alienwhitelist()
 	var/text = file2text("config/alienwhitelist.txt")
 	if (!text)
-		diary << "Failed to load config/alienwhitelist.txt\n"
+		log_misc("Failed to load config/alienwhitelist.txt")
 	else
 		alien_whitelist = text2list(text, "\n")
 
@@ -36,8 +36,8 @@ var/list/whitelist = list()
 		return 1
 	if(species == "human" || species == "Human")
 		return 1
-	if(check_rights(R_ADMIN, 0))
-		return 1
+//	if(check_rights(R_ADMIN, 0))
+//		return 1
 	if(!alien_whitelist)
 		return 0
 	if(M && species)

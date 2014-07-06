@@ -104,7 +104,7 @@
 		M.Weaken(5)
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
-		log_attack("[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])")
+		msg_admin_attack("[key_name(user)] attacked [key_name(user)] with [src.name] (INTENT: [uppertext(user.a_intent)])")
 		src.add_fingerprint(user)
 
 		for(var/mob/O in viewers(M))
@@ -113,7 +113,7 @@
 //Telescopic baton
 /obj/item/weapon/melee/telebaton
 	name = "telescopic baton"
-	desc = "A compact yet robust personal defense weapon. Can be concealed when folded."
+	desc = "A compact yet rebalanced personal defense weapon. Can be concealed when folded."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "telebaton_0"
 	item_state = "telebaton_0"
@@ -153,7 +153,7 @@
 	playsound(src.loc, 'sound/weapons/empty.ogg', 50, 1)
 	add_fingerprint(user)
 
-	if(blood_overlay && (blood_DNA.len >= 1)) //updates blood overlay, if any
+	if(blood_overlay && blood_DNA && (blood_DNA.len >= 1)) //updates blood overlay, if any
 		overlays.Cut()//this might delete other item overlays as well but eeeeeeeh
 
 		var/icon/I = new /icon(src.icon, src.icon_state)
@@ -165,7 +165,7 @@
 
 	return
 
-/obj/item/weapon/melee/telebaton/attack(mob/target as mob, mob/living/user as mob)
+/obj/item/weapon/melee/telebaton/attack(mob/target as mob, mob/living/user as mob/*, target_zone*/)
 	if(on)
 		if ((CLUMSY in user.mutations) && prob(50))
 			user << "\red You club yourself over the head."
@@ -178,7 +178,17 @@
 			return
 		if(..())
 			playsound(src.loc, "swing_hit", 50, 1, -1)
-			target.Weaken(4)
+//			var/obj/item/c_hand							UNFUCK WHEN YOU HAVE TIME AND KNOWLEDGE
+//			var/hand
+			if(user.zone_sel.selecting == "r_leg" || user.zone_sel.selecting == "l_leg")
+				target.Weaken(20)
+/*			if(user.zone_sel.selecting == "l_hand" || user.zone_sel.selecting == "l_arm")
+				c_hand = "l_hand"
+				target.u_equip(c_hand)
+				hand = "left hand"
+				user.visible_message("\red [target] screams out in pain and drops what they were holding in their [hand]!")*/
+			else
+				..()
 			return
 	else
 		return ..()

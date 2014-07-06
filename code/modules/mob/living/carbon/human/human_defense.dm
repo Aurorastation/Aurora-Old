@@ -52,7 +52,7 @@ emp_act
 				return -1 // complete projectile permutation
 
 	if(check_shields(P.damage, "the [P.name]"))
-		P.on_hit(src, 2)
+		P.on_hit(src, 2, def_zone)
 		return 2
 
 //BEGIN BOOK'S TASER NERF.
@@ -232,7 +232,7 @@ emp_act
 	if(armor >= 2)	return 0
 	if(!I.force)	return 0
 
-	apply_damage(I.force, I.damtype, affecting, armor , is_sharp(I), I)
+	apply_damage(I.force, I.damtype, affecting, armor , is_sharp(I), has_edge(I), I)
 
 	var/bloody = 0
 	if(((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && prob(25 + (I.force * 2)))

@@ -294,7 +294,7 @@
 
 /obj/item/toy/ammo/crossbow
 	name = "foam dart"
-	desc = "Its nerf or nothing! Ages 8 and up."
+	desc = "It's nerf or nothing! Ages 8 and up."
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "foamdart"
 	flags = FPRINT | TABLEPASS
@@ -365,7 +365,7 @@
 
 /obj/item/toy/crayon
 	name = "crayon"
-	desc = "A colourful crayon. Looks tasty. Mmmm..."
+	desc = "A colourful crayon. Please refrain from eating it or putting it in your nose."
 	icon = 'icons/obj/crayons.dmi'
 	icon_state = "crayonred"
 	w_class = 1.0
@@ -586,3 +586,13 @@
 	w_class = 4.0
 	slot_flags = SLOT_BACK
 */
+
+//This should really be somewhere else but I don't know where. w/e
+/obj/item/weapon/inflatable_duck
+	name = "inflatable duck"
+	desc = "No bother to sink or swim when you can just float!"
+	icon_state = "inflatable"
+	item_state = "inflatable"
+	flags = FPRINT | TABLEPASS
+	icon = 'icons/obj/clothing/belts.dmi'
+	slot_flags = SLOT_BELT

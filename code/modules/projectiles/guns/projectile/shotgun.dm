@@ -1,3 +1,8 @@
+//
+//	Please check gun.dm for infomation on making a weapon two handed
+//	- SoundScopes
+//
+
 /obj/item/weapon/gun/projectile/shotgun/pump
 	name = "shotgun"
 	desc = "Useful for sweeping alleys."
@@ -15,6 +20,12 @@
 	var/pumped = 0
 	var/obj/item/ammo_casing/current_shell = null
 
+	icon_action_button = "action_blank"
+	action_button_name = "Wield the shotgun"
+
+	can_wield()
+		return 1
+
 	isHandgun()
 		return 0
 
@@ -23,15 +34,20 @@
 			return 1
 		return 0
 
+//Shotguns need two hands
+	Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0)
+		if(!wielded)
+			user << "<span class='warning'>You need to use two hands to fire this.</span>"
+			return 0
+		..()
 
 	attack_self(mob/living/user as mob)
 		if(recentpump)	return
-		pump()
+		pump(user)
 		recentpump = 1
 		spawn(10)
 			recentpump = 0
 		return
-
 
 	proc/pump(mob/M as mob)
 		playsound(M, 'sound/weapons/shotgunpump.ogg', 60, 1)
@@ -57,6 +73,9 @@
 	origin_tech = "combat=5;materials=2"
 	ammo_type = "/obj/item/ammo_casing/shotgun"
 
+	icon_action_button = "action_blank"
+	action_button_name = "Wield the combat shotgun"
+
 //this is largely hacky and bad :(	-Pete
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel
 	name = "double-barreled shotgun"
@@ -71,6 +90,9 @@
 	caliber = "shotgun"
 	origin_tech = "combat=3;materials=1"
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
+
+	icon_action_button = "action_blank"
+	action_button_name = "Wield the double-barreled shotgun"
 
 	New()
 		for(var/i = 1, i <= max_shells, i++)
@@ -94,6 +116,13 @@
 			AC.BB.loc = src //Set projectile loc to gun.
 			return 1
 		return 0
+
+//Shotguns need two hands to fire
+	Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0)
+		if(!wielded)
+			user << "<span class='warning'>You need to use two hands to fire this.</span>"
+			return 0
+		..()
 
 	attack_self(mob/living/user as mob)
 		if(!(locate(/obj/item/ammo_casing/shotgun) in src) && !loaded.len)
@@ -135,3 +164,11 @@
 				name = "sawn-off shotgun"
 				desc = "Omar's coming!"
 				user << "<span class='warning'>You shorten the barrel of \the [src]!</span>"
+
+	can_wield()
+		return 1
+
+/obj/item/weapon/gun/projectile/shotgun/ui_action_click()
+	if( src in usr )
+		toggle_wield(usr)
+	return

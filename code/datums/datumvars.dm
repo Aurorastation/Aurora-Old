@@ -245,7 +245,8 @@ client
 
 		if(ismob(D))
 			body += "<option value='?_src_=vars;give_spell=\ref[D]'>Give Spell</option>"
-			body += "<option value='?_src_=vars;give_disease=\ref[D]'>Give Disease</option>"
+			body += "<option value='?_src_=vars;give_disease2=\ref[D]'>Give Disease</option>"
+			body += "<option value='?_src_=vars;give_disease=\ref[D]'>Give TG-style Disease</option>"
 			body += "<option value='?_src_=vars;godmode=\ref[D]'>Toggle Godmode</option>"
 			body += "<option value='?_src_=vars;build_mode=\ref[D]'>Toggle Build Mode</option>"
 
@@ -258,6 +259,8 @@ client
 			body += "<option value='?_src_=vars;regenerateicons=\ref[D]'>Regenerate Icons</option>"
 			body += "<option value='?_src_=vars;addlanguage=\ref[D]'>Add Language</option>"
 			body += "<option value='?_src_=vars;remlanguage=\ref[D]'>Remove Language</option>"
+
+			body += "<option value='?_src_=vars;fix_nano=\ref[D]'>Fix NanoUI</option>"
 
 			body += "<option value='?_src_=vars;addverb=\ref[D]'>Add Verb</option>"
 			body += "<option value='?_src_=vars;remverb=\ref[D]'>Remove Verb</option>"
@@ -491,6 +494,17 @@ client
 			return
 
 		src.give_disease(M)
+		href_list["datumrefresh"] = href_list["give_spell"]
+		
+	else if(href_list["give_disease2"])
+		if(!check_rights(R_ADMIN|R_FUN))	return
+
+		var/mob/M = locate(href_list["give_disease2"])
+		if(!istype(M))
+			usr << "This can only be used on instances of type /mob"
+			return
+
+		src.give_disease2(M)
 		href_list["datumrefresh"] = href_list["give_spell"]
 
 	else if(href_list["ninja"])
@@ -815,7 +829,7 @@ client
 		if(!check_rights(R_DEBUG|R_DEV))      return
 
 		var/mob/living/H = locate(href_list["addverb"])
-
+		
 		if(!istype(H))
 			usr << "This can only be done to instances of type /mob/living"
 			return
@@ -831,7 +845,7 @@ client
 				possibleverbs += typesof(/mob/living/silicon/proc,/mob/living/silicon/ai/proc,/mob/living/silicon/ai/verb)
 		possibleverbs -= H.verbs
 		possibleverbs += "Cancel" 								// ...And one for the bottom
-
+		
 		var/verb = input("Select a verb!", "Verbs",null) as anything in possibleverbs
 		if(!H)
 			usr << "Mob doesn't exist anymore"
@@ -840,7 +854,7 @@ client
 			return
 		else
 			H.verbs += verb
-
+		
 	else if(href_list["remverb"])
 		if(!check_rights(R_DEBUG|R_DEV))      return
 
@@ -857,6 +871,25 @@ client
 			return
 		else
 			H.verbs -= verb
+
+	
+	else if(href_list["fix_nano"])
+		if(!check_rights(R_DEBUG)) return
+
+		var/mob/H = locate(href_list["fix_nano"])
+
+		if(!istype(H) || !H.client)
+			usr << "This can only be done on mobs with clients"
+			return
+		
+				
+
+		nanomanager.send_resources(H.client)
+		
+		usr << "Resource files sent"
+		H << "Your NanoUI Resource files have been refreshed"
+
+		log_admin("[key_name(usr)] resent the NanoUI resource files to [key_name(H)] ")
 
 
 

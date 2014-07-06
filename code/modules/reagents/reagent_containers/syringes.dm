@@ -15,6 +15,8 @@
 	amount_per_transfer_from_this = 5
 	possible_transfer_amounts = null //list(5,10,15)
 	volume = 15
+	w_class = 1
+	sharp = 1
 	var/mode = SYRINGE_DRAW
 
 	on_reagent_change()
@@ -139,11 +141,23 @@
 					return
 
 				if(ismob(target) && target != user)
+
 					var/time = 30 //Injecting through a hardsuit takes longer due to needing to find a port.
+
 					if(istype(target,/mob/living/carbon/human))
+
 						var/mob/living/carbon/human/H = target
-						if(H.wear_suit && istype(H.wear_suit,/obj/item/clothing/suit/space))
-							time = 60
+						if(H.wear_suit)
+							if(istype(H.wear_suit,/obj/item/clothing/suit/space))
+								time = 60
+							else if(!H.can_inject(user, 1))
+								return
+
+					else if(isliving(target))
+
+						var/mob/living/M = target
+						if(!M.can_inject(user, 1))
+							return
 
 					for(var/mob/O in viewers(world.view, user))
 						if(time == 30)
@@ -263,6 +277,18 @@
 		src.add_fingerprint(usr)
 		src.update_icon()
 
+/obj/item/weapon/reagent_containers/syringe/verb/empty()
+
+	set name = "Empty Syringe"
+	set category = "Object"
+	set src in usr
+
+	if (alert(usr, "Are you sure you want to empty that?", "Empty Syringe:", "Yes", "No") != "Yes")
+		return
+	if(isturf(usr.loc))
+		usr << "<span class='notice'>You empty \the [src] onto the floor.</span>"
+		reagents.reaction(usr.loc)
+		spawn(5) src.reagents.clear_reagents()
 
 /obj/item/weapon/reagent_containers/ld50_syringe
 	name = "Lethal Injection Syringe"

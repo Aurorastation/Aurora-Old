@@ -107,7 +107,8 @@
 	item_state = "hazard"
 	blood_overlay_type = "armor"
 	allowed = list (/obj/item/device/analyzer, /obj/item/device/flashlight, /obj/item/device/multitool, /obj/item/device/pipe_painter, /obj/item/device/radio, /obj/item/device/t_scanner, \
-	/obj/item/weapon/crowbar, /obj/item/weapon/screwdriver, /obj/item/weapon/weldingtool, /obj/item/weapon/wirecutters, /obj/item/weapon/wrench, /obj/item/weapon/tank/emergency_oxygen)
+	/obj/item/weapon/crowbar, /obj/item/weapon/screwdriver, /obj/item/weapon/weldingtool, /obj/item/weapon/wirecutters, /obj/item/weapon/wrench, /obj/item/weapon/tank/emergency_oxygen, \
+	/obj/item/clothing/mask/gas, /obj/item/taperoll/engineering)
 
 //Lawyer
 /obj/item/clothing/suit/storage/lawyer/bluejacket
@@ -189,3 +190,30 @@
 	icon = 'icons/obj/clothing/belts.dmi'
 	icon_state = "suspenders"
 	blood_overlay_type = "armor" //it's the less thing that I can put here
+
+obj/item/clothing/suit/storage/ert
+	name = "Emergency Response Team duty jacket"
+	desc = "A militaristic duty jacket worn by members of the NanoTrasen Emergency Response Teams."
+	icon_state = "dwu_open"
+	item_state = "dwu_open"
+	allowed = list(/obj/item/weapon/tank/emergency_oxygen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy,/obj/item/weapon/gun/projectile,/obj/item/ammo_magazine,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/device/detective_scanner,/obj/item/device/taperecorder)
+
+	verb/toggle()
+		set name = "Toggle coat zipper"
+		set category = "Object"
+		set src in usr
+
+		if(!usr.canmove || usr.stat || usr.restrained())
+			return 0
+
+		switch(icon_state)
+			if("dwu_open")
+				src.icon_state = "dwu_closed"
+				usr << "You zip the coat's zipper shut."
+			if("dwu_closed")
+				src.icon_state = "dwu_open"
+				usr << "You unzip the coat's zipper."
+			else
+				usr << "You attempt to button-up the velcro on your [src], before promptly realising how retarded you are."
+				return
+		usr.update_inv_wear_suit()	//so our overlays update

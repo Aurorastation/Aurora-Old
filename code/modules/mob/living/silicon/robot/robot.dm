@@ -42,10 +42,10 @@
 	var/emagged = 0
 	var/wiresexposed = 0
 	var/locked = 1
+	var/has_power = 1
 	var/list/req_access = list(access_robotics)
 	var/ident = 0
 	//var/list/laws = list()
-	var/alarms = list("Motion"=list(), "Fire"=list(), "Atmosphere"=list(), "Power"=list(), "Camera"=list())
 	var/viewalerts = 0
 	var/modtype = "Default"
 	var/lower_mod = 0
@@ -89,6 +89,9 @@
 		hands.icon_state = "standard"
 		icon_state = "secborg"
 		modtype = "Security"
+	else if(istype(src,/mob/living/silicon/robot/drone))
+		laws = new /datum/ai_laws/drone()
+		connected_ai = null
 	else
 		laws = new /datum/ai_laws/nanotrasen()
 		connected_ai = select_active_ai_with_fewest_borgs()
@@ -127,7 +130,20 @@
 		cell_component.wrapped = cell
 		cell_component.installed = 1
 
-	playsound(loc, 'sound/voice/liveagain.ogg', 75, 1)
+	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
+	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[WANTED_HUD]      = image('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[IMPLOYAL_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[IMPCHEM_HUD]     = image('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[IMPTRACK_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[SPECIALROLE_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
+
+
+	if(istype(src,/mob/living/silicon/robot/drone))
+		playsound(src.loc, 'sound/machines/twobeep.ogg', 50, 0)
+	else
+		playsound(loc, 'sound/voice/liveagain.ogg', 75, 1)
 
 // setup the PDA and its name
 /mob/living/silicon/robot/proc/setup_PDA()
@@ -155,7 +171,6 @@
 	modtype = input("Please, select a module!", "Robot", null, null) in modules
 
 	var/module_sprites[0] //Used to store the associations between sprite names and sprite index.
-	var/channels = list()
 
 	if(module)
 		return
@@ -177,7 +192,7 @@
 
 		if("Miner")
 			module = new /obj/item/weapon/robot_module/miner(src)
-			channels = list("Supply" = 1)
+			module.channels = list("Supply" = 1)
 			if(camera && "Robots" in camera.network)
 				camera.network.Add("MINE")
 			module_sprites["Basic"] = "Miner_old"
@@ -186,7 +201,7 @@
 
 		if("Medical")
 			module = new /obj/item/weapon/robot_module/medical(src)
-			channels = list("Medical" = 1)
+			module.channels = list("Medical" = 1)
 			if(camera && "Robots" in camera.network)
 				camera.network.Add("Medical")
 			module_sprites["Basic"] = "Medbot"
@@ -196,7 +211,7 @@
 
 		if("Security")
 			module = new /obj/item/weapon/robot_module/security(src)
-			channels = list("Security" = 1)
+			module.channels = list("Security" = 1)
 			module_sprites["Basic"] = "secborg"
 			module_sprites["Red Knight"] = "Security"
 			module_sprites["Black Knight"] = "securityrobot"
@@ -204,7 +219,7 @@
 
 		if("Engineering")
 			module = new /obj/item/weapon/robot_module/engineering(src)
-			channels = list("Engineering" = 1)
+			module.channels = list("Engineering" = 1)
 			if(camera && "Robots" in camera.network)
 				camera.network.Add("Engineering")
 			module_sprites["Basic"] = "Engineering"
@@ -220,7 +235,7 @@
 		if("Combat")
 			module = new /obj/item/weapon/robot_module/combat(src)
 			module_sprites["Combat Android"] = "droid-combat"
-			channels = list("Security" = 1)
+			module.channels = list("Security" = 1)
 
 	//Custom_sprite check and entry
 	if (custom_sprite == 1)
@@ -234,7 +249,7 @@
 		status_flags &= ~CANPUSH
 
 	choose_icon(6,module_sprites)
-	radio.config(channels)
+	radio.config(module.channels)
 
 /mob/living/silicon/robot/proc/updatename(var/prefix as text)
 	if(prefix)
@@ -309,16 +324,14 @@
 	dat += "<A HREF='?src=\ref[src];mach_close=robotalerts'>Close</A><BR><BR>"
 	for (var/cat in alarms)
 		dat += text("<B>[cat]</B><BR>\n")
-		var/list/L = alarms[cat]
-		if (L.len)
-			for (var/alarm in L)
-				var/list/alm = L[alarm]
-				var/area/A = alm[1]
-				var/list/sources = alm[3]
+		var/list/alarmlist = alarms[cat]
+		if (alarmlist.len)
+			for (var/area_name in alarmlist)
+				var/datum/alarm/alarm = alarmlist[area_name]
 				dat += "<NOBR>"
-				dat += text("-- [A.name]")
-				if (sources.len > 1)
-					dat += text("- [sources.len] sources")
+				dat += text("-- [area_name]")
+				if (alarm.sources.len > 1)
+					dat += text("- [alarm.sources.len] sources")
 				dat += "</NOBR><BR>\n"
 		else
 			dat += "-- All Systems Nominal<BR>\n"
@@ -510,47 +523,22 @@
 	return
 
 
-/mob/living/silicon/robot/triggerAlarm(var/class, area/A, var/O, var/alarmsource)
+/mob/living/silicon/robot/triggerAlarm(var/class, area/A, list/cameralist, var/source)
 	if (stat == 2)
 		return 1
-	var/list/L = alarms[class]
-	for (var/I in L)
-		if (I == A.name)
-			var/list/alarm = L[I]
-			var/list/sources = alarm[3]
-			if (!(alarmsource in sources))
-				sources += alarmsource
-			return 1
-	var/obj/machinery/camera/C = null
-	var/list/CL = null
-	if (O && istype(O, /list))
-		CL = O
-		if (CL.len == 1)
-			C = CL[1]
-	else if (O && istype(O, /obj/machinery/camera))
-		C = O
-	L[A.name] = list(A, (C) ? C : O, list(alarmsource))
+
+	..()
+
 	queueAlarm(text("--- [class] alarm detected in [A.name]!"), class)
-//	if (viewalerts) robot_alerts()
-	return 1
 
 
 /mob/living/silicon/robot/cancelAlarm(var/class, area/A as area, obj/origin)
-	var/list/L = alarms[class]
-	var/cleared = 0
-	for (var/I in L)
-		if (I == A.name)
-			var/list/alarm = L[I]
-			var/list/srcs  = alarm[3]
-			if (origin in srcs)
-				srcs -= origin
-			if (srcs.len == 0)
-				cleared = 1
-				L -= I
-	if (cleared)
+	var/has_alarm = ..()
+
+	if (!has_alarm)
 		queueAlarm(text("--- [class] alarm in [A.name] has been cleared."), class, 0)
 //		if (viewalerts) robot_alerts()
-	return !cleared
+	return has_alarm
 
 
 /mob/living/silicon/robot/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -566,6 +554,11 @@
 				C.install()
 				user.drop_item()
 				W.loc = null
+
+				var/obj/item/robot_parts/robot_component/WC = W
+				if(istype(WC))
+					C.brute_damage = WC.brute
+					C.electronics_damage = WC.burn
 
 				usr << "\blue You install the [W.name]."
 
@@ -586,7 +579,7 @@
 			user << "Need more welding fuel!"
 			return
 
-	else if(istype(W, /obj/item/weapon/cable_coil) && wiresexposed)
+	else if(istype(W, /obj/item/weapon/cable_coil) && (wiresexposed || istype(src,/mob/living/silicon/robot/drone)))
 		if (!getFireLoss())
 			user << "Nothing to fix here!"
 			return
@@ -603,8 +596,12 @@
 				user << "You close the cover."
 				opened = 0
 				updateicon()
-			else if(mmi && wiresexposed && isWireCut(1) && isWireCut(2) && isWireCut(3) && isWireCut(4) && isWireCut(5))
+			else if(wiresexposed && isWireCut(1) && isWireCut(2) && isWireCut(3) && isWireCut(4) && isWireCut(5))
 				//Cell is out, wires are exposed, remove MMI, produce damaged chassis, baleet original mob.
+				if(!mmi)
+					user << "\The [src] has no brain to remove."
+					return
+
 				user << "You jam the crowbar into the robot and begin levering [mmi]."
 				sleep(30)
 				user << "You damage some parts of the chassis, but eventually manage to rip out [mmi]!"
@@ -629,8 +626,12 @@
 				if(!remove)
 					return
 				var/datum/robot_component/C = components[remove]
-				var/obj/item/I = C.wrapped
+				var/obj/item/robot_parts/robot_component/I = C.wrapped
 				user << "You remove \the [I]."
+				if(istype(I))
+					I.brute = C.brute_damage
+					I.burn = C.electronics_damage
+
 				I.loc = src.loc
 
 				if(C.installed == 1)
@@ -660,6 +661,9 @@
 			C.installed = 1
 			C.wrapped = W
 			C.install()
+			//This will mean that removing and replacing a power cell will repair the mount, but I don't care at this point. ~Z
+			C.brute_damage = 0
+			C.electronics_damage = 0
 
 	else if (istype(W, /obj/item/weapon/wirecutters) || istype(W, /obj/item/device/multitool))
 		if (wiresexposed)
@@ -708,8 +712,7 @@
 					locked = 0
 				else
 					user << "You fail to emag the cover lock."
-					if(prob(25))
-						src << "Hack attempt detected."
+					src << "Hack attempt detected."
 			else
 				user << "The cover is already unlocked."
 			return
@@ -726,7 +729,7 @@
 					lawupdate = 0
 					connected_ai = null
 					user << "You emag [src]'s interface."
-//					message_admins("[key_name_admin(user)] emagged cyborg [key_name_admin(src)].  Laws overridden.")
+					message_admins("[key_name_admin(user)] emagged cyborg [key_name_admin(src)].  Laws overridden.")
 					log_game("[key_name(user)] emagged cyborg [key_name(src)].  Laws overridden.")
 					clear_supplied_laws()
 					clear_inherent_laws()
@@ -738,7 +741,7 @@
 					sleep(5)
 					src << "\red Initiating diagnostics..."
 					sleep(20)
-					src << "\red SynBorg v1.7 loaded."
+					src << "\red SynBorg v1.7.1 loaded."
 					sleep(5)
 					src << "\red LAW SYNCHRONISATION ERROR"
 					sleep(5)
@@ -757,9 +760,8 @@
 						src.module.rebuild()
 					updateicon()
 				else
-					user << "You fail to [ locked ? "unlock" : "lock"] [src]'s interface."
-					if(prob(25))
-						src << "Hack attempt detected."
+					user << "You fail to hack [src]'s interface."
+					src << "Hack attempt detected."
 			return
 
 	else if(istype(W, /obj/item/borg/upgrade/))
@@ -798,7 +800,7 @@
 		if ("help")
 			for(var/mob/O in viewers(src, null))
 				if ((O.client && !( O.blinded )))
-					O.show_message(text("\blue [M] caresses [src]'s plating with its scythe like arm."), 1)
+					O.show_message(text("\blue [M] caresses [src]'s plating with its scythe-like arm."), 1)
 
 		if ("grab")
 			if (M == src)
@@ -817,13 +819,6 @@
 		if ("hurt")
 			var/damage = rand(10, 20)
 			if (prob(90))
-				/*
-				if (M.class == "combat")
-					damage += 15
-					if(prob(20))
-						weakened = max(weakened,4)
-						stunned = max(stunned,4)
-				What is this?*/
 
 				playsound(loc, 'sound/weapons/slash.ogg', 25, 1, -1)
 				for(var/mob/O in viewers(src, null))
@@ -977,9 +972,9 @@
 	if(!I || !istype(I, /obj/item/weapon/card/id) || !I.access) //not ID or no access
 		return 0
 	for(var/req in req_access)
-		if(!(req in I.access)) //doesn't have this access
-			return 0
-	return 1
+		if(req in I.access) //have one of the required accesses
+			return 1
+	return 0
 
 /mob/living/silicon/robot/proc/updateicon()
 
@@ -1035,10 +1030,8 @@
 	if(!module)
 		pick_module()
 		return
-	var/dat = "<HEAD><TITLE>Modules</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n"
-	dat += {"<A HREF='?src=\ref[src];mach_close=robotmod'>Close</A>
-	<BR>
-	<BR>
+	var/dat = "<HEAD><TITLE>Modules</TITLE></HEAD><BODY>\n"
+	dat += {"
 	<B>Activated Modules</B>
 	<BR>
 	Module 1: [module_state_1 ? "<A HREF=?src=\ref[src];mod=\ref[module_state_1]>[module_state_1]<A>" : "No Module"]<BR>
@@ -1066,16 +1059,11 @@
 		else
 			dat += text("[obj]: \[<A HREF=?src=\ref[src];act=\ref[obj]>Activate</A> | <B>Deactivated</B>\]<BR>")
 */
-	src << browse(dat, "window=robotmod&can_close=0")
+	src << browse(dat, "window=robotmod")
 
 
 /mob/living/silicon/robot/Topic(href, href_list)
 	..()
-	if (href_list["mach_close"])
-		var/t1 = text("window=[href_list["mach_close"]]")
-		unset_machine()
-		src << browse(null, t1)
-		return
 
 	if (href_list["showalerts"])
 		robot_alerts()
@@ -1189,7 +1177,7 @@
 							if(cleaned_human.shoes)
 								cleaned_human.shoes.clean_blood()
 								cleaned_human.update_inv_shoes(0)
-							cleaned_human.clean_blood()
+							cleaned_human.clean_blood(1)
 							cleaned_human << "\red [src] cleans your face!"
 		return
 

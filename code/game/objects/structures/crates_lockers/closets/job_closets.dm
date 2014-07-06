@@ -66,6 +66,7 @@
 	icon_closed = "blue"
 
 /obj/structure/closet/lawcloset/New()
+	..()
 	new /obj/item/clothing/under/lawyer/female(src)
 	new /obj/item/clothing/under/lawyer/black(src)
 	new /obj/item/clothing/under/lawyer/red(src)
@@ -87,7 +88,19 @@
 	icon_opened = "ertopen"
 
 /obj/structure/closet/ertcloset/New()
-	new /obj/item/clothing/mask/balaclava(src)
+	new /obj/item/clothing/gloves/combat(src)
+	new /obj/item/clothing/gloves/combat(src)
 	new /obj/item/clothing/gloves/combat(src)
 	new /obj/item/clothing/shoes/combat(src)
+	new /obj/item/clothing/shoes/combat(src)
+	new /obj/item/clothing/shoes/combat(src)
 	new /obj/item/device/radio/headset/ert(src)
+	new /obj/item/device/radio/headset/ert(src)
+	new /obj/item/device/radio/headset/ert(src)
+	new /obj/item/clothing/under/rank/ert/soldier(src)
+	new /obj/item/clothing/under/rank/ert/soldier(src)
+	new /obj/item/clothing/under/rank/ert/soldier(src)
+	new /obj/item/clothing/under/rank/ert/nco(src)
+	new /obj/item/clothing/under/rank/ert/nco(src)
+	new /obj/item/clothing/under/rank/ert/nco(src)
+	new /obj/item/clothing/under/rank/ert/officer(src)

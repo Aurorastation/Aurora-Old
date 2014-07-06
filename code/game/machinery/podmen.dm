@@ -101,7 +101,7 @@ Growing it to term with nothing injected will grab a ghost from the observers. *
 /obj/item/seeds/replicapod/proc/question(var/client/C)
 	spawn(0)
 		if(!C)	return
-		var/response = alert(C, "Someone is harvesting a replica pod. Would you like to play as a Dionaea?", "Replica pod harvest", "Yes", "No", "Never for this round.")
+		var/response = alert(C, "Someone is harvesting a diona pod. Would you like to play as a diona?", "Dionaea harvest", "Yes", "No", "Never for this round.")
 		if(!C || ckey)
 			return
 		if(response == "Yes")
@@ -123,9 +123,6 @@ Growing it to term with nothing injected will grab a ghost from the observers. *
 
 	if(realName)
 		podman.real_name = realName
-	else
-		podman.real_name = "diona nymph ([rand(100,999)])"
-
 	podman.dna.real_name = podman.real_name
 
 	// Update mode specific HUD icons.

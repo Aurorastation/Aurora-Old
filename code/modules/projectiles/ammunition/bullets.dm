@@ -46,7 +46,7 @@
 /obj/item/ammo_casing/c45r
 	desc = "A .45 rubber bullet casing."
 	caliber = ".45"
-	projectile_type = "/obj/item/projectile/bullet/weakbullet"
+	projectile_type = "/obj/item/projectile/bullet/weakbullet/rubber"
 
 /obj/item/ammo_casing/a12mm
 	desc = "A 12mm bullet casing."
@@ -75,7 +75,7 @@
 	name = "beanbag shell"
 	desc = "A weak beanbag shell."
 	icon_state = "bshell"
-	projectile_type = "/obj/item/projectile/bullet/weakbullet"
+	projectile_type = "/obj/item/projectile/bullet/weakbullet/beanbag"
 	m_amt = 500
 
 
@@ -105,3 +105,9 @@
 	icon_state = "rocketshell"
 	projectile_type = "/obj/item/missile"
 	caliber = "rocket"
+
+/obj/item/ammo_casing/chameleon
+	name = "chameleon bullets"
+	desc = "A set of bullets for the Chameleon Gun."
+	projectile_type = "/obj/item/projectile/bullet/chameleon"
+	caliber = ".45"

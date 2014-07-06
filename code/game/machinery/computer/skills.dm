@@ -100,7 +100,7 @@
 						Fingerprint: <A href='?src=\ref[src];choice=Edit Field;field=fingerprint'>[active1.fields["fingerprint"]]</A><BR>\n	\
 						Physical Status: [active1.fields["p_stat"]]<BR>\n	\
 						Mental Status: [active1.fields["m_stat"]]<BR><BR>\n	\
-						Employment/skills summary:<BR> [active1.fields["notes"]]<BR></td>	\
+						Employment/skills summary:<BR> [decode(active1.fields["notes"])]<BR></td>	\
 						<td align = center valign = top>Photo:<br><img src=front.png height=80 width=80 border=4>	\
 						<img src=side.png height=80 width=80 border=4></td></tr></table>")
 					else
@@ -275,11 +275,11 @@ What a mess.*/
 					var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( loc )
 					P.info = "<CENTER><B>Employment Record</B></CENTER><BR>"
 					if ((istype(active1, /datum/data/record) && data_core.general.Find(active1)))
-						P.info += text("Name: [] ID: []<BR>\nSex: []<BR>\nAge: []<BR>\nFingerprint: []<BR>\nPhysical Status: []<BR>\nMental Status: []<BR>\nEmployment/Skills Summary:[]<BR>", active1.fields["name"], active1.fields["id"], active1.fields["sex"], active1.fields["age"], active1.fields["fingerprint"], active1.fields["p_stat"], active1.fields["m_stat"], active1.fields["notes"])
+						P.info += text("Name: [] ID: []<BR>\nSex: []<BR>\nAge: []<BR>\nFingerprint: []<BR>\nPhysical Status: []<BR>\nMental Status: []<BR>\nEmployment/Skills Summary:<BR>\n[]<BR>", active1.fields["name"], active1.fields["id"], active1.fields["sex"], active1.fields["age"], active1.fields["fingerprint"], active1.fields["p_stat"], active1.fields["m_stat"], decode(active1.fields["notes"]))
 					else
 						P.info += "<B>General Record Lost!</B><BR>"
 					P.info += "</TT>"
-					P.name = "paper - 'Employment Record'"
+					P.name = "Employment Record ([active1.fields["name"]])"
 					printing = null
 //RECORD DELETE
 			if ("Delete All Records")
@@ -289,6 +289,8 @@ What a mess.*/
 				temp += "<a href='?src=\ref[src];choice=Clear Screen'>No</a>"
 
 			if ("Purge All Records")
+				if(PDA_Manifest.len)
+					PDA_Manifest.Cut()
 				for(var/datum/data/record/R in data_core.security)
 					del(R)
 				temp = "All Employment records deleted."
@@ -300,6 +302,9 @@ What a mess.*/
 					temp += "<a href='?src=\ref[src];choice=Clear Screen'>No</a>"
 //RECORD CREATE
 			if ("New Record (General)")
+
+				if(PDA_Manifest.len)
+					PDA_Manifest.Cut()
 				var/datum/data/record/G = new /datum/data/record()
 				G.fields["name"] = "New Record"
 				G.fields["id"] = text("[]", add_zero(num2hex(rand(1, 1.6777215E7)), 6))
@@ -354,7 +359,7 @@ What a mess.*/
 						if ((istype(active1, /datum/data/record) && L.Find(rank)))
 							temp = "<h5>Rank:</h5>"
 							temp += "<ul>"
-							for(var/rank in get_all_jobs())
+							for(var/rank in joblist)
 								temp += "<li><a href='?src=\ref[src];choice=Change Rank;rank=[rank]'>[rank]</a></li>"
 							temp += "</ul>"
 						else
@@ -372,12 +377,16 @@ What a mess.*/
 				switch(href_list["choice"])
 					if ("Change Rank")
 						if (active1)
+							if(PDA_Manifest.len)
+								PDA_Manifest.Cut()
 							active1.fields["rank"] = href_list["rank"]
-							if(href_list["rank"] in get_all_jobs())
+							if(href_list["rank"] in joblist)
 								active1.fields["real_rank"] = href_list["real_rank"]
 
 					if ("Delete Record (ALL) Execute")
 						if (active1)
+							if(PDA_Manifest.len)
+								PDA_Manifest.Cut()
 							for(var/datum/data/record/R in data_core.medical)
 								if ((R.fields["name"] == active1.fields["name"] || R.fields["id"] == active1.fields["id"]))
 									del(R)

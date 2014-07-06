@@ -80,18 +80,6 @@
 			if("labgreen_all")
 				src.icon_state = "labgreen_open"
 				usr << "You unbotton the labcoat."
-			if("coatdark")
-				src.icon_state = "coatdark-hood"
-				usr << "You button up the coat and pull on the hood."
-			if("coatdark-hood")
-				src.icon_state = "coatdark"
-				usr << "You unbutton the coat and pull off the hood."
-			if("coatwhite")
-				src.icon_state = "coatwhite-hood"
-				usr << "You button up the coat and pull on the hood."
-			if("coatwhite-hood")
-				src.icon_state = "coatwhite"
-				usr << "You unbutton the coat and pull off the hood."
 			if("raieed_labcoat_open")
 				src.icon_state = "raieed_labcoat_top"
 				usr << "You button up the labcoat's first button."
@@ -101,10 +89,46 @@
 			if("raieed_labcoat_all")
 				src.icon_state = "raieed_labcoat_open"
 				usr << "You unbutton the labcoat."
+			if("fabian_coat_open")
+				src.icon_state = "fabian_coat_closed"
+				usr << "You button up the coat's buttons."
+			if("fabian_coat_closed")
+				src.icon_state = "fabian_coat_open"
+				usr << "You unbutton the coat's buttons."
 			else
 				usr << "You attempt to button-up the velcro on your [src], before promptly realising how retarded you are."
 				return
 		usr.update_inv_wear_suit()	//so our overlays update
+
+/obj/item/clothing/suit/storage/labcoat/red
+	name = "red labcoat"
+	desc = "A suit that protects against minor chemical spills. This one is red."
+	icon_state = "red_labcoat_open"
+	item_state = "red_labcoat"
+
+/obj/item/clothing/suit/storage/labcoat/blue
+	name = "blue labcoat"
+	desc = "A suit that protects against minor chemical spills. This one is blue."
+	icon_state = "blue_labcoat_open"
+	item_state = "blue_labcoat"
+
+/obj/item/clothing/suit/storage/labcoat/purple
+	name = "purple labcoat"
+	desc = "A suit that protects against minor chemical spills. This one is purple."
+	icon_state = "purple_labcoat_open"
+	item_state = "purple_labcoat"
+
+/obj/item/clothing/suit/storage/labcoat/orange
+	name = "orange labcoat"
+	desc = "A suit that protects against minor chemical spills. This one is orange."
+	icon_state = "orange_labcoat_open"
+	item_state = "orange_labcoat"
+
+/obj/item/clothing/suit/storage/labcoat/green
+	name = "green labcoat"
+	desc = "A suit that protects against minor chemical spills. This one is green."
+	icon_state = "green_labcoat_open"
+	item_state = "green_labcoat"
 
 /obj/item/clothing/suit/storage/labcoat/cmo
 	name = "chief medical officer's labcoat"
@@ -119,34 +143,22 @@
 	item_state = "labgreen_open"
 
 /obj/item/clothing/suit/storage/labcoat/genetics
-	name = "Geneticist Labcoat"
+	name = "Geneticist labcoat"
 	desc = "A suit that protects against minor chemical spills. Has a blue stripe on the shoulder."
 	icon_state = "labcoat_gen_open"
 
 /obj/item/clothing/suit/storage/labcoat/chemist
-	name = "Chemist Labcoat"
+	name = "Chemist labcoat"
 	desc = "A suit that protects against minor chemical spills. Has an orange stripe on the shoulder."
 	icon_state = "labcoat_chem_open"
 
 /obj/item/clothing/suit/storage/labcoat/virologist
-	name = "Virologist Labcoat"
+	name = "Virologist labcoat"
 	desc = "A suit that protects against minor chemical spills. Offers slightly more protection against biohazards than the standard model. Has a green stripe on the shoulder."
 	icon_state = "labcoat_vir_open"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 60, rad = 0)
 
 /obj/item/clothing/suit/storage/labcoat/science
-	name = "Scientist Labcoat"
+	name = "Scientist labcoat"
 	desc = "A suit that protects against minor chemical spills. Has a purple stripe on the shoulder."
 	icon_state = "labcoat_tox_open"
-
-/obj/item/clothing/suit/storage/labcoat/coat_dark
-	name = "Dark Winter Coat"
-	desc = "A soft dark coat, with fur on the edges of the hood."
-	icon_state = "coatdark"
-	item_state = "coatdark"
-
-/obj/item/clothing/suit/storage/labcoat/coat_white
-	name = "White Winter Coat"
-	desc = "A soft white coat, with fur on the edges of the hood."
-	icon_state = "coatwhite"
-	item_state = "coatwhite"

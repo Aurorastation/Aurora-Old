@@ -42,9 +42,10 @@
 	icon_state = "cbbolt"
 	damage = 10
 	damage_type = TOX
+	irradiate = 50
 	nodamage = 0
-	weaken = 10
-	stutter = 10
+//	weaken = 10
+//	stutter = 10
 
 
 /obj/item/projectile/energy/bolt/large

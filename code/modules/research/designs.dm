@@ -223,6 +223,15 @@ datum/design/robocontrol
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = "/obj/item/weapon/circuitboard/robotics"
 
+datum/design/dronecontrol
+	name = "Circuit Design (Drone Control Console)"
+	desc = "Allows for the construction of circuit boards used to build a Drone Control console."
+	id = "dronecontrol"
+	req_tech = list("programming" = 4)
+	build_type = IMPRINTER
+	materials = list("$glass" = 2000, "sacid" = 20)
+	build_path = "/obj/item/weapon/circuitboard/drone_control"
+
 datum/design/clonecontrol
 	name = "Circuit Design (Cloning Machine Console)"
 	desc = "Allows for the construction of circuit boards used to build a new Cloning Machine console."
@@ -717,7 +726,16 @@ datum/design/honker_targ
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = "/obj/item/weapon/circuitboard/mecha/honker/targeting"
-
+/*
+datum/design/exoskeleton
+	name = "Circuit Design (\"Exoskeleton\" Control Module)"
+	desc = "Allows for the construction of a \"Exoskeleton\" Control Module."
+	id = "exoskeleton"
+	req_tech = list("programming" = 4, "combat" = 2)
+	build_type = IMPRINTER
+	materials = list("$glass" = 2000, "sacid" = 20)
+	build_path = "/obj/item/weapon/circuitboard/mecha/exoskeleton/main"
+*/
 ////////////////////////////////////////
 /////////// Mecha Equpment /////////////
 ////////////////////////////////////////
@@ -1425,6 +1443,43 @@ datum/design/noreactbeaker
 	reliability_base = 76
 	build_path = "/obj/item/weapon/reagent_containers/glass/beaker/noreact"
 	category = "Misc"
+
+datum/design/scalpel_laser1
+	name = "Basic Laser Scalpel"
+	desc = "A scalpel augmented with a directed laser, for more precise cutting without blood entering the field.  This one looks basic and could be improved."
+	id = "scalpel_laser1"
+	req_tech = list("biotech" = 2, "materials" = 2, "magnets" = 2)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 12500, "$glass" = 7500)
+	build_path = "/obj/item/weapon/scalpel/laser1"
+
+datum/design/scalpel_laser2
+	name = "Improved Laser Scalpel"
+	desc = "A scalpel augmented with a directed laser, for more precise cutting without blood entering the field.  This one looks somewhat advanced."
+	id = "scalpel_laser2"
+	req_tech = list("biotech" = 3, "materials" = 4, "magnets" = 4)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 12500, "$glass" = 7500, "$silver" = 2500)
+	build_path = "/obj/item/weapon/scalpel/laser2"
+
+datum/design/scalpel_laser3
+	name = "Advanced Laser Scalpel"
+	desc = "A scalpel augmented with a directed laser, for more precise cutting without blood entering the field.  This one looks to be the pinnacle of precision energy cutlery!"
+	id = "scalpel_laser3"
+	req_tech = list("biotech" = 4, "materials" = 6, "magnets" = 5)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 12500, "$glass" = 7500, "$silver" = 2000, "$gold" = 1500)
+	build_path = "/obj/item/weapon/scalpel/laser3"
+
+datum/design/scalpel_manager
+	name = "Incision Management System"
+	desc = "A true extension of the surgeon's body, this marvel instantly and completely prepares an incision allowing for the immediate commencement of therapeutic steps."
+	id = "scalpel_manager"
+	req_tech = list("biotech" = 4, "materials" = 7, "magnets" = 5, "programming" = 4)
+	build_type = PROTOLATHE
+	materials = list ("$metal" = 12500, "$glass" = 7500, "$silver" = 1500, "$gold" = 1500, "$diamond" = 750)
+	build_path = "/obj/item/weapon/scalpel/manager"
+
 /////////////////////////////////////////
 /////////////////Weapons/////////////////
 /////////////////////////////////////////
@@ -1437,7 +1492,7 @@ datum/design/nuclear_gun
 	build_type = PROTOLATHE
 	materials = list("$metal" = 5000, "$glass" = 1000, "$uranium" = 500)
 	reliability_base = 76
-	build_path = "/obj/item/weapon/gun/energy/gun/nuclear"
+	build_path = "/obj/item/weapon/gun/energy/rifle/gun/nuclear"
 	locked = 1
 
 datum/design/stunrevolver
