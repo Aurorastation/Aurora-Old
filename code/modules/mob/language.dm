@@ -79,6 +79,7 @@
 	speech_verb = "sings"
 	colour = "skrell"
 	key = "z"
+	flags = WHITELISTED
 
 // Language handling.
 /mob/proc/add_language(var/language)

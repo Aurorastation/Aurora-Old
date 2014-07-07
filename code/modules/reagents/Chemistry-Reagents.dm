@@ -3925,7 +3925,7 @@ datum
 
 		ethanol/oldfashioned
 			name = "Old Fashioned"
-			id = "oldfashion"
+			id = "oldfashioned"
 			description = "That looks like from sixties"
 			color = "#2E6671"
 			boozepwr = 3
