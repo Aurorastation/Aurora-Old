@@ -660,9 +660,9 @@
 	name = "old locket"
 	desc = "A dark metal locket, it seems at least sixty years old. The photo that was once inside is gone."
 	icon = 'icons/obj/custom_items.dmi'
-	icon_state = "cecillia_locket0"
-	item_state = "cecillia_locket0"
-	item_color = "cecillia_locket0"
+	icon_state = "cecillia_locket1" //Keep as one, to indicate glass.
+	item_state = "cecillia_locket1"
+	item_color = "cecillia_locket1"
 	slots = 1
 
 /obj/item/weapon/reagent_containers/pill/cecillia_pill
@@ -674,31 +674,17 @@
 		reagents.add_reagent("space_drugs", 5)
 		reagents.add_reagent("paroxetine", 5)
 
-
-/obj/item/clothing/tie/storage/fluff/cecillia_locket/attackby(/*var/obj/item/O as obj, mob/user as mob*/)
-	..()
-	update()
-
-/obj/item/clothing/tie/storage/fluff/cecillia_locket/proc/update()
-	var/count = 0
-	for(var/obj/item/I in hold)
-		if(istype(I,/obj/item/weapon/reagent_containers/pill/))
-			count++
-	if(count>1) count = 1
-	item_state = "cecillia_locket[count]"
-	icon_state = item_state
-	item_color = item_state
-
-	if(istype(loc, /obj/item/clothing))
-		var/obj/item/clothing/U = loc
-		if(istype(U.loc, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = U.loc
-			H.update_inv_w_uniform()
-
 /obj/item/clothing/tie/storage/fluff/cecillia_locket/New()
 		..()
 		new /obj/item/weapon/reagent_containers/pill/cecillia_pill(hold)
 		return
+
+/obj/item/weapon/storage/backpack/satchel/fluff/cecillia_satchel //Satchel-bag - Cecillia Lambert - casperf1 - SPRITE
+	name = "satchel-bag"
+	desc = "This looks old, is not yours and if you're wearing it, the original owner is probably dead."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "cecillia_satchel"
+	item_state = "cecillia_satchel"
 
 /obj/item/clothing/glasses/regular/fluff/cecillia_glasses //Red prescription glasses - Cecillia Lamber - casperf1 - DONE
 	name = "red prescription glasses"
@@ -713,3 +699,62 @@
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "temple_coat"
 	item_state = "temple_coat"
+
+/obj/item/clothing/shoes/jackboots/fluff/peter_boots //Worn boots - Peter Thrushwood - farcry11 - DONE
+	name = "worn boots"
+	desc = "A worn pair of combat boots. They look walked-around in."
+
+/obj/item/clothing/gloves/brown/fluff/peter_gloves //Cropped driving hloves - Peter Thrushwood - farcry11 - DONE
+	name = "cropped driving gloves"
+	desc = "A pair of high quality, fingerless driving gloves made of faux leather and faux velvet-leathern without and velvet within."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "peter_gloves"
+	item_state = "peter_gloves"
+	clipped = 1
+
+/obj/item/clothing/under/fluff/peter_shirt //Plaid shirt - Peter Thrushwood - farcry11 - SPRITE
+	name = "plaid shirt"
+	desc = "A worn and rugged looking plaid button-up overshirt. The initials 'P.T.' are scrawled in pen on the neck tag."
+	icon_state = "sl_suit"
+	item_state = "sl_suit"
+	item_color = "sl_suit"
+
+/obj/item/clothing/head/det_hat/fluff/leo_hat //Tagged brown hat - Leo Wyatt - keinto - DONE
+	name = "tagged brown hat"
+	desc = "A worn mid 20th century brown hat. If you look closely at the back, you can see a an embedded tag from the 'Museum of Terran Culture and Technology'."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "leo_hat"
+	item_state = "leo_hat"
+
+/obj/item/clothing/suit/storage/det_suit/fluff/leo_coat //Tagged brown coat - Leo Wyatt - keinto - DONE
+	name = "tagged brown coat"
+	desc = "A worn mid 20th century brown trenchcoat. If you look closely at bottom of the back, you can see an embedded tag from the 'Museum of Terran Culture and Technology'."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "leo_coat"
+	item_state = "leo_coat"
+
+/obj/item/device/modkit/fluff/omnivac_modkit //Weapon case - Leo Wyatt - keinto - DONE
+	name = "ornate box"
+	desc = "A sturdy leather case, with a velvet covered interior.."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "leo_modkit"
+	parts = MODKIT_HELMET
+	from_helmet = /obj/item/weapon/gun/projectile/detective/semiauto
+	to_helmet = /obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun
+
+/obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun //Instant Prosecutor - Leo Wyatt - keinto - DONE (stab)
+	name = "\improper Instant Prosecutor"
+	desc = "An original Colt 1911 pistol. Slightly worn on the edges, this gun has its name embedded on the side."
+
+/obj/item/weapon/bikehorn/rubberducky/fluff/bryce_ducky //Sir Duckens - Bryce Hunt - mrmajestic - DONE
+	name = "Sir Duckens"
+	desc = "A important and manly looking duck. He adorns a official looking cap and sunglasses. The hair on the back of your neck tingles as you look at it."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "bryce_duck"
+
+/obj/item/weapon/reagent_containers/food/drinks/fluff/bryce_mug //duck mug - Bryce Hunt - mrmajestic - DONE
+	name = "\improper duck mug"
+	desc = "A fashionable and reasonably large mug filled with a delicious smelling coffee drink. The mug adorns what looks to be a rubber duck."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "bryce_mug"
+	volume = 30

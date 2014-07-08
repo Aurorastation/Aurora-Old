@@ -27,12 +27,41 @@
 		C.images += patient.hud_list[HEALTH_HUD]
 		C.images += patient.hud_list[STATUS_HUD]
 
+/obj/item/clothing/glasses/hud/health/prescription
+	name = "prescription glasses/HUD assembly"
+	desc = "A medical HUD clipped onto the side of prescription glasses."
+	prescription = 1
+	icon_state = "healthhudpresc"
+	item_state = "healthhudpresc"
+
+/obj/item/clothing/glasses/hud/health/prescription/attack_self(mob/user)
+	user << "<span class='notice'>You detach a set of medical HUDs form your glasses.</span>"
+	var/turf/T = get_turf(src)
+	new /obj/item/clothing/glasses/hud/health(T)
+	new /obj/item/clothing/glasses/regular(T)
+	user.drop_item(src)
+	del(src)
 
 /obj/item/clothing/glasses/hud/security
 	name = "Security HUD"
 	desc = "A heads-up display that scans the humans in view and provides accurate data about their ID status and security records."
 	icon_state = "securityhud"
-	var/global/list/jobs[0] 
+	var/global/list/jobs[0]
+
+/obj/item/clothing/glasses/hud/security/prescription
+	name = "prescription glasses/HUD assembly"
+	desc = "A security HUD clipped onto the side of prescription glasses."
+	prescription = 1
+	icon_state = "sechudpresc"
+	item_state = "sechudpresc"
+
+/obj/item/clothing/glasses/hud/security/prescription/attack_self(mob/user)
+	user << "<span class='notice'>You detach a set of medical HUDs form your glasses.</span>"
+	var/turf/T = get_turf(src)
+	new /obj/item/clothing/glasses/hud/health(T)
+	new /obj/item/clothing/glasses/regular(T)
+	user.drop_item(src)
+	del(src)
 
 /obj/item/clothing/glasses/hud/security/jensenshades
 	name = "Augmented shades"

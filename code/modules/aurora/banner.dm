@@ -21,7 +21,7 @@
 	switch(icon_state)
 		if("banner_down")
 			src.icon_state = "banner_up"
-			usr << "You scroll the cloth up."
+			usr << "You roll up the cloth."
 		if("banner_up")
 			src.icon_state = "banner_down"
 			usr << "You let the cloth hang loose."
