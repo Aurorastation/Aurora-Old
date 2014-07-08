@@ -29,6 +29,9 @@
 		if(!M.mind.assigned_role == "Detective")
 			M << "<span class='notice'>You don't feel cool enough to name this gun, chump.</span>"
 			return 0
+		if(istype(src, /obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun))
+			M << "<span class='notice'>You find it impossible to name this weapon something other.</span>"
+			return 0
 
 		var/input = stripped_input(usr,"What do you want to name the gun?", ,"", MAX_NAME_LEN)
 

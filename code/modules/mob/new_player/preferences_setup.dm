@@ -415,6 +415,13 @@ datum/preferences
 							clothes_s.Blend(new /icon('icons/mob/back.dmi', "satchel-norm"), ICON_OVERLAY)
 						if(4)
 							clothes_s.Blend(new /icon('icons/mob/back.dmi', "satchel"), ICON_OVERLAY)
+				if(INTERN)
+					clothes_s = new /icon('icons/mob/uniform.dmi', "white_s")
+					clothes_s.Blend(new /icon('icons/mob/feet.dmi', "white"), ICON_UNDERLAY)
+					if(backbag == 2)
+						clothes_s.Blend(new /icon('icons/mob/back.dmi', "backpack"), ICON_OVERLAY)
+					else if(backbag == 3 || backbag == 4)
+						clothes_s.Blend(new /icon('icons/mob/back.dmi', "satchel"), ICON_OVERLAY)
 
 		else if(job_medsci_high)
 			switch(job_medsci_high)

@@ -68,7 +68,7 @@
 
 /datum/language/gutter
 	name = "Gutter"
-	desc = "Much like Standard, this crude pidgin tongue descended from numerous languages and serves as Tradeband for criminal elements."
+	desc = "Much like Ceti Basic, this crude pidgin tongue descended from numerous languages and serves as Tradeband for criminal elements."
 	speech_verb = "growls"
 	colour = "rough"
 	key = "3"
@@ -80,6 +80,13 @@
 	colour = "skrell"
 	key = "z"
 	flags = WHITELISTED
+
+/datum/language/sign
+	name = "Sign language"
+	desc = "A mixture of manual communication and body-languaged, used to communication with those who have impaired hearing."
+	speech_verb = "signs"
+	colour = "say_quote"
+	key = "4"
 
 // Language handling.
 /mob/proc/add_language(var/language)
