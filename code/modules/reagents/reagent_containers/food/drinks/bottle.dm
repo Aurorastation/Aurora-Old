@@ -324,7 +324,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/guinnes
 	name = "Guinness"
-	desc = "A bottle of good old Guinnes"
+	desc = "A bottle of good old Guinness"
 	icon_state = "guinnes_bottle"
 	New()
 		..()

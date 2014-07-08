@@ -79,6 +79,7 @@
 	speech_verb = "sings"
 	colour = "skrell"
 	key = "z"
+	flags = WHITELISTED
 
 /datum/language/sign
 	name = "Sign language"
