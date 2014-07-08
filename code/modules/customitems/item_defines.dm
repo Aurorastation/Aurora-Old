@@ -660,9 +660,9 @@
 	name = "old locket"
 	desc = "A dark metal locket, it seems at least sixty years old. The photo that was once inside is gone."
 	icon = 'icons/obj/custom_items.dmi'
-	icon_state = "cecillia_locket0"
-	item_state = "cecillia_locket0"
-	item_color = "cecillia_locket0"
+	icon_state = "cecillia_locket1" //Keep as one, to indicate glass.
+	item_state = "cecillia_locket1"
+	item_color = "cecillia_locket1"
 	slots = 1
 
 /obj/item/weapon/reagent_containers/pill/cecillia_pill
@@ -709,12 +709,52 @@
 	desc = "A pair of high quality, fingerless driving gloves made of faux leather and faux velvet-leathern without and velvet within."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "peter_gloves"
-	item_state = "peter gloves"
+	item_state = "peter_gloves"
 	clipped = 1
 
-/obj/item/clothing/under/fluff/peter_shirt //Plaid shirt - Peter Thrushwood - farcry11 - DONE
+/obj/item/clothing/under/fluff/peter_shirt //Plaid shirt - Peter Thrushwood - farcry11 - SPRITE
 	name = "plaid shirt"
 	desc = "A worn and rugged looking plaid button-up overshirt. The initials 'P.T.' are scrawled in pen on the neck tag."
 	icon_state = "sl_suit"
 	item_state = "sl_suit"
 	item_color = "sl_suit"
+
+/obj/item/clothing/head/det_hat/fluff/leo_hat //Tagged brown hat - Leo Wyatt - keinto - DONE
+	name = "tagged brown hat"
+	desc = "A worn mid 20th century brown hat. If you look closely at the back, you can see a an embedded tag from the 'Museum of Terran Culture and Technology'."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "leo_hat"
+	item_state = "leo_hat"
+
+/obj/item/clothing/suit/storage/det_suit/fluff/leo_coat //Tagged brown coat - Leo Wyatt - keinto - DONE
+	name = "tagged brown coat"
+	desc = "A worn mid 20th century brown trenchcoat. If you look closely at bottom of the back, you can see an embedded tag from the 'Museum of Terran Culture and Technology'."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "leo_coat"
+	item_state = "leo_coat"
+
+/obj/item/device/modkit/fluff/omnivac_modkit //Weapon case - Leo Wyatt - keinto - DONE
+	name = "ornate box"
+	desc = "A sturdy leather case, with a velvet covered interior.."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "leo_modkit"
+	parts = MODKIT_HELMET
+	from_helmet = /obj/item/weapon/gun/projectile/detective/semiauto
+	to_helmet = /obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun
+
+/obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun //Instant Prosecutor - Leo Wyatt - keinto - DONE (stab)
+	name = "\improper Instant Prosecutor"
+	desc = "An original Colt 1911 pistol. Slightly worn on the edges, this gun has its name embedded on the side."
+
+/obj/item/weapon/bikehorn/rubberducky/fluff/bryce_ducky //Sir Duckens - Bryce Hunt - mrmajestic - DONE
+	name = "Sir Duckens"
+	desc = "A important and manly looking duck. He adorns a official looking cap and sunglasses. The hair on the back of your neck tingles as you look at it."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "bryce_duck"
+
+/obj/item/weapon/reagent_containers/food/drinks/fluff/bryce_mug //duck mug - Bryce Hunt - mrmajestic - DONE
+	name = "\improper duck mug"
+	desc = "A fashionable and reasonably large mug filled with a delicious smelling coffee drink. The mug adorns what looks to be a rubber duck."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "bryce_mug"
+	volume = 30
