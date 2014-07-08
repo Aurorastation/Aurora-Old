@@ -346,6 +346,9 @@
 	desc = "A soft dark coat, with fur on the edges of the hood."
 	icon_state = "coatdark"
 	item_state = "coatdark"
+//	body_parts_covered = HEAD
+//	flags = FPRINT|TABLEPASS|HEADCOVERSEYES|HEADCOVERSMOUTH|BLOCKHAIR
+//	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES
 
 /obj/item/clothing/suit/wintercoat/white
 	name = "White Winter Coat"
@@ -353,6 +356,10 @@
 	icon_state = "coatwhite"
 	item_state = "coatwhite"
 
+/*
+ * Removed until a fix can be found for hiding hair. Fucking hair.
+ * Further info: setting body_parts_covered to include the HEAD does not work, at least not with the tonnes of flags I've added in.
+ *
 /obj/item/clothing/suit/wintercoat/verb/toggle()
 	set name = "Toggle wintercoat hood"
 	set category = "Object"
@@ -383,4 +390,4 @@
 		else
 			usr << "You attempt to button-up the velcro on your [src], before promptly realising how retarded you are."
 			return
-	usr.update_inv_wear_suit()	//so our overlays update
+	usr.update_inv_wear_suit()*/	//so our overlays update

@@ -90,7 +90,7 @@
 							del(B)
 							M.glasses=null
 						ok = M.equip_if_possible(I, slot_glasses, 0)
-				else if(istype(Item,/obj/item/device/pda))
+/*				else if(istype(Item,/obj/item/device/pda))
 					if(M.ckey == "meowykins" && M.real_name == "Miyako Yukimura")
 						ok = 1
 						del(Item)
@@ -105,7 +105,7 @@
 						for(var/obj/item/device/pda/B in M)
 							del(B)
 							M.l_store=null
-						ok = M.equip_if_possible(I, slot_l_store,0)
+						ok = M.equip_if_possible(I, slot_l_store,0)*/
 				else if(istype(M.back,/obj/item/weapon/storage) && M.back:contents.len < M.back:storage_slots) // Try to place it in something on the mob's back
 					Item.loc = M.back
 					ok = 1
