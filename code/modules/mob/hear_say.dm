@@ -160,3 +160,49 @@
 		heard = "<span class = 'game_say'>...<i>You almost hear someone talking</i>...</span>"
 
 	src << heard
+
+/mob/proc/see_say(var/message, var/verb = "signs", var/datum/language/language = null, var/alt_name = "",var/italics = 0, var/mob/signer = null)
+	if(!client)
+		return
+
+	if(sleeping || stat == 1)
+		return
+
+	var/style = "body"
+	if(!say_understands(signer,language))
+		if(istype(signer,/mob/living/simple_animal))
+			var/mob/living/simple_animal/S = signer
+			message = pick(S.speak)
+		else
+			message = stars(message)
+
+	if(language)
+		verb = language.speech_verb
+		style = language.colour
+
+	var/signer_name = signer.name
+	if(istype(signer, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = signer
+		signer_name = H.GetVoice()
+
+	if(italics)
+		message = "<i>[message]</i>"
+
+	var/track = null
+	if(istype(src, /mob/dead/observer))
+		if(italics && client.prefs.toggles & CHAT_GHOSTRADIO)
+			return
+		if(signer_name != signer.real_name && signer.real_name)
+			signer_name = "[signer.real_name] ([signer_name])"
+		track = "(<a href='byond://?src=\ref[src];track=\ref[signer]'>follow</a>) "
+		if(client.prefs.toggles & CHAT_GHOSTEARS && signer in view(src))
+			message = "<b>[message]</b>"
+	world << "[signer.name] / [signer_name] / [signer.real_name]"
+	if(sdisabilities & BLIND)
+		if(signer == src)
+			src << "<span class='warning'>You cannot see yourself sign!</span>"
+	else
+		if((signer_name != signer.name) || (istype(src.wear_mask, /obj/item/clothing/mask/gas)))
+			src << "<span class='game say'><span class='name'>[signer.name]</span>[track] [verb], <span class='message'><span class='[style]'>\"[message]\"</span></span></span>"
+		else
+			src << "<span class='game say'><span class='name'>[signer_name]</span>[alt_name]</span>[track] [verb], <span class='message'><span class='[style]'>\"[message]\"</span></span></span>"
