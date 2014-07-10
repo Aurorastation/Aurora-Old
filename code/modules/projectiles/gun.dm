@@ -250,7 +250,7 @@
 		return
 
 	if(!istype(user.get_active_hand(), /obj/item/weapon/gun))
-		user << "<span class='warning'>You need to be holding the [name].</span>"
+		user << "<span class='warning'>You need to be holding the [name] in your active hand</span>"
 		return
 
 	if( istype(user,/mob/living/carbon/monkey) )
