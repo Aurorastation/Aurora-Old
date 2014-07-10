@@ -80,6 +80,7 @@
 		if(emergency_shuttle.departed)
 			return
 		//message_admins("Performing AutoTraitor Check")
+		log_debug("DEBUG: Doing AFK traitor check")
 		var/playercount = 0
 		var/traitorcount = 0
 		var/possible_traitors[0]
