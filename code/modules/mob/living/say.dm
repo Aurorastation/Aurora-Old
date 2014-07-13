@@ -138,3 +138,47 @@ var/list/department_radio_keys = list(
 
 /mob/living/proc/GetVoice()
 	return name
+
+/mob/living/sign(var/message, var/verb="signs", var/datum/language/speaking = null, var/alt_name="", var/italics=0, var/message_range = world.view)
+
+	var/turf/T = get_turf(src)
+
+	var/list/listening = list()
+	if(T)
+
+		var/list/objects = list()
+		var/list/hear = hear(message_range, T)
+		var/list/hearturfs = list()
+
+		for(var/I in hear)
+			if(istype(I, /mob/))
+				var/mob/M = I
+				listening += M
+				hearturfs += M.locs[1]
+				for(var/obj/O in M.contents)
+					objects |= O
+			else if(istype(I, /obj/))
+				var/obj/O = I
+				hearturfs += O.locs[1]
+				objects |= O
+
+		for(var/mob/M in player_list)
+			if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTEARS))
+				listening |= M
+				continue
+			if(M.loc && M.locs[1] in hearturfs)
+				listening |= M
+
+// Can object see signing?
+// Only if they have cameras.
+// Do any objects currently have cameras? -- SoundScopes
+
+//		for(var/obj/O in objects)
+//			spawn(0)
+//				if(O) //It's possible that it could be deleted in the meantime.
+//					O.hear_talk(src, message, verb, speaking)
+
+	for(var/mob/M in listening)
+		M.see_say(message,verb,speaking,alt_name, italics, src)
+
+	log_say("[name]/[key] : [message]")

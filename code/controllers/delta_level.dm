@@ -30,7 +30,6 @@ datum/delta_level/proc/activate()
 	ticker.mode:explosion_in_progress = 1
 	for(var/mob/M in player_list)
 		M << 'sound/machines/Alarm.ogg'
-	world << timeleft()
 
 datum/delta_level/proc/dotheboom()
 	for(var/i = 9 to 1 step -1)

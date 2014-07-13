@@ -249,6 +249,10 @@
 	if(!can_wield())
 		return
 
+	if(!istype(user.get_active_hand(), /obj/item/weapon/gun))
+		user << "<span class='warning'>You need to be holding the [name] in your active hand</span>"
+		return
+
 	if( istype(user,/mob/living/carbon/monkey) )
 		user << "<span class='warning'>It's too heavy for you to stabilize properly.</span>"
 		return
@@ -261,6 +265,10 @@
 		var/obj/item/weapon/gun/offhand/O = user.get_inactive_hand()
 		if(O && istype(O))
 			O.unwield()
+		else
+			O = user.get_active_hand()
+			if(O && istype(O))
+				O.unwield()
 		return
 
 	else //Trying to wield it
