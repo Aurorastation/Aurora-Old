@@ -197,7 +197,6 @@
 		track = "(<a href='byond://?src=\ref[src];track=\ref[signer]'>follow</a>) "
 		if(client.prefs.toggles & CHAT_GHOSTEARS && signer in view(src))
 			message = "<b>[message]</b>"
-	world << "[signer.name] / [signer_name] / [signer.real_name]"
 	if(sdisabilities & BLIND)
 		if(signer == src)
 			src << "<span class='warning'>You cannot see yourself sign!</span>"
