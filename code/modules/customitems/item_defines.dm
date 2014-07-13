@@ -733,7 +733,7 @@
 	icon_state = "leo_coat"
 	item_state = "leo_coat"
 
-/obj/item/device/modkit/fluff/omnivac_modkit //Weapon case - Leo Wyatt - keinto - DONE
+/obj/item/device/modkit/fluff/leo_modkit //Weapon case - Leo Wyatt - keinto - DONE
 	name = "ornate box"
 	desc = "A sturdy leather case, with a velvet covered interior.."
 	icon = 'icons/obj/custom_items.dmi'
@@ -758,3 +758,23 @@
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "bryce_mug"
 	volume = 30
+
+/obj/item/clothing/gloves/black/fluff/lily_gloves //fitted gloves - Lily Has're - meowykins - DONE
+	name = "fitted gloves"
+	desc = "A pair of gloves, modified for non-human use. They're a sleek quality, made from lambskin."
+	attack_verb = list("caressed")
+	species_restricted = list("exclude","human")
+
+/obj/item/weapon/storage/belt/utility/fluff/fortune_belt //Fortune's toolbelt - Fortune Bloise - swat43 - DONE
+	name = "Fortune's toolbelt"
+	desc = "'Nothing can beat the mechanic when you have this badboy with you,' small text on the belts side is written."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "fortune_belt"
+	item_state = "fortune_belt"
+
+/obj/item/weapon/storage/backpack/satchel/fluff/fortune_bag //Fortune's bag - Fortune Bloise - swat43 - DONE
+	name = "Fortune's bag"
+	desc = "'For the wolf to survive, he needs to chop off his own leg' - Fortunes friends. A nice black satchel with a mech and a heart painting on it."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "fortune_bag"
+	item_state = "fortune_bag"
