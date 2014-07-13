@@ -10,6 +10,7 @@
 	var/key = "x"                    // Character used to speak in language eg. :o for Unathi.
 	var/flags = 0                    // Various language flags.
 	var/native                       // If set, non-native speakers will have trouble speaking.
+	var/vocal = 1                    // Is a spoken language
 
 /datum/language/unathi
 	name = "Sinta'unathi"
@@ -87,6 +88,7 @@
 	speech_verb = "signs"
 	colour = "say_quote"
 	key = "4"
+	vocal = 0
 
 // Language handling.
 /mob/proc/add_language(var/language)

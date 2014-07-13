@@ -408,9 +408,12 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				pass = 1
 
 			if(pass)
-
+				var/sent = 0
 				for (var/obj/machinery/requests_console/Console in world)
 					if (Console == sendto)
+						if(!sent)
+							sent = 1
+
 						var/obj/item/weapon/paper/C = O
 						var/obj/item/weapon/paper/P = new /obj/item/weapon/paper(Console.loc)
 						P.info = "<font color = #101010>"
@@ -438,12 +441,15 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 							img.pixel_x = C.offset_x[j]
 							img.pixel_y = C.offset_y[j]
 							P.overlays += img
+
 						P.updateinfolinks()
 						playsound(Console.loc, 'sound/machines/twobeep.ogg', 50, 1)
 						for (var/mob/player in hearers(4, Console.loc))
 							player.show_message(text("\icon[Console] *The Requests Console beeps: 'Fax received'"))
-						continue
-					continue
+
+				if(sent == 1)
+					user.show_message(text("\icon[src] *The Requests Console beeps: 'Message Sent.'"))
+
 			else
 				user.show_message(text("\icon[src] *The Requests Console beeps: 'NOTICE: No server detected!'"))
 	return

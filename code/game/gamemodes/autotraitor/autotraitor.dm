@@ -80,6 +80,7 @@
 		if(emergency_shuttle.departed)
 			return
 		//message_admins("Performing AutoTraitor Check")
+		log_debug("DEBUG: Doing AFK traitor check")
 		var/playercount = 0
 		var/traitorcount = 0
 		var/possible_traitors[0]
@@ -109,11 +110,11 @@
 			if(player.client.is_afk())
 				afk_traitors += 1
 
-		if(afk_traitors > afk_traitor_count)
+		if(afk_traitors > afk_traitor_count) //Need to make it so it registers if someone has come back -- SoundScopes
 			log_debug("DEBUG: Traitors are afk, forcing a new traitor")
 			need_new_traitor = 1
 			log_debug("DEBUG: afk_traitors = [afk_traitors] | afk_traitor_count = [afk_traitor_count]")
-			afk_traitors = afk_traitor_count
+			afk_traitor_count = afk_traitors
 
 //		var/r = rand(5)
 //		var/target_traitors = 1
