@@ -90,6 +90,8 @@
 	icon_state = "weldtank"
 	amount_per_transfer_from_this = 10
 	var/modded = 0
+	var/defuse = 0
+	var/armed = 0
 	var/obj/item/device/assembly_holder/rig = null
 	New()
 		..()
@@ -119,6 +121,7 @@
 			"You wrench [src]'s faucet [modded ? "closed" : "open"]")
 		modded = modded ? 0 : 1
 		if (modded)
+			message_admins("[key_name_admin(user)] opened fueltank at ([loc.x],[loc.y],[loc.z]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>.")
 			leak_fuel(amount_per_transfer_from_this)
 	if (istype(W,/obj/item/device/assembly_holder))
 		if (rig)
@@ -130,7 +133,7 @@
 
 			var/obj/item/device/assembly_holder/H = W
 			if (istype(H.a_left,/obj/item/device/assembly/igniter) || istype(H.a_right,/obj/item/device/assembly/igniter))
-				message_admins("[key_name_admin(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion.")
+				message_admins("[key_name_admin(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>.")
 				log_game("[key_name(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion.")
 
 			rig = W
@@ -144,6 +147,16 @@
 
 	return ..()
 
+/obj/structure/reagent_dispensers/fueltank/attack_ghost(mob/user as mob)
+	if(user.client && user.client.inquisitive_ghost)
+		examine()
+	if(!src.defuse && user.client.holder)
+		src.defuse = 1
+		message_admins("[key_name_admin(user)] defused fueltank at ([loc.x],[loc.y],[loc.z]).")
+	else
+		if(!src.armed && user.client.holder)
+			src.defuse = 0
+			message_admins("[key_name_admin(user)] reset fuse on fueltank at ([loc.x],[loc.y],[loc.z]).")
 
 /obj/structure/reagent_dispensers/fueltank/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet))
@@ -157,6 +170,8 @@
 	explode()
 
 /obj/structure/reagent_dispensers/fueltank/proc/explode()
+	if(defuse)
+		return
 	if (reagents.total_volume > 500)
 		explosion(src.loc,1,2,4)
 	else if (reagents.total_volume > 100)
@@ -170,15 +185,15 @@
 	if(temperature > T0C+500)
 		explode()
 	return ..()
-	
+
 /obj/structure/reagent_dispensers/fueltank/Move()
 	if (..() && modded)
 		leak_fuel(amount_per_transfer_from_this/10.0)
-	
+
 /obj/structure/reagent_dispensers/fueltank/proc/leak_fuel(amount)
 	if (reagents.total_volume == 0)
 		return
-	
+
 	amount = min(amount, reagents.total_volume)
 	reagents.remove_reagent("fuel",amount)
 	new /obj/effect/decal/cleanable/liquid_fuel(src.loc, amount)
