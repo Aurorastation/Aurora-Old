@@ -851,6 +851,10 @@ var/list/ghostteleportlocs = list()
  	name = "\improper Library"
  	icon_state = "library"
 
+/area/thinktank
+ 	name = "\improper Think Tank"
+ 	icon_state = "thinktank"
+
 /area/chapel/main
 	name = "\improper Chapel"
 	icon_state = "chapel"
