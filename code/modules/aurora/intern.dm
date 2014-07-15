@@ -86,7 +86,7 @@
 	supervisors = "the Chief Engineer"
 	selection_color = "#fff5cc"
 	access = list(access_engine, access_maint_tunnels, access_construction)
-	minimal_access = list(access_research, access_tox)
+	minimal_access = list(access_engine, access_maint_tunnels, access_construction)
 
 	equip(var/mob/living/carbon/human/H)
 		if(!H)	return 0
