@@ -179,6 +179,8 @@ var/list/department_radio_keys = list(
 //					O.hear_talk(src, message, verb, speaking)
 
 	for(var/mob/M in listening)
+		if(istype(M, /mob/new_player)) //Silly bug, works exactly the same as say, but without this the lobby can see.
+			continue
 		M.see_say(message,verb,speaking,alt_name, italics, src)
 
 	log_say("[name]/[key] : [message]")
