@@ -826,3 +826,42 @@
 	force = 1
 	throwforce = 1
 
+/obj/item/clothing/mask/muzzle/fluff/summer_jaws // Metal Jaw - Summer Floyd - Hivefleetchicken - DONE
+	name = "metal jaw"
+	desc = "A heavy-looking hunk of steel fused with the mouth and vocal chords of anyone unfortunate enough to have to wear it. It looks like a rather poor replacement for a mouth."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "summer_jaws"
+	item_state = "summer_jaws"
+	w_class = 2.0
+	flags = FPRINT | TABLEPASS | CONDUCT
+	slot_flags = SLOT_MASK
+	var/spamcheck = 0
+
+	verb/jaws()
+		set name = "Speak"
+		set category = "Object"
+		set src in usr
+
+		if (usr.client)
+			if(usr.client.prefs.muted & MUTE_IC)
+				src << "\red You cannot speak in IC (muted)."
+				return
+		if(!ishuman(usr))
+			usr << "\red You don't know how to use this!"
+			return
+		if(spamcheck)
+			usr << "\red Your jaws hurt!"
+			return
+
+		var/message = copytext(sanitize(input(usr, "Speak?", "Moving your mouth", null)  as text),1,MAX_MESSAGE_LEN)
+		if(!message)
+			return
+//		message = whisper(message)
+		if ((src.loc == usr && usr.stat == 0))
+			for(var/mob/O in (viewers(usr)))
+				O.show_message("<B>[usr]</B>'s jaws croak out, \"[message]\"",2) // 2 stands for hearable message
+
+			spamcheck = 1
+			spawn(20)
+				spamcheck = 0
+			return
