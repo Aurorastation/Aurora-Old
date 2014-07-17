@@ -179,6 +179,8 @@ var/list/department_radio_keys = list(
 //					O.hear_talk(src, message, verb, speaking)
 
 	for(var/mob/M in listening)
+		if(istype(M, /mob/new_player)) // for some reason this didn't work like say() this fixes it
+			continue
 		M.see_say(message,verb,speaking,alt_name, italics, src)
 
 	log_say("[name]/[key] : [message]")
