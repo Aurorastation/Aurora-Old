@@ -792,6 +792,7 @@
 #include "code\modules\aur-engie\engineering_shuttle.dm"
 #include "code\modules\aurora\aurora_areas.dm"
 #include "code\modules\aurora\banner.dm"
+#include "code\modules\aurora\bluespacetech.dm"
 #include "code\modules\aurora\intern.dm"
 #include "code\modules\aurora\recycler.dm"
 #include "code\modules\aurora\weldbackpack.dm"
