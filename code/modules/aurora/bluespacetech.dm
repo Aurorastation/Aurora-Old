@@ -40,8 +40,8 @@
 	bst.name = "Bluespace Technician"
 	bst.real_name = "Bluespace Technician"
 	bst.voice_name = "Bluespace Technician"
-	bst.h_style = "hair_crewcut"
-	bst.update_hair()
+//	bst.h_style = "hair_crewcut"
+//	bst.update_hair()
 
 	//Items
 	var/obj/item/clothing/under/U = new /obj/item/clothing/under/rank/centcom_officer/bst(bst)
@@ -192,15 +192,15 @@
 /obj/item/clothing/glasses/sunglasses/bst
 	name = "Bluespace Technician's Glasses"
 	desc = "A pair of sunglasses, these look modified, 'BST' marked on the side."
-	var/list/obj/item/clothing/glasses/hud/health/hud = null
+//	var/list/obj/item/clothing/glasses/hud/health/hud = null
 	vision_flags = (SEE_TURFS|SEE_OBJS|SEE_MOBS)
 	canremove = 0
-	New()
+/*	New()
 		..()
 		src.hud += new/obj/item/clothing/glasses/hud/security(src)
 		src.hud += new/obj/item/clothing/glasses/hud/health(src)
 		return
-
+*/
 	attack_hand()
 		if(!usr)
 			return
@@ -233,7 +233,7 @@
 /obj/item/weapon/card/id/bst
 	icon_state = "centcom"
 	desc = "An ID straight from Cent. Com, this one looks highly classified"
-	canremove = 0
+//	canremove = 0
 	New()
 		access = get_all_accesses()+get_all_centcom_access()+get_all_syndicate_access()
 
