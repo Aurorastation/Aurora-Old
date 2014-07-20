@@ -795,12 +795,6 @@
 	throwforce = 2
 	var/headless = 0
 
-	update_icon()
-		if(headless == 1)
-			icon_state = "jenifer_bear_headless"
-		else
-			icon_state = "jenifer_bear"
-
 	attack_self(mob/user as mob)
 		if(user.a_intent == "hurt")
 			if(headless == 1)
@@ -811,6 +805,7 @@
 				var/turf/T = get_turf(user)
 				new /obj/item/fluff/jenifer_bear_head(T)
 				desc = "A fluffy-wuffy brown teddy bear! This one is wearing a blue lab coat, much like a Chief Medical Officer! \red It's lacking a head!"
+				update_icon()
 		else
 			if(headless == 1)
 				user.visible_message("<span class='notice'>[user] clutches [src] with both arms, weeping slightly as they embrace the headless toy.</span>", "<span class='notice'>You clutch the toy, shivering and weeping slightly. Who would do such a monsterous thing?</span>")
