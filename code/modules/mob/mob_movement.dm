@@ -209,6 +209,8 @@
 	if((istype(mob.loc, /turf/space)) || (mob.lastarea.has_gravity == 0))
 		if(!mob.Process_Spacemove(0))	return 0
 
+	if(mob.floating & mob.mob_has_gravity(mob.loc))
+		mob.float(0)
 
 	if(isobj(mob.loc) || ismob(mob.loc))//Inside an object, tell it we moved
 		var/atom/O = mob.loc
@@ -443,6 +445,8 @@
 		return 0
 	//If not then we can reset inertia and move
 	inertia_dir = 0
+	if(!floating)
+		src.float(1)
 	return 1
 
 
@@ -454,3 +458,20 @@
 
 	prob_slip = round(prob_slip)
 	return(prob_slip)
+
+/mob/proc/update_gravity()
+	return
+
+/mob/proc/mob_has_gravity(turf/T)
+	return has_gravity(src, T)
+
+/mob/proc/mob_negates_gravity()
+	return 0
+
+/mob/proc/float(on)
+	if(on && !floating)
+		animate(src, pixel_y = 2, time = 10, loop = -1)
+		floating = 1
+	else if(!on && floating)
+		animate(src, pixel_y = initial(pixel_y), time = 10)
+		floating = 0
