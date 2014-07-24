@@ -18,7 +18,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 // Abstract Generator
 //
 
-/client/proc/cmd_dev_rsg()
+/client/proc/cmd_dev_reset_gravity()
 	set category = "Debug"
 	set name = "Restore Default Gravity"
 	set desc = "Resets all gravity on the entire server"
