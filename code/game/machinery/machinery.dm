@@ -109,6 +109,7 @@ Class Procs:
 	var/list/component_parts = null //list of all the parts used to build it, if made from certain kinds of frames.
 	var/uid
 	var/manual = 0
+	var/interact_offline = 0
 	var/global/gl_uid = 1
 
 /obj/machinery/New()
@@ -168,7 +169,7 @@ Class Procs:
 
 /obj/machinery/Topic(href, href_list)
 	..()
-	if(stat & (NOPOWER|BROKEN))
+	if(!interact_offline && stat & (NOPOWER|BROKEN))
 		return 1
 	if(usr.restrained() || usr.lying || usr.stat)
 		return 1
@@ -210,7 +211,7 @@ Class Procs:
 	return src.attack_hand(user)
 
 /obj/machinery/attack_hand(mob/user as mob)
-	if(stat & (NOPOWER|BROKEN|MAINT))
+	if(!interact_offline && stat & (NOPOWER|BROKEN|MAINT))
 		return 1
 	if(user.lying || user.stat)
 		return 1

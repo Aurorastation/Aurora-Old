@@ -14,7 +14,7 @@
 	set name = "Spawn Bluespace Tech"
 	set desc = "Spawns a Bluespace Tech to debug stuff"
 
-	if(!check_rights(R_DEBUG|R_DEV))	return
+	if(!check_rights(R_DEV))	return
 
 	if(!holder)
 		return //how did they get here?
@@ -228,6 +228,9 @@
 			return
 		else
 			..()
+
+	negates_gravity()
+		return 1 //Because Bluespace
 
 //ID
 /obj/item/weapon/card/id/bst
