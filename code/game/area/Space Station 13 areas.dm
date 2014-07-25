@@ -1011,6 +1011,10 @@ var/list/ghostteleportlocs = list()
 		name = "\improper Engineering Locker Room"
 		icon_state = "engine_storage"
 
+	gravity_gen
+		name = "\improper Gravity Generator"
+		icon_state = "engine"
+
 
 //Solars
 

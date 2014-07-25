@@ -1,0 +1,78 @@
+"a" = (/turf/space,/area)
+"b" = (/turf/simulated/wall/r_wall,/area/engine/gravity_gen)
+"c" = (/obj/machinery/ai_status_display,/turf/simulated/wall/r_wall,/area/engine/gravity_gen)
+"d" = (/obj/machinery/status_display{density = 0; layer = 4},/turf/simulated/wall/r_wall,/area/engine/gravity_gen)
+"e" = (/turf/simulated/floor{icon_state = "dark"},/area/engine/gravity_gen)
+"f" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 4; on = 1},/turf/simulated/floor{icon_state = "dark"},/area/engine/gravity_gen)
+"g" = (/obj/machinery/atmospherics/pipe/manifold{pipe_color = "blue"; dir = 1; icon_state = "manifold-b-f"; level = 1; name = "pipe manifold"},/turf/simulated/floor{icon_state = "dark"},/area/engine/gravity_gen)
+"h" = (/turf/simulated/floor{icon_state = "vault"; dir = 1},/area/engine/gravity_gen)
+"i" = (/turf/simulated/floor{icon_state = "vault"; dir = 8},/area/engine/gravity_gen)
+"j" = (/turf/simulated/floor{icon_state = "vault"; dir = 4},/area/engine/gravity_gen)
+"k" = (/obj/machinery/gravity_field_generator/main/station,/turf/simulated/floor{icon_state = "vault"; dir = 8},/area/engine/gravity_gen)
+"l" = (/obj/machinery/camera{c_tag = "Gravity Generator Room"; dir = 8; network = list("SS13"); pixel_x = 0; pixel_y = 0},/turf/simulated/floor{icon_state = "dark"},/area/engine/gravity_gen)
+"m" = (/obj/machinery/atmospherics/pipe/manifold{pipe_color = "red"; dir = 8; icon_state = "manifold-r-f"; initialize_directions = 11; level = 1; name = "pipe manifold"},/obj/machinery/light{icon_state = "tube1"; dir = 8},/turf/simulated/floor{icon_state = "dark"},/area/engine/gravity_gen)
+"n" = (/obj/machinery/atmospherics/unary/vent_scrubber{dir = 8; on = 1; scrub_Toxins = 0},/turf/simulated/floor{icon_state = "dark"},/area/engine/gravity_gen)
+"o" = (/obj/machinery/light{dir = 4},/turf/simulated/floor{icon_state = "dark"},/area/engine/gravity_gen)
+"p" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/sign/securearea{desc = "A warning sign which reads 'HIGH VOLTAGE'"; icon_state = "shock"; name = "HIGH VOLTAGE"; pixel_x = -32; pixel_y = 0},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor/plating,/area/engine/gravity_gen)
+"q" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor/plating,/area/engine/gravity_gen)
+"r" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/door/airlock/glass_engineering{name = "Gravity Generator"; req_access_txt = "11"; req_one_access_txt = "0"},/turf/simulated/floor{icon_state = "dark"},/area/engine/gravity_gen)
+"s" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor/plating,/area/engine/gravity_gen)
+"t" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/sign/securearea{desc = "A warning sign which reads 'RADIOACTIVE AREA'"; icon_state = "radiation"; name = "RADIOACTIVE AREA"; pixel_x = 32; pixel_y = 0},/obj/structure/cable{icon_state = "0-2"; d2 = 2},/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/plating,/area/engine/gravity_gen)
+"u" = (/obj/structure/stool/bed/chair/office/light,/obj/machinery/firealarm{dir = 8; pixel_x = -24},/turf/simulated/floor{dir = 9; icon_state = "warning"},/area/engine/gravity_gen)
+"v" = (/turf/simulated/floor{dir = 1; icon_state = "warning"},/area/engine/gravity_gen)
+"w" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 4; on = 1},/turf/simulated/floor{dir = 1; icon_state = "warning"},/area/engine/gravity_gen)
+"x" = (/obj/machinery/alarm{dir = 8; icon_state = "alarm0"; pixel_x = 24},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor{dir = 5; icon_state = "warning"},/area/engine/gravity_gen)
+"y" = (/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/machinery/power/apc{dir = 8; name = "Gravity Generator APC"; pixel_x = -25; pixel_y = 1},/obj/structure/table,/obj/item/weapon/pen/blue,/obj/item/device/radio/intercom{name = "Station Intercom (General)"; pixel_y = -35},/obj/item/weapon/paper/gravity_gen,/turf/simulated/floor,/area/engine/gravity_gen)
+"z" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/engine/gravity_gen)
+"A" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/hologram/holopad,/turf/simulated/floor,/area/engine/gravity_gen)
+"B" = (/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/structure/cable,/obj/machinery/power/smes{charge = 5e+006},/turf/simulated/floor,/area/engine/gravity_gen)
+"C" = (/obj/machinery/atmospherics/unary/vent_scrubber{dir = 1; on = 1; scrub_N2O = 0; scrub_Toxins = 0},/turf/simulated/floor,/area/engine/gravity_gen)
+"D" = (/turf/simulated/floor,/area/engine/gravity_gen)
+"E" = (/obj/machinery/computer/gravity_control_computer,/turf/simulated/floor,/area/engine/gravity_gen)
+"F" = (/obj/machinery/power/terminal{icon_state = "term"; dir = 1},/turf/simulated/wall/r_wall,/area/engine/gravity_gen)
+"G" = (/obj/structure/lattice,/turf/space,/area)
+"H" = (/obj/machinery/door/firedoor/border_only{dir = 1; name = "Firelock North"},/obj/machinery/door/airlock/engineering{name = "Gravity Generator"; req_access_txt = "11"},/turf/simulated/floor{icon_state = "delivery"; name = "floor"},/area/engine/gravity_gen)
+"I" = (/turf/simulated/wall,/area/engine/gravity_gen)
+"J" = (/obj/machinery/atmospherics/unary/vent_pump{on = 1},/obj/machinery/alarm{dir = 4; icon_state = "alarm0"; pixel_x = -22},/turf/simulated/floor{dir = 9; icon_state = "warning"},/area/engine/gravity_gen)
+"K" = (/obj/machinery/atmospherics/unary/vent_scrubber{on = 1; scrub_N2O = 0; scrub_Toxins = 0},/obj/machinery/light{dir = 4; icon_state = "tube1"},/obj/machinery/camera{c_tag = "Gravity Generator Foyer"},/turf/simulated/floor{dir = 5; icon_state = "warning"},/area/engine/gravity_gen)
+"L" = (/obj/structure/closet/radiation,/obj/structure/sign/securearea{desc = "A warning sign which reads 'RADIOACTIVE AREA'"; icon_state = "radiation"; name = "RADIOACTIVE AREA"; pixel_x = -32; pixel_y = 0},/turf/simulated/floor{dir = 8; icon_state = "warning"},/area/engine/gravity_gen)
+"M" = (/obj/structure/closet/radiation,/obj/structure/sign/securearea{desc = "A warning sign which reads 'RADIOACTIVE AREA'"; icon_state = "radiation"; name = "RADIOACTIVE AREA"; pixel_x = 32; pixel_y = 0},/turf/simulated/floor{dir = 4; icon_state = "warning"},/area/engine/gravity_gen)
+"N" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/hallway/primary/central)
+"O" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/hallway/primary/central)
+"P" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating,/area/hallway/primary/central)
+"Q" = (/obj/machinery/ai_status_display,/turf/simulated/wall,/area/engine/gravity_gen)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaabcbbbdbaaaaaaaaaaaaaa
+aaaaaaaaaaabeeefgbaaaaaaaaaaaaaa
+aaaaaaaaaaabehijebaaaaaaaaaaaaaa
+aaaaaaaaaaabeieiebaaaaaaaaaaaaaa
+aaaaaaaaaaabejkhlbaaaaaaaaaaaaaa
+aaaaaaaaaaabmneeobaaaaaaaaaaaaaa
+aaaaaaaaaaabpqrstbaaaaaaaaaaaaaa
+aaaaaaaaaaabuvvwxbaaaaaaaaaaaaaa
+aaaaaaaaaaabyzAzBbaaaaaaaaaaaaaa
+aaaaaaaaaaabbCDEFbaaaaaaaaaaaaaa
+aaaaaaaaaaaGbbHbbGaaaaaaaaaaaaaa
+aaaaaaaaaaaGIJvKIGaaaaaaaaaaaaaa
+aaaaaaaaaaaGILDMIGaaaaaaaaaaaaaa
+aaaaaaaaaNOPIQHIINOPaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+"}
