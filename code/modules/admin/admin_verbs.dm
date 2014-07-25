@@ -138,7 +138,8 @@ var/list/admin_verbs_dev = list(
 	/client/proc/SDQL_query,
 	/client/proc/SDQL2_query,
 	/client/proc/cmd_dev_say,
-	/client/proc/cmd_dev_bst
+	/client/proc/cmd_dev_bst,
+	/client/proc/cmd_dev_reset_gravity
 )
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom,		/*allows us to spawn instances*/
@@ -186,7 +187,8 @@ var/list/admin_verbs_debug = list(
 	/client/proc/toggledebuglogs,
 	/client/proc/SDQL_query,
 	/client/proc/SDQL2_query,
-	/client/proc/cmd_dev_bst
+	/client/proc/cmd_dev_bst,
+	/client/proc/cmd_dev_reset_gravity
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,

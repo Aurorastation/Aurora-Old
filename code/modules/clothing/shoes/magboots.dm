@@ -8,6 +8,12 @@
 	action_button_name = "Toggle the magboots"
 //	flags = NOSLIP //disabled by default
 
+	negates_gravity()
+		if(magpulse)
+			return 1
+		else
+			return 0
+
 	attack_self(mob/user)
 		if(magpulse)
 			flags &= ~NOSLIP
@@ -22,7 +28,7 @@
 			icon_state = "magboots1"
 			user << "You enable the mag-pulse traction system."
 		user.update_inv_shoes()	//so our mob-overlays update
-	
+
 	examine()
 		set src in view()
 		..()

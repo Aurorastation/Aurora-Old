@@ -311,16 +311,16 @@
 				if(L.&& L.client)
 					L.client.played = 0
 
-/area/proc/gravitychange(var/gravitystate = 0, var/area/A)
-
+/area/proc/gravitychange(var/gravitystate = 0, var/area/A, var/round_start = 0)
 	A.has_gravity = gravitystate
 
 	for(var/area/SubA in A.related)
 		SubA.has_gravity = gravitystate
 
-		if(gravitystate)
-			for(var/mob/living/carbon/human/M in SubA)
-				thunk(M)
+		if(!round_start)
+			if(gravitystate)
+				for(var/mob/living/carbon/human/M in SubA)
+					thunk(M)
 
 /area/proc/thunk(mob)
 	if(istype(mob,/mob/living/carbon/human/))  // Only humans can wear magboots, so we give them a chance to.
@@ -338,5 +338,18 @@
 		mob:AdjustStunned(2)
 		mob:AdjustWeakened(2)
 
+	mob:float(0)
 	mob << "Gravity!"
 
+/proc/has_gravity(atom/AT, turf/T)
+	if(!T)
+		T = get_turf(AT)
+	var/area/A = get_area(T)
+	if(istype(T, /turf/space)) //because space
+		return 0
+	else if(A && A.has_gravity)
+		return 1
+	else
+		if(T && gravity_field_generators["[T.z]"] && length(gravity_field_generators["[T.z]"]))
+			return 1
+	return 0

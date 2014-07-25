@@ -55,6 +55,7 @@
 #define FILE_DIR "Sammacs Folder/L7 Gun/AussecL7Attachments"
 #define FILE_DIR "Sammacs Folder/Medical Uniforms"
 #define FILE_DIR "Sammacs Folder/TG Download"
+#define FILE_DIR "Scopes Files"
 #define FILE_DIR "sound"
 #define FILE_DIR "sound/AI"
 #define FILE_DIR "sound/ambience"
@@ -1450,4 +1451,5 @@
 #include "interface\interface.dm"
 #include "interface\skin.dmf"
 #include "maps\tgstation2.dmm"
+#include "Scopes Files\gravitygenerator.dm"
 // END_INCLUDE
