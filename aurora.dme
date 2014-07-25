@@ -39,7 +39,6 @@
 #define FILE_DIR "icons/turf"
 #define FILE_DIR "icons/vending_icons"
 #define FILE_DIR "Mocheeze"
-#define FILE_DIR "Mocheeze/Scraps"
 #define FILE_DIR "nano"
 #define FILE_DIR "nano/images"
 #define FILE_DIR "Sammacs Folder"
@@ -1444,4 +1443,5 @@
 #include "code\ZAS\Zone.dm"
 #include "interface\interface.dm"
 #include "interface\skin.dmf"
+#include "Mocheeze\tgstation2 mocheeze.dmm"
 // END_INCLUDE
