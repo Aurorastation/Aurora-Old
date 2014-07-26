@@ -398,4 +398,58 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			var/obj/item/weapon/stamp/T = O
 			msgStamped = text("<font color='blue'><b>Stamped with the [T.name]</b></font>")
 			updateUsrDialog()
+	if (istype(O, /obj/item/weapon/paper))
+		if(screen == 0)
+			var/pass = 0
+			var/sendto = input("Select department.", "Send Fax", null, null) in allConsoles
+
+			for (var/obj/machinery/message_server/MS in world)
+				if(!MS.active) continue
+				pass = 1
+
+			if(pass)
+				var/sent = 0
+				for (var/obj/machinery/requests_console/Console in world)
+					if (Console == sendto)
+						if(!sent)
+							sent = 1
+
+						var/obj/item/weapon/paper/C = O
+						var/obj/item/weapon/paper/P = new /obj/item/weapon/paper(Console.loc)
+						P.info = "<font color = #101010>"
+						var/copied = html_decode(C.info)
+						copied = replacetext(copied, "<font face=\"[P.deffont]\" color=", "<font face=\"[P.deffont]\" nocolor=")	//state of the art techniques in action
+						copied = replacetext(copied, "<font face=\"[P.crayonfont]\" color=", "<font face=\"[P.crayonfont]\" nocolor=")	//This basically just breaks the existing color tag, which we need to do because the innermost tag takes priority.
+						P.info += copied
+						P.info += "</font>"
+						P.name = C.name
+						P.fields = C.fields
+						P.stamps = C.stamps
+						P.stamped = C.stamped
+						P.ico = C.ico
+						P.offset_x = C.offset_x
+						P.offset_y = C.offset_y
+						var/list/temp_overlays = C.overlays
+						var/image/img
+						for (var/j = 1, j <= temp_overlays.len, j++)
+							if (findtext(C.ico[j], "cap") || findtext(C.ico[j], "cent"))
+								img = image('icons/obj/bureaucracy.dmi', "paper_stamp-circle")
+							else if (findtext(C.ico[j], "deny"))
+								img = image('icons/obj/bureaucracy.dmi', "paper_stamp-x")
+							else
+								img = image('icons/obj/bureaucracy.dmi', "paper_stamp-dots")
+							img.pixel_x = C.offset_x[j]
+							img.pixel_y = C.offset_y[j]
+							P.overlays += img
+
+						P.updateinfolinks()
+						playsound(Console.loc, 'sound/machines/twobeep.ogg', 50, 1)
+						for (var/mob/player in hearers(4, Console.loc))
+							player.show_message(text("\icon[Console] *The Requests Console beeps: 'Fax received'"))
+
+				if(sent == 1)
+					user.show_message(text("\icon[src] *The Requests Console beeps: 'Message Sent.'"))
+
+			else
+				user.show_message(text("\icon[src] *The Requests Console beeps: 'NOTICE: No server detected!'"))
 	return

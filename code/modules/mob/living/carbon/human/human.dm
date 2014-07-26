@@ -1,3 +1,4 @@
+
 /mob/living/carbon/human
 	name = "unknown"
 	real_name = "unknown"
@@ -38,6 +39,11 @@
 /mob/living/carbon/human/machine/New(var/new_loc)
 	h_style = "blue IPC screen"
 	..(new_loc, "Machine")
+
+/mob/living/carbon/human/kocasslani/New(var/new_loc)
+	h_style = "Bald"
+	..(new_loc, "Kocasslani")
+
 
 /mob/living/carbon/human/New(var/new_loc, var/new_species = null)
 

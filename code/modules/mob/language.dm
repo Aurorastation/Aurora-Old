@@ -10,6 +10,7 @@
 	var/key = "x"                    // Character used to speak in language eg. :o for Unathi.
 	var/flags = 0                    // Various language flags.
 	var/native                       // If set, non-native speakers will have trouble speaking.
+	var/vocal = 1                    // Is a spoken language
 
 /datum/language/unathi
 	name = "Sinta'unathi"
@@ -68,10 +69,26 @@
 
 /datum/language/gutter
 	name = "Gutter"
-	desc = "Much like Standard, this crude pidgin tongue descended from numerous languages and serves as Tradeband for criminal elements."
+	desc = "Much like Ceti Basic, this crude pidgin tongue descended from numerous languages and serves as Tradeband for criminal elements."
 	speech_verb = "growls"
 	colour = "rough"
 	key = "3"
+
+/datum/language/sini
+	name = "Sini"
+	desc = "Kocasslani traditional language"
+	speech_verb = "sings"
+	colour = "skrell"
+	key = "z"
+	flags = WHITELISTED
+
+/datum/language/sign
+	name = "Sign language"
+	desc = "A mixture of manual communication and body-languaged, used to communication with those who have impaired hearing."
+	speech_verb = "signs"
+	colour = "say_quote"
+	key = "4"
+	vocal = 0
 
 // Language handling.
 /mob/proc/add_language(var/language)

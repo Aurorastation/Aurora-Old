@@ -6,7 +6,7 @@
 	step_in = 2
 	max_temperature = 7000 // DON'T FORGET TO TEST THIS
 	health = 200
-	wreckage =  /obj/effect/decal/mecha_wreckage/exoskeleton
+//	wreckage =  /obj/effect/decal/mecha_wreckage/exoskeleton
 	internal_damage_threshold = 35
 	deflect_chance = 25
 	step_energy_drain = 4

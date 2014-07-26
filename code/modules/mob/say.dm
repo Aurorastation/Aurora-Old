@@ -1,6 +1,9 @@
 /mob/proc/say()
 	return
 
+/mob/proc/sign()
+	return
+
 /mob/verb/whisper()
 	set name = "Whisper"
 	set category = "IC"

@@ -29,6 +29,9 @@
 		if(!M.mind.assigned_role == "Detective")
 			M << "<span class='notice'>You don't feel cool enough to name this gun, chump.</span>"
 			return 0
+		if(istype(src, /obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun))
+			M << "<span class='notice'>You find it impossible to name this weapon something other.</span>"
+			return 0
 
 		var/input = stripped_input(usr,"What do you want to name the gun?", ,"", MAX_NAME_LEN)
 
@@ -191,7 +194,7 @@
 				playsound(user, fire_sound, 50, 1)
 				user.visible_message("<span class='danger'>[user.name] fires [src] at \his head!</span>", "<span class='danger'>You fire [src] at your head!</span>", "You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
 				if(!P.nodamage)
-					user.apply_damage(300, BRUTE, affecting) // You are dead, dead, dead.
+					user.apply_damage(300, BRUTE, affecting, sharp=1) // You are dead, dead, dead.
 				return
 	..()
 

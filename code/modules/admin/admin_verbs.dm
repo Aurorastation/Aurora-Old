@@ -133,10 +133,13 @@ var/list/admin_verbs_dev = list(
 	/client/proc/restart_controller,
 	/client/proc/enable_debug_verbs,
 	/client/proc/callproc,
+	/client/proc/toggleattacklogs,
 	/client/proc/toggledebuglogs,
 	/client/proc/SDQL_query,
 	/client/proc/SDQL2_query,
-	/client/proc/cmd_dev_say
+	/client/proc/cmd_dev_say,
+	/client/proc/cmd_dev_bst,
+	/client/proc/cmd_dev_reset_gravity
 )
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom,		/*allows us to spawn instances*/
@@ -183,7 +186,9 @@ var/list/admin_verbs_debug = list(
 	/client/proc/callproc,
 	/client/proc/toggledebuglogs,
 	/client/proc/SDQL_query,
-	/client/proc/SDQL2_query
+	/client/proc/SDQL2_query,
+	/client/proc/cmd_dev_bst,
+	/client/proc/cmd_dev_reset_gravity
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -273,6 +278,7 @@ var/list/admin_verbs_mod = list(
 	/client/proc/cmd_admin_pm_context,	/*right-click adminPM interface*/
 	/client/proc/cmd_admin_pm_panel,	/*admin-pm list*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game.*/
+	/client/proc/toggleattacklogs,
 	/client/proc/toggledebuglogs,
 	/datum/admins/proc/PlayerNotes,
 	/client/proc/admin_ghost,			/*allows us to ghost/reenter body at will*/
@@ -905,4 +911,8 @@ var/list/admin_verbs_mod = list(
 		if("Red")
 			set_security_level(SEC_LEVEL_RED)
 		if("Delta")
+			if (alert(usr, "Everyone will die, there is no cancelling yet.", "Are you sure you want Code Delta?", "Yes", "No") != "Yes") //Confirmation box incase of miss-clicks
+				return
 			set_security_level(SEC_LEVEL_DELTA)
+			delta_level:active = 1
+			delta_level.activate()
