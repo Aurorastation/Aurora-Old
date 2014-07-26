@@ -283,10 +283,13 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 		return
 
 	if(href_list["gentoggle"])
+		if(charging_state != POWER_IDLE)
+			return 0
 		breaker = !breaker
 		investigate_log("was toggled [breaker ? "<font color='green'>ON</font>" : "<font color='red'>OFF</font>"] by [usr.key].", "gravity")
 		set_power()
-		src.updateUsrDialog()
+		sleep(2)
+			src.updateUsrDialog()
 
 // Power and Icon States
 
