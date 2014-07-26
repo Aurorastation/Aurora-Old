@@ -54,7 +54,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 
 /obj/machinery/gravity_field_generator
 	name = "gravitational generator"
-	desc = "A device which produces a gravaton field when set up."
+	desc = "A device which produces a graviton field when set up."
 	icon = 'Scopes Files/gravity_generator.dmi'
 	anchored = 1
 	density = 1

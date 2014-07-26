@@ -119,6 +119,10 @@
 				s.start()
 			del(src)
 
+	say(var/message)
+		var/verb = "says in a subdued tone"
+		..(message, verb)
+
 //Equipment. All should have canremove set to 0
 //All items with a /bst need the attack_hand() proc overrided to stop people getting overpowered items.
 
