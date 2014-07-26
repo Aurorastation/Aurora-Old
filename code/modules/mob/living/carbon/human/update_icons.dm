@@ -368,11 +368,11 @@ proc/get_damage_icon_part(damage_state, body_part)
 			stand_icon.Blend(new/icon('icons/mob/human_face.dmi', "lips_[lip_style]_s"), ICON_OVERLAY)
 
 	//Underwear
-	if(underwear >0 && underwear < 12 && species.flags & HAS_UNDERWEAR)
+	if(underwear >0 && underwear < 7 && species.flags & HAS_UNDERWEAR)
 		if(!fat && !skeleton)
 			stand_icon.Blend(new /icon('icons/mob/human.dmi', "underwear[underwear]_[g]_s"), ICON_OVERLAY)
 
-	if(undershirt>0 && undershirt < 5 && species.flags & HAS_UNDERWEAR)
+	if(undershirt > 0 && undershirt < 16 && species.flags & HAS_UNDERWEAR)
 		stand_icon.Blend(new /icon('icons/mob/human.dmi', "undershirt[undershirt]_s"), ICON_OVERLAY)
 
 	if(update_icons)
