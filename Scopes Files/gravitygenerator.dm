@@ -288,7 +288,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 		breaker = !breaker
 		investigate_log("was toggled [breaker ? "<font color='green'>ON</font>" : "<font color='red'>OFF</font>"] by [usr.key].", "gravity")
 		set_power()
-		sleep(2)
+		spawn(2)
 			src.updateUsrDialog()
 
 // Power and Icon States

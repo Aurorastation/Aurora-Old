@@ -96,6 +96,8 @@
 			for(var/job in restricted_jobs)
 				if(player.assigned_role == job)
 					possible_traitors -= player
+				if(istype(player, "/mob/living/silicon/robot/drone"))
+					possible_traitors -= player
 
 		//message_admins("Live Players: [playercount]")
 		//message_admins("Live Traitors: [traitorcount]")
