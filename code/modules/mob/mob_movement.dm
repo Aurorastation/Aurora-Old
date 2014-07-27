@@ -469,9 +469,9 @@
 	return 0
 
 /mob/proc/float(on)
-	if(on && !floating)
+	if(on)
 		animate(src, pixel_y = 2, time = 10, loop = -1)
 		floating = 1
-	else if(!on && floating)
+	else
 		animate(src, pixel_y = initial(pixel_y), time = 10)
 		floating = 0
