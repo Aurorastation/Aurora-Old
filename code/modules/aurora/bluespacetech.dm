@@ -95,6 +95,7 @@
 	spawn(5)
 		s.start()
 		bst.anchored = 0
+	log_debug("Bluespace Tech Spawned: X:[bst.x] Y:[bst.y] Z:[bst.z] User:[src]")
 	feedback_add_details("admin_verb","BST")
 	return 1
 
