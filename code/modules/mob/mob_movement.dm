@@ -468,7 +468,7 @@
 /mob/proc/mob_negates_gravity()
 	return 0
 
-/mob/proc/float(on)
+/mob/proc/float(var/on)
 	if(on)
 		animate(src, pixel_y = 2, time = 10, loop = -1)
 		floating = 1
