@@ -96,13 +96,6 @@
 	item_state = "steelboots"
 	siemens_coefficient = 0.7
 
-/obj/item/clothing/shoes/work_shoes
-	name = "Steel Toe Shoes"
-	desc = "Stylish shoes with the protection of boots."
-	icon_state = "steelshoes"
-	item_state = "steelshoes"
-	siemens_coefficient = 0.7
-
 /obj/item/clothing/shoes/cult
 	name = "boots"
 	desc = "A pair of boots worn by the followers of Nar-Sie."
