@@ -19,7 +19,7 @@ var/global/list/special_roles = list( //keep synced with the defines BE_* in set
 	"diona" = 1,                                         // 12
 )
 
-var/const/MAX_SAVE_SLOTS = 10
+var/const/MAX_SAVE_SLOTS = 20
 
 //used for alternate_option
 #define GET_RANDOM_JOB 0
@@ -976,10 +976,13 @@ datum/preferences
 							metadata = sanitize(copytext(new_metadata,1,MAX_MESSAGE_LEN))
 
 					if("b_type")
+//						if(species != "Kocasslani")
 						var/new_b_type = input(user, "Choose your character's blood-type:", "Character Preference") as null|anything in list( "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-" )
 						if(new_b_type)
 							b_type = new_b_type
-
+/*						else
+							b_type = "K"
+*/
 					if("hair")
 						if(species == "Human" || species == "Unathi" || species == "Tajaran" || species == "Skrell")
 							var/new_hair = input(user, "Choose your character's hair colour:", "Character Preference") as color|null
@@ -1052,6 +1055,7 @@ datum/preferences
 							r_eyes = hex2num(copytext(new_eyes, 2, 4))
 							g_eyes = hex2num(copytext(new_eyes, 4, 6))
 							b_eyes = hex2num(copytext(new_eyes, 6, 8))
+
 
 					if("s_tone")
 						if(species != "Human")

@@ -6,7 +6,7 @@
 
 	if (istype(loc, /turf/space)) return -1 // It's hard to be slowed down in space by... anything
 
-	if(embedded_flag) 
+	if(embedded_flag)
 		handle_embedded_objects() //Moving with objects stuck in you can cause bad times.
 
 	if(reagents.has_reagent("hyperzine")) return -1
@@ -81,3 +81,13 @@
 
 	prob_slip = round(prob_slip)
 	return(prob_slip)
+
+/mob/living/carbon/human/mob_has_gravity()
+	. = ..()
+	if(!.)
+		if(mob_negates_gravity())
+			. = 1
+			return .
+
+/mob/living/carbon/human/mob_negates_gravity()
+	return (shoes && shoes.negates_gravity())

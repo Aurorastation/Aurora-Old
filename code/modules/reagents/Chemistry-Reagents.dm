@@ -118,10 +118,15 @@ datum
 						else //injected
 							M.contract_disease(D, 1, 0)
 				if(self.data && self.data["virus2"] && istype(M, /mob/living/carbon))//infecting...
-					if(method == TOUCH)
-						infect_virus2(M,self.data["virus2"])
-					else
-						infect_virus2(M,self.data["virus2"],1) //injected, force infection!
+					var/list/vlist = self.data["virus2"]
+					if (vlist.len)
+						for (var/ID in vlist)
+							var/datum/disease2/disease/V = vlist[ID]
+
+							if(method == TOUCH)
+								infect_virus2(M,V.getcopy())
+							else
+								infect_virus2(M,V.getcopy(),1) //injected, force infection!
 				if(self.data && self.data["antibodies"] && istype(M, /mob/living/carbon))//... and curing
 					var/mob/living/carbon/C = M
 					C.antibodies |= self.data["antibodies"]
@@ -145,6 +150,9 @@ datum
 						var/datum/disease/newVirus = D.Copy(1)
 						blood_prop.viruses += newVirus
 						newVirus.holder = blood_prop
+
+					if(self.data["virus2"])
+						blood_prop.virus2 = virus_copylist(self.data["virus2"])
 
 
 				else if(istype(self.data["donor"], /mob/living/carbon/monkey))
@@ -778,6 +786,8 @@ datum
 			on_mob_life(var/mob/living/M as mob)
 				if (volume > overdose)
 					M.hallucination = max(M.hallucination, 2)
+				..()
+				return
 
 		tramadol
 			name = "Tramadol"
@@ -790,6 +800,8 @@ datum
 			on_mob_life(var/mob/living/M as mob)
 				if (volume > overdose)
 					M.hallucination = max(M.hallucination, 2)
+				..()
+				return
 
 		oxycodone
 			name = "Oxycodone"
@@ -803,6 +815,8 @@ datum
 				if (volume > overdose)
 					M.druggy = max(M.druggy, 10)
 					M.hallucination = max(M.hallucination, 3)
+				..()
+				return
 
 
 		virus_food
@@ -1574,14 +1588,14 @@ datum
 				var/turf/the_turf = get_turf(O)
 				var/datum/gas_mixture/napalm = new
 				var/datum/gas/volatile_fuel/fuel = new
-				fuel.moles = 5
+				fuel.moles = volume
 				napalm.trace_gases += fuel
 				the_turf.assume_air(napalm)
 			reaction_turf(var/turf/T, var/volume)
 				src = null
 				var/datum/gas_mixture/napalm = new
 				var/datum/gas/volatile_fuel/fuel = new
-				fuel.moles = 5
+				fuel.moles = volume
 				napalm.trace_gases += fuel
 				T.assume_air(napalm)
 				return
@@ -3889,6 +3903,53 @@ datum
 			slur_start = 35			//amount absorbed after which mob starts slurring
 			confused_start = 140	//amount absorbed after which mob starts confusing directions
 
+///////////////////////////////
+///////////////////////////////
+//Dea's Request - Dalekfodder// Lol ART
+///////////////////////////////
+///////////////////////////////
+
+		ethanol/guinnes
+			name = "Guinness"
+			id = "guinnes"
+			description = "Special Guinnes drink"
+			color = ""  // dunno
+			boozepwr = 3
+
+		ethanol/drambuie
+			name = "Drambuie"
+			id = "drambuie"
+			description = "A drink that smells like whiskey but tastes different" // LOL.
+			color = "#2E6671" // dunno
+			boozepwr = 4
+
+		ethanol/oldfashioned
+			name = "Old Fashioned"
+			id = "oldfashioned"
+			description = "That looks like from sixties"
+			color = "#2E6671"
+			boozepwr = 3
+
+		ethanol/blindrussian
+			name = "Blind Russian"
+			id = "blindrussian"
+			description = "You can't see?"
+			color = "#2E6671"
+			boozepwr = 5
+
+		ethanol/rustynail
+			name = "Rusty Nail"
+			id = "rustynail"
+			description = "Smells like lemon"
+			color = "#2E6671"
+			boozepwr = 4
+
+		ethanol/tallrussian
+			name = "Tall Black Russian"
+			id = "tallrussian"
+			description = "Just like black russian but taller"
+			color = "#2E6671"
+			boozepwr = 5
 
 
 // Undefine the alias for REAGENTS_EFFECT_MULTIPLER

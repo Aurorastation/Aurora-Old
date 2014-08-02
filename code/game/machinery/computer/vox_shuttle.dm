@@ -55,9 +55,9 @@ var/global/announce_vox_departure = 1 //Stealth systems - give an announcement o
 
 	if(announce_vox_departure)
 		if(curr_location == locate(/area/shuttle/vox/station))
-			command_alert("Attention, Exodus, we just tracked a small target bypassing our defensive perimeter. Can't fire on it without hitting the station - you've got incoming visitors, like it or not.", "NSV Icarus")
+			command_alert("Attention, NSS Aurora, we just tracked a small target bypassing our defensive perimeter. Can't fire on it without hitting the station - you've got incoming visitors, like it or not.", "NSV Icarus")
 		else if(dest_location == locate(/area/shuttle/vox/station))
-			command_alert("Your guests are pulling away, Exodus - moving too fast for us to draw a bead on them. Looks like they're heading out of Tau Ceti at a rapid clip.", "NSV Icarus")
+			command_alert("Your guests are pulling away, NSS Aurora - moving too fast for us to draw a bead on them. Looks like they're heading out of Tau Ceti at a rapid clip.", "NSV Icarus")
 
 	moving = 1
 	lastMove = world.time

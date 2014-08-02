@@ -851,6 +851,10 @@ var/list/ghostteleportlocs = list()
  	name = "\improper Library"
  	icon_state = "library"
 
+/area/thinktank
+ 	name = "\improper Think Tank"
+ 	icon_state = "thinktank"
+
 /area/chapel/main
 	name = "\improper Chapel"
 	icon_state = "chapel"
@@ -1006,6 +1010,10 @@ var/list/ghostteleportlocs = list()
 	locker_room
 		name = "\improper Engineering Locker Room"
 		icon_state = "engine_storage"
+
+	gravity_gen
+		name = "\improper Gravity Generator"
+		icon_state = "engine"
 
 
 //Solars
@@ -1612,6 +1620,10 @@ var/list/ghostteleportlocs = list()
 /area/turret_protected/ai_upload_foyer
 	name = "AI Upload Access"
 	icon_state = "ai_foyer"
+
+/area/turret_protected/ai_server_room
+	name = "AI Server Room"
+	icon_state = "ai_server"
 
 /area/turret_protected/ai
 	name = "\improper AI Chamber"

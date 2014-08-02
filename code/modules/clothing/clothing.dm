@@ -172,7 +172,6 @@ BLIND     // can't see anything
 	icon = 'icons/obj/clothing/shoes.dmi'
 	desc = "Comfortable-looking shoes."
 	gender = PLURAL //Carn: for grammarically correct text-parsing
-	var/chained = 0
 	siemens_coefficient = 0.9
 	body_parts_covered = FEET
 	slot_flags = SLOT_FEET
@@ -180,6 +179,9 @@ BLIND     // can't see anything
 	permeability_coefficient = 0.50
 	slowdown = SHOES_SLOWDOWN
 	species_restricted = list("exclude","Unathi","Tajaran")
+
+/obj/item/proc/negates_gravity()
+	return 0
 
 //Suit
 /obj/item/clothing/suit
@@ -250,6 +252,7 @@ BLIND     // can't see anything
 	var/obj/item/clothing/tie/hastie = null
 	var/displays_id = 1
 	var/rolled_down = 0
+	var/rolled_sleeves = 0
 	var/basecolor
 
 /obj/item/clothing/under/attackby(obj/item/I, mob/user)
@@ -368,13 +371,26 @@ BLIND     // can't see anything
 	if(!istype(usr, /mob/living)) return
 	if(usr.stat) return
 
-	if(copytext(item_color,-2) != "_d")
+	if(copytext(item_color,-2) != "_d" && rolled_sleeves == 0)
 		basecolor = item_color
 	if(basecolor + "_d_s" in icon_states('icons/mob/uniform.dmi'))
 		item_color = item_color == "[basecolor]" ? "[basecolor]_d" : "[basecolor]"
 		usr.update_inv_w_uniform()
-	else
-		usr << "<span class='notice'>You cannot roll down the uniform!</span>"
+		rolled_down = 1
+
+/obj/item/clothing/under/verb/rollsleeve()
+	set name = "Roll Up Sleeves"
+	set category = "Object"
+	set src in usr
+	if(!istype(usr, /mob/living)) return
+	if(usr.stat) return
+
+	if(copytext(item_color,-2) != "_r" && rolled_down == 0)
+		basecolor = item_color
+	if(basecolor + "_r_s" in icon_states('icons/mob/uniform.dmi'))
+		item_color = item_color == "[basecolor]" ? "[basecolor]_r" : "[basecolor]"
+		usr.update_inv_w_uniform()
+		rolled_sleeves = 1
 
 /obj/item/clothing/under/proc/remove_accessory(mob/user as mob)
 	if(!hastie)

@@ -165,7 +165,7 @@
 
 	return
 
-/obj/item/weapon/melee/telebaton/attack(mob/target as mob, mob/living/user as mob)
+/obj/item/weapon/melee/telebaton/attack(mob/target as mob, mob/living/user as mob/*, target_zone*/)
 	if(on)
 		if ((CLUMSY in user.mutations) && prob(50))
 			user << "\red You club yourself over the head."
@@ -178,6 +178,17 @@
 			return
 		if(..())
 			playsound(src.loc, "swing_hit", 50, 1, -1)
+//			var/obj/item/c_hand							UNFUCK WHEN YOU HAVE TIME AND KNOWLEDGE
+//			var/hand
+			if(user.zone_sel.selecting == "r_leg" || user.zone_sel.selecting == "l_leg")
+				target.Weaken(20)
+/*			if(user.zone_sel.selecting == "l_hand" || user.zone_sel.selecting == "l_arm")
+				c_hand = "l_hand"
+				target.u_equip(c_hand)
+				hand = "left hand"
+				user.visible_message("\red [target] screams out in pain and drops what they were holding in their [hand]!")*/
+			else
+				..()
 			return
 	else
 		return ..()

@@ -3,6 +3,7 @@
 #define LAYING_EGGS 2
 #define MOVING_TO_TARGET 3
 #define SPINNING_COCOON 4
+#define MAX_SPIDERS 20
 
 //basic spider mob, these generally guard nests
 /mob/living/simple_animal/hostile/giant_spider
@@ -34,6 +35,33 @@
 	pass_flags = PASSTABLE
 	move_to_delay = 6
 	speed = 3
+
+/mob/living/simple_animal/hostile/giant_spider/New()
+	total_spiders += 1
+	if(total_spiders == MAX_SPIDERS)
+		spider_can_spawn = 0
+	..()
+
+/mob/living/simple_animal/hostile/giant_spider/death()
+	total_spiders -= 1
+	if(total_spiders <= (MAX_SPIDERS - 2) && !spider_can_spawn)
+		spider_can_spawn = 1
+	if(total_spiders < 0) //Admin mess around protection
+		total_spiders = 0 //If it worked right we won't get -1
+	..()
+
+/mob/living/simple_animal/hostile/giant_spider/Life() //Checks to see if spider has been respawned from var edits
+	if(stat == DEAD)
+		if(health > 0)
+			total_spiders += 1
+	..()
+
+/mob/living/simple_animal/hostile/giant_spider/Del() //The other form of admin protection.
+	if(stat == DEAD)
+		..()
+	else
+		total_spiders -= 1
+		..()
 
 //nursemaids - these create webs and eggs
 /mob/living/simple_animal/hostile/giant_spider/nurse

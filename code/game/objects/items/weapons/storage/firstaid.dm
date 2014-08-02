@@ -125,6 +125,21 @@
 	storage_slots = 14
 	use_sound = null
 
+/obj/item/weapon/storage/pill_bottle/verb/rename()
+	set name = "Rename Label"
+	set category = "Object"
+	set src in usr
+
+	if((CLUMSY in usr.mutations) && prob(50))
+		usr << "<span class='warning'>You drop the bottle, slipping on it and giving you a bruise ankle as you stumble.</span>"
+		return
+	var/n_name = copytext(sanitize(input(usr, "What would you like to label the Pill Bottle?", "Bottle Label", null)  as text), 1, MAX_NAME_LEN)
+	if((loc == usr && usr.stat == 0))
+		name = "[(n_name ? text("[n_name]") : "Pill Bottle")]"
+	add_fingerprint(usr)
+	return
+
+
 /obj/item/weapon/storage/pill_bottle/kelotane
 	name = "bottle of kelotane pills"
 	desc = "Contains pills used to treat burns."

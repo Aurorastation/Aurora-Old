@@ -5,8 +5,8 @@
 /datum/game_mode/traitor
 	name = "traitor"
 	config_tag = "traitor"
-	restricted_jobs = list("Cyborg")//They are part of the AI if he is traitor so are they, they use to get double chances
-	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain")//AI", Currently out of the list as malf does not work for shit
+	restricted_jobs = list("Cyborg", "Internal Affairs Agent", "Head of Security", "Captain")//Borgs are part of the AI if he is traitor so are they, they use to get double chances Added Implanted
+	protected_jobs = list("Security Officer", "Warden", "Detective")//AI", Currently out of the list as malf does not work for shit
 	required_players = 0
 	required_enemies = 1
 	recommended_enemies = 4
@@ -78,6 +78,9 @@
 
 
 /datum/game_mode/proc/forge_traitor_objectives(var/datum/mind/traitor)
+	if (config.objectives_disabled)
+		return
+
 	if(istype(traitor.current, /mob/living/silicon))
 		var/datum/objective/assassinate/kill_objective = new
 		kill_objective.owner = traitor

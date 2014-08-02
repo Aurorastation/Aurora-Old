@@ -5,9 +5,11 @@
 /datum/game_mode/traitor/autotraitor
 	name = "AutoTraitor"
 	config_tag = "extend-a-traitormongous"
+	restricted_jobs = list("Cyborg", "Internal Affairs Agent", "Head of Security", "Captain") //To ensure the setting stay from /traitor
 
 	var/list/possible_traitors
 	var/num_players = 0
+	var/list/afk_traitor_count
 
 /datum/game_mode/traitor/autotraitor/announce()
 	..()
@@ -78,6 +80,8 @@
 		if(emergency_shuttle.departed)
 			return
 		//message_admins("Performing AutoTraitor Check")
+		log_debug("Doing AFK traitor check")
+		var/scopesdebug = 0 //tempory marker 4464-45
 		var/playercount = 0
 		var/traitorcount = 0
 		var/possible_traitors[0]
@@ -87,18 +91,39 @@
 				playercount += 1
 			if (player.client && player.mind && player.mind.special_role && player.stat != 2)
 				traitorcount += 1
-			if (player.client && player.mind && !player.mind.special_role && player.stat != 2 && (player.client && player.client.prefs.be_special & BE_TRAITOR) && !jobban_isbanned(player, "Syndicate"))
+			if (player.client && player.mind && !player.mind.special_role && player.stat != 2 && (player.client && player.client.prefs.be_special & BE_TRAITOR) && !jobban_isbanned(player, "Syndicate") && !jobban_isbanned(player, "traitor") && !player.client.is_afk())
 				possible_traitors += player
 		for(var/datum/mind/player in possible_traitors)
 			for(var/job in restricted_jobs)
 				if(player.assigned_role == job)
 					possible_traitors -= player
+				if(istype(player, "/mob/living/silicon/robot/drone"))
+					possible_traitors -= player
+					scopesdebug++
+
+		if(scopesdebug) //4464-45
+			log_debug("Drones Found: [scopesdebug]")
 
 		//message_admins("Live Players: [playercount]")
 		//message_admins("Live Traitors: [traitorcount]")
 //		message_admins("Potential Traitors:")
 //		for(var/mob/living/traitorlist in possible_traitors)
 //			message_admins("[traitorlist.real_name]")
+
+		var/need_new_traitor = 0
+		var/list/old_afk_traitors = afk_traitor_count
+
+		for(var/mob/living/player in traitors)
+			if(player.client.is_afk() && !(player in afk_traitor_count))
+				afk_traitor_count += player
+
+		for(var/mob/living/player in afk_traitor_count) //Need to make it so it registers if someone has come back -- SoundScopes
+			if(player in old_afk_traitors)
+				continue
+
+			log_debug("Traitors are afk, forcing a new traitor")
+			need_new_traitor = 1
+			log_debug("afk_traitor_count = [afk_traitor_count.len] : old count: [old_afk_traitors.len]")
 
 //		var/r = rand(5)
 //		var/target_traitors = 1
@@ -109,19 +134,22 @@
 		if(traitorcount < max_traitors - 1)
 			traitor_prob += 50
 
-
-		if(traitorcount < max_traitors)
+		if(traitorcount < max_traitors || need_new_traitor)
 			//message_admins("Number of Traitors is below maximum.  Rolling for new Traitor.")
 			//message_admins("The probability of a new traitor is [traitor_prob]%")
 
-			if(prob(traitor_prob))
+			if(prob(traitor_prob) || need_new_traitor)
 				message_admins("Making a new Traitor.")
 				if(!possible_traitors.len)
+					if(need_new_traitor)
+						log_debug("No potential traitors.  Cancelling new traitor.")
 					message_admins("No potential traitors.  Cancelling new traitor.")
 					traitorcheckloop()
 					return
 				var/mob/living/newtraitor = pick(possible_traitors)
 				//message_admins("[newtraitor.real_name] is the new Traitor.")
+				if(need_new_traitor)
+					log_debug("Traitor forced and selected")
 
 				if (!config.objectives_disabled)
 					forge_traitor_objectives(newtraitor.mind)
@@ -188,7 +216,8 @@
 			//message_admins("The probability of a new traitor is [traitor_prob]%")
 			if(prob(traitor_prob))
 				message_admins("New traitor roll passed.  Making a new Traitor.")
-				forge_traitor_objectives(character.mind)
+				if (!config.objectives_disabled)
+					forge_traitor_objectives(character.mind)
 				equip_traitor(character)
 				traitors += character.mind
 				character << "\red <B>You are the traitor.</B>"

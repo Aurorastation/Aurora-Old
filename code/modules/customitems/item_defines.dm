@@ -92,7 +92,7 @@
 
 /obj/item/clothing/shoes/sandal/fluff/raieed_sandals //Treasured Sandals - Raieed Amari - nikolaithebeast - DONE
 	name = "Treasured Sandals"
-	desc = "A pair of black sandals, which seem to hold the entire on themselves."
+	desc = "A pair of black sandals, which seem to hold the entire world on themselves."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "raieed_sandals"
 	item_state = "raieed_sandals"
@@ -524,3 +524,339 @@
 /	"Affinity"
 /	"Dream Spark"
 */
+
+/obj/item/device/fluff/sten_synth //VoiceOS.V2 - Sten Asval - vtol - DONE
+	name = "VoiceOS.V2"
+	desc = "A text-to-speech device with an appearance that is not too futuristic. It looks slim and light. On the back of it there are initials in silver: SA."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "synth"
+	item_state = "radio"
+	w_class = 2.0
+	flags = FPRINT | TABLEPASS | CONDUCT
+	slot_flags = SLOT_GLOVES
+
+	var/spamcheck = 0
+	var/emagged = 0
+	var/insults = 0
+	var/list/insultmsg = list("BOB'S A PERVERT!", "I HATE YOU ALL!", "ALL SECURITY TO SHOOT ME ON SIGHT!", "I HAVE A BOMB!", "CAPTAIN IS A COMDOM!", "FOR THE SYNDICATE!")
+	var/list/empmsg = list("Lusty Xenomorph Maid", "Tajara Nymphomaniac Se'xual Hea'Ling", "Uneth Hermaphrodite Tai'L S'ex", "Skrellian Pornstar Hen-Tai")
+	var/emped = 0
+
+	verb/synth()
+		set name = "Use voice synth"
+		set category = "Object"
+		set src in usr
+
+		if (usr.client)
+			if(usr.client.prefs.muted & MUTE_IC)
+				src << "\red You cannot speak in IC (muted)."
+				return
+		if(!ishuman(usr))
+			usr << "\red You don't know how to use this!"
+			return
+		if(emped)
+			for(var/mob/O in (viewers(usr)))
+				O.show_message("<B>[usr]</B>'s voice synth starts showing obscene images of [pick(empmsg)], coupled with excessive moaning and questionable noises.",2)
+			spawn(rand(5,30))
+				for(var/mob/O in (viewers(usr)))
+					O.show_message("<B>[usr]</B>'s voice synth starts sparking and finally explodes.",2)
+				var/turf/T = get_turf(src.loc)
+				explosion(T, 0, 0, 0, 1)
+				del(src)
+			return
+		if(spamcheck)
+			usr << "\red \The [src] needs to recharge!"
+			return
+
+		var/message = copytext(sanitize(input(usr, "Type a message?", "VoiceOS.V2", null)  as text),1,MAX_MESSAGE_LEN)
+		if(!message)
+			return
+	//	message = capitalize(message)
+		if ((src.loc == usr && usr.stat == 0))
+			if(emagged)
+				if(insults)
+					for(var/mob/O in (viewers(usr)))
+						O.show_message("<B>[usr]</B>'s voice synth blurts out, <FONT size=3>\"[pick(insultmsg)]\"</FONT>",2) // 2 stands for hearable message
+					insults--
+				else
+					usr << "\red *BZZZZzzzzzt*"
+			else
+				for(var/mob/O in (viewers(usr)))
+					O.show_message("<B>[usr]</B>'s voice synth rasps, \"[message]\"",2) // 2 stands for hearable message
+
+			spamcheck = 1
+			spawn(20)
+				spamcheck = 0
+			return
+
+	attackby(obj/item/I, mob/usr)
+		if(istype(I, /obj/item/weapon/card/emag) && !emagged)
+			usr << "\red You overload \the [src]'s voice synthesizer."
+			emagged = 1
+			insults = rand(1, 3)//to prevent dickflooding
+			return
+		return
+
+	emp_act(severity)
+		emped = 1
+		return
+
+/obj/item/fluff/brenna_rock //Memento rock - Brenna Noton - mikalhvi - DONE
+	name = "memento rock"
+	desc = "A rounded-off chunk of a NanoTransen claimed asteroid." //I'm sorry. Too much description, nixed all of it.
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "rock"
+	item_state = ""
+	w_class = 2.0
+	force = 2
+	throwforce = 4
+	attack_verb = list("bashed", "struck", "smashed", "bonked", "clobbered")
+
+	attack(mob/living/carbon/human/M as mob, mob/user as mob)
+		if(M == user)
+			user << "You take a lick of the sandstone rock."
+			if(prob(5))
+				spawn(10)
+					user << "Whilist attempting to lick the rock, you accidentally swallow it."
+					M.apply_damage(rand(10,40), OXY)
+					del(src)
+		else
+			..()
+
+/obj/item/fluff/iris_bracelets //Silver bracelets - Iris Kilur - gollee - DONE
+	name = "silver bracelets"
+	desc = "Two silver bracelets, the scrolled one oversetting the other."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "iris_bracelets"
+	item_state = ""
+	w_class = 1.0
+	slot_flags = SLOT_GLOVES
+
+/obj/item/fluff/delivander_ring //Old wedding ring - Delivander Starbreeze - gollee - DONE
+	name = "old wedding ring"
+	desc = "A tarnished gold ring, there is writing inside it, “To Liura, forever.”"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "delivander_ring"
+	item_state = ""
+	w_class = 1.0
+	slot_flags = SLOT_GLOVES
+
+/obj/item/clothing/head/welding/fluff/buck_mask //Blue Panther's welding mask - Buck Bradely - bluesp34r - DONE
+	name = "Blue Panther's welding mask"
+	desc = "A welding mask. This one in particular has a hand-painted, blue jungle cat face on it. It looks absolutely ferocious!"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "bluepanther"
+	item_state = "bluepanther"
+
+/obj/item/clothing/gloves/fluff/amy_gloves //Red fingerless gloves - Amy Tilley - lk600 - DONE
+	name = "Red fingerless gloves"
+	desc = "A pair of red and black fingerless gloves that stretch up the arm. They look to be made of a soft wool and are well worn."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "amy_gloves"
+	item_state = "amy_gloves"
+	clipped = 1
+
+/obj/item/clothing/tie/storage/fluff/cecillia_locket //Old locket - Cecillia Lambert - casperf1 - DONE
+	name = "old locket"
+	desc = "A dark metal locket, it seems at least sixty years old. The photo that was once inside is gone."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "cecillia_locket1" //Keep as one, to indicate glass.
+	item_state = "cecillia_locket1"
+	item_color = "cecillia_locket1"
+	slots = 1
+
+/obj/item/weapon/reagent_containers/pill/cecillia_pill
+	name = "Cici's moonshine pill"
+	desc = "Smells of home-made remedies."
+	icon_state = "pill8"
+	New()
+		..()
+		reagents.add_reagent("space_drugs", 5)
+		reagents.add_reagent("paroxetine", 5)
+
+/obj/item/clothing/tie/storage/fluff/cecillia_locket/New()
+		..()
+		new /obj/item/weapon/reagent_containers/pill/cecillia_pill(hold)
+		return
+
+/obj/item/weapon/storage/backpack/satchel/fluff/cecillia_satchel //Satchel-bag - Cecillia Lambert - casperf1 - SPRITE
+	name = "satchel-bag"
+	desc = "This looks old, is not yours and if you're wearing it, the original owner is probably dead."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "cecillia_satchel"
+	item_state = "cecillia_satchel"
+
+/obj/item/clothing/glasses/regular/fluff/cecillia_glasses //Red prescription glasses - Cecillia Lamber - casperf1 - DONE
+	name = "red prescription glasses"
+	desc = "These glasses have been prescribed for a terrible pair of eyes."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "cecillia_glasses"
+	item_state = "cecillia_glasses"
+
+/obj/item/clothing/suit/wintercoat/fluff/temple_coat //Red coat - Temple Zorion - deatacita - DONE
+	name = "red coat"
+	desc = "An old red and black winter-coat, there looks to be spots of dried blood on it."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "temple_coat"
+	item_state = "temple_coat"
+
+/obj/item/clothing/shoes/jackboots/fluff/peter_boots //Worn boots - Peter Thrushwood - farcry11 - DONE
+	name = "worn boots"
+	desc = "A worn pair of combat boots. They look walked-around in."
+
+/obj/item/clothing/gloves/brown/fluff/peter_gloves //Cropped driving hloves - Peter Thrushwood - farcry11 - DONE
+	name = "cropped driving gloves"
+	desc = "A pair of high quality, fingerless driving gloves made of faux leather and faux velvet-leathern without and velvet within."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "peter_gloves"
+	item_state = "peter_gloves"
+	clipped = 1
+
+/obj/item/clothing/under/fluff/peter_shirt //Plaid shirt - Peter Thrushwood - farcry11 - SPRITE
+	name = "plaid shirt"
+	desc = "A worn and rugged looking plaid button-up overshirt. The initials 'P.T.' are scrawled in pen on the neck tag."
+	icon_state = "sl_suit"
+	item_state = "sl_suit"
+	item_color = "sl_suit"
+
+/obj/item/clothing/head/det_hat/fluff/leo_hat //Tagged brown hat - Leo Wyatt - keinto - DONE
+	name = "tagged brown hat"
+	desc = "A worn mid 20th century brown hat. If you look closely at the back, you can see a an embedded tag from the 'Museum of Terran Culture and Technology'."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "leo_hat"
+	item_state = "leo_hat"
+
+/obj/item/clothing/suit/storage/det_suit/fluff/leo_coat //Tagged brown coat - Leo Wyatt - keinto - DONE
+	name = "tagged brown coat"
+	desc = "A worn mid 20th century brown trenchcoat. If you look closely at bottom of the back, you can see an embedded tag from the 'Museum of Terran Culture and Technology'."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "leo_coat"
+	item_state = "leo_coat"
+
+/obj/item/device/modkit/fluff/leo_modkit //Weapon case - Leo Wyatt - keinto - DONE
+	name = "weapon case"
+	desc = "A sturdy leather case, with a velvet covered interior.."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "leo_mod"
+	parts = MODKIT_HELMET
+	from_helmet = /obj/item/weapon/gun/projectile/detective/semiauto
+	to_helmet = /obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun
+
+/obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun //Instant Prosecutor - Leo Wyatt - keinto - DONE (stab)
+	name = "\improper Instant Prosecutor"
+	desc = "An original Colt 1911 pistol. Slightly worn on the edges, this gun has its name embedded on the side."
+
+/obj/item/weapon/bikehorn/rubberducky/fluff/bryce_ducky //Sir Duckens - Bryce Hunt - mrmajestic - DONE
+	name = "Sir Duckens"
+	desc = "A important and manly looking duck. He adorns a official looking cap and sunglasses. The hair on the back of your neck tingles as you look at it."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "bryce_duck"
+
+/obj/item/weapon/reagent_containers/food/drinks/fluff/bryce_mug //duck mug - Bryce Hunt - mrmajestic - DONE
+	name = "\improper duck mug"
+	desc = "A fashionable and reasonably large mug filled with a delicious smelling coffee drink. The mug adorns what looks to be a rubber duck."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "bryce_mug"
+	volume = 30
+
+/obj/item/clothing/gloves/black/fluff/lily_gloves //fitted gloves - Lily Has're - meowykins - DONE
+	name = "fitted gloves"
+	desc = "A pair of gloves, modified for non-human use. They're a sleek quality, made from lambskin."
+	attack_verb = list("caressed")
+	species_restricted = list("exclude","human")
+
+/obj/item/weapon/storage/belt/utility/fluff/fortune_belt //Fortune's toolbelt - Fortune Bloise - swat43 - DONE
+	name = "Fortune's toolbelt"
+	desc = "'Nothing can beat the mechanic when you have this badboy with you,' small text on the belts side is written."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "fortune_belt"
+	item_state = "fortune_belt"
+
+/obj/item/weapon/storage/backpack/satchel/fluff/fortune_bag //Fortune's bag - Fortune Bloise - swat43 - DONE
+	name = "Fortune's bag"
+	desc = "'For the wolf to survive, he needs to chop off his own leg' - Fortunes friends. A nice black satchel with a mech and a heart painting on it."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "fortune_bag"
+	item_state = "fortune_bag"
+
+/obj/item/clothing/head/soft/fluff/mike_hat //BRI Hat - Mike Axel - Smifboy78 - DONE
+	name = "BRI Hat"
+	desc = "A black hat. It has the letters 'BRI' on the front."
+	icon_state = "corpsoft"
+	item_color = "corp"
+
+/obj/item/fluff/jenifer_bear //Doctor SnuggleBuns - Jenifer Clewett - bluesp34r - SPRITE
+	name = "Doctor SnuggleBuns"
+	desc = "A fluffy-wuffy brown teddy bear! This one is wearing a blue lab coat, much like a Chief Medical Officer!"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "jenifer_bear"
+	w_class = 2
+	force = 1
+	throwforce = 2
+	var/headless = 0
+
+	attack_self(mob/user as mob)
+		if(user.a_intent == "hurt")
+			if(headless == 1)
+				user.visible_message("<span class='warning'>[user] stares at [src] full of anger, but elects not to tear any more limbs off of it.</span>", "<span class='notice'>You've already ripped [src]'s head off, what else do you want to do to it!?</span>")
+			else
+				user.visible_message("<span class='warning'>[user] clutches [src] with anger, and rips its head off, dropping it to the ground!</span>", "<span class='warning'>You are unable to contain your anger any longer! Off with its head!</span>")
+				headless = 1
+				var/turf/T = get_turf(user)
+				new /obj/item/fluff/jenifer_bear_head(T)
+				desc = "A fluffy-wuffy brown teddy bear! This one is wearing a blue lab coat, much like a Chief Medical Officer! \red It's lacking a head!"
+				update_icon()
+		else
+			if(headless == 1)
+				user.visible_message("<span class='notice'>[user] clutches [src] with both arms, weeping slightly as they embrace the headless toy.</span>", "<span class='notice'>You clutch the toy, shivering and weeping slightly. Who would do such a monsterous thing?</span>")
+			else
+				user.visible_message("<span class='notice'>[user] clutches [src] and embraces it!</span>", "<span class='notice'>You hug the toy, and suddenly feel how the weight of the world is lifted from your shoulders!</span>")
+
+/obj/item/fluff/jenifer_bear_head
+	name = "\improper teddybear head"
+	desc = "The head of a brown teddy, cruelly torn from its original body. You can see stuffing fall out of it."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "jenifer_bear_head"
+	w_class = 1
+	force = 1
+	throwforce = 1
+
+/obj/item/clothing/mask/muzzle/fluff/summer_jaws // Metal Jaw - Summer Floyd - Hivefleetchicken - DONE
+	name = "metal jaw"
+	desc = "A heavy-looking hunk of steel fused with the mouth and vocal chords of anyone unfortunate enough to have to wear it. It looks like a rather poor replacement for a mouth."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "summer_jaws"
+	item_state = "summer_jaws"
+	w_class = 2.0
+	flags = FPRINT | TABLEPASS | CONDUCT
+	slot_flags = SLOT_MASK
+	var/spamcheck = 0
+
+	verb/jaws()
+		set name = "Speak"
+		set category = "Object"
+		set src in usr
+
+		if (usr.client)
+			if(usr.client.prefs.muted & MUTE_IC)
+				src << "\red You cannot speak in IC (muted)."
+				return
+		if(!ishuman(usr))
+			usr << "\red You don't know how to use this!"
+			return
+		if(spamcheck)
+			usr << "\red Your jaws hurt!"
+			return
+
+		var/message = copytext(sanitize(input(usr, "Speak?", "Moving your mouth", null)  as text),1,MAX_MESSAGE_LEN)
+		if(!message)
+			return
+//		message = whisper(message)
+		if ((src.loc == usr && usr.stat == 0))
+			for(var/mob/O in (viewers(usr)))
+				O.show_message("<B>[usr]</B>'s jaws croak out, \"[message]\"",2) // 2 stands for hearable message
+
+			spamcheck = 1
+			spawn(20)
+				spamcheck = 0
+			return
