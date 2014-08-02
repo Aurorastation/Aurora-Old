@@ -236,8 +236,8 @@
 	siemens_coefficient = 0.9
 
 /obj/item/clothing/under/rank/navy/officer/blue
-	name = "Blue Officer Uniform"
-	desc = "A blue service uniform worn by a security officer."
+	name = "Internal Advisor Uniform"
+	desc = "A blue service uniform worn by Advisors."
 	icon_state = "officerblueclothes"
 	item_state = "officerblueclothes"
 	item_color = "officerblueclothes"
