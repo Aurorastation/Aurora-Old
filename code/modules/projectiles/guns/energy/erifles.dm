@@ -252,7 +252,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	desc = "A basic energy-based rifle with two settings: Stun and kill."
 	icon = 'icons/obj/erifle.dmi'
 	icon_state = "eriflestun100"
-	item_state = null	//so the human update icon uses the icon_state instead.
+	item_state = "laser"	//so the human update icon uses the icon_state instead.
 	fire_sound = 'sound/weapons/Taser.ogg'
 
 	charge_cost = 50 //How much energy is needed to fire.
