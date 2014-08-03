@@ -91,17 +91,17 @@
 	desc = "A rather grungy looking eyepatch. If you're holding it, a certain man is probably freaking out right now."
 
 /obj/item/clothing/shoes/sandal/fluff/raieed_sandals //Treasured Sandals - Raieed Amari - nikolaithebeast - DONE
-	name = "Treasured Sandals"
+	name = "treasured sandals"
 	desc = "A pair of black sandals, which seem to hold the entire world on themselves."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "raieed_sandals"
 	item_state = "raieed_sandals"
 
 /obj/item/clothing/suit/storage/fluff/raieed_labcoat //Treasured Labcoat - Raieed Amari - nikolaithebeast - DONE
-	name = "Treasured Labcoat"
-	desc = "A coat that seems to emanate the love that was put into its creation."
+	name = "torn labcoat"
+	desc = "A old labcoat, torn beyond reorganization, but yet it still seems to be kept for."
 	icon = 'icons/obj/custom_items.dmi'
-	icon_state = "raieed_labcoat_open"
+	icon_state = "raieed_labcoat"
 	item_state = "raieed_labcoat"
 
 /obj/item/weapon/folder/fluff/may_notebook //May Izumi's Notebook - May Izumi - lk600 - DONE
