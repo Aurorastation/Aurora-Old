@@ -95,6 +95,7 @@
 	spawn(5)
 		s.start()
 		bst.anchored = 0
+	log_debug("Bluespace Tech Spawned: X:[bst.x] Y:[bst.y] Z:[bst.z] User:[src]")
 	feedback_add_details("admin_verb","BST")
 	return 1
 
@@ -118,6 +119,10 @@
 			spawn(5)
 				s.start()
 			del(src)
+
+	say(var/message)
+		var/verb = "says in a subdued tone"
+		..(message, verb)
 
 //Equipment. All should have canremove set to 0
 //All items with a /bst need the attack_hand() proc overrided to stop people getting overpowered items.
