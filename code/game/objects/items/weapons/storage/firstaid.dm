@@ -2,7 +2,6 @@
  * Contains:
  *		First Aid Kits
  * 		Pill Bottles
- *		Dice Pack (in a pill bottle)
  */
 
 /*
@@ -124,29 +123,22 @@
 	allow_quick_gather = 1
 	use_to_pickup = 1
 	storage_slots = 14
+	use_sound = null
 
-/obj/item/weapon/storage/pill_bottle/MouseDrop(obj/over_object as obj) //Quick pillbottle fix. -Agouri
+/obj/item/weapon/storage/pill_bottle/verb/rename()
+	set name = "Rename Label"
+	set category = "Object"
+	set src in usr
 
-	if (ishuman(usr) || ismonkey(usr)) //Can monkeys even place items in the pocket slots? Leaving this in just in case~
-		var/mob/M = usr
-		if (!( istype(over_object, /obj/screen) ))
-			return ..()
-		if ((!( M.restrained() ) && !( M.stat ) /*&& M.pocket == src*/))
-			switch(over_object.name)
-				if("r_hand")
-					M.u_equip(src)
-					M.put_in_r_hand(src)
-				if("l_hand")
-					M.u_equip(src)
-					M.put_in_l_hand(src)
-			src.add_fingerprint(usr)
-			return
-		if(over_object == usr && in_range(src, usr) || usr.contents.Find(src))
-			if (usr.s_active)
-				usr.s_active.close(usr)
-			src.show_to(usr)
-			return
+	if((CLUMSY in usr.mutations) && prob(50))
+		usr << "<span class='warning'>You drop the bottle, slipping on it and giving you a bruise ankle as you stumble.</span>"
+		return
+	var/n_name = copytext(sanitize(input(usr, "What would you like to label the Pill Bottle?", "Bottle Label", null)  as text), 1, MAX_NAME_LEN)
+	if((loc == usr && usr.stat == 0))
+		name = "[(n_name ? text("[n_name]") : "Pill Bottle")]"
+	add_fingerprint(usr)
 	return
+
 
 /obj/item/weapon/storage/pill_bottle/kelotane
 	name = "bottle of kelotane pills"
@@ -163,7 +155,7 @@
 		new /obj/item/weapon/reagent_containers/pill/kelotane( src )
 
 /obj/item/weapon/storage/pill_bottle/antitox
-	name = "bottle of anti-toxin pills"
+	name = "Dylovene pills"
 	desc = "Contains pills used to counter toxins."
 
 	New()
@@ -177,7 +169,7 @@
 		new /obj/item/weapon/reagent_containers/pill/antitox( src )
 
 /obj/item/weapon/storage/pill_bottle/inaprovaline
-	name = "bottle of inaprovaline pills"
+	name = "Inaprovaline pills"
 	desc = "Contains pills used to stabilize patients."
 
 	New()
@@ -190,6 +182,19 @@
 		new /obj/item/weapon/reagent_containers/pill/inaprovaline( src )
 		new /obj/item/weapon/reagent_containers/pill/inaprovaline( src )
 
+/obj/item/weapon/storage/pill_bottle/tramadol
+	name = "Tramadol Pills"
+	desc = "Contains pills used to relieve pain."
+
+	New()
+		..()
+		new /obj/item/weapon/reagent_containers/pill/tramadol( src )
+		new /obj/item/weapon/reagent_containers/pill/tramadol( src )
+		new /obj/item/weapon/reagent_containers/pill/tramadol( src )
+		new /obj/item/weapon/reagent_containers/pill/tramadol( src )
+		new /obj/item/weapon/reagent_containers/pill/tramadol( src )
+		new /obj/item/weapon/reagent_containers/pill/tramadol( src )
+		new /obj/item/weapon/reagent_containers/pill/tramadol( src )
 
 /obj/item/weapon/storage/pill_bottle/dice
 	name = "pack of dice"

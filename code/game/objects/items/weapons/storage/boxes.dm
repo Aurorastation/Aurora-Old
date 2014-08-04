@@ -48,6 +48,8 @@
 /obj/item/weapon/storage/box/gloves
 	name = "box of latex gloves"
 	desc = "Contains white gloves."
+	icon_state = "latex"
+
 	New()
 		..()
 		new /obj/item/clothing/gloves/latex(src)
@@ -72,6 +74,30 @@
 		new /obj/item/clothing/mask/surgical(src)
 		new /obj/item/clothing/mask/surgical(src)
 		new /obj/item/clothing/mask/surgical(src)
+
+/obj/item/weapon/storage/box/lastrequest
+	name = "Last Request package"
+	desc = "Hope you're hungry for lead."
+	icon_state = "lastreq"
+	storage_slots = 4
+
+	New()
+		..()
+		new /obj/item/clothing/glasses/sunglasses/blindfold(src)
+		new /obj/item/weapon/lighter/zippo(src)
+		new /obj/item/weapon/storage/fancy/cigarettes/dromedaryco(src)
+		new /obj/item/weapon/reagent_containers/food/drinks/cans/waterbottle(src)
+
+
+/obj/item/weapon/storage/box/transplant
+	name = "Transplant Storage Unit"
+	desc = "Self-Cooling storage unit to keep your organs fresher than the prince of bel-air."
+	icon_state = "transplantbox_closed"
+	storage_slots = 6
+
+	New()
+		..()
+
 
 
 /obj/item/weapon/storage/box/syringes
@@ -132,7 +158,19 @@
 		new /obj/item/ammo_casing/shotgun/blank(src)
 		new /obj/item/ammo_casing/shotgun/blank(src)
 
+/obj/item/weapon/storage/box/beanbags
+	name = "box of beanbag shells"
+	desc = "It has a picture of a gun and several warning symbols on the front.<br>WARNING: Live ammunition. Misuse may result in serious injury or death."
 
+	New()
+		..()
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
+		new /obj/item/ammo_casing/shotgun/beanbag(src)
 
 /obj/item/weapon/storage/box/flashbangs
 	name = "box of flashbangs (WARNING)"
@@ -161,7 +199,7 @@
 		new /obj/item/weapon/grenade/empgrenade(src)
 		new /obj/item/weapon/grenade/empgrenade(src)
 		new /obj/item/weapon/grenade/empgrenade(src)
-//		new /obj/item/device/flashlight/emp/(src)(src) Waiting on fix of the EMP Flashlight
+		new /obj/item/device/flashlight/emp/(src)//Waiting on fix of the EMP Flashlight
 
 
 /obj/item/weapon/storage/box/trackimp
@@ -411,7 +449,7 @@
 
 /obj/item/weapon/storage/box/matches
 	name = "matchbox"
-	desc = "A small box of Almost But Not Quite Plasma Premium Matches."
+	desc = "A small box of 'Space-Proof' premium matches."
 	icon = 'icons/obj/cigarettes.dmi'
 	icon_state = "matchbox"
 	item_state = "zippo"
@@ -419,6 +457,7 @@
 	w_class = 1
 	flags = TABLEPASS
 	slot_flags = SLOT_BELT
+	can_hold = list("/obj/item/weapon/match")
 
 	New()
 		..()
@@ -426,8 +465,9 @@
 			new /obj/item/weapon/match(src)
 
 	attackby(obj/item/weapon/match/W as obj, mob/user as mob)
-		if(istype(W, /obj/item/weapon/match) && W.lit == 0)
+		if(istype(W) && !W.lit && !W.burnt)
 			W.lit = 1
+			W.damtype = "burn"
 			W.icon_state = "match_lit"
 			processing_objects.Add(W)
 		W.update_icon()
@@ -451,7 +491,7 @@
 	foldable = /obj/item/stack/sheet/cardboard //BubbleWrap
 	storage_slots=21
 	can_hold = list("/obj/item/weapon/light/tube", "/obj/item/weapon/light/bulb")
-	max_combined_w_class = 21
+	max_combined_w_class = 42	//holds 21 items of w_class 2
 	use_to_pickup = 1 // for picking up broken bulbs, not that most people will try
 
 /obj/item/weapon/storage/box/lights/bulbs/New()

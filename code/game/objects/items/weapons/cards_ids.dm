@@ -160,7 +160,7 @@
 /obj/item/weapon/card/id/GetID()
 	return src
 
-/* /obj/item/weapon/card/id/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/card/id/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	if(istype(W,/obj/item/weapon/id_wallet))
 		user << "You slip [src] into [W]."
@@ -170,7 +170,6 @@
 		src.icon_state = W.icon_state
 		del(W)
 		return
-*/
 
 /obj/item/weapon/card/id/verb/read()
 	set name = "Read ID Card"
@@ -201,7 +200,7 @@
 	access = list(access_maint_tunnels, access_syndicate, access_external_airlocks)
 	origin_tech = "syndicate=3"
 	var/registered_user=null
-
+	
 /obj/item/weapon/card/id/syndicate/New(mob/user as mob)
 	..()
 	if(!isnull(user)) // Runtime prevention on laggy starts or where users log out because of lag at round start.
@@ -209,7 +208,7 @@
 	else
 		registered_name = "Agent Card"
 	assignment = "Agent"
-	name = "[registered_name]'s ID Card ([assignment])"
+	name = "[registered_name]'s ID Card ([assignment])"		
 
 /obj/item/weapon/card/id/syndicate/afterattack(var/obj/item/weapon/O as obj, mob/user as mob, proximity)
 	if(!proximity) return
@@ -240,7 +239,7 @@
 		registered_user = user
 	else if(!registered_user || registered_user == user)
 
-		if(!registered_user) registered_user = user  //
+		if(!registered_user) registered_user = user  // 
 
 		switch(alert("Would you like to display the ID, or retitle it?","Choose.","Rename","Show"))
 			if("Rename")

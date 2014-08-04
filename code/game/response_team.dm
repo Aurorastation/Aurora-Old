@@ -283,7 +283,8 @@ proc/trigger_armed_response_team(var/force = 0)
 	equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(src), slot_l_ear)
 
 	//Replaced with new ERT uniform
-	equip_to_slot_or_del(new /obj/item/clothing/under/rank/centcom_officer(src), slot_w_uniform)
+	equip_to_slot_or_del(new /obj/item/clothing/under/rank/ert(src), slot_w_uniform)
+	equip_to_slot_or_del(new /obj/item/clothing/suit/storage/ert(src), slot_wear_suit)
 	equip_to_slot_or_del(new /obj/item/clothing/shoes/swat(src), slot_shoes)
 	equip_to_slot_or_del(new /obj/item/clothing/gloves/swat(src), slot_gloves)
 	equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(src), slot_glasses)
@@ -320,7 +321,7 @@ proc/trigger_armed_response_team(var/force = 0)
 	W.name = "[real_name]'s ID Card ([W.assignment])"
 	W.icon_state = "centcom"
 	W.access = get_all_accesses()
-	W.access += get_all_centcom_access()
+	W.access += get_ert_access()
 	equip_to_slot_or_del(W, slot_wear_id)
 
 	return 1

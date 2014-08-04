@@ -26,6 +26,28 @@
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.01
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 25, rad = 0)
+	var/hanging = 0
+
+	verb/toggle()
+		set category = "Object"
+		set name = "Adjust mask"
+		set src in usr
+
+		if(usr.canmove && !usr.stat && !usr.restrained())
+			if(!src.hanging)
+				src.hanging = !src.hanging
+				gas_transfer_coefficient = 1 //gas is now escaping to the turf and vice versa
+				flags &= ~(MASKCOVERSMOUTH)
+				icon_state = "steriledown"
+				usr.visible_message ("<span class='notice'>[usr] pulls the [src] down, letting it hang around their neck.</span>", "<span class='notice'>You pull the [src] down around your neck.</span>")
+
+			else
+				src.hanging = !src.hanging
+				gas_transfer_coefficient = 0.90
+				flags |= MASKCOVERSMOUTH
+				icon_state = "sterile"
+				usr.visible_message ("<span class='notice'>[usr] pulls the [src] over their mouth and nose.</span>", "<span class='notice'>You pull the [src] over you mouth and nose.</span>")
+			usr.update_inv_wear_mask()
 
 /obj/item/clothing/mask/fakemoustache
 	name = "fake moustache"

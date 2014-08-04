@@ -4,13 +4,15 @@
 //for multiple items just add mutliple entries, unless i change it to be a listlistlist
 //yes, it has to be an item, you can't pick up nonitems
 
+/var/list/custom_items = list()
+
+/hook/startup/proc/loadCustomItems()
+	var/custom_items_file = file2text("config/custom_items.txt")
+	custom_items = text2list(custom_items_file, "\n")
+	return 1
 
 /proc/EquipCustomItems(mob/living/carbon/human/M)
-	// load lines
-	var/file = file2text("config/custom_items.txt")
-	var/lines = text2list(file, "\n")
-
-	for(var/line in lines)
+	for(var/line in custom_items)
 		// split & clean up
 		var/list/Entry = text2list(line, ":")
 		for(var/i = 1 to Entry.len)
@@ -25,6 +27,8 @@
 				var/ok = 0  // 1 if the item was placed successfully
 				P = trim(P)
 				var/path = text2path(P)
+				if(!path) continue
+
 				var/obj/item/Item = new path()
 				if(istype(Item,/obj/item/weapon/card/id))
 					//id card needs to replace the original ID
@@ -58,6 +62,50 @@
 						del(C)
 						ok = M.equip_if_possible(I, slot_wear_id, 0)	//if 1, last argument deletes on fail
 						break
+/*				else if(istype(Item,/obj/item/weapon/storage/belt))
+					if(M.ckey == "jakksergal" && M.real_name == "Nashi Ra'hal" && M.mind.role_alt_title && M.mind.role_alt_title != "Nurse" && M.mind.role_alt_title != "Chemist")
+						ok = 1
+						del(Item)
+						goto skip
+					var/obj/item/weapon/storage/belt/medical/fluff/nashi_belt/I = Item
+					if(istype(M.belt,/obj/item/weapon/storage/belt))
+						for(var/obj/item/weapon/storage/belt/B in M)
+							del(B)
+							M.belt=null
+						ok = M.equip_if_possible(I, slot_belt, 0)
+						break
+					if(istype(M.belt,/obj/item/device/pda))
+						for(var/obj/item/device/pda/Pda in M)
+							M.belt=null
+							M.equip_if_possible(Pda, slot_l_store, 0)
+						ok = M.equip_if_possible(I, slot_belt, 0)*/
+				else if(istype(Item,/obj/item/clothing/glasses))
+					if(M.ckey == "casperf1" && M.real_name == "Cecillia Lambert")
+						ok = 1
+						del(Item)
+						goto skip
+					var/obj/item/clothing/glasses/regular/fluff/cecillia_glasses/I = Item
+					if(istype(M.glasses,/obj/item/clothing/glasses))
+						for(var/obj/item/clothing/glasses/B in M)
+							del(B)
+							M.glasses=null
+						ok = M.equip_if_possible(I, slot_glasses, 0)
+/*				else if(istype(Item,/obj/item/device/pda))
+					if(M.ckey == "meowykins" && M.real_name == "Miyako Yukimura")
+						ok = 1
+						del(Item)
+						goto skip
+					var/obj/item/device/pda/fluff/meowykins_pda/I = Item
+					if(istype(M.belt,/obj/item/device/pda))
+						for(var/obj/item/device/pda/B in M)
+							del(B)
+							M.belt=null
+						ok = M.equip_if_possible(I, slot_belt,0)
+					if(istype(M.l_store,/obj/item/device/pda))
+						for(var/obj/item/device/pda/B in M)
+							del(B)
+							M.l_store=null
+						ok = M.equip_if_possible(I, slot_l_store,0)*/
 				else if(istype(M.back,/obj/item/weapon/storage) && M.back:contents.len < M.back:storage_slots) // Try to place it in something on the mob's back
 					Item.loc = M.back
 					ok = 1

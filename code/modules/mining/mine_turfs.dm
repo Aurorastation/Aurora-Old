@@ -13,7 +13,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 	opacity = 1
 	density = 1
 	blocks_air = 1
-	temperature = TCMB
+	temperature = T0C
 	var/mineral/mineral
 	var/mined_ore = 0
 	var/last_act = 0
@@ -176,7 +176,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 						//just pull the surrounding rock out
 						excavate_find(0, F)
 
-				if( excavation_level + P.excavation_amount >= 100 ) //Keep it at 100, it's a bit more complicated that this, and caused issues. -Skull132
+				if( excavation_level + P.excavation_amount >= 100 )
 					//if players have been excavating this turf, leave some rocky debris behind
 					var/obj/structure/boulder/B
 					if(artifact_find)
@@ -187,9 +187,9 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 								B.artifact_find = artifact_find
 						else
 							artifact_debris(1)
-					/*else if(prob(15))
+					else if(prob(15))
 						//empty boulder
-						B = new(src)*/
+						B = new(src)
 
 					if(B)
 						GetDrilled(0)
@@ -283,7 +283,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 		var/turf/simulated/floor/plating/airless/asteroid/N = ChangeTurf(/turf/simulated/floor/plating/airless/asteroid)
 		N.fullUpdateMineralOverlays()
 
-		if(rand(1,50) == 1)
+		if(rand(1,75) == 1)
 			visible_message("<span class='notice'>An old dusty crate was buried within!</span>")
 			new /obj/structure/closet/crate/secure/loot(src)
 
@@ -389,7 +389,7 @@ var/list/artifact_spawn = list() // Runtime fix for geometry loading before cont
 	icon_state = "asteroid"
 	oxygen = 0.01
 	nitrogen = 0.01
-	temperature = TCMB
+	temperature = T0C
 	icon_plating = "asteroid"
 	var/dug = 0       //0 = has not yet been dug, 1 = has already been dug
 

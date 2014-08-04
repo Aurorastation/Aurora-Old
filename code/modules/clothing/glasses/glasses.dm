@@ -1,3 +1,4 @@
+
 /obj/item/clothing/glasses
 	name = "glasses"
 	icon = 'icons/obj/clothing/glasses.dmi'
@@ -24,18 +25,17 @@
 
 /obj/item/clothing/glasses/science
 	name = "Science Goggles"
-	desc = "nothing"
+	desc = "The goggles do nothing!"
 	icon_state = "purple"
 	item_state = "glasses"
 
 /obj/item/clothing/glasses/night
 	name = "Night Vision Goggles"
-	desc = "You can totally see in the dark now!."
+	desc = "You can totally see in the dark now!"
 	icon_state = "night"
 	item_state = "glasses"
 	origin_tech = "magnets=2"
-	darkness_view = 3
-	vision_flags = 32 //Very hacky way of doing it.  I don't know what it means.  But I did guess-and-check numbers until it worked.  So. 
+	darkness_view = 7
 
 /obj/item/clothing/glasses/eyepatch
 	name = "eyepatch"
@@ -64,11 +64,35 @@
 	item_state = "glasses"
 	prescription = 1
 
+/obj/item/clothing/glasses/regular/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/clothing/glasses/hud/health))
+		user.drop_item()
+		del(W)
+		user << "<span class='notice'>You attach a set of medical HUDs to your glasses.</span>"
+		var/turf/T = get_turf(src)
+		new /obj/item/clothing/glasses/hud/health/prescription(T)
+		user.drop_from_inventory(src)
+		del(src)
+	if(istype(W, /obj/item/clothing/glasses/hud/security))
+		user.drop_item()
+		del(W)
+		user << "<span class='notice'>You attach a set of security HUDs to your glasses.</span>"
+		var/turf/T = get_turf(src)
+		new /obj/item/clothing/glasses/hud/security/prescription(T)
+		user.drop_from_inventory(src)
+		del(src)
+
 /obj/item/clothing/glasses/regular/hipster
 	name = "Prescription Glasses"
 	desc = "Made by Uncool. Co."
 	icon_state = "hipster_glasses"
 	item_state = "hipster_glasses"
+
+/obj/item/clothing/glasses/threedglasses
+	desc = "A long time ago, people used these glasses to makes images from screens threedimensional."
+	name = "3D glasses"
+	icon_state = "3d"
+	item_state = "3d"
 
 /obj/item/clothing/glasses/gglasses
 	name = "Green Glasses"
@@ -106,13 +130,13 @@
 			src.flags |= GLASSESCOVERSEYES
 			flags_inv |= HIDEEYES
 			icon_state = initial(icon_state)
-			usr << "You flip the [src] down to protect your eyes."
+			usr << "You flip \the [src] down to protect your eyes."
 		else
 			src.up = !src.up
 			src.flags &= ~HEADCOVERSEYES
 			flags_inv &= ~HIDEEYES
 			icon_state = "[initial(icon_state)]up"
-			usr << "You push the [src] up out of your face."
+			usr << "You push \the [src] up out of your face."
 
 		usr.update_inv_glasses()
 
@@ -149,6 +173,11 @@
 		..()
 		src.hud = new/obj/item/clothing/glasses/hud/security(src)
 		return
+
+/obj/item/clothing/glasses/sunglasses/sechud/tactical
+	name = "tactical HUD"
+	desc = "Flash-resistant goggles with inbuilt combat and security information."
+	icon_state = "swatgoggles"
 
 /obj/item/clothing/glasses/thermal
 	name = "Optical Thermal Scanner"

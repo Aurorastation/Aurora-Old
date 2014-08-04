@@ -23,7 +23,7 @@ datum
 		var/list/data = null
 		var/volume = 0
 		var/nutriment_factor = 0
-		var/custom_metabolism = REAGENTS_METABOLISM //Default 0.2
+		var/custom_metabolism = REAGENTS_METABOLISM
 		var/overdose = 0
 		var/overdose_dam = 1
 		//var/list/viruses = list()
@@ -35,31 +35,32 @@ datum
 				var/datum/reagent/self = src
 				src = null										  //of the reagent to the mob on TOUCHING it.
 
-				if(!istype(self.holder.my_atom, /obj/effect/effect/smoke/chem))
-					// If the chemicals are in a smoke cloud, do not try to let the chemicals "penetrate" into the mob's system (balance station 13) -- Doohl
+				if(self.holder)		//for catching rare runtimes
+					if(!istype(self.holder.my_atom, /obj/effect/effect/smoke/chem))
+						// If the chemicals are in a smoke cloud, do not try to let the chemicals "penetrate" into the mob's system (balance station 13) -- Doohl
 
-					if(method == TOUCH)
+						if(method == TOUCH)
 
-						var/chance = 1
-						var/block  = 0
+							var/chance = 1
+							var/block  = 0
 
-						for(var/obj/item/clothing/C in M.get_equipped_items())
-							if(C.permeability_coefficient < chance) chance = C.permeability_coefficient
-							if(istype(C, /obj/item/clothing/suit/bio_suit))
-								// bio suits are just about completely fool-proof - Doohl
-								// kind of a hacky way of making bio suits more resistant to chemicals but w/e
-								if(prob(75))
-									block = 1
+							for(var/obj/item/clothing/C in M.get_equipped_items())
+								if(C.permeability_coefficient < chance) chance = C.permeability_coefficient
+								if(istype(C, /obj/item/clothing/suit/bio_suit))
+									// bio suits are just about completely fool-proof - Doohl
+									// kind of a hacky way of making bio suits more resistant to chemicals but w/e
+									if(prob(75))
+										block = 1
 
-							if(istype(C, /obj/item/clothing/head/bio_hood))
-								if(prob(75))
-									block = 1
+								if(istype(C, /obj/item/clothing/head/bio_hood))
+									if(prob(75))
+										block = 1
 
-						chance = chance * 100
+							chance = chance * 100
 
-						if(prob(chance) && !block)
-							if(M.reagents)
-								M.reagents.add_reagent(self.id,self.volume/2)
+							if(prob(chance) && !block)
+								if(M.reagents)
+									M.reagents.add_reagent(self.id,self.volume/2)
 				return 1
 
 			reaction_obj(var/obj/O, var/volume) //By default we transfer a small part of the reagent to the object
@@ -117,10 +118,15 @@ datum
 						else //injected
 							M.contract_disease(D, 1, 0)
 				if(self.data && self.data["virus2"] && istype(M, /mob/living/carbon))//infecting...
-					if(method == TOUCH)
-						infect_virus2(M,self.data["virus2"])
-					else
-						infect_virus2(M,self.data["virus2"],1) //injected, force infection!
+					var/list/vlist = self.data["virus2"]
+					if (vlist.len)
+						for (var/ID in vlist)
+							var/datum/disease2/disease/V = vlist[ID]
+
+							if(method == TOUCH)
+								infect_virus2(M,V.getcopy())
+							else
+								infect_virus2(M,V.getcopy(),1) //injected, force infection!
 				if(self.data && self.data["antibodies"] && istype(M, /mob/living/carbon))//... and curing
 					var/mob/living/carbon/C = M
 					C.antibodies |= self.data["antibodies"]
@@ -144,6 +150,9 @@ datum
 						var/datum/disease/newVirus = D.Copy(1)
 						blood_prop.viruses += newVirus
 						newVirus.holder = blood_prop
+
+					if(self.data["virus2"])
+						blood_prop.virus2 = virus_copylist(self.data["virus2"])
 
 
 				else if(istype(self.data["donor"], /mob/living/carbon/monkey))
@@ -582,7 +591,12 @@ datum
 			reaction_turf(var/turf/T, var/volume)
 				src = null
 				if(!istype(T, /turf/space))
-					new /obj/effect/decal/cleanable/dirt(T)
+					var/obj/effect/decal/cleanable/dirt/dirtoverlay = locate(/obj/effect/decal/cleanable/dirt, T)
+					if (!dirtoverlay)
+						dirtoverlay = new/obj/effect/decal/cleanable/dirt(T)
+						dirtoverlay.alpha = volume*30
+					else
+						dirtoverlay.alpha = min(dirtoverlay.alpha+volume*30, 255)
 
 		chlorine
 			name = "Chlorine"
@@ -708,7 +722,9 @@ datum
 				src = null
 				if(volume >= 3)
 					if(!istype(T, /turf/space))
-						new /obj/effect/decal/cleanable/greenglow(T)
+						var/obj/effect/decal/cleanable/greenglow/glow = locate(/obj/effect/decal/cleanable/greenglow, T)
+						if(!glow)
+							new /obj/effect/decal/cleanable/greenglow(T)
 						return
 
 
@@ -748,9 +764,9 @@ datum
 				src = null
 				if(volume >= 5)
 					if(istype(T, /turf/simulated/wall))
-						T:thermite = 1
-						T.overlays.Cut()
-						T.overlays = image('icons/effects/effects.dmi',icon_state = "thermite")
+						var/turf/simulated/wall/W = T
+						W.thermite = 1
+						W.overlays += image('icons/effects/effects.dmi',icon_state = "#673910")
 				return
 
 			on_mob_life(var/mob/living/M as mob)
@@ -770,6 +786,8 @@ datum
 			on_mob_life(var/mob/living/M as mob)
 				if (volume > overdose)
 					M.hallucination = max(M.hallucination, 2)
+				..()
+				return
 
 		tramadol
 			name = "Tramadol"
@@ -782,6 +800,8 @@ datum
 			on_mob_life(var/mob/living/M as mob)
 				if (volume > overdose)
 					M.hallucination = max(M.hallucination, 2)
+				..()
+				return
 
 		oxycodone
 			name = "Oxycodone"
@@ -795,6 +815,8 @@ datum
 				if (volume > overdose)
 					M.druggy = max(M.druggy, 10)
 					M.hallucination = max(M.hallucination, 3)
+				..()
+				return
 
 
 		virus_food
@@ -872,7 +894,10 @@ datum
 				src = null
 				if(volume >= 3)
 					if(!istype(T, /turf/space))
-						new /obj/effect/decal/cleanable/greenglow(T)
+						var/obj/effect/decal/cleanable/greenglow/glow = locate(/obj/effect/decal/cleanable/greenglow, T)
+						if(!glow)
+							new /obj/effect/decal/cleanable/greenglow(T)
+						return
 
 		aluminum
 			name = "Aluminum"
@@ -925,18 +950,19 @@ datum
 				else
 					if(O)
 						O.clean_blood()
+
 			reaction_turf(var/turf/T, var/volume)
 				if(volume >= 1)
-					T.overlays.Cut()
+					if(istype(T, /turf/simulated))
+						var/turf/simulated/S = T
+						S.dirt = 0
 					T.clean_blood()
-					for(var/obj/effect/decal/cleanable/C in src)
+					for(var/obj/effect/decal/cleanable/C in T.contents)
+						src.reaction_obj(C, volume)
 						del(C)
 
 					for(var/mob/living/carbon/slime/M in T)
 						M.adjustToxLoss(rand(5,10))
-			reaction_turf(var/turf/simulated/S, var/volume)
-				if(volume >= 1)
-					S.dirt = 0
 
 			reaction_mob(var/mob/M, var/method=TOUCH, var/volume)
 				if(iscarbon(M))
@@ -962,6 +988,9 @@ datum
 						if(H.shoes)
 							if(H.shoes.clean_blood())
 								H.update_inv_shoes(0)
+						else
+							H.clean_blood(1)
+							return
 					M.clean_blood()
 
 		leporazine
@@ -1559,14 +1588,14 @@ datum
 				var/turf/the_turf = get_turf(O)
 				var/datum/gas_mixture/napalm = new
 				var/datum/gas/volatile_fuel/fuel = new
-				fuel.moles = 5
+				fuel.moles = volume
 				napalm.trace_gases += fuel
 				the_turf.assume_air(napalm)
 			reaction_turf(var/turf/T, var/volume)
 				src = null
 				var/datum/gas_mixture/napalm = new
 				var/datum/gas/volatile_fuel/fuel = new
-				fuel.moles = 5
+				fuel.moles = volume
 				napalm.trace_gases += fuel
 				T.assume_air(napalm)
 				return
@@ -1586,7 +1615,7 @@ datum
 				if(!M) M = holder.my_atom
 				if(prob(33))
 					M.take_organ_damage(1*REM, 0)
-				M.adjustOxyLoss(4)
+				M.adjustOxyLoss(3)
 				if(prob(20)) M.emote("gasp")
 				..()
 				return
@@ -1868,7 +1897,7 @@ datum
 		toxin/beer2	//disguised as normal beer for use by emagged brobots
 			name = "Beer"
 			id = "beer2"
-			description = "An alcoholic beverage made from malted grains, hops, yeast, and water. The fermentation appears to be imcomplete." //If the players manage to analyze this, they deserve to know something is wrong.
+			description = "An alcoholic beverage made from malted grains, hops, yeast, and water. The fermentation appears to be incomplete." //If the players manage to analyze this, they deserve to know something is wrong.
 			reagent_state = LIQUID
 			color = "#664300" // rgb: 102, 67, 0
 			custom_metabolism = 0.15 // Sleep toxins should always be consumed pretty fast
@@ -2381,6 +2410,7 @@ datum
 				..()
 				return
 
+/* We're back to flour bags
 		flour
 			name = "flour"
 			id = "flour"
@@ -2398,6 +2428,7 @@ datum
 				src = null
 				if(!istype(T, /turf/space))
 					new /obj/effect/decal/cleanable/flour(T)
+*/
 
 		rice
 			name = "Rice"
@@ -3735,6 +3766,191 @@ datum
 					M.confused = max(M.confused+15,15)
 				..()
 				return
+
+//////////////////////////SKULL'S BOOZE///////////////////////
+
+		ethanol/daiquiri
+			name = "Daiquiri"
+			id = "daiquiri"
+			description = "A splendid looking cocktail."
+			color = "#664300" // rgb: 102, 67, 0
+			boozepwr = 2
+
+		ethanol/icepick
+			name = "Ice Pick"
+			id = "icepick"
+			description = "Big. And red. Hmm..."
+			color = "#664300" // rgb: 102, 67, 0
+			boozepwr = 1
+
+		ethanol/puosseecafe
+			name = "Puossee-Cafe"
+			id = "puosseecafe"
+			description = "Smells of the French and liquore."
+			color = "#664300" // rgb: 102, 67, 0
+			boozepwr = 2
+
+		ethanol/mintjulep
+			name = "Mint Julep"
+			id = "mintjulep"
+			description = "As old as time itself, but how does it taste?"
+			color = "#664300" // rgb: 102, 67, 0
+			boozepwr = 1
+
+		ethanol/johncollins
+			name = "John Collins"
+			id = "johncollins"
+			description = "Crystal clear, yellow, and smells of gin. How could this go wrong?"
+			color = "#664300" // rgb: 102, 67, 0
+			boozepwr = 3
+
+		ethanol/gimlet
+			name = "Gimlet"
+			id = "gimlet"
+			description = "Small, elegant, and kicks."
+			color = "#664300" // rgb: 102, 67, 0
+			boozepwr = 3
+
+		ethanol/starsandstripes
+			name = "Stars and Stripes"
+			id = "starsandstripes"
+			description = "Someone, somewhere, is saluting."
+			color = "#664300" // rgb: 102, 67, 0
+			boozepwr = 1
+
+		ethanol/metropolitan
+			name = "Metropolitan"
+			id = "metropolitan"
+			description = "What more could you ask for?"
+			color = "#664300" // rgb: 102, 67, 0
+			boozepwr = 2
+
+		ethanol/caruso
+			name = "Caruso"
+			id = "caruso"
+			description = "Green, almost alien."
+			color = "#664300"
+			boozepwr = 2
+
+		ethanol/aprilshower
+			name = "April Shower"
+			id = "aprilshower"
+			description = "Smells of brandy."
+			color = "#664300"
+			boozepwr = 2
+
+		ethanol/carthusiansazerac
+			name = "Carthusian Sazerac"
+			id = "carthusiansazerac"
+			description = "Whiskey and... Syrup?"
+			color = "#664300"
+			boozepwr = 3
+
+		ethanol/deweycocktail
+			name = "Dewey Cocktail"
+			id = "deweycocktail"
+			description = "Colours, look at all the colours!"
+			color = "#664300"
+			boozepwr = 2
+
+		ethanol/chartreusegreen
+			name = "Green Chartreuse"
+			id = "chartreusegreen"
+			description = "A green, strong liqueur."
+			color = "#664300" //FIND PROPER COLOURS!
+			boozepwr = 5
+			dizzy_adj = 4
+			slur_start = 15			//amount absorbed after which mob starts slurring
+			confused_start = 30		//amount absorbed after which mob starts confusing directions
+
+		ethanol/chartreuseyellow
+			name = "Yellow Chartreuse"
+			id = "chartreuseyellow"
+			description = "A yellow, strong liqueur."
+			color = "#664300" //FIND PROPER COLOURS!
+			boozepwr = 5
+			dizzy_adj = 4
+			slur_start = 15			//amount absorbed after which mob starts slurring
+			confused_start = 30		//amount absorbed after which mob starts confusing directions
+
+		ethanol/cremewhite
+			name = "White Creme de Menthe"
+			id = "cremewhite"
+			description = "Mint-flavoured alcohol, in a bottle."
+			color = "#664300" //FIND PROPER COLOURS!
+			boozepwr = 2
+			dizzy_adj = 2
+			slur_start = 35			//amount absorbed after which mob starts slurring
+			confused_start = 140	//amount absorbed after which mob starts confusing directions
+
+		ethanol/cremeyvette
+			name = "Creme de Yvette"
+			id = "cremeyvette"
+			description = "Berry-flavoured alcohol, in a bottle."
+			color = "#664300" //FIND PROPER COLOURS!
+			boozepwr = 2
+			dizzy_adj = 2
+			slur_start = 35			//amount absorbed after which mob starts slurring
+			confused_start = 140	//amount absorbed after which mob starts confusing directions
+
+		ethanol/brandy
+			name = "Brandy"
+			id = "brandy"
+			description = "Cheap knock off for cognac."
+			color = "#664300" //FIND PROPER COLOURS!
+			boozepwr = 2
+			dizzy_adj = 2
+			slur_start = 35			//amount absorbed after which mob starts slurring
+			confused_start = 140	//amount absorbed after which mob starts confusing directions
+
+///////////////////////////////
+///////////////////////////////
+//Dea's Request - Dalekfodder// Lol ART
+///////////////////////////////
+///////////////////////////////
+
+		ethanol/guinnes
+			name = "Guinness"
+			id = "guinnes"
+			description = "Special Guinnes drink"
+			color = ""  // dunno
+			boozepwr = 3
+
+		ethanol/drambuie
+			name = "Drambuie"
+			id = "drambuie"
+			description = "A drink that smells like whiskey but tastes different" // LOL.
+			color = "#2E6671" // dunno
+			boozepwr = 4
+
+		ethanol/oldfashioned
+			name = "Old Fashioned"
+			id = "oldfashioned"
+			description = "That looks like from sixties"
+			color = "#2E6671"
+			boozepwr = 3
+
+		ethanol/blindrussian
+			name = "Blind Russian"
+			id = "blindrussian"
+			description = "You can't see?"
+			color = "#2E6671"
+			boozepwr = 5
+
+		ethanol/rustynail
+			name = "Rusty Nail"
+			id = "rustynail"
+			description = "Smells like lemon"
+			color = "#2E6671"
+			boozepwr = 4
+
+		ethanol/tallrussian
+			name = "Tall Black Russian"
+			id = "tallrussian"
+			description = "Just like black russian but taller"
+			color = "#2E6671"
+			boozepwr = 5
+
 
 // Undefine the alias for REAGENTS_EFFECT_MULTIPLER
 #undef REM

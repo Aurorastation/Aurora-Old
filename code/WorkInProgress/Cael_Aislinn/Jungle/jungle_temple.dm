@@ -210,7 +210,7 @@
 				/obj/item/weapon/reagent_containers/food/snacks/candiedapple, \
 				/obj/item/weapon/reagent_containers/food/snacks/chocolatebar, \
 				/obj/item/weapon/reagent_containers/food/snacks/cookie, \
-				/obj/item/weapon/reagent_containers/food/snacks/faggot, \
+				/obj/item/weapon/reagent_containers/food/snacks/meatball, \
 				/obj/item/weapon/reagent_containers/food/snacks/plump_pie, \
 				)
 				for(var/i=0,i<num,i++)
@@ -306,7 +306,7 @@
 	switch(trap_type)
 		if("sawburst")
 			M << "\red <b>A sawblade shoots out of the ground and strikes you!</b>"
-			M.apply_damage(rand(5,10), BRUTE)
+			M.apply_damage(rand(5,10), BRUTE, sharp=1, edge=1)
 
 			var/atom/myloc = src.loc
 			var/image/flicker = image('code/WorkInProgress/Cael_Aislinn/Jungle/jungle.dmi',"sawblade")

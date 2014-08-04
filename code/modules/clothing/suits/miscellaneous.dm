@@ -10,7 +10,7 @@
  */
 /obj/item/clothing/suit/bluetag
 	name = "blue laser tag armour"
-	desc = "Blue Pride, Station Wide"
+	desc = "Blue Pride, Station Wide."
 	icon_state = "bluetag"
 	item_state = "bluetag"
 	blood_overlay_type = "armor"
@@ -20,7 +20,7 @@
 
 /obj/item/clothing/suit/redtag
 	name = "red laser tag armour"
-	desc = "Pew pew pew"
+	desc = "Reputed to go faster."
 	icon_state = "redtag"
 	item_state = "redtag"
 	blood_overlay_type = "armor"
@@ -76,7 +76,7 @@
 
 /obj/item/clothing/suit/justice
 	name = "justice suit"
-	desc = "this pretty much looks ridiculous"
+	desc = "This pretty much looks ridiculous."
 	icon_state = "justice"
 	item_state = "justice"
 	flags = FPRINT | TABLEPASS
@@ -187,7 +187,7 @@
 	icon_state = "straight_jacket"
 	item_state = "straight_jacket"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS|HANDS
-	flags_inv = HIDEGLOVES|HIDESHOES|HIDEJUMPSUIT
+	flags_inv = HIDEGLOVES|HIDESHOES|HIDEJUMPSUIT|HIDETAIL
 
 /obj/item/clothing/suit/ianshirt
 	name = "worn shirt"
@@ -340,3 +340,54 @@
 	icon_state = "swim_red"
 	item_color = "swim_red"
 	siemens_coefficient = 1
+
+/obj/item/clothing/suit/wintercoat
+	name = "Dark Winter Coat"
+	desc = "A soft dark coat, with fur on the edges of the hood."
+	icon_state = "coatdark"
+	item_state = "coatdark"
+//	body_parts_covered = HEAD
+//	flags = FPRINT|TABLEPASS|HEADCOVERSEYES|HEADCOVERSMOUTH|BLOCKHAIR
+//	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES
+
+/obj/item/clothing/suit/wintercoat/white
+	name = "White Winter Coat"
+	desc = "A soft white coat, with fur on the edges of the hood."
+	icon_state = "coatwhite"
+	item_state = "coatwhite"
+
+/*
+ * Removed until a fix can be found for hiding hair. Fucking hair.
+ * Further info: setting body_parts_covered to include the HEAD does not work, at least not with the tonnes of flags I've added in.
+ *
+/obj/item/clothing/suit/wintercoat/verb/toggle()
+	set name = "Toggle wintercoat hood"
+	set category = "Object"
+	set src in usr
+
+	if(!usr.canmove || usr.stat || usr.restrained())
+		return 0
+
+	switch(icon_state)
+		if("coatdark")
+			src.icon_state = "coatdark-hood"
+			usr << "You button up the coat and pull on the hood."
+		if("coatdark-hood")
+			src.icon_state = "coatdark"
+			usr << "You unbutton the coat and pull off the hood."
+		if("coatwhite")
+			src.icon_state = "coatwhite-hood"
+			usr << "You button up the coat and pull on the hood."
+		if("coatwhite-hood")
+			src.icon_state = "coatwhite"
+			usr << "You unbutton the coat and pull off the hood."
+		if("temple_coat")
+			src.icon_state = "temple_coat-hood"
+			usr << "You button up the coat and pull on the hood."
+		if("temple_coat-hood")
+			src.icon_state = "temple_coat"
+			usr << "You unbutton the coat and pull off the hood."
+		else
+			usr << "You attempt to button-up the velcro on your [src], before promptly realising how retarded you are."
+			return
+	usr.update_inv_wear_suit()*/	//so our overlays update

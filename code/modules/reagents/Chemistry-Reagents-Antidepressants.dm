@@ -21,18 +21,6 @@
 		..()
 		return
 
-/*			on_mob_life(var/mob/living/M as mob)
-				if(ishuman(M))
-					if((M.mind in ticker.mode.cult))
-						M << "\red The drugs burn your thoughts...the visions stop...and the voices are no more.  You are now deaf to the commands of Nar-Sie."
-						ticker.mode.remove_cultist(M.mind)
-						for(var/mob/O in viewers(M, null))
-							O.show_message(text("\blue []'s eyes blink and become clearer.", M), 1) // So observers know it worked.
-
-				return
-
-*/
-
 /datum/chemical_reaction/methylphenidate
 	name = "Methylphenidate"
 	id = "methylphenidate"
@@ -60,19 +48,6 @@
 				M << "\blue Your mind feels stable.. a little stable."
 		..()
 		return
-
-
-/*			on_mob_life(var/mob/living/M as mob)
-				if(ishuman(M))
-					if((M.mind in ticker.mode.cult))
-						M << "\red The drugs burn your thoughts...the visions stop...and the voices are no more.  You are now deaf to the commands of Nar-Sie."
-						ticker.mode.remove_cultist(M.mind)
-						for(var/mob/O in viewers(M, null))
-							O.show_message(text("\blue []'s eyes blink and become clearer.", M), 1) // So observers know it worked.
-
-				return
-
-*/
 
 /datum/chemical_reaction/citalopram
 	name = "Citalopram"

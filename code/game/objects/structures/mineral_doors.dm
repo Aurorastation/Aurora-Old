@@ -82,6 +82,7 @@
 		state = 1
 		update_icon()
 		isSwitchingStates = 0
+		update_nearby_tiles()
 
 	proc/Close()
 		isSwitchingStates = 1
@@ -93,6 +94,7 @@
 		state = 0
 		update_icon()
 		isSwitchingStates = 0
+		update_nearby_tiles()
 
 	update_icon()
 		if(state)
@@ -158,7 +160,7 @@
 	proc/update_nearby_tiles(need_rebuild) //Copypasta from airlock code
 		if(!air_master)
 			return 0
-		air_master.AddTurfToUpdate(get_turf(src))
+		air_master.mark_for_update(get_turf(src))
 		return 1
 
 /obj/structure/mineral_door/iron
@@ -198,7 +200,7 @@
 				TemperatureAct(100)
 		..()
 
-	temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 		if(exposed_temperature > 300)
 			TemperatureAct(exposed_temperature)
 

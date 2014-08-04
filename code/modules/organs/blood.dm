@@ -159,6 +159,9 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		this.icon_state = pick(iconL)
 		this.blood_DNA = list()
 		this.blood_DNA[dna.unique_enzymes] = dna.b_type
+		for (var/ID in virus2)
+			var/datum/disease2/disease/V = virus2[ID]
+			this.virus2[ID] = V.getcopy()
 		if (species) this.basecolor = species.blood_color
 		this.update_icon()
 
@@ -217,7 +220,10 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	var/datum/reagent/blood/injected = get_blood(container.reagents)
 	if (!injected)
 		return
-	src.virus2 |= virus_copylist(injected.data["virus2"])
+	var/list/sniffles = virus_copylist(injected.data["virus2"])
+	for(var/ID in sniffles)
+		var/datum/disease2/disease/sniffle = sniffles[ID]
+		infect_virus2(src,sniffle,1)
 	if (injected.data["antibodies"] && prob(5))
 		antibodies |= injected.data["antibodies"]
 	var/list/chems = list()

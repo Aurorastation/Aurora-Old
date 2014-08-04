@@ -77,7 +77,7 @@
 	armor_duration /= 10
 
 	//Apply the damage!
-	target.apply_damage(force, BRUTE, affecting, armor_block)
+	target.apply_damage(force, BRUTE, affecting, armor_block, sharp=0)
 
 	// You are going to knock someone out for longer if they are not wearing a helmet.
 	if(affecting == "head" && istype(target, /mob/living/carbon/))
@@ -125,6 +125,8 @@
 	throw_range = 5
 	item_state = "beer"
 	attack_verb = list("stabbed", "slashed", "attacked")
+	sharp = 1
+	edge = 0
 	var/icon/broken_outline = icon('icons/obj/drinks.dmi', "broken")
 
 /obj/item/weapon/broken_bottle/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
@@ -275,6 +277,66 @@
 	New()
 		..()
 		reagents.add_reagent("pwine", 100)
+
+//////////////////////////SKULL'S BOOZE///////////////////////
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/chartreusegreen
+	name = "Green Chartreuse"
+	desc = "A green, strong liqueur."
+	icon_state = "chartreusegreenbottle"
+	New()
+		..()
+		reagents.add_reagent("chartreusegreen", 100)
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/chartreuseyellow
+	name = "Yellow Chartreuse"
+	desc = "A yellow, strong liqueur."
+	icon_state = "chartreuseyellowbottle"
+	New()
+		..()
+		reagents.add_reagent("chartreuseyellow", 100)
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/cremewhite
+	name = "White Creme de Menthe"
+	desc = "Mint-flavoured alcohol, in a bottle."
+	icon_state = "whitecremebottle"
+	New()
+		..()
+		reagents.add_reagent("cremewhite", 100)
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/cremeyvette
+	name = "Creme de Yvette"
+	desc = "Berry-flavoured alcohol, in a bottle."
+	icon_state = "cremedeyvettebottle"
+	New()
+		..()
+		reagents.add_reagent("cremeyvette", 100)
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/brandy
+	name = "Brandy"
+	desc = "Cheap knock off for cognac."
+	icon_state = "brandybottle"
+	New()
+		..()
+		reagents.add_reagent("brandy", 100)
+
+//////////////////////////REQUESTED BY DEA - DALEK////////////////
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/guinnes
+	name = "Guinness"
+	desc = "A bottle of good old Guinness"
+	icon_state = "guinnes_bottle"
+	New()
+		..()
+		reagents.add_reagent("guinnes", 100)
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/drambuie
+	name = "Drambuie"
+	desc = "A bottle of Drambuie"
+	icon_state = "drambuie_bottle"
+	New()
+		..()
+		reagents.add_reagent("drambuie", 100)
 
 //////////////////////////JUICES AND STUFF ///////////////////////
 

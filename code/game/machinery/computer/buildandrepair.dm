@@ -109,6 +109,10 @@
 	name = "Circuit board (Robotics Control)"
 	build_path = "/obj/machinery/computer/robotics"
 	origin_tech = "programming=3"
+/obj/item/weapon/circuitboard/drone_control
+	name = "Circuit board (Drone Control)"
+	build_path = "/obj/machinery/computer/drone_control"
+	origin_tech = "programming=3"
 /obj/item/weapon/circuitboard/cloning
 	name = "Circuit board (Cloning)"
 	build_path = "/obj/machinery/computer/cloning"
@@ -281,20 +285,22 @@
 
 /obj/item/weapon/circuitboard/rdconsole/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I,/obj/item/weapon/screwdriver))
+		user.visible_message("\blue \the [user] adjusts the jumper on the [src]'s access protocol pins.", "\blue You adjust the jumper on the access protocol pins.")
 		if(src.build_path == "/obj/machinery/computer/rdconsole/core")
 			src.name = "Circuit Board (RD Console - Robotics)"
 			src.build_path = "/obj/machinery/computer/rdconsole/robotics"
-			user << "\blue Access protocols succesfully updated."
+			user << "\blue Access protocols set to robotics."
 		else
 			src.name = "Circuit Board (RD Console)"
 			src.build_path = "/obj/machinery/computer/rdconsole/core"
-			user << "\blue Defaulting access protocols."
+			user << "\blue Access protocols set to default."
 	return
 
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)
 		if(0)
 			if(istype(P, /obj/item/weapon/wrench))
+				usr << "\blue You begin wrenching the frame into place."
 				playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 				if(do_after(user, 20))
 					user << "\blue You wrench the frame into place."
@@ -350,6 +356,7 @@
 			if(istype(P, /obj/item/weapon/cable_coil))
 				if(P:amount >= 5)
 					playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
+					usr << "\blue You begin adding cables to the frame."
 					if(do_after(user, 20))
 						if(P)
 							P:amount -= 5
@@ -369,6 +376,7 @@
 			if(istype(P, /obj/item/stack/sheet/glass))
 				if(P:amount >= 2)
 					playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
+					usr << "\blue You begin adding glass into the frame."
 					if(do_after(user, 20))
 						if(P)
 							P:use(2)

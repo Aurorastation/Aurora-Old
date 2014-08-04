@@ -15,8 +15,21 @@
 	max_combined_w_class = 21
 
 /obj/item/weapon/storage/backpack/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	playsound(src.loc, "rustle", 50, 1, -5)
+	if (src.use_sound)
+		playsound(src.loc, src.use_sound, 50, 1, -5)
 	..()
+
+/obj/item/weapon/storage/backpack/equipped(var/mob/user, var/slot)
+	if (slot == slot_back && src.use_sound)
+		playsound(src.loc, src.use_sound, 50, 1, -5)
+	..(user, slot)
+
+/*
+/obj/item/weapon/storage/backpack/dropped(mob/user as mob)
+	if (loc == user && src.use_sound)
+		playsound(src.loc, src.use_sound, 50, 1, -5)
+	..(user)
+*/
 
 /*
  * Backpack Types
@@ -180,3 +193,9 @@
 	desc = "An exclusive satchel for Nanotrasen officers."
 	icon_state = "satchel-cap"
 	item_state = "captainpack"
+
+/obj/item/weapon/storage/backpack/ert
+	name = "combat ruck"
+	desc = "A large rucksack with supports and webbing, specifically designed for combat operations and equipment carrying."
+	icon_state = "ert_ruck"
+	item_state = "ert_ruck"

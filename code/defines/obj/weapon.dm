@@ -31,7 +31,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "banana_peel"
 	item_state = "banana_peel"
-	w_class = 1.0
+	w_class = 2.0
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
@@ -42,7 +42,7 @@
 	icon = 'icons/obj/harvest.dmi'
 	icon_state = "corncob"
 	item_state = "corncob"
-	w_class = 1.0
+	w_class = 2.0
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
@@ -90,7 +90,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "c_tube"
 	throwforce = 1
-	w_class = 1.0
+	w_class = 2.0
 	throw_speed = 4
 	throw_range = 5
 
@@ -228,8 +228,9 @@
 	icon = 'icons/obj/shards.dmi'
 	icon_state = "large"
 	sharp = 1
+	edge = 1
 	desc = "Could probably be used as ... a throwing weapon?"
-	w_class = 1.0
+	w_class = 2.0
 	force = 5.0
 	throwforce = 8.0
 	item_state = "shard-glass"
@@ -461,7 +462,7 @@
 	icon = 'icons/obj/food.dmi'
 	icon_state = "meat"
 	flags = FPRINT | TABLEPASS | CONDUCT
-	w_class = 1.0
+	w_class = 2.0
 	origin_tech = "biotech=2"
 
 /obj/item/weapon/hatchet
@@ -471,6 +472,8 @@
 	icon_state = "hatchet"
 	flags = FPRINT | TABLEPASS | CONDUCT
 	force = 12.0
+	sharp = 1
+	edge = 1
 	w_class = 2.0
 	throwforce = 15.0
 	throw_speed = 4
@@ -496,6 +499,8 @@
 	desc = "A sharp and curved blade on a long fibremetal handle, this tool makes it easy to reap what you sow."
 	force = 13.0
 	throwforce = 5.0
+	sharp = 1
+	edge = 1
 	throw_speed = 1
 	throw_range = 3
 	w_class = 4.0

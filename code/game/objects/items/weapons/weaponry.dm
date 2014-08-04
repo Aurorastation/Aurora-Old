@@ -6,7 +6,7 @@
 	flags = FPRINT | TABLEPASS
 	slot_flags = SLOT_BELT
 	throwforce = 0
-	w_class = 1.0
+	w_class = 2.0
 	throw_speed = 7
 	throw_range = 15
 	attack_verb = list("banned")
@@ -26,7 +26,7 @@
 	throw_speed = 1
 	throw_range = 4
 	throwforce = 10
-	w_class = 1
+	w_class = 2
 
 	suicide_act(mob/user)
 		viewers(user) << "\red <b>[user] is impaling \himself with the [src.name]! It looks like \he's trying to commit suicide.</b>"
@@ -79,6 +79,8 @@
 	slot_flags = SLOT_BELT
 	force = 2
 	throwforce = 1
+	sharp = 1
+	edge = 1
 	w_class = 3
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
@@ -99,6 +101,8 @@
 	slot_flags = SLOT_BELT
 	force = 40
 	throwforce = 10
+	sharp = 1
+	edge = 1
 	w_class = 3
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
@@ -122,6 +126,8 @@
 	slot_flags = SLOT_BELT | SLOT_BACK
 	force = 40
 	throwforce = 10
+	sharp = 1
+	edge = 1
 	w_class = 3
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
@@ -139,6 +145,7 @@
 /obj/item/weapon/harpoon
 	name = "harpoon"
 	sharp = 1
+	edge = 0
 	desc = "Tharr she blows!"
 	icon_state = "harpoon"
 	item_state = "harpoon"
@@ -150,6 +157,7 @@
 /obj/item/weapon/canesword
 	name = "cane sword"
 	sharp = 1
+	edge = 1
 	desc = "A thin, sharp blade with an elegant handle."
 	icon_state = "canesword"
 	item_state = "canesword"

@@ -80,7 +80,7 @@
 						M.stop_pulling()
 						step(M, M.dir)
 						M << "\blue You slipped on the wet floor!"
-						playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
+						playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
 						M.Stun(5)
 						M.Weaken(3)
 					else
@@ -91,7 +91,7 @@
 						M.stop_pulling()
 						step(M, M.dir)
 						M << "\blue You slipped on the wet floor!"
-						playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
+						playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
 						M.Stun(5)
 						M.Weaken(3)
 					else
@@ -108,7 +108,7 @@
 					spawn(4) step(M, M.dir)
 					M.take_organ_damage(2) // Was 5 -- TLE
 					M << "\blue You slipped on the floor!"
-					playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
+					playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
 					M.Weaken(10)
 			if(3) // Ice
 				if(istype(M, /mob/living/carbon/human)) // Added check since monkeys don't have shoes
@@ -116,7 +116,7 @@
 						M.stop_pulling()
 						step(M, M.dir)
 						M << "\blue You slipped on the icy floor!"
-						playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
+						playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
 						M.Stun(4)
 						M.Weaken(3)
 					else
@@ -127,7 +127,7 @@
 						M.stop_pulling()
 						step(M, M.dir)
 						M << "\blue You slipped on the icy floor!"
-						playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
+						playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
 						M.Stun(4)
 						M.Weaken(3)
 					else
@@ -144,7 +144,10 @@
 	for(var/obj/effect/decal/cleanable/blood/B in contents)
 		if(!B.blood_DNA[M.dna.unique_enzymes])
 			B.blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
+			B.virus2 = virus_copylist(M.virus2)
 		return 1 //we bloodied the floor
+
+
 
 	//if there isn't a blood decal already, make one.
 	var/obj/effect/decal/cleanable/blood/newblood = new /obj/effect/decal/cleanable/blood(src)
@@ -156,6 +159,7 @@
 		newblood.basecolor = "#A10808"
 
 	newblood.blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
+	newblood.virus2 = virus_copylist(M.virus2)
 	newblood.update_icon()
 
 	return 1 //we bloodied the floor

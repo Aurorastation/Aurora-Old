@@ -13,6 +13,8 @@
 	master = src //moved outside the spawn(1) to avoid runtimes in lighting.dm when it references loc.loc.master ~Carn
 	uid = ++global_uid
 	related = list(src)
+	active_areas += src
+	all_areas += src
 
 	if(type == /area)	// override defaults for space. TODO: make space areas of type /area/space rather than /area
 		requires_power = 1
@@ -220,6 +222,7 @@
 // called when power status changes
 
 /area/proc/power_change()
+	master.powerupdate = 2
 	for(var/area/RA in related)
 		for(var/obj/machinery/M in RA)	// for each machine in the area
 			M.power_change()				// reverify power status (to update icons etc.)
@@ -241,7 +244,6 @@
 	return used
 
 /area/proc/clear_usage()
-
 	master.used_equip = 0
 	master.used_light = 0
 	master.used_environ = 0
@@ -309,16 +311,16 @@
 				if(L.&& L.client)
 					L.client.played = 0
 
-/area/proc/gravitychange(var/gravitystate = 0, var/area/A)
-
+/area/proc/gravitychange(var/gravitystate = 0, var/area/A, var/round_start = 0)
 	A.has_gravity = gravitystate
 
 	for(var/area/SubA in A.related)
 		SubA.has_gravity = gravitystate
 
-		if(gravitystate)
-			for(var/mob/living/carbon/human/M in SubA)
-				thunk(M)
+		if(!round_start)
+			if(gravitystate)
+				for(var/mob/living/carbon/human/M in SubA)
+					thunk(M)
 
 /area/proc/thunk(mob)
 	if(istype(mob,/mob/living/carbon/human/))  // Only humans can wear magboots, so we give them a chance to.
@@ -336,5 +338,18 @@
 		mob:AdjustStunned(2)
 		mob:AdjustWeakened(2)
 
+	mob:float(0)
 	mob << "Gravity!"
 
+/proc/has_gravity(atom/AT, turf/T)
+	if(!T)
+		T = get_turf(AT)
+	var/area/A = get_area(T)
+	if(istype(T, /turf/space)) //because space
+		return 0
+	else if(A && A.has_gravity)
+		return 1
+	else
+		if(T && gravity_field_generators["[T.z]"] && length(gravity_field_generators["[T.z]"]))
+			return 1
+	return 0

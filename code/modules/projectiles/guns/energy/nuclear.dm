@@ -33,10 +33,12 @@
 
 
 
-/obj/item/weapon/gun/energy/gun/nuclear
+/obj/item/weapon/gun/energy/rifle/gun/nuclear
 	name = "Advanced Energy Gun"
 	desc = "An energy gun with an experimental miniaturized reactor."
+	icon = 'icons/obj/gun.dmi' //Overrides .../rifle
 	icon_state = "nucgun"
+
 	origin_tech = "combat=3;materials=5;powerstorage=3"
 	var/lightfail = 0
 	var/charge_tick = 0
@@ -129,11 +131,12 @@
 /obj/item/weapon/gun/energy/gun/pistol
 	name = "energy pistol"
 	desc = "A basic energy-based pistol with two settings: Stun and kill."
+	icon = 'icons/obj/gun.dmi'
 	icon_state = "epistolstun100"
 	item_state = null	//so the human update icon uses the icon_state instead.
 	fire_sound = 'sound/weapons/Taser.ogg'
 	fire_delay = 2
-	charge_cost = 100 //How much energy is needed to fire.
+	charge_cost = 150 //How much energy is needed to fire.
 	projectile_type = "/obj/item/projectile/energy/electrode"
 	origin_tech = "combat=2;magnets=1"
 	modifystate = "epistolstun"
@@ -155,7 +158,7 @@
 				modifystate = "epistolkill"
 			if(1)
 				mode = 0
-				charge_cost = 100
+				charge_cost = 150
 				fire_sound = 'sound/weapons/Taser.ogg'
 				user << "\red [src.name] is now set to stun."
 				projectile_type = "/obj/item/projectile/energy/electrode"

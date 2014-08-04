@@ -7,7 +7,7 @@
 	icon_state = "airtunnel0e"
 	anchored = 1
 	density = 1
-	var/obj/machinery/gravity_generator = null
+	var/obj/machinery/gravity_field_generator = null
 
 
 /obj/machinery/gravity_generator/
@@ -39,12 +39,8 @@
 		return
 	return
 
-
-
 /obj/machinery/computer/gravity_control_computer/proc/updatemodules()
-	src.gravity_generator = findgenerator()
-
-
+	src.gravity_field_generator = findgenerator()
 
 /obj/machinery/gravity_generator/proc/locatelocalareas()
 	for(var/area/A in range(src,effectiverange))
@@ -81,16 +77,16 @@
 
 	var/dat = "<h3>Generator Control System</h3>"
 	//dat += "<font size=-1><a href='byond://?src=\ref[src];refresh=1'>Refresh</a></font>"
-	if(gravity_generator)
-		if(gravity_generator:on)
+	if(gravity_field_generator)
+		if(gravity_field_generator:on)
 			dat += "<font color=green><br><tt>Gravity Status: ON</tt></font><br>"
 		else
 			dat += "<font color=red><br><tt>Gravity Status: OFF</tt></font><br>"
 
 		dat += "<br><tt>Currently Supplying Gravitons To:</tt><br>"
 
-		for(var/area/A in gravity_generator:localareas)
-			if(A.has_gravity && gravity_generator:on)
+		for(var/area/A in gravity_field_generator:localareas)
+			if(A.has_gravity && gravity_field_generator:on)
 				dat += "<tt><font color=green>[A]</tt></font><br>"
 
 			else if (A.has_gravity)
@@ -100,7 +96,7 @@
 				dat += "<tt><font color=red>[A]</tt></font><br>"
 
 		dat += "<br><tt>Maintainence Functions:</tt><br>"
-		if(gravity_generator:on)
+		if(gravity_field_generator:on)
 			dat += "<a href='byond://?src=\ref[src];gentoggle=1'><font color=red> TURN GRAVITY GENERATOR OFF. </font></a>"
 		else
 			dat += "<a href='byond://?src=\ref[src];gentoggle=1'><font color=green> TURN GRAVITY GENERATOR ON. </font></a>"
@@ -123,11 +119,11 @@
 			return
 
 	if(href_list["gentoggle"])
-		if(gravity_generator:on)
-			gravity_generator:on = 0
+		if(gravity_field_generator:on)
+			gravity_field_generator:on = 0
 
-			for(var/area/A in gravity_generator:localareas)
-				var/obj/machinery/gravity_generator/G
+			for(var/area/A in gravity_field_generator:localareas)
+				var/obj/machinery/gravity_field_generator/main/G
 				for(G in machines)
 					if((A.master in G.localareas) && (G.on))
 						break
@@ -136,8 +132,8 @@
 
 
 		else
-			for(var/area/A in gravity_generator:localareas)
-				gravity_generator:on = 1
+			for(var/area/A in gravity_field_generator:localareas)
+				gravity_field_generator:on = 1
 				A.gravitychange(1,A)
 
 		src.updateUsrDialog()
