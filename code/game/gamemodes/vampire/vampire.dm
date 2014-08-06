@@ -461,27 +461,27 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 
 		if(T.density)
 			return
-/*	if(prob(35))
+	if(prob(35))
 		switch(health)
 			if(80 to 100)
 				src << "\red Your skin flakes away..."
 			if(60 to 80)
 				src << "<span class='warning'>Your skin sizzles!</span>"
-			if((-INFINITY) to 60)
+	//		if((-INFINITY) to 60)
 	//			if(!on_fire)
 	//				src << "<b>\red Your skin catches fire!</b>"
 	//			else
-					src << "<b>\red You continue to burn!</b>"
+	//				src << "<b>\red You continue to burn!</b>"
 	//			fire_stacks += 5
 	//			IgniteMob()
-		emote("scream")
-	else
+	//	emote("scream")
+	//else
 	//	switch(health)
 	//		if((-INFINITY) to 60)
 	//			fire_stacks++
 	//			IgniteMob()
-	adjustFireLoss(3)
-*/
+	adjustFireLoss(30) //Original value was 3.  Barely did anything.  Vamps should vaporize in starlight.
+
 /mob/living/carbon/human/proc/handle_vampire()
 /*	if(hud_used)
 		if(!hud_used.vampire_blood_display)

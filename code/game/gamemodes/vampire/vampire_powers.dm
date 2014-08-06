@@ -103,24 +103,26 @@
 
 	if(!C) return
 	M.current.visible_message("<span class='warning'>[M]'s eyes flash briefly as he stares into [C.name]'s eyes</span>")
-	M.current.remove_vampire_blood(20)
-	M.current.verbs -= /client/vampire/proc/vampire_hypnotise
-	spawn(1800)
-		M.current.verbs += /client/vampire/proc/vampire_hypnotise
-	if(do_mob(M.current, C, 50))
-		if(C.mind && C.mind.vampire)
-			M.current << "\red Your piercing gaze fails to knock out [C.name]."
-			C << "\blue [M.current]'s feeble gaze is ineffective."
-			return
+//	M.current.remove_vampire_blood(20) Moved to remove if it works only.
+	if(M.current.vampire_power(20, 0))
+		M.current.verbs -= /client/vampire/proc/vampire_hypnotise
+		spawn(1800)
+			M.current.verbs += /client/vampire/proc/vampire_hypnotise
+		if(do_mob(M.current, C, 50))
+			if(C.mind && C.mind.vampire)
+				M.current << "\red Your piercing gaze fails to knock out [C.name]."
+				C << "\blue [M.current]'s feeble gaze is ineffective."
+				return
+			else
+				M.current << "\red Your piercing gaze knocks out [C.name]."
+				C << "\red You find yourself unable to move and barely able to speak"
+				C.Weaken(20)
+				C.Stun(20)
+				C.stuttering = 20
+				M.current.remove_vampire_blood(20)
 		else
-			M.current << "\red Your piercing gaze knocks out [C.name]."
-			C << "\red You find yourself unable to move and barely able to speak"
-			C.Weaken(20)
-			C.Stun(20)
-			C.stuttering = 20
-	else
-		M.current << "\red You broke your gaze."
-		return
+			M.current << "\red You broke your gaze."
+			return
 
 /client/vampire/proc/vampire_disease()
 	set category = "Abilities"
@@ -230,11 +232,11 @@
 
 /client/vampire/proc/vampire_enthrall()
 	set category = "Abilities"
-	set name = "Enthrall (300)"
+	set name = "Enthrall (150)"
 	set desc = "You use a large portion of your power to sway those loyal to none to be loyal to you only."
 	var/datum/mind/M = usr.mind
 	if(!M) return
-	var/mob/living/carbon/C = M.current.vampire_active(300, 0, 1)
+	var/mob/living/carbon/C = M.current.vampire_active(150, 0, 1)
 	if(!C) return
 	M.current.visible_message("\red [M.current.name] bites [C.name]'s neck!", "\red You bite [C.name]'s neck and begin the flow of power.")
 	C << "<span class='warning'>You feel the tendrils of evil invade your mind.</span>"
@@ -243,9 +245,9 @@
 		return
 
 	if(do_mob(M.current, C, 50))
-		if(M.current.can_enthrall(C) && M.current.vampire_power(300, 0)) // recheck
+		if(M.current.can_enthrall(C) && M.current.vampire_power(150, 0)) // recheck
 			M.current.handle_enthrall(C)
-			M.current.remove_vampire_blood(300)
+			M.current.remove_vampire_blood(150)
 			M.current.verbs -= /client/vampire/proc/vampire_enthrall
 			spawn(1800) M.current.verbs += /client/vampire/proc/vampire_enthrall
 		else
@@ -328,11 +330,11 @@
 
 /client/vampire/proc/vampire_bats()
 	set category = "Abilities"
-	set name = "Summon Bats (75)"
+	set name = "Summon Bats (60)"
 	set desc = "You summon a pair of space bats who attack nearby targets until they or their target is dead."
 	var/datum/mind/M = usr.mind
 	if(!M) return
-	if(M.current.vampire_power(75, 0))
+	if(M.current.vampire_power(60, 0))
 		var/list/turf/locs = new
 		var/number = 0
 		for(var/direction in alldirs) //looking for bat spawns
@@ -349,8 +351,8 @@
 				new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
 		else // we had no good locations so make two on top of us
 			new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
-			new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
-		M.current.remove_vampire_blood(75)
+//			new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
+		M.current.remove_vampire_blood(60)
 		M.current.verbs -= /client/vampire/proc/vampire_bats
 		spawn(1200) M.current.verbs += /client/vampire/proc/vampire_bats
 

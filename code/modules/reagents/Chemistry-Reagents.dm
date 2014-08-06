@@ -1644,7 +1644,7 @@ datum
 			reagent_state = LIQUID
 			color = "#CF3600" // rgb: 207, 54, 0
 			toxpwr = 4
-			custom_metabolism = 0.4
+			custom_metabolism = 0.1
 
 			on_mob_life(var/mob/living/M as mob)
 				if(!M) M = holder.my_atom
@@ -1659,6 +1659,7 @@ datum
 			description = "Causes severe damage to genetic data."
 			reagent_state = LIQUID
 			toxpwr = 0
+			color = "#CF3600"
 			custom_metabolism = 0.1
 
 			on_mob_life(var/mob/living/M as mob)
