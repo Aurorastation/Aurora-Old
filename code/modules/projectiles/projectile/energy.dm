@@ -24,9 +24,10 @@
 /obj/item/projectile/energy/declone
 	name = "declone"
 	icon_state = "declone"
-	nodamage = 1
+	damage = 40
 	damage_type = CLONE
 	irradiate = 40
+
 
 
 /obj/item/projectile/energy/dart
@@ -42,8 +43,9 @@
 	icon_state = "cbbolt"
 	damage = 10
 	damage_type = TOX
-	irradiate = 50
+	irradiate = 70
 	nodamage = 0
+
 //	weaken = 10
 //	stutter = 10
 
