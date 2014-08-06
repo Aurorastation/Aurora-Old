@@ -3913,7 +3913,7 @@ datum
 			name = "Guinness"
 			id = "guinnes"
 			description = "Special Guinnes drink"
-			color = ""  // dunno
+			color = "#2E6671"  // dunno -- god dammit -_-
 			boozepwr = 3
 
 		ethanol/drambuie
