@@ -276,8 +276,16 @@ datum
 						ticker.mode.remove_cultist(M.mind)
 						for(var/mob/O in viewers(M, null))
 							O.show_message(text("\blue []'s eyes blink and become clearer.", M), 1) // So observers know it worked.
+					if((M.mind in ticker.mode.vampires) && (M.mind.vampire) && (!(VAMP_FULL in M.mind.vampire.powers)))
+						if(!M) M = holder.my_atom
+						M.adjustFireLoss(6)
+						//M.take_organ_damage(0, 1*REM)
+						if(prob(50))
+							for(var/mob/O in viewers(M, null))
+								O.show_message(text("\red []'s skin sizzles and burns.", M), 1)
 				holder.remove_reagent(src.id, 10 * REAGENTS_METABOLISM) //high metabolism to prevent extended uncult rolls.
 				return
+
 
 		lube
 			name = "Space Lube"
@@ -1428,6 +1436,24 @@ datum
 			description = "This was once water, but has been altered by higher powers."
 			reagent_state = LIQUID
 			color = "#535E66" // rgb: 83, 94, 102
+
+			on_mob_life(var/mob/living/M as mob)
+				if(ishuman(M))
+					if((M.mind in ticker.mode.cult) && prob(10))
+						M << "\blue A cooling sensation from inside you brings you an untold calmness."
+						ticker.mode.remove_cultist(M.mind)
+						for(var/mob/O in viewers(M, null))
+							O.show_message(text("\blue []'s eyes blink and become clearer.", M), 1) // So observers know it worked.
+					if((M.mind in ticker.mode.vampires) && (M.mind.vampire) && (!(VAMP_FULL in M.mind.vampire.powers)))
+						if(!M) M = holder.my_atom
+						M.adjustFireLoss(6)
+						//M.take_organ_damage(0, 1*REM)
+						if(prob(50))
+							for(var/mob/O in viewers(M, null))
+								O.show_message(text("\red []'s skin sizzles and burns.", M), 1)
+				holder.remove_reagent(src.id, 10 * REAGENTS_METABOLISM) //high metabolism to prevent extended uncult rolls.
+				return
+
 
 		nanites
 			name = "Nanomachines"

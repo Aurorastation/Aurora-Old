@@ -177,7 +177,7 @@
 		M.current.visible_message("\red <b>[M.current]'s eyes emit a blinding flash!")
 		//M.vampire.bloodusable -= 10
 		M.current.verbs -= /client/vampire/proc/vampire_glare
-		spawn(300)
+		spawn(450)
 			M.current.verbs += /client/vampire/proc/vampire_glare
 		if(istype(M.current:glasses, /obj/item/clothing/glasses/sunglasses/blindfold))
 			M.current << "<span class='warning'>You're blindfolded!</span>"

@@ -1,8 +1,8 @@
 /obj/item/weapon/gun/energy/temperature
-	name = "temperature gun"
+	name = "freeze ray"
 	icon_state = "freezegun"
 	fire_sound = 'sound/weapons/pulse3.ogg'
-	desc = "A gun that changes temperatures."
+	desc = "For when somebody won't let it go."
 //	var/temperature = T20C None of this commented stuff works.  Freeze gun revamping.  Now it freezes you and it freezes you hard on-hit.
 //	var/current_temperature = T20C
 	charge_cost = 25//20 shots.
