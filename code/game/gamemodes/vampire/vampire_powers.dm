@@ -443,7 +443,7 @@
 				// LIGHTING CHECK
 				if(T.lighting_lumcount > max_lum) continue
 				turfs += T
-				M.current.remove_vampire_blood(30)
+				//M.current.remove_vampire_blood(30) This isn't the right place for this either.
 
 			if(!turfs.len)
 				usr << "\red You cannot find darkness to step to."
@@ -465,6 +465,7 @@
 			animation.layer = 5
 			//animation.master = src
 			usr.loc = picked
+			M.current.remove_vampire_blood(30)
 			spawn(10)
 				del(animation)
 //		M.current.remove_vampire_blood(30)
