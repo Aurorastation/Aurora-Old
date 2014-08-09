@@ -116,8 +116,12 @@
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(5, 1, src)
 			s.start()
-			spawn(5)
-				s.start()
+			var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
+			ghost.key = key
+			ghost.mind.name = "[ghost.key] Bluespace Tech"
+			ghost.name = "[ghost.key] Bluespace Tech"
+			ghost.real_name = "[ghost.key] Bluespace Tech"
+			ghost.voice_name = "[ghost.key] Bluespace Tech"
 			del(src)
 
 	say(var/message)
