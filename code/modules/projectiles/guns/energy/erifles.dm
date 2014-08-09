@@ -199,7 +199,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	w_class = 4
 	slot_flags = SLOT_BACK //Just realized... Going to need A LOT more on-back sprites now... FECK...
 	var/mode = 2
-	fire_delay_wielded = 25
+	fire_delay_wielded = 8
 	fire_delay_unwielded = 75
 
 //	attack_self(mob/living/user as mob)
