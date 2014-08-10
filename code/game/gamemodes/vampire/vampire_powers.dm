@@ -223,8 +223,8 @@
 			C.stuttering = 20
 			C.Stun(8)
 //			C.Jitter(150)
-//		for(var/obj/structure/window/W in view(4))
-//			W.destroy()
+		for(var/obj/structure/window/W in view(4))
+			W.destroy()
 		playsound(M.current.loc, 'sound/effects/creepyshriek.ogg', 100, 1)
 		M.current.remove_vampire_blood(30)
 		M.current.verbs -= /client/vampire/proc/vampire_screech
