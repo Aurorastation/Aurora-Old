@@ -799,7 +799,7 @@ datum/design/mech_teleporter
 	desc = "An exosuit module that allows exosuits to teleport to any position in view."
 	id = "mech_teleporter"
 	build_type = MECHFAB
-	req_tech = list("bluespace" = 10, "magnets" = 5)
+	req_tech = list("bluespace" = 5, "magnets" = 5)
 	build_path = "/obj/item/mecha_parts/mecha_equipment/teleporter"
 	category = "Exosuit Equipment"
 
@@ -1519,9 +1519,9 @@ datum/design/decloner
 	name = "Decloner"
 	desc = "Your opponent will bubble into a messy pile of goop."
 	id = "decloner"
-	req_tech = list("combat" = 8, "materials" = 7, "biotech" = 5, "powerstorage" = 6)
+	req_tech = list("combat" = 5, "materials" = 7, "biotech" = 4, "powerstorage" = 5)
 	build_type = PROTOLATHE
-	materials = list("$gold" = 5000,"$uranium" = 10000, "mutagen" = 40)
+	materials = list("$gold" = 5000,"$uranium" = 5000, "$plasma" = 1500) //"mutagen" = 40 Don't think protolathe can hold chems anymore.  Not sure.  It's redundant anyway.  Mutagen is easy.
 	build_path = "/obj/item/weapon/gun/energy/decloner"
 	locked = 1
 
@@ -1529,9 +1529,9 @@ datum/design/chemsprayer
 	name = "Chem Sprayer"
 	desc = "An advanced chem spraying device."
 	id = "chemsprayer"
-	req_tech = list("materials" = 3, "engineering" = 3, "biotech" = 2)
+	req_tech = list("materials" = 3, "engineering" = 5, "biotech" = 2)
 	build_type = PROTOLATHE
-	materials = list("$metal" = 5000, "$glass" = 1000)
+	materials = list("$metal" = 5000, "$glass" = 1000, "$plasma" = 3000)
 	reliability_base = 100
 	build_path = "/obj/item/weapon/reagent_containers/spray/chemsprayer"
 
@@ -1649,7 +1649,7 @@ datum/design/plasmacutter
 	materials = list("$metal" = 1500, "$glass" = 500, "$gold" = 500, "$plasma" = 500)
 	reliability_base = 79
 	build_path = "/obj/item/weapon/pickaxe/plasmacutter"
-
+/* I'm sorry, but the diamond drill is pretty much redundant.  And it messes with my immersions.
 datum/design/pick_diamond
 	name = "Diamond Pickaxe"
 	desc = "A pickaxe with a diamond pick head, this is just like minecraft."
@@ -1658,7 +1658,7 @@ datum/design/pick_diamond
 	build_type = PROTOLATHE
 	materials = list("$diamond" = 3000)
 	build_path = "/obj/item/weapon/pickaxe/diamond"
-
+*/
 datum/design/drill_diamond
 	name = "Diamond Mining Drill"
 	desc = "Yours is the drill that will pierce the heavens!"
