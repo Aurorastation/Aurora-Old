@@ -775,3 +775,10 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define VAMP_SLAVE 11
 #define VAMP_BLINK 12
 #define VAMP_FULL 13
+
+
+
+
+
+
+#define MAX_GEAR_COST 5 //Used in chargen for loadout limit.
