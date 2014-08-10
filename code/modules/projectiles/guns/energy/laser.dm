@@ -16,6 +16,7 @@
 	desc = "A modified version of the basic laser gun, this one fires less concentrated energy bolts designed for target practice."
 	projectile_type = "/obj/item/projectile/beam/practice"
 	clumsy_check = 0
+	w_class = 3
 
 	isHandgun()
 		return 1
@@ -24,6 +25,7 @@ obj/item/weapon/gun/energy/laser/retro
 	name ="retro laser"
 	icon_state = "retro"
 	desc = "An older model of the basic lasergun, no longer used by Nanotrasen's security or military forces. Nevertheless, it is still quite deadly and easy to maintain, making it a favorite amongst pirates and other outlaws."
+	w_class = 3
 
 	isHandgun()
 		return 1
@@ -34,6 +36,7 @@ obj/item/weapon/gun/energy/laser/retro
 	force = 10
 	origin_tech = null
 	var/charge_tick = 0
+	w_class = 3
 
 	isHandgun()
 		return 1
@@ -104,7 +107,7 @@ obj/item/weapon/gun/energy/laser/retro
 	origin_tech = "combat=5;materials=3;magnets=2;syndicate=2"
 	projectile_type = "/obj/item/projectile/beam/xray"
 	charge_cost = 50
-
+	w_class = 3
 
 ////////Laser Tag////////////////////
 
@@ -116,6 +119,7 @@ obj/item/weapon/gun/energy/laser/retro
 	origin_tech = "combat=1;magnets=2"
 	clumsy_check = 0
 	var/charge_tick = 0
+	w_class = 3
 
 	special_check(var/mob/living/carbon/human/M)
 		if(ishuman(M))
@@ -153,6 +157,7 @@ obj/item/weapon/gun/energy/laser/retro
 	origin_tech = "combat=1;magnets=2"
 	clumsy_check = 0
 	var/charge_tick = 0
+	w_class = 3
 
 	special_check(var/mob/living/carbon/human/M)
 		if(ishuman(M))

@@ -40,7 +40,7 @@ var/global/list/skin_styles_female_list = list()		//unused
 var/global/list/underwear_m = list("White", "Grey", "Green", "Blue", "Black", "Mankini", "None") //Curse whoever made male/female underwear diffrent colours
 var/global/list/underwear_f = list("Red", "White", "Yellow", "Blue", "Black", "Thong", "None")
 	//undershirt
-var/global/list/undershirt_t = list("Black Tank top", "White Tank top", "Black shirt", "White shirt", "None")
+var/global/list/undershirt_t = list("Black Tank top", "White Tank top", "Black shirt", "White shirt", "Blue Tank top", "Rainbow Tank top", "Happy Tank top", "Neutral Tank top", "Sad Tank top", "Sunny Tank top", "Red Tank top", "Telnyashka Tank top", "Telnyashka shirt", "Space Station shirt", "Ian shirt", "None")
 	//Backpacks
 var/global/list/backbaglist = list("Nothing", "Backpack", "Satchel", "Satchel Alt")
 

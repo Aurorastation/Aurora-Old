@@ -80,15 +80,6 @@
 			if("labgreen_all")
 				src.icon_state = "labgreen_open"
 				usr << "You unbotton the labcoat."
-			if("raieed_labcoat_open")
-				src.icon_state = "raieed_labcoat_top"
-				usr << "You button up the labcoat's first button."
-			if("raieed_labcoat_top")
-				src.icon_state = "raieed_labcoat_all"
-				usr << "You fully button the labcoat."
-			if("raieed_labcoat_all")
-				src.icon_state = "raieed_labcoat_open"
-				usr << "You unbutton the labcoat."
 			if("fabian_coat_open")
 				src.icon_state = "fabian_coat_closed"
 				usr << "You button up the coat's buttons."

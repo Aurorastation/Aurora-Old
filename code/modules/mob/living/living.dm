@@ -799,7 +799,7 @@
 		if(new_area)
 			new_area.Entered(src)
 
-/mob/living/update_gravity(has_gravity)
+/mob/living/update_gravity(var/has_gravity)
 	if(!ticker)
 		return
 	float(!has_gravity)

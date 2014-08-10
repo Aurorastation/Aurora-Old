@@ -300,6 +300,7 @@
 	switch(state)
 		if(0)
 			if(istype(P, /obj/item/weapon/wrench))
+				usr << "\blue You begin wrenching the frame into place."
 				playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 				if(do_after(user, 20))
 					user << "\blue You wrench the frame into place."
@@ -355,6 +356,7 @@
 			if(istype(P, /obj/item/weapon/cable_coil))
 				if(P:amount >= 5)
 					playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
+					usr << "\blue You begin adding cables to the frame."
 					if(do_after(user, 20))
 						if(P)
 							P:amount -= 5
@@ -374,6 +376,7 @@
 			if(istype(P, /obj/item/stack/sheet/glass))
 				if(P:amount >= 2)
 					playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
+					usr << "\blue You begin adding glass into the frame."
 					if(do_after(user, 20))
 						if(P)
 							P:use(2)

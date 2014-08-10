@@ -1,5 +1,4 @@
-/mob/living/carbon/human/say(var/message)
-	var/verb = "says"
+/mob/living/carbon/human/say(var/message, var/verb = "says")
 	var/alt_name = ""
 	var/message_range = world.view
 	var/italics = 0
@@ -48,10 +47,16 @@
 		return
 
 	var/ending = copytext(message, length(message))
-	if(ending=="!")
-		verb=pick("exclaims","shouts","yells")
-	if(ending=="?")
-		verb="asks"
+	if(verb == "says")
+		if(ending == "!")
+			verb = pick("exclaims","shouts","yells")
+		if(ending == "?")
+			verb = "asks"
+	else
+		if(ending == "!")
+			verb = "orders"
+		if(ending == "?")
+			verb = "requests"
 
 	if(speaking)	//speaking = null if used through say without a language
 		if(!speaking.vocal)
