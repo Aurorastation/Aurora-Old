@@ -654,6 +654,7 @@ var/list/liftable_structures = list(\
 #define BE_NINJA		1024
 #define BE_RAIDER		2048
 #define BE_PLANT		4096
+#define BE_VAMPIRE		8192
 
 var/list/be_special_flags = list(
 	"Traitor" = BE_TRAITOR,
@@ -668,7 +669,8 @@ var/list/be_special_flags = list(
 	"Monkey" = BE_MONKEY,
 	"Ninja" = BE_NINJA,
 	"Raider" = BE_RAIDER,
-	"Diona" = BE_PLANT
+	"Diona" = BE_PLANT,
+	"Vampire" = BE_VAMPIRE
 	)
 
 #define AGE_MIN 17			//youngest a character can be
@@ -759,3 +761,25 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define COLOR_YELLOW 	"#FFFF00"
 #define COLOR_ORANGE 	"#FF9900"
 #define COLOR_WHITE 	"#FFFFFF"
+
+// Vampire power defines
+#define VAMP_REJUV 1
+#define VAMP_GLARE 2
+#define VAMP_HYPNO 3
+#define VAMP_SHAPE 4
+#define VAMP_VISION 5
+#define VAMP_DISEASE 6
+#define VAMP_CLOAK 7
+#define VAMP_BATS 8
+#define VAMP_SCREAM 9
+#define VAMP_JAUNT 10
+#define VAMP_SLAVE 11
+#define VAMP_BLINK 12
+#define VAMP_FULL 13
+
+
+
+
+
+
+#define MAX_GEAR_COST 5 //Used in chargen for loadout limit.

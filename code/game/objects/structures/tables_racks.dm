@@ -371,7 +371,7 @@
 				G.affecting.loc = src.loc
 				G.affecting.Weaken(5)
 				visible_message("\red [G.assailant] puts [G.affecting] on \the [src].")
-			del(W)
+				del(W)
 			return
 
 	if (istype(W, /obj/item/weapon/wrench))
@@ -422,6 +422,27 @@
 		return 0
 	return 1
 
+
+/obj/structure/table/verb/do_climb()
+	set name = "Climb table"
+	set desc = "Climbs onto a table."
+	set category = "Object"
+	set src in oview(1)
+
+	if (!can_touch(usr))
+		return
+
+	usr.visible_message("<span class='warning'>[usr] starts climbing onto \the [src]!</span>")
+
+	if(!do_after(usr,50))
+		return
+
+	usr.loc = get_turf(src)
+	for(var/mob/living/M in get_turf(src))
+		M.Weaken(5)
+	if (get_turf(usr) == get_turf(src))
+		usr.visible_message("<span class='warning'>[usr] climbs onto \the [src]!</span>")
+
 /obj/structure/table/verb/do_flip()
 	set name = "Flip table"
 	set desc = "Flips a non-reinforced table"
@@ -435,6 +456,9 @@
 		usr << "<span class='notice'>It won't budge.</span>"
 	else
 		usr.visible_message("<span class='warning'>[usr] flips \the [src]!</span>")
+	for(var/mob/living/M in get_turf(src))
+		M.Weaken(5)
+		M << "\red You topple as \the [src] moves under you!"
 		return
 
 /obj/structure/table/proc/unflipping_check(var/direction)
