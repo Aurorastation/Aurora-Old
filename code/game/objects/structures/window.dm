@@ -32,6 +32,13 @@
 	return
 
 
+// This should result in the same materials used to make the window.
+/obj/structure/window/proc/destroy()
+	new /obj/item/weapon/shard(loc)
+	if(reinf)
+		new /obj/item/stack/rods(loc)
+	del(src)
+
 /obj/structure/window/ex_act(severity)
 	switch(severity)
 		if(1.0)
