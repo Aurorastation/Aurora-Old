@@ -1,6 +1,7 @@
 var/datum/controller/vote/vote = new()
 
 var/global/list/round_voters = list() //Keeps track of the individuals voting for a given round, for use in forcedrafting.
+var/global/last_vote_time = 0
 
 datum/controller/vote
 	var/initiator = null
@@ -180,6 +181,7 @@ datum/controller/vote
 			log_game("Rebooting due to restart vote")
 			world.Reboot()
 
+		last_vote_time = world.time
 		return .
 
 	proc/submit_vote(var/ckey, var/vote)
@@ -234,6 +236,11 @@ datum/controller/vote
 			mode = vote_type
 			initiator = initiator_key
 			started_time = world.time
+			var/timedifference = world.time - last_vote_time
+			var/timedifference_text
+			timedifference_text = time2text(timedifference,"mm:ss")
+			for(var/client/C in admins)
+				C << "Time since last vote: [timedifference_text]"
 			var/text = "[capitalize(mode)] vote started by [initiator]."
 			if(mode == "custom")
 				text += "\n[question]"
