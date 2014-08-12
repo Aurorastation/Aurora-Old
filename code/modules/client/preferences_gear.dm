@@ -378,6 +378,9 @@ proc/populate_gear_list()
 	allowed_roles = list("Roboticist", "Scientist", "Research Director")
 
 //Species-specific gear datums.
+
+//Taken out until fixes are done
+/*
 /datum/gear/zhan_furs
 	display_name = "Zhan-Khazan furs"
 	path = /obj/item/clothing/suit/tajaran/furs
@@ -391,6 +394,7 @@ proc/populate_gear_list()
 	cost = 2
 	slot = slot_head
 	whitelisted = "Tajaran"
+*/
 
 /datum/gear/unathi_robe
 	display_name = "roughspun robe"
