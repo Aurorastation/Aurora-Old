@@ -109,6 +109,9 @@
 	if(life_tick > 5 && timeofdeath && (timeofdeath < 5 || world.time - timeofdeath > 6000))	//We are long dead, or we're junk mobs spawned like the clowns on the clown shuttle
 		return											//We go ahead and process them 5 times for HUD images and other stuff though.
 
+	if(stat == DEAD && floating)
+		float(0)
+
 	//Handle temperature/pressure differences between body and environment
 	handle_environment(environment)		//Optimized a good bit.
 

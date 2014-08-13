@@ -140,7 +140,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 /obj/machinery/gravity_field_generator/main
 	icon_state = "on_8"
 	idle_power_usage = 0
-	active_power_usage = 3000
+	active_power_usage = 12000
 	power_channel = ENVIRON
 	sprite_number = 8
 	use_power = 1

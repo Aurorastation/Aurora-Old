@@ -124,7 +124,14 @@
 					if(mind && mind.vampire && (mind in ticker.mode.vampires))
 						M << "\red Your fangs fail to pierce [src.name]'s cold flesh"
 						return 0
+					if(isipc())
+						M << "\red They have no blood"
+						return 0
 					//we're good to suck the blood, blaah
+					//and leave an attack log
+					M.attack_log += text("\[[time_stamp()]\] <font color='red'>Bit [src.name] ([src.ckey]) in the neck and draining their blood</font>")
+					src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bit in the neck by [M.name] ([M.ckey])</font>")
+					msg_admin_attack("[M.name] ([M.ckey]) bit [src.name] ([src.ckey]) in the neck")
 					M.handle_bloodsucking(src)
 					return
 			//end vampire codes
