@@ -55,6 +55,9 @@
 		for(var/job in restricted_jobs)//Removing robots from the list
 			if(player.assigned_role == job)
 				possible_vampires -= player
+				continue
+			if(player.current.isipc())
+				possible_vampires -= player
 
 	vampire_amount = max(1,round(num_players() / 10)) //1 + round(num_players() / 10)
 
@@ -261,9 +264,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	var/blood = 0
 	var/bloodtotal = 0 //used to see if we increased our blood total
 	var/bloodusable = 0 //used to see if we increased our blood usable
-	src.attack_log += text("\[[time_stamp()]\] <font color='red'>Bit [src.name] ([src.ckey]) in the neck and draining their blood</font>")
-	H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bit in the neck by [src.name] ([src.ckey])</font>")
-	log_attack("[src.name] ([src.ckey]) bit [H.name] ([H.ckey]) in the neck")
+
 	src.visible_message("\red <b>[src.name] bites [H.name]'s neck!<b>", "\red <b>You bite [H.name]'s neck and begin to drain their blood.", "\blue You hear a soft puncture and a wet sucking noise")
 	if(!iscarbon(src))
 		H.LAssailant = null
@@ -327,8 +328,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 			vamp.powers.Add(VAMP_BATS)
 		if(!(VAMP_SCREAM in vamp.powers))
 			vamp.powers.Add(VAMP_SCREAM)
-		// Commented out until we can figured out a way to stop this from spamming.
-		//src << "\blue Your rejuvination abilities have improved and will now heal you over time when used."
+			src << "\blue Your rejuvination abilities have improved and will now heal you over time when used."
 
 	// TIER 3.5 (/vg/)
 	if(vamp.bloodtotal >= 250)

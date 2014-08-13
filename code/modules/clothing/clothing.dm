@@ -376,7 +376,16 @@ BLIND     // can't see anything
 	if(basecolor + "_d_s" in icon_states('icons/mob/uniform.dmi'))
 		item_color = item_color == "[basecolor]" ? "[basecolor]_d" : "[basecolor]"
 		usr.update_inv_w_uniform()
-		rolled_down = 1
+		if(rolled_down)
+			usr << "You roll [src] up"
+			rolled_down = 0
+		else
+			if(rolled_sleeves)
+				usr << "You roll [src] sleeves down"
+				rolled_sleeves = 0
+			else
+				usr << "You roll [src] down"
+				rolled_down = 1
 
 /obj/item/clothing/under/verb/rollsleeve()
 	set name = "Roll Up Sleeves"
@@ -390,7 +399,16 @@ BLIND     // can't see anything
 	if(basecolor + "_r_s" in icon_states('icons/mob/uniform.dmi'))
 		item_color = item_color == "[basecolor]" ? "[basecolor]_r" : "[basecolor]"
 		usr.update_inv_w_uniform()
-		rolled_sleeves = 1
+		if(rolled_sleeves)
+			usr << "You roll [src] sleeves down"
+			rolled_sleeves = 0
+		else
+			if(rolled_down)
+				usr << "You roll [src] up"
+				rolled_down = 0
+			else
+				usr << "You roll [src] sleeves up"
+				rolled_sleeves = 1
 
 /obj/item/clothing/under/proc/remove_accessory(mob/user as mob)
 	if(!hastie)
