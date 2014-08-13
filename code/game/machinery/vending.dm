@@ -649,7 +649,8 @@
 					/obj/item/weapon/reagent_containers/food/drinks/bottle/absinthe = 2,/obj/item/weapon/reagent_containers/food/drinks/bottle/grenadine = 5,
 					/obj/item/weapon/reagent_containers/food/drinks/bottle/chartreusegreen = 5,/obj/item/weapon/reagent_containers/food/drinks/bottle/chartreuseyellow =5,
 					/obj/item/weapon/reagent_containers/food/drinks/bottle/cremewhite = 4, /obj/item/weapon/reagent_containers/food/drinks/bottle/brandy = 4,
-					/obj/item/weapon/reagent_containers/food/drinks/bottle/guinnes = 4, /obj/item/weapon/reagent_containers/food/drinks/bottle/drambuie = 4)
+					/obj/item/weapon/reagent_containers/food/drinks/bottle/guinnes = 4, /obj/item/weapon/reagent_containers/food/drinks/bottle/drambuie = 4,
+					/obj/item/weapon/reagent_containers/food/drinks/bottle/cremeyvette = 5)
 	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/tea = 10)
 	vend_delay = 15
 	product_slogans = "I hope nobody asks me for a bloody cup o' tea...;Alcohol is humanity's friend. Would you abandon a friend?;Quite delighted to serve you!;Is nobody thirsty on this station?"

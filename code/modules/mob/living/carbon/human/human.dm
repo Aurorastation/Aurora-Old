@@ -40,6 +40,9 @@
 	h_style = "blue IPC screen"
 	..(new_loc, "Machine")
 
+/mob/living/carbon/human/machine/isipc()
+	return 1
+
 /mob/living/carbon/human/kocasslani/New(var/new_loc)
 	h_style = "Bald"
 	..(new_loc, "Kocasslani")
@@ -1172,7 +1175,12 @@
 				visible_implants += O
 
 	return(visible_implants)
-
+/*
+/mob/living/carbon/human/generate_name()
+	name = species.makeName(gender,src)
+	real_name = name
+	return name
+*/
 /mob/living/carbon/human/proc/handle_embedded_objects()
 
 	for(var/datum/organ/external/organ in src.organs)

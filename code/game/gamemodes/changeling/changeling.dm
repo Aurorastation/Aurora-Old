@@ -54,6 +54,9 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 		for(var/job in restricted_jobs)//Removing robots from the list
 			if(player.assigned_role == job)
 				possible_changelings -= player
+				continue
+			if(player.current.isipc()) //Removing ipc's
+				possible_changelings -= player
 
 	changeling_amount = 1 + round(num_players() / 10)
 

@@ -139,7 +139,8 @@ var/list/admin_verbs_dev = list(
 	/client/proc/SDQL2_query,
 	/client/proc/cmd_dev_say,
 	/client/proc/cmd_dev_bst,
-	/client/proc/cmd_dev_reset_gravity
+	/client/proc/cmd_dev_reset_gravity,
+	/client/proc/togglescopeslogs
 )
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom,		/*allows us to spawn instances*/
@@ -916,3 +917,18 @@ var/list/admin_verbs_mod = list(
 			set_security_level(SEC_LEVEL_DELTA)
 			delta_level:active = 1
 			delta_level.activate()
+
+//SoundScopes extra messages, most of which will be almost useless >_>
+/client/proc/togglescopeslogs()
+	set name = "Toggle Scopes Debug"
+	set category = "Preferences"
+	set desc = "SoundScopes Advanced debug logs, this will create spam for yourself"
+
+	if(!check_rights(R_DEV))	return
+	if(!check_rights(R_MOD))	return
+
+	prefs.toggles ^= CHAT_SCOPES_DEBUG
+	if (prefs.toggles & CHAT_SCOPES_DEBUG)
+		usr << "You now will get advanced debug logs"
+	else
+		usr << "You now won't get advanced debug logs"

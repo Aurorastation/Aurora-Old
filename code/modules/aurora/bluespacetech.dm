@@ -58,6 +58,7 @@
 		bst.equip_to_slot_or_del(new /obj/item/weapon/storage/box/ids(bst), slot_r_hand)
 	else
 		bst.equip_to_slot_or_del(new /obj/item/weapon/storage/box/ids(bst.back), slot_in_backpack)
+		bst.equip_to_slot_or_del(new /obj/item/device/t_scanner(bst.back), slot_in_backpack)
 
 	//Implant because access
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(bst)
@@ -116,8 +117,12 @@
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(5, 1, src)
 			s.start()
-			spawn(5)
-				s.start()
+			var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
+			ghost.key = key
+			ghost.mind.name = "[ghost.key] Bluespace Tech"
+			ghost.name = "[ghost.key] Bluespace Tech"
+			ghost.real_name = "[ghost.key] Bluespace Tech"
+			ghost.voice_name = "[ghost.key] Bluespace Tech"
 			del(src)
 
 	say(var/message)

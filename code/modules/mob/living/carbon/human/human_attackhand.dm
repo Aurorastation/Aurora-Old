@@ -112,7 +112,29 @@
 
 		if("hurt")
 			var/datum/unarmed_attack/attack = M.species.unarmed
-
+			//Vampire code
+			if(M.zone_sel && M.zone_sel.selecting == "head")
+				if(M.mind && M.mind.vampire && (M.mind in ticker.mode.vampires) && !M.mind.vampire.draining)
+					if((head && (head.flags & HEADCOVERSMOUTH)) || (wear_mask && (wear_mask.flags & MASKCOVERSMOUTH)))
+						M << "\red Remove their mask!"
+						return 0
+					if((M.head && (M.head.flags & HEADCOVERSMOUTH)) || (M.wear_mask && (M.wear_mask.flags & MASKCOVERSMOUTH)))
+						M << "\red Remove your mask!"
+						return 0
+					if(mind && mind.vampire && (mind in ticker.mode.vampires))
+						M << "\red Your fangs fail to pierce [src.name]'s cold flesh"
+						return 0
+					if(isipc())
+						M << "\red They have no blood"
+						return 0
+					//we're good to suck the blood, blaah
+					//and leave an attack log
+					M.attack_log += text("\[[time_stamp()]\] <font color='red'>Bit [src.name] ([src.ckey]) in the neck and draining their blood</font>")
+					src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bit in the neck by [M.name] ([M.ckey])</font>")
+					msg_admin_attack("[M.name] ([M.ckey]) bit [src.name] ([src.ckey]) in the neck")
+					M.handle_bloodsucking(src)
+					return
+			//end vampire codes
 			M.attack_log += text("\[[time_stamp()]\] <font color='red'>[pick(attack.attack_verb)]ed [src.name] ([src.ckey])</font>")
 			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [pick(attack.attack_verb)]ed by [M.name] ([M.ckey])</font>")
 			msg_admin_attack("[key_name(M)] [pick(attack.attack_verb)]ed [key_name(src)]")
