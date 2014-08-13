@@ -56,8 +56,9 @@
 			if(player.assigned_role == job)
 				possible_vampires -= player
 				continue
-			if(player.current.isipc())
-				possible_vampires -= player
+//This could be the fuckup with game start
+//			if(player.current.isipc())
+//				possible_vampires -= player
 
 	vampire_amount = max(1,round(num_players() / 10)) //1 + round(num_players() / 10)
 
