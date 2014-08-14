@@ -119,10 +119,10 @@
 			s.start()
 			var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
 			ghost.key = key
-			ghost.mind.name = "[ghost.key] Bluespace Tech"
-			ghost.name = "[ghost.key] Bluespace Tech"
-			ghost.real_name = "[ghost.key] Bluespace Tech"
-			ghost.voice_name = "[ghost.key] Bluespace Tech"
+			ghost.mind.name = "[ghost.key] BSTech"
+			ghost.name = "[ghost.key] BSTech"
+			ghost.real_name = "[ghost.key] BSTech"
+			ghost.voice_name = "[ghost.key] BSTech"
 			del(src)
 
 	say(var/message)
