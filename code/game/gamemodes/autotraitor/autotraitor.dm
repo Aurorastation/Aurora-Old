@@ -127,7 +127,8 @@
 
 			msg_scopes("Traitors are afk, forcing a new traitor")
 			need_new_traitor = 1
-			msg_scopes("afk_traitor_count = [afk_traitor_count.len] : old count: [old_afk_traitors.len]")
+			msg_scopes("afk_traitor_count = [afk_traitor_count.len]")
+			msg_scopes("old count: [old_afk_traitors.len]")
 
 //		var/r = rand(5)
 //		var/target_traitors = 1
@@ -138,6 +139,7 @@
 		if(traitorcount < max_traitors - 1)
 			traitor_prob += 50
 
+		msg_scopes("Need traitor = [need_new_traitor]")
 		if(traitorcount < max_traitors || need_new_traitor)
 			//message_admins("Number of Traitors is below maximum.  Rolling for new Traitor.")
 			//message_admins("The probability of a new traitor is [traitor_prob]%")

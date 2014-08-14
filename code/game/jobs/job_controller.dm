@@ -374,14 +374,12 @@ var/global/datum/controller/occupations/job_master
 									continue
 
 								if(G.slot)
-									msg_scopes("G.slot = [G.slot]")
 									if(!H.equip_to_slot_or_del(new G.path(H), G.slot))
 										spawn(6)
 											if(!H.equip_to_slot_or_del(new G.path(H.back), slot_in_backpack))
 												new G.path(H.loc)
 								else
 									if(H.backbag)
-										msg_scopes("G.path = [G.path]")
 										spawn(6) //I can't beleive this worked: 4 works but I want to give a little time for lags
 											if(!H.equip_to_slot_or_del(new G.path(H.back), slot_in_backpack))
 												new G.path(H.loc)

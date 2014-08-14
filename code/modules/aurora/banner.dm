@@ -8,7 +8,6 @@
 	layer = 9
 	icon = 'icons/obj/banner.dmi'
 	icon_state = "banner_down"
-	var/secured = 1
 
 /obj/structure/banner/verb/toggle()
 	set src in oview(1)
@@ -33,19 +32,17 @@
 
 /obj/structure/banner/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/wrench))
-		switch(secured)
+		switch(anchored)
 			if(0)
-				secured = 1
+				anchored = 1
 				playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
 				user.visible_message("[user.name] secures [src.name] to the floor.", \
 					"You secure [src.name] to the floor.", \
 					"You hear a ratchet")
-				src.anchored = 1
 			if(1)
-				secured = 0
+				anchored = 0
 				playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
 				user.visible_message("[user.name] unsecures [src.name] reinforcing bolts from the floor.", \
 					"You unsecure [src.name] from the floor.", \
 					"You hear a ratchet")
-				src.anchored = 0
 		return
