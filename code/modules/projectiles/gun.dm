@@ -25,6 +25,7 @@
 	var/tmp/list/mob/living/target //List of who yer targeting.
 	var/tmp/lock_time = -100
 	var/tmp/mouthshoot = 0 ///To stop people from suiciding twice... >.>
+	var/projectiles_per_shot = 1 //projectiles per shot.  burstfire weapons.
 	var/automatic = 0 //Used to determine if you can target multiple people.
 	var/tmp/mob/living/last_moved_mob //Used to fire faster at more than one person.
 	var/tmp/told_cant_shoot = 0 //So that it doesn't spam them with the fact they cannot hit them.
@@ -32,6 +33,7 @@
 						// 1 for one bullet after tarrget moves and aim is lowered
 	var/fire_delay = 6
 	var/last_fired = 0
+	var/fire_cooldown = 0
 
 	var/wielded = 0
 
@@ -68,7 +70,11 @@
 	if(user && user.client && user.client.gun_mode && !(A in target))
 		PreFire(A,user,params) //They're using the new gun system, locate what they're aiming at.
 	else
-		Fire(A,user,params) //Otherwise, fire normally.
+		for (var/i = 0; i < projectiles_per_shot; i++)
+			Fire(A,user,params) //Otherwise, fire normally.
+			if(fire_cooldown)
+				sleep(fire_cooldown)
+
 
 /obj/item/weapon/gun/proc/isHandgun()
 	return 1
