@@ -34,7 +34,7 @@
 	var/fire_delay = 6
 	var/last_fired = 0
 	var/fire_cooldown = 0 //burst fire code
-
+	var/last_bursted = 0 //burst cooldowns
 	var/wielded = 0
 
 	var/fire_delay_unwielded = 0 //If these are set it will change the respected fields, if not they are ignored
@@ -54,6 +54,15 @@
 		else
 			return 0
 
+	proc/burst_delay()
+		if(world.time >= last_bursted + 2 + fire_cooldown*3)
+			return 1
+		else
+			return 0
+
+	proc/set_burst()
+		last_bursted = world.time
+
 	proc/load_into_chamber()
 		return 0
 
@@ -70,11 +79,16 @@
 	if(user && user.client && user.client.gun_mode && !(A in target))
 		PreFire(A,user,params) //They're using the new gun system, locate what they're aiming at.
 	else
-		for (var/i = 0; i < projectiles_per_shot; i++)
-			Fire(A,user,params) //Otherwise, fire normally.
-			if(fire_cooldown)
-				sleep(fire_cooldown)
-		sleep(fire_cooldown*3)
+		if (!burst_delay())
+			if (world.time % 3) //to prevent spam
+				user << "<span class='warning'>[src] is not ready to burst again!"
+			return
+		else
+			for (var/i = 0; i < projectiles_per_shot; i++)
+				Fire(A,user,params) //Otherwise, fire normally.
+				if(fire_cooldown)
+					sleep(fire_cooldown)
+			set_burst()
 
 
 /obj/item/weapon/gun/proc/isHandgun()

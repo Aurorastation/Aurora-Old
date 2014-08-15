@@ -9,7 +9,7 @@
 	ammo_type = "/obj/item/ammo_casing/c9mm"
 	automatic = 1
 	fire_delay = 0
-	fire_cooldown = 1
+	fire_cooldown = 0
 	projectiles_per_shot = 1
 
 /obj/item/weapon/gun/projectile/automatic/verb/toggle_burst()
