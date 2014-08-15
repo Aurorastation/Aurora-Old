@@ -55,8 +55,9 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 			if(player.assigned_role == job)
 				possible_changelings -= player
 				continue
-			if(player.current.isipc()) //Removing ipc's
-				possible_changelings -= player
+//This could be the fuckup with game start
+//			if(player.current.isipc()) //Removing ipc's
+//				possible_changelings -= player
 
 	changeling_amount = 1 + round(num_players() / 10)
 

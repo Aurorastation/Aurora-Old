@@ -111,6 +111,7 @@ Class Procs:
 	var/manual = 0
 	var/interact_offline = 0
 	var/global/gl_uid = 1
+	var/moveable = 0
 
 /obj/machinery/New()
 	..()
@@ -259,3 +260,19 @@ Class Procs:
 
   state(text, "blue")
   playsound(src.loc, 'sound/machines/ping.ogg', 50, 0)
+
+/obj/machinery/attack_by(obj/item/W, mob/user)
+	if(istype(W, /obj/item/weapon/wrench))
+		if(moveable == 1)
+			switch(anchored)
+				if(0)
+					anchored = 1
+					playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
+					user.visible_message("[user.name] secures [src.name] to the floor.", \"You secure [src.name] to the floor.", \"You hear a ratchet")
+				if(1)
+					anchored = 0
+					playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
+					user.visible_message("[user.name] unsecures [src.name] reinforcing bolts from the floor.", \"You unsecure [src.name] from the floor.", \"You hear a ratchet")
+			return
+		else
+			user << "The item is secured to the floor too firmly."
