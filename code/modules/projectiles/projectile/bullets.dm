@@ -34,6 +34,18 @@
 /obj/item/projectile/bullet/midbullet2
 	damage = 25
 
+/obj/item/projectile/bullet/incendiary
+	icon_state= "fireball"
+
+/obj/item/projectile/bullet/incendiary/on_hit(var/atom/target, var/blocked = 0)
+	if(istype(target, /mob/living/carbon))
+		var/mob/living/carbon/M = target
+		M.adjust_fire_stacks(1)
+		M.IgniteMob()
+
+/obj/item/projectile/bullet/incendiary/shell
+	damage = 20
+
 /obj/item/projectile/bullet/suffocationbullet//How does this even work?
 	name = "co bullet"
 	damage = 20

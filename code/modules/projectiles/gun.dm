@@ -33,7 +33,7 @@
 						// 1 for one bullet after tarrget moves and aim is lowered
 	var/fire_delay = 6
 	var/last_fired = 0
-	var/fire_cooldown = 0
+	var/fire_cooldown = 0 //burst fire code
 
 	var/wielded = 0
 
@@ -74,6 +74,7 @@
 			Fire(A,user,params) //Otherwise, fire normally.
 			if(fire_cooldown)
 				sleep(fire_cooldown)
+		sleep(fire_cooldown*3)
 
 
 /obj/item/weapon/gun/proc/isHandgun()

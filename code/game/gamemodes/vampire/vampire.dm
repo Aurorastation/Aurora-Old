@@ -319,8 +319,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	if(vamp.bloodtotal >= 150)
 		if(!(VAMP_CLOAK in vamp.powers))
 			vamp.powers.Add(VAMP_CLOAK)
-		if(!(VAMP_DISEASE in vamp.powers))
-			vamp.powers.Add(VAMP_DISEASE)
+
 
 	// TIER 3
 	if(vamp.bloodtotal >= 200)
@@ -329,6 +328,8 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 		if(!(VAMP_SCREAM in vamp.powers))
 			vamp.powers.Add(VAMP_SCREAM)
 			src << "\blue Your rejuvination abilities have improved and will now heal you over time when used."
+		if(!(VAMP_DISEASE in vamp.powers))
+			vamp.powers.Add(VAMP_DISEASE)
 
 	// TIER 3.5 (/vg/)
 	if(vamp.bloodtotal >= 250)
@@ -369,7 +370,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 					src << "\blue You have gained the Summon Bats ability."
 					verbs += /client/vampire/proc/vampire_bats // work in progress
 				if(VAMP_SCREAM)
-					src << "\blue You have gained the Chriopteran Screech ability which stuns anything with ears in a large radius and shatters glass in the process."
+					src << "\blue You have gained the Chiropteran Screech ability which stuns anything with ears in a large radius and shatters glass in the process."
 					verbs += /client/vampire/proc/vampire_screech
 				if(VAMP_JAUNT)
 					src << "\blue You have gained the Mist Form ability which allows you to take on the form of mist for a short period and pass over any obstacle in your path."

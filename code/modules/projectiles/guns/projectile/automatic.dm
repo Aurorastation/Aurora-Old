@@ -23,7 +23,7 @@
 	else
 		loc << "\red [src.name] is now set to fire in bursts."
 		projectiles_per_shot = 3
-		fire_cooldown = 2
+		fire_cooldown = 1
 	update_icon()
 
 
