@@ -4,6 +4,9 @@
 	icon_state = "lawgiver"
 	item_state = "gun"
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
+	fire_delay = 3
+	recoil = 1
+
 
 	projectile_type = "/obj/item/projectile/bullet/midbullet2"
 	origin_tech = "combat=6;magnets=5"

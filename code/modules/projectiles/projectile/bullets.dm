@@ -15,8 +15,9 @@
 
 /obj/item/projectile/bullet/weakbullet // "rubber" bullets
 	damage = 10
-	stun = 5
-	weaken = 5
+	agony = 60
+/*	stun = 5
+	weaken = 5*/
 	embed = 0
 	sharp = 0
 
@@ -44,7 +45,11 @@
 		M.IgniteMob()
 
 /obj/item/projectile/bullet/incendiary/shell
+	name = "incendiary shell"
+	damage_type = BURN
 	damage = 20
+	embed = 0
+	sharp = 0
 
 /obj/item/projectile/bullet/suffocationbullet//How does this even work?
 	name = "co bullet"

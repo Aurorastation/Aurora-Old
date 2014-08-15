@@ -6,10 +6,12 @@
 	origin_tech = "combat=5;materials=3;magnets=2"
 	projectile_type = "/obj/item/projectile/beam/xray/burst"
 	w_class = 3
-	fire_delay = 2
+	fire_delay = 0
 	projectiles_per_shot = 3 //more than three and adminlogs will cry
 	fire_cooldown = 2
 
+//How burst weapons work.  Firedelay should always, always be 0 if and when burstfire is toggled on.  Its function is replaced by fire_cooldown, which triggers after
+//a burst.
 /*
 /obj/item/weapon/gun/energy/automatic/verb/toggle_burst()
 	set name = "Toggle Burst"
