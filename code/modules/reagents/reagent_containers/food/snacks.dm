@@ -278,7 +278,7 @@
 	deepfried = 1
 	New()
 		..()
-		reagents.add_reagent("nutriment", 30)
+		reagents.add_reagent("nutriment", 10)
 
 /obj/item/weapon/reagent_containers/food/snacks/candy
 	name = "candy"
