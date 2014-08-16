@@ -118,17 +118,17 @@ proc/populate_gear_list()
 	slot = slot_wear_suit
 
 /datum/gear/bluescrubs
-	display_name "blue scrubs"
+	display_name = "blue scrubs"
 	path = /obj/item/clothing/under/rank/medical/blue
 	cost = 1
 
 /datum/gear/purplescrubs
-	display_name "purple scrubs"
+	display_name = "purple scrubs"
 	path = /obj/item/clothing/under/rank/medical/purple
 	cost = 1
 
 /datum/gear/greenscrubs
-	display_name "green scrubs"
+	display_name = "green scrubs"
 	path = /obj/item/clothing/under/rank/medical/green
 	cost = 1
 
