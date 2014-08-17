@@ -28,7 +28,8 @@
 
 //I secretly have no idea what I am doing with this stuff
 //it could work
-	attack(var/obj/machinery/O as obj)
+//Well what the donkey tail, of cause it won't
+	attack(var/obj/O as obj)
 		if(!setting)
 			return
 		if(!O.id)
@@ -38,4 +39,4 @@
 				usr << "\blue You alter the componants signal id"
 				O.id = setting
 			else
-				user << "\red The id's are the same"
+				usr << "\red The id's are the same"
