@@ -36,6 +36,11 @@ proc/populate_gear_list()
 	path = /obj/item/weapon/fluff/cado_keppel_1
 	cost = 1
 
+/datum/gear/cane
+	display_name = "cane"
+	path = /obj/item/weapon/cane
+	cost = 2
+
 /datum/gear/tie_horrible
 	display_name = "horrible tie"
 	path = /obj/item/clothing/tie/horrible
@@ -108,6 +113,18 @@ proc/populate_gear_list()
 /datum/gear/greensoftcap
 	display_name = "green softcap"
 	path = /obj/item/clothing/head/soft/green
+	cost = 2
+	slot = slot_head
+
+/datum/gear/greysoftcap
+	display_name = "grey softcap"
+	path = /obj/item/clothing/head/soft/grey
+	cost = 2
+	slot = slot_head
+
+/datum/gear/purplesoftcap
+	display_name = "purple softcap"
+	path = /obj/item/clothing/head/soft/purple
 	cost = 2
 	slot = slot_head
 
@@ -321,6 +338,12 @@ proc/populate_gear_list()
 	slot = slot_w_uniform
 	cost = 3
 
+/datum/gear/skirt_green
+	display_name = "green plaid skirt"
+	path = /obj/item/clothing/under/dress/plaid_green
+	slot = slot_w_uniform
+	cost = 3
+
 /datum/gear/skirt_black
 	display_name = "black skirt"
 	path = /obj/item/clothing/under/blackskirt
@@ -365,6 +388,18 @@ proc/populate_gear_list()
 	path = /obj/item/clothing/under/suit_jacket/really_black
 	slot = slot_w_uniform
 	cost = 3
+
+/datum/gear/exec_suit
+	display_name = "executive suit"
+	path = /obj/item/clothing/under/suit_jacket/really_black
+	slot = slot_w_uniform
+	cost = 3
+
+/datum/gear/oldmansuit
+	display_name = "old man suit"
+	path = /obj/item/clothing/under/lawyer/oldman
+	cost = 3
+
 
 //Security
 /datum/gear/security
