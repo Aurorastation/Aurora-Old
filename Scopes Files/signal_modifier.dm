@@ -1,8 +1,12 @@
 //Make a thing that changes id's on stuff to change what they do
+//
+// This is only the item, I have some plans on how this could work with minimal file
+// editing but we will have to see first. Need to decide what it will change on everything too.
+//
 
 /obj/item/device/signaltool
-	name = "Signal Modifyer"
-	desc = "Used for Stuff."
+	name = "Signal Modifier"
+	desc = "Used for Stuff."  //and here
 	icon_state = "multitool"
 	flags = FPRINT | TABLEPASS| CONDUCT //check out
 	force = 5.0
@@ -20,23 +24,13 @@
 		var/prevname = "[setting]"
 		var/str = trim(stripped_input(usr,"New ID tag:","Signal Altering", prevname, MAX_NAME_LEN))
 		if(!str || !length(str) || str==prevname) //cancel
+			usr << "\blue You remove the tag from the [name]"
+			setting = null
 			return
+
 		if(length(str) > 50)
 			usr << "\red Text too long."
 			return
-		setting = str
 
-//I secretly have no idea what I am doing with this stuff
-//it could work
-//Well what the donkey tail, of cause it won't
-	attack(var/obj/O as obj)
-		if(!setting)
-			return
-		if(!O.id)
-			msg_scopes("no id thing")
-		else
-			if(O.id != setting)
-				usr << "\blue You alter the componants signal id"
-				O.id = setting
-			else
-				usr << "\red The id's are the same"
+		setting = str
+		usr << "\blue You change the tag setting to [setting]"
