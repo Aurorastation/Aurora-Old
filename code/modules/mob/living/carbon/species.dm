@@ -232,12 +232,12 @@
 		"feet" = 'icons/mob/species/vox/feet.dmi',
 		"gloves" = 'icons/mob/species/vox/gloves.dmi'
 		)
-
+/* NO MORE LEAPS.  NO MORE.
 /datum/species/vox/handle_post_spawn(var/mob/living/carbon/human/H)
 
 	H.verbs += /mob/living/carbon/human/proc/leap
 	..()
-
+*/
 /datum/species/vox/armalis/handle_post_spawn(var/mob/living/carbon/human/H)
 
 	H.verbs += /mob/living/carbon/human/proc/gut

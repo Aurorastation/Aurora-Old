@@ -470,8 +470,16 @@
 
 /mob/proc/float(var/on)
 	if(on)
+		if(!real_name)
+			msg_scopes("[name] was made to float")
+		else
+			msg_scopes("[real_name] was made to float")
 		animate(src, pixel_y = 2, time = 10, loop = -1)
 		floating = 1
 	else
+		if(!real_name)
+			msg_scopes("[name] was made to stop floating")
+		else
+			msg_scopes("[real_name] was made to stop floating")
 		animate(src, pixel_y = initial(pixel_y), time = 10)
 		floating = 0

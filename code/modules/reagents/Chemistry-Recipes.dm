@@ -1961,7 +1961,7 @@ datum
 			name = "Tall Black Russian"
 			id = "tallrussian"
 			result = "tallrussian"
-			required_reagents = list("vodka" = 1, "kahlua" = 1, "cola" = 1)
+			required_reagents = list("blackrussian" = 1, "cola" = 1)
 
 			result_amount = 3
 

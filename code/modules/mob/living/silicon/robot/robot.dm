@@ -1014,6 +1014,9 @@
 			icon_state = base_icon
 		return
 
+/mob/living/silicon/robot/proc/updatefire()
+	return
+
 //Call when target overlay should be added/removed
 /mob/living/silicon/robot/update_targeted()
 	if(!targeted_by && target_locked)

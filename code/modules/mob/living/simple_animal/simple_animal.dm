@@ -445,6 +445,9 @@
 			return (0)
 	return (1)
 
+/mob/living/simple_animal/update_fire()
+	return
+
 //Call when target overlay should be added/removed
 /mob/living/simple_animal/update_targeted()
 	if(!targeted_by && target_locked)

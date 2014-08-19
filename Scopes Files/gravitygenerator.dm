@@ -140,7 +140,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 /obj/machinery/gravity_field_generator/main
 	icon_state = "on_8"
 	idle_power_usage = 0
-	active_power_usage = 3000
+	active_power_usage = 12000
 	power_channel = ENVIRON
 	sprite_number = 8
 	use_power = 1
@@ -421,6 +421,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 		if(!gravity_field_generators["[T.z]"])
 			gravity_field_generators["[T.z]"] = list()
 		if(on)
+			msg_scopes("Well here is a list of people on their face")
 			for(var/area/A in localareas)
 				A.has_gravity = 1
 				if(round_start)
@@ -431,6 +432,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 				round_start = 0
 			gravity_field_generators["[T.z]"] |= src
 		else
+			msg_scopes("Here is a lovely list of floaty people")
 			for(var/area/A in localareas)
 				A.has_gravity = 0
 				A.gravitychange(A.has_gravity,A)

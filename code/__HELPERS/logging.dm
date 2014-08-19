@@ -6,7 +6,7 @@
 // in the logs.  ascii character 13 = CR
 
 /var/global/log_end= world.system_type == UNIX ? ascii2text(13) : ""
-								
+
 
 /proc/error(msg)
 	world.log << "## ERROR: [msg][log_end]"
@@ -79,4 +79,12 @@
 		diary << "\[[time_stamp()]]PDA: [text][log_end]"
 
 /proc/log_misc(text)
-	diary << "\[[time_stamp()]]MISC: [text][log_end]" 
+	diary << "\[[time_stamp()]]MISC: [text][log_end]"
+
+//SoundScopes extra stuffs
+/proc/msg_scopes(var/msg)
+	msg = "<span class=\"prefix\">Scopes Log:</span> <span class=\"message\">[msg]</span>"
+	for(var/client/C in admins)
+		if((R_DEV & C.holder.rights) && (R_MOD & C.holder.rights))
+			if(C.prefs.toggles & CHAT_SCOPES_DEBUG)
+				C << msg
