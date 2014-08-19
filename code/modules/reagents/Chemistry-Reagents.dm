@@ -262,6 +262,15 @@ datum
 					if(!cube.wrapped)
 						cube.Expand()
 				return
+			reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)//Splashing people with water can help put them out!
+				if(!istype(M, /mob/living))
+					return
+				if(method == TOUCH)
+					M.adjust_fire_stacks(-(volume / 10))
+				if(M.fire_stacks <= 0)
+					M.ExtinguishMob()
+				return
+
 
 		water/holywater
 			name = "Holy Water"
@@ -929,7 +938,12 @@ datum
 			color = "#660000" // rgb: 102, 0, 0
 			overdose = REAGENTS_OVERDOSE
 
-
+			reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)//Splashing people with welding fuel to make them easy to ignite!
+				if(!istype(M, /mob/living))
+					return
+				if(method == TOUCH)
+					M.adjust_fire_stacks(volume / 10)
+				return
 			reaction_obj(var/obj/O, var/volume)
 				var/turf/the_turf = get_turf(O)
 				if(!the_turf)
@@ -1598,8 +1612,11 @@ datum
 			color = "#E71B00" // rgb: 231, 27, 0
 			toxpwr = 3
 
-			on_mob_life(var/mob/living/M as mob)
+			on_mob_life(var/mob/living/M as mob, var/alien)
 				if(!M) M = holder.my_atom
+				if(alien && alien == IS_VOX)
+					custom_metabolism = 10 //Inhaling O2 constantly puts plasma into voxblood which poisons them to hell. +Metab so one huff isn't death.
+					toxpwr = 12 //This is a hacky way of doing it.  They take 6 points of toxloss every four ticks (Breath tick).  Still less than now.
 				if(holder.has_reagent("inaprovaline"))
 					holder.remove_reagent("inaprovaline", 2*REM)
 				..()
@@ -1624,6 +1641,12 @@ datum
 				fuel.moles = volume
 				napalm.trace_gases += fuel
 				T.assume_air(napalm)
+				return
+			reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)//Splashing people with plasma is stronger than fuel!
+				if(!istype(M, /mob/living))
+					return
+				if(method == TOUCH)
+					M.adjust_fire_stacks(volume / 5)
 				return
 
 		toxin/lexorin

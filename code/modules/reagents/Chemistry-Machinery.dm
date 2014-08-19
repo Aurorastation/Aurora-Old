@@ -23,6 +23,7 @@
 	"copper","mercury","radium","water","ethanol","sugar","sacid","tungsten")
 	var/list/broken_requirements = list()
 	var/broken_on_spawn = 0
+	moveable = 1
 
 /obj/machinery/chem_dispenser/proc/recharge()
 	if(stat & (BROKEN|NOPOWER)) return
@@ -180,7 +181,7 @@
 	add_fingerprint(usr)
 	return 1 // update UIs attached to this object
 
-/obj/machinery/chem_dispenser/attackby(var/obj/item/weapon/reagent_containers/B as obj, var/mob/user as mob)
+/obj/machinery/chem_dispenser/attackby(var/obj/item/weapon/B as obj, var/mob/user as mob)
 	if(isrobot(user))
 		return
 
@@ -208,6 +209,21 @@
 		user << "You set [B] on the machine."
 		nanomanager.update_uis(src) // update all UIs attached to src
 		return
+
+	if(istype(B, /obj/item/weapon/wrench))
+		if(moveable == 1)
+			switch(anchored)
+				if(0)
+					playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
+					spawn(10)
+					user.visible_message("[user.name] secures [src.name] to the floor.", "You secure [src.name] to the floor.", "You hear a ratchet")
+					anchored = 1
+				if(1)
+					playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
+					spawn(10)
+					user.visible_message("[user.name] unsecures [src.name] reinforcing bolts from the floor.", "You unsecure [src.name] from the floor.", "You hear a ratchet")
+					anchored = 0
+	return
 
 /obj/machinery/chem_dispenser/attack_ai(mob/user as mob)
 	return src.attack_hand(user)
@@ -281,6 +297,7 @@
 	icon_state = "mixer0"
 	use_power = 1
 	idle_power_usage = 20
+	moveable = 1
 	var/beaker = null
 	var/obj/item/weapon/storage/pill_bottle/loaded_pill_bottle = null
 	var/mode = 0
@@ -325,6 +342,21 @@
 
 /obj/machinery/chem_master/attackby(var/obj/item/weapon/B as obj, var/mob/user as mob)
 
+	if(istype(B, /obj/item/weapon/wrench))
+		if(moveable == 1)
+			switch(anchored)
+				if(0)
+					playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
+					spawn(10)
+					user.visible_message("[user.name] secures [src.name] to the floor.", "You secure [src.name] to the floor.", "You hear a ratchet")
+					anchored = 1
+				if(1)
+					playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
+					spawn(10)
+					user.visible_message("[user.name] unsecures [src.name] reinforcing bolts from the floor.", "You unsecure [src.name] from the floor.", "You hear a ratchet")
+					anchored = 0
+	return
+
 	if(istype(B, /obj/item/weapon/reagent_containers/glass))
 
 		if(src.beaker)
@@ -337,7 +369,7 @@
 		src.updateUsrDialog()
 		icon_state = "mixer1"
 
-	else if(istype(B, /obj/item/weapon/storage/pill_bottle))
+	if(istype(B, /obj/item/weapon/storage/pill_bottle))
 
 		if(src.loaded_pill_bottle)
 			user << "A pill bottle is already loaded into the machine."
@@ -860,6 +892,7 @@
 	use_power = 1
 	idle_power_usage = 5
 	active_power_usage = 100
+	moveable = 1
 	var/inuse = 0
 	var/obj/item/weapon/reagent_containers/beaker = null
 	var/limit = 10

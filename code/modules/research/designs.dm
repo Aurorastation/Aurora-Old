@@ -1554,7 +1554,7 @@ datum/design/largecrossbow
 	build_path = "/obj/item/weapon/gun/energy/crossbow/largecrossbow"
 
 datum/design/temp_gun
-	name = "Temperature Gun"
+	name = "Freeze Ray"
 	desc = "A gun that shoots temperature bullet energythings to change temperature."//Change it if you want
 	id = "temp_gun"
 	req_tech = list("combat" = 3, "materials" = 4, "powerstorage" = 3, "magnets" = 2)
@@ -1592,6 +1592,16 @@ datum/design/smg
 	build_path = "/obj/item/weapon/gun/projectile/automatic"
 	locked = 1
 
+datum/design/rapidlaser
+	name = "Rapid-fire Laser"
+	desc = "A fast-firing laser that shoots bursts of weaker beams."
+	id = "smg"
+	req_tech = list("combat" = 4, "materials" = 3)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 5000, "$uranium" = 1000)
+	build_path = "/obj/item/weapon/gun/energy/automatic/rapidlaser"
+	locked = 1
+
 datum/design/ammo_9mm
 	name = "Ammunition Box (9mm)"
 	desc = "A box of prototype 9mm ammunition."
@@ -1618,6 +1628,15 @@ datum/design/plasmapistol
 	build_type = PROTOLATHE
 	materials = list("$metal" = 5000, "$glass" = 1000, "$plasma" = 3000)
 	build_path = "/obj/item/weapon/gun/energy/toxgun"
+
+datum/design/lawgiver
+	name = "Lawgiver Mk II"
+	desc = "A highly advanced firearm for the modern police force. It has multiple voice-activated firing modes."
+	id = "lawgiver"
+	req_tech = list("combat" = 6, "plasmatech" = 4, "bluespace" = 5, "materials" = 7)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 6000, "$glass" = 1000, "$uranium" = 1000, "$plasma" = 1000, "$diamond" = 3000)
+	build_path = "/obj/item/weapon/gun/energy/lawgiver"
 /////////////////////////////////////////
 /////////////////Mining//////////////////
 /////////////////////////////////////////
