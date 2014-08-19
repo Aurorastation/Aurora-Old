@@ -1111,3 +1111,77 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	containername = "Beekeeping crate"
 	access = access_hydroponics
 	group = "Hydroponics"
+
+/datum/supply_packs/aliengloves
+	name = "Alien Glove Kit"
+	contains = list(/obj/item/clothing/gloves/yellow/specialt,
+					/obj/item/clothing/gloves/yellow/specialt,
+					/obj/item/clothing/gloves/yellow/specialt,
+					/obj/item/clothing/gloves/yellow/specialu,
+					/obj/item/clothing/gloves/yellow/specialu,
+					/obj/item/clothing/gloves/yellow/specialu)
+	cost = 25
+	containertype = /obj/structure/closet/crate
+	containername = "Speciality Gloves Kit"
+	group = "Supply"
+
+/datum/supply_packs/hardsuitcrate_e
+	name = "E-Hardsuit Crate"
+	contains = list(/obj/item/clothing/head/helmet/space/rig,
+					/obj/item/clothing/head/helmet/space/rig,
+					/obj/item/clothing/head/helmet/space/rig,
+					/obj/item/clothing/suit/space/rig,
+					/obj/item/clothing/suit/space/rig,
+					/obj/item/clothing/suit/space/rig)
+	cost = 40
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Engineer Hardsuit Kit"
+	access_engine_equip
+	group = "Engineering"
+
+/datum/supply_packs/hardsuitcrate_s
+	name = "S-Hardsuit Hardsuit Crate"
+	contains = list(/obj/item/clothing/head/helmet/space/rig/security,
+					/obj/item/clothing/head/helmet/space/rig/security,
+					/obj/item/clothing/head/helmet/space/rig/security,
+					/obj/item/clothing/suit/space/rig/security,
+					/obj/item/clothing/suit/space/rig/security,
+					/obj/item/clothing/suit/space/rig/security)
+	cost = 40
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Security Hardsuit Kit"
+	access = access_security
+	group = "Security"
+
+/datum/supply_packs/hardsuitcrate_m
+	name = "M-Hardsuit Hardsuit Crate"
+	contains = list(/obj/item/clothing/head/helmet/space/rig/medical,
+					/obj/item/clothing/head/helmet/space/rig/medical,
+					/obj/item/clothing/head/helmet/space/rig/medical,
+					/obj/item/clothing/suit/space/rig/medical,
+					/obj/item/clothing/suit/space/rig/medical,
+					/obj/item/clothing/suit/space/rig/medical)
+	cost = 40
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Medical Hardsuit Kit"
+	access = access_medical
+	group = "Medical"
+
+/datum/supply_packs/condiments
+	name = "Condiment Supply"
+	contains = list(/obj/item/weapon/reagent_containers/food/condi/s_packet,
+					/obj/item/weapon/reagent_containers/food/condi/s_packet,
+					/obj/item/weapon/reagent_containers/food/condi/p_packet,
+					/obj/item/weapon/reagent_containers/food/condi/p_packet,
+					/obj/item/weapon/reagent_containers/food/condi/soy_packet,
+					/obj/item/weapon/reagent_containers/food/condi/soy_packet,
+					/obj/item/weapon/reagent_containers/food/condi/k_packet,
+					/obj/item/weapon/reagent_containers/food/condi/k_packet,
+					/obj/item/weapon/reagent_containers/food/condi/h_packet,
+					/obj/item/weapon/reagent_containers/food/condi/h_packet,
+					/obj/item/weapon/reagent_containers/food/condi/sr_packet,
+					/obj/item/weapon/reagent_containers/food/condi/sr_packet)
+	cost = 5
+	containertype = /obj/structure/closet/crate/freezer
+	containername = "Condiment Kit"
+	group = "Supply"
