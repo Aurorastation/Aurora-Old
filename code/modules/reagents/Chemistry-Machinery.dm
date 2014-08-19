@@ -355,7 +355,7 @@
 					spawn(10)
 					user.visible_message("[user.name] unsecures [src.name] reinforcing bolts from the floor.", "You unsecure [src.name] from the floor.", "You hear a ratchet")
 					anchored = 0
-	return
+		return
 
 	if(istype(B, /obj/item/weapon/reagent_containers/glass))
 
