@@ -1111,3 +1111,34 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	containername = "Beekeeping crate"
 	access = access_hydroponics
 	group = "Hydroponics"
+
+/*
+ *Skull's additions to satisfy the cravings of any atmospheric tech begin here.
+ */
+
+/datum/supply_packs/atmos_freezer
+	name = "Gas Cooling Unit"
+	contains = list(/obj/machinery/atmospherics/unary/cold_sink/freezer/cargo) //MAKE A FREEZER THAT IS, BY DEFAULT, UNANCHORED!
+	cost = 50
+	containertype = /obj/structure/closet/crate/secure/large //Test if this works ((should))
+	containername = "gas cooling unit crate"
+	access = access_atmospherics
+	group = "Engineering"
+
+/datum/supply_packs/atmos_heater
+	name = "Gas Heating Unit"
+	contains = list(/obj/machinery/atmospherics/unary/heat_reservoir/heater/cargo) //MAKE A COOLER THAT IS, BY DEFAULT, UNANCHORED!
+	cost = 50
+	containertype = /obj/structure/closet/crate/secure/large //Test if this works ((should))
+	containername = "gas heating unit crate"
+	access = access_atmospherics
+	group = "Engineering"
+
+///datum/supply_packs/atmos_airtank
+//	name = "Large Air Tank"
+//	contains = list() //MAKE A LARGE RED AIRTANK THAT IS UNWRENCHED, AND CAN BE MANIPULATED AT SPAWN. This may cause issues, hueh.
+//	cost = 65
+//	containertype = /obj/structure/closet/crate/secure/large //test if this works ((should))
+//	containername = "large air tank crate"
+//	access = access_atmospherics
+//	group = "Engineering"
