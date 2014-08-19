@@ -23,6 +23,7 @@
 	"copper","mercury","radium","water","ethanol","sugar","sacid","tungsten")
 	var/list/broken_requirements = list()
 	var/broken_on_spawn = 0
+	moveable = 1
 
 /obj/machinery/chem_dispenser/proc/recharge()
 	if(stat & (BROKEN|NOPOWER)) return
@@ -281,6 +282,7 @@
 	icon_state = "mixer0"
 	use_power = 1
 	idle_power_usage = 20
+	moveable = 1
 	var/beaker = null
 	var/obj/item/weapon/storage/pill_bottle/loaded_pill_bottle = null
 	var/mode = 0
@@ -860,6 +862,7 @@
 	use_power = 1
 	idle_power_usage = 5
 	active_power_usage = 100
+	moveable = 1
 	var/inuse = 0
 	var/obj/item/weapon/reagent_containers/beaker = null
 	var/limit = 10
