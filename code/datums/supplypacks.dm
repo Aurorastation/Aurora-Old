@@ -1118,7 +1118,7 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 
 /datum/supply_packs/atmos_freezer
 	name = "Gas Cooling Unit"
-	contains = list() //MAKE A FREEZER THAT IS, BY DEFAULT, UNANCHORED!
+	contains = list(/obj/machinery/atmospherics/unary/cold_sink/freezer/cargo) //MAKE A FREEZER THAT IS, BY DEFAULT, UNANCHORED!
 	cost = 50
 	containertype = /obj/structure/closet/crate/secure/large //Test if this works ((should))
 	containername = "gas cooling unit crate"
@@ -1127,7 +1127,7 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 
 /datum/supply_packs/atmos_heater
 	name = "Gas Heating Unit"
-	contains = list() //MAKE A COOLER THAT IS, BY DEFAULT, UNANCHORED!
+	contains = list(/obj/machinery/atmospherics/unary/heat_reservoir/heater/cargo) //MAKE A COOLER THAT IS, BY DEFAULT, UNANCHORED!
 	cost = 50
 	containertype = /obj/structure/closet/crate/secure/large //Test if this works ((should))
 	containername = "gas heating unit crate"
