@@ -87,6 +87,8 @@ rcd light flash thingy on matter drain
 				spawn(50)
 					explosion(get_turf(M), 0,0,3,4)
 					del(M)
+				new/obj/effect/effect/smoke/flashbang(M)
+				del(/obj/effect/effect/smoke/flashbang)
 			else usr << "Out of uses."
 	else usr << "That's not a machine."
 
