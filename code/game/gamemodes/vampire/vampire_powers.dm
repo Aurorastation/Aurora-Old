@@ -113,7 +113,7 @@
 //	M.current.remove_vampire_blood(20) Moved to remove if it works only.
 	if(M.current.vampire_power(20, 0))
 		M.current.verbs -= /client/vampire/proc/vampire_hypnotise
-		spawn(1800)
+		spawn(900)
 			M.current.verbs += /client/vampire/proc/vampire_hypnotise
 		if(do_mob(M.current, C, 50))
 			if(C.mind && C.mind.vampire)
@@ -133,12 +133,12 @@
 
 /client/vampire/proc/vampire_disease()
 	set category = "Abilities"
-	set name = "Diseased Touch (100)"
+	set name = "Diseased Touch (200)"
 	set desc = "Touches your victim with infected blood giving them the Shutdown Syndrome which quickly shutsdown their major organs resulting in a quick painful death."
 	var/datum/mind/M = usr.mind
 	if(!M) return
 
-	var/mob/living/carbon/C = M.current.vampire_active(100, 0, 1)
+	var/mob/living/carbon/C = M.current.vampire_active(200, 0, 1)
 	if(!C) return
 	if(C==usr)
 		M.current << "\red You can't do that to yourself"
@@ -179,7 +179,7 @@
 	usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Gave [C.name] ([C.ckey]) the shutdown disease</font>")
 	C.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been given the shutdown disease by [usr.name] ([usr.ckey])</font>")
 	infect_virus2(C,shutdown,0)
-	M.current.remove_vampire_blood(100)
+	M.current.remove_vampire_blood(200)
 	M.current.verbs -= /client/vampire/proc/vampire_disease
 	spawn(1800) M.current.verbs += /client/vampire/proc/vampire_disease
 
@@ -193,7 +193,7 @@
 		M.current.visible_message("\red <b>[M.current]'s eyes emit a blinding flash!")
 		//M.vampire.bloodusable -= 10
 		M.current.verbs -= /client/vampire/proc/vampire_glare
-		spawn(450)
+		spawn(800)
 			M.current.verbs += /client/vampire/proc/vampire_glare
 		if(istype(M.current:glasses, /obj/item/clothing/glasses/sunglasses/blindfold))
 			M.current << "<span class='warning'>You're blindfolded!</span>"
@@ -225,11 +225,11 @@
 */
 /client/vampire/proc/vampire_screech()
 	set category = "Abilities"
-	set name = "Chiropteran  Screech (30)"
-	set desc = "An extremely loud shriek that stuns nearby humans in a four-tile radius." //and breaks windows as well ||Or would if duck knew how to code. end orig text.
+	set name = "Chiropteran  Screech (90)"
+	set desc = "An extremely loud shriek that stuns nearby humans in a four-tile radius, as well as shattering the windows."
 	var/datum/mind/M = usr.mind
 	if(!M) return
-	if(M.current.vampire_power(30, 0))
+	if(M.current.vampire_power(90, 0))
 		M.current.visible_message("\red [M.current.name] lets out an ear piercing shriek!", "\red You let out a loud shriek.", "\red You hear a loud painful shriek!")
 		for(var/mob/living/carbon/C in hearers(4, M.current))
 			if(C == M.current) continue
@@ -238,17 +238,17 @@
 				if(!C.isipc())
 					continue
 			C << "<span class='warning'><font size='3'><b>You hear a ear piercing shriek and your senses dull!</font></b></span>"
-			C.Weaken(8)
+			C.Weaken(5)
 			C.ear_deaf = 20
 			C.stuttering = 20
-			C.Stun(8)
+			C.Stun(5)
 //			C.Jitter(150)
-		for(var/obj/structure/window/W in view(4))
+		for(var/obj/structure/window/W in view(7))
 			W.destroy()
 		playsound(M.current.loc, 'sound/effects/creepyshriek.ogg', 100, 1)
-		M.current.remove_vampire_blood(30)
+		M.current.remove_vampire_blood(90)
 		M.current.verbs -= /client/vampire/proc/vampire_screech
-		spawn(1800) M.current.verbs += /client/vampire/proc/vampire_screech
+		spawn(3600) M.current.verbs += /client/vampire/proc/vampire_screech
 
 /client/vampire/proc/vampire_enthrall()
 	set category = "Abilities"
@@ -387,13 +387,13 @@
 /client/vampire/proc/vampire_jaunt()
 	//AHOY COPY PASTE INCOMING
 	set category = "Abilities"
-	set name = "Mist Form (30)"
+	set name = "Mist Form (45)"
 	set desc = "You take on the form of mist for a short period of time."
 	var/jaunt_duration = 50 //in deciseconds
 	var/datum/mind/M = usr.mind
 	if(!M) return
 
-	if(M.current.vampire_power(30, 0))
+	if(M.current.vampire_power(45, 0))
 		if(M.current.buckled) M.current.buckled.unbuckle()
 		spawn(0)
 			var/originalloc = get_turf(M.current.loc)
@@ -406,7 +406,7 @@
 			animation.icon_state = "liquify"
 			animation.layer = 5
 			animation.master = holder
-			//M.current.ExtinguishMob()
+			M.current.ExtinguishMob()
 			if(M.current.buckled)
 				M.current.buckled.unbuckle()
 			flick("liquify",animation)
@@ -437,7 +437,7 @@
 			M.current.client.eye = M.current
 			del(animation)
 			del(holder)
-		M.current.remove_vampire_blood(30)
+		M.current.remove_vampire_blood(45)
 		M.current.verbs -= /client/vampire/proc/vampire_jaunt
 		spawn(600) M.current.verbs += /client/vampire/proc/vampire_jaunt
 
@@ -481,7 +481,7 @@
 
 			if(!picked || !isturf(picked))
 				return
-			//M.current.ExtinguishMob()
+			M.current.ExtinguishMob()
 			if(M.current.buckled)
 				M.current.buckled.unbuckle()
 			var/atom/movable/overlay/animation = new /atom/movable/overlay( get_turf(usr) )
