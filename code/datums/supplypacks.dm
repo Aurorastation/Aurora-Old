@@ -1134,11 +1134,11 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	access = access_atmospherics
 	group = "Engineering"
 
-/daumt/supply_packs/atmos_airtank
-	name = "Large Air Tank"
-	contains = list() //MAKE A LARGE RED AIRTANK THAT IS UNWRENCHED, AND CAN BE MANIPULATED AT SPAWN. This may cause issues, hueh.
-	cost = 65
-	containertype = /obj/structure/closet/crate/secure/large //test if this works ((should))
-	containername = "large air tank crate"
-	access = access_atmospherics
-	group = "Engineering"
+///datum/supply_packs/atmos_airtank
+//	name = "Large Air Tank"
+//	contains = list() //MAKE A LARGE RED AIRTANK THAT IS UNWRENCHED, AND CAN BE MANIPULATED AT SPAWN. This may cause issues, hueh.
+//	cost = 65
+//	containertype = /obj/structure/closet/crate/secure/large //test if this works ((should))
+//	containername = "large air tank crate"
+//	access = access_atmospherics
+//	group = "Engineering"
