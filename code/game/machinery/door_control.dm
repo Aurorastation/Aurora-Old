@@ -55,6 +55,10 @@
 		return
 	}
 	*/
+	if(istype(W, /obj/item/device/signaltool))
+		var/obj/item/device/signaltool/ST = W
+		id = ST.change_ID(id)
+		return
 	if(istype(W, /obj/item/device/detective_scanner))
 		return
 	if(istype(W, /obj/item/weapon/card/emag))

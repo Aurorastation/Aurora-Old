@@ -320,6 +320,11 @@
 		I.overlays += ID
 	return I
 
+/obj/machinery/door_timer/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/device/signaltool))
+		var/obj/item/device/signaltool/ST = W
+		id = ST.change_ID(id)
+		return
 
 /obj/machinery/door_timer/cell_1
 	name = "Cell 1"
