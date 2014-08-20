@@ -24,13 +24,15 @@
 	var/mode = 0
 
 	attack_self(mob/M as mob)
-		if (alert(usr, "What would you like to do", "[name] Settings", "Copy", "New") == "New")
-			change_tool_settings("id")
-			change_tool_settings("freq")
-			mode = 1
-		else
-			mode = 0
-		return
+		switch(alert(usr, "What would you like to do", "[name] Settings", "Set", "Copy", "New",))
+			if("New")
+				change_tool_settings("id")
+				change_tool_settings("freq")
+				mode = 1
+			if("Copy")
+				mode = 0
+			if("Set")
+				mode = 1
 
 	proc/change_ID(var/cur_setting)
 		if(mode)
