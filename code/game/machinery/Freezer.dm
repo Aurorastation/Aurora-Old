@@ -141,6 +141,7 @@
 	..()
 	initialize_directions = dir
 	anchored = 1
+	var/setup = 0
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/cargo/New()
 	..()
@@ -157,6 +158,7 @@
 			node = target
 			break
 
+	setup = 1
 	update_icon()
 
 
