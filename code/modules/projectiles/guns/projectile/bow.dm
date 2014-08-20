@@ -210,7 +210,7 @@
 /obj/item/weapon/crossbowframe
 	name = "crossbow frame"
 	desc = "A half-finished crossbow."
-	icon_state = "crossbowframe0"
+	icon_state = "crossbow"
 	item_state = "crossbow-solid"
 
 	var/buildstate = 0
