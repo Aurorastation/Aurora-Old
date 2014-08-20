@@ -1118,18 +1118,18 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 
 /datum/supply_packs/atmos_freezer
 	name = "Gas Cooling Unit"
-	contains = list(/obj/machinery/atmospherics/unary/cold_sink/freezer) //MAKE A FREEZER THAT IS, BY DEFAULT, UNANCHORED!
+	contains = list(/obj/machinery/atmospherics/unary/cold_sink/freezer/cargo)
 	cost = 50
-	containertype = /obj/structure/closet/crate/secure/large //Test if this works ((should))
+	containertype = /obj/structure/closet/crate/secure/large
 	containername = "gas cooling unit crate"
 	access = access_atmospherics
 	group = "Engineering"
 
 /datum/supply_packs/atmos_heater
 	name = "Gas Heating Unit"
-	contains = list(/obj/machinery/atmospherics/unary/heat_reservoir/heater) //MAKE A COOLER THAT IS, BY DEFAULT, UNANCHORED!
+	contains = list(/obj/machinery/atmospherics/unary/heat_reservoir/heater/cargo)
 	cost = 50
-	containertype = /obj/structure/closet/crate/secure/large //Test if this works ((should))
+	containertype = /obj/structure/closet/crate/secure/large
 	containername = "gas heating unit crate"
 	access = access_atmospherics
 	group = "Engineering"
