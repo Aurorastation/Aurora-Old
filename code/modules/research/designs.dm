@@ -1595,7 +1595,7 @@ datum/design/smg
 datum/design/rapidlaser
 	name = "Rapid-fire Laser"
 	desc = "A fast-firing laser that shoots bursts of weaker beams."
-	id = "smg"
+	id = "rapidlaser"
 	req_tech = list("combat" = 4, "materials" = 3)
 	build_type = PROTOLATHE
 	materials = list("$metal" = 5000, "$uranium" = 1000)
