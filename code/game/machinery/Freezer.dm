@@ -134,6 +134,7 @@
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "freezer_0"
 	density = 1
+	var/setup = 0
 
 	anchored = 1.0
 
@@ -143,7 +144,6 @@
 	..()
 	initialize_directions = dir
 	anchored = 1
-	var/setup = 0
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/cargo/New()
 	..()
