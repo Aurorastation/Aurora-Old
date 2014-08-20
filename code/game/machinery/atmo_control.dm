@@ -74,6 +74,14 @@ obj/machinery/air_sensor
 		if(radio_controller)
 			set_frequency(frequency)
 
+	attackby(var/obj/item/I, mob/user)
+		if(istype(I, /obj/item/device/signaltool))
+			var/obj/item/device/signaltool/ST = I
+			id_tag = ST.change_ID(id_tag)
+			set_frequency(ST.change_freq(frequency))
+			return
+
+
 obj/machinery/computer/general_air_control
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "tank"
