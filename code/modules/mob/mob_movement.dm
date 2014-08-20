@@ -206,11 +206,13 @@
 	if(!mob.lastarea)
 		mob.lastarea = get_area(mob.loc)
 
+	if(mob.floating && mob.mob_has_gravity(mob.loc))
+		mob.float(0)
+	else if(!mob.floating && !mob.mob_has_gravity(mob.loc))
+		mob.float(1)
+
 	if((istype(mob.loc, /turf/space)) || (mob.lastarea.has_gravity == 0))
 		if(!mob.Process_Spacemove(0))	return 0
-
-	if(mob.floating & mob.mob_has_gravity(mob.loc))
-		mob.float(0)
 
 	if(isobj(mob.loc) || ismob(mob.loc))//Inside an object, tell it we moved
 		var/atom/O = mob.loc
@@ -445,8 +447,6 @@
 		return 0
 	//If not then we can reset inertia and move
 	inertia_dir = 0
-	if(!floating)
-		src.float(1)
 	return 1
 
 
