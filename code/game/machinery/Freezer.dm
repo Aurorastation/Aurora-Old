@@ -120,6 +120,8 @@
 					user.visible_message("[user.name] secures [src.name] to the floor.", "You secure [src.name] to the floor.", "You hear a ratchet")
 					anchored = 1
 					initialize_directions = dir
+					if(!setup)
+						initialize()
 				if(1)
 					playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
 					spawn(10)
