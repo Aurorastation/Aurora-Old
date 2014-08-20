@@ -1763,15 +1763,15 @@
 					if(gravity_is_on)
 						if(!(M.stat & BROKEN))
 							M.set_broken()
-							log_admin("[key_name(usr)] toggled gravity on.", 1)
-							message_admins("\blue [key_name_admin(usr)] toggled gravity on.", 1)
-							command_alert("Gravity generators are again functioning within normal parameters, please restart your generator, Sorry for any inconvenience.")
-					else
-						if(M.stat & BROKEN)
-							M.set_fix()
 							log_admin("[key_name(usr)] toggled gravity off.", 1)
 							message_admins("\blue [key_name_admin(usr)] toggled gravity off.", 1)
 							command_alert("Feedback surge detected in mass-distributions systems. Artifical gravity has been disabled whilst the system reinitializes. Further failures may result in a gravitational collapse and formation of blackholes. Have a nice day.")
+					else
+						if(M.stat & BROKEN)
+							M.set_fix()
+							log_admin("[key_name(usr)] toggled gravity on.", 1)
+							message_admins("\blue [key_name_admin(usr)] toggled gravity on.", 1)
+							command_alert("Gravity generators are again functioning within normal parameters, please restart your generator, Sorry for any inconvenience.")
 /*
 				spawn(300)
 					for(var/area/A in world)

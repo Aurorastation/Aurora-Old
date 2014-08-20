@@ -725,7 +725,16 @@ var/list/ai_list = list()
 				user.visible_message("\blue \The [user] decides not to bolt \the [src].")
 				return
 			user.visible_message("\blue \The [user] finishes fastening down \the [src]!")
+			if(floating)
+				float(0)
 			anchored = 1
 			return
 	else
 		return ..()
+
+/mob/living/silicon/ai/float(var/on = 0)
+	if(anchored)
+		msg_scopes("AI is bolted")
+		..(0)
+	else
+		..(on)

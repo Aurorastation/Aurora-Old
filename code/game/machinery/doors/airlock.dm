@@ -1153,6 +1153,12 @@ About the new airlock wires panel:
 	if(istype(C, /obj/item/device/detective_scanner) || istype(C, /obj/item/taperoll))
 		return
 
+	if(istype(C, /obj/item/device/signaltool))
+		var/obj/item/device/signaltool/ST = C
+		id_tag = ST.change_ID(id_tag)
+		set_frequency(ST.change_freq(frequency))
+		return
+
 	src.add_fingerprint(user)
 	if((istype(C, /obj/item/weapon/weldingtool) && !( src.operating > 0 ) && src.density))
 		var/obj/item/weapon/weldingtool/W = C
