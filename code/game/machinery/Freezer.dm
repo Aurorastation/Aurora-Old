@@ -3,6 +3,7 @@
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "freezer_0"
 	density = 1
+	var/setup = 0
 
 	anchored = 1.0
 
@@ -28,6 +29,7 @@
 			node = target
 			break
 
+	setup = 1
 	update_icon()
 
 
@@ -243,6 +245,8 @@
 					user.visible_message("[user.name] secures [src.name] to the floor.", "You secure [src.name] to the floor.", "You hear a ratchet")
 					anchored = 1
 					initialize_directions = dir
+					if(!setup)
+						initialize()
 				if(1)
 					playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
 					spawn(10)
