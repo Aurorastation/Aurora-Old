@@ -11,6 +11,7 @@
 /obj/machinery/atmospherics/unary/cold_sink/freezer/New()
 	..()
 	initialize_directions = dir
+	anchored = 0
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/initialize()
 	if(node) return
@@ -119,9 +120,6 @@
 					anchored = 0
 	return
 
-/obj/machinery/atmospherics/unary/cold_sink/freezer/cargo
-	anchored = 0
-
 /obj/machinery/atmospherics/unary/heat_reservoir/heater
 	name = "gas heating system"
 	icon = 'icons/obj/Cryogenic2.dmi'
@@ -135,6 +133,7 @@
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/New()
 	..()
 	initialize_directions = dir
+	anchored = 0
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/initialize()
 	if(node) return
@@ -240,6 +239,3 @@
 					user.visible_message("[user.name] unsecures [src.name] reinforcing bolts from the floor.", "You unsecure [src.name] from the floor.", "You hear a ratchet")
 					anchored = 0
 	return
-
-/obj/machinery/atmospherics/unary/heat_reservoir/heater/cargo
-	anchored = 0
