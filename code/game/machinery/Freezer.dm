@@ -11,7 +11,12 @@
 /obj/machinery/atmospherics/unary/cold_sink/freezer/New()
 	..()
 	initialize_directions = dir
-	anchored = 0
+	anchored = 1
+
+/obj/machinery/atmospherics/unary/cold_sink/freezer/cargo/New()
+	..()
+	spawn(1)
+		anchored = 0
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/initialize()
 	if(node) return
@@ -133,7 +138,12 @@
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/New()
 	..()
 	initialize_directions = dir
-	anchored = 0
+	anchored = 1
+
+/obj/machinery/atmospherics/unary/heat_reservoir/heater/cargo/New()
+	..()
+	spawn(1)
+		anchored = 0
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/initialize()
 	if(node) return
