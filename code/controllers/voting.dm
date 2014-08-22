@@ -239,6 +239,7 @@ datum/controller/vote
 			var/timedifference = round((world.time - last_vote_time))
 			var/timedifference_text
 			timedifference_text = time2text(timedifference,"mm:ss")
+			msg_scopes("timedifference: [timedifference] timedifference_text: [timedifference_text] started_time: [started_time]")
 			for(var/client/C in admins)
 				C << "Time since last vote: [timedifference_text]"
 			var/text = "[capitalize(mode)] vote started by [initiator]."
