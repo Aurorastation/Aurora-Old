@@ -68,8 +68,9 @@
 
 		for(var/obj/machinery/medical_alarm/L in A)
 			L.on = on
-			L.updateicon()
-			L.activate()
+			spawn(8)
+				L.updateicon()
+				L.activate()
 
 /obj/machinery/medical_alarm/proc/make_noise()
 	for (var/mob/O in hearers(6, src.loc))
