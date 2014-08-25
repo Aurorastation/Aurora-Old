@@ -1471,4 +1471,5 @@
 #include "Scopes Files\gravitygenerator.dm"
 #include "Scopes Files\medical_alarm.dm"
 #include "Scopes Files\signal_modifier.dm"
+#include "Scopes Files\space_cooler.dm"
 // END_INCLUDE
