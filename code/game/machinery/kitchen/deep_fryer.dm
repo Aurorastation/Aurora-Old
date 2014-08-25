@@ -23,19 +23,33 @@
 			if(ismob(G.affecting))
 				var/mob/living/GM = G.affecting
 				for (var/mob/V in viewers(usr))
-					V.show_message("[usr] starts forcing [GM.name] towards the fryer.", 3)
+					V.show_message("[usr] starts pushing [GM.name] into the fryer.", 3)
+
 				if(do_after(usr, 20))
-					GM.apply_damage(20, BURN, "head")
+					var/body_part = fry_mob_by_limb(GM, user.zone_sel.selecting)
+					if(!body_part) //If you fry a valid part this will be set
+						for (var/mob/V in viewers(usr))
+							if(GM.sleeping||GM.resting)
+								V.show_message("[GM.name] is to much of a dead weight to be place in the fryer")
+							else
+								V.show_message("[GM.name] breaks free.", 3)
+						return
+
 					for (var/mob/C in viewers(src))
-						C.show_message("\red [GM.name] has been placed in the [src] by [user].", 3)
+						C.show_message("\red [GM.name]'s [body_part] has been placed in the [src] by [user].", 3)
+
 					del(G)
 					usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Has placed [GM.name] ([GM.ckey]) in in the fryer.</font>")
 					GM.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been fried by [usr.name] ([usr.ckey])</font>")
 					msg_admin_attack("[usr] ([usr.ckey]) placed [GM] ([GM.ckey]) in a fryer. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[usr.x];Y=[usr.y];Z=[usr.z]'>JMP</a>)")
+				else
+					for (var/mob/V in viewers(usr))
+						V.show_message("[usr] broke free")
 			return
 
-		user << "<span class='notice'>[src] is still active!</span>"
-		return
+		else
+			user << "<span class='notice'>[src] is still active!</span>"
+			return
 
 	if(!istype(I, /obj/item/weapon/reagent_containers/food/snacks/))
 		user << "<span class='warning'>Budget cuts won't let you put that in there.</span>"
@@ -46,6 +60,49 @@
 	else
 		fry_food(I, user)
 
+/obj/machinery/deepfryer/proc/fry_mob_by_limb(var/mob/living/M, var/limb)
+	switch(limb)
+		if("head")
+			M.apply_damage(40, BURN, limb)
+			M << "\red Your head burns"
+			return "head"
+		if("l_leg")
+			M.apply_damage(20, BURN, limb)
+			M.apply_damage(30, BURN, "l_foot")
+			M << "\red Your left foot and leg frys"
+			return "left leg"
+		if("l_foot")
+			M.apply_damage(20, BURN, limb)
+			M << "\red Your left foot frys"
+			return "left foot"
+		if("r_leg")
+			M.apply_damage(20, BURN, limb)
+			M.apply_damage(30, BURN, "r_foot")
+			M << "\red Your right foot and leg frys"
+			return "right leg"
+		if("r_foot")
+			M.apply_damage(20, BURN, limb)
+			M << "\red Your right foot frys"
+			return "right foot"
+		if("l_arm")
+			M.apply_damage(20, BURN, limb)
+			M.apply_damage(30, BURN, "l_hand")
+			M << "\red Your left arm and hand frys"
+			return "left arm"
+		if("l_hand")
+			M.apply_damage(20, BURN, limb)
+			M << "\red Your left hand frys"
+			return "left hand"
+		if("r_arm")
+			M.apply_damage(20, BURN, limb)
+			M.apply_damage(30, BURN, "r_hand")
+			M << "\red Your right arm and hand frys"
+			return "right arm"
+		if("r_hand")
+			M.apply_damage(20, BURN, limb)
+			M << "\red Your right hand frys"
+			return "right hand"
+	return null
 
 /obj/machinery/deepfryer/attack_hand(mob/user)
 	if(on && frying)
@@ -80,8 +137,4 @@
 	icon_state = "fryer_off"
 	on = FALSE
 	playsound(src.loc, 'sound/machines/ding.ogg', 50, 1)
-	return
-
-/obj/machinery/deepfryer/proc/fry_human(var/mob/M, var/mob/user)
-	world << "AFGIFAIOOSFHOAE GLAEUIBGASEB"
 	return

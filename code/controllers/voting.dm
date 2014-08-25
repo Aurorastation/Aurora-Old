@@ -238,6 +238,8 @@ datum/controller/vote
 			started_time = world.time
 			var/timedifference = round((world.time - last_vote_time))
 			var/timedifference_text
+			timedifference_text = time2text(timedifference, "hh:mm:ss")
+			msg_scopes("timedifference_text debug: [timedifference]")
 			timedifference_text = time2text(timedifference,"mm:ss")
 			msg_scopes("timedifference: [timedifference] timedifference_text: [timedifference_text] started_time: [started_time]")
 			for(var/client/C in admins)

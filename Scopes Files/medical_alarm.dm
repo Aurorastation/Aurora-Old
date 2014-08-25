@@ -52,7 +52,6 @@
 	src.attack_hand(user)
 
 /obj/machinery/medical_alarm/attack_hand(mob/user)
-//	var/last_icon = icon_state
 	icon_state = "eng_press"
 	add_fingerprint(usr)
 //	if(!allowed(user))
@@ -64,15 +63,13 @@
 
 	for(var/area/A in area.master.related)
 		A.medical_alarm = on
-		spawn(5)
+		spawn(8)
 			A.updateicon()
 
 		for(var/obj/machinery/medical_alarm/L in A)
 			L.on = on
 			L.updateicon()
 			L.activate()
-
-//	area.master.power_change()
 
 /obj/machinery/medical_alarm/proc/make_noise()
 	for (var/mob/O in hearers(6, src.loc))
