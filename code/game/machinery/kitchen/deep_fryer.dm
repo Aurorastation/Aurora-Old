@@ -64,43 +64,43 @@
 	switch(limb)
 		if("head")
 			M.apply_damage(40, BURN, limb)
-			M << "\red Your head burns"
+			M << "\red  Your thoughts are overwritten by the pain, as seering hot oil encompasses your head."
 			return "head"
 		if("l_leg")
 			M.apply_damage(20, BURN, limb)
 			M.apply_damage(30, BURN, "l_foot")
-			M << "\red Your left foot and leg frys"
+			M << "\red  Your thoughts are overwritten by the pain, as seering hot oil encompasses your left leg and foot."
 			return "left leg"
 		if("l_foot")
 			M.apply_damage(20, BURN, limb)
-			M << "\red Your left foot frys"
+			M << "\red  Your thoughts are overwritten by the pain, as seering hot oil encompasses your left foot."
 			return "left foot"
 		if("r_leg")
 			M.apply_damage(20, BURN, limb)
 			M.apply_damage(30, BURN, "r_foot")
-			M << "\red Your right foot and leg frys"
+			M << "\red  Your thoughts are overwritten by the pain, as seering hot oil encompasses your right leg and foot."
 			return "right leg"
 		if("r_foot")
 			M.apply_damage(20, BURN, limb)
-			M << "\red Your right foot frys"
+			M << "\red  Your thoughts are overwritten by the pain, as seering hot oil encompasses your right foot."
 			return "right foot"
 		if("l_arm")
 			M.apply_damage(20, BURN, limb)
 			M.apply_damage(30, BURN, "l_hand")
-			M << "\red Your left arm and hand frys"
+			M << "\red  Your thoughts are overwritten by the pain, as seering hot oil encompasses your left arm and hand."
 			return "left arm"
 		if("l_hand")
 			M.apply_damage(20, BURN, limb)
-			M << "\red Your left hand frys"
+			M << "\red  Your thoughts are overwritten by the pain, as seering hot oil encompasses your left hand."
 			return "left hand"
 		if("r_arm")
 			M.apply_damage(20, BURN, limb)
 			M.apply_damage(30, BURN, "r_hand")
-			M << "\red Your right arm and hand frys"
+			M << "\red  Your thoughts are overwritten by the pain, as seering hot oil encompasses your right arm and hand."
 			return "right arm"
 		if("r_hand")
 			M.apply_damage(20, BURN, limb)
-			M << "\red Your right hand frys"
+			M << "\red  Your thoughts are overwritten by the pain, as seering hot oil encompasses your right hand."
 			return "right hand"
 	return null
 
