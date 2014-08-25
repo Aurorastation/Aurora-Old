@@ -21,7 +21,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 /client/proc/cmd_dev_reset_gravity()
 	set category = "Debug"
 	set name = "Restore Default Gravity"
-	set desc = "Resets all gravity on the entire server"
+	set desc = "Resets all gravity on the entire server(This spams Scopes like mad.)"
 
 	if(!check_rights(R_DEBUG|R_DEV))	return
 
@@ -36,6 +36,9 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 		src << "\red The game hasn't started yet!"
 		return
 
+	if(alert(usr, "Be sure to warn Scopes, Chris, and Skull. This could be very spammy for their logs", "Restore gravity", "No", "Yes") == "No")
+		return 0
+
 	world << "\red \b Resetting Gravity Simulation."
 	gravity_is_on = 1
 	spawn(10)
@@ -44,10 +47,12 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 				continue
 
 			A.has_gravity = 1
+			msg_scopes("Gravity reset in: [A.name]")
 			for(var/area/SubA in A.related)
 				SubA.has_gravity = 1
 				for(var/mob/living/carbon/human/M in SubA)
 					M:float(0)
+		msg_scopes("Did you enjoy that insane amount of things")
 		world << "\red Gravity Simulation reset."
 
 	feedback_add_details("admin_verb","RSG")
@@ -156,6 +161,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	var/list/localareas = list()
 	var/effectiverange = 255  //Currently unused due to errors
 	var/round_start = 2 //To help stop a bug with round start
+	var/has_been_charged = 0
 
 /obj/machinery/gravity_field_generator/main/Del() // If we somehow get deleted, remove all of our other parts.
 	log_debug("Gravity Generator Destroyed")
@@ -329,6 +335,8 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	var/alert = 0
 	var/area/area = get_area(src)
 	if(new_state) // If we turned on
+		if(has_been_charged)
+			return
 		if(gravity_in_level() == 0)
 			alert = 1
 			gravity_is_on = 1
@@ -355,8 +363,10 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	if(charging_state != POWER_IDLE)
 		if(charging_state == POWER_UP && charge_count >= 100)
 			set_state(1)
+			has_been_charged = 1
 		else if(charging_state == POWER_DOWN && charge_count <= 0)
 			set_state(0)
+			has_been_charged = 0
 		else
 			if(charging_state == POWER_UP)
 				charge_count += 2
