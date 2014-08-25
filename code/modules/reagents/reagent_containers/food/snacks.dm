@@ -279,6 +279,9 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 10)
+	Del()
+		contents  = null
+		..()
 
 /obj/item/weapon/reagent_containers/food/snacks/candy
 	name = "candy"
