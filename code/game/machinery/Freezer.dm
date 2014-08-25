@@ -129,6 +129,24 @@
 					anchored = 0
 	return
 
+/obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate()
+	set name = "Rotate Object"
+	set category = "Object"
+	set src in oview(1)
+
+	if(anchored)
+		usr << "It is fastened to the floor therefore you can't rotate it!"
+		return 0
+
+	dir = turn(dir, 90)
+	initialize_directions = dir
+	return
+
+///////////////////////////////////
+///////SPACING BECAUSE YES/////////
+////////HEATER DOWN BELOW//////////
+///////////////////////////////////
+
 /obj/machinery/atmospherics/unary/heat_reservoir/heater
 	name = "gas heating system"
 	icon = 'icons/obj/Cryogenic2.dmi'
@@ -256,4 +274,17 @@
 					spawn(10)
 					user.visible_message("[user.name] unsecures [src.name] reinforcing bolts from the floor.", "You unsecure [src.name] from the floor.", "You hear a ratchet")
 					anchored = 0
+	return
+
+/obj/machinery/atmospherics/unary/heat_reservoir/verb/rotate()
+	set name = "Rotate Object"
+	set category = "Object"
+	set src in oview(1)
+
+	if(anchored)
+		usr << "It is fastened to the floor therefore you can't rotate it!"
+		return 0
+
+	dir = turn(dir, 90)
+	initialize_directions = dir
 	return

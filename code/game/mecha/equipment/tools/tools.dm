@@ -238,6 +238,7 @@
 								if(W.loc == my_target)
 									break
 								sleep(2)
+							W.delete()
 		return 1
 
 	get_equip_info()

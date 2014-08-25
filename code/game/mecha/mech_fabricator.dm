@@ -552,6 +552,14 @@
 
 /obj/machinery/mecha_part_fabricator/attack_hand(mob/user as mob)
 	var/dat, left_part
+	if(istype(user, /mob/living/carbon/human))
+		var/mob/living/carbon/human/M = user
+		if(M.h_style == "Floorlength Braid" || M.h_style == "Very Long Hair")
+			if(prob(25))
+				M.apply_damage(30, BRUTE, "head")
+				M.apply_damage(45, HALLOSS)
+				M.visible_message("\red [user]'s hair catches in the [src]!", "\red Your hair gets caught in the [src]!")
+				M.say("*scream")
 	if (..())
 		return
 	if(!operation_allowed(user))

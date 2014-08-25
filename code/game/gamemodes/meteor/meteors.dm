@@ -98,6 +98,7 @@
 
 		if (A)
 			A.meteorhit(src)
+			message_admins("Meteor hit [A] at [src.x], [src.y], [src.z]([src ? "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>" : "null"])" , 0)
 			playsound(src.loc, 'sound/effects/meteorimpact.ogg', 40, 1)
 		if (--src.hits <= 0)
 

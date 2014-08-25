@@ -1155,7 +1155,7 @@ datum/preferences
 							nanotrasen_relation = new_relation
 
 					if("flavor_text")
-						var/msg = input(usr,"Set the flavor text in your 'examine' verb. This can also be used for OOC notes and preferences!","Flavor Text",html_decode(flavor_text)) as message
+						var/msg = input(usr,"Set the flavor text in your 'examine' verb. This should be something that can be observed at a glance or so!","Flavor Text",html_decode(flavor_text)) as message
 
 						if(msg != null)
 							msg = copytext(msg, 1, MAX_MESSAGE_LEN)
