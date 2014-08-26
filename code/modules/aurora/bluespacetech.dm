@@ -60,6 +60,7 @@
 		bst.equip_to_slot_or_del(new /obj/item/weapon/storage/box/ids(bst.back), slot_in_backpack)
 		bst.equip_to_slot_or_del(new /obj/item/device/t_scanner(bst.back), slot_in_backpack)
 		bst.equip_to_slot_or_del(new /obj/item/device/signaltool(bst.back), slot_in_backpack)
+		bst.equip_to_slot_or_del(new /obj/item/device/pda/captain/bst(bst.back), slot_in_backpack)
 
 	//Implant because access
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(bst)
@@ -256,6 +257,20 @@
 			return
 		if(!istype(usr, /mob/living/carbon/human/bst))
 			usr << "<span class='alert'>Your hand seems to go right through the [src] ID. It's like it doesn't exist.</span>"
+			return
+		else
+			..()
+
+/obj/item/device/pda/captain/bst
+	hidden = 1
+	silent = 1
+//	ttone = "DO SOMETHING HERE"
+
+	attack_hand()
+		if(!usr)
+			return
+		if(!istype(usr, /mob/living/carbon/human/bst))
+			usr << "<span class='alert'>Your hand seems to go right through the pda. It's like it doesn't exist.</span>"
 			return
 		else
 			..()
