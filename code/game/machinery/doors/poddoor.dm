@@ -22,6 +22,11 @@
 		return 0
 
 /obj/machinery/door/poddoor/attackby(obj/item/weapon/C as obj, mob/user as mob)
+	if(istype(C, /obj/item/device/signaltool))
+		var/obj/item/device/signaltool/ST = C
+		id = ST.change_ID(id)
+		return
+
 	src.add_fingerprint(user)
 	if (!( istype(C, /obj/item/weapon/crowbar) || (istype(C, /obj/item/weapon/twohanded/fireaxe) && C:wielded == 1) ))
 		return

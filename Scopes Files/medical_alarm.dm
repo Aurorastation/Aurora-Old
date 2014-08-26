@@ -7,10 +7,11 @@
 /obj/machinery/medical_alarm
 	name = "Medical Emergency button"
 	desc = "Medical Emergency button for when people are hurt"
-	icon = 'Scopes Files/Alarms.dmi'
+	icon = 'Scopes Files/Alarms.dmi' //temp holder until it's done
 	icon_state = "eng_stand"
 	anchored = 1
 	var/on = 1
+	var/played_sound = 0
 	var/area/area = null
 	var/otherarea = null
 	//luminosity = 1
@@ -40,6 +41,7 @@
 		icon_state = "eng_unlock"
 	else
 		icon_state = "eng_stand"
+	..()
 
 /obj/machinery/medical_alarm/examine()
 	set src in oview(1)
@@ -50,7 +52,6 @@
 	src.attack_hand(user)
 
 /obj/machinery/medical_alarm/attack_hand(mob/user)
-//	var/last_icon = icon_state
 	icon_state = "eng_press"
 	add_fingerprint(usr)
 //	if(!allowed(user))
@@ -62,24 +63,27 @@
 
 	for(var/area/A in area.master.related)
 		A.medical_alarm = on
-		spawn(10)
+		spawn(8)
 			A.updateicon()
 
 		for(var/obj/machinery/medical_alarm/L in A)
 			L.on = on
-			spawn(10)
+			spawn(8)
 				L.updateicon()
 				L.activate()
 
-	area.master.power_change()
-
 /obj/machinery/medical_alarm/proc/make_noise()
 	for (var/mob/O in hearers(6, src.loc))
-		O << "Impliment Sound"
+		if(!played_sound)
+			O.playsound_local(src, 'Scopes Files/PowerPlant_Alarm.ogg', 10, 1, 0.5, 1)
+		O << "The [src] beeps"
+		played_sound = 1
 
 /obj/machinery/medical_alarm/proc/activate()
 	if(on)
 		make_noise()
 		spawn(100)
 			activate()
+	else
+		played_sound = 0
 	return

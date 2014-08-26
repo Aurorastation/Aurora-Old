@@ -145,3 +145,11 @@
 			icon_state = "[i == 1 && istype(loc, /turf/simulated) ? "h" : "" ]exposed"
 			on = 0
 		return
+
+	attackby(obj/item/weapon/C as obj, mob/user as mob)
+		add_fingerprint(user)
+		if(istype(C, /obj/item/device/signaltool))
+			var/obj/item/device/signaltool/ST = C
+			id = ST.change_ID(id)
+			set_frequency(ST.change_freq(frequency))
+			return

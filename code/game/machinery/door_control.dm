@@ -55,6 +55,25 @@
 		return
 	}
 	*/
+	if(istype(W, /obj/item/device/signaltool))
+		var/obj/item/device/signaltool/ST = W
+		id = ST.change_ID(id)
+		if(alert(usr, "Does this button control airlocks?", "Normal doors?", "Yes", "No") == "Yes")
+			normaldoorcontrol = 1
+			switch(alert(usr, "What function does the button do?", "Function", "Open", "Bolts", "Shock"))
+				if("Open")
+					specialfunctions = 1
+//				if("IDscan")
+//					specialfunctions = 2
+				if("Bolts")
+					specialfunctions = 4
+				if("Shock")
+					specialfunctions = 8
+//				if("Safetys")
+//					specialfunctions = 16
+		else
+			normaldoorcontrol = 0
+		return
 	if(istype(W, /obj/item/device/detective_scanner))
 		return
 	if(istype(W, /obj/item/weapon/card/emag))

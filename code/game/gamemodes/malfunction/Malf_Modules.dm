@@ -85,7 +85,7 @@ rcd light flash thingy on matter drain
 				for(var/mob/V in hearers(M, null))
 					V.show_message("\blue You hear a loud electrical buzzing sound!", 2)
 				spawn(50)
-					explosion(get_turf(M), 0,1,2,3)
+					explosion(get_turf(M), 0,0,3,4)
 					del(M)
 			else usr << "Out of uses."
 	else usr << "That's not a machine."
@@ -131,8 +131,9 @@ rcd light flash thingy on matter drain
 				if(!C.status)
 					C.status = !C.status
 					camera.uses --
-					for(var/mob/V in viewers(src, null))
-						V.show_message(text("\blue You hear a quiet click."))
+					for(var/mob/V in viewers(C, null))
+						V.show_message(text("\blue The light on the nearby camera turns back on, and it slowly begins moving."))
+						playsound(C, 'sound/items/Wirecutter.ogg', 100, 1)
 				else
 					usr << "This camera is either active, or not repairable."
 			else usr << "Out of uses."

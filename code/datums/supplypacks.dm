@@ -1111,3 +1111,96 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	containername = "Beekeeping crate"
 	access = access_hydroponics
 	group = "Hydroponics"
+
+/*
+ *Skull's additions to satisfy the cravings of any atmospheric tech begin here.
+ */
+
+/datum/supply_packs/atmos_freezer
+	name = "Gas Cooling Unit"
+	contains = list(/obj/machinery/atmospherics/unary/cold_sink/freezer/cargo)
+	cost = 50
+	containertype = /obj/structure/closet/crate/secure/large
+	containername = "gas cooling unit crate"
+	access = access_atmospherics
+	group = "Engineering"
+
+/datum/supply_packs/atmos_heater
+	name = "Gas Heating Unit"
+	contains = list(/obj/machinery/atmospherics/unary/heat_reservoir/heater/cargo)
+	cost = 50
+	containertype = /obj/structure/closet/crate/secure/large
+	containername = "gas heating unit crate"
+	access = access_atmospherics
+	group = "Engineering"
+
+///datum/supply_packs/atmos_airtank
+//	name = "Large Air Tank"
+//	contains = list() //MAKE A LARGE RED AIRTANK THAT IS UNWRENCHED, AND CAN BE MANIPULATED AT SPAWN. This may cause issues, hueh.
+//	cost = 65
+//	containertype = /obj/structure/closet/crate/secure/large //test if this works ((should))
+//	containername = "large air tank crate"
+//	access = access_atmospherics
+//	group = "Engineering"
+
+/datum/supply_packs/aliengloves
+	name = "Non-Human Glove Kit"
+	contains = list(/obj/item/clothing/gloves/yellow/specialt,
+					/obj/item/clothing/gloves/yellow/specialt,
+					/obj/item/clothing/gloves/yellow/specialt,
+					/obj/item/clothing/gloves/yellow/specialu,
+					/obj/item/clothing/gloves/yellow/specialu,
+					/obj/item/clothing/gloves/yellow/specialu)
+	cost = 25
+	containertype = /obj/structure/closet/crate
+	containername = "speciality gloves kit"
+	group = "Supply"
+
+/datum/supply_packs/hardsuitcrate_e
+	name = "Engineering Hardsuit"
+	contains = list(/obj/item/clothing/head/helmet/space/rig,
+					/obj/item/clothing/suit/space/rig)
+	cost = 40
+	containertype = /obj/structure/closet/crate/secure
+	containername = "engineer hardsuit kit"
+	access_engine_equip
+	group = "Engineering"
+
+/datum/supply_packs/hardsuitcrate_s
+	name = "Security Hardsuit Crate"
+	contains = list(/obj/item/clothing/head/helmet/space/rig/security,
+					/obj/item/clothing/suit/space/rig/security)
+	cost = 40
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Security Hardsuit Kit"
+	access = access_security
+	group = "Security"
+
+/datum/supply_packs/hardsuitcrate_m
+	name = "Medical Hardsuit Crate"
+	contains = list(/obj/item/clothing/head/helmet/space/rig/medical,
+					/obj/item/clothing/suit/space/rig/medical)
+	cost = 40
+	containertype = /obj/structure/closet/crate/secure
+	containername = "medical hardsuit kit"
+	access = access_medical
+	group = "Medical"
+
+/datum/supply_packs/condiments
+	name = "Condiment Supply"
+	contains = list(/obj/item/weapon/reagent_containers/food/condi/s_packet,
+					/obj/item/weapon/reagent_containers/food/condi/s_packet,
+					/obj/item/weapon/reagent_containers/food/condi/p_packet,
+					/obj/item/weapon/reagent_containers/food/condi/p_packet,
+					/obj/item/weapon/reagent_containers/food/condi/soy_packet,
+					/obj/item/weapon/reagent_containers/food/condi/soy_packet,
+					/obj/item/weapon/reagent_containers/food/condi/k_packet,
+					/obj/item/weapon/reagent_containers/food/condi/k_packet,
+					/obj/item/weapon/reagent_containers/food/condi/h_packet,
+					/obj/item/weapon/reagent_containers/food/condi/h_packet,
+					/obj/item/weapon/reagent_containers/food/condi/sr_packet,
+					/obj/item/weapon/reagent_containers/food/condi/sr_packet)
+	cost = 20
+	containertype = /obj/structure/closet/crate/freezer
+	containername = "condiment kit"
+	group = "Supply"

@@ -148,6 +148,14 @@ var/global/list/autolathe_recipes_hidden = list( \
 				return 0
 
 	interact(mob/user as mob)
+		if(istype(user, /mob/living/carbon/human))
+			var/mob/living/carbon/human/M = user
+			if(M.h_style == "Floorlength Braid" || M.h_style == "Very Long Hair")
+				if(prob(25))
+					M.apply_damage(30, BRUTE, "head")
+					M.apply_damage(45, HALLOSS)
+					M.visible_message("\red [user]'s hair catches in the [src]!", "\red Your hair gets caught in the [src]!")
+					M.say("*scream")
 		if(..())
 			return
 		if (src.shocked)
@@ -262,7 +270,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 		if (!busy)
 			if(href_list["make"])
 				var/turf/T = get_step(src.loc, get_dir(src,usr))
-				
+
 				// critical exploit fix start -walter0o
 				var/obj/item/template = null
 				var/attempting_to_build = locate(href_list["make"])
@@ -274,25 +282,25 @@ var/global/list/autolathe_recipes_hidden = list( \
 					template = attempting_to_build
 
 				else // somebody is trying to exploit, alert admins -walter0o
-					
+
 					var/turf/LOC = get_turf(usr)
 					message_admins("[key_name_admin(usr)] tried to exploit an autolathe to duplicate <a href='?_src_=vars;Vars=\ref[attempting_to_build]'>[attempting_to_build]</a> ! ([LOC ? "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[LOC.x];Y=[LOC.y];Z=[LOC.z]'>JMP</a>" : "null"])", 0)
-					log_admin("EXPLOIT : [key_name(usr)] tried to exploit an autolathe to duplicate [attempting_to_build] !")		
+					log_admin("EXPLOIT : [key_name(usr)] tried to exploit an autolathe to duplicate [attempting_to_build] !")
 					return
 
 				// now check for legit multiplier, also only stacks should pass with one to prevent raw-materials-manipulation -walter0o
 
 				var/multiplier = text2num(href_list["multiplier"])
-				
+
 				if (!multiplier) multiplier = 1
 				var/max_multiplier = 1
-				
+
 				if(istype(template, /obj/item/stack)) // stacks are the only items which can have a multiplier higher than 1 -walter0o
 					var/obj/item/stack/S = template
 					max_multiplier = min(S.max_amount, S.m_amt?round(m_amount/S.m_amt):INFINITY, S.g_amt?round(g_amount/S.g_amt):INFINITY)  // pasta from regular_win() to make sure the numbers match -walter0o
 
 				if( (multiplier > max_multiplier) || (multiplier <= 0) ) // somebody is trying to exploit, alert admins-walter0o
-						
+
 					var/turf/LOC = get_turf(usr)
 					message_admins("[key_name_admin(usr)] tried to exploit an autolathe with multiplier set to <u>[multiplier]</u> on <u>[template]</u>  ! ([LOC ? "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[LOC.x];Y=[LOC.y];Z=[LOC.z]'>JMP</a>" : "null"])" , 0)
 					log_admin("EXPLOIT : [key_name(usr)] tried to exploit an autolathe with multiplier set to [multiplier] on [template]  !")

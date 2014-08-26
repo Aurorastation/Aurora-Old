@@ -59,6 +59,7 @@
 	else
 		bst.equip_to_slot_or_del(new /obj/item/weapon/storage/box/ids(bst.back), slot_in_backpack)
 		bst.equip_to_slot_or_del(new /obj/item/device/t_scanner(bst.back), slot_in_backpack)
+		bst.equip_to_slot_or_del(new /obj/item/device/signaltool(bst.back), slot_in_backpack)
 
 	//Implant because access
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(bst)
@@ -79,7 +80,7 @@
 	//Add the rest of the languages
 	//Because universal speak doesn't work right.
 	bst.add_language("Sinta'unathi")
-	bst.add_language("Siik'tajr")
+	bst.add_language("Siik'Maas")
 	bst.add_language("Skrellian")
 	bst.add_language("Vox-pidgin")
 	bst.add_language("Rootspeak")
@@ -119,10 +120,10 @@
 			s.start()
 			var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
 			ghost.key = key
-			ghost.mind.name = "[ghost.key] Bluespace Tech"
-			ghost.name = "[ghost.key] Bluespace Tech"
-			ghost.real_name = "[ghost.key] Bluespace Tech"
-			ghost.voice_name = "[ghost.key] Bluespace Tech"
+			ghost.mind.name = "[ghost.key] BSTech"
+			ghost.name = "[ghost.key] BSTech"
+			ghost.real_name = "[ghost.key] BSTech"
+			ghost.voice_name = "[ghost.key] BSTech"
 			del(src)
 
 	say(var/message)

@@ -206,11 +206,13 @@
 	if(!mob.lastarea)
 		mob.lastarea = get_area(mob.loc)
 
+	if(mob.floating && mob.mob_has_gravity(mob.loc))
+		mob.float(0)
+	else if(!mob.floating && !mob.mob_has_gravity(mob.loc))
+		mob.float(1)
+
 	if((istype(mob.loc, /turf/space)) || (mob.lastarea.has_gravity == 0))
 		if(!mob.Process_Spacemove(0))	return 0
-
-	if(mob.floating & mob.mob_has_gravity(mob.loc))
-		mob.float(0)
 
 	if(isobj(mob.loc) || ismob(mob.loc))//Inside an object, tell it we moved
 		var/atom/O = mob.loc
@@ -445,8 +447,6 @@
 		return 0
 	//If not then we can reset inertia and move
 	inertia_dir = 0
-	if(!floating)
-		src.float(1)
 	return 1
 
 
@@ -478,8 +478,8 @@
 		floating = 1
 	else
 		if(!real_name)
-			msg_scopes("[name] was made to float")
+			msg_scopes("[name] was made to stop floating")
 		else
-			msg_scopes("[real_name] was made to float")
+			msg_scopes("[real_name] was made to stop floating")
 		animate(src, pixel_y = initial(pixel_y), time = 10)
 		floating = 0
