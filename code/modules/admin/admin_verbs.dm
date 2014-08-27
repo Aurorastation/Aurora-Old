@@ -903,7 +903,8 @@ var/list/admin_verbs_mod = list(
 		"Delta",
 	)
 
-	var/input = input("Select the alert level.", "Alert Level", null, null) in L
+	var/current_level = get_security_level()
+	var/input = input("Select the alert level.", "Alert Level -( [current_level] )", null, null) in L
 	switch(input)
 		if("Green")
 			set_security_level(SEC_LEVEL_GREEN)
