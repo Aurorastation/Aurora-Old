@@ -1072,10 +1072,6 @@ datum
 			required_container = /obj/item/slime_extract/gold
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
-				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
-					O.show_message(text("<span class='danger'>The slime extract begins to vibrate violently !</span>"), 1)
-				spawn(50)
-
 				var/blocked = list(/mob/living/simple_animal/hostile,
 					/mob/living/simple_animal/hostile/pirate,
 					/mob/living/simple_animal/hostile/pirate/ranged,
@@ -1100,7 +1096,6 @@ datum
 				for(var/mob/living/carbon/human/M in viewers(get_turf_loc(holder.my_atom), null))
 					if(M:eyecheck() <= 0)
 						flick("e_flash", M.flash)
-
 				for(var/i = 1, i <= 5, i++)
 					var/chosen = pick(critters)
 					var/mob/living/simple_animal/hostile/C = new chosen
@@ -1141,14 +1136,14 @@ datum
 						/mob/living/simple_animal/hostile/alien/queen/large,
 						/mob/living/simple_animal/hostile/retaliate,
 						/mob/living/simple_animal/hostile/retaliate/clown,
-/*				/mob/living/simple_animal/hostile/mushroom,
-				/mob/living/simple_animal/hostile/asteroid,
-				/mob/living/simple_animal/hostile/asteroid/basilisk,
-				/mob/living/simple_animal/hostile/asteroid/goldgrub,
-				/mob/living/simple_animal/hostile/asteroid/goliath,
-				/mob/living/simple_animal/hostile/asteroid/hivelord,
-				/mob/living/simple_animal/hostile/asteroid/hivelordbrood,
-				/mob/living/simple_animal/hostile/carp/holocarp*/
+						/mob/living/simple_animal/hostile/mushroom,
+/*						/mob/living/simple_animal/hostile/asteroid,
+						/mob/living/simple_animal/hostile/asteroid/basilisk,
+						/mob/living/simple_animal/hostile/asteroid/goldgrub,
+						/mob/living/simple_animal/hostile/asteroid/goliath,
+						/mob/living/simple_animal/hostile/asteroid/hivelord,
+						/mob/living/simple_animal/hostile/asteroid/hivelordbrood,
+						/mob/living/simple_animal/hostile/carp/holocarp*/ Monsters we don't have
 						)//exclusion list for things you don't want the reaction to create.
 					var/list/critters = typesof(/mob/living/simple_animal/hostile) - blocked // list of possible hostile mobs
 
@@ -1161,8 +1156,7 @@ datum
 					var/chosen = pick(critters)
 					var/mob/living/simple_animal/hostile/C = new chosen
 					C.faction |= "neutral"
-					C.loc = get_turf(holder.my_atom)
-*/
+					C.loc = get_turf(holder.my_atom)*/
 
 //Silver
 		slimebork
