@@ -27,7 +27,7 @@
 /obj/item/projectile/bullet/gyro/law
 	name ="high-ex round"
 	icon_state= "bolter"
-	damage = 5
+	damage = 15
 	flag = "bullet"
 
 /obj/item/projectile/bullet/gyro/law/on_hit(var/atom/target, var/blocked = 0)

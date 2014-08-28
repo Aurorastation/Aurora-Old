@@ -785,34 +785,13 @@
 	icon_state = "corpsoft"
 	item_color = "corp"
 
-/obj/item/fluff/jenifer_bear //Doctor SnuggleBuns - Jenifer Clewett - bluesp34r - SPRITE
+/obj/item/toy/teddy/fluff/jenifer_bear //Doctor SnuggleBuns - Jenifer Clewett - bluesp34r - SPRITE
 	name = "Doctor SnuggleBuns"
 	desc = "A fluffy-wuffy brown teddy bear! This one is wearing a blue lab coat, much like a Chief Medical Officer!"
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "jenifer_bear"
-	w_class = 2
-	force = 1
-	throwforce = 2
-	var/headless = 0
 
-	attack_self(mob/user as mob)
-		if(user.a_intent == "hurt")
-			if(headless == 1)
-				user.visible_message("<span class='warning'>[user] stares at [src] full of anger, but elects not to tear any more limbs off of it.</span>", "<span class='notice'>You've already ripped [src]'s head off, what else do you want to do to it!?</span>")
-			else
-				user.visible_message("<span class='warning'>[user] clutches [src] with anger, and rips its head off, dropping it to the ground!</span>", "<span class='warning'>You are unable to contain your anger any longer! Off with its head!</span>")
-				headless = 1
-				var/turf/T = get_turf(user)
-				new /obj/item/fluff/jenifer_bear_head(T)
-				desc = "A fluffy-wuffy brown teddy bear! This one is wearing a blue lab coat, much like a Chief Medical Officer! \red It's lacking a head!"
-				update_icon()
-		else
-			if(headless == 1)
-				user.visible_message("<span class='notice'>[user] clutches [src] with both arms, weeping slightly as they embrace the headless toy.</span>", "<span class='notice'>You clutch the toy, shivering and weeping slightly. Who would do such a monsterous thing?</span>")
-			else
-				user.visible_message("<span class='notice'>[user] clutches [src] and embraces it!</span>", "<span class='notice'>You hug the toy, and suddenly feel how the weight of the world is lifted from your shoulders!</span>")
-
-/obj/item/fluff/jenifer_bear_head
+/obj/item/toy/fluff/jenifer_bear_head
 	name = "\improper teddybear head"
 	desc = "The head of a brown teddy, cruelly torn from its original body. You can see stuffing fall out of it."
 	icon = 'icons/obj/custom_items.dmi'
