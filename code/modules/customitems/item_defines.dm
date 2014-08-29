@@ -331,8 +331,8 @@
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "omni_modkit"
 	parts = MODKIT_HELMET
-	from_helmet = /obj/item/weapon/melee
-	to_helmet = /obj/item/weapon/melee/baton/fluff/omnivac_baton
+	from_helmet = list(/obj/item/weapon/melee)
+	to_helmet = list(/obj/item/weapon/melee/baton/fluff/omnivac_baton)
 
 /obj/item/clothing/head/soft/fluff/nebula_cap //Black baseball cap - Roxy Wallace - nebulaflare - DONE
 	name = "black baseball cap"
@@ -739,8 +739,8 @@
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "leo_mod"
 	parts = MODKIT_HELMET
-	from_helmet = /obj/item/weapon/gun/projectile/detective/semiauto
-	to_helmet = /obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun
+	from_helmet = list(/obj/item/weapon/gun/projectile/detective/semiauto)
+	to_helmet = list(/obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun)
 
 /obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun //Instant Prosecutor - Leo Wyatt - keinto - DONE (stab)
 	name = "\improper Instant Prosecutor"
