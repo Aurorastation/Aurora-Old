@@ -22,9 +22,7 @@
 		if(istype(G))	// handle grabbed mob
 			if(ismob(G.affecting))
 				var/mob/living/GM = G.affecting
-//				for (var/mob/V in viewers(usr))
-//					V.show_message("[usr] starts pushing [GM.name] into the fryer.", 3)
-				user.visible_message("<span class='warning'>[user] starts pushing [GM.name] into the fryer.</span>", "<span class='warning'>You try to force [src] towards the fryer.</span>", "You hear a struggle.")
+				user.visible_message("<span class='warning'>[user] starts pushing [GM.name] into the fryer.</span>", "<span class='warning'>You try to force [GM.name] towards the fryer.</span>", "You hear a struggle.")
 
 				if(do_after(usr, 20))
 					var/body_part = fry_mob_by_limb(GM, user.zone_sel.selecting)
