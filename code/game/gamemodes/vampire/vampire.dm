@@ -10,7 +10,7 @@
 	restricted_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Security Pod Pilot", "Nanotrasen Recruiter", "Magistrate") //Consistent screening has filtered all infiltration attempts on high value jobs
 	protected_jobs = list()
 	required_players = 1
-	required_players_secret = 15
+	required_players_secret = 10
 	required_enemies = 1
 	recommended_enemies = 4
 
@@ -77,7 +77,8 @@
 	for(var/datum/mind/vampire in vampires)
 		grant_vampire_powers(vampire.current)
 		vampire.special_role = "Vampire"
-		forge_vampire_objectives(vampire)
+		if(!config.objectives_disabled)
+			forge_vampire_objectives(vampire)
 		greet_vampire(vampire)
 
 	spawn (rand(waittime_l, waittime_h))
@@ -105,28 +106,29 @@
 
 			if(vampire.objectives.len)//If the traitor had no objectives, don't need to process this.
 				var/count = 1
-				for(var/datum/objective/objective in vampire.objectives)
-					if(objective.check_completion())
-						text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='green'><B>Success!</B></font>"
-						feedback_add_details("traitor_objective","[objective.type]|SUCCESS")
-					else
-						text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='red'>Fail.</font>"
-						feedback_add_details("traitor_objective","[objective.type]|FAIL")
-						traitorwin = 0
-					count++
+				if (!config.objectives_disabled)
+					for(var/datum/objective/objective in vampire.objectives)
+						if(objective.check_completion())
+							text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='green'><B>Success!</B></font>"
+							feedback_add_details("traitor_objective","[objective.type]|SUCCESS")
+						else
+							text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='red'>Fail.</font>"
+							feedback_add_details("traitor_objective","[objective.type]|FAIL")
+							traitorwin = 0
+						count++
 
 			var/special_role_text
 			if(vampire.special_role)
 				special_role_text = lowertext(vampire.special_role)
 			else
 				special_role_text = "antagonist"
-
-			if(traitorwin)
-				text += "<br><font color='green'><B>The [special_role_text] was successful!</B></font>"
-				feedback_add_details("traitor_success","SUCCESS")
-			else
-				text += "<br><font color='red'><B>The [special_role_text] has failed!</B></font>"
-				feedback_add_details("traitor_success","FAIL")
+			if (!config.objectives_disabled)
+				if(traitorwin)
+					text += "<br><font color='green'><B>The [special_role_text] was successful!</B></font>"
+					feedback_add_details("traitor_success","SUCCESS")
+				else
+					text += "<br><font color='red'><B>The [special_role_text] has failed!</B></font>"
+					feedback_add_details("traitor_success","FAIL")
 		world << text
 	return 1
 
@@ -150,6 +152,9 @@
 
 /datum/game_mode/proc/forge_vampire_objectives(var/datum/mind/vampire)
 	//Objectives are traitor objectives plus blood objectives
+
+	if (config.objectives_disabled)
+		return
 
 	var/datum/objective/blood/blood_objective = new
 	blood_objective.owner = vampire
