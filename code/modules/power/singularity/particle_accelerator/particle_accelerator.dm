@@ -152,7 +152,8 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	return
 
 /obj/structure/particle_accelerator/Del()
-	master.connected_parts.Remove(src)
+	if(master && master.connected_parts)
+		master.connected_parts.Remove(src)
 	..()
 
 /obj/structure/particle_accelerator/blob_act()
