@@ -1377,6 +1377,15 @@ datum/design/nanopaste
 	materials = list("$metal" = 7000, "$glass" = 7000)
 	build_path = "/obj/item/stack/nanopaste"
 
+datum/design/laserpointer
+	name = "laser pointer"
+	desc = "Don't shine it in your eyes!"
+	id = "laser_pointer"
+	req_tech = list("magnets" = 3)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 100, "$glass" = 50)
+	build_path = "/obj/item/device/laser_pointer"
+
 datum/design/implant_loyal
 	name = "loyalty implant"
 	desc = "Makes you loyal or such."
@@ -1497,7 +1506,7 @@ datum/design/nuclear_gun
 
 datum/design/stunrevolver
 	name = "Stun Revolver"
-	desc = "The prize of the Head of Security."
+	desc = "Occasionally prize of the Head of Security, but usually of asshole scientists."
 	id = "stunrevolver"
 	req_tech = list("combat" = 3, "materials" = 3, "powerstorage" = 2)
 	build_type = PROTOLATHE

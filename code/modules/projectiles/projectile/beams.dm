@@ -122,6 +122,11 @@ var/list/beam_master = list()
 	icon_state = "emitter"
 	damage = 30
 
+/obj/item/projectile/beam/stunrevolver
+	name = "stun beam"
+	icon_state = "stun"
+	damage = 10
+	agony = 45
 
 /obj/item/projectile/beam/lastertag/blue
 	name = "lasertag beam"
