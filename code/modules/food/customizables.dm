@@ -33,7 +33,7 @@
 
 /obj/item/trash/bowl/attackby(obj/item/W as obj, mob/user as mob)
 
-	if(istype(W,/obj/item/))
+	if(istype(W,/obj/item/weapon/reagent_containers/food))
 		var/obj/item/weapon/reagent_containers/food/snacks/customizable/soup/S = new(get_turf(user))
 		S.attackby(W,user)
 		del(src)

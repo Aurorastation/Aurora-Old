@@ -1416,6 +1416,7 @@ datum/preferences
 		//Debugging report to track down a bug, which randomly assigned the plural gender to people.
 		if(character.gender in list(PLURAL, NEUTER))
 			if(isliving(src)) //Ghosts get neuter by default
+				msg_scopes("[character] ([character.ckey]) has spawned with their gender as plural or neuter.")
 				message_admins("[character] ([character.ckey]) has spawned with their gender as plural or neuter. Please notify coders.")
 				character.gender = MALE
 
