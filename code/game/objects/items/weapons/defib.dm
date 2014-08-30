@@ -91,9 +91,11 @@
 			if(charges >= 2)
 				H.Weaken(10)
 				H.adjustOxyLoss(10)
+				H.apply_damage(10, BURN, "chest")
 			else
 				H.Weaken(5)
 				H.adjustOxyLoss(5)
+				H.apply_damage(5, BURN, "chest")
 			H.updatehealth() //forces health update before next life tick
 			spark_system.attach(M)
 			spark_system.set_up(5, 0, M)
