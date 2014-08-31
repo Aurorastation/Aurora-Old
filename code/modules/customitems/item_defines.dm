@@ -283,6 +283,7 @@
 	icon_on = "toolpipeon"  //Note - these are in masks.dmi
 	icon_off = "pipeoff"
 	smoketime = 100
+	can_hurt_mob = 0
 
 /obj/item/weapon/reagent_containers/food/drinks/flask/fluff/tool_flask //Worn flask - Michael Tool - mrimatool - DONE
 	name = "worn flask"
