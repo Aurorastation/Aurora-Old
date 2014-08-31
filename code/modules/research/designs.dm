@@ -1413,6 +1413,15 @@ datum/design/implant_free
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/implantcase/freedom"
 
+datum/design/energy_shield
+	name = "energy shield"
+	desc = "An energy shield."
+	id = "energy_shield"
+	req_tech = list("syndicate" = 4, "materials" = 4, "magnets" = 3)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 1000, "$glass" = 3000, "$plasma" = 1000)
+	build_path = "/obj/item/weapon/shield/energy"
+
 datum/design/implant_death_alarm
 	name = "death alarm implant"
 	desc = "Alerts others to your death."
@@ -1628,6 +1637,15 @@ datum/design/stunshell
 	build_type = PROTOLATHE
 	materials = list("$metal" = 4000)
 	build_path = "/obj/item/ammo_casing/shotgun/stunshell"
+
+datum/design/stunshellbox
+	name = "Stun Shell box"
+	desc = "A box full of stun shells."
+	id = "stunshellbox"
+	req_tech = list("combat" = 3, "materials" = 3)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 20000)
+	build_path = "/obj/item/ammo_magazine/shotgun/stun"
 
 datum/design/plasmapistol
 	name = "plasma pistol"

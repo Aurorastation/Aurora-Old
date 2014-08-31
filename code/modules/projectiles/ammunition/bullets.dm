@@ -36,7 +36,12 @@
 	desc = "A 9mm bullet casing."
 	caliber = "9mm"
 	projectile_type = "/obj/item/projectile/bullet/midbullet2"
-
+/* do this later
+/obj/item/ammo_casing/c9mmsilver
+	desc = "A silver 9mm bullet casing."
+	caliber = "9mm"
+	projectile_type = "/obj/item/projectile/bullet/midbullet2"
+*/
 
 /obj/item/ammo_casing/c45
 	desc = "A .45 bullet casing."
@@ -60,6 +65,13 @@
 	icon_state = "gshell"
 	caliber = "shotgun"
 	projectile_type = "/obj/item/projectile/bullet"
+	m_amt = 12500
+
+/obj/item/ammo_casing/shotgun/incendiary
+	name = "shotgun shell"
+	desc = "A 12 gauge shell."
+	icon_state = "ishell"
+	projectile_type = "/obj/item/projectile/bullet/incendiary/shell"
 	m_amt = 12500
 
 
