@@ -1184,7 +1184,7 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	containertype = /obj/structure/closet/crate/secure
 	containername = "medical hardsuit kit"
 	access = access_medical
-	group = "Medical"
+	group = "Medical / Science"
 
 /datum/supply_packs/condiments
 	name = "Condiment Supply"
@@ -1204,3 +1204,12 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	containertype = /obj/structure/closet/crate/freezer
 	containername = "condiment kit"
 	group = "Supply"
+
+/datum/supply_packs/pillboxes
+	name = "Chemistry Crate"
+	contains = list(/obj/item/weapon/storage/box/pillbottles)
+	cost = 20
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Pill Bottle Kit"
+	access = access_medical
+	group = "Medical / Science"
