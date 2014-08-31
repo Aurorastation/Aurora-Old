@@ -44,6 +44,9 @@
 	var/force_unwielded = 0 //Force modification, because striking someone with a rifle held in two hands -hurts-
 	var/force_wielded = 0
 
+	var/accuracy = -30 //goes into projectile.dm to provide individual offsets for each gun.  negative to increase base accuracy
+	var/rangedrop = 5 //how much accuracy the average gun loses for every tile
+
 	proc/can_wield() //Override in order to make a weapon two handed, remember to add toggle_wield(mob/user as mob) in the weapon somewhere
 		return 0	//Override /Fire(..) to force the weapon to be two handed
 

@@ -1321,6 +1321,10 @@
 						var/obj/item/weapon/gun/energy/rifle/sniperrifle/s = locate() in src
 						if(s.zoom)
 							s.zoom()
+					if(locate(/obj/item/weapon/gun/energy/laser/modular, contents))
+						var/obj/item/weapon/gun/energy/laser/modular/s = locate() in src
+						if(s.zoom)
+							s.zoom()
 
 		else
 			sight &= ~(SEE_TURFS|SEE_MOBS|SEE_OBJS)

@@ -93,7 +93,7 @@
 				var/obj/item/weapon/gun/daddy = shot_from //Kinda balanced by fact you need like 2 seconds to aim
 				if (daddy.target && original in daddy.target) //As opposed to no-delay pew pew
 					miss_modifier += -30
-			def_zone = get_zone_with_miss_chance(def_zone, M, miss_modifier + 5*distance)
+			def_zone = get_zone_with_miss_chance(def_zone, M, miss_modifier + 10*distance) // add +daddy.missmod vars to gun and this. snowflake accuracy
 
 			if(!def_zone)
 				visible_message("\blue \The [src] misses [M] narrowly!")
