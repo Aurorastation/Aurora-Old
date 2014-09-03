@@ -1664,6 +1664,38 @@ datum/design/lawgiver
 	build_type = PROTOLATHE
 	materials = list("$metal" = 6000, "$glass" = 1000, "$uranium" = 1000, "$plasma" = 1000, "$diamond" = 3000)
 	build_path = "/obj/item/weapon/gun/energy/lawgiver"
+
+datum/design/bprotopistol
+	name = "Basic Protopistol"
+	desc = "A highly customizeable handgun.  This one looks pretty basic."
+	id = "bprotopistol"
+	req_tech = list("combat" = 3, "materials" = 3, "powerstorage" = 2)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 4000, "$glass" = 1000)
+	build_path = "/obj/item/weapon/gun/energy/laser/modular/pistol/crap"
+	locked = 1
+
+datum/design/protopistol
+	name = "Protopistol"
+	desc = "A highly customizeable handgun."
+	id = "protopistol"
+	req_tech = list("combat" = 4, "materials" = 3, "powerstorage" = 3)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 8000, "$glass" = 3000, "$uranium" = 1000, "$plasma" = 1000)
+	build_path = "/obj/item/weapon/gun/energy/laser/modular/pistol"
+	locked = 1
+
+datum/design/aprotopistol
+	name = "Advanced Protopistol"
+	desc = "A highly customizeable handgun.  This one has a more powerful frame."
+	id = "aprotopistol"
+	req_tech = list("combat" = 6, "materials" = 7, "powerstorage" = 5)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 8000, "$glass" = 4000, "$uranium" = 2000, "$plasma" = 2000, "$diamond" = 1000)
+	build_path = "/obj/item/weapon/gun/energy/laser/modular/pistol/advanced"
+	locked = 1
+
+
 /////////////////////////////////////////
 /////////////////Mining//////////////////
 /////////////////////////////////////////
