@@ -25,6 +25,13 @@
 //	Please check gun.dm for infomation on making a weapon able to be used with two hands
 //	- SoundScopes
 
+/obj/item/weapon/gun/energy/rifle/verb/wield()
+	set name = "Wield"
+	set category = "Object"
+	set src in usr
+
+	toggle_wield(usr)
+
 /obj/item/weapon/gun/energy/rifle
 	can_wield()
 		return 1

@@ -2,6 +2,12 @@
 //	Please check gun.dm for infomation on making a weapon two handed
 //	- SoundScopes
 //
+/obj/item/weapon/gun/projectile/shotgun/verb/wield()
+	set name = "Wield"
+	set category = "Object"
+	set src in usr
+
+	toggle_wield(usr)
 
 /obj/item/weapon/gun/projectile/shotgun/pump
 	name = "shotgun"
