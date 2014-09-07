@@ -88,13 +88,13 @@
 	if(tell_devs)
 		msg = "DEBUG: [msg]"
 	else
-		msg = "[time_stamp()]<span class=\"prefix\">Scopes Log[tell_devs]:</span> <span class=\"message\">[msg]</span>"
+		msg = "[time_stamp()] <span class=\"prefix\">Scopes Log [tell_devs]:</span> <span class=\"message\">[msg]</span>"
 
 	for(var/client/C in admins)
 		if(R_DEV & C.holder.rights)
 			if(tell_devs)
-				if((C.prefs.toggles & CHAT_DEBUGLOGS) && !(R_MOD & C.holder.rights))
+				if((C.prefs.toggles & CHAT_DEBUGLOGS) && !(R_ADMIN & C.holder.rights))
 					C << msg
-			if(R_MOD & C.holder.rights)
+			if(R_ADMIN & C.holder.rights)
 				if(C.prefs.toggles & CHAT_SCOPES_DEBUG)
 					C << msg
