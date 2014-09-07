@@ -153,7 +153,7 @@
 		CIG.light("")
 		H.equip_to_slot_or_del(CIG, slot_wear_mask)	*/
 		H.equip_to_slot_or_del(new /obj/item/clothing/gloves/black(H), slot_gloves)
-		if(H.mind.role_alt_title && H.mind.role_alt_title == "Forensic Technician")
+		if(H.mind.role_alt_title && H.mind.role_alt_title == "Crime Scene Investigator")
 			H.equip_to_slot_or_del(new /obj/item/clothing/suit/armor/det_suit(H), slot_wear_suit)
 		else
 			H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/labcoat(H), slot_wear_suit)
