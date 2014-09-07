@@ -52,7 +52,7 @@
 		bad_external_organs.Cut()
 		for(var/datum/organ/external/Ex in organs)
 			bad_external_organs += Ex
-			
+
 	for(var/datum/organ/external/E in bad_external_organs)
 		if(!E)
 			continue
@@ -92,11 +92,23 @@
 				if (c_hand)
 
 					if(broken)
-						u_equip(c_hand)
+						if(istype(c_hand, /obj/item/weapon/gun/offhand))
+							var/obj/item/weapon/gun/O = get_inactive_hand()
+							var/obj/item/weapon/gun/offhand/OH = c_hand
+							O.unwield()
+							OH.unwield()
+						else
+							u_equip(c_hand)
 						var/emote_scream = pick("screams in pain and", "let's out a sharp hiss and", "cries out and")
 						emote("me", 1, "[(species && species.flags & NO_PAIN) ? "" : emote_scream ] drops what they were holding in their [hand]!")
 					if(malfunction)
-						u_equip(c_hand)
+						if(istype(c_hand, /obj/item/weapon/gun/offhand))
+							var/obj/item/weapon/gun/O = get_inactive_hand()
+							var/obj/item/weapon/gun/offhand/OH = c_hand
+							O.unwield()
+							OH.unwield()
+						else
+							u_equip(c_hand)
 						emote("me", 1, "drops what they were holding, their [hand] malfunctioning!")
 						var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
 						spark_system.set_up(5, 0, src)
@@ -115,7 +127,7 @@
 			emote("scream")
 		emote("collapse")
 		paralysis = 10
-	
+
 	//Check arms and legs for existence
 	can_stand = 2 //can stand on both legs
 	var/datum/organ/external/E = organs_by_name["l_foot"]

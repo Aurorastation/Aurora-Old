@@ -20,9 +20,13 @@
 		user << "The machine is already running."
 		return
 	else
+		if(!istype(I, /obj/item/weapon/reagent_containers/food))
+			user << "You think yourself better than to place [I] in there"
+			return
+
 		var/obj/item/F = I
 		var/obj/item/weapon/reagent_containers/food/snacks/customizable/C
-		C = input("Select food to make.", "Cooking", C) in food_choices
+		C = input("Select food to make.", "Cooking", C) as null|obj in food_choices
 		if(!C)
 			return
 		else

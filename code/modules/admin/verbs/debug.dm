@@ -7,10 +7,12 @@
 		Debug2 = 0
 		message_admins("[key_name(src)] toggled debugging off.")
 		log_admin("[key_name(src)] toggled debugging off.")
+		log_debug("[key_name(src)] toggled debugging off.")
 	else
 		Debug2 = 1
 		message_admins("[key_name(src)] toggled debugging on.")
 		log_admin("[key_name(src)] toggled debugging on.")
+		log_debug("[key_name(src)] toggled debugging off.")
 
 	feedback_add_details("admin_verb","DG2") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -434,6 +436,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	GLOBAL_RADIO_TYPE = !GLOBAL_RADIO_TYPE // toggle
 	log_admin("[key_name(src)] has turned the experimental radio system [GLOBAL_RADIO_TYPE ? "on" : "off"].")
 	message_admins("[key_name_admin(src)] has turned the experimental radio system [GLOBAL_RADIO_TYPE ? "on" : "off"].", 0)
+	msg_scopes("[key_name_admin(src)] has turned the experimental radio system [GLOBAL_RADIO_TYPE ? "on" : "off"].", 0)
 	feedback_add_details("admin_verb","SRM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/cmd_admin_areatest()
