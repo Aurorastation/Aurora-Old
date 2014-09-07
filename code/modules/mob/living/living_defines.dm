@@ -30,6 +30,7 @@
 	var/t_oxygen = null
 	var/t_sl_gas = null
 	var/t_n2 = null
+	var/gsr = 0 //forensics variable for gunshot residue
 
 	var/now_pushing = null
 

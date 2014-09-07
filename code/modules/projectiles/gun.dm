@@ -198,6 +198,15 @@
 	else
 		user.update_inv_r_hand()
 
+	if(istype(src, /obj/item/weapon/gun/projectile) && ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(!H.gloves)
+			H.gsr = 1
+		else
+			var/obj/item/clothing/G = H.gloves
+			G.gsr = 1
+
+
 /obj/item/weapon/gun/proc/can_fire()
 	return load_into_chamber()
 

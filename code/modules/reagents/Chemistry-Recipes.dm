@@ -713,6 +713,12 @@ datum
 			required_reagents = list("ammonia" = 1, "water" = 1)
 			result_amount = 2
 
+		luminol
+			name = "Luminol"
+			id = "luminol"
+			result = "luminol"
+			required_reagents = list("hydrogen" = 3, "carbon" = 3, "ammonia" = 3)
+
 		plantbgone
 			name = "Plant-B-Gone"
 			id = "plantbgone"
