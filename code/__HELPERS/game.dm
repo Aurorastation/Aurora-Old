@@ -366,3 +366,11 @@ datum/projectile_data
 	var/dest_y = src_y + distance*cos(rotation);
 
 	return new /datum/projectile_data(src_x, src_y, time, distance, power_x, power_y, dest_x, dest_y)
+
+
+/proc/flick_overlay(image/I, list/show_to, duration)
+	for(var/client/C in show_to)
+		C.images += I
+	sleep(duration)
+	for(var/client/C in show_to)
+		C.images -= I
