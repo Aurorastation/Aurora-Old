@@ -144,6 +144,7 @@ datum/controller/game_controller/proc/process()
 							world << "<font color='red'><b>RUNTIMES IN ATMOS TICKER.  Killing air simulation!</font></b>"
 							world.log << "### ZAS SHUTDOWN"
 							message_admins("ZASALERT: unable to run [air_master.tick_progress], shutting down!")
+							msg_scopes("ZASALERT: unable to run [air_master.tick_progress], shutting down!")
 							log_admin("ZASALERT: unable run zone/process() -- [air_master.tick_progress]")
 							air_processing_killed = 1
 							air_master.failed_ticks = 0
