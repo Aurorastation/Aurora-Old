@@ -926,7 +926,7 @@ var/list/admin_verbs_mod = list(
 	set desc = "SoundScopes Advanced debug logs, this will create spam for yourself"
 
 	if(!check_rights(R_DEV))	return
-	if(!check_rights(R_MOD))	return
+	if(!check_rights(R_ADMIN))	return
 
 	prefs.toggles ^= CHAT_SCOPES_DEBUG
 	if (prefs.toggles & CHAT_SCOPES_DEBUG)
