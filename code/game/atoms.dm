@@ -6,6 +6,7 @@
 	var/list/fingerprintshidden
 	var/fingerprintslast = null
 	var/list/blood_DNA
+	var/list/stored_DNA = list()
 	var/blood_color
 	var/last_bumped = 0
 	var/pass_flags = 0
@@ -416,7 +417,6 @@ its easier to just keep the beam vertical.
 		// Make toxins vomit look different
 		if(toxvomit)
 			this.icon_state = "vomittox_[pick(1,4)]"
-
 
 /atom/proc/clean_blood()
 	src.germ_level = 0

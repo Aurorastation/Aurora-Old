@@ -43,6 +43,9 @@
 	for(var/atom/A in contents)
 		A.clean_blood()
 
+	for(var/obj/item/clothing/C in contents)
+		C.gsr = 0
+
 	for(var/obj/item/I in contents)
 		I.decontaminate()
 

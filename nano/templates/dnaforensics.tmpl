@@ -1,0 +1,42 @@
+<h3>Machine Status</h3>
+<div class="item">
+	<div class="itemContent" style="width: 20%;">
+		{{:~link(scanning ? 'Halt Scan' : 'Begin Scan', 'signal-diag', {'scanItem' : 1}, null)}}
+	</div>
+	<div class="itemContent" style="width: 20%;">
+		{{:~link('Eject item', 'eject', {'ejectItem' : 1}, (bloodsamp && !scanning) ? null : 'disabled')}}
+	</div>
+</div>
+<h3>Scanner</h3>
+<div class="item">
+	<div class="itemLabel" style="width: 21%;">Scan progress:</div>
+	<div class="itemContent" style="width: 35%;">
+		{{:~displayBar(scan_progress, 0, 100, 'good')}}
+		{{:scan_progress}} %
+	</div>
+	<div class="itemContent" style="width: 44%;">
+		{{if scan_progress >= 100}}
+			<span class="notice" style="width: 100%;">Scan completed successfully.</span>
+		{{/if}}
+	</div>
+</div>
+<div class="statusDisplay">
+	<div class="line">
+		<div class="statusLabel">Item:</div>
+		<div class="statusValue">
+			{{if bloodsamp}}
+				<span class="good">{{:bloodsamp}}</span>
+			{{else}}
+				<span class="bad">No item inserted</span>
+			{{/if}}
+		</div>
+	</div>
+	<div class="line">
+		<div class="statusLabel">Heuristic analysis:</div>
+		<div class="statusValue">
+			{{if bloodsamp_desc}}
+				<span class="average">{{:bloodsamp_desc}}</span>
+			{{/if}}
+		</div>
+	</div>
+</div>
