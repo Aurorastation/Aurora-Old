@@ -1812,6 +1812,8 @@
 					holder.icon_state = "huddeathsquad"
 				if("Ninja")
 					holder.icon_state = "hudninja"
+				if("Vampire")
+					holder.icon_state = "hudvampire"
 
 			hud_list[SPECIALROLE_HUD] = holder
 	hud_updateflag = 0
