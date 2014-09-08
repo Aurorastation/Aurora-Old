@@ -1,29 +1,34 @@
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/attackby(obj/item/W as obj, mob/user as mob)
-	var/obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/S = new(get_turf(user))
-	S.attackby(W,user)
-	del(src)
+	if(istype(W,/obj/item/weapon/reagent_containers/food))
+		var/obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/S = new(get_turf(user))
+		S.attackby(W,user)
+		del(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/bun/attackby(obj/item/W as obj, mob/user as mob)
-	var/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/S = new(get_turf(user))
-	S.attackby(W,user)
-	del(src)
+	if(istype(W,/obj/item/weapon/reagent_containers/food))
+		var/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/S = new(get_turf(user))
+		S.attackby(W,user)
+		del(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/flatdough/attackby(obj/item/W as obj, mob/user as mob)
-	var/obj/item/weapon/reagent_containers/food/snacks/customizable/pizza/S = new(get_turf(user))
-	S.attackby(W,user)
-	del(src)
+	if(istype(W,/obj/item/weapon/reagent_containers/food))
+		var/obj/item/weapon/reagent_containers/food/snacks/customizable/pizza/S = new(get_turf(user))
+		S.attackby(W,user)
+		del(src)
 
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledspagetti/attackby(obj/item/W as obj, mob/user as mob)
-	var/obj/item/weapon/reagent_containers/food/snacks/customizable/pasta/S = new(get_turf(user))
-	S.attackby(W,user)
-	del(src)
+	if(istype(W,/obj/item/weapon/reagent_containers/food))
+		var/obj/item/weapon/reagent_containers/food/snacks/customizable/pasta/S = new(get_turf(user))
+		S.attackby(W,user)
+		del(src)
 
 
 /obj/item/trash/plate/attackby(obj/item/W as obj, mob/user as mob)
-	var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/S = new(get_turf(user))
-	S.attackby(W,user)
-	del(src)
+	if(istype(W,/obj/item/weapon/reagent_containers/food))
+		var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/S = new(get_turf(user))
+		S.attackby(W,user)
+		del(src)
 
 /obj/item/trash/bowl
 	name = "bowl"
@@ -33,7 +38,7 @@
 
 /obj/item/trash/bowl/attackby(obj/item/W as obj, mob/user as mob)
 
-	if(istype(W,/obj/item/))
+	if(istype(W,/obj/item/weapon/reagent_containers/food))
 		var/obj/item/weapon/reagent_containers/food/snacks/customizable/soup/S = new(get_turf(user))
 		S.attackby(W,user)
 		del(src)
@@ -318,6 +323,9 @@
 /*	if(istype(I, /obj/item/flag/nation))
 		user << "That's not going to fit!"
 		return*/
+	if(!istype(I,/obj/item/weapon/reagent_containers/food))
+		user << "You think about it for a few seconds, then you realize it wouldn't make sense."
+		return
 	user << "<span class='notice'>You add [I] to [src].</span>"
 	if(istype(I,  /obj/item/weapon/reagent_containers/))
 		var/obj/item/weapon/reagent_containers/F = I

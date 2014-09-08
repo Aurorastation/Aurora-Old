@@ -45,6 +45,12 @@
 
 	return
 
+/obj/machinery/particle_accelerator/control_box/Del()
+	if(active)
+		toggle_power()
+		process()
+	..()
+
 /obj/machinery/particle_accelerator/control_box/update_icon()
 	if(active)
 		icon_state = "[reference]p1"
@@ -181,6 +187,7 @@
 		if(PA.connect_master(src))
 			if(PA.report_ready(src))
 				src.connected_parts.Add(PA)
+				PA.master = src
 				return 1
 	return 0
 
@@ -214,7 +221,7 @@
 	dat += "Particle Accelerator Control Panel<BR>"
 	dat += "<A href='?src=\ref[src];close=1'>Close</A><BR><BR>"
 	dat += "Status:<BR>"
-	if(!assembled)
+	if(!assembled || connected_parts.len < 6)
 		dat += "Unable to detect all parts!<BR>"
 		dat += "<A href='?src=\ref[src];scan=1'>Run Scan</A><BR><BR>"
 	else

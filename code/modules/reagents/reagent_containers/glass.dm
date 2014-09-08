@@ -61,10 +61,10 @@
 	attack_self()
 		..()
 		if (is_open_container())
-			usr << "<span class = 'notice'>You put the lid on \the [src]."
+			usr << "<span class = 'notice'>You put the lid on \the [src].</span>"
 			flags ^= OPENCONTAINER
 		else
-			usr << "<span class = 'notice'>You take the lid off \the [src]."
+			usr << "<span class = 'notice'>You take the lid off \the [src].</span>"
 			flags |= OPENCONTAINER
 		update_icon()
 
@@ -280,7 +280,7 @@
 			user.put_in_hands(new /obj/item/weapon/bucket_sensor)
 			user.drop_from_inventory(src)
 			del(src)
-			
+
 	update_icon()
 		overlays.Cut()
 

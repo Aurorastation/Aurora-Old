@@ -474,7 +474,7 @@
 	return 0
 
 /mob/proc/float(var/on)
-	if(on)
+	if(on && !buckled)
 		if(!real_name)
 			msg_scopes("[name] was made to float")
 		else

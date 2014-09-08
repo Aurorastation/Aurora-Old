@@ -187,3 +187,15 @@
 	if(air_contents.nitrogen < 10)
 		usr << text("\red <B>The meter on the [src.name] indicates you are almost out of air!</B>")
 		//playsound(usr, 'sound/effects/alert.ogg', 50, 1)
+
+/obj/item/weapon/tank/autolathe
+	name = "Emergency Tank"
+	desc = "Used for emergencies. Use wisely."
+	icon_state = "emergency"
+	flags = FPRINT | TABLEPASS | CONDUCT
+	slot_flags = SLOT_BELT
+	w_class = 2.0
+	force = 4.0
+	m_amt = 1000
+	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
+	volume = 2

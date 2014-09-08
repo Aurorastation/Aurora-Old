@@ -5,6 +5,7 @@ var/global/list/autolathe_recipes = list( \
 		new /obj/item/weapon/reagent_containers/glass/bucket(), \
 		new /obj/item/weapon/crowbar(), \
 		new /obj/item/device/flashlight(), \
+		new /obj/item/device/flashlight/lantern(), \
 		new /obj/item/weapon/extinguisher(), \
 		new /obj/item/device/multitool(), \
 		new /obj/item/device/t_scanner(), \
@@ -12,6 +13,7 @@ var/global/list/autolathe_recipes = list( \
 		new /obj/item/weapon/screwdriver(), \
 		new /obj/item/weapon/wirecutters(), \
 		new /obj/item/weapon/wrench(), \
+		new /obj/item/clothing/glasses/sunglasses(), \
 		new /obj/item/clothing/head/welding(), \
 		new /obj/item/weapon/stock_parts/console_screen(), \
 		new /obj/item/weapon/airlock_electronics(), \
@@ -26,10 +28,11 @@ var/global/list/autolathe_recipes = list( \
 		new /obj/item/weapon/kitchenknife(), \
 		new /obj/item/weapon/scalpel(), \
 		new /obj/item/weapon/circular_saw(), \
-		new /obj/item/weapon/surgicaldrill(),\
-		new /obj/item/weapon/retractor(),\
-		new /obj/item/weapon/cautery(),\
-		new /obj/item/weapon/hemostat(),\
+		new /obj/item/weapon/surgicaldrill(), \
+		new /obj/item/weapon/retractor(), \
+		new /obj/item/weapon/cautery(), \
+		new /obj/item/weapon/hemostat(), \
+		new /obj/item/weapon/bonesetter(), \
 		new /obj/item/weapon/reagent_containers/glass/beaker(), \
 		new /obj/item/weapon/reagent_containers/glass/beaker/large(), \
 		new /obj/item/weapon/reagent_containers/glass/beaker/vial(), \
@@ -49,6 +52,8 @@ var/global/list/autolathe_recipes = list( \
 		new /obj/item/weapon/light/bulb(), \
 		new /obj/item/ashtray/glass(), \
 		new /obj/item/weapon/camera_assembly(), \
+		new /obj/item/weapon/tank/autolathe(), \
+		new /obj/item/weapon/storage/pill_bottle(), \
 	)
 
 var/global/list/autolathe_recipes_hidden = list( \
