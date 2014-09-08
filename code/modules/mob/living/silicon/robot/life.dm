@@ -337,7 +337,7 @@
 	overlays -= image("icon"='icons/mob/OnFire.dmi', "icon_state"="Standing")
 	if(on_fire)
 		overlays += image("icon"='icons/mob/OnFire.dmi', "icon_state"="Standing")
-	update_icons()
+//	update_icons()
 	return
 
 /mob/living/silicon/robot/fire_act()

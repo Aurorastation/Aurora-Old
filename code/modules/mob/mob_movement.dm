@@ -192,6 +192,11 @@
 					var/obj/item/weapon/gun/energy/rifle/sniperrifle/s = locate() in mob
 					if(s.zoom)
 						s.zoom()
+				if(locate(/obj/item/weapon/gun/energy/laser/modular, mob.contents))		// If mob moves while zoomed in with modular rifle, unzoom them.
+					var/obj/item/weapon/gun/energy/laser/modular/s = locate() in mob
+					if(s.zoom)
+						s.zoom()
+
 
 	if(Process_Grab())	return
 
@@ -469,7 +474,7 @@
 	return 0
 
 /mob/proc/float(var/on)
-	if(on)
+	if(on && !buckled)
 		if(!real_name)
 			msg_scopes("[name] was made to float")
 		else
