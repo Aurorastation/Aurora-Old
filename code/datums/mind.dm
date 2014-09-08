@@ -780,6 +780,7 @@ datum/mind
 						domutcheck(current, null)
 
 		else if (href_list["vampire"])
+			current.hud_updateflag |= (1 << SPECIALROLE_HUD)
 			switch(href_list["vampire"])
 				if("clear")
 					if(src in ticker.mode.vampires)

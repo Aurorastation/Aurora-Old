@@ -151,6 +151,28 @@
 	//get the user's location
 	if( !istype(user.loc, /turf) )	return	//can't do this stuff whilst inside objects and such
 
+	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
+		var/obj/item/weapon/grab/G = W
+		if (istype(G.affecting, /mob/living))
+			var/mob/living/M = G.affecting
+			if(user.a_intent == "hurt")
+				if (G.state >= 2)
+					if (prob(15))	M.Weaken(5)
+					M.apply_damage(8,def_zone = "head")
+					visible_message("\red [G.assailant] slams [G.affecting]'s face against \the [src]!")
+					msg_admin_attack("[user.name]([user.ckey]) slams [M.name]'s([M.ckey]) face against \the [src]!")
+//					switch(rand(1,3))
+//						if(1)
+//							playsound(src.loc, 'sound/weapons/genhit1.ogg', 50, 1)
+//						if(2)
+//							playsound(src.loc, 'sound/weapons/genhit2.ogg', 50, 1)
+//						if(3)
+//							playsound(src.loc, 'sound/weapons/genhit3.ogg', 50, 1)
+					return
+				else
+					user << "\red You need a better grip to do that!"
+					return
+
 	if(rotting)
 		if(istype(W, /obj/item/weapon/weldingtool) )
 			var/obj/item/weapon/weldingtool/WT = W

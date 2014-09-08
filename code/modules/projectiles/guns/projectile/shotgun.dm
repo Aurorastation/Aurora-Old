@@ -2,6 +2,12 @@
 //	Please check gun.dm for infomation on making a weapon two handed
 //	- SoundScopes
 //
+/obj/item/weapon/gun/projectile/shotgun/verb/wield()
+	set name = "Wield"
+	set category = "Object"
+	set src in usr
+
+	toggle_wield(usr)
 
 /obj/item/weapon/gun/projectile/shotgun/pump
 	name = "shotgun"
@@ -19,6 +25,9 @@
 	var/recentpump = 0 // to prevent spammage
 	var/pumped = 0
 	var/obj/item/ammo_casing/current_shell = null
+
+	accuracy = -40 //-60 full accuracy up to 3 tiles unaimed. aimed 5 tiles accurate.  40% misschance at 7.
+	rangedrop = 5 //loses 20 accuracy per distance tile. unaimed 70% chance to miss at 7 tiles.
 
 	icon_action_button = "action_blank"
 	action_button_name = "Wield the shotgun"
@@ -90,6 +99,9 @@
 	caliber = "shotgun"
 	origin_tech = "combat=3;materials=1"
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
+
+	accuracy = -40 //-60 full accuracy up to 3 tiles unaimed. aimed 5 tiles accurate.  40% misschance at 7.
+	rangedrop = 5 //loses 20 accuracy per distance tile. unaimed 70% chance to miss at 7 tiles.
 
 	icon_action_button = "action_blank"
 	action_button_name = "Wield the double-barreled shotgun"

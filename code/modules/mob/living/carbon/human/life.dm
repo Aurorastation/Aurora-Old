@@ -1321,6 +1321,10 @@
 						var/obj/item/weapon/gun/energy/rifle/sniperrifle/s = locate() in src
 						if(s.zoom)
 							s.zoom()
+					if(locate(/obj/item/weapon/gun/energy/laser/modular, contents))
+						var/obj/item/weapon/gun/energy/laser/modular/s = locate() in src
+						if(s.zoom)
+							s.zoom()
 
 		else
 			sight &= ~(SEE_TURFS|SEE_MOBS|SEE_OBJS)
@@ -1808,6 +1812,8 @@
 					holder.icon_state = "huddeathsquad"
 				if("Ninja")
 					holder.icon_state = "hudninja"
+				if("Vampire")
+					holder.icon_state = "hudvampire"
 
 			hud_list[SPECIALROLE_HUD] = holder
 	hud_updateflag = 0

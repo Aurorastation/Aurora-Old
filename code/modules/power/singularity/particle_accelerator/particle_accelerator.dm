@@ -71,6 +71,7 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	var/strength = null
 	var/desc_holder = null
 
+
 /obj/structure/particle_accelerator/end_cap
 	name = "Alpha Particle Generation Array"
 	desc_holder = "This is where Alpha particles are generated from \[REDACTED\]"
@@ -137,29 +138,33 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 /obj/structure/particle_accelerator/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			del(src)
+			Del(src)
 			return
 		if(2.0)
 			if (prob(50))
-				del(src)
+				Del(src)
 				return
 		if(3.0)
 			if (prob(25))
-				del(src)
+				Del(src)
 				return
 		else
 	return
 
+/obj/structure/particle_accelerator/Del()
+	if(master && master.connected_parts)
+		master.connected_parts.Remove(src)
+	..()
 
 /obj/structure/particle_accelerator/blob_act()
 	if(prob(50))
-		del(src)
+		Del()
 	return
 
 
 /obj/structure/particle_accelerator/meteorhit()
 	if(prob(50))
-		del(src)
+		Del()
 	return
 
 /obj/structure/particle_accelerator/update_icon()

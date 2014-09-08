@@ -322,7 +322,7 @@
 		icon_state = "Shield_Gen"
 		anchored = 0
 		density = 1
-		req_access = list(access_teleporter)
+		req_access = list(access_research)
 		var/active = 0
 		var/power = 0
 		var/state = 0
@@ -330,7 +330,7 @@
 		var/last_check = 0
 		var/check_delay = 10
 		var/recalc = 0
-		var/locked = 1
+		var/locked = 0
 		var/destroyed = 0
 		var/directwired = 1
 //		var/maxshieldload = 200

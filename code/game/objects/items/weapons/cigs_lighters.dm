@@ -71,6 +71,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	var/lastHolder = null
 	var/smoketime = 300
 	var/chem_volume = 15
+	var/can_hurt_mob = 1
 
 /obj/item/clothing/mask/cigarette/New()
 	..()
@@ -116,6 +117,86 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	user.update_inv_l_hand(0)
 	user.update_inv_r_hand(1)
 	return
+
+/obj/item/clothing/mask/cigarette/attack(mob/M as mob, mob/user as mob)
+	if(!can_hurt_mob)
+		return ..()
+
+	var/mob/living/carbon/human/H
+	if(ishuman(M))
+		H = M
+	else
+		return ..()
+
+	if(lit)
+		if (user.a_intent == "hurt")
+			switch(user.zone_sel.selecting)
+				if("eyes")
+					H.apply_damage(6, BURN, "eyes")
+					for(var/mob/O in viewers(H, null))
+						O.show_message("\red <B>[user] has shoved [src] in [M] eyes!</B>", 1)
+					H.say("*scream")
+				if("mouth")
+					H.apply_damage(6, BURN, "mouth")
+					for(var/mob/O in viewers(H, null))
+						O.show_message("\red <B>[user] has shoved [src] in [M] mouth!</B>", 1)
+					H.say("*scream")
+				if("head")
+					H.apply_damage(6, BURN, "head")
+					for(var/mob/O in viewers(H, null))
+						O.show_message("\red <B>[user] has shoved [src] in [M] face!</B>", 1)
+					H.say("*scream")
+				if("chest")
+					H.apply_damage(6, BURN, "chest")
+					for(var/mob/O in viewers(H, null))
+						O.show_message("\red <B>[user] has shoved [src] in [M] chest!</B>", 1)
+					H.say("*scream")
+				if("groin")
+					H.apply_damage(6, BURN, "groin")
+					for(var/mob/O in viewers(H, null))
+						O.show_message("\red <B>[user] has shoved [src] in [M] groin!</B>", 1)
+					H.say("*scream")
+				if("l_arm")
+					H.apply_damage(6, BURN, "l_arm")
+					for(var/mob/O in viewers(H, null))
+						O.show_message("\red <B>[user] has shoved [src] in [M] left arm!</B>", 1)
+					H.say("*scream")
+				if("r_arm")
+					H.apply_damage(6, BURN, "r_arm")
+					for(var/mob/O in viewers(H, null))
+						O.show_message("\red <B>[user] has shoved [src] in [M] right arm!</B>", 1)
+					H.say("*scream")
+				if("l_leg")
+					H.apply_damage(6, BURN, "l_leg")
+					for(var/mob/O in viewers(H, null))
+						O.show_message("\red <B>[user] has shoved [src] in [M] left leg!</B>", 1)
+					H.say("*scream")
+				if("l_hand")
+					H.apply_damage(6, BURN, "l_hand")
+					for(var/mob/O in viewers(H, null))
+						O.show_message("\red <B>[user] has shoved [src] in [M] left hand!</B>", 1)
+					H.say("*scream")
+				if("r_hand")
+					H.apply_damage(6, BURN, "r_hand")
+					for(var/mob/O in viewers(H, null))
+						O.show_message("\red <B>[user] has shoved [src] in [M] right hand!</B>", 1)
+					H.say("*scream")
+				if("r_foot")
+					H.apply_damage(6, BURN, "r_foot")
+					for(var/mob/O in viewers(H, null))
+						O.show_message("\red <B>[user] has shoved [src] in [M] left foot!</B>", 1)
+					H.say("*scream")
+				if("l_foot")
+					H.apply_damage(6, BURN, "l_foot")
+					for(var/mob/O in viewers(H, null))
+						O.show_message("\red <B>[user] has shoved [src] in [M] right foot!</B>", 1)
+					H.say("*scream")
+				else
+					return ..()
+
+			M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been burnt with [src.name] by [user.name] ([user.ckey])</font>")
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to burn [M.name] ([M.ckey])</font>")
+			msg_admin_attack("[key_name(user)] burnt [key_name(user)] with [src.name] (INTENT: [uppertext(user.a_intent)])")
 
 
 /obj/item/clothing/mask/cigarette/afterattack(obj/item/weapon/reagent_containers/glass/glass, mob/user as mob, proximity)
@@ -217,6 +298,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	item_state = "cigaroff"
 	smoketime = 1500
 	chem_volume = 20
+	can_hurt_mob = 1
 
 /obj/item/clothing/mask/cigarette/cigar/cohiba
 	name = "\improper Cohiba Robusto cigar"
@@ -224,6 +306,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	icon_state = "cigar2off"
 	icon_on = "cigar2on"
 	icon_off = "cigar2off"
+	can_hurt_mob = 1
 
 /obj/item/clothing/mask/cigarette/cigar/havana
 	name = "premium Havanian cigar"
@@ -233,6 +316,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	icon_off = "cigar2off"
 	smoketime = 7200
 	chem_volume = 30
+	can_hurt_mob = 1
 
 /obj/item/weapon/cigbutt
 	name = "cigarette butt"
@@ -294,6 +378,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	icon_on = "pipeon"  //Note - these are in masks.dmi
 	icon_off = "pipeoff"
 	smoketime = 100
+	can_hurt_mob = 0
 
 /obj/item/clothing/mask/cigarette/pipe/light(var/flavor_text = "[usr] lights the [name].")
 	if(!src.lit)
@@ -368,6 +453,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	icon_on = "cobpipeon"  //Note - these are in masks.dmi
 	icon_off = "cobpipeoff"
 	smoketime = 400
+	can_hurt_mob = 0
 
 
 
@@ -430,9 +516,9 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 			icon_state = icon_off
 			item_state = icon_off
 			if(istype(src, /obj/item/weapon/lighter/zippo) )
-				user.visible_message("<span class='rose'>You hear a quiet click, as [user] shuts off [src] without even looking at what they're doing.")
+				user.visible_message("<span class='rose'>You hear a quiet click, as [user] shuts off [src] without even looking at what they're doing.</span>")
 			else
-				user.visible_message("<span class='notice'>[user] quietly shuts off the [src].")
+				user.visible_message("<span class='notice'>[user] quietly shuts off the [src].</span>")
 
 			user.SetLuminosity(user.luminosity - 2)
 			processing_objects.Remove(src)

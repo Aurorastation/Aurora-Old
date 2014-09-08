@@ -17,7 +17,7 @@
 	var/on = 0
 	var/open = 0
 	var/set_temperature = 20		// in celcius, add T0C for kelvin
-	var/cooling_power = 40000
+	var/cooling_power = 10000
 
 	flags = FPRINT
 
@@ -179,32 +179,24 @@
 					if(env.temperature != set_temperature + T0C)
 
 						var/transfer_moles = 0.25 * env.total_moles()
-
+						msg_scopes("transfer_moles: [transfer_moles]")
 						var/datum/gas_mixture/removed = env.remove(transfer_moles)
 
-						//world << "got [transfer_moles] moles at [removed.temperature]"
-
 						if(removed)
-
 							var/heat_capacity = removed.heat_capacity()
-							//world << "heating ([heat_capacity])"
+							msg_scopes("heat_capacity: [heat_capacity]")
 							if(heat_capacity) // Added check to avoid divide by zero (oshi-) runtime errors -- TLE
 								if(removed.temperature > set_temperature + T0C)
 									removed.temperature = min(removed.temperature - cooling_power/heat_capacity, TCMB) // Added min() check to try and avoid wacky superheating issues in low gas scenarios -- TLE
 								else
 									removed.temperature = max(removed.temperature + cooling_power/heat_capacity, 1000)
-								cell.use(cooling_power/20000)
 
-							//world << "now at [removed.temperature]"
+								cell.use(cooling_power/1000)
 
 						env.merge(removed)
-
-						//world << "turf now at [env.temperature]"
-
 
 			else
 				on = 0
 				update_icon()
-
 
 		return

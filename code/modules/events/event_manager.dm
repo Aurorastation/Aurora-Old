@@ -65,3 +65,4 @@ var/scheduledEvent = null
 	if(ispath(type))
 		new type
 		message_admins("[key_name_admin(usr)] has triggered an event. ([type])", 1)
+		msg_scopes("[key_name_admin(usr)] has triggered an event. ([type])", 0)

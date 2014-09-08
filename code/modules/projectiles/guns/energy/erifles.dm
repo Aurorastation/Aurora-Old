@@ -25,6 +25,13 @@
 //	Please check gun.dm for infomation on making a weapon able to be used with two hands
 //	- SoundScopes
 
+/obj/item/weapon/gun/energy/rifle/verb/wield()
+	set name = "Wield"
+	set category = "Object"
+	set src in usr
+
+	toggle_wield(usr)
+
 /obj/item/weapon/gun/energy/rifle
 	can_wield()
 		return 1
@@ -59,7 +66,7 @@
 	fire_delay_unwielded = 24 //4x difference, let's be an arse about this, and push the issue
 	force_wielded = 10 //10 is amped force, due to better grip
 	force_unwielded = 5 //5 is normal force
-
+	rangedrop = -5 //lasers are more accurate than bullets. fully accurate up to three tiles unaimed. 40% miss at 7 tiles.  aimed: 6 tiles accurate, 10% miss at 7
 /*
 /obj/item/weapon/gun/energy/rifle/laser/update_icon()  //Currently only here to fuck with the on-mob icons.
 	icon_state = "laser[wielded]"
@@ -127,6 +134,9 @@ Commenting out right now, due to a lack of sprites existing. I hate on-mob weapo
 	fire_delay_wielded = 35 //35 is normal fire_delay -- this is going to suck. Yiss, what we want!
 	fire_delay_unwielded = 105 //3x difference, let's be an arse about this, and push the issue
 	var/zoom = 0
+
+	accuracy = -90
+	rangedrop = -5 // fully accurate up to first 10 tiles.  the last 4 zoomed tiles you are on your
 
 /obj/item/weapon/gun/energy/rifle/sniperrifle/dropped(mob/user)
 	user.client.view = world.view

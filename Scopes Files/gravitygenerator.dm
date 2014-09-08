@@ -488,6 +488,8 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	)
 	for (var/type in SPECIALS)
 		if ( istype(A,type) )
+			if(A.type == /area/prison/gas_chamber)
+				return AREA_STATION
 			return AREA_SPECIAL
 	return AREA_STATION
 
