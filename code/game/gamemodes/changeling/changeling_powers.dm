@@ -161,6 +161,7 @@
 		switch(stage)
 			if(1)
 				src << "<span class='notice'>This creature is compatible. We must hold still...</span>"
+				src.visible_message("<span class='warning'>[src]'s skin begins to shift and squirm!</span>")
 			if(2)
 				src << "<span class='notice'>We extend a proboscis.</span>"
 				src.visible_message("<span class='warning'>[src] extends a proboscis!</span>")
@@ -460,7 +461,7 @@
 			// let us move again
 			C.update_canmove()
 
-			// re-add out changeling powers
+			// re-add our changeling powers
 			C.make_changeling()
 
 			// sending display messages
@@ -492,12 +493,12 @@
 //Recover from stuns.
 /mob/proc/changeling_unstun()
 	set category = "Changeling"
-	set name = "Epinephrine Sacs (45)"
+	set name = "Epinephrine Sacs (20)"
 	set desc = "Removes all stuns"
 
 	var/datum/changeling/changeling = changeling_power(45,0,100,UNCONSCIOUS)
 	if(!changeling)	return 0
-	changeling.chem_charges -= 45
+	changeling.chem_charges -= 20
 
 	var/mob/living/carbon/human/C = src
 	C.stat = 0
@@ -505,6 +506,7 @@
 	C.SetStunned(0)
 	C.SetWeakened(0)
 	C.lying = 0
+	C.setHalLoss(0)
 	C.update_canmove()
 
 	src.verbs -= /mob/proc/changeling_unstun
@@ -567,6 +569,7 @@
 				C.adjustToxLoss(-10)
 				C.adjustOxyLoss(-10)
 				C.adjustFireLoss(-10)
+				C.adjustHalLoss(-10)
 				sleep(10)
 
 	src.verbs -= /mob/proc/changeling_rapidregen
@@ -682,7 +685,7 @@ var/list/datum/dna/hivemind_bank = list()
 	return 0
 
 //Handles the general sting code to reduce on copypasta (seeming as somebody decided to make SO MANY dumb abilities)
-/mob/proc/changeling_sting(var/required_chems=0, var/verb_path)
+/mob/proc/changeling_sting(var/required_chems=0, var/verb_path, var/stealthy = 0)
 	var/datum/changeling/changeling = changeling_power(required_chems)
 	if(!changeling)								return
 
@@ -690,6 +693,7 @@ var/list/datum/dna/hivemind_bank = list()
 	for(var/mob/living/carbon/C in oview(changeling.sting_range))
 		victims += C
 	var/mob/living/carbon/T = input(src, "Who will we sting?") as null|anything in victims
+
 
 	if(!T) return
 	if(!(T in view(changeling.sting_range))) return
@@ -701,9 +705,13 @@ var/list/datum/dna/hivemind_bank = list()
 	src.verbs -= verb_path
 	spawn(10)	src.verbs += verb_path
 
-	src << "<span class='notice'>We stealthily sting [T].</span>"
+
+	if(stealthy == 1)
+		src << "<span class='notice'>We stealthily sting [T].</span>"
+//		T << "<span class='warning'>You feel a tiny prick.</span>"
+	else
+		src.visible_message(pick("<span class='warning'>[src]'s eyes balloon and burst out in a welter of blood, burrowing into [T]!</span>", "<span class='warning'>[src]'s arm rapidly shifts into a giant scorpion-stinger and stabs into [T]!</span>", "<span class='warning'>[src]'s throat lengthens and twists before vomitting a chunky red spew all over [T]!</span>", "<span class='warning'>[src]'s tongue stretches an impossible length and stabs into [T]!</span>", "<span class='warning'>[src] sneezes a cloud of shrieking spiders at [T]!</span>", "<span class='warning'>[src] erupts a grotesque tail and impales [T]!</span>", "<span class='warning'>[src]'s chin skin bulges and tears, launching a bone-dart at [T]!</span>"))
 	if(!T.mind || !T.mind.changeling)	return T	//T will be affected by the sting
-	T << "<span class='warning'>You feel a tiny prick.</span>"
 	return
 
 
@@ -712,7 +720,7 @@ var/list/datum/dna/hivemind_bank = list()
 	set name = "Hallucination Sting (15)"
 	set desc = "Causes terror in the target."
 
-	var/mob/living/carbon/T = changeling_sting(15,/mob/proc/changeling_lsdsting)
+	var/mob/living/carbon/T = changeling_sting(15,/mob/proc/changeling_lsdsting, 1)
 	if(!T)	return 0
 	spawn(rand(300,600))
 		if(T)	T.hallucination += 400
@@ -724,7 +732,7 @@ var/list/datum/dna/hivemind_bank = list()
 	set name = "Silence sting (10)"
 	set desc="Sting target"
 
-	var/mob/living/carbon/T = changeling_sting(10,/mob/proc/changeling_silence_sting)
+	var/mob/living/carbon/T = changeling_sting(10,/mob/proc/changeling_silence_sting, 1)
 	if(!T)	return 0
 	T.silent += 30
 	feedback_add_details("changeling_powers","SS")
@@ -735,7 +743,7 @@ var/list/datum/dna/hivemind_bank = list()
 	set name = "Blind sting (20)"
 	set desc="Sting target"
 
-	var/mob/living/carbon/T = changeling_sting(20,/mob/proc/changeling_blind_sting)
+	var/mob/living/carbon/T = changeling_sting(20,/mob/proc/changeling_blind_sting, 0)
 	if(!T)	return 0
 	T << "<span class='danger'>Your eyes burn horrificly!</span>"
 	T.disabilities |= NEARSIGHTED
@@ -750,7 +758,7 @@ var/list/datum/dna/hivemind_bank = list()
 	set name = "Deaf sting (5)"
 	set desc="Sting target:"
 
-	var/mob/living/carbon/T = changeling_sting(5,/mob/proc/changeling_deaf_sting)
+	var/mob/living/carbon/T = changeling_sting(5,/mob/proc/changeling_deaf_sting, 0)
 	if(!T)	return 0
 	T << "<span class='danger'>Your ears pop and begin ringing loudly!</span>"
 	T.sdisabilities |= DEAF
@@ -763,7 +771,7 @@ var/list/datum/dna/hivemind_bank = list()
 	set name = "Paralysis sting (30)"
 	set desc="Sting target"
 
-	var/mob/living/carbon/T = changeling_sting(30,/mob/proc/changeling_paralysis_sting)
+	var/mob/living/carbon/T = changeling_sting(30,/mob/proc/changeling_paralysis_sting, 0)
 	if(!T)	return 0
 	T << "<span class='danger'>Your muscles begin to painfully tighten.</span>"
 	T.Weaken(20)
@@ -791,7 +799,7 @@ var/list/datum/dna/hivemind_bank = list()
 	if(!chosen_dna)
 		return
 
-	var/mob/living/carbon/T = changeling_sting(40,/mob/proc/changeling_transformation_sting)
+	var/mob/living/carbon/T = changeling_sting(40,/mob/proc/changeling_transformation_sting, 1)
 	if(!T)	return 0
 	if((HUSK in T.mutations) || (!ishuman(T) && !ismonkey(T)))
 		src << "<span class='warning'>Our sting appears ineffective against its DNA.</span>"
@@ -809,9 +817,9 @@ var/list/datum/dna/hivemind_bank = list()
 	set name = "Unfat sting (5)"
 	set desc = "Sting target"
 
-	var/mob/living/carbon/T = changeling_sting(5,/mob/proc/changeling_unfat_sting)
+	var/mob/living/carbon/T = changeling_sting(5,/mob/proc/changeling_unfat_sting, 0)
 	if(!T)	return 0
-	T << "<span class='danger'>you feel a small prick as stomach churns violently and you become to feel skinnier.</span>"
+	T << "<span class='danger'>Your stomach churns violently before you suddenly become skinnier.</span>"
 	T.overeatduration = 0
 	T.nutrition -= 100
 	feedback_add_details("changeling_powers","US")
@@ -822,7 +830,7 @@ var/list/datum/dna/hivemind_bank = list()
 	set name = "Death Sting (40)"
 	set desc = "Causes spasms onto death."
 
-	var/mob/living/carbon/T = changeling_sting(40,/mob/proc/changeling_DEATHsting)
+	var/mob/living/carbon/T = changeling_sting(40,/mob/proc/changeling_DEATHsting, 0)
 	if(!T)	return 0
 	T << "<span class='danger'>You feel a small prick and your chest becomes tight.</span>"
 	T.silent = 10
@@ -848,7 +856,7 @@ var/list/datum/dna/hivemind_bank = list()
 	if(!changeling)
 		return 0
 
-	var/mob/living/carbon/T = changeling_sting(40, /mob/proc/changeling_extract_dna_sting)
+	var/mob/living/carbon/T = changeling_sting(40, /mob/proc/changeling_extract_dna_sting, 1)
 	if(!T)	return 0
 
 	T.dna.real_name = T.real_name

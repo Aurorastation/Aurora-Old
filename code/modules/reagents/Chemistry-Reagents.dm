@@ -777,6 +777,13 @@ datum
 			reagent_state = SOLID
 			color = "#673910" // rgb: 103, 57, 16
 
+			reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)//Splashing people with welding fuel to make them easy to ignite!
+				if(!istype(M, /mob/living))
+					return
+				if(method == TOUCH)
+					M.adjust_fire_stacks(volume / 10)
+				return
+
 			reaction_turf(var/turf/T, var/volume)
 				src = null
 				if(volume >= 5)
@@ -3067,6 +3074,13 @@ datum
 			var/confused_start = 150	//amount absorbed after which mob starts confusing directions
 			var/blur_start = 300	//amount absorbed after which mob starts getting blurred vision
 			var/pass_out = 400	//amount absorbed after which mob starts passing out
+
+			reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)//Splashing people with welding fuel to make them easy to ignite!
+				if(!istype(M, /mob/living))
+					return
+				if(method == TOUCH)
+					M.adjust_fire_stacks(volume / 10)
+				return
 
 			on_mob_life(var/mob/living/M as mob)
 				M:nutrition += nutriment_factor

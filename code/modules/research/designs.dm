@@ -1377,6 +1377,15 @@ datum/design/nanopaste
 	materials = list("$metal" = 7000, "$glass" = 7000)
 	build_path = "/obj/item/stack/nanopaste"
 
+datum/design/laserpointer
+	name = "laser pointer"
+	desc = "Don't shine it in your eyes!"
+	id = "laser_pointer"
+	req_tech = list("magnets" = 3)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 100, "$glass" = 50)
+	build_path = "/obj/item/device/laser_pointer"
+
 datum/design/implant_loyal
 	name = "loyalty implant"
 	desc = "Makes you loyal or such."
@@ -1403,6 +1412,15 @@ datum/design/implant_free
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/implantcase/freedom"
+
+datum/design/energy_shield
+	name = "energy shield"
+	desc = "An energy shield."
+	id = "energy_shield"
+	req_tech = list("syndicate" = 4, "materials" = 4, "magnets" = 3)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 1000, "$glass" = 3000, "$plasma" = 1000)
+	build_path = "/obj/item/weapon/shield/energy"
 
 datum/design/implant_death_alarm
 	name = "death alarm implant"
@@ -1497,7 +1515,7 @@ datum/design/nuclear_gun
 
 datum/design/stunrevolver
 	name = "Stun Revolver"
-	desc = "The prize of the Head of Security."
+	desc = "Occasionally prize of the Head of Security, but usually of asshole scientists."
 	id = "stunrevolver"
 	req_tech = list("combat" = 3, "materials" = 3, "powerstorage" = 2)
 	build_type = PROTOLATHE
@@ -1620,6 +1638,15 @@ datum/design/stunshell
 	materials = list("$metal" = 4000)
 	build_path = "/obj/item/ammo_casing/shotgun/stunshell"
 
+datum/design/stunshellbox
+	name = "Stun Shell box"
+	desc = "A box full of stun shells."
+	id = "stunshellbox"
+	req_tech = list("combat" = 3, "materials" = 3)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 20000)
+	build_path = "/obj/item/ammo_magazine/shotgun/stun"
+
 datum/design/plasmapistol
 	name = "plasma pistol"
 	desc = "A specialized firearm designed to fire lethal bolts of toxins."
@@ -1637,6 +1664,38 @@ datum/design/lawgiver
 	build_type = PROTOLATHE
 	materials = list("$metal" = 6000, "$glass" = 1000, "$uranium" = 1000, "$plasma" = 1000, "$diamond" = 3000)
 	build_path = "/obj/item/weapon/gun/energy/lawgiver"
+
+datum/design/bprotopistol
+	name = "Basic Protopistol"
+	desc = "A highly customizeable handgun.  This one looks pretty basic."
+	id = "bprotopistol"
+	req_tech = list("combat" = 3, "materials" = 3, "powerstorage" = 2)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 4000, "$glass" = 1000)
+	build_path = "/obj/item/weapon/gun/energy/laser/modular/pistol/crap"
+	locked = 1
+
+datum/design/protopistol
+	name = "Protopistol"
+	desc = "A highly customizeable handgun."
+	id = "protopistol"
+	req_tech = list("combat" = 4, "materials" = 3, "powerstorage" = 3)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 8000, "$glass" = 3000, "$uranium" = 1000, "$plasma" = 1000)
+	build_path = "/obj/item/weapon/gun/energy/laser/modular/pistol"
+	locked = 1
+
+datum/design/aprotopistol
+	name = "Advanced Protopistol"
+	desc = "A highly customizeable handgun.  This one has a more powerful frame."
+	id = "aprotopistol"
+	req_tech = list("combat" = 6, "materials" = 7, "powerstorage" = 5)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 8000, "$glass" = 4000, "$uranium" = 2000, "$plasma" = 2000, "$diamond" = 1000)
+	build_path = "/obj/item/weapon/gun/energy/laser/modular/pistol/advanced"
+	locked = 1
+
+
 /////////////////////////////////////////
 /////////////////Mining//////////////////
 /////////////////////////////////////////

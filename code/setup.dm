@@ -62,9 +62,9 @@
 
 #define PRESSURE_DAMAGE_COEFFICIENT 4 //The amount of pressure damage someone takes is equal to (pressure / HAZARD_HIGH_PRESSURE)*PRESSURE_DAMAGE_COEFFICIENT, with the maximum of MAX_PRESSURE_DAMAGE
 #define MAX_HIGH_PRESSURE_DAMAGE 4	//This used to be 20... I got this much random rage for some retarded decision by polymorph?! Polymorph now lies in a pool of blood with a katana jammed in his spleen. ~Errorage --PS: The katana did less than 20 damage to him :(
-#define LOW_PRESSURE_DAMAGE 6 	//The amount of damage someone takes when in a low pressure area (The pressure threshold is so low that it doesn't make sense to do any calculations, so it just applies this flat value).
-//low pressure damage bumped to 6 because current ZAS means cold does not proc half the time.  You can waltz in space and be totally fine.
-#define PRESSURE_SUIT_REDUCTION_COEFFICIENT 0.8 //This is how much (percentual) a suit with the flag STOPSPRESSUREDMAGE reduces pressure.
+#define LOW_PRESSURE_DAMAGE 4 	//The amount of damage someone takes when in a low pressure area (The pressure threshold is so low that it doesn't make sense to do any calculations, so it just applies this flat value).
+//low pressure damage bumped to 4 because current ZAS means cold does not proc half the time.  6 was too much.
+#define PRESSURE_SUIT_REDUCTION_COEFFICIENT 0.6 //This is how much (percentual) a suit with the flag STOPSPRESSUREDMAGE reduces pressure. orig. .8 but we had spacewalkers without helmets.
 #define PRESSURE_HEAD_REDUCTION_COEFFICIENT 0.4 //This is how much (percentual) a helmet/hat with the flag STOPSPRESSUREDMAGE reduces pressure.
 
 // Doors!
@@ -697,7 +697,7 @@ var/list/be_special_flags = list(
 #define IMPLOYAL_HUD		5 // loyality implant
 #define IMPCHEM_HUD		6 // chemical implant
 #define IMPTRACK_HUD		7 // tracking implant
-#define SPECIALROLE_HUD 	8 // AntagHUD image
+#define SPECIALROLE_HUD 	9 // AntagHUD image
 #define STATUS_HUD_OOC		9 // STATUS_HUD without virus db check for someone being ill.
 
 //Pulse levels, very simplified

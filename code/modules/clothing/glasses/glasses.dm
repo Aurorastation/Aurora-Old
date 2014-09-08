@@ -106,6 +106,8 @@
 	icon_state = "sun"
 	item_state = "sunglasses"
 	darkness_view = -1
+	g_amt = 1000
+	m_amt = 500
 
 /obj/item/clothing/glasses/welding
 	name = "welding goggles"
