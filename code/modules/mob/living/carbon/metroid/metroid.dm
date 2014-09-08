@@ -51,6 +51,9 @@
 	var/adulttype = /mob/living/carbon/slime/adult
 	var/coretype = /obj/item/slime_extract/grey
 
+	///////////GOLD SLIME CATALYST VAR
+	var/catalyst = 0
+
 /mob/living/carbon/slime/adult
 	name = "adult slime"
 	icon = 'icons/mob/slimes.dmi'
@@ -808,6 +811,32 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 		user <<"You feed the slime the steroid. It now has triple the amount of extract."
 		M.cores = 3
+		del (src)
+
+////////Slime Catalyst. Makes it halve into slimes of the same type.
+
+/obj/item/weapon/slimecatalyst
+	name = "slime catalyst"
+	desc = "A potent chemical mixture that will influence a slime's splitting behaviour."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle15"
+
+	attack(mob/living/carbon/slime/M as mob, mob/user as mob)
+		if(!istype(M, /mob/living/carbon/slime))//If target is not a slime.
+			user << "\red The steroid only works on baby slimes!"
+			return ..()
+		if(istype(M, /mob/living/carbon/slime/adult)) //Can't tame adults
+			user << "\red Only baby slimes can use the steroid!"
+			return..()
+		if(M.stat)
+			user << "\red The slime is dead!"
+			return..()
+		if(M.catalyst == 1)
+			user <<"\red The slime has already been fed a catalyst!"
+			return..()
+
+		user <<"You feed the slime the catalyst. It's core now glows golden."
+		M.catalyst = 1
 		del (src)
 
 

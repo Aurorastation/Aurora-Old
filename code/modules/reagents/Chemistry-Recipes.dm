@@ -1067,7 +1067,7 @@ datum
 			name = "Slime Crit"
 			id = "m_tele"
 			result = null
-			required_reagents = list("plasma" = 5)
+			required_reagents = list("water" = 5)
 			result_amount = 1
 			required_container = /obj/item/slime_extract/gold
 			required_other = 1
@@ -1106,6 +1106,18 @@ datum
 							step(C, pick(NORTH,SOUTH,EAST,WEST))
 //				for(var/mob/O in viewers(get_turf_loc(holder.my_atom), null))
 //					O.show_message(text("\red The slime core fizzles disappointingly,"), 1)
+
+		slimecatalyst
+			name = "slime catalyst"
+			id = "m_catalyst"
+			result = null
+			required_reagents = list("plasma" = 5)
+			result_amount = 1
+			required_container = /obj/item/slime_extract/gold
+			required_other = 1
+			on_reaction(var/datum/reagents/holder)
+				var/obj/item/weapon/slimecatalyst/P = new /obj/item/weapon/slimecatalyst
+				P.loc = get_turf_loc(holder.my_atom)
 /*
 		slimecritlesser
 			name = "Slime Crit Lesser"
