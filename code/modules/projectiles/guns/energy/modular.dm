@@ -58,8 +58,8 @@
 	desc = "A basic, modular laser pistol."
 	icon_state = "modpistolopen"
 	open = 1
-	w_class = 2
-	upgradepointtotal = 16
+	w_class = 3 // leave it at three until protorifle is implemented.  then severely nerf pistol points.
+	upgradepointtotal = 16 //current protopistol is at protorifle point totals.
 
 /obj/item/weapon/gun/energy/laser/modular/pistol/advanced //better version of the pistol
 	name = "advanced protopistol"
