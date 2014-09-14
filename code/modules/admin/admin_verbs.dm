@@ -1,17 +1,17 @@
 //admin verb groups - They can overlap if you so wish. Only one of each verb will exist in the verbs list regardless
 var/list/admin_verbs_default = list(
-	/datum/admins/proc/show_player_panel,	/*shows an interface for individual players, with various links (links require additional flags*/
 	/client/proc/player_panel,
 	/client/proc/toggleadminhelpsound,	/*toggles whether we hear a sound when adminhelps/PMs are used*/
 	/client/proc/deadmin_self,			/*destroys our own admin datum so we can play as a regular player*/
 	/client/proc/hide_verbs,			/*hides all our adminverbs*/
 	/client/proc/hide_most_verbs,		/*hides all our hideable adminverbs*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game. +VAREDIT needed to modify*/
-	/client/proc/check_antagonists,		/*shows all antags*/
 	/client/proc/cmd_mentor_check_new_players
 //	/client/proc/deadchat				/*toggles deadchat on/off*/
 	)
 var/list/admin_verbs_admin = list(
+	/datum/admins/proc/show_player_panel,	/*shows an interface for individual players, with various links (links require additional flags*/
+	/client/proc/check_antagonists,		/*shows all antags*/
 	/client/proc/alertlevels,
 	/client/proc/cmd_admin_wind,
 	/client/proc/cmd_admin_unwind,
@@ -53,11 +53,11 @@ var/list/admin_verbs_admin = list(
 	/client/proc/check_antagonists,
 	/client/proc/admin_memo,			/*admin memo system. show/delete/write. +SERVER needed to delete admin memos of others*/
 	/client/proc/dsay,					/*talk in deadchat using our ckey/fakekey*/
-	/client/proc/toggleprayers,			/*toggles prayers on/off*/
 //	/client/proc/toggle_hear_deadcast,	/*toggles whether we hear deadchat*/
 	/client/proc/toggle_hear_radio,		/*toggles whether we hear the radio*/
 	/client/proc/investigate_show,		/*various admintools for investigation. Such as a singulo grief-log*/
 	/client/proc/secrets,
+	/client/proc/toggleprayers,
 	/datum/admins/proc/toggleooc,		/*toggles ooc on/off for everyone*/
 	/datum/admins/proc/togglelooc,
 	/datum/admins/proc/toggleoocdead,	/*toggles ooc on/off for everyone who is dead*/
@@ -96,7 +96,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/cmd_admin_dress,
 	/client/proc/cmd_admin_gib_self,
 	/client/proc/drop_bomb,
-        /client/proc/everyone_random,
+	/client/proc/everyone_random,
 	/client/proc/cinematic,
 	/client/proc/one_click_antag,
 	/datum/admins/proc/toggle_aliens,
@@ -112,8 +112,6 @@ var/list/admin_verbs_fun = list(
 var/list/admin_verbs_dev = list(
 	/client/proc/dsay,
 	/client/proc/togglebuildmodeself,
-	/datum/admins/proc/restart,
-	/datum/admins/proc/delay,
 	/client/proc/giveruntimelog,
 	/client/proc/getruntimelog,
 	/client/proc/cmd_admin_list_open_jobs,
@@ -128,12 +126,11 @@ var/list/admin_verbs_dev = list(
 	/client/proc/cmd_admin_delete,
 	/client/proc/cmd_debug_del_all,
 	/client/proc/cmd_debug_tog_aliens,
+	/datum/admins/proc/restart,
 	/client/proc/air_report,
 	/client/proc/reload_admins,
 	/client/proc/restart_controller,
 	/client/proc/enable_debug_verbs,
-	/client/proc/callproc,
-	/client/proc/toggleattacklogs,
 	/client/proc/toggledebuglogs,
 	/client/proc/SDQL_query,
 	/client/proc/SDQL2_query,
@@ -168,8 +165,10 @@ var/list/admin_verbs_server = list(
 	/client/proc/check_customitem_activity
 	)
 var/list/admin_verbs_debug = list(
-        /client/proc/getruntimelog,                     /*allows us to access runtime logs to somebody*/
+	/client/proc/getruntimelog,                     /*allows us to access runtime logs to somebody*/
 	/client/proc/cmd_admin_list_open_jobs,
+	/datum/admins/proc/restart,
+	/datum/admins/proc/delay,
 	/client/proc/Debug2,
 	/client/proc/kill_air,
 	/client/proc/ZASSettings,
@@ -188,7 +187,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/toggledebuglogs,
 	/client/proc/SDQL_query,
 	/client/proc/SDQL2_query,
-	/client/proc/cmd_dev_bst,
 	/client/proc/cmd_dev_reset_gravity
 	)
 var/list/admin_verbs_possess = list(
@@ -274,6 +272,8 @@ var/list/admin_verbs_hideable = list(
 	/proc/release
 	)
 var/list/admin_verbs_mod = list(
+	/client/proc/check_antagonists,		/*shows all antags*/
+	/client/proc/cmd_admin_check_contents,
 	/client/proc/cmd_admin_wind,
 	/client/proc/cmd_admin_unwind,
 	/client/proc/cmd_admin_pm_context,	/*right-click adminPM interface*/
@@ -281,15 +281,19 @@ var/list/admin_verbs_mod = list(
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game.*/
 	/client/proc/toggleattacklogs,
 	/client/proc/toggledebuglogs,
+	/client/proc/toggleprayers,
 	/datum/admins/proc/PlayerNotes,
 	/client/proc/admin_ghost,			/*allows us to ghost/reenter body at will*/
 	/client/proc/cmd_mod_say,
+	/client/proc/check_ai_laws,
+	/client/proc/jumptomob,
 	/datum/admins/proc/show_player_info,
 	/client/proc/player_panel_new,
 	/client/proc/dsay,
 	/datum/admins/proc/show_skills,
 	/datum/admins/proc/show_player_panel,
 	/client/proc/check_antagonists,
+	/datum/admins/proc/adjump,
 	/client/proc/jobbans,
 	/client/proc/cmd_admin_subtle_message 	/*send an message to somebody as a 'voice in their head'*/
 )
@@ -520,7 +524,7 @@ var/list/admin_verbs_mod = list(
 #define AUTOBANTIME 10
 
 /client/proc/warn(warned_ckey)
-	if(!check_rights(R_ADMIN))	return
+	if(!check_rights(R_ADMIN|R_MOD))	return
 
 	if(!warned_ckey || !istext(warned_ckey))	return
 	if(warned_ckey in admin_datums)
@@ -797,6 +801,9 @@ var/list/admin_verbs_mod = list(
 /client/proc/playernotes()
 	set name = "Show Player Info"
 	set category = "Admin"
+	if(!check_rights(R_ADMIN|R_MOD))
+		return
+
 	if(holder)
 		holder.PlayerNotes()
 	return

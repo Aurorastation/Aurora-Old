@@ -465,7 +465,7 @@ client
 		cmd_mass_modify_object_variables(A, href_list["varnamemass"])
 
 	else if(href_list["mob_player_panel"])
-		if(!check_rights(0))	return
+		if(!check_rights(R_ADMIN|R_MOD))	return
 
 		var/mob/M = locate(href_list["mob_player_panel"])
 		if(!istype(M))

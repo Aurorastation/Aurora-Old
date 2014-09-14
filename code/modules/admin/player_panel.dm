@@ -364,13 +364,16 @@
 		<td align=center><A HREF='?src=\ref[src];adminplayeropts=\ref[M]'>X</A></td>
 		<td align=center><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
 		"}
-		switch(is_special_character(M))
-			if(0)
-				dat += {"<td align=center><A HREF='?src=\ref[src];traitor=\ref[M]'>Traitor?</A></td>"}
-			if(1)
-				dat += {"<td align=center><A HREF='?src=\ref[src];traitor=\ref[M]'><font color=red>Traitor?</font></A></td>"}
-			if(2)
-				dat += {"<td align=center><A HREF='?src=\ref[src];traitor=\ref[M]'><font color=red><b>Traitor?</b></font></A></td>"}
+		if(!check_rights(R_ADMIN|R_MOD))
+			dat += {"<td align=center><A HREF='?src=\ref[src];traitor=\ref[M]'>Traitor?</A></td>"}
+		else
+			switch(is_special_character(M))
+				if(0)
+					dat += {"<td align=center><A HREF='?src=\ref[src];traitor=\ref[M]'>Traitor?</A></td>"}
+				if(1)
+					dat += {"<td align=center><A HREF='?src=\ref[src];traitor=\ref[M]'><font color=red>Traitor?</font></A></td>"}
+				if(2)
+					dat += {"<td align=center><A HREF='?src=\ref[src];traitor=\ref[M]'><font color=red><b>Traitor?</b></font></A></td>"}
 
 	dat += "</table></body></html>"
 

@@ -52,16 +52,19 @@
 	var/list/datum/mind/possible_vampires = get_players_for_role(BE_VAMPIRE)
 
 	for(var/datum/mind/player in possible_vampires)
-		for(var/job in restricted_jobs)//Removing robots from the list
+//This could be the fuckup with game start
+		if(player.current.client.prefs.species == "Machine")
+			possible_vampires -= player
+			msg_scopes("[player.key] has an invalid mob for this role.")
+			continue
+		for(var/job in restricted_jobs)
 			if(player.assigned_role == job)
 				possible_vampires -= player
-				continue
-//This could be the fuckup with game start
-//			if(player.current.isipc())
-//				possible_vampires -= player
+				msg_scopes("[player.key] has an invalid job for this role.")
+				break
 
 	vampire_amount = max(1,round(num_players() / 10)) //1 + round(num_players() / 10)
-
+	msg_scopes("vampire_amount: [vampire_amount]")
 	if(possible_vampires.len>0)
 		for(var/i = 0, i < vampire_amount, i++)
 			if(!possible_vampires.len) break
@@ -71,6 +74,7 @@
 			modePlayer += vampires
 		return 1
 	else
+		msg_scopes("possible_vampires went poof")
 		return 0
 
 /datum/game_mode/vampire/post_setup()
