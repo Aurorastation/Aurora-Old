@@ -105,6 +105,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/cmd_admin_add_freeform_ai_law,
 	/client/proc/cmd_admin_add_random_ai_law,
 	/client/proc/make_sound,
+	/client/proc/make_area_sound,
 	/client/proc/toggle_random_events,
 	/client/proc/set_ooc,
 	/client/proc/editappear
@@ -238,6 +239,7 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/cmd_admin_add_random_ai_law,
 	/client/proc/cmd_admin_create_centcom_report,
 	/client/proc/make_sound,
+	/client/proc/make_area_sound,
 	/client/proc/toggle_random_events,
 	/client/proc/cmd_admin_add_random_ai_law,
 	/client/proc/Set_Holiday,
@@ -662,6 +664,23 @@ var/list/admin_verbs_mod = list(
 		message_admins("\blue [key_name_admin(usr)] made [O] at [O.x], [O.y], [O.z]. make a sound", 1)
 		feedback_add_details("admin_verb","MS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+/client/proc/make_area_sound(var/turf/T in world) // -- TLE
+	set category = "Special Verbs"
+	set name = "Make Area Sound"
+	set desc = "Display a message to everyone in the area (Experimental)"
+	if(T)
+		var/message = input("What do you want the message to be?", "Make Area Sound (Experimental)") as text|null
+		if(!message)
+			return
+		var/area/A = get_area(T)
+		if(!A == A.master)
+			A = A.master
+		for(var/area/SubA in A.related)
+			for (var/mob/V in SubA)
+				V.show_message(message, 2)
+		log_admin("[key_name(usr)] made [A.name] make a sound")
+		message_admins("\blue [key_name_admin(usr)] made [A.name] make a sound", 1)
+		feedback_add_details("admin_verb","MAS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/togglebuildmodeself()
 	set name = "Toggle Build Mode Self"
