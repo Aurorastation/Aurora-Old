@@ -278,7 +278,7 @@ datum
 			description = "An ashen-obsidian-water mix, this solution will alter certain sections of the brain's rationality."
 			color = "#E0E8EF" // rgb: 224, 232, 239
 
-			on_mob_life(var/mob/living/M as mob)
+			on_mob_life(var/mob/living/carbon/human/M as mob)
 				if(ishuman(M))
 					if((M.mind in ticker.mode.cult) && prob(10))
 						M << "\blue A cooling sensation from inside you brings you an untold calmness."
@@ -288,8 +288,10 @@ datum
 					if((M.mind in ticker.mode.vampires) && (M.mind.vampire) && (!(VAMP_FULL in M.mind.vampire.powers)))
 						if(!M) M = holder.my_atom
 						M.adjustFireLoss(6)
+						M.adjust_fire_stacks(1)
+						M.IgniteMob()
 						//M.take_organ_damage(0, 1*REM)
-						if(prob(50))
+						if(prob(20))
 							for(var/mob/O in viewers(M, null))
 								O.show_message(text("\red []'s skin sizzles and burns.", M), 1)
 				holder.remove_reagent(src.id, 10 * REAGENTS_METABOLISM) //high metabolism to prevent extended uncult rolls.
@@ -1468,8 +1470,10 @@ datum
 					if((M.mind in ticker.mode.vampires) && (M.mind.vampire) && (!(VAMP_FULL in M.mind.vampire.powers)))
 						if(!M) M = holder.my_atom
 						M.adjustFireLoss(6)
+						M.adjust_fire_stacks(1)
+						M.IgniteMob()
 						//M.take_organ_damage(0, 1*REM)
-						if(prob(50))
+						if(prob(20))
 							for(var/mob/O in viewers(M, null))
 								O.show_message(text("\red []'s skin sizzles and burns.", M), 1)
 				holder.remove_reagent(src.id, 10 * REAGENTS_METABOLISM) //high metabolism to prevent extended uncult rolls.

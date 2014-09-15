@@ -83,8 +83,10 @@
 		else
 			break
 
-	if(!success)
-		user.loc = pick(L)
+		if(user.weakened > 100)//if you are megastunned by the isocube, there is no escape
+			user <<"An outside force prevents you from teleporting."
+		else if(!success)
+			user.loc = pick(L)
 
 	smoke.start()
 	src.uses -= 1

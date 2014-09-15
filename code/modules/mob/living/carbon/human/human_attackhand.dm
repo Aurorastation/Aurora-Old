@@ -133,6 +133,8 @@
 					src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bit in the neck by [M.name] ([M.ckey])</font>")
 					msg_admin_attack("[M.name] ([M.ckey]) bit [src.name] ([src.ckey]) in the neck")
 					M.handle_bloodsucking(src)
+//					var/datum/organ/external/affecting = get_organ(src.zone_sel.selecting)
+//					affecting.take_damage(10,0,1,0,"dual puncture marks") //this does not work and causes runtimes.
 					return
 			//end vampire codes
 			M.attack_log += text("\[[time_stamp()]\] <font color='red'>[pick(attack.attack_verb)]ed [src.name] ([src.ckey])</font>")

@@ -310,16 +310,16 @@
 		accuracy = 30 //positive.  subtracts to 0 accuracy base, 30 if aimed.  fully accurate up to two tiles *if aimed*, -15% per tile after
 		canzoom = 0
 	else if(targetmod.rating == 1)
-		rangedrop = 5
+		rangedrop = 0
 		accuracy = -30 //standard accuracy.  standard gun.
 		canzoom = 0
 	else if(targetmod.rating == 2)
-		rangedrop = 5
+		rangedrop = 0
 		accuracy = -60 //Fully accurate up to 6 tiles aimed. 15% drop per tile after that for ~-120% accuracy at 14 tiles.  If you want to snipe things, get phasic.
 		canzoom = 1 //advanced and up scanning modules let you zoom in. good luck hitting without phasic though pal.  good luck.
 	else if(targetmod.rating == 3)
 		rangedrop = -5 //Accurate aimed up to 12 tiles.  20% miss at 14.  9 tiles and 50% miss at 14 without aiming.
-		accuracy = -90 //If you're paying a premium for accuracy, you can have accuracy.
+		accuracy = -110 //If you're paying a premium for accuracy, you can have accuracy.
 		canzoom = 1
 
 	if(!powermod)

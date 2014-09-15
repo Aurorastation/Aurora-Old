@@ -135,7 +135,7 @@ Commenting out right now, due to a lack of sprites existing. I hate on-mob weapo
 	fire_delay_unwielded = 105 //3x difference, let's be an arse about this, and push the issue
 	var/zoom = 0
 
-	accuracy = -90
+	accuracy = -110
 	rangedrop = -5 // fully accurate up to first 10 tiles.  the last 4 zoomed tiles you are on your
 
 /obj/item/weapon/gun/energy/rifle/sniperrifle/dropped(mob/user)
