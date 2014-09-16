@@ -93,7 +93,6 @@
 				var/obj/item/weapon/gun/daddy = shot_from //Kinda balanced by fact you need like 2 seconds to aim
 				if (daddy.target && original in daddy.target) //As opposed to no-delay pew pew
 					miss_modifier += -30
-					M << "\red [miss_modifier]!"
 				def_zone = get_zone_with_miss_chance(def_zone, M, miss_modifier + 15*distance + daddy.accuracy + daddy.rangedrop) // add +daddy.missmod vars to gun and this. snowflake accuracy
 //moving def_zone to be a child of the daddyblock because i need the daddy
 			if(!def_zone)

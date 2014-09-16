@@ -225,6 +225,13 @@
 	item_state = "wardentanclothes"
 	item_color = "wardentanclothes"
 
+/obj/item/clothing/under/rank/navy/det
+	name = "Investigator's uniform"
+	desc = "A smart pair of khakis and a dress shirt."
+	icon_state = "wardentanclothes"
+	item_state = "wardentanclothes"
+	item_color = "wardentanclothes"
+
 /obj/item/clothing/under/rank/navy/officer
 	name = "Naval Officer Uniform"
 	desc = "A service unfirom worn by an officer of the NanoTrasen Naval branch."
@@ -245,6 +252,13 @@
 /obj/item/clothing/under/rank/navy/officer/tan
 	name = "Tan Officer Uniform"
 	desc = "A tan service uniform worn by a security officer."
+	icon_state = "officertanclothes"
+	item_state = "officertanclothes"
+	item_color = "officertanclothes"
+
+/obj/item/clothing/under/rank/navy/det/forensics
+	name = "Technician's uniform"
+	desc = "A tan service uniform worn by a forensics officer."
 	icon_state = "officertanclothes"
 	item_state = "officertanclothes"
 	item_color = "officertanclothes"

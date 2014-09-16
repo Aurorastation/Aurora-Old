@@ -97,8 +97,8 @@
 			//20% chance to actually hit the eyes
 
 			if(prob(effectchance * diode.rating))
-				msg_admin_attack(user, C, "shone in the eyes", object="laser pointer")
-
+				//msg_admin_attack(user, C, "shone in the eyes", object="laser pointer")
+				msg_admin_attack("\[[time_stamp()]\] [user.name] ([user.ckey]) used a laser pointer to blind [C]")
 
 				//eye target check
 				outmsg = "<span class='notice'>You blind [C] by shining [src] in their eyes.</span>"

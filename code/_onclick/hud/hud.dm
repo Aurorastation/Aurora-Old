@@ -14,6 +14,7 @@ var/datum/global_hud/global_hud = new()
 	var/obj/screen/blurry
 	var/list/vimpaired
 	var/list/darkMask
+	var/obj/screen/lum
 	var/obj/screen/nvg
 
 /datum/global_hud/New()
@@ -37,6 +38,13 @@ var/datum/global_hud/global_hud = new()
 	nvg.icon_state = "nvg_hud"
 	nvg.layer = 17
 	nvg.mouse_opacity = 0
+
+	lum = new /obj/screen()
+	lum.screen_loc = "1,1"
+	lum.icon = 'icons/obj/nvg_hud_full.dmi'
+	lum.icon_state = "luminol_hud"
+	lum.layer = 17
+	lum.mouse_opacity = 0
 
 	var/obj/screen/O
 	var/i

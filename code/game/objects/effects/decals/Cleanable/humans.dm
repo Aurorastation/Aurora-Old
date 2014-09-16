@@ -50,6 +50,8 @@ var/global/list/image/splatter_cache=list()
 		return
 	if(amount < 1)
 		return
+	if(invisibility != 0)
+		return
 
 	if(perp.shoes)//Adding blood to shoes
 		perp.shoes.blood_color = basecolor

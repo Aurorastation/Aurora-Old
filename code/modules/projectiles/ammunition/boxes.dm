@@ -152,14 +152,14 @@
 	multiple_sprites = 1
 
 // Tried to steal these from Para.  They're kind of funky.
-
+/*
 /obj/item/ammo_magazine/a12mm
 	name = "Ammunition Box (12mm)"
 	icon_state = "9mm"
 	origin_tech = "combat=2"
 	ammo_type = "/obj/item/ammo_casing/a12mm"
 	max_ammo = 40
-
+*/
 /obj/item/ammo_magazine/shotgun
 	name = "Ammunition Box (slug)"
 	icon_state = "9mm"
