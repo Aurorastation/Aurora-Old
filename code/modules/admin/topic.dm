@@ -1470,6 +1470,20 @@
 		log_admin("[src.owner] replied to [key_name(H)]'s Syndicate message with the message [input].")
 		H << "You hear something crackle in your headset for a moment before a voice speaks.  \"Please stand by for a message from your benefactor.  Message as follows, agent. <b>\"[input]\"</b>  Message ends.\""
 
+	else if(href_list["CentcommAIReply"])
+		var/mob/living/silicon/ai/H = locate(href_list["CentcommAIReply"])
+		if(!istype(H))
+			usr << "This can only be used on instances of type /mob/living/silicon"
+			return
+
+		var/input = input(src.owner, "Please enter a message to reply to [key_name(H)] via encripted.","Outgoing message from Central Command", "")
+		if(!input)	return
+
+		src.owner << "You sent [input] to [H] via a secure channel."
+		log_admin("[src.owner] replied to [key_name(H)]'s Centcomm message with the message [input].")
+		message_admins("[src.owner] replied to [key_name(H)]'s Centcom message with: \"[input]\"")
+		H << "An encripted connection was made and a file was uploaded to your systems.  \"Please stand by for a message from Central Command.  Message as follows. <b>\"[input]\"</b>  Message ends.\""
+
 	else if(href_list["CentcommFaxView"])
 		var/info = locate(href_list["CentcommFaxView"])
 
