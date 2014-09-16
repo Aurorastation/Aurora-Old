@@ -15,7 +15,7 @@
 							"/obj/item/weapon/stock_parts/subspace/amplifier" = 1,
 							"/obj/item/weapon/stock_parts/console_screen" = 1,
 							"/obj/item/weapon/cable_coil" = 5)
-
+/*
 datum/design/shield_gen_ex
 	name = "Circuit Design (Experimental hull shield generator)"
 	desc = "Allows for the construction of circuit boards used to build an experimental hull shield generator."
@@ -24,7 +24,7 @@ datum/design/shield_gen_ex
 	build_type = PROTOLATHE
 	materials = list("$glass" = 2000, "$plasma" = 5000, "$diamond" = 5000, "$gold" = 5000)
 	build_path = "/obj/machinery/shield_gen/external"
-
+*/
 ////////////////////////////////////////
 // Shield Generator
 
@@ -41,7 +41,7 @@ datum/design/shield_gen_ex
 							"/obj/item/weapon/stock_parts/subspace/amplifier" = 1,
 							"/obj/item/weapon/stock_parts/console_screen" = 1,
 							"/obj/item/weapon/cable_coil" = 5)
-
+/*
 datum/design/shield_gen
 	name = "Circuit Design (Experimental shield generator)"
 	desc = "Allows for the construction of circuit boards used to build an experimental shield generator."
@@ -50,7 +50,7 @@ datum/design/shield_gen
 	build_type = PROTOLATHE
 	materials = list("$glass" = 2000, "$plasma" = 5000, "$diamond" = 5000, "$gold" = 5000)
 	build_path = "/obj/machinery/shield_gen/external"
-
+*/
 ////////////////////////////////////////
 // Shield Capacitor
 
@@ -67,7 +67,7 @@ datum/design/shield_gen
 							"/obj/item/weapon/stock_parts/subspace/analyzer" = 1,
 							"/obj/item/weapon/stock_parts/console_screen" = 1,
 							"/obj/item/weapon/cable_coil" = 5)
-
+/*
 datum/design/shield_cap
 	name = "Circuit Design (Experimental shield capacitor)"
 	desc = "Allows for the construction of circuit boards used to build an experimental shielding capacitor."
@@ -76,3 +76,4 @@ datum/design/shield_cap
 	build_type = PROTOLATHE
 	materials = list("$glass" = 2000, "$plasma" = 5000, "$diamond" = 5000, "$silver" = 5000)
 	build_path = "/obj/machinery/shield_gen/external"
+*/
