@@ -14,7 +14,7 @@ var/global/floorIsLava = 0
 /proc/message_mods(var/msg)
 	msg = "<span class=\"admin\"><span class=\"prefix\">MOD LOG:</span> <span class=\"message\">[msg]</span></span>"
 	for(var/client/C in admins)
-		if(R_MOD & C.holder.rights)
+		if(R_MOD & C.holder.rights && !(R_ADMIN & C.holder.rights))
 			C << msg
 
 /proc/msg_admin_attack(var/text) //Toggleable Attack Messages
@@ -872,6 +872,7 @@ var/global/floorIsLava = 0
 		ticker.delay_end = !ticker.delay_end
 		log_admin("[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].")
 		message_admins("\blue [key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].", 1)
+		message_mods("\blue [key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].", 1)
 		return //alert("Round end delayed", null, null, null, null, null)
 	going = !( going )
 	if (!( going ))
@@ -1249,6 +1250,7 @@ proc/move_alien_ship()
 
 	log_admin("[key_name(usr)] winded [key_name(M)]!")
 	message_admins("[key_name_admin(usr)] winded [key_name_admin(M)]!", 1)
+	message_mods("[key_name_admin(usr)] winded [key_name_admin(M)]!")
 	// feedback_add_details("admin_verb","WIND") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	// Chop chop.
 	return
@@ -1261,4 +1263,5 @@ proc/move_alien_ship()
 
 	log_admin("[key_name(usr)] unwinded [key_name(M)]!")
 	message_admins("[key_name_admin(usr)] unwinded [key_name_admin(M)]!", 1)
+	message_mods("[key_name_admin(usr)] unwinded [key_name_admin(M)]!", 1)
 	return

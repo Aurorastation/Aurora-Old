@@ -933,7 +933,6 @@ client
 		if(amount != 0)
 			log_admin("[key_name(usr)] dealt [amount] amount of [Text] damage to [L] ")
 			message_admins("\blue [key_name(usr)] dealt [amount] amount of [Text] damage to [L] ")
-			msg_scopes("\blue [key_name(usr)] dealt [amount] amount of [Text] damage to [L] ", 1)
 			href_list["datumrefresh"] = href_list["mobToDamage"]
 
 	if(href_list["datumrefresh"])
