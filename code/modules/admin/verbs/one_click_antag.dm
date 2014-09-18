@@ -18,6 +18,7 @@ client/proc/one_click_antag()
 		<a href='?src=\ref[src];makeAntag=5'>Make Malf AI</a><br>
 		<a href='?src=\ref[src];makeAntag=6'>Make Wizard (Requires Ghosts)</a><br>
 		<a href='?src=\ref[src];makeAntag=11'>Make Vox Raiders (Requires Ghosts)</a><br>
+		<a href='?src=\ref[src];makeAntag=12'>Make Vampire</a><br>
 		"}
 /* These dont work just yet
 	Ninja, aliens and deathsquad I have not looked into yet
@@ -100,9 +101,10 @@ client/proc/one_click_antag()
 			if(!applicant.stat)
 				if(applicant.mind)
 					if (!applicant.mind.special_role)
-						if(!jobban_isbanned(applicant, "changeling") && !jobban_isbanned(applicant, "Syndicate"))
-							if(!(applicant.job in temp.restricted_jobs))
-								candidates += applicant
+						if(applicant.species.name != "Machine")
+							if(!jobban_isbanned(applicant, "changeling") && !jobban_isbanned(applicant, "Syndicate"))
+								if(!(applicant.job in temp.restricted_jobs))
+									candidates += applicant
 
 	if(candidates.len)
 		var/numChanglings = min(candidates.len, 3)
@@ -521,3 +523,34 @@ client/proc/one_click_antag()
 	new_vox.equip_vox_raider()
 
 	return new_vox
+
+/datum/admins/proc/makeVampire()
+
+	var/datum/game_mode/vampire/temp = new
+	if(config.protect_roles_from_antagonist)
+		temp.restricted_jobs += temp.protected_jobs
+
+	var/list/mob/living/carbon/human/candidates = list()
+	var/mob/living/carbon/human/H = null
+
+	for(var/mob/living/carbon/human/applicant in player_list)
+		if(applicant.client.prefs.be_special & BE_VAMPIRE)
+			if(!applicant.stat)
+				if(applicant.mind)
+					if (!applicant.mind.special_role)
+						if(applicant.species.name != "Machine")
+							if(!jobban_isbanned(applicant, "vampire") && !jobban_isbanned(applicant, "Syndicate"))
+								if(!(applicant.job in temp.restricted_jobs))
+									candidates += applicant
+
+	if(candidates.len)
+		var/numVampires = min(candidates.len, 3)
+
+		for(var/i = 0, i<numVampires, i++)
+			H = pick(candidates)
+			H.mind.make_Vampire()
+			candidates.Remove(H)
+
+		return 1
+
+	return 0
