@@ -27,7 +27,7 @@
 	var/raised = 0			// if the turret cover is "open" and the turret is raised
 	var/raising= 0			// if the turret is currently opening or closing its cover
 	var/health = 80			// the turret's health
-	var/locked = 1			// if the turret's behaviour control access is locked
+	var/locked = 0			// if the turret's behaviour control access is locked
 
 	var/installation		// the type of weapon installed
 	var/gun_charge = 0		// the charge of the gun inserted
@@ -165,6 +165,12 @@
 
 				if(/obj/item/weapon/gun/energy/rifle/laser)
 					projectile = /obj/item/projectile/beam
+					eprojectile = projectile
+					iconholder = null
+					reqpower = 500
+
+				if(/obj/item/weapon/gun/energy/laser) //laser rifles are cool and all.
+					projectile = /obj/item/projectile/beam //but captainlaser and retrolaser still use energy/laser pathing.
 					eprojectile = projectile
 					iconholder = null
 					reqpower = 500
@@ -395,8 +401,8 @@ Status: []<BR>"},
 		check_records=pick(0,1)
 		criminals=pick(0,1)
 		auth_weapons=pick(0,1)
-		stun_all=pick(0,0,0,0,1) // stun_all is a pretty big deal, so it's least likely to get turned on
-		if(prob(5)) emagged=1
+		stun_all=pick(0,1) // stun_all is a pretty big deal, so it's least likely to get turned on //but think of the fun
+		if(prob(50)) emagged=1
 		on=0
 		sleep(rand(60,600))
 		if(!on)
