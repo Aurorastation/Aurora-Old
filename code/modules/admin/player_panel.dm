@@ -323,7 +323,13 @@
 	if (!usr.client.holder)
 		return
 	var/dat = "<html><head><title>Player Menu</title></head>"
-	dat += "<body><table border=1 cellspacing=5><B><tr><th>Name</th><th>Real Name</th><th>Assigned Job</th><th>Key</th><th>Options</th><th>PM</th><th>Traitor?</th></tr></B>"
+	dat += "<body><table border=1 cellspacing=5><B><tr><th>Name</th><th>Real Name</th><th>Assigned Job</th><th>Key</th><th>Options</th><th>PM</th>"
+
+	if(check_rights(R_ADMIN|R_MOD, 0))
+		dat += "<th>Traitor?</th></tr></B>"
+	else
+		dat += "<th>View Var's</th></tr></B>"
+
 	//add <th>IP:</th> to this if wanting to add back in IP checking
 	//add <td>(IP: [M.lastKnownIP])</td> if you want to know their ip to the lists below
 	var/list/mobs = sortmobs()
@@ -364,8 +370,8 @@
 		<td align=center><A HREF='?src=\ref[src];adminplayeropts=\ref[M]'>X</A></td>
 		<td align=center><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
 		"}
-		if(!check_rights(R_ADMIN|R_MOD))
-			dat += {"<td align=center><A HREF='?src=\ref[src];traitor=\ref[M]'>Traitor?</A></td>"}
+		if(!check_rights(R_ADMIN|R_MOD, 0))
+			dat += {"<td align=center><a HREF='?_src_=vars;Vars=\ref[M]'>VV</a></td>"}
 		else
 			switch(is_special_character(M))
 				if(0)
