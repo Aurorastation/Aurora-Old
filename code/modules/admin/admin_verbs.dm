@@ -288,7 +288,6 @@ var/list/admin_verbs_mod = list(
 	/client/proc/admin_ghost,			/*allows us to ghost/reenter body at will*/
 	/client/proc/cmd_mod_say,
 	/client/proc/check_ai_laws,
-	/client/proc/jumptomob,
 	/datum/admins/proc/show_player_info,
 	/client/proc/player_panel_new,
 	/client/proc/dsay,
