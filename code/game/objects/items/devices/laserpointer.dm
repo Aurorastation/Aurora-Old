@@ -97,8 +97,8 @@
 			//20% chance to actually hit the eyes
 
 			if(prob(effectchance * diode.rating))
-				msg_admin_attack(user, C, "shone in the eyes", object="laser pointer")
-
+				//msg_admin_attack(user, C, "shone in the eyes", object="laser pointer")
+				msg_admin_attack("\[[time_stamp()]\] [user.name] ([user.ckey]) used a laser pointer to blind [C]")
 
 				//eye target check
 				outmsg = "<span class='notice'>You blind [C] by shining [src] in their eyes.</span>"
@@ -120,26 +120,26 @@
 						C << "<span class='info'>A small, bright dot appears in your vision.</span>"
 					if(1)
 						//industrial grade eye protection
-						E.damage += rand(0, 2)
+						//E.damage += rand(0, 2)
 						C << "<span class='notice'>Something bright flashes in the corner of your vision!</span>"
 					if(2)
 						//basic eye protection (sunglasses)
 						flick("flash", C.flash)
-						E.damage += rand(2, 4)
+						//E.damage += rand(2, 4)
 						C << "<span class='danger'>Your eyes were blinded!</span>"
 					if(3)
 						//no eye protection
 						if(prob(10))
 							C.Weaken(1)
 						flick("e_flash", C.flash)
-						E.damage += rand(3, 5)
+						E.damage += 1
 						C << "<span class='danger'>Your eyes were blinded!</span>"
 					if(4)
 						//the effect has been worsened by something
 						if(prob(5))
 							C.Weaken(1)
 						flick("e_flash", C.flash)
-						E.damage += rand(5, 10)
+						E.damage += 2
 						C << "<span class='danger'>Your eyes were blinded!</span>"
 			else
 				outmsg = "<span class='notice'>You fail to blind [C] by shining [src] at their eyes.</span>"

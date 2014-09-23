@@ -21,7 +21,7 @@
 	throwpass = 1	//You can throw objects over this, despite it's density.")
 	var/parts = /obj/item/weapon/table_parts
 	var/flipped = 0
-	var/health = 100
+	var/health = 200
 
 /obj/structure/table/proc/update_adjacent()
 	for(var/direction in list(1,2,4,8,5,6,9,10))
@@ -311,14 +311,14 @@
 	if (get_dist(P.starting, loc) <= 1) //Tables won't help you if people are THIS close
 		return 1
 	if (get_turf(P.original) == cover)
-		var/chance = 20
+		var/chance = 30
 		if (ismob(P.original))
 			var/mob/M = P.original
 			if (M.lying)
-				chance += 20				//Lying down lets you catch less bullets
+				chance += 50				//Lying down lets you catch less bullets
 		if(flipped)
 			if(get_dir(loc, from) == dir)	//Flipped tables catch mroe bullets
-				chance += 20
+				chance += 50
 			else
 				return 1					//But only from one side
 		if(prob(chance))
@@ -545,7 +545,7 @@
 	desc = "Do not apply fire to this. Rumour says it burns easily."
 	icon_state = "wood_table"
 	parts = /obj/item/weapon/table_parts/wood
-	health = 50
+	health = 100
 /*
  * Reinforced tables
  */
@@ -553,7 +553,7 @@
 	name = "reinforced table"
 	desc = "A version of the four legged table. It is stronger."
 	icon_state = "reinf_table"
-	health = 200
+	health = 400
 	var/status = 2
 	parts = /obj/item/weapon/table_parts/reinforced
 
