@@ -839,7 +839,7 @@ var/list/datum/dna/hivemind_bank = list()
 	if(T.reagents)	T.reagents.add_reagent("lexorin", 40)
 
 	//Becase a deadly powerful attack should be logged
-	msg_admin_attack("[usr.name] ([usr.ckey]) Death Stung [T.name] ([T.ckey])")
+	msg_admin_attack("[usr.name] ([usr.ckey]) Death Stung [T.name] ([T.ckey]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[usr.x];Y=[usr.y];Z=[usr.z]'>JMP</a>")
 	usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Death stung [T.name] ([T.ckey])</font>")
 	T.attack_log += text("\[[time_stamp()]\] <font color='orange'>Was death stung by [usr.name] ([usr.ckey])</font>")
 	feedback_add_details("changeling_powers","DTHS")

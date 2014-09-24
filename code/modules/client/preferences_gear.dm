@@ -25,7 +25,7 @@ proc/populate_gear_list()
 	path = /obj/item/weapon/dice/d20
 	cost = 1
 
-/datum/gear/dice
+/datum/gear/wallet
 	display_name = "wallet"
 	path = /obj/item/weapon/storage/wallet
 	cost = 2
@@ -39,6 +39,51 @@ proc/populate_gear_list()
 /datum/gear/cane
 	display_name = "cane"
 	path = /obj/item/weapon/cane
+	cost = 2
+
+/datum/gear/briefcase
+	display_name = "briefcase"
+	path = /obj/item/weapon/storage/briefcase
+	cost = 2
+
+/datum/gear/securebriefcase
+	display_name = "secure briefcase"
+	path = /obj/item/weapon/storage/secure/briefcase
+	cost = 3
+
+/datum/gear/zippolighter
+	display_name = "zippo lighter"
+	path = /obj/item/weapon/lighter/zippo
+	cost = 1
+
+/datum/gear/recorder
+	display_name = "universal recorder"
+	path = /obj/item/device/taperecorder
+	cost = 2
+
+/datum/gear/camera
+	display_name = "camera"
+	path = /obj/item/device/camera
+	cost = 1
+
+/datum/gear/clipboard
+	display_name = "clipboard"
+	path = /obj/item/weapon/clipboard
+	cost = 1
+
+/datum/gear/redpen
+	display_name = "red pen"
+	path = /obj/item/weapon/pen/red
+	cost = 1
+
+/datum/gear/bluepen
+	display_name = "blue pen"
+	path = /obj/item/weapon/pen/blue
+	cost = 1
+
+/datum/gear/flask
+	display_name = "flask"
+	path = /obj/item/weapon/reagent_containers/food/drinks/flask/barflask
 	cost = 2
 
 /datum/gear/tie_horrible
@@ -395,12 +440,6 @@ proc/populate_gear_list()
 //	slot = slot_w_uniform
 	cost = 3
 
-/datum/gear/exec_suit
-	display_name = "executive suit"
-	path = /obj/item/clothing/under/suit_jacket/really_black
-//	slot = slot_w_uniform
-	cost = 3
-
 /datum/gear/oldmansuit
 	display_name = "old man suit"
 	path = /obj/item/clothing/under/lawyer/oldman
@@ -423,9 +462,15 @@ proc/populate_gear_list()
 
 /datum/gear/armpit
 	display_name = "shoulder holster"
-//	path = /obj/item/clothing/tie/holster/armpit
+	path = /obj/item/clothing/tie/holster/armpit
 	cost = 3
 	allowed_roles = list("Captain", "Head of Personnel", "Security Officer", "Head of Security")
+
+
+/datum/gear/normal_beret
+	display_name = "beret"
+	path = /obj/item/clothing/head/beret
+	cost = 3
 
 /datum/gear/sec_beret
 	display_name = "security beret"

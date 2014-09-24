@@ -163,6 +163,7 @@ Implant Specifics:<BR>"}
 		if(istype(imp_in, /mob/))
 			var/mob/T = imp_in
 			message_admins("Explosive implant triggered in [T] ([T.key]). (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</a>) ")
+			message_mods("Explosive implant triggered in [T] ([T.key]). (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</a>) ")
 			log_game("Explosive implant triggered in [T] ([T.key]).")
 			need_gib = 1
 

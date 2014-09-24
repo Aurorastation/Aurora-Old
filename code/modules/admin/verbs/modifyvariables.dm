@@ -264,6 +264,12 @@ var/list/forbidden_varedit_object_types = list(
 		if("marked datum")
 			L[L.Find(variable)] = holder.marked_datum
 
+//Runtimes >_< List's are like organised messes.
+//This worked the other day.
+//	world.log << "### VarEdit by [src]: [variable]=[html_encode("[L[L.Find(variable)]]")]"
+//	log_admin("[key_name(src)] modified [variable] to [L[L.Find(variable)]]")
+//	message_admins("[key_name_admin(src)] modified [variable] to [L[L.Find(variable)]]", 1)
+//	msg_scopes("[key_name_admin(src)] modified [variable] to [L[L.Find(variable)]]", 1) // Tell dev's to but not log twice
 
 /client/proc/modify_variables(var/atom/O, var/param_var_name = null, var/autodetect_class = 0)
 	if(!check_rights(R_VAREDIT|R_DEV))	return
@@ -498,4 +504,4 @@ var/list/forbidden_varedit_object_types = list(
 	world.log << "### VarEdit by [src]: [O.type] [variable]=[html_encode("[O.vars[variable]]")]"
 	log_admin("[key_name(src)] modified [original_name]'s [variable] to [O.vars[variable]]")
 	message_admins("[key_name_admin(src)] modified [original_name]'s [variable] to [O.vars[variable]]", 1)
-	msg_scopes("[key_name_admin(src)] modified [original_name]'s [variable] to [O.vars[variable]]", 1) // Tell dev's to but look at the logs
+	msg_scopes("[key_name_admin(src)] modified [original_name]'s [variable] to [O.vars[variable]]", 1) // Tell dev's to but not log twice
