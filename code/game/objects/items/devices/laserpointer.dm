@@ -98,7 +98,7 @@
 
 			if(prob(effectchance * diode.rating))
 				//msg_admin_attack(user, C, "shone in the eyes", object="laser pointer")
-				msg_admin_attack("\[[time_stamp()]\] [user.name] ([user.ckey]) used a laser pointer to blind [C]")
+				msg_admin_attack("[user.name] ([user.ckey]) used a laser pointer to blind [C]")
 
 				//eye target check
 				outmsg = "<span class='notice'>You blind [C] by shining [src] in their eyes.</span>"
@@ -120,26 +120,26 @@
 						C << "<span class='info'>A small, bright dot appears in your vision.</span>"
 					if(1)
 						//industrial grade eye protection
-						E.damage += rand(0, 2)
+						//E.damage += rand(0, 2)
 						C << "<span class='notice'>Something bright flashes in the corner of your vision!</span>"
 					if(2)
 						//basic eye protection (sunglasses)
 						flick("flash", C.flash)
-						E.damage += rand(2, 4)
+						//E.damage += rand(2, 4)
 						C << "<span class='danger'>Your eyes were blinded!</span>"
 					if(3)
 						//no eye protection
 						if(prob(10))
 							C.Weaken(1)
 						flick("e_flash", C.flash)
-						E.damage += rand(3, 5)
+						E.damage += 1
 						C << "<span class='danger'>Your eyes were blinded!</span>"
 					if(4)
 						//the effect has been worsened by something
 						if(prob(5))
 							C.Weaken(1)
 						flick("e_flash", C.flash)
-						E.damage += rand(5, 10)
+						E.damage += 2
 						C << "<span class='danger'>Your eyes were blinded!</span>"
 			else
 				outmsg = "<span class='notice'>You fail to blind [C] by shining [src] at their eyes.</span>"
@@ -155,7 +155,7 @@
 
 			S.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had a laser pointer shone in their eyes by [user.name] ([user.ckey])</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='orange'>Shone a laser pointer in the eyes of [S.name] ([S.ckey])</font>")
-			log_attack("<font color='orange'>[user.name] ([user.ckey]) Shone a laser pointer in the eyes of [S.name] ([S.ckey])</font>")
+			msg_admin_attack("<font color='orange'>[user.name] ([user.ckey]) Shone a laser pointer in the eyes of [S.name] ([S.ckey])</font>")
 		else
 			outmsg = "<span class='notice'>You fail to overload [S] by shining [src] at their sensors.</span>"
 
@@ -166,7 +166,7 @@
 			C.emp_act(1)
 			outmsg = "<span class='notice'>You hit the lens of [C] with [src], temporarily disabling the camera!</span>"
 
-			msg_admin_attack("\[[time_stamp()]\] [user.name] ([user.ckey]) EMPd a camera with a laser pointer")
+			msg_admin_attack("[user.name] ([user.ckey]) EMPd a camera with a laser pointer")
 			user.attack_log += text("\[[time_stamp()]\] [user.name] ([user.ckey]) EMPd a camera with a laser pointer")
 		else
 			outmsg = "<span class='info'>You missed the lens of [C] with [src].</span>"

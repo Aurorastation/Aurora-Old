@@ -76,6 +76,7 @@ var/global/datum/controller/gameticker/ticker
 	if((master_mode=="random") || (master_mode=="secret"))
 		runnable_modes = config.get_runnable_modes()
 		if (runnable_modes.len==0)
+			msg_scopes("Well we can't continue runnable_modes.0")
 			current_state = GAME_STATE_PREGAME
 			world << "<B>Unable to choose playable game mode.</B> Reverting to pre-game lobby."
 			return 0
@@ -92,6 +93,7 @@ var/global/datum/controller/gameticker/ticker
 	else
 		src.mode = config.pick_mode(master_mode)
 	if (!src.mode.can_start())
+		msg_scopes("Well we can't continue can_start")
 		world << "<B>Unable to start [mode.name].</B> Not enough players, [mode.required_players] players needed. Reverting to pre-game lobby."
 		del(mode)
 		current_state = GAME_STATE_PREGAME
@@ -104,6 +106,7 @@ var/global/datum/controller/gameticker/ticker
 	if(!can_continue)
 		del(mode)
 		current_state = GAME_STATE_PREGAME
+		msg_scopes("Well we can't continue pre_setup")
 		world << "<B>Error setting up [master_mode].</B> Reverting to pre-game lobby."
 		job_master.ResetOccupations()
 		return 0
