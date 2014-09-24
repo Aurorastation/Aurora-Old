@@ -2137,6 +2137,77 @@ datum
 			toxpwr = 2
 			meltprob = 30
 
+		toxin/philodexphid
+			name = "Philodexphid"
+			id = "philodex"
+			description = "Aggressively destroys the central nervous system."
+			reagent_state = LIQUID
+			color = "#000067"
+			overdose = REAGENTS_OVERDOSE
+
+			on_mob_life(var/mob/living/M as mob)
+				if(!M) M = holder.my_atom
+				if(!data) data = 1
+				switch(data)
+					if(1 to 5)
+						if(prob(50))
+							M << "\red Your muscles are aching."
+						if(prob(5))
+							M.visible_message("\blue [M]'s muscles lock up violently and they crumple to the floor!", "\red Your muscles lock up with great pain! You fall to the ground!")
+							M.weakened = max(M.weakened, 3)
+						if(prob(2))
+							if (!M.stuttering) M.stuttering = 1
+							M.stuttering += 3
+//						M << "DEBUG: YOU HAVE 1 to 5 UNITS IN YOU!"
+					if(5 to 10)
+						if(prob(15))
+							M.confused = max(M.confused+3,0)
+						if(prob(30))
+							if (!M.stuttering) M.stuttering = 1
+							M.stuttering += 3
+						if(prob(5))
+							M.visible_message("\blue [M]'s muscles lock up violently and they crumple to the floor!", "\red Your muscles lock up with great pain! You fall to the ground!")
+							M.weakened = max(M.weakened, 3)
+//						M << "DEBUG: YOU HAVE 5 to 10 UNITS IN YOU!"
+					if(10 to 15)
+						if(prob(5))
+							M.Paralyse(10)
+					if(15 to INFINITY)
+						var/mob/living/carbon/human/H = M
+						var/datum/organ/internal/eyes/E = H.internal_organs["eyes"]
+						if(istype(E))
+							if(E.damage < 100)
+								E.damage += 1
+				data++
+				..()
+				return
+
+		toxin/ecyeipate
+			name = "Ecyeipate"
+			id = "ecye"
+			description = "Causes aggressive convulsions of large muscle groups."
+			reagent_state = LIQUID
+			color = "#000067"
+			overdose = REAGENTS_OVERDOSE
+
+			on_mob_life(var/mob/living/M as mob)
+				if(!M) M = holder.my_atom
+				if(!data) data = 1
+				switch(data)
+					if(1 to 10)
+						if(prob(10))
+							M.visible_message("\blue [M]'s muscles lock up violently and they crumple to the floor!", "\red Your muscles lock up with great pain! You fall to the ground!")
+							M.weakened = max(M.weakened, 3)
+							if(prob(25))
+								M.emote("scream")
+//						M << "DEBUG: YOU HAVE 1 to 10 UNITS IN YOU!"
+					if(10 to INFINITY)
+						M.AdjustParalysis(-1)
+						M.AdjustStunned(-1)
+						M.AdjustWeakened(-1)
+//						M << "DEBUG: YOU HAVE 10 to 25 UNITS IN YOU!"
+
+
 /////////////////////////Food Reagents////////////////////////////
 // Part of the food code. Nutriment is used instead of the old "heal_amt" code. Also is where all the food
 // 	condiments, additives, and such go.
@@ -4082,7 +4153,6 @@ datum
 			description = "Just like black russian but taller"
 			color = "#2E6671"
 			boozepwr = 5
-
 
 // Undefine the alias for REAGENTS_EFFECT_MULTIPLER
 #undef REM
