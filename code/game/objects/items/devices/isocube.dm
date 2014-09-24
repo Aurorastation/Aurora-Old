@@ -26,7 +26,7 @@
 
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been imprisoned with [src.name] by [user.name] ([user.ckey])</font>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to imprison [M.name] ([M.ckey])</font>")
-		msg_admin_attack("[user.name] ([user.ckey]) used the [src.name] to imprison [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+		msg_admin_attack("[user.name] ([user.ckey]) is attemptin to imprison [M.name] ([M.ckey]) with the [src.name] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
 		isolate("VICTIM", M, user)
 		return
@@ -80,6 +80,8 @@
 					A.paralysis = 0
 					A.cancel_camera()
 					src.icon_state = "soulstone"
+				for(var/obj/O in src)
+					O.loc = U.loc
 			if ("Disable")
 				for(var/mob/living/carbon/human/A in src)
 					if (A.paralysis < 100)
@@ -130,4 +132,5 @@
 					T << "You feel a heavy weightlessness and find yourself barely able to move.  The outside world seems larger."
 					U << "\blue <b>[T.real_name] has been successfully captured within the isocube.</b> "
 					T.Weaken(9000000)
+					msg_admin_attack("[U.name] ([U.ckey]) used the [src.name] to imprison [T.name] ([T.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[U.x];Y=[U.y];Z=[U.z]'>JMP</a>)")
 	return
