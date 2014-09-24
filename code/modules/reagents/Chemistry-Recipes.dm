@@ -2238,3 +2238,18 @@ datum
 			result = "suidream"
 			required_reagents = list("space_up" = 2, "bluecuracao" = 1, "melonliquor" = 1)
 			result_amount = 4
+
+//////////////////////////SKULL'S DRUGS///////////////////////
+		philodex
+			name = "Philodexphid"
+			id = "philodex"
+			result = "philodex"
+			required_reagents = list("cryptobiolin" = 1, "impedrezene" = 1, "mercury" = 1)
+			result_amount = 2
+
+		ecye
+			name = "Ecyeipate"
+			id = "ecye"
+			result = "ecye"
+			required_reagents = list("synaptizine" = 1, "plasma" = 1)
+			result_amount = 2
