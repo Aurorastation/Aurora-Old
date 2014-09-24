@@ -237,7 +237,7 @@
 					handled = 1
 
 	if((HULK in mutations) && health >= 25 && length(message))
-		message = "[uppertext(message)]!!!"
+		//message = "[uppertext(message)]!!!"  //this is really irritating.  let's not.
 		verb = pick("yells","roars","hollers")
 		handled = 1
 	if(slurring)

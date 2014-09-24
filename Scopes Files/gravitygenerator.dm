@@ -21,7 +21,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 /client/proc/cmd_dev_reset_gravity()
 	set category = "Debug"
 	set name = "Restore Default Gravity"
-	set desc = "Resets all gravity on the entire server(This spams Scopes like mad.)"
+	set desc = "Resets all gravity on the entire server."
 
 	if(!check_rights(R_DEBUG|R_DEV))	return
 
@@ -36,7 +36,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 		src << "\red The game hasn't started yet!"
 		return
 
-	if(alert(usr, "Be sure to warn Scopes, Chris, and Skull. This could be very spammy for their logs", "Restore gravity", "No", "Yes") == "No")
+	if(alert(usr, "Make people fall on their face?", "Restore gravity", "No", "Yes") == "No")
 		return 0
 
 	world << "\red \b Resetting Gravity Simulation."
@@ -47,12 +47,10 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 				continue
 
 			A.has_gravity = 1
-			msg_scopes("Gravity reset in: [A.name]")
 			for(var/area/SubA in A.related)
 				SubA.has_gravity = 1
 				for(var/mob/living/carbon/human/M in SubA)
 					M:float(0)
-		msg_scopes("Did you enjoy that insane amount of things")
 		world << "\red Gravity Simulation reset."
 
 	feedback_add_details("admin_verb","RSG")
@@ -348,6 +346,8 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 			gravity_is_on = 0
 			investigate_log("was brought offline and there is now no gravity for this level.", "gravity")
 			message_admins("The gravity generator was brought offline with no backup generator. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>[area.name]</a>)")
+			message_mods("The gravity generator was brought offline with no backup generator. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>[area.name]</a>)")
+
 
 	update_icon()
 	update_list()

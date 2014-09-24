@@ -144,7 +144,7 @@ var/list/debug_verbs = list (
         ,/client/proc/splash
         ,/client/proc/cmd_admin_areatest
         ,/client/proc/cmd_admin_rejuvenate
-        ,/datum/admins/proc/show_traitor_panel
+//        ,/datum/admins/proc/show_traitor_panel //What has this got to do with mapping
         ,/client/proc/print_jobban_old
         ,/client/proc/print_jobban_old_filter
         ,/client/proc/forceEvent
