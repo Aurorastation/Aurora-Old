@@ -578,6 +578,11 @@ proc/get_damage_icon_part(damage_state, body_part)
 			bloodsies.color		= w_uniform.blood_color
 			standing.overlays	+= bloodsies
 
+		if(w_uniform.wasbloody == 2)
+			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "uniformblood")
+			bloodsies.color		= "#007fff"
+			standing.overlays	+= bloodsies
+
 		if(w_uniform:hastie)	//WE CHECKED THE TYPE ABOVE. THIS REALLY SHOULD BE FINE.
 			var/tie_color = w_uniform:hastie.item_color
 			if(!tie_color) tie_color = w_uniform:hastie.icon_state
@@ -624,6 +629,10 @@ proc/get_damage_icon_part(damage_state, body_part)
 			var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = "bloodyhands")
 			bloodsies.color = gloves.blood_color
 			standing.overlays	+= bloodsies
+		else if(gloves.wasbloody == 2)
+			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "bloodyhands")
+			bloodsies.color		= "#007fff"
+			standing.overlays	+= bloodsies
 		gloves.screen_loc = ui_gloves
 		overlays_standing[GLOVES_LAYER]	= standing
 	else
@@ -664,6 +673,10 @@ proc/get_damage_icon_part(damage_state, body_part)
 			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "shoeblood")
 			bloodsies.color = shoes.blood_color
 			standing.overlays += bloodsies
+		else if(shoes.wasbloody == 2)
+			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "shoeblood")
+			bloodsies.color		= "#007fff"
+			standing.overlays	+= bloodsies
 		overlays_standing[SHOES_LAYER] = standing
 	else
 		if(feet_blood_DNA)
@@ -697,6 +710,10 @@ proc/get_damage_icon_part(damage_state, body_part)
 			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
 			bloodsies.color = head.blood_color
 			standing.overlays	+= bloodsies
+		if(head.wasbloody == 2)
+			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
+			bloodsies.color		= "#007fff"
+			standing.overlays	+= bloodsies
 		overlays_standing[HEAD_LAYER]	= standing
 	else
 		overlays_standing[HEAD_LAYER]	= null
@@ -729,6 +746,12 @@ proc/get_damage_icon_part(damage_state, body_part)
 			bloodsies.color = wear_suit.blood_color
 			standing.overlays	+= bloodsies
 
+		if(wear_suit.wasbloody == 2)
+			var/obj/item/clothing/suit/S = wear_suit
+			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "[S.blood_overlay_type]blood")
+			bloodsies.color		= "#007fff"
+			standing.overlays	+= bloodsies
+
 		overlays_standing[SUIT_LAYER]	= standing
 
 		update_tail_showing(0)
@@ -755,6 +778,10 @@ proc/get_damage_icon_part(damage_state, body_part)
 		if( !istype(wear_mask, /obj/item/clothing/mask/cigarette) && wear_mask.blood_DNA )
 			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "maskblood")
 			bloodsies.color = wear_mask.blood_color
+			standing.overlays	+= bloodsies
+		else if( !istype(wear_mask, /obj/item/clothing/mask/cigarette) && wear_mask.wasbloody == 2 )
+			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "maskblood")
+			bloodsies.color = wear_suit.blood_color
 			standing.overlays	+= bloodsies
 		overlays_standing[FACEMASK_LAYER]	= standing
 	else
