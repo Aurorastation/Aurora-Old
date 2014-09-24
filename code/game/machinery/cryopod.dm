@@ -72,7 +72,7 @@ obj/machinery/computer/cryopod/Topic(href, href_list)
 			user << "\blue There is nothing to recover from storage."
 			return
 
-		var/obj/item/I = input(usr, "Please choose which object to retrieve.","Object recovery",null) as obj in frozen_items
+		var/obj/item/I = input(usr, "Please choose which object to retrieve.","Object recovery",null) as null|obj in frozen_items
 
 		if(!I || frozen_items.len == 0)
 			user << "\blue There is nothing to recover from storage."
@@ -240,7 +240,7 @@ obj/machinery/computer/cryopod/Topic(href, href_list)
 					current_mode.possible_traitors.Remove(occupant)
 
 			// Delete them from datacore.
-			
+
 			if(PDA_Manifest.len)
 				PDA_Manifest.Cut()
 			for(var/datum/data/record/R in data_core.medical)
@@ -324,6 +324,7 @@ obj/machinery/computer/cryopod/Topic(href, href_list)
 			// Book keeping!
 			log_admin("[key_name_admin(M)] has entered a stasis pod.")
 			message_admins("\blue [key_name_admin(M)] has entered a stasis pod.")
+			message_mods("\blue [key_name_admin(M)] has entered a stasis pod.")
 
 			//Despawning occurs when process() is called with an occupant without a client.
 			src.add_fingerprint(M)

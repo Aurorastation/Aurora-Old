@@ -91,9 +91,11 @@
 			if(charges >= 2)
 				H.Weaken(10)
 				H.adjustOxyLoss(10)
+				H.apply_damage(10, BURN, "chest")
 			else
 				H.Weaken(5)
 				H.adjustOxyLoss(5)
+				H.apply_damage(5, BURN, "chest")
 			H.updatehealth() //forces health update before next life tick
 			spark_system.attach(M)
 			spark_system.set_up(5, 0, M)
@@ -107,7 +109,7 @@
 			playsound(get_turf(src), 'sound/weapons/Egloves.ogg', 50, 1, -1)
 			user.attack_log += "\[[time_stamp()]\]<font color='red'> Defibrillated [H.name] ([H.ckey]) with [src.name]</font>"
 			H.attack_log += "\[[time_stamp()]\]<font color='orange'> Defibrillated by [user.name] ([user.ckey]) with [src.name]</font>"
-			msg_admin_attack("<font color='red'>[user.name] ([user.ckey]) defibrillated [H.name] ([H.ckey]) with [src.name]</font>" )
+			msg_admin_attack("<font color='red'>[user.name] ([user.ckey]) defibrillated [H.name] ([H.ckey]) with [src.name]</font> - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[H.x];Y=[H.y];Z=[H.z]'>JMP</a>" )
 			if(!iscarbon(user))
 				M.LAssailant = null
 			else

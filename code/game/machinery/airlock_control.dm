@@ -133,6 +133,13 @@ obj/machinery/airlock_sensor
 	var/alert = 0
 	var/previousPressure
 
+	attackby(C as obj, mob/user as mob)
+		if(istype(C, /obj/item/device/signaltool))
+			var/obj/item/device/signaltool/ST = C
+			id_tag = ST.change_ID(id_tag)
+			set_frequency(ST.change_freq(frequency))
+			return
+
 obj/machinery/airlock_sensor/update_icon()
 	if(on)
 		if(alert)
@@ -207,6 +214,12 @@ obj/machinery/access_button
 
 	var/on = 1
 
+	attackby(C as obj, mob/user as mob)
+		if(istype(C, /obj/item/device/signaltool))
+			var/obj/item/device/signaltool/ST = C
+			master_tag = ST.change_ID(master_tag)
+			set_frequency(ST.change_freq(frequency))
+			return
 
 obj/machinery/access_button/update_icon()
 	if(on)

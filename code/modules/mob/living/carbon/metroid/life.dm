@@ -340,7 +340,51 @@
 		if(istype(src, /mob/living/carbon/slime/adult))
 			if(!client)
 				for(var/i=1,i<=4,i++)
-					if(prob(70))
+					if(catalyst == 0)
+						if(prob(70))
+							var/mob/living/carbon/slime/M = new primarytype(loc)
+							M.powerlevel = round(powerlevel/4)
+							M.Friends = Friends
+							M.tame = tame
+							M.rabid = rabid
+							M.Discipline = Discipline
+							if(i != 1) step_away(M,src)
+						else
+							var/mutations = pick("one","two","three","four")
+							switch(mutations)
+								if("one")
+									var/mob/living/carbon/slime/M = new mutationone(loc)
+									M.powerlevel = round(powerlevel/4)
+									M.Friends = Friends
+									M.tame = tame
+									M.rabid = rabid
+									M.Discipline = Discipline
+									if(i != 1) step_away(M,src)
+								if("two")
+									var/mob/living/carbon/slime/M = new mutationtwo(loc)
+									M.powerlevel = round(powerlevel/4)
+									M.Friends = Friends
+									M.tame = tame
+									M.rabid = rabid
+									M.Discipline = Discipline
+									if(i != 1) step_away(M,src)
+								if("three")
+									var/mob/living/carbon/slime/M = new mutationthree(loc)
+									M.powerlevel = round(powerlevel/4)
+									M.Friends = Friends
+									M.tame = tame
+									M.rabid = rabid
+									M.Discipline = Discipline
+									if(i != 1) step_away(M,src)
+								if("four")
+									var/mob/living/carbon/slime/M = new mutationfour(loc)
+									M.powerlevel = round(powerlevel/4)
+									M.Friends = Friends
+									M.tame = tame
+									M.rabid = rabid
+									M.Discipline = Discipline
+									if(i != 1) step_away(M,src)
+					else
 						var/mob/living/carbon/slime/M = new primarytype(loc)
 						M.powerlevel = round(powerlevel/4)
 						M.Friends = Friends
@@ -348,41 +392,6 @@
 						M.rabid = rabid
 						M.Discipline = Discipline
 						if(i != 1) step_away(M,src)
-					else
-						var/mutations = pick("one","two","three","four")
-						switch(mutations)
-							if("one")
-								var/mob/living/carbon/slime/M = new mutationone(loc)
-								M.powerlevel = round(powerlevel/4)
-								M.Friends = Friends
-								M.tame = tame
-								M.rabid = rabid
-								M.Discipline = Discipline
-								if(i != 1) step_away(M,src)
-							if("two")
-								var/mob/living/carbon/slime/M = new mutationtwo(loc)
-								M.powerlevel = round(powerlevel/4)
-								M.Friends = Friends
-								M.tame = tame
-								M.rabid = rabid
-								M.Discipline = Discipline
-								if(i != 1) step_away(M,src)
-							if("three")
-								var/mob/living/carbon/slime/M = new mutationthree(loc)
-								M.powerlevel = round(powerlevel/4)
-								M.Friends = Friends
-								M.tame = tame
-								M.rabid = rabid
-								M.Discipline = Discipline
-								if(i != 1) step_away(M,src)
-							if("four")
-								var/mob/living/carbon/slime/M = new mutationfour(loc)
-								M.powerlevel = round(powerlevel/4)
-								M.Friends = Friends
-								M.tame = tame
-								M.rabid = rabid
-								M.Discipline = Discipline
-								if(i != 1) step_away(M,src)
 
 				del(src)
 
@@ -395,6 +404,7 @@
 				A.Friends = Friends
 				A.tame = tame
 				A.rabid = rabid
+				A.catalyst = catalyst
 				del(src)
 
 

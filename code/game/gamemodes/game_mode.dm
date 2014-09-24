@@ -92,12 +92,16 @@ Implants;
 		if((player.client)&&(player.ready))
 			playerC++
 
+	msg_scopes("playerC: [playerC]")
 	if(master_mode=="secret")
+		msg_scopes("req [required_players_secret]")
 		if(playerC >= required_players_secret)
 			return 1
 	else
+		msg_scopes("req [required_players]")
 		if(playerC >= required_players)
 			return 1
+	msg_scopes("Nope, players not here or something")
 	return 0
 
 
@@ -282,6 +286,7 @@ Implants;
 		if(BE_CULTIST)		roletext="cultist"
 		if(BE_NINJA)		roletext="ninja"
 		if(BE_RAIDER)		roletext="raider"
+		if(BE_VAMPIRE)		roletext="vampire"
 
 	// Assemble a list of active players without jobbans.
 	for(var/mob/new_player/player in player_list)
@@ -311,6 +316,7 @@ Implants;
 
 	// Remove candidates who want to be antagonist but have a job that precludes it
 	if(restricted_jobs)
+		msg_scopes("going through restricted jobs")
 		for(var/datum/mind/player in candidates)
 			for(var/job in restricted_jobs)
 				if(player.assigned_role == job)
@@ -417,7 +423,7 @@ Implants;
 //Reports player logouts//
 //////////////////////////
 proc/display_roundstart_logout_report()
-	var/msg = "\blue <b>Roundstart logout report\n\n"
+	var/msg = "\blue <b>Roundstart logout report</b>\n\n"
 	for(var/mob/living/L in mob_list)
 
 		if(L.ckey)

@@ -79,10 +79,14 @@
 /obj/structure/target_stake/proc/unbuckle()
 	if(buckled_mob)
 		if(buckled_mob.buckled == src)	//this is probably unneccesary, but it doesn't hurt
+			if(!buckled_mob.mob_has_gravity(buckled_mob.loc))
+				buckled_mob.float(1)
+
 			buckled_mob.buckled = null
 			buckled_mob.anchored = initial(buckled_mob.anchored)
 			buckled_mob.update_canmove()
 			buckled_mob = null
+
 	return
 
 /obj/structure/target_stake/proc/manual_unbuckle(mob/user as mob)
@@ -138,6 +142,8 @@
 	M.loc = src.loc
 	M.dir = src.dir
 	M.update_canmove()
+	if(!M.mob_has_gravity(M.loc))
+		M.float(0)
 	src.buckled_mob = M
 	src.add_fingerprint(user)
 	return

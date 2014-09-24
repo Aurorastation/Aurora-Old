@@ -9,6 +9,7 @@
 	var/cell_type = "/obj/item/weapon/cell"
 	var/projectile_type = "/obj/item/projectile/beam/practice"
 	var/modifystate
+	rangedrop = -5 // energy weapons more accurate than bulletweapons.
 
 	isHandgun()
 		return 0

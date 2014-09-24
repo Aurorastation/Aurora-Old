@@ -43,7 +43,10 @@
 		var/mob/living/carbon/M = target
 		M.adjust_fire_stacks(1)
 		M.IgniteMob()
-
+	else if(istype(target, /mob/living/silicon/robot))
+		var/mob/living/silicon/robot/M = target
+		M.adjust_fire_stacks(1)
+		M.IgniteMob()
 /obj/item/projectile/bullet/incendiary/shell
 	name = "incendiary shell"
 	damage_type = BURN

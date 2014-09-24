@@ -203,7 +203,7 @@
 
 /obj/item/weapon/grown/deathnettle/changePotency(newValue) //-QualityVan
 	potency = newValue
-	force = round((5+potency/2.5), 1)
+	force = round((5+potency), 1) ///2.5.  deadly nettles because you have earned it.
 
 
 /*

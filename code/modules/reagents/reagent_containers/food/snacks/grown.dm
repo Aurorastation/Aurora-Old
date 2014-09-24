@@ -382,7 +382,7 @@
 			reagents.add_reagent("nutriment", 1)
 			reagents.add_reagent("toxin", 3+round(potency / 3, 1))
 			reagents.add_reagent("lexorin", 1+round(potency / 5, 1))
-			bitesize = 1+round(reagents.total_volume / 2, 1)
+			bitesize = reagents.total_volume
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris
 	seed = "/obj/item/seeds/ambrosiavulgaris"
@@ -833,7 +833,7 @@
 			reagents.add_reagent("nutriment", 1)
 			reagents.add_reagent("amatoxin", 3+round(potency / 3, 1))
 			reagents.add_reagent("psilocybin", 1+round(potency / 25, 1))
-			bitesize = 1+round(reagents.total_volume / 2, 1)
+			bitesize = reagents.total_volume
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/amanita/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	. = ..()
@@ -854,7 +854,7 @@
 			reagents.add_reagent("nutriment", 1+round((potency / 50), 1))
 			reagents.add_reagent("amatoxin", 13+round(potency / 3, 1))
 			reagents.add_reagent("psilocybin", 1+round(potency / 25, 1))
-			bitesize = 1+round(reagents.total_volume / 2, 1)
+			bitesize = reagents.total_volume
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/angel/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	. = ..()

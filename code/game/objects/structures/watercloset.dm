@@ -344,6 +344,14 @@
 	M.clean_blood()
 	if(ishuman(M))
 		M:update_inv_gloves()
+	if(ishuman(M))
+		var/mob/living/carbon/human/B = M
+		if(B.gloves)
+			var/obj/item/clothing/gloves/C = B.gloves
+			C.gsr = 0
+		else
+			B.gsr = 0
+
 	for(var/mob/V in viewers(src, null))
 		V.show_message("\blue [M] washes their hands using \the [src].")
 
@@ -392,6 +400,11 @@
 	if(user.get_active_hand() != I) return		//Person has switched hands or the item in their hands
 
 	O.clean_blood()
+
+	if(istype(O, /obj/item/clothing))
+		var/obj/item/clothing/G = O
+		G.gsr = 0
+
 	user.visible_message( \
 		"\blue [user] washes \a [I] using \the [src].", \
 		"\blue You wash \a [I] using \the [src].")

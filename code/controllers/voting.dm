@@ -181,7 +181,7 @@ datum/controller/vote
 			log_game("Rebooting due to restart vote")
 			world.Reboot()
 
-		last_vote_time = world.time
+		last_vote_time = time_stamp()
 		return .
 
 	proc/submit_vote(var/ckey, var/vote)
@@ -236,11 +236,16 @@ datum/controller/vote
 			mode = vote_type
 			initiator = initiator_key
 			started_time = world.time
-			var/timedifference = world.time - last_vote_time
-			var/timedifference_text
-			timedifference_text = time2text(timedifference,"mm:ss")
+//			var/timedifference = round((world.time - last_vote_time))
+//			var/timedifference_text
+//			timedifference_text = time2text(timedifference, "hh:mm:ss")
+//			msg_scopes("timedifference_text debug: [timedifference]")
+//			timedifference_text = time2text(timedifference,"mm:ss")
+//			msg_scopes("timedifference: [timedifference] timedifference_text: [timedifference_text] started_time: [started_time]")
 			for(var/client/C in admins)
-				C << "Time since last vote: [timedifference_text]"
+				if((C.holder.rights & R_ADMIN) || (C.holder.rights & R_MOD))
+					C << "Time last vote: [last_vote_time]"
+					C << "Time:           [time_stamp()]"
 			var/text = "[capitalize(mode)] vote started by [initiator]."
 			if(mode == "custom")
 				text += "\n[question]"

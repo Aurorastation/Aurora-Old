@@ -122,6 +122,7 @@
 				if(src.check_access(I))
 					if (!status)
 						message_admins("\blue [key_name_admin(usr)] has initiated the global cyborg killswitch!")
+						message_mods("\blue [key_name_admin(usr)] has initiated the global cyborg killswitch!")
 						log_game("\blue [key_name(usr)] has initiated the global cyborg killswitch!")
 						src.status = 1
 						src.start_sequence()
@@ -167,6 +168,7 @@
 
 							else
 								message_admins("\blue [key_name_admin(usr)] detonated [R.name]!")
+								message_mods("\blue [key_name_admin(usr)] detonated [R.name]!")
 								log_game("\blue [key_name_admin(usr)] detonated [R.name]!")
 								R.self_destruct()
 			else
@@ -180,6 +182,7 @@
 					if(choice == "Confirm")
 						if(R && istype(R))
 							message_admins("\blue [key_name_admin(usr)] [R.canmove ? "locked down" : "released"] [R.name]!")
+							message_mods("\blue [key_name_admin(usr)] [R.canmove ? "locked down" : "released"] [R.name]!")
 							log_game("[key_name(usr)] [R.canmove ? "locked down" : "released"] [R.name]!")
 							R.canmove = !R.canmove
 							if (R.lockcharge)

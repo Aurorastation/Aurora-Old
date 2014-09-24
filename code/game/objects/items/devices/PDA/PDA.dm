@@ -193,6 +193,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	default_cartridge = /obj/item/weapon/cartridge/medical
 	icon_state = "pda-gene"
 
+/obj/item/device/pda/central
+	default_cartridge = /obj/item/weapon/cartridge/captain
+	icon_state = "pda-h"
+	detonate = 0
+
 
 // Special AI/pAI PDAs that cannot explode.
 /obj/item/device/pda/ai
@@ -755,10 +760,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 							detonate_act(src)
 							log_admin("[key_name(U)] just attempted to blow up [P] with the Detomatix cartridge but failed, blowing themselves up")
 							message_admins("[key_name_admin(U)] just attempted to blow up [P] with the Detomatix cartridge but failed.", 1)
+							message_mods("[key_name_admin(U)] just attempted to blow up [P] with the Detomatix cartridge but failed.")
 						else
 							U.show_message("\blue Success!", 1)
 							log_admin("[key_name(U)] just attempted to blow up [P] with the Detomatix cartridge and succeeded")
 							message_admins("[key_name_admin(U)] just attempted to blow up [P] with the Detomatix cartridge and succeeded.", 1)
+							message_mods("[key_name_admin(U)] just attempted to blow up [P] with the Detomatix cartridge and succeeded.")
 							detonate_act(P)
 					else
 						U << "No charges left."

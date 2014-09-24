@@ -21,7 +21,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 /client/proc/cmd_dev_reset_gravity()
 	set category = "Debug"
 	set name = "Restore Default Gravity"
-	set desc = "Resets all gravity on the entire server"
+	set desc = "Resets all gravity on the entire server."
 
 	if(!check_rights(R_DEBUG|R_DEV))	return
 
@@ -35,6 +35,9 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	if(ticker.current_state < GAME_STATE_PLAYING)
 		src << "\red The game hasn't started yet!"
 		return
+
+	if(alert(usr, "Make people fall on their face?", "Restore gravity", "No", "Yes") == "No")
+		return 0
 
 	world << "\red \b Resetting Gravity Simulation."
 	gravity_is_on = 1
@@ -156,6 +159,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	var/list/localareas = list()
 	var/effectiverange = 255  //Currently unused due to errors
 	var/round_start = 2 //To help stop a bug with round start
+	var/has_been_charged = 0
 
 /obj/machinery/gravity_field_generator/main/Del() // If we somehow get deleted, remove all of our other parts.
 	log_debug("Gravity Generator Destroyed")
@@ -329,6 +333,8 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	var/alert = 0
 	var/area/area = get_area(src)
 	if(new_state) // If we turned on
+		if(has_been_charged)
+			return
 		if(gravity_in_level() == 0)
 			alert = 1
 			gravity_is_on = 1
@@ -340,6 +346,8 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 			gravity_is_on = 0
 			investigate_log("was brought offline and there is now no gravity for this level.", "gravity")
 			message_admins("The gravity generator was brought offline with no backup generator. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>[area.name]</a>)")
+			message_mods("The gravity generator was brought offline with no backup generator. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>[area.name]</a>)")
+
 
 	update_icon()
 	update_list()
@@ -355,8 +363,10 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	if(charging_state != POWER_IDLE)
 		if(charging_state == POWER_UP && charge_count >= 100)
 			set_state(1)
+			has_been_charged = 1
 		else if(charging_state == POWER_DOWN && charge_count <= 0)
 			set_state(0)
+			has_been_charged = 0
 		else
 			if(charging_state == POWER_UP)
 				charge_count += 2
@@ -478,6 +488,8 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	)
 	for (var/type in SPECIALS)
 		if ( istype(A,type) )
+			if(A.type == /area/prison/gas_chamber)
+				return AREA_STATION
 			return AREA_SPECIAL
 	return AREA_STATION
 

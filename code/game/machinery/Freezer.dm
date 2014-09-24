@@ -3,6 +3,7 @@
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "freezer_0"
 	density = 1
+	var/setup = 0
 
 	anchored = 1.0
 
@@ -11,6 +12,12 @@
 /obj/machinery/atmospherics/unary/cold_sink/freezer/New()
 	..()
 	initialize_directions = dir
+	anchored = 1
+
+/obj/machinery/atmospherics/unary/cold_sink/freezer/cargo/New()
+	..()
+	spawn(1)
+		anchored = 0
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/initialize()
 	if(node) return
@@ -22,6 +29,7 @@
 			node = target
 			break
 
+	setup = 1
 	update_icon()
 
 
@@ -112,6 +120,8 @@
 					user.visible_message("[user.name] secures [src.name] to the floor.", "You secure [src.name] to the floor.", "You hear a ratchet")
 					anchored = 1
 					initialize_directions = dir
+					if(!setup)
+						initialize()
 				if(1)
 					playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
 					spawn(10)
@@ -119,14 +129,30 @@
 					anchored = 0
 	return
 
-/obj/machinery/atmospherics/unary/cold_sink/freezer/cargo
-	anchored = 0
+/obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate()
+	set name = "Rotate Object"
+	set category = "Object"
+	set src in oview(1)
+
+	if(anchored)
+		usr << "It is fastened to the floor therefore you can't rotate it!"
+		return 0
+
+	dir = turn(dir, 90)
+	initialize_directions = dir
+	return
+
+///////////////////////////////////
+///////SPACING BECAUSE YES/////////
+////////HEATER DOWN BELOW//////////
+///////////////////////////////////
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater
 	name = "gas heating system"
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "freezer_0"
 	density = 1
+	var/setup = 0
 
 	anchored = 1.0
 
@@ -135,6 +161,12 @@
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/New()
 	..()
 	initialize_directions = dir
+	anchored = 1
+
+/obj/machinery/atmospherics/unary/heat_reservoir/heater/cargo/New()
+	..()
+	spawn(1)
+		anchored = 0
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/initialize()
 	if(node) return
@@ -146,6 +178,7 @@
 			node = target
 			break
 
+	setup = 1
 	update_icon()
 
 
@@ -234,6 +267,8 @@
 					user.visible_message("[user.name] secures [src.name] to the floor.", "You secure [src.name] to the floor.", "You hear a ratchet")
 					anchored = 1
 					initialize_directions = dir
+					if(!setup)
+						initialize()
 				if(1)
 					playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
 					spawn(10)
@@ -241,5 +276,15 @@
 					anchored = 0
 	return
 
-/obj/machinery/atmospherics/unary/heat_reservoir/heater/cargo
-	anchored = 0
+/obj/machinery/atmospherics/unary/heat_reservoir/verb/rotate()
+	set name = "Rotate Object"
+	set category = "Object"
+	set src in oview(1)
+
+	if(anchored)
+		usr << "It is fastened to the floor therefore you can't rotate it!"
+		return 0
+
+	dir = turn(dir, 90)
+	initialize_directions = dir
+	return

@@ -46,7 +46,7 @@ var/list/spells = typesof(/obj/effect/proc_holder/spell) //needed for the badmin
 		usr << "\red You shouldn't have this spell! Something's wrong."
 		return 0
 
-	if(usr.z == 2 && !centcomm_cancast) //Certain spells are not allowed on the centcomm zlevel
+	if(usr.z == 2 && !centcomm_cancast || usr.weakened > 100) //Certain spells are not allowed on the centcomm zlevel
 		return 0
 
 	if(!skipcharge)

@@ -13,11 +13,11 @@
 	response_disarm = "gently pushes aside the"
 	response_harm = "hits the"
 	speed = 4
-	maxHealth = 70
-	health = 70
+	maxHealth = 45
+	health = 45
 
 	harm_intent_damage = 8
-	melee_damage_lower = 15
+	melee_damage_lower = 10
 	melee_damage_upper = 15
 	attacktext = "bites"
 	attack_sound = 'sound/weapons/bite.ogg'
@@ -35,7 +35,7 @@
 
 //	break_stuff_probability = 2
 
-	faction = list("scarybat")
+	faction = "scarybat"
 	var/mob/living/owner
 
 /mob/living/simple_animal/hostile/scarybat/New(loc, mob/living/L as mob)

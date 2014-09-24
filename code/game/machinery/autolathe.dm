@@ -5,6 +5,7 @@ var/global/list/autolathe_recipes = list( \
 		new /obj/item/weapon/reagent_containers/glass/bucket(), \
 		new /obj/item/weapon/crowbar(), \
 		new /obj/item/device/flashlight(), \
+		new /obj/item/device/flashlight/lantern(), \
 		new /obj/item/weapon/extinguisher(), \
 		new /obj/item/device/multitool(), \
 		new /obj/item/device/t_scanner(), \
@@ -12,6 +13,7 @@ var/global/list/autolathe_recipes = list( \
 		new /obj/item/weapon/screwdriver(), \
 		new /obj/item/weapon/wirecutters(), \
 		new /obj/item/weapon/wrench(), \
+		new /obj/item/clothing/glasses/sunglasses(), \
 		new /obj/item/clothing/head/welding(), \
 		new /obj/item/weapon/stock_parts/console_screen(), \
 		new /obj/item/weapon/airlock_electronics(), \
@@ -26,10 +28,11 @@ var/global/list/autolathe_recipes = list( \
 		new /obj/item/weapon/kitchenknife(), \
 		new /obj/item/weapon/scalpel(), \
 		new /obj/item/weapon/circular_saw(), \
-		new /obj/item/weapon/surgicaldrill(),\
-		new /obj/item/weapon/retractor(),\
-		new /obj/item/weapon/cautery(),\
-		new /obj/item/weapon/hemostat(),\
+		new /obj/item/weapon/surgicaldrill(), \
+		new /obj/item/weapon/retractor(), \
+		new /obj/item/weapon/cautery(), \
+		new /obj/item/weapon/hemostat(), \
+		new /obj/item/weapon/bonesetter(), \
 		new /obj/item/weapon/reagent_containers/glass/beaker(), \
 		new /obj/item/weapon/reagent_containers/glass/beaker/large(), \
 		new /obj/item/weapon/reagent_containers/glass/beaker/vial(), \
@@ -49,6 +52,8 @@ var/global/list/autolathe_recipes = list( \
 		new /obj/item/weapon/light/bulb(), \
 		new /obj/item/ashtray/glass(), \
 		new /obj/item/weapon/camera_assembly(), \
+		new /obj/item/weapon/tank/autolathe(), \
+		new /obj/item/weapon/storage/pill_bottle(), \
 	)
 
 var/global/list/autolathe_recipes_hidden = list( \
@@ -61,6 +66,10 @@ var/global/list/autolathe_recipes_hidden = list( \
 		new /obj/item/ammo_magazine/c45m(), \
 		new /obj/item/ammo_casing/shotgun(), \
 		new /obj/item/ammo_casing/shotgun/dart(), \
+		new /obj/item/ammo_casing/shotgun/incendiary(), \
+		new /obj/item/ammo_magazine/shotgun(), \
+		new /obj/item/ammo_magazine/shotgun/beanbag(), \
+		new /obj/item/ammo_magazine/shotgun/incendiary, \
 		/* new /obj/item/weapon/shield/riot(), */ \
 	)
 
@@ -148,6 +157,14 @@ var/global/list/autolathe_recipes_hidden = list( \
 				return 0
 
 	interact(mob/user as mob)
+		if(istype(user, /mob/living/carbon/human))
+			var/mob/living/carbon/human/M = user
+			if(M.h_style == "Floorlength Braid" || M.h_style == "Very Long Hair")
+				if(prob(10))
+					M.apply_damage(30, BRUTE, "head")
+					M.apply_damage(45, HALLOSS)
+					M.visible_message("\red [user]'s hair catches in the [src]!", "\red Your hair gets caught in the [src]!")
+					M.say("*scream")
 		if(..())
 			return
 		if (src.shocked)
@@ -262,7 +279,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 		if (!busy)
 			if(href_list["make"])
 				var/turf/T = get_step(src.loc, get_dir(src,usr))
-				
+
 				// critical exploit fix start -walter0o
 				var/obj/item/template = null
 				var/attempting_to_build = locate(href_list["make"])
@@ -274,25 +291,25 @@ var/global/list/autolathe_recipes_hidden = list( \
 					template = attempting_to_build
 
 				else // somebody is trying to exploit, alert admins -walter0o
-					
+
 					var/turf/LOC = get_turf(usr)
 					message_admins("[key_name_admin(usr)] tried to exploit an autolathe to duplicate <a href='?_src_=vars;Vars=\ref[attempting_to_build]'>[attempting_to_build]</a> ! ([LOC ? "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[LOC.x];Y=[LOC.y];Z=[LOC.z]'>JMP</a>" : "null"])", 0)
-					log_admin("EXPLOIT : [key_name(usr)] tried to exploit an autolathe to duplicate [attempting_to_build] !")		
+					log_admin("EXPLOIT : [key_name(usr)] tried to exploit an autolathe to duplicate [attempting_to_build] !")
 					return
 
 				// now check for legit multiplier, also only stacks should pass with one to prevent raw-materials-manipulation -walter0o
 
 				var/multiplier = text2num(href_list["multiplier"])
-				
+
 				if (!multiplier) multiplier = 1
 				var/max_multiplier = 1
-				
+
 				if(istype(template, /obj/item/stack)) // stacks are the only items which can have a multiplier higher than 1 -walter0o
 					var/obj/item/stack/S = template
 					max_multiplier = min(S.max_amount, S.m_amt?round(m_amount/S.m_amt):INFINITY, S.g_amt?round(g_amount/S.g_amt):INFINITY)  // pasta from regular_win() to make sure the numbers match -walter0o
 
 				if( (multiplier > max_multiplier) || (multiplier <= 0) ) // somebody is trying to exploit, alert admins-walter0o
-						
+
 					var/turf/LOC = get_turf(usr)
 					message_admins("[key_name_admin(usr)] tried to exploit an autolathe with multiplier set to <u>[multiplier]</u> on <u>[template]</u>  ! ([LOC ? "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[LOC.x];Y=[LOC.y];Z=[LOC.z]'>JMP</a>" : "null"])" , 0)
 					log_admin("EXPLOIT : [key_name(usr)] tried to exploit an autolathe with multiplier set to [multiplier] on [template]  !")
@@ -399,3 +416,42 @@ var/global/list/autolathe_recipes_hidden = list( \
 		w -= src.shock_wire
 		src.disable_wire = pick(w)
 		w -= src.disable_wire
+
+	MouseDrop_T(mob/living/carbon/human/target as mob, mob/user as mob)
+		if (!istype(target) || target.buckled || get_dist(user, src) > 1 || get_dist(user, target) > 1 || user.stat || istype(user, /mob/living/silicon/ai))
+			return
+		if(target == user)
+			if(target.h_style == "Floorlength Braid" || target.h_style == "Very Long Hair")
+				user.visible_message("\blue [user] looks like they're about to feed their own hair into the [src], but think better of it.", "\blue You grasp your hair and are about to feed it into the [src], but stop and come to your sense.")
+				return
+		src.add_fingerprint(user)
+		var/target_loc = target.loc
+		if(target != user && !user.restrained() && !user.stat && !user.weakened && !user.stunned && !user.paralysis)
+			if(target.h_style != "Cut Hair" || target.h_style != "Short Hair" || target.h_style != "Skinhead" || target.h_style != "Buzzcut" || target.h_style != "Crewcut" || target.h_style != "Bald" || target.h_style != "Balding Hair")
+				user.visible_message("\red [user] starts feeding [target]'s hair into the [src]!", "\red You start feeding [target]'s hair into the [src]!")
+			if(!do_after(usr, 50))
+				return
+			if(target_loc != target.loc)
+				return
+			if(target != user && !user.restrained() && !user.stat && !user.weakened && !user.stunned && !user.paralysis)
+				user.visible_message("\red [user] feeds the [target]'s hair into the [src] and flicks it on!", "\red You turn the [src] on!")
+				target.apply_damage(30, BRUTE, "head")
+				target.apply_damage(25, HALLOSS)
+				target.say("*scream")
+
+				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has fed [target.name]'s ([target.ckey]) hair into a [src].</font>")
+				target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had their hair fed into [src] by [user.name] ([user.ckey])</font>")
+				msg_admin_attack("[user] ([user.ckey]) fed [target]'s ([target.ckey]) in a [src]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+			else
+				return
+			if(!do_after(usr, 35))
+				return
+			if(target_loc != target.loc)
+				return
+			if(target != user && !user.restrained() && !user.stat && !user.weakened && !user.stunned && !user.paralysis)
+				user.visible_message("\red [user] starts tugging on [target]'s head as the [src] keeps running!", "\red You start tugging on [target]'s head!")
+				target.apply_damage(25, BRUTE, "head")
+				target.apply_damage(10, HALLOSS)
+				target.say("*scream")
+				spawn(10)
+				user.visible_message("\red [user] stops the [src] and leaves [target] resting as they are.", "\red You turn the [src] off and let go of [target].")
