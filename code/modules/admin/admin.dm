@@ -11,11 +11,17 @@ var/global/floorIsLava = 0
 		if(R_ADMIN & C.holder.rights)
 			C << msg
 
+/proc/message_mods(var/msg)
+	msg = "<span class=\"admin\"><span class=\"prefix\">MOD LOG:</span> <span class=\"message\">[msg]</span></span>"
+	for(var/client/C in admins)
+		if(R_MOD & C.holder.rights && !(R_ADMIN & C.holder.rights))
+			C << msg
+
 /proc/msg_admin_attack(var/text) //Toggleable Attack Messages
 	log_attack(text)
 	var/rendered = "<span class=\"admin\"><span class=\"prefix\">ATTACK:</span> <span class=\"message\">[text]</span></span>"
 	for(var/client/C in admins)
-		if(R_MOD || R_ADMIN & C.holder.rights)
+		if((R_ADMIN & C.holder.rights) || (R_MOD & C.holder.rights))
 			if(C.prefs.toggles & CHAT_ATTACKLOGS)
 				var/msg = rendered
 				C << msg
@@ -28,14 +34,18 @@ var/global/floorIsLava = 0
 	set name = "Show Player Panel"
 	set desc="Edit player (respawn, ban, heal, etc)"
 
+	if(!check_rights(R_ADMIN|R_MOD))	return
+
 	if(!M)
 		usr << "You seem to be selecting a mob that doesn't exist anymore."
 		return
+/*
 	if (!istype(src,/datum/admins))
 		src = usr.client.holder
 	if (!istype(src,/datum/admins))
 		usr << "Error: you are not an admin!"
 		return
+*/
 
 	var/body = "<html><head><title>Options for [M.key]</title></head>"
 	body += "<body>Options panel for <b>[M]</b>"
@@ -192,10 +202,13 @@ var/global/floorIsLava = 0
 /datum/admins/proc/PlayerNotes()
 	set category = "Admin"
 	set name = "Player Notes"
-	if (!istype(src,/datum/admins))
+/*	if (!istype(src,/datum/admins))
 		src = usr.client.holder
 	if (!istype(src,/datum/admins))
 		usr << "Error: you are not an admin!"
+		return
+*/
+	if(!check_rights(R_ADMIN|R_MOD))
 		return
 	PlayerNotesPage(1)
 
@@ -245,7 +258,6 @@ var/global/floorIsLava = 0
 	info >> infos
 	if(!infos || !infos.len) return 0
 	else return 1
-
 
 /datum/admins/proc/show_player_info(var/key as text)
 	set category = "Admin"
@@ -855,11 +867,12 @@ var/global/floorIsLava = 0
 	set desc="Delay the game start/end"
 	set name="Delay"
 
-	if(!check_rights(R_SERVER|R_DEV))	return
+	if(!check_rights(R_SERVER|R_DEBUG))	return
 	if (!ticker || ticker.current_state != GAME_STATE_PREGAME)
 		ticker.delay_end = !ticker.delay_end
 		log_admin("[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].")
 		message_admins("\blue [key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].", 1)
+		message_mods("\blue [key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].", 1)
 		return //alert("Round end delayed", null, null, null, null, null)
 	going = !( going )
 	if (!( going ))
@@ -1237,6 +1250,7 @@ proc/move_alien_ship()
 
 	log_admin("[key_name(usr)] winded [key_name(M)]!")
 	message_admins("[key_name_admin(usr)] winded [key_name_admin(M)]!", 1)
+	message_mods("[key_name_admin(usr)] winded [key_name_admin(M)]!")
 	// feedback_add_details("admin_verb","WIND") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	// Chop chop.
 	return
@@ -1249,4 +1263,5 @@ proc/move_alien_ship()
 
 	log_admin("[key_name(usr)] unwinded [key_name(M)]!")
 	message_admins("[key_name_admin(usr)] unwinded [key_name_admin(M)]!", 1)
+	message_mods("[key_name_admin(usr)] unwinded [key_name_admin(M)]!", 1)
 	return

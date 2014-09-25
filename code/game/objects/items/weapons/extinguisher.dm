@@ -128,7 +128,9 @@
 						W.reagents.reaction(atm)
 					if(W.loc == my_target) break
 					sleep(2)
+//				spawn(20)
 
+				W.Del()
 		if((istype(usr.loc, /turf/space)) || (usr.lastarea.has_gravity == 0))
 			user.inertia_dir = get_dir(target, user)
 			step(user, user.inertia_dir)

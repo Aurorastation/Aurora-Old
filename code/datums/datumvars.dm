@@ -465,7 +465,7 @@ client
 		cmd_mass_modify_object_variables(A, href_list["varnamemass"])
 
 	else if(href_list["mob_player_panel"])
-		if(!check_rights(0))	return
+		if(!check_rights(R_ADMIN|R_MOD))	return
 
 		var/mob/M = locate(href_list["mob_player_panel"])
 		if(!istype(M))
@@ -933,7 +933,6 @@ client
 		if(amount != 0)
 			log_admin("[key_name(usr)] dealt [amount] amount of [Text] damage to [L] ")
 			message_admins("\blue [key_name(usr)] dealt [amount] amount of [Text] damage to [L] ")
-			msg_scopes("\blue [key_name(usr)] dealt [amount] amount of [Text] damage to [L] ", 1)
 			href_list["datumrefresh"] = href_list["mobToDamage"]
 
 	if(href_list["datumrefresh"])

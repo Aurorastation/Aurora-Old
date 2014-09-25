@@ -59,7 +59,7 @@ proc/populate_gear_list()
 /datum/gear/recorder
 	display_name = "universal recorder"
 	path = /obj/item/device/taperecorder
-	cost = 1
+	cost = 2
 
 /datum/gear/camera
 	display_name = "camera"

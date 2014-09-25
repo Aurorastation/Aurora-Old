@@ -175,7 +175,7 @@
 	shutdown.speed = 1
 	shutdown.stage = 2
 	shutdown.clicks = 185
-	msg_admin_attack("[usr.name] ([usr.ckey]) gave [C.name] ([C.ckey]) the shutdown disease")
+	msg_admin_attack("[usr.name] ([usr.ckey]) gave [C.name] ([C.ckey]) the shutdown disease - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[C.x];Y=[C.y];Z=[C.z]'>JMP</a>")
 	usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Gave [C.name] ([C.ckey]) the shutdown disease</font>")
 	C.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been given the shutdown disease by [usr.name] ([usr.ckey])</font>")
 	infect_virus2(C,shutdown,0)
@@ -354,7 +354,7 @@
 	src << "\red You have successfully Enthralled [H.name]. <i>If they refuse to do as you say just adminhelp.</i>"
 	ticker.mode.update_vampire_icons_added(H.mind)
 	ticker.mode.update_vampire_icons_added(src.mind)
-	msg_admin_attack("[name]([ckey]) has mind-slaved [H.name]([H.ckey]).")
+	msg_admin_attack("[name]([ckey]) has mind-slaved [H.name]([H.ckey]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[H.x];Y=[H.y];Z=[H.z]'>JMP</a>.")
 
 /client/vampire/proc/vampire_bats()
 	set category = "Abilities"
