@@ -194,6 +194,9 @@
 	set category = "Object"
 	set name = "Empty Slide"
 	set src in usr
+	if(usr.stat || !(istype(usr,/mob/living/carbon/human)))
+		usr << "No."
+		return
 
 	if(issilicon(usr))
 		return
@@ -337,6 +340,9 @@
 	set category = "Object"
 	set name = "Remove Sample"
 	set src in oview(1)
+	if(usr.stat || !(istype(usr,/mob/living/carbon/human)))
+		usr << "No."
+		return
 
 	if(issilicon(usr))
 		return
@@ -639,6 +645,9 @@
 	set category = "Object"
 	set name = "Toggle Lid"
 	set src in oview(1)
+	if(usr.stat || !(istype(usr,/mob/living/carbon/human)))
+		usr << "No."
+		return
 
 	if(issilicon(usr))
 		return
