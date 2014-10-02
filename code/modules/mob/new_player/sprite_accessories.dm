@@ -126,6 +126,11 @@
 		name = "Ponytail 4"
 		icon_state = "hair_ponytail4"
 
+	ponytail5
+		name = "Ponytail 5"
+		icon_state = "hair_ponytail5"
+		gender = FEMALE
+
 	sideponytail
 		name = "Side Ponytail"
 		icon_state = "hair_stail"
@@ -389,6 +394,29 @@
 		name = "Joestar"
 		icon_state = "hair_joestar"
 		gender = MALE
+
+	dad
+		name = "Father"
+		icon_state = "hair_father"
+		gender = MALE
+
+	reversemohawk
+		name = "Reverse Mohawk"
+		icon_state = "hair_reversemohawk"
+
+	beehive2
+		name = "Beehive 2"
+		icon_state = "hair_beehive2"
+		gender = FEMALE
+
+	shortbraid
+		name = "Short Braid"
+		icon_state = "hair_shortbraid"
+		gender = FEMALE
+
+	emolong
+		name = "Long Emo"
+		icon_state = "hair_emolong"
 
 	bald
 		name = "Bald"
