@@ -59,6 +59,9 @@
 	uid = "[rand(100,999)]-G[rand(10,99)]"
 
 /obj/machinery/computer/guestpass/attackby(obj/O, mob/user)
+	if(contents.len > 0)
+		attack_hand(user)
+		return
 	if(istype(O, /obj/item/weapon/card/id))
 		user.drop_item()
 		O.loc = src
