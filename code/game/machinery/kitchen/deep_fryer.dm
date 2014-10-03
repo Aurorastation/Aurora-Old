@@ -22,29 +22,24 @@
 		if(istype(G))	// handle grabbed mob
 			if(ismob(G.affecting))
 				var/mob/living/GM = G.affecting
-				for (var/mob/V in viewers(usr))
-					V.show_message("[usr] starts pushing [GM.name] into the fryer.", 3)
+				user.visible_message("<span class='warning'>[user] starts pushing [GM.name] into the fryer.</span>", "<span class='warning'>You try to force [GM.name] towards the fryer.</span>", "You hear a struggle.")
 
 				if(do_after(usr, 20))
 					var/body_part = fry_mob_by_limb(GM, user.zone_sel.selecting)
 					if(!body_part) //If you fry a valid part this will be set
-						for (var/mob/V in viewers(usr))
-							if(GM.sleeping||GM.resting)
-								V.show_message("[GM.name] is to much of a dead weight to be place in the fryer")
-							else
-								V.show_message("[GM.name] breaks free.", 3)
+						if(GM.sleeping||GM.resting)
+							user.visible_message("[GM.name] falls limp.", "[GM.name] is to much of a dead weight to be place in the fryer", "You hear a thump.")
+						else
+							GM.visible_message("[GM.name] breaks free.", "You broke free from [user]'s grip", "You stop hearing a struggle.")
 						return
 
-					for (var/mob/C in viewers(src))
-						C.show_message("\red [GM.name]'s [body_part] has been placed in the [src] by [user].", 3)
-
+					user.visible_message("[GM.name]'s [body_part] has been placed in the [src] by [user]", "You place [GM.name]'s [body_part] in the fryer", "You hear a sizzling.")
 					del(G)
 					usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Has placed [GM.name] ([GM.ckey]) in in the fryer.</font>")
 					GM.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been fried by [usr.name] ([usr.ckey])</font>")
 					msg_admin_attack("[usr] ([usr.ckey]) placed [GM] ([GM.ckey]) in a fryer. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[usr.x];Y=[usr.y];Z=[usr.z]'>JMP</a>)")
 				else
-					for (var/mob/V in viewers(usr))
-						V.show_message("[usr] broke free")
+					GM.visible_message("[GM.name] breaks free.", "You broke free from [user]'s grip", "You stop hearing a struggle.")
 			return
 
 		else
@@ -65,42 +60,51 @@
 		if("head")
 			M.apply_damage(40, BURN, limb)
 			M << "\red  Your thoughts are overwritten by the pain, as searing hot oil encompasses your head."
+			M.say("*scream")
 			return "head"
 		if("l_leg")
 			M.apply_damage(20, BURN, limb)
 			M.apply_damage(30, BURN, "l_foot")
 			M << "\red  Your thoughts are overwritten by the pain, as searing hot oil encompasses your left leg and foot."
+			M.say("*scream")
 			return "left leg"
 		if("l_foot")
 			M.apply_damage(20, BURN, limb)
 			M << "\red  Your thoughts are overwritten by the pain, as searing hot oil encompasses your left foot."
+			M.say("*scream")
 			return "left foot"
 		if("r_leg")
 			M.apply_damage(20, BURN, limb)
 			M.apply_damage(30, BURN, "r_foot")
 			M << "\red  Your thoughts are overwritten by the pain, as searing hot oil encompasses your right leg and foot."
+			M.say("*scream")
 			return "right leg"
 		if("r_foot")
 			M.apply_damage(20, BURN, limb)
 			M << "\red  Your thoughts are overwritten by the pain, as searing hot oil encompasses your right foot."
+			M.say("*scream")
 			return "right foot"
 		if("l_arm")
 			M.apply_damage(20, BURN, limb)
 			M.apply_damage(30, BURN, "l_hand")
 			M << "\red  Your thoughts are overwritten by the pain, as searing hot oil encompasses your left arm and hand."
+			M.say("*scream")
 			return "left arm"
 		if("l_hand")
 			M.apply_damage(20, BURN, limb)
 			M << "\red  Your thoughts are overwritten by the pain, as searing hot oil encompasses your left hand."
+			M.say("*scream")
 			return "left hand"
 		if("r_arm")
 			M.apply_damage(20, BURN, limb)
 			M.apply_damage(30, BURN, "r_hand")
 			M << "\red  Your thoughts are overwritten by the pain, as searing hot oil encompasses your right arm and hand."
+			M.say("*scream")
 			return "right arm"
 		if("r_hand")
 			M.apply_damage(20, BURN, limb)
 			M << "\red  Your thoughts are overwritten by the pain, as searing hot oil encompasses your right hand."
+			M.say("*scream")
 			return "right hand"
 	return null
 

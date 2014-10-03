@@ -98,12 +98,12 @@
 
 /client/vampire/proc/vampire_hypnotise()
 	set category = "Abilities"
-	set name = "Hypnotise (20)"
+	set name = "Hypnotise" // (20)
 	set desc= "A piercing stare that incapacitates your victim for a good length of time."
 	var/datum/mind/M = usr.mind
 	if(!M) return
 
-	var/mob/living/carbon/C = M.current.vampire_active(20, 0, 1)
+	var/mob/living/carbon/C = M.current.vampire_active(0, 0, 1) //(20, 0, 1)
 
 	if(!C) return
 	if(C==usr)
@@ -111,9 +111,9 @@
 		return
 	M.current.visible_message("<span class='warning'>[M]'s eyes flash briefly as he stares into [C.name]'s eyes</span>")
 //	M.current.remove_vampire_blood(20) Moved to remove if it works only.
-	if(M.current.vampire_power(20, 0))
+	if(M.current.vampire_power(0, 0)) //if(M.current.vampire_power(20, 0))
 		M.current.verbs -= /client/vampire/proc/vampire_hypnotise
-		spawn(900)
+		spawn(1200)
 			M.current.verbs += /client/vampire/proc/vampire_hypnotise
 		if(do_mob(M.current, C, 50))
 			if(C.mind && C.mind.vampire)
@@ -126,7 +126,7 @@
 				C.Weaken(20)
 				C.Stun(20)
 				C.stuttering = 20
-				M.current.remove_vampire_blood(20)
+//				M.current.remove_vampire_blood(20)
 		else
 			M.current << "\red You broke your gaze."
 			return
@@ -175,7 +175,7 @@
 	shutdown.speed = 1
 	shutdown.stage = 2
 	shutdown.clicks = 185
-	msg_admin_attack("[usr.name] ([usr.ckey]) gave [C.name] ([C.ckey]) the shutdown disease")
+	msg_admin_attack("[usr.name] ([usr.ckey]) gave [C.name] ([C.ckey]) the shutdown disease - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[C.x];Y=[C.y];Z=[C.z]'>JMP</a>")
 	usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Gave [C.name] ([C.ckey]) the shutdown disease</font>")
 	C.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been given the shutdown disease by [usr.name] ([usr.ckey])</font>")
 	infect_virus2(C,shutdown,0)
@@ -354,7 +354,7 @@
 	src << "\red You have successfully Enthralled [H.name]. <i>If they refuse to do as you say just adminhelp.</i>"
 	ticker.mode.update_vampire_icons_added(H.mind)
 	ticker.mode.update_vampire_icons_added(src.mind)
-	msg_admin_attack("[name]([ckey]) has mind-slaved [H.name]([H.ckey]).")
+	msg_admin_attack("[name]([ckey]) has mind-slaved [H.name]([H.ckey]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[H.x];Y=[H.y];Z=[H.z]'>JMP</a>.")
 
 /client/vampire/proc/vampire_bats()
 	set category = "Abilities"
@@ -379,7 +379,7 @@
 				new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
 		else // we had no good locations so make two on top of us
 			new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
-//			new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
+			new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
 		M.current.remove_vampire_blood(60)
 		M.current.verbs -= /client/vampire/proc/vampire_bats
 		spawn(1200) M.current.verbs += /client/vampire/proc/vampire_bats
@@ -387,13 +387,13 @@
 /client/vampire/proc/vampire_jaunt()
 	//AHOY COPY PASTE INCOMING
 	set category = "Abilities"
-	set name = "Mist Form (45)"
+	set name = "Mist Form (30)"
 	set desc = "You take on the form of mist for a short period of time."
 	var/jaunt_duration = 50 //in deciseconds
 	var/datum/mind/M = usr.mind
 	if(!M) return
 
-	if(M.current.vampire_power(45, 0))
+	if(M.current.vampire_power(30, 0))
 		if(M.current.buckled) M.current.buckled.unbuckle()
 		spawn(0)
 			var/originalloc = get_turf(M.current.loc)
@@ -407,6 +407,8 @@
 			animation.layer = 5
 			animation.master = holder
 			M.current.ExtinguishMob()
+			M.current.weakened = 0
+			M.current.stunned = 0
 			if(M.current.buckled)
 				M.current.buckled.unbuckle()
 			flick("liquify",animation)
@@ -437,7 +439,7 @@
 			M.current.client.eye = M.current
 			del(animation)
 			del(holder)
-		M.current.remove_vampire_blood(45)
+		M.current.remove_vampire_blood(30)
 		M.current.verbs -= /client/vampire/proc/vampire_jaunt
 		spawn(600) M.current.verbs += /client/vampire/proc/vampire_jaunt
 

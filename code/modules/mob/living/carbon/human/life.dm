@@ -1236,7 +1236,7 @@
 			if(copytext(hud.icon_state,1,4) == "hud") //ugly, but icon comparison is worse, I believe
 				client.images.Remove(hud)
 
-		client.screen.Remove(global_hud.blurry, global_hud.druggy, global_hud.vimpaired, global_hud.darkMask, global_hud.nvg)
+		client.screen.Remove(global_hud.blurry, global_hud.druggy, global_hud.vimpaired, global_hud.darkMask, global_hud.nvg, global_hud.lum)
 
 		update_action_buttons()
 
@@ -1321,6 +1321,10 @@
 						var/obj/item/weapon/gun/energy/rifle/sniperrifle/s = locate() in src
 						if(s.zoom)
 							s.zoom()
+					if(locate(/obj/item/weapon/gun/energy/laser/modular, contents))
+						var/obj/item/weapon/gun/energy/laser/modular/s = locate() in src
+						if(s.zoom)
+							s.zoom()
 
 		else
 			sight &= ~(SEE_TURFS|SEE_MOBS|SEE_OBJS)
@@ -1388,6 +1392,9 @@
 				if(istype(G,/obj/item/clothing/glasses/night))
 					see_invisible = SEE_INVISIBLE_MINIMUM
 					client.screen += global_hud.nvg
+				if(istype(G,/obj/item/clothing/glasses/UV))
+					see_invisible = SEE_INVISIBLE_LIVING
+					client.screen += global_hud.lum
 
 	/* HUD shit goes here, as long as it doesn't modify sight flags */
 	// The purpose of this is to stop xray and w/e from preventing you from using huds -- Love, Doohl

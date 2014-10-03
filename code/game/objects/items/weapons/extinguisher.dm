@@ -5,12 +5,12 @@
 	icon_state = "fire_extinguisher0"
 	item_state = "fire_extinguisher"
 	hitsound = 'sound/weapons/smash.ogg'
-	flags = FPRINT | USEDELAY | TABLEPASS | CONDUCT
+	flags = FPRINT | TABLEPASS | CONDUCT
 	throwforce = 10
 	w_class = 3.0
 	throw_speed = 2
 	throw_range = 10
-	force = 10
+	force = 10.0
 	m_amt = 90
 	attack_verb = list("slammed", "whacked", "bashed", "thunked", "battered", "bludgeoned", "thrashed")
 	var/max_water = 50
@@ -24,7 +24,7 @@
 	icon_state = "miniFE0"
 	item_state = "miniFE"
 	hitsound = null	//it is much lighter, after all.
-	flags = FPRINT | USEDELAY | TABLEPASS
+	flags = FPRINT | TABLEPASS
 	throwforce = 2
 	w_class = 2.0
 	force = 3.0
@@ -78,8 +78,12 @@
 
 		if(usr.buckled && isobj(usr.buckled) && !usr.buckled.anchored )
 			spawn(0)
+				var/obj/structure/stool/bed/chair/C = null
+				if(istype(usr.buckled, /obj/structure/stool/bed/chair))
+					C = usr.buckled
 				var/obj/B = usr.buckled
 				var/movementdirection = turn(direction,180)
+				if(C)	C.propelled = 1
 				B.Move(get_step(usr,movementdirection), movementdirection)
 				sleep(1)
 				B.Move(get_step(usr,movementdirection), movementdirection)
@@ -91,6 +95,7 @@
 				B.Move(get_step(usr,movementdirection), movementdirection)
 				sleep(2)
 				B.Move(get_step(usr,movementdirection), movementdirection)
+				if(C)	C.propelled = 0
 				sleep(3)
 				B.Move(get_step(usr,movementdirection), movementdirection)
 				sleep(3)
@@ -117,18 +122,15 @@
 				for(var/b=0, b<5, b++)
 					step_towards(W,my_target)
 					if(!W) return
-					if(!W.reagents) return
 					W.reagents.reaction(get_turf(W))
 					for(var/atom/atm in get_turf(W))
 						if(!W) return
 						W.reagents.reaction(atm)
-						if(isliving(atm)) //For extinguishing mobs on fire
-							var/mob/living/M = atm
-							M.ExtinguishMob()
 					if(W.loc == my_target) break
 					sleep(2)
-				W.delete()
+//				spawn(20)
 
+				W.Del()
 		if((istype(usr.loc, /turf/space)) || (usr.lastarea.has_gravity == 0))
 			user.inertia_dir = get_dir(target, user)
 			step(user, user.inertia_dir)

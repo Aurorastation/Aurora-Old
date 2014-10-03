@@ -283,6 +283,7 @@
 	icon_on = "toolpipeon"  //Note - these are in masks.dmi
 	icon_off = "pipeoff"
 	smoketime = 100
+	can_hurt_mob = 0
 
 /obj/item/weapon/reagent_containers/food/drinks/flask/fluff/tool_flask //Worn flask - Michael Tool - mrimatool - DONE
 	name = "worn flask"
@@ -331,8 +332,8 @@
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "omni_modkit"
 	parts = MODKIT_HELMET
-	from_helmet = /obj/item/weapon/melee
-	to_helmet = /obj/item/weapon/melee/baton/fluff/omnivac_baton
+	from_helmet = list(/obj/item/weapon/melee)
+	to_helmet = list(/obj/item/weapon/melee/baton/fluff/omnivac_baton)
 
 /obj/item/clothing/head/soft/fluff/nebula_cap //Black baseball cap - Roxy Wallace - nebulaflare - DONE
 	name = "black baseball cap"
@@ -739,8 +740,8 @@
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "leo_mod"
 	parts = MODKIT_HELMET
-	from_helmet = /obj/item/weapon/gun/projectile/detective/semiauto
-	to_helmet = /obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun
+	from_helmet = list(/obj/item/weapon/gun/projectile/detective/semiauto)
+	to_helmet = list(/obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun)
 
 /obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun //Instant Prosecutor - Leo Wyatt - keinto - DONE (stab)
 	name = "\improper Instant Prosecutor"

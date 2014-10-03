@@ -150,16 +150,16 @@
 	ammo_type = "/obj/item/ammo_casing/chameleon"
 	max_ammo = 0
 	multiple_sprites = 1
-/*
-// Tried to steal these from Para.  They're kind of funky.
 
+// Tried to steal these from Para.  They're kind of funky.
+/*
 /obj/item/ammo_magazine/a12mm
 	name = "Ammunition Box (12mm)"
 	icon_state = "9mm"
 	origin_tech = "combat=2"
 	ammo_type = "/obj/item/ammo_casing/a12mm"
 	max_ammo = 40
-
+*/
 /obj/item/ammo_magazine/shotgun
 	name = "Ammunition Box (slug)"
 	icon_state = "9mm"
@@ -167,19 +167,27 @@
 	ammo_type = "/obj/item/ammo_casing/shotgun"
 	max_ammo = 8
 	m_amt = 100000
-
+/* no buckshots.  never again.  too hard to steal forever.
 /obj/item/ammo_magazine/shotgun/buck
 	name = "Ammunition Box (buckshot)"
 	ammo_type = "/obj/item/ammo_casing/buck"
+*/
 
 /obj/item/ammo_magazine/shotgun/stun
 	name = "Ammunition Box (stun shells)"
-	ammo_type = "/obj/item/ammo_casing/stunshell"
+	ammo_type = "/obj/item/ammo_casing/shotgun/stunshell"
+	max_ammo = 8
 	m_amt = 20000
 
 /obj/item/ammo_magazine/shotgun/beanbag
 	name = "Ammunition Box (beanbag shells)"
-	ammo_type = "/obj/item/ammo_casing/beanbag"
+	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
+	max_ammo = 8
 	m_amt = 4000
 
-	*/
+/obj/item/ammo_magazine/shotgun/incendiary
+	name = "Ammunition Box (incendiary shells)"
+	ammo_type = "/obj/item/ammo_casing/shotgun/incendiary"
+	max_ammo = 8
+	m_amt = 100000
+

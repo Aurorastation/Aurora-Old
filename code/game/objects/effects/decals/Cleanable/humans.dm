@@ -50,8 +50,15 @@ var/global/list/image/splatter_cache=list()
 		return
 	if(amount < 1)
 		return
+	if(invisibility != 0)
+		return
 
-	if(perp.shoes)//Adding blood to shoes
+	var/datum/organ/external/l_foot = perp.get_organ("l_foot")
+	var/datum/organ/external/r_foot = perp.get_organ("r_foot")
+	var/hasfeet = 1
+	if((!l_foot || l_foot.status & ORGAN_DESTROYED) && (!r_foot || r_foot.status & ORGAN_DESTROYED))
+		hasfeet = 0
+	if(perp.shoes && !perp.buckled)//Adding blood to shoes
 		perp.shoes.blood_color = basecolor
 		perp.shoes:track_blood = max(amount,perp.shoes:track_blood)
 		if(!perp.shoes.blood_overlay)
@@ -62,15 +69,19 @@ var/global/list/image/splatter_cache=list()
 			perp.shoes.overlays += perp.shoes.blood_overlay
 		perp.shoes.blood_DNA |= blood_DNA.Copy()
 
-	else//Or feet
+	else if (hasfeet)//Or feet
 		perp.feet_blood_color = basecolor
 		perp.track_blood = max(amount,perp.track_blood)
 		if(!perp.feet_blood_DNA)
 			perp.feet_blood_DNA = list()
 		perp.feet_blood_DNA |= blood_DNA.Copy()
+	else if (perp.buckled && istype(perp.buckled, /obj/structure/stool/bed/chair/wheelchair))
+		var/obj/structure/stool/bed/chair/wheelchair/W = perp.buckled
+		W.bloodiness = 4
 
 	perp.update_inv_shoes(1)
 	amount--
+
 
 /obj/effect/decal/cleanable/blood/proc/dry()
 		name = "dried [src.name]"

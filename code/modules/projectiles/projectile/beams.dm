@@ -122,6 +122,11 @@ var/list/beam_master = list()
 	icon_state = "emitter"
 	damage = 30
 
+/obj/item/projectile/beam/stunrevolver
+	name = "stun beam"
+	icon_state = "stun"
+	damage = 10
+	agony = 45
 
 /obj/item/projectile/beam/lastertag/blue
 	name = "lasertag beam"
@@ -184,3 +189,41 @@ var/list/beam_master = list()
 	damage_type = BURN
 	flag = "laser"
 	eyeblur = 4
+
+//modular laser projectiles
+
+/obj/item/projectile/beam/reallyweak
+	name = "unfocused laser"
+	icon_state = "laser"
+	damage = 20
+
+/obj/item/projectile/beam/green
+	name = "green laser"
+	icon_state = "lasergreen"
+	damage = 40
+	agony = 25 //these extra values and below are all timed so they knock you out only on the killing/critting blow.  more for coolness than effect.
+
+/obj/item/projectile/beam/blue
+	name = "blue laser"
+	icon_state = "laserblue"
+	damage = 60
+	irradiate = 40
+	agony = 40
+
+
+/obj/item/projectile/beam/violet
+	name = "violet laser"
+	icon_state = "laserviolet"
+	damage = 80
+	irradiate = 50
+	agony = 50
+
+/obj/item/projectile/beam/violet/on_hit(var/atom/target, var/blocked = 0)
+	if(istype(target, /mob/living/carbon))
+		var/mob/living/carbon/M = target
+		M.adjust_fire_stacks(1)
+		M.IgniteMob()
+	else if(istype(target, /mob/living/silicon/robot))
+		var/mob/living/silicon/robot/M = target
+		M.adjust_fire_stacks(1)
+		M.IgniteMob()

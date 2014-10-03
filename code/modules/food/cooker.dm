@@ -49,6 +49,9 @@ obj/machinery/cooker/proc/checkValid(obj/item/check, mob/user)
 /*	if(istype(check, /obj/item/flag))
 		user << "<span class='warning'>That isn't going to fit.</span>"
 		return 0*/
+	if(!istype(check, /obj/item/weapon/reagent_containers/food))
+		user << "<span class='warning'>That isn't going to work.</span>"
+		return 0
 	return 1
 
 obj/machinery/cooker/proc/setIcon(obj/item/copyme, obj/item/copyto)

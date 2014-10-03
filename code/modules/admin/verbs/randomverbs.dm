@@ -993,8 +993,10 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		config.allow_random_events = 1
 		usr << "Random events enabled"
 		message_admins("Admin [key_name_admin(usr)] has enabled random events.", 1)
+		msg_scopes("Admin [key_name_admin(usr)] has enabled random events.", 0)
 	else
 		config.allow_random_events = 0
 		usr << "Random events disabled"
 		message_admins("Admin [key_name_admin(usr)] has disabled random events.", 1)
+		msg_scopes("Admin [key_name_admin(usr)] has disabled random events.", 0)
 	feedback_add_details("admin_verb","TRE") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!

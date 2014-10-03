@@ -25,6 +25,7 @@
 			supply_shuttle.process()
 			feedback_add_details("admin_verb","RSupply")
 	message_admins("Admin [key_name_admin(usr)] has restarted the [controller] controller.")
+	msg_scopes("Admin [key_name_admin(usr)] has restarted the [controller] controller.")
 	return
 
 

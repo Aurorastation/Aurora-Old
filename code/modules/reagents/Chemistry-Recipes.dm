@@ -713,6 +713,12 @@ datum
 			required_reagents = list("ammonia" = 1, "water" = 1)
 			result_amount = 2
 
+		luminol
+			name = "Luminol"
+			id = "luminol"
+			result = "luminol"
+			required_reagents = list("hydrogen" = 3, "carbon" = 3, "ammonia" = 3)
+
 		plantbgone
 			name = "Plant-B-Gone"
 			id = "plantbgone"
@@ -1067,7 +1073,7 @@ datum
 			name = "Slime Crit"
 			id = "m_tele"
 			result = null
-			required_reagents = list("plasma" = 5)
+			required_reagents = list("water" = 5)
 			result_amount = 1
 			required_container = /obj/item/slime_extract/gold
 			required_other = 1
@@ -1106,6 +1112,18 @@ datum
 							step(C, pick(NORTH,SOUTH,EAST,WEST))
 //				for(var/mob/O in viewers(get_turf_loc(holder.my_atom), null))
 //					O.show_message(text("\red The slime core fizzles disappointingly,"), 1)
+
+		slimecatalyst
+			name = "slime catalyst"
+			id = "m_catalyst"
+			result = null
+			required_reagents = list("plasma" = 5)
+			result_amount = 1
+			required_container = /obj/item/slime_extract/gold
+			required_other = 1
+			on_reaction(var/datum/reagents/holder)
+				var/obj/item/weapon/slimecatalyst/P = new /obj/item/weapon/slimecatalyst
+				P.loc = get_turf_loc(holder.my_atom)
 /*
 		slimecritlesser
 			name = "Slime Crit Lesser"
@@ -2220,3 +2238,18 @@ datum
 			result = "suidream"
 			required_reagents = list("space_up" = 2, "bluecuracao" = 1, "melonliquor" = 1)
 			result_amount = 4
+
+//////////////////////////SKULL'S DRUGS///////////////////////
+		philodex
+			name = "Philodexphid"
+			id = "philodex"
+			result = "philodex"
+			required_reagents = list("cryptobiolin" = 1, "impedrezene" = 1, "mercury" = 1)
+			result_amount = 2
+
+		ecye
+			name = "Ecyeipate"
+			id = "ecye"
+			result = "ecye"
+			required_reagents = list("synaptizine" = 1, "plasma" = 1)
+			result_amount = 2

@@ -77,6 +77,7 @@
 							src.bomb.detonate()
 							log_admin("[user.real_name]([user.ckey]) has triggered [src.bomb] with [src].")
 							message_admins("\red [user.real_name]([user.ckey]) has triggered [src.bomb] with [src].")
+							message_mods("\red [user.real_name]([user.ckey]) has triggered [src.bomb] with [src].")
 
 					if("Close the lighter.")
 						src.icon_state = "c-4detonator_0"
