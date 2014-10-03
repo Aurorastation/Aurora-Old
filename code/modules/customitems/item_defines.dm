@@ -840,3 +840,24 @@
 			spawn(20)
 				spamcheck = 0
 			return
+
+/obj/item/clothing/tie/fluff/hamil_badge
+	name = "Internal Investigations Badge"
+	desc = "An Internal Investigation badge. Used by a special branch of the Elyran police force."
+	icon = 'icons/obj/custom_items.dmi'
+	item_state = "hamil_badge"
+
+/obj/item/clothing/tie/fluff/hamil_badge/attack_self(mob/user as mob)
+	if(isliving(user))
+		user.visible_message("\red [user] flashes their [src].\nIt reads: Muhammad Hamil, Internal Investigations, Persepolis..","\red You display the [src].\nIt reads: Muhammad Hamil, Internal Investigations, Persepolis.")
+
+/obj/item/clothing/tie/fluff/hamil_badge/attack(mob/living/carbon/human/M, mob/living/user)
+	if(isliving(user))
+		user.visible_message("\red [user] invades [M]'s personal space, thrusting [src] into their face insistently.","\red You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.")
+
+/obj/item/clothing/mask/gas/fluff/stefan_mask
+	desc = "This odd looking gas mask is quite clearly not of NanoTrasen origin as it sports a black metal polish, as well as a reflective face plate that mirrors the view of the mask itself. This particular mask appears to breathe with the user, hissing when they exhale, and whining softly as they inhale."
+	name = "Modified Gas Mask"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "stefan_mask"
+	item_state = "stefan_mask"

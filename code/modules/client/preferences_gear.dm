@@ -25,6 +25,11 @@ proc/populate_gear_list()
 	path = /obj/item/weapon/dice/d20
 	cost = 1
 
+/datum/gear/watch
+	display_name = "watch"
+	path = /obj/item/clothing/gloves/watch
+	cost = 1
+
 /datum/gear/wallet
 	display_name = "wallet"
 	path = /obj/item/weapon/storage/wallet
