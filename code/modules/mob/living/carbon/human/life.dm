@@ -95,6 +95,9 @@
 
 		handle_virus_updates()
 
+		//check if we're on fire
+		handle_fire()
+
 		//stuff in the stomach
 		handle_stomach()
 
@@ -108,6 +111,9 @@
 
 	if(life_tick > 5 && timeofdeath && (timeofdeath < 5 || world.time - timeofdeath > 6000))	//We are long dead, or we're junk mobs spawned like the clowns on the clown shuttle
 		return											//We go ahead and process them 5 times for HUD images and other stuff though.
+
+	if(stat == DEAD && floating)
+		float(0)
 
 	//Handle temperature/pressure differences between body and environment
 	handle_environment(environment)		//Optimized a good bit.
@@ -653,16 +659,19 @@
 				stabilize_temperature_from_calories()
 
 			//After then, it reacts to the surrounding atmosphere based on your thermal protection
-			if(loc_temp < BODYTEMP_COLD_DAMAGE_LIMIT)			//Place is colder than we are
-				var/thermal_protection = get_cold_protection(loc_temp) //This returns a 0 - 1 value, which corresponds to the percentage of protection based on what you're wearing and what you're exposed to.
-				if(thermal_protection < 1)
-					var/amt = min((1-thermal_protection) * ((loc_temp - bodytemperature) / BODYTEMP_COLD_DIVISOR), BODYTEMP_COOLING_MAX)
-					bodytemperature += amt
-			else if (loc_temp > BODYTEMP_HEAT_DAMAGE_LIMIT)			//Place is hotter than we are
-				var/thermal_protection = get_heat_protection(loc_temp) //This returns a 0 - 1 value, which corresponds to the percentage of protection based on what you're wearing and what you're exposed to.
-				if(thermal_protection < 1)
-					var/amt = min((1-thermal_protection) * ((loc_temp - bodytemperature) / BODYTEMP_HEAT_DIVISOR), BODYTEMP_HEATING_MAX)
-					bodytemperature += amt
+			if(!on_fire) //If you're on fire, you do not heat up or cool down based on surrounding gases
+				if(loc_temp < BODYTEMP_COLD_DAMAGE_LIMIT)			//Place is colder than we are
+					var/thermal_protection = get_cold_protection(loc_temp) //This returns a 0 - 1 value, which corresponds to the percentage of protection based on what you're wearing and what you're exposed to.
+					if(thermal_protection < 1)
+						var/amt = min((1-thermal_protection) * ((loc_temp - bodytemperature) / BODYTEMP_COLD_DIVISOR), BODYTEMP_COOLING_MAX)
+	//					log_debug("[loc_temp] is Cold. Cooling by [amt]")
+						bodytemperature += amt
+				else if (loc_temp > BODYTEMP_HEAT_DAMAGE_LIMIT)			//Place is hotter than we are
+					var/thermal_protection = get_heat_protection(loc_temp) //This returns a 0 - 1 value, which corresponds to the percentage of protection based on what you're wearing and what you're exposed to.
+					if(thermal_protection < 1)
+						var/amt = min((1-thermal_protection) * ((loc_temp - bodytemperature) / BODYTEMP_HEAT_DIVISOR), BODYTEMP_HEATING_MAX)
+	//					log_debug("[loc_temp] is Heat. Heating up by [amt]")
+						bodytemperature += amt
 
 		// +/- 50 degrees from 310.15K is the 'safe' zone, where no damage is dealt.
 		if(bodytemperature > BODYTEMP_HEAT_DAMAGE_LIMIT)
@@ -726,6 +735,16 @@
 		if(environment.toxins > MOLES_PLASMA_VISIBLE)
 			pl_effects()
 		return
+
+	///FIRE CODE
+	handle_fire()
+		if(..())
+			return
+		var/thermal_protection = get_heat_protection(30000) //If you don't have fire suit level protection, you get a temperature increase
+		if((1 - thermal_protection) > 0.0001)
+			bodytemperature += BODYTEMP_HEATING_MAX
+		return
+	//END FIRE CODE
 
 	/*
 	proc/adjust_body_temperature(current, loc_temp, boost)
@@ -1217,7 +1236,7 @@
 			if(copytext(hud.icon_state,1,4) == "hud") //ugly, but icon comparison is worse, I believe
 				client.images.Remove(hud)
 
-		client.screen.Remove(global_hud.blurry, global_hud.druggy, global_hud.vimpaired, global_hud.darkMask, global_hud.nvg)
+		client.screen.Remove(global_hud.blurry, global_hud.druggy, global_hud.vimpaired, global_hud.darkMask, global_hud.nvg, global_hud.lum)
 
 		update_action_buttons()
 
@@ -1302,6 +1321,10 @@
 						var/obj/item/weapon/gun/energy/rifle/sniperrifle/s = locate() in src
 						if(s.zoom)
 							s.zoom()
+					if(locate(/obj/item/weapon/gun/energy/laser/modular, contents))
+						var/obj/item/weapon/gun/energy/laser/modular/s = locate() in src
+						if(s.zoom)
+							s.zoom()
 
 		else
 			sight &= ~(SEE_TURFS|SEE_MOBS|SEE_OBJS)
@@ -1369,6 +1392,9 @@
 				if(istype(G,/obj/item/clothing/glasses/night))
 					see_invisible = SEE_INVISIBLE_MINIMUM
 					client.screen += global_hud.nvg
+				if(istype(G,/obj/item/clothing/glasses/UV))
+					see_invisible = SEE_INVISIBLE_LIVING
+					client.screen += global_hud.lum
 
 	/* HUD shit goes here, as long as it doesn't modify sight flags */
 	// The purpose of this is to stop xray and w/e from preventing you from using huds -- Love, Doohl
@@ -1789,6 +1815,8 @@
 					holder.icon_state = "huddeathsquad"
 				if("Ninja")
 					holder.icon_state = "hudninja"
+				if("Vampire")
+					holder.icon_state = "hudvampire"
 
 			hud_list[SPECIALROLE_HUD] = holder
 	hud_updateflag = 0

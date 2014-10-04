@@ -483,6 +483,7 @@
 	..(Proj)
 	updatehealth()
 	if(prob(75) && Proj.damage > 0) spark_system.start()
+	update_fire()
 	return 2
 
 
@@ -730,6 +731,7 @@
 					connected_ai = null
 					user << "You emag [src]'s interface."
 					message_admins("[key_name_admin(user)] emagged cyborg [key_name_admin(src)].  Laws overridden.")
+					message_mods("[key_name_admin(user)] emagged cyborg [key_name_admin(src)].  Laws overridden.")
 					log_game("[key_name(user)] emagged cyborg [key_name(src)].  Laws overridden.")
 					clear_supplied_laws()
 					clear_inherent_laws()
@@ -784,6 +786,7 @@
 	else
 		if( !(istype(W, /obj/item/device/robotanalyzer) || istype(W, /obj/item/device/healthanalyzer)) )
 			spark_system.start()
+			update_fire()
 		return ..()
 
 /mob/living/silicon/robot/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
@@ -979,6 +982,7 @@
 /mob/living/silicon/robot/proc/updateicon()
 
 	overlays.Cut()
+	update_fire()
 	if(stat == 0)
 		overlays += "eyes"
 		overlays.Cut()
@@ -1013,7 +1017,10 @@
 		else
 			icon_state = base_icon
 		return
-
+/*
+/mob/living/silicon/robot/proc/updatefire()
+	return
+*/
 //Call when target overlay should be added/removed
 /mob/living/silicon/robot/update_targeted()
 	if(!targeted_by && target_locked)

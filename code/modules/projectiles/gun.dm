@@ -25,6 +25,7 @@
 	var/tmp/list/mob/living/target //List of who yer targeting.
 	var/tmp/lock_time = -100
 	var/tmp/mouthshoot = 0 ///To stop people from suiciding twice... >.>
+	var/projectiles_per_shot = 1 //projectiles per shot.  burstfire weapons.
 	var/automatic = 0 //Used to determine if you can target multiple people.
 	var/tmp/mob/living/last_moved_mob //Used to fire faster at more than one person.
 	var/tmp/told_cant_shoot = 0 //So that it doesn't spam them with the fact they cannot hit them.
@@ -32,7 +33,8 @@
 						// 1 for one bullet after tarrget moves and aim is lowered
 	var/fire_delay = 6
 	var/last_fired = 0
-
+	var/fire_cooldown = 0 //burst fire code
+	var/last_bursted = 0 //burst cooldowns
 	var/wielded = 0
 
 	var/fire_delay_unwielded = 0 //If these are set it will change the respected fields, if not they are ignored
@@ -41,6 +43,9 @@
 	var/unwieldsound = null
 	var/force_unwielded = 0 //Force modification, because striking someone with a rifle held in two hands -hurts-
 	var/force_wielded = 0
+
+	var/accuracy = 0 //goes into projectile.dm to provide individual offsets for each gun.  negative to increase base accuracy
+	var/rangedrop = 0 //how much accuracy the average gun loses for every tile
 
 	proc/can_wield() //Override in order to make a weapon two handed, remember to add toggle_wield(mob/user as mob) in the weapon somewhere
 		return 0	//Override /Fire(..) to force the weapon to be two handed
@@ -51,6 +56,15 @@
 			return 1
 		else
 			return 0
+
+	proc/burst_delay()
+		if(world.time >= last_bursted + 2 + fire_cooldown*3)
+			return 1
+		else
+			return 0
+
+	proc/set_burst()
+		last_bursted = world.time
 
 	proc/load_into_chamber()
 		return 0
@@ -68,7 +82,17 @@
 	if(user && user.client && user.client.gun_mode && !(A in target))
 		PreFire(A,user,params) //They're using the new gun system, locate what they're aiming at.
 	else
-		Fire(A,user,params) //Otherwise, fire normally.
+		if (!burst_delay())
+			if (world.time % 3) //to prevent spam
+				user << "<span class='warning'>[src] is not ready to burst again!"
+			return
+		else
+			for (var/i = 0; i < projectiles_per_shot; i++)
+				Fire(A,user,params) //Otherwise, fire normally.
+				if(fire_cooldown)
+					sleep(fire_cooldown)
+			set_burst()
+
 
 /obj/item/weapon/gun/proc/isHandgun()
 	return 1
@@ -177,6 +201,15 @@
 	else
 		user.update_inv_r_hand()
 
+	if(istype(src, /obj/item/weapon/gun/projectile) && ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(!H.gloves)
+			H.gsr = 1
+		else
+			var/obj/item/clothing/G = H.gloves
+			G.gsr = 1
+
+
 /obj/item/weapon/gun/proc/can_fire()
 	return load_into_chamber()
 
@@ -245,10 +278,19 @@
 		return ..() //Pistolwhippin'
 
 //Wielding weapons
+
+/*  This is what you place on the weapon that you want to wield
+/obj/item/weapon/gun/[path to gun]/verb/wield()
+	set name = "Wield"
+	set category = "Object"
+	set src in usr
+
+	toggle_wield(usr)
+*/
+
 /obj/item/weapon/gun/proc/toggle_wield(mob/user as mob)
 	if(!can_wield())
 		return
-
 	if(!istype(user.get_active_hand(), /obj/item/weapon/gun))
 		user << "<span class='warning'>You need to be holding the [name] in your active hand</span>"
 		return
@@ -275,7 +317,7 @@
 		if(user.get_inactive_hand())
 			user << "<span class='warning'>You need your other hand to be empty</span>"
 			return
-		wield()
+		wieldg()
 		user << "<span class='notice'>You stabilize the [initial(name)] with both hands.</span>"
 		if (src.wieldsound)
 			playsound(src.loc, wieldsound, 50, 1)
@@ -315,7 +357,7 @@
 	if(fire_delay_unwielded && fire_delay_wielded)
 		fire_delay = fire_delay_unwielded
 
-/obj/item/weapon/gun/proc/wield()
+/obj/item/weapon/gun/proc/wieldg()
 	wielded = 1
 	if(force_wielded)
 		force = force_wielded
@@ -331,10 +373,12 @@
 	name = "offhand"
 
 	unwield()
-		del(src)
+		spawn(1)
+			del(src)
 
-	wield()
-		del(src)
+	wieldg()
+		spawn(1)
+			del(src)
 
 	dropped(mob/living/user as mob)
 		if(user)
@@ -343,6 +387,8 @@
 				user << "<span class='notice'>You are no-longer stabilizing the [name] with both hands.</span>"
 				O.unwield()
 				unwield()
+				if(src)
+					del(src)
 
 /obj/item/weapon/gun/offhand/mob_can_equip(M as mob, slot)
 	return 0 //Because you can't equip your hand yet somehow you can

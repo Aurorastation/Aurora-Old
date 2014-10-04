@@ -48,6 +48,10 @@
 				log_admin("[key_name(usr)] has spawned vox raiders.")
 				if(!src.makeVoxRaiders())
 					usr << "\red Unfortunately there weren't enough candidates available."
+			if("12")
+				log_admin("[key_name(usr)] has spawned a vampire.")
+				if(!src.makeVampire())
+					usr << "\red Unfortunately there weren't enough candidates available."
 	else if(href_list["dbsearchckey"] || href_list["dbsearchadmin"])
 		var/adminckey = href_list["dbsearchadmin"]
 		var/playerckey = href_list["dbsearchckey"]
@@ -248,6 +252,7 @@
 		ticker.delay_end = !ticker.delay_end
 		log_admin("[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].")
 		message_admins("\blue [key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].", 1)
+		message_mods("\blue [key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].")
 		href_list["secretsadmin"] = "check_antagonist"
 
 	else if(href_list["simplemake"])
@@ -1306,7 +1311,7 @@
 		check_antagonists()
 
 	else if(href_list["adminplayerobservecoodjump"])
-		if(!check_rights(R_ADMIN))	return
+		if(!check_rights(R_MOD,0) && !check_rights(R_ADMIN))	return
 
 		var/x = text2num(href_list["X"])
 		var/y = text2num(href_list["Y"])
@@ -1470,6 +1475,20 @@
 		log_admin("[src.owner] replied to [key_name(H)]'s Syndicate message with the message [input].")
 		H << "You hear something crackle in your headset for a moment before a voice speaks.  \"Please stand by for a message from your benefactor.  Message as follows, agent. <b>\"[input]\"</b>  Message ends.\""
 
+	else if(href_list["CentcommAIReply"])
+		var/mob/living/silicon/ai/H = locate(href_list["CentcommAIReply"])
+		if(!istype(H))
+			usr << "This can only be used on instances of type /mob/living/silicon"
+			return
+
+		var/input = input(src.owner, "Please enter a message to reply to [key_name(H)] via encripted.","Outgoing message from Central Command", "")
+		if(!input)	return
+
+		src.owner << "You sent [input] to [H] via a secure channel."
+		log_admin("[src.owner] replied to [key_name(H)]'s Centcomm message with the message [input].")
+		message_admins("[src.owner] replied to [key_name(H)]'s Centcom message with: \"[input]\"")
+		H << "An encripted connection was made and a file was uploaded to your systems.  \"Please stand by for a message from Central Command.  Message as follows. <b>\"[input]\"</b>  Message ends.\""
+
 	else if(href_list["CentcommFaxView"])
 		var/info = locate(href_list["CentcommFaxView"])
 
@@ -1510,6 +1529,7 @@
 		src.owner << "Message reply to transmitted successfully."
 		log_admin("[key_name(src.owner)] replied to a fax message from [key_name(H)]: [input]")
 		message_admins("[key_name_admin(src.owner)] replied to a fax message from [key_name_admin(H)]", 1)
+		message_mods("[key_name_admin(src.owner)] replied to a fax message from [key_name_admin(H)]")
 
 
 	else if(href_list["jumpto"])
@@ -1763,15 +1783,15 @@
 					if(gravity_is_on)
 						if(!(M.stat & BROKEN))
 							M.set_broken()
-							log_admin("[key_name(usr)] toggled gravity on.", 1)
-							message_admins("\blue [key_name_admin(usr)] toggled gravity on.", 1)
-							command_alert("Gravity generators are again functioning within normal parameters, please restart your generator, Sorry for any inconvenience.")
-					else
-						if(M.stat & BROKEN)
-							M.set_fix()
 							log_admin("[key_name(usr)] toggled gravity off.", 1)
 							message_admins("\blue [key_name_admin(usr)] toggled gravity off.", 1)
 							command_alert("Feedback surge detected in mass-distributions systems. Artifical gravity has been disabled whilst the system reinitializes. Further failures may result in a gravitational collapse and formation of blackholes. Have a nice day.")
+					else
+						if(M.stat & BROKEN)
+							M.set_fix()
+							log_admin("[key_name(usr)] toggled gravity on.", 1)
+							message_admins("\blue [key_name_admin(usr)] toggled gravity on.", 1)
+							command_alert("Gravity generators are again functioning within normal parameters, please restart your generator, Sorry for any inconvenience.")
 /*
 				spawn(300)
 					for(var/area/A in world)

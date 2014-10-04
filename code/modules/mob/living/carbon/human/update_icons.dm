@@ -128,14 +128,30 @@ Please contact me on #coderbus IRC. ~Carn x
 #define L_HAND_LAYER			21
 #define R_HAND_LAYER			22
 #define TARGETED_LAYER			23		//BS12: Layer for the target overlay from weapon targeting system
+#define FIRE_LAYER				23    //If you're on fire
 #define TOTAL_LAYERS			23
 //////////////////////////////////
 
 /mob/living/carbon/human
 	var/list/overlays_standing[TOTAL_LAYERS]
+	var/list/overlays_lying[TOTAL_LAYERS]
 	var/previous_damage_appearance // store what the body last looked like, so we only have to update it if something changed
 	var/icon/race_icon
 	var/icon/deform_icon
+
+
+/mob/living/carbon/human/proc/apply_overlay(cache_index)
+	var/image/I = lying ? overlays_lying[cache_index] : overlays_standing[cache_index]
+	if(I)
+		overlays += I
+
+/mob/living/carbon/human/proc/remove_overlay(cache_index)
+	if(overlays_lying[cache_index])
+		overlays -= overlays_lying[cache_index]
+		overlays_lying[cache_index] = null
+	if(overlays_standing[cache_index])
+		overlays -= overlays_standing[cache_index]
+		overlays_standing[cache_index] = null
 
 //UPDATES OVERLAYS FROM OVERLAYS_LYING/OVERLAYS_STANDING
 //this proc is messy as I was forced to include some old laggy cloaking code to it so that I don't break cloakers
@@ -506,6 +522,15 @@ proc/get_damage_icon_part(damage_state, body_part)
 		overlays_standing[TARGETED_LAYER]	= null
 	if(update_icons)		update_icons()
 
+/mob/living/carbon/human/update_fire()
+
+	remove_overlay(FIRE_LAYER)
+	if(on_fire)
+		overlays_lying[FIRE_LAYER] = image("icon"='icons/mob/OnFire.dmi', "icon_state"="Lying", "layer"=-FIRE_LAYER)
+		overlays_standing[FIRE_LAYER] = image("icon"='icons/mob/OnFire.dmi', "icon_state"="Standing", "layer"=-FIRE_LAYER)
+
+	apply_overlay(FIRE_LAYER)
+
 
 /* --------------------------------------- */
 //For legacy support.
@@ -535,7 +560,7 @@ proc/get_damage_icon_part(damage_state, body_part)
 	update_icons()
 	//Hud Stuff
 	update_hud()
-
+	update_fire()
 /* --------------------------------------- */
 //vvvvvv UPDATE_INV PROCS vvvvvv
 
@@ -551,6 +576,11 @@ proc/get_damage_icon_part(damage_state, body_part)
 		if(w_uniform.blood_DNA)
 			var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = "uniformblood")
 			bloodsies.color		= w_uniform.blood_color
+			standing.overlays	+= bloodsies
+
+		if(w_uniform.wasbloody == 2)
+			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "uniformblood")
+			bloodsies.color		= "#007fff"
 			standing.overlays	+= bloodsies
 
 		if(w_uniform:hastie)	//WE CHECKED THE TYPE ABOVE. THIS REALLY SHOULD BE FINE.
@@ -599,6 +629,10 @@ proc/get_damage_icon_part(damage_state, body_part)
 			var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = "bloodyhands")
 			bloodsies.color = gloves.blood_color
 			standing.overlays	+= bloodsies
+		else if(gloves.wasbloody == 2)
+			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "bloodyhands")
+			bloodsies.color		= "#007fff"
+			standing.overlays	+= bloodsies
 		gloves.screen_loc = ui_gloves
 		overlays_standing[GLOVES_LAYER]	= standing
 	else
@@ -639,6 +673,10 @@ proc/get_damage_icon_part(damage_state, body_part)
 			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "shoeblood")
 			bloodsies.color = shoes.blood_color
 			standing.overlays += bloodsies
+		else if(shoes.wasbloody == 2)
+			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "shoeblood")
+			bloodsies.color		= "#007fff"
+			standing.overlays	+= bloodsies
 		overlays_standing[SHOES_LAYER] = standing
 	else
 		if(feet_blood_DNA)
@@ -672,6 +710,10 @@ proc/get_damage_icon_part(damage_state, body_part)
 			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
 			bloodsies.color = head.blood_color
 			standing.overlays	+= bloodsies
+		if(head.wasbloody == 2)
+			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
+			bloodsies.color		= "#007fff"
+			standing.overlays	+= bloodsies
 		overlays_standing[HEAD_LAYER]	= standing
 	else
 		overlays_standing[HEAD_LAYER]	= null
@@ -704,6 +746,12 @@ proc/get_damage_icon_part(damage_state, body_part)
 			bloodsies.color = wear_suit.blood_color
 			standing.overlays	+= bloodsies
 
+		if(wear_suit.wasbloody == 2)
+			var/obj/item/clothing/suit/S = wear_suit
+			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "[S.blood_overlay_type]blood")
+			bloodsies.color		= "#007fff"
+			standing.overlays	+= bloodsies
+
 		overlays_standing[SUIT_LAYER]	= standing
 
 		update_tail_showing(0)
@@ -730,6 +778,10 @@ proc/get_damage_icon_part(damage_state, body_part)
 		if( !istype(wear_mask, /obj/item/clothing/mask/cigarette) && wear_mask.blood_DNA )
 			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "maskblood")
 			bloodsies.color = wear_mask.blood_color
+			standing.overlays	+= bloodsies
+		else if( !istype(wear_mask, /obj/item/clothing/mask/cigarette) && wear_mask.wasbloody == 2 )
+			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "maskblood")
+			bloodsies.color = wear_suit.blood_color
 			standing.overlays	+= bloodsies
 		overlays_standing[FACEMASK_LAYER]	= standing
 	else
@@ -889,4 +941,5 @@ proc/get_damage_icon_part(damage_state, body_part)
 #undef L_HAND_LAYER
 #undef R_HAND_LAYER
 #undef TARGETED_LAYER
+#undef FIRE_LAYER
 #undef TOTAL_LAYERS

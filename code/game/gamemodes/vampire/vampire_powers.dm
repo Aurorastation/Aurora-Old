@@ -11,6 +11,7 @@
 	var/datum/vampire/vampire = src.mind.vampire
 
 	if(!vampire)
+		msg_scopes("[src] has vampire verbs but isn't a vampire.")
 		world.log << "[src] has vampire verbs but isn't a vampire."
 		return 0
 
@@ -37,12 +38,14 @@
 /mob/proc/vampire_affected(datum/mind/M)
 	//Other vampires aren't affected
 	if(mind && mind.vampire) return 0
-	//Vampires who have reached their full potential can affect nearly everything
-	if(M && M.vampire && (VAMP_FULL in M.vampire.powers))
-		return 1
 	//Chaplains are resistant to vampire powers
 	if(mind && mind.assigned_role == "Chaplain")
 		return 0
+	if(mind && mind.current.isipc())//Not sure if this should be here but we can easily override.
+		return 0
+	//Vampires who have reached their full potential can affect nearly everything
+	if(M && M.vampire && (VAMP_FULL in M.vampire.powers))
+		return 1 // This doesn't really need to be here because of well the line below it.
 	return 1
 
 /mob/proc/vampire_can_reach(mob/M as mob, active_range = 1)
@@ -59,6 +62,7 @@
 	if(!vampire) return
 	var/list/victims = list()
 	for(var/mob/living/carbon/C in view(active_range))
+		if(C==src) continue
 		victims += C
 	var/mob/living/carbon/T = input(src, "Victim?") as null|anything in victims
 
@@ -94,19 +98,22 @@
 
 /client/vampire/proc/vampire_hypnotise()
 	set category = "Abilities"
-	set name = "Hypnotise (20)"
+	set name = "Hypnotise" // (20)
 	set desc= "A piercing stare that incapacitates your victim for a good length of time."
 	var/datum/mind/M = usr.mind
 	if(!M) return
 
-	var/mob/living/carbon/C = M.current.vampire_active(20, 0, 1)
+	var/mob/living/carbon/C = M.current.vampire_active(0, 0, 1) //(20, 0, 1)
 
 	if(!C) return
+	if(C==usr)
+		M.current << "\red You can't do that to yourself"
+		return
 	M.current.visible_message("<span class='warning'>[M]'s eyes flash briefly as he stares into [C.name]'s eyes</span>")
 //	M.current.remove_vampire_blood(20) Moved to remove if it works only.
-	if(M.current.vampire_power(20, 0))
+	if(M.current.vampire_power(0, 0)) //if(M.current.vampire_power(20, 0))
 		M.current.verbs -= /client/vampire/proc/vampire_hypnotise
-		spawn(1800)
+		spawn(1200)
 			M.current.verbs += /client/vampire/proc/vampire_hypnotise
 		if(do_mob(M.current, C, 50))
 			if(C.mind && C.mind.vampire)
@@ -119,20 +126,26 @@
 				C.Weaken(20)
 				C.Stun(20)
 				C.stuttering = 20
-				M.current.remove_vampire_blood(20)
+//				M.current.remove_vampire_blood(20)
 		else
 			M.current << "\red You broke your gaze."
 			return
 
 /client/vampire/proc/vampire_disease()
 	set category = "Abilities"
-	set name = "Diseased Touch (100)"
+	set name = "Diseased Touch (200)"
 	set desc = "Touches your victim with infected blood giving them the Shutdown Syndrome which quickly shutsdown their major organs resulting in a quick painful death."
 	var/datum/mind/M = usr.mind
 	if(!M) return
 
-	var/mob/living/carbon/C = M.current.vampire_active(100, 0, 1)
+	var/mob/living/carbon/C = M.current.vampire_active(200, 0, 1)
 	if(!C) return
+	if(C==usr)
+		M.current << "\red You can't do that to yourself"
+		return
+	if(C.isipc())
+		M.current << "\red You can't to that to a machine"
+		return
 	if(!M.current.vampire_can_reach(C, 1))
 		M.current << "\red <b>You cannot touch [C.name] from where you are standing!"
 		return
@@ -162,8 +175,11 @@
 	shutdown.speed = 1
 	shutdown.stage = 2
 	shutdown.clicks = 185
+	msg_admin_attack("[usr.name] ([usr.ckey]) gave [C.name] ([C.ckey]) the shutdown disease - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[C.x];Y=[C.y];Z=[C.z]'>JMP</a>")
+	usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Gave [C.name] ([C.ckey]) the shutdown disease</font>")
+	C.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been given the shutdown disease by [usr.name] ([usr.ckey])</font>")
 	infect_virus2(C,shutdown,0)
-	M.current.remove_vampire_blood(100)
+	M.current.remove_vampire_blood(200)
 	M.current.verbs -= /client/vampire/proc/vampire_disease
 	spawn(1800) M.current.verbs += /client/vampire/proc/vampire_disease
 
@@ -177,15 +193,17 @@
 		M.current.visible_message("\red <b>[M.current]'s eyes emit a blinding flash!")
 		//M.vampire.bloodusable -= 10
 		M.current.verbs -= /client/vampire/proc/vampire_glare
-		spawn(450)
+		spawn(800)
 			M.current.verbs += /client/vampire/proc/vampire_glare
 		if(istype(M.current:glasses, /obj/item/clothing/glasses/sunglasses/blindfold))
 			M.current << "<span class='warning'>You're blindfolded!</span>"
 			return
 		for(var/mob/living/carbon/C in view(1))
-			if(!C.vampire_affected(M)) continue
+			if(!C.vampire_affected(M))
+				if(!C.isipc())
+					continue
 			if(!M.current.vampire_can_reach(C, 1)) continue
-			C.Stun(8)
+//			C.Stun(8)
 			C.Weaken(8)
 			C.stuttering = 20
 			C << "\red You are blinded by [M.current]'s glare"
@@ -207,28 +225,30 @@
 */
 /client/vampire/proc/vampire_screech()
 	set category = "Abilities"
-	set name = "Chiroptean Screech (30)"
-	set desc = "An extremely loud shriek that stuns nearby humans in a four-tile radius." //and breaks windows as well ||Or would if duck knew how to code. end orig text.
+	set name = "Chiropteran  Screech (90)"
+	set desc = "An extremely loud shriek that stuns nearby humans in a four-tile radius, as well as shattering the windows."
 	var/datum/mind/M = usr.mind
 	if(!M) return
-	if(M.current.vampire_power(30, 0))
+	if(M.current.vampire_power(90, 0))
 		M.current.visible_message("\red [M.current.name] lets out an ear piercing shriek!", "\red You let out a loud shriek.", "\red You hear a loud painful shriek!")
 		for(var/mob/living/carbon/C in hearers(4, M.current))
 			if(C == M.current) continue
 			if(ishuman(C) && (C:l_ear || C:r_ear) && istype((C:l_ear || C:r_ear), /obj/item/clothing/ears/earmuffs)) continue
-			if(!C.vampire_affected(M)) continue
+			if(!C.vampire_affected(M))
+				if(!C.isipc())
+					continue
 			C << "<span class='warning'><font size='3'><b>You hear a ear piercing shriek and your senses dull!</font></b></span>"
-			C.Weaken(8)
+			C.Weaken(5)
 			C.ear_deaf = 20
 			C.stuttering = 20
-			C.Stun(8)
+			C.Stun(5)
 //			C.Jitter(150)
-		for(var/obj/structure/window/W in view(4))
+		for(var/obj/structure/window/W in view(7))
 			W.destroy()
 		playsound(M.current.loc, 'sound/effects/creepyshriek.ogg', 100, 1)
-		M.current.remove_vampire_blood(30)
+		M.current.remove_vampire_blood(90)
 		M.current.verbs -= /client/vampire/proc/vampire_screech
-		spawn(1800) M.current.verbs += /client/vampire/proc/vampire_screech
+		spawn(3600) M.current.verbs += /client/vampire/proc/vampire_screech
 
 /client/vampire/proc/vampire_enthrall()
 	set category = "Abilities"
@@ -238,6 +258,12 @@
 	if(!M) return
 	var/mob/living/carbon/C = M.current.vampire_active(150, 0, 1)
 	if(!C) return
+	if(C==usr)
+		M.current << "\red You can't do that to yourself"
+		return
+	if(C.isipc())
+		M.current << "\red You can only enthrall humans"
+		return
 	M.current.visible_message("\red [M.current.name] bites [C.name]'s neck!", "\red You bite [C.name]'s neck and begin the flow of power.")
 	C << "<span class='warning'>You feel the tendrils of evil invade your mind.</span>"
 	if(!ishuman(C))
@@ -245,16 +271,15 @@
 		return
 
 	if(do_mob(M.current, C, 50))
-		if(M.current.can_enthrall(C) && M.current.vampire_power(150, 0)) // recheck
-			M.current.handle_enthrall(C)
-			M.current.remove_vampire_blood(150)
-			M.current.verbs -= /client/vampire/proc/vampire_enthrall
-			spawn(1800) M.current.verbs += /client/vampire/proc/vampire_enthrall
+		if(M.current.can_enthrall(C)) // recheck
+			if(M.current.vampire_power(150, 0))
+				M.current.handle_enthrall(C)
+				M.current.remove_vampire_blood(150)
+				M.current.verbs -= /client/vampire/proc/vampire_enthrall
+				spawn(1800) M.current.verbs += /client/vampire/proc/vampire_enthrall
 		else
 			M.current << "\red You or your target either moved or you dont have enough usable blood."
 			return
-
-
 
 /client/vampire/proc/vampire_cloak()
 	set category = "Abilities"
@@ -305,6 +330,7 @@
 		return 0
 	if(!C.vampire_affected(mind))
 		C.visible_message("\red [C] seems to resist the takeover!", "\blue Your faith of [ticker.Bible_deity_name] has kept your mind clear of all evil")
+		return 0
 	if(!ishuman(C))
 		src << "\red You can only enthrall humans!"
 		return 0
@@ -312,6 +338,7 @@
 
 /mob/proc/handle_enthrall(mob/living/carbon/human/H as mob)
 	if(!istype(H))
+		msg_scopes("handle_enthrall fucked up with no H < [src]")
 		src << "<b>\red SOMETHING WENT WRONG, YELL AT POMF OR NEXIS</b>"
 		return 0
 	var/ref = "\ref[src.mind]"
@@ -319,6 +346,7 @@
 		ticker.mode.thralls[ref] = list(H.mind)
 	else
 		ticker.mode.thralls[ref] += H.mind
+	msg_scopes("[H.name] Changed in handle_enthrall") //purely here to see live changes incase of unexpected things
 	ticker.mode.enthralled.Add(H.mind)
 	ticker.mode.enthralled[H.mind] = src.mind
 	H.mind.special_role = "VampThrall"
@@ -326,7 +354,7 @@
 	src << "\red You have successfully Enthralled [H.name]. <i>If they refuse to do as you say just adminhelp.</i>"
 	ticker.mode.update_vampire_icons_added(H.mind)
 	ticker.mode.update_vampire_icons_added(src.mind)
-	log_admin("[ckey(src.key)] has mind-slaved [ckey(H.key)].")
+	msg_admin_attack("[name]([ckey]) has mind-slaved [H.name]([H.ckey]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[H.x];Y=[H.y];Z=[H.z]'>JMP</a>.")
 
 /client/vampire/proc/vampire_bats()
 	set category = "Abilities"
@@ -351,7 +379,7 @@
 				new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
 		else // we had no good locations so make two on top of us
 			new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
-//			new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
+			new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
 		M.current.remove_vampire_blood(60)
 		M.current.verbs -= /client/vampire/proc/vampire_bats
 		spawn(1200) M.current.verbs += /client/vampire/proc/vampire_bats
@@ -378,7 +406,9 @@
 			animation.icon_state = "liquify"
 			animation.layer = 5
 			animation.master = holder
-			//M.current.ExtinguishMob()
+			M.current.ExtinguishMob()
+			M.current.weakened = 0
+			M.current.stunned = 0
 			if(M.current.buckled)
 				M.current.buckled.unbuckle()
 			flick("liquify",animation)
@@ -453,7 +483,7 @@
 
 			if(!picked || !isturf(picked))
 				return
-			//M.current.ExtinguishMob()
+			M.current.ExtinguishMob()
 			if(M.current.buckled)
 				M.current.buckled.unbuckle()
 			var/atom/movable/overlay/animation = new /atom/movable/overlay( get_turf(usr) )

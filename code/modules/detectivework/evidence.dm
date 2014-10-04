@@ -96,6 +96,7 @@
 	icon = 'icons/obj/card.dmi'
 	icon_state = "fingerprint0"
 	var/amount = 10.0
+	var/complete_prints = list()
 	item_state = "paper"
 	throwforce = 1
 	w_class = 1.0

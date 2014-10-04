@@ -70,6 +70,10 @@
 //		src.sd_SetLuminosity(0)
 
 /obj/machinery/sparker/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/device/signaltool))
+		var/obj/item/device/signaltool/ST = W
+		id = ST.change_ID(id)
+		return
 	if(istype(W, /obj/item/device/detective_scanner))
 		return
 	if (istype(W, /obj/item/weapon/screwdriver))

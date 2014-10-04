@@ -45,6 +45,12 @@
 
 	return
 
+/obj/machinery/particle_accelerator/control_box/Del()
+	if(active)
+		toggle_power()
+		process()
+	..()
+
 /obj/machinery/particle_accelerator/control_box/update_icon()
 	if(active)
 		icon_state = "[reference]p1"
@@ -81,9 +87,9 @@
 	if(href_list["togglep"])
 		src.toggle_power()
 		investigate_log("turned [active?"<font color='red'>ON</font>":"<font color='green'>OFF</font>"] by [usr.key]","singulo")
-		if (active)
-			message_admins("PA Control Computer turned ON by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
-			log_game("PA Control Computer turned ON by [usr.ckey]([usr]) in ([x],[y],[z])")
+		message_admins("PA Control Computer turned [active?"<font color='red'>ON</font>":"<font color='green'>OFF</font>"] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
+		message_mods("PA Control Computer turned [active?"<font color='red'>ON</font>":"<font color='green'>OFF</font>"] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)")
+		log_game("PA Control Computer turned [active?"<font color='red'>ON</font>":"<font color='green'>OFF</font>"] by [usr.ckey]([usr]) in ([x],[y],[z])")
 	else if(href_list["scan"])
 		src.part_scan()
 	else if(href_list["strengthup"])
@@ -92,6 +98,7 @@
 			strength = 2
 		else
 			message_admins("PA Control Computer increased to [strength] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
+			message_mods("PA Control Computer increased to [strength] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)")
 			log_game("PA Control Computer increased to [strength] by [usr.ckey]([usr]) in ([x],[y],[z])")
 			investigate_log("increased to <font color='red'>[strength]</font> by [usr.key]","singulo")
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
@@ -103,6 +110,9 @@
 		if(strength < 0)
 			strength = 0
 		else
+			message_admins("PA Control Computer decreased to [strength] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
+			message_mods("PA Control Computer decreased to [strength] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)")
+			log_game("PA Control Computer decreased to [strength] by [usr.ckey]([usr]) in ([x],[y],[z])")
 			investigate_log("decreased to <font color='green'>[strength]</font> by [usr.key]","singulo")
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
 			part.strength = strength
@@ -181,6 +191,7 @@
 		if(PA.connect_master(src))
 			if(PA.report_ready(src))
 				src.connected_parts.Add(PA)
+				PA.master = src
 				return 1
 	return 0
 
@@ -214,7 +225,7 @@
 	dat += "Particle Accelerator Control Panel<BR>"
 	dat += "<A href='?src=\ref[src];close=1'>Close</A><BR><BR>"
 	dat += "Status:<BR>"
-	if(!assembled)
+	if(!assembled || connected_parts.len < 6)
 		dat += "Unable to detect all parts!<BR>"
 		dat += "<A href='?src=\ref[src];scan=1'>Run Scan</A><BR><BR>"
 	else

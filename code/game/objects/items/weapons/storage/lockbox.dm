@@ -86,3 +86,18 @@
 	New()
 		..()
 		new /obj/item/weapon/grenade/flashbang/clusterbang(src)
+
+/obj/item/weapon/storage/lockbox/dutyofficer
+	name = "silver lockbox"
+	desc = "A silver lockbox with a NanoTrasen symbol etched onto it."
+	req_access = list(access_cent_general)
+	storage_slots = 6
+
+	New()
+		..()
+		new /obj/item/weapon/implantcase/loyalty(src)
+		new /obj/item/weapon/implantcase/loyalty(src)
+		new /obj/item/weapon/implantcase/loyalty(src)
+		new /obj/item/weapon/implanter/loyalty(src)
+		new /obj/item/clothing/tie/holster/waist(src)
+		new /obj/item/weapon/gun/energy/gun/pistol(src)

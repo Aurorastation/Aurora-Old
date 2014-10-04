@@ -262,6 +262,15 @@ datum
 					if(!cube.wrapped)
 						cube.Expand()
 				return
+			reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)//Splashing people with water can help put them out!
+				if(!istype(M, /mob/living))
+					return
+				if(method == TOUCH)
+					M.adjust_fire_stacks(-(volume / 10))
+				if(M.fire_stacks <= 0)
+					M.ExtinguishMob()
+				return
+
 
 		water/holywater
 			name = "Holy Water"
@@ -269,7 +278,7 @@ datum
 			description = "An ashen-obsidian-water mix, this solution will alter certain sections of the brain's rationality."
 			color = "#E0E8EF" // rgb: 224, 232, 239
 
-			on_mob_life(var/mob/living/M as mob)
+			on_mob_life(var/mob/living/carbon/human/M as mob)
 				if(ishuman(M))
 					if((M.mind in ticker.mode.cult) && prob(10))
 						M << "\blue A cooling sensation from inside you brings you an untold calmness."
@@ -279,8 +288,10 @@ datum
 					if((M.mind in ticker.mode.vampires) && (M.mind.vampire) && (!(VAMP_FULL in M.mind.vampire.powers)))
 						if(!M) M = holder.my_atom
 						M.adjustFireLoss(6)
+						M.adjust_fire_stacks(1)
+						M.IgniteMob()
 						//M.take_organ_damage(0, 1*REM)
-						if(prob(50))
+						if(prob(20))
 							for(var/mob/O in viewers(M, null))
 								O.show_message(text("\red []'s skin sizzles and burns.", M), 1)
 				holder.remove_reagent(src.id, 10 * REAGENTS_METABOLISM) //high metabolism to prevent extended uncult rolls.
@@ -768,6 +779,13 @@ datum
 			reagent_state = SOLID
 			color = "#673910" // rgb: 103, 57, 16
 
+			reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)//Splashing people with welding fuel to make them easy to ignite!
+				if(!istype(M, /mob/living))
+					return
+				if(method == TOUCH)
+					M.adjust_fire_stacks(volume / 10)
+				return
+
 			reaction_turf(var/turf/T, var/volume)
 				src = null
 				if(volume >= 5)
@@ -929,7 +947,12 @@ datum
 			color = "#660000" // rgb: 102, 0, 0
 			overdose = REAGENTS_OVERDOSE
 
-
+			reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)//Splashing people with welding fuel to make them easy to ignite!
+				if(!istype(M, /mob/living))
+					return
+				if(method == TOUCH)
+					M.adjust_fire_stacks(volume / 10)
+				return
 			reaction_obj(var/obj/O, var/volume)
 				var/turf/the_turf = get_turf(O)
 				if(!the_turf)
@@ -944,6 +967,62 @@ datum
 				..()
 				return
 
+
+
+		luminol
+			name = "Luminol"
+			id = "luminol"
+			description = "A compound that interacts with blood on the molecular level."
+			reagent_state = LIQUID
+			color = "#F2F3F4"
+			overdose = REAGENTS_OVERDOSE
+
+			reaction_obj(var/obj/O, var/volume)
+				if(istype(O,/obj/effect/decal/cleanable/blood))
+					var/obj/effect/decal/cleanable/blood/W
+					W.invisibility = 1
+					W.color = "#007fff"
+					W.basecolor = "#007fff"
+				else if (istype(O, /obj/item/))
+					var/obj/item/I = O
+					I.reveal_blood()
+					return
+				else
+					return
+
+			reaction_turf(var/turf/T, var/volume)
+				if(volume >= 1)
+					if(istype(T, /turf/simulated))
+						var/turf/simulated/S = T
+						S.dirt = 0
+					T.clean_blood()
+					for(var/obj/effect/decal/cleanable/blood/C in T.contents)
+						C.invisibility = 1
+						C.basecolor = "#007fff"
+						C.color = "#007fff"
+						if(istype(C, /obj/effect/decal/cleanable/blood/tracks/footprints))
+							var/obj/effect/decal/cleanable/blood/tracks/footprints/D = C
+							for(var/datum/fluidtrack/E in D.stack)
+								E.basecolor = "#007fff"
+								D.update_icon()
+					return
+
+			reaction_mob(var/mob/living/carbon/human/H, var/method=TOUCH, var/volume)
+				if(H.head)
+					if(H.head.reveal_blood())
+						H.update_inv_head(0)
+				if(H.wear_suit)
+					if(H.wear_suit.reveal_blood())
+						H.update_inv_wear_suit(0)
+				else if(H.w_uniform)
+					if(H.w_uniform.reveal_blood())
+						H.update_inv_w_uniform(0)
+				if(H.shoes)
+					if(H.shoes.reveal_blood())
+						H.update_inv_shoes(0)
+				else
+					return
+
 		space_cleaner
 			name = "Space cleaner"
 			id = "cleaner"
@@ -953,11 +1032,14 @@ datum
 			overdose = REAGENTS_OVERDOSE
 
 			reaction_obj(var/obj/O, var/volume)
-				if(istype(O,/obj/effect/decal/cleanable))
+				if(istype(O,/obj/effect/decal/cleanable/blood))
+					O.invisibility = INVISIBILITY_MAXIMUM
+					return
+				else if(istype(O,/obj/effect/decal/cleanable/))
 					del(O)
 				else
-					if(O)
-						O.clean_blood()
+					O.clean_blood()
+					return
 
 			reaction_turf(var/turf/T, var/volume)
 				if(volume >= 1)
@@ -966,8 +1048,13 @@ datum
 						S.dirt = 0
 					T.clean_blood()
 					for(var/obj/effect/decal/cleanable/C in T.contents)
-						src.reaction_obj(C, volume)
-						del(C)
+						if(istype (C,/obj/effect/decal/cleanable/blood))
+							src.reaction_obj(C, volume)
+							C.invisibility = INVISIBILITY_MAXIMUM
+							return
+						else
+							src.reaction_obj(C, volume)
+							del(C)
 
 					for(var/mob/living/carbon/slime/M in T)
 						M.adjustToxLoss(rand(5,10))
@@ -1447,8 +1534,10 @@ datum
 					if((M.mind in ticker.mode.vampires) && (M.mind.vampire) && (!(VAMP_FULL in M.mind.vampire.powers)))
 						if(!M) M = holder.my_atom
 						M.adjustFireLoss(6)
+						M.adjust_fire_stacks(1)
+						M.IgniteMob()
 						//M.take_organ_damage(0, 1*REM)
-						if(prob(50))
+						if(prob(20))
 							for(var/mob/O in viewers(M, null))
 								O.show_message(text("\red []'s skin sizzles and burns.", M), 1)
 				holder.remove_reagent(src.id, 10 * REAGENTS_METABOLISM) //high metabolism to prevent extended uncult rolls.
@@ -1598,8 +1687,11 @@ datum
 			color = "#E71B00" // rgb: 231, 27, 0
 			toxpwr = 3
 
-			on_mob_life(var/mob/living/M as mob)
+			on_mob_life(var/mob/living/M as mob, var/alien)
 				if(!M) M = holder.my_atom
+				if(alien && alien == IS_VOX)
+					custom_metabolism = 10 //Inhaling O2 constantly puts plasma into voxblood which poisons them to hell. +Metab so one huff isn't death.
+					toxpwr = 12 //This is a hacky way of doing it.  They take 6 points of toxloss every four ticks (Breath tick).  Still less than now.
 				if(holder.has_reagent("inaprovaline"))
 					holder.remove_reagent("inaprovaline", 2*REM)
 				..()
@@ -1624,6 +1716,12 @@ datum
 				fuel.moles = volume
 				napalm.trace_gases += fuel
 				T.assume_air(napalm)
+				return
+			reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)//Splashing people with plasma is stronger than fuel!
+				if(!istype(M, /mob/living))
+					return
+				if(method == TOUCH)
+					M.adjust_fire_stacks(volume / 5)
 				return
 
 		toxin/lexorin
@@ -2038,6 +2136,77 @@ datum
 			color = "#8E18A9" // rgb: 142, 24, 169
 			toxpwr = 2
 			meltprob = 30
+
+		toxin/philodexphid
+			name = "Philodexphid"
+			id = "philodex"
+			description = "Aggressively destroys the central nervous system."
+			reagent_state = LIQUID
+			color = "#000067"
+			overdose = REAGENTS_OVERDOSE
+
+			on_mob_life(var/mob/living/M as mob)
+				if(!M) M = holder.my_atom
+				if(!data) data = 1
+				switch(data)
+					if(1 to 5)
+						if(prob(50))
+							M << "\red Your muscles are aching."
+						if(prob(5))
+							M.visible_message("\blue [M]'s muscles lock up violently and they crumple to the floor!", "\red Your muscles lock up with great pain! You fall to the ground!")
+							M.weakened = max(M.weakened, 3)
+						if(prob(2))
+							if (!M.stuttering) M.stuttering = 1
+							M.stuttering += 3
+//						M << "DEBUG: YOU HAVE 1 to 5 UNITS IN YOU!"
+					if(5 to 10)
+						if(prob(15))
+							M.confused = max(M.confused+3,0)
+						if(prob(30))
+							if (!M.stuttering) M.stuttering = 1
+							M.stuttering += 3
+						if(prob(5))
+							M.visible_message("\blue [M]'s muscles lock up violently and they crumple to the floor!", "\red Your muscles lock up with great pain! You fall to the ground!")
+							M.weakened = max(M.weakened, 3)
+//						M << "DEBUG: YOU HAVE 5 to 10 UNITS IN YOU!"
+					if(10 to 15)
+						if(prob(5))
+							M.Paralyse(10)
+					if(15 to INFINITY)
+						var/mob/living/carbon/human/H = M
+						var/datum/organ/internal/eyes/E = H.internal_organs["eyes"]
+						if(istype(E))
+							if(E.damage < 100)
+								E.damage += 1
+				data++
+				..()
+				return
+
+		toxin/ecyeipate
+			name = "Ecyeipate"
+			id = "ecye"
+			description = "Causes aggressive convulsions of large muscle groups."
+			reagent_state = LIQUID
+			color = "#000067"
+			overdose = REAGENTS_OVERDOSE
+
+			on_mob_life(var/mob/living/M as mob)
+				if(!M) M = holder.my_atom
+				if(!data) data = 1
+				switch(data)
+					if(1 to 10)
+						if(prob(10))
+							M.visible_message("\blue [M]'s muscles lock up violently and they crumple to the floor!", "\red Your muscles lock up with great pain! You fall to the ground!")
+							M.weakened = max(M.weakened, 3)
+							if(prob(25))
+								M.emote("scream")
+//						M << "DEBUG: YOU HAVE 1 to 10 UNITS IN YOU!"
+					if(10 to INFINITY)
+						M.AdjustParalysis(-1)
+						M.AdjustStunned(-1)
+						M.AdjustWeakened(-1)
+//						M << "DEBUG: YOU HAVE 10 to 25 UNITS IN YOU!"
+
 
 /////////////////////////Food Reagents////////////////////////////
 // Part of the food code. Nutriment is used instead of the old "heal_amt" code. Also is where all the food
@@ -3045,6 +3214,13 @@ datum
 			var/blur_start = 300	//amount absorbed after which mob starts getting blurred vision
 			var/pass_out = 400	//amount absorbed after which mob starts passing out
 
+			reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)//Splashing people with welding fuel to make them easy to ignite!
+				if(!istype(M, /mob/living))
+					return
+				if(method == TOUCH)
+					M.adjust_fire_stacks(volume / 10)
+				return
+
 			on_mob_life(var/mob/living/M as mob)
 				M:nutrition += nutriment_factor
 				holder.remove_reagent(src.id, FOOD_METABOLISM)
@@ -3940,7 +4116,7 @@ datum
 			name = "Guinness"
 			id = "guinnes"
 			description = "Special Guinnes drink"
-			color = ""  // dunno
+			color = "#2E6671"  // dunno -- god dammit -_-
 			boozepwr = 3
 
 		ethanol/drambuie
@@ -3977,7 +4153,6 @@ datum
 			description = "Just like black russian but taller"
 			color = "#2E6671"
 			boozepwr = 5
-
 
 // Undefine the alias for REAGENTS_EFFECT_MULTIPLER
 #undef REM

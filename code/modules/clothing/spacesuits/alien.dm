@@ -282,3 +282,210 @@
 	item_state = "syndie_hardsuit"
 	icon_state = "rig-syndie-human"
 	species_restricted = list("Human")
+
+//BEGIN NEW ALIEN HARDSUIT ATTEMPT.
+
+
+/obj/item/clothing/suit/space/rig/security/tajara
+	icon_state = "rig-sec" //change this when you can stop being dumb
+	desc = "A special suit that protects against hazardous, low pressure environments. Has an additional layer of armor."
+	item_state = "sec_hardsuit"
+	species_restricted = list("Tajaran")
+
+/obj/item/clothing/suit/space/rig/security/skrell
+	icon_state = "rig-sec"
+	desc = "A special suit that protects against hazardous, low pressure environments. Has an additional layer of armor."
+	item_state = "sec_hardsuit"
+	species_restricted = list("Skrell")
+
+/obj/item/clothing/suit/space/rig/security/unathi
+	icon_state = "rig-sec"
+	desc = "A special suit that protects against hazardous, low pressure environments. Has an additional layer of armor."
+	item_state = "sec_hardsuit"
+	species_restricted = list("Unathi")
+
+/obj/item/clothing/head/helmet/space/rig/security/tajara
+	name = "security hardsuit helmet"
+	desc = "A special helmet designed for work in a hazardous, low pressure environment. Has an additional layer of armor."
+	icon_state = "rig0-sec"
+	item_state = "sec_helm"
+	species_restricted = list("Tajaran")
+
+/obj/item/clothing/head/helmet/space/rig/security/unathi
+	name = "security hardsuit helmet"
+	desc = "A special helmet designed for work in a hazardous, low pressure environment. Has an additional layer of armor."
+	icon_state = "rig0-sec"
+	item_state = "sec_helm"
+	species_restricted = list("Unathi")
+
+/obj/item/clothing/head/helmet/space/rig/security/skrell
+	name = "security hardsuit helmet"
+	desc = "A special helmet designed for work in a hazardous, low pressure environment. Has an additional layer of armor."
+	icon_state = "rig0-sec"
+	item_state = "sec_helm"
+	species_restricted = list("Skrell")
+
+/obj/item/clothing/suit/space/rig/atmos/tajara
+	icon_state = "rig-atmos" //change this when you can stop being dumb
+	desc = "A special suit that protects against hazardous, low pressure environments. Has improved thermal protection and minor radiation shielding."
+	item_state = "atmos_hardsuit"
+	species_restricted = list("Tajaran")
+
+/obj/item/clothing/suit/space/rig/atmos/skrell
+	icon_state = "rig-atmos"
+	desc = "A special suit that protects against hazardous, low pressure environments. Has improved thermal protection and minor radiation shielding."
+	item_state = "atmos_hardsuit"
+	species_restricted = list("Skrell")
+
+/obj/item/clothing/suit/space/rig/atmos/unathi
+	icon_state = "rig-atmos"
+	desc = "A special suit that protects against hazardous, low pressure environments. Has improved thermal protection and minor radiation shielding."
+	item_state = "atmos_hardsuit"
+	species_restricted = list("Unathi")
+
+/obj/item/clothing/head/helmet/space/rig/atmos/tajara
+	desc = "A special helmet designed for work in a hazardous, low pressure environments. Has improved thermal protection and minor radiation shielding."
+	name = "atmospherics hardsuit helmet"
+	icon_state = "rig0-atmos"
+	item_state = "atmos_helm"
+	species_restricted = list("Tajaran")
+
+/obj/item/clothing/head/helmet/space/rig/atmos/unathi
+	desc = "A special helmet designed for work in a hazardous, low pressure environments. Has improved thermal protection and minor radiation shielding."
+	name = "atmospherics hardsuit helmet"
+	icon_state = "rig0-atmos"
+	item_state = "atmos_helm"
+	species_restricted = list("Unathi")
+
+/obj/item/clothing/head/helmet/space/rig/atmos/skrell
+	desc = "A special helmet designed for work in a hazardous, low pressure environments. Has improved thermal protection and minor radiation shielding."
+	name = "atmospherics hardsuit helmet"
+	icon_state = "rig0-atmos"
+	item_state = "atmos_helm"
+	species_restricted = list("Skrell")
+
+/obj/item/clothing/suit/space/rig/medical/tajara
+	icon_state = "rig-medical"
+	name = "medical hardsuit"
+	desc = "A special suit that protects against hazardous, low pressure environments. Has minor radiation shielding."
+	item_state = "medical_hardsuit"
+	species_restricted = list("Tajaran")
+
+/obj/item/clothing/suit/space/rig/medical/unathi
+	icon_state = "rig-medical"
+	name = "medical hardsuit"
+	desc = "A special suit that protects against hazardous, low pressure environments. Has minor radiation shielding."
+	item_state = "medical_hardsuit"
+	species_restricted = list("Unathi")
+
+/obj/item/clothing/suit/space/rig/medical/skrell
+	icon_state = "rig-medical"
+	name = "medical hardsuit"
+	desc = "A special suit that protects against hazardous, low pressure environments. Has minor radiation shielding."
+	item_state = "medical_hardsuit"
+	species_restricted = list("Skrell")
+
+/obj/item/clothing/head/helmet/space/rig/medical/tajara
+	name = "medical hardsuit helmet"
+	desc = "A special helmet designed for work in a hazardous, low pressure environment. Has minor radiation shielding."
+	icon_state = "rig0-medical"
+	item_state = "medical_helm"
+	species_restricted = list("Tajaran")
+
+/obj/item/clothing/head/helmet/space/rig/medical/unathi
+	name = "medical hardsuit helmet"
+	desc = "A special helmet designed for work in a hazardous, low pressure environment. Has minor radiation shielding."
+	icon_state = "rig0-medical"
+	item_state = "medical_helm"
+	species_restricted = list("Unathi")
+
+/obj/item/clothing/head/helmet/space/rig/medical/skrell
+	name = "medical hardsuit helmet"
+	desc = "A special helmet designed for work in a hazardous, low pressure environment. Has minor radiation shielding."
+	icon_state = "rig0-medical"
+	item_state = "medical_helm"
+	species_restricted = list("Skrell")
+
+/obj/item/clothing/suit/space/rig/mining/tajara
+	icon_state = "rig-mining"
+	name = "mining hardsuit"
+	desc = "A special suit that protects against hazardous, low pressure environments. Has reinforced plating."
+	item_state = "mining_hardsuit"
+	species_restricted = list("Tajaran")
+
+/obj/item/clothing/suit/space/rig/mining/unathi
+	icon_state = "rig-mining"
+	name = "mining hardsuit"
+	desc = "A special suit that protects against hazardous, low pressure environments. Has reinforced plating."
+	item_state = "mining_hardsuit"
+	species_restricted = list("Unathi")
+
+/obj/item/clothing/suit/space/rig/mining/skrell
+	icon_state = "rig-mining"
+	name = "mining hardsuit"
+	desc = "A special suit that protects against hazardous, low pressure environments. Has reinforced plating."
+	item_state = "mining_hardsuit"
+	species_restricted = list("Skrell")
+
+/obj/item/clothing/head/helmet/space/rig/mining/tajara
+	name = "mining hardsuit helmet"
+	desc = "A special helmet designed for work in a hazardous, low pressure environment. Has reinforced plating."
+	icon_state = "rig0-mining"
+	item_state = "mining_helm"
+	species_restricted = list("Tajaran")
+
+/obj/item/clothing/head/helmet/space/rig/mining/unathi
+	name = "mining hardsuit helmet"
+	desc = "A special helmet designed for work in a hazardous, low pressure environment. Has reinforced plating."
+	icon_state = "rig0-mining"
+	item_state = "mining_helm"
+	species_restricted = list("Unathi")
+
+/obj/item/clothing/head/helmet/space/rig/mining/skrell
+	name = "mining hardsuit helmet"
+	desc = "A special helmet designed for work in a hazardous, low pressure environment. Has reinforced plating."
+	icon_state = "rig0-mining"
+	item_state = "mining_helm"
+	species_restricted = list("Skrell")
+/*
+/obj/item/clothing/suit/space/rig/tajara
+	name = "engineering hardsuit"
+	desc = "A special suit that protects against hazardous, low pressure environments. Has radiation shielding."
+	icon_state = "rig-engineering"
+	item_state = "eng_hardsuit"
+	species_restricted = list("Tajaran")
+*/
+/obj/item/clothing/suit/space/rig/unathi
+	name = "engineering hardsuit"
+	desc = "A special suit that protects against hazardous, low pressure environments. Has radiation shielding."
+	icon_state = "rig-engineering"
+	item_state = "eng_hardsuit"
+	species_restricted = list("Unathi")
+
+/obj/item/clothing/suit/space/rig/skrell
+	name = "engineering hardsuit"
+	desc = "A special suit that protects against hazardous, low pressure environments. Has radiation shielding."
+	icon_state = "rig-engineering"
+	item_state = "eng_hardsuit"
+	species_restricted = list("Skrell")
+/*
+/obj/item/clothing/head/helmet/space/rig/tajara
+	name = "engineering hardsuit helmet"
+	desc = "A special helmet designed for work in a hazardous, low-pressure environment. Has radiation shielding."
+	icon_state = "rig0-engineering"
+	item_state = "eng_helm"
+	species_restricted = list("Tajaran")
+*/
+/obj/item/clothing/head/helmet/space/rig/unathi
+	name = "engineering hardsuit helmet"
+	desc = "A special helmet designed for work in a hazardous, low-pressure environment. Has radiation shielding."
+	icon_state = "rig0-engineering"
+	item_state = "eng_helm"
+	species_restricted = list("Unathi")
+
+/obj/item/clothing/head/helmet/space/rig/skrell
+	name = "engineering hardsuit helmet"
+	desc = "A special helmet designed for work in a hazardous, low-pressure environment. Has radiation shielding."
+	icon_state = "rig0-engineering"
+	item_state = "eng_helm"
+	species_restricted = list("Skrell")

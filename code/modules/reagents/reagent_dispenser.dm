@@ -122,6 +122,7 @@
 		modded = modded ? 0 : 1
 		if (modded)
 			message_admins("[key_name_admin(user)] opened fueltank at ([loc.x],[loc.y],[loc.z]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>.")
+			message_mods("[key_name_admin(user)] opened fueltank at ([loc.x],[loc.y],[loc.z]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>.")
 			leak_fuel(amount_per_transfer_from_this)
 	if (istype(W,/obj/item/device/assembly_holder))
 		if (rig)
@@ -134,6 +135,7 @@
 			var/obj/item/device/assembly_holder/H = W
 			if (istype(H.a_left,/obj/item/device/assembly/igniter) || istype(H.a_right,/obj/item/device/assembly/igniter))
 				message_admins("[key_name_admin(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>.")
+				message_mods("[key_name_admin(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>.")
 				log_game("[key_name(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion.")
 
 			rig = W
@@ -153,10 +155,12 @@
 	if(!src.defuse && user.client.holder)
 		src.defuse = 1
 		message_admins("[key_name_admin(user)] defused fueltank at ([loc.x],[loc.y],[loc.z]).")
+		message_mods("[key_name_admin(user)] defused fueltank at ([loc.x],[loc.y],[loc.z]).")
 	else
 		if(!src.armed && user.client.holder)
 			src.defuse = 0
 			message_admins("[key_name_admin(user)] reset fuse on fueltank at ([loc.x],[loc.y],[loc.z]).")
+			message_mods("[key_name_admin(user)] reset fuse on fueltank at ([loc.x],[loc.y],[loc.z]).")
 
 /obj/structure/reagent_dispensers/fueltank/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet))

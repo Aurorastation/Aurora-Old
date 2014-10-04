@@ -69,6 +69,7 @@ datum/mind
 
 	proc/transfer_to(mob/living/new_character)
 		if(!istype(new_character))
+			msg_scopes("transfer_to(): Some idiot has tried to transfer_to() a non mob/living mob.")
 			world.log << "## DEBUG: transfer_to(): Some idiot has tried to transfer_to() a non mob/living mob. Please inform Carn"
 		if(current)					//remove ourself from our old body's mind variable
 			if(changeling)
@@ -780,6 +781,7 @@ datum/mind
 						domutcheck(current, null)
 
 		else if (href_list["vampire"])
+			current.hud_updateflag |= (1 << SPECIALROLE_HUD)
 			switch(href_list["vampire"])
 				if("clear")
 					if(src in ticker.mode.vampires)
@@ -1227,6 +1229,18 @@ datum/mind
 		var/fail = 0
 	//	fail |= !ticker.mode.equip_traitor(current, 1)
 		fail |= !ticker.mode.equip_revolutionary(current)
+
+//Look here again to make sure it works right -- SoundScopes
+	proc/make_Vampire()
+		if(!(src in ticker.mode.vampires))
+			ticker.mode.vampires += src
+			ticker.mode.grant_vampire_powers(current)
+			special_role = "Vampire"
+			current << "<B><font color='red'>Your powers are awoken. Your lust for blood grows... You are a Vampire!</font></B>"
+			log_admin("[key_name_admin(usr)] has vampired [current].")
+			if (!config.objectives_disabled)
+				ticker.mode.forge_vampire_objectives(src)
+			ticker.mode.greet_vampire(src)
 
 
 	// check whether this mind's mob has been brigged for the given duration

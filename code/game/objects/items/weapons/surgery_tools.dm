@@ -850,6 +850,7 @@ LOOK FOR SURGERY.DM*/
 	force = 8.0
 	throwforce = 9.0
 	throw_speed = 3
+	m_amt = 1000
 	throw_range = 5
 	w_class = 2.0
 	attack_verb = list("attacked", "hit", "bludgeoned")

@@ -10,7 +10,7 @@
 	restricted_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Security Pod Pilot", "Nanotrasen Recruiter", "Magistrate") //Consistent screening has filtered all infiltration attempts on high value jobs
 	protected_jobs = list()
 	required_players = 1
-	required_players_secret = 15
+	required_players_secret = 10
 	required_enemies = 1
 	recommended_enemies = 4
 
@@ -52,12 +52,19 @@
 	var/list/datum/mind/possible_vampires = get_players_for_role(BE_VAMPIRE)
 
 	for(var/datum/mind/player in possible_vampires)
-		for(var/job in restricted_jobs)//Removing robots from the list
+//This could be the fuckup with game start
+		if(player.current.client.prefs.species == "Machine")
+			possible_vampires -= player
+			msg_scopes("[player.key] has an invalid mob for this role.")
+			continue
+		for(var/job in restricted_jobs)
 			if(player.assigned_role == job)
 				possible_vampires -= player
+				msg_scopes("[player.key] has an invalid job for this role.")
+				break
 
 	vampire_amount = max(1,round(num_players() / 10)) //1 + round(num_players() / 10)
-
+	msg_scopes("vampire_amount: [vampire_amount]")
 	if(possible_vampires.len>0)
 		for(var/i = 0, i < vampire_amount, i++)
 			if(!possible_vampires.len) break
@@ -67,13 +74,15 @@
 			modePlayer += vampires
 		return 1
 	else
+		msg_scopes("possible_vampires went poof")
 		return 0
 
 /datum/game_mode/vampire/post_setup()
 	for(var/datum/mind/vampire in vampires)
 		grant_vampire_powers(vampire.current)
 		vampire.special_role = "Vampire"
-		forge_vampire_objectives(vampire)
+		if(!config.objectives_disabled)
+			forge_vampire_objectives(vampire)
 		greet_vampire(vampire)
 
 	spawn (rand(waittime_l, waittime_h))
@@ -101,28 +110,29 @@
 
 			if(vampire.objectives.len)//If the traitor had no objectives, don't need to process this.
 				var/count = 1
-				for(var/datum/objective/objective in vampire.objectives)
-					if(objective.check_completion())
-						text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='green'><B>Success!</B></font>"
-						feedback_add_details("traitor_objective","[objective.type]|SUCCESS")
-					else
-						text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='red'>Fail.</font>"
-						feedback_add_details("traitor_objective","[objective.type]|FAIL")
-						traitorwin = 0
-					count++
+				if (!config.objectives_disabled)
+					for(var/datum/objective/objective in vampire.objectives)
+						if(objective.check_completion())
+							text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='green'><B>Success!</B></font>"
+							feedback_add_details("traitor_objective","[objective.type]|SUCCESS")
+						else
+							text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='red'>Fail.</font>"
+							feedback_add_details("traitor_objective","[objective.type]|FAIL")
+							traitorwin = 0
+						count++
 
 			var/special_role_text
 			if(vampire.special_role)
 				special_role_text = lowertext(vampire.special_role)
 			else
 				special_role_text = "antagonist"
-
-			if(traitorwin)
-				text += "<br><font color='green'><B>The [special_role_text] was successful!</B></font>"
-				feedback_add_details("traitor_success","SUCCESS")
-			else
-				text += "<br><font color='red'><B>The [special_role_text] has failed!</B></font>"
-				feedback_add_details("traitor_success","FAIL")
+			if (!config.objectives_disabled)
+				if(traitorwin)
+					text += "<br><font color='green'><B>The [special_role_text] was successful!</B></font>"
+					feedback_add_details("traitor_success","SUCCESS")
+				else
+					text += "<br><font color='red'><B>The [special_role_text] has failed!</B></font>"
+					feedback_add_details("traitor_success","FAIL")
 		world << text
 	return 1
 
@@ -146,6 +156,9 @@
 
 /datum/game_mode/proc/forge_vampire_objectives(var/datum/mind/vampire)
 	//Objectives are traitor objectives plus blood objectives
+
+	if (config.objectives_disabled)
+		return
 
 	var/datum/objective/blood/blood_objective = new
 	blood_objective.owner = vampire
@@ -261,9 +274,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	var/blood = 0
 	var/bloodtotal = 0 //used to see if we increased our blood total
 	var/bloodusable = 0 //used to see if we increased our blood usable
-	src.attack_log += text("\[[time_stamp()]\] <font color='red'>Bit [src.name] ([src.ckey]) in the neck and draining their blood</font>")
-	H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bit in the neck by [src.name] ([src.ckey])</font>")
-	log_attack("[src.name] ([src.ckey]) bit [H.name] ([H.ckey]) in the neck")
+
 	src.visible_message("\red <b>[src.name] bites [H.name]'s neck!<b>", "\red <b>You bite [H.name]'s neck and begin to drain their blood.", "\blue You hear a soft puncture and a wet sucking noise")
 	if(!iscarbon(src))
 		H.LAssailant = null
@@ -282,7 +293,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 			blood = min(10, H.vessel.get_reagent_amount("blood"))// if they have less than 10 blood, give them the remnant else they get 10 blood
 			src.mind.vampire.bloodtotal += blood
 			src.mind.vampire.bloodusable += blood
-			H.adjustCloneLoss(10) // beep boop 10 damage
+//			H.adjustCloneLoss(10) // beep boop 10 damage //probably not necessary actually honestly okay
 		else
 			blood = min(5, H.vessel.get_reagent_amount("blood"))// The dead only give 5 bloods
 			src.mind.vampire.bloodtotal += blood
@@ -318,8 +329,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	if(vamp.bloodtotal >= 150)
 		if(!(VAMP_CLOAK in vamp.powers))
 			vamp.powers.Add(VAMP_CLOAK)
-		if(!(VAMP_DISEASE in vamp.powers))
-			vamp.powers.Add(VAMP_DISEASE)
+
 
 	// TIER 3
 	if(vamp.bloodtotal >= 200)
@@ -327,8 +337,9 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 			vamp.powers.Add(VAMP_BATS)
 		if(!(VAMP_SCREAM in vamp.powers))
 			vamp.powers.Add(VAMP_SCREAM)
-		// Commented out until we can figured out a way to stop this from spamming.
-		//src << "\blue Your rejuvination abilities have improved and will now heal you over time when used."
+			src << "\blue Your rejuvination abilities have improved and will now heal you over time when used."
+		if(!(VAMP_DISEASE in vamp.powers))
+			vamp.powers.Add(VAMP_DISEASE)
 
 	// TIER 3.5 (/vg/)
 	if(vamp.bloodtotal >= 250)
@@ -369,7 +380,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 					src << "\blue You have gained the Summon Bats ability."
 					verbs += /client/vampire/proc/vampire_bats // work in progress
 				if(VAMP_SCREAM)
-					src << "\blue You have gained the Chriopteran Screech ability which stuns anything with ears in a large radius and shatters glass in the process."
+					src << "\blue You have gained the Chiropteran Screech ability which stuns anything with ears in a large radius and shatters glass in the process."
 					verbs += /client/vampire/proc/vampire_screech
 				if(VAMP_JAUNT)
 					src << "\blue You have gained the Mist Form ability which allows you to take on the form of mist for a short period and pass over any obstacle in your path."

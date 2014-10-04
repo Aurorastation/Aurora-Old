@@ -78,8 +78,12 @@
 
 		if(usr.buckled && isobj(usr.buckled) && !usr.buckled.anchored )
 			spawn(0)
+				var/obj/structure/stool/bed/chair/C = null
+				if(istype(usr.buckled, /obj/structure/stool/bed/chair))
+					C = usr.buckled
 				var/obj/B = usr.buckled
 				var/movementdirection = turn(direction,180)
+				if(C)	C.propelled = 1
 				B.Move(get_step(usr,movementdirection), movementdirection)
 				sleep(1)
 				B.Move(get_step(usr,movementdirection), movementdirection)
@@ -91,6 +95,7 @@
 				B.Move(get_step(usr,movementdirection), movementdirection)
 				sleep(2)
 				B.Move(get_step(usr,movementdirection), movementdirection)
+				if(C)	C.propelled = 0
 				sleep(3)
 				B.Move(get_step(usr,movementdirection), movementdirection)
 				sleep(3)
@@ -123,8 +128,9 @@
 						W.reagents.reaction(atm)
 					if(W.loc == my_target) break
 					sleep(2)
-				W.delete()
+//				spawn(20)
 
+				W.Del()
 		if((istype(usr.loc, /turf/space)) || (usr.lastarea.has_gravity == 0))
 			user.inertia_dir = get_dir(target, user)
 			step(user, user.inertia_dir)

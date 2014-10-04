@@ -126,6 +126,11 @@
 		name = "Ponytail 4"
 		icon_state = "hair_ponytail4"
 
+	ponytail5
+		name = "Ponytail 5"
+		icon_state = "hair_ponytail5"
+		gender = FEMALE
+
 	sideponytail
 		name = "Side Ponytail"
 		icon_state = "hair_stail"
@@ -334,6 +339,84 @@
 		name = "Bangs Short"
 		icon_state = "hair_hbangs_alt"
 		gender = FEMALE
+
+	familyman
+		name = "The Family Man"
+		icon_state = "hair_thefamilyman"
+		gender = MALE
+
+	mahdrills
+		name = "Drillruru"
+		icon_state = "hair_drillruru"
+		gender = FEMALE
+
+	dandypomp
+		name = "Dandy Pompadour"
+		icon_state = "hair_dandypompadour"
+		gender = MALE
+
+	poofy
+		name = "Poofy"
+		icon_state = "hair_poofy"
+		gender = FEMALE
+
+	crono
+		name = "Chrono"
+		icon_state = "hair_toriyama"
+		gender = MALE
+
+	vegeta
+		name = "Vegeta"
+		icon_state = "hair_toriyama2"
+		gender = MALE
+
+	cia
+		name = "CIA"
+		icon_state = "hair_cia"
+		gender = MALE
+
+	mulder
+		name = "Mulder"
+		icon_state = "hair_mulder"
+		gender = MALE
+
+	scully
+		name = "Scully"
+		icon_state = "hair_scully"
+		gender = FEMALE
+
+	nitori
+		name = "Nitori"
+		icon_state = "hair_nitori"
+		gender = FEMALE
+
+	joestar
+		name = "Joestar"
+		icon_state = "hair_joestar"
+		gender = MALE
+
+	dad
+		name = "Father"
+		icon_state = "hair_father"
+		gender = MALE
+
+	reversemohawk
+		name = "Reverse Mohawk"
+		icon_state = "hair_reversemohawk"
+
+	beehive2
+		name = "Beehive 2"
+		icon_state = "hair_beehive2"
+		gender = FEMALE
+
+	shortbraid
+		name = "Short Braid"
+		icon_state = "hair_shortbraid"
+		gender = FEMALE
+
+	emolong
+		name = "Long Emo"
+		icon_state = "hair_emolong"
 
 	bald
 		name = "Bald"

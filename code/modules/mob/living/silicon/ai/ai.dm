@@ -51,6 +51,8 @@ var/list/ai_list = list()
 	var/datum/trackable/track = null
 	var/last_announcement = ""
 
+	var/centcomm_message_cooldown = 0
+
 /mob/living/silicon/ai/New(loc, var/datum/ai_laws/L, var/obj/item/device/mmi/B, var/safety = 0)
 	var/list/possibleNames = ai_names
 
@@ -92,7 +94,7 @@ var/list/ai_list = list()
 		verbs.Add(/mob/living/silicon/ai/proc/ai_call_shuttle,/mob/living/silicon/ai/proc/ai_camera_track, \
 		/mob/living/silicon/ai/proc/ai_camera_list, /mob/living/silicon/ai/proc/ai_network_change, \
 		/mob/living/silicon/ai/proc/ai_statuschange, /mob/living/silicon/ai/proc/ai_hologram_change, \
-		/mob/living/silicon/ai/proc/toggle_camera_light)
+		/mob/living/silicon/ai/proc/toggle_camera_light, /mob/living/silicon/ai/proc/MessageCentcomm)
 
 
 	if(!safety)//Only used by AIize() to successfully spawn an AI.
@@ -725,7 +727,32 @@ var/list/ai_list = list()
 				user.visible_message("\blue \The [user] decides not to bolt \the [src].")
 				return
 			user.visible_message("\blue \The [user] finishes fastening down \the [src]!")
+			if(floating)
+				float(0)
 			anchored = 1
 			return
 	else
 		return ..()
+
+/mob/living/silicon/ai/float(var/on = 0)
+	if(anchored)
+		msg_scopes("AI is bolted")
+		..(0)
+	else
+		..(on)
+
+/mob/living/silicon/ai/proc/MessageCentcomm()
+	set category = "AI Commands"
+	set name = "Message Centcomm"
+	if(centcomm_message_cooldown)
+		usr << "\red Arrays recycling.  Please stand by."
+		return
+	var/input = stripped_input(usr, "Please choose a message to transmit to Centcomm via quantum entanglement.  Please be aware that this process is very expensive, and abuse will lead to... termination.  Transmission does not guarantee a response. There is a 10 minute delay before you may send another message, be clear, full and concise.", "To abort, send an empty message.", "")
+	if(!input || !(usr in view(1,src)))
+		return
+	Centcomm_announce(input, usr, 1)
+	usr << "\blue Message transmitted."
+	log_say("[key_name(usr)] has made an IA Centcomm announcement: [input]")
+	centcomm_message_cooldown = 1
+	spawn(6000)//10 minute cooldown
+		centcomm_message_cooldown = 0

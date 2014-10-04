@@ -1155,7 +1155,7 @@ datum/preferences
 							nanotrasen_relation = new_relation
 
 					if("flavor_text")
-						var/msg = input(usr,"Set the flavor text in your 'examine' verb. This can also be used for OOC notes and preferences!","Flavor Text",html_decode(flavor_text)) as message
+						var/msg = input(usr,"Set the flavor text in your 'examine' verb. This should be something that can be observed at a glance or so!","Flavor Text",html_decode(flavor_text)) as message
 
 						if(msg != null)
 							msg = copytext(msg, 1, MAX_MESSAGE_LEN)
@@ -1401,6 +1401,17 @@ datum/preferences
 
 			else continue
 
+		// Wheelchair necessary?
+		var/datum/organ/external/l_foot = character.get_organ("l_foot")
+		var/datum/organ/external/r_foot = character.get_organ("r_foot")
+		if((!l_foot || l_foot.status & ORGAN_DESTROYED) && (!r_foot || r_foot.status & ORGAN_DESTROYED))
+			var/obj/structure/stool/bed/chair/wheelchair/W = new /obj/structure/stool/bed/chair/wheelchair (character.loc)
+			character.buckled = W
+			character.update_canmove()
+			W.dir = character.dir
+			W.buckled_mob = character
+			W.add_fingerprint(character)
+
 		if(underwear > underwear_m.len || underwear < 1)
 			underwear = 0 //I'm sure this is 100% unnecessary, but I'm paranoid... sue me. //HAH NOW NO MORE MAGIC CLONING UNDIES
 		character.underwear = underwear
@@ -1416,6 +1427,7 @@ datum/preferences
 		//Debugging report to track down a bug, which randomly assigned the plural gender to people.
 		if(character.gender in list(PLURAL, NEUTER))
 			if(isliving(src)) //Ghosts get neuter by default
+				msg_scopes("[character] ([character.ckey]) has spawned with their gender as plural or neuter.")
 				message_admins("[character] ([character.ckey]) has spawned with their gender as plural or neuter. Please notify coders.")
 				character.gender = MALE
 

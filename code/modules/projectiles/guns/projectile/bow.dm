@@ -159,7 +159,7 @@
 		src.dropped()
 		return
 
-	else if (target.loc == user.loc)
+	if (target.loc == user.loc)
 		return
 
 	else if (locate (/obj/structure/table, src.loc))
@@ -197,7 +197,7 @@
 	icon_state = "crossbow"
 
 /obj/item/weapon/crossbow/dropped(mob/user)
-	if(arrow)
+	if(arrow && tension != max_tension)
 		var/obj/item/weapon/arrow/A = arrow
 		A.loc = get_turf(src)
 		A.removed(user)
@@ -210,14 +210,14 @@
 /obj/item/weapon/crossbowframe
 	name = "crossbow frame"
 	desc = "A half-finished crossbow."
-	icon_state = "crossbowframe0"
+	icon_state = "crossbow"
 	item_state = "crossbow-solid"
 
 	var/buildstate = 0
-
+/*
 /obj/item/weapon/crossbowframe/update_icon()
 	icon_state = "crossbowframe[buildstate]"
-
+*/
 /obj/item/weapon/crossbowframe/examine()
 	..()
 	switch(buildstate)
@@ -235,7 +235,7 @@
 				R.use(3)
 				user << "\blue You assemble a backbone of rods around the wooden stock."
 				buildstate++
-				update_icon()
+//				update_icon()
 			else
 				user << "\blue You need at least three rods to complete this task."
 			return
@@ -247,7 +247,7 @@
 				playsound(src.loc, 'sound/items/Welder2.ogg', 100, 1)
 				user << "\blue You weld the rods into place."
 			buildstate++
-			update_icon()
+//			update_icon()
 		return
 	else if(istype(W,/obj/item/weapon/cable_coil))
 		var/obj/item/weapon/cable_coil/C = W
@@ -256,7 +256,7 @@
 				C.use(5)
 				user << "\blue You wire a crude cell mount into the top of the crossbow."
 				buildstate++
-				update_icon()
+//				update_icon()
 			else
 				user << "\blue You need at least five segments of cable coil to complete this task."
 			return
@@ -265,7 +265,7 @@
 				C.use(5)
 				user << "\blue You string a steel cable across the crossbow's lath."
 				buildstate++
-				update_icon()
+//				update_icon()
 			else
 				user << "\blue You need at least five segments of cable coil to complete this task."
 			return
@@ -276,7 +276,7 @@
 				P.use(3)
 				user << "\blue You assemble and install a heavy plastic lath onto the crossbow."
 				buildstate++
-				update_icon()
+//				update_icon()
 			else
 				user << "\blue You need at least three plastic sheets to complete this task."
 			return

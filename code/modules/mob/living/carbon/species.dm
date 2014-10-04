@@ -165,7 +165,7 @@
 	name = "Tajaran"
 	icobase = 'icons/mob/human_races/r_tajaran.dmi'
 	deform = 'icons/mob/human_races/r_def_tajaran.dmi'
-	language = "Siik'tajr"
+	language = "Siik'Maas"
 	tail = "tajtail"
 	unarmed_type = /datum/unarmed_attack/claws
 	darksight = 8
@@ -232,12 +232,12 @@
 		"feet" = 'icons/mob/species/vox/feet.dmi',
 		"gloves" = 'icons/mob/species/vox/gloves.dmi'
 		)
-
+/* NO MORE LEAPS.  NO MORE.
 /datum/species/vox/handle_post_spawn(var/mob/living/carbon/human/H)
 
 	H.verbs += /mob/living/carbon/human/proc/leap
 	..()
-
+*/
 /datum/species/vox/armalis/handle_post_spawn(var/mob/living/carbon/human/H)
 
 	H.verbs += /mob/living/carbon/human/proc/gut

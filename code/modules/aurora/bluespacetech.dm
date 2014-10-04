@@ -58,6 +58,9 @@
 		bst.equip_to_slot_or_del(new /obj/item/weapon/storage/box/ids(bst), slot_r_hand)
 	else
 		bst.equip_to_slot_or_del(new /obj/item/weapon/storage/box/ids(bst.back), slot_in_backpack)
+		bst.equip_to_slot_or_del(new /obj/item/device/t_scanner(bst.back), slot_in_backpack)
+		bst.equip_to_slot_or_del(new /obj/item/device/signaltool(bst.back), slot_in_backpack)
+		bst.equip_to_slot_or_del(new /obj/item/device/pda/captain/bst(bst.back), slot_in_backpack)
 
 	//Implant because access
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(bst)
@@ -78,7 +81,7 @@
 	//Add the rest of the languages
 	//Because universal speak doesn't work right.
 	bst.add_language("Sinta'unathi")
-	bst.add_language("Siik'tajr")
+	bst.add_language("Siik'Maas")
 	bst.add_language("Skrellian")
 	bst.add_language("Vox-pidgin")
 	bst.add_language("Rootspeak")
@@ -116,8 +119,12 @@
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(5, 1, src)
 			s.start()
-			spawn(5)
-				s.start()
+			var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
+			ghost.key = key
+			ghost.mind.name = "[ghost.key] BSTech"
+			ghost.name = "[ghost.key] BSTech"
+			ghost.real_name = "[ghost.key] BSTech"
+			ghost.voice_name = "[ghost.key] BSTech"
 			del(src)
 
 	say(var/message)
@@ -250,6 +257,20 @@
 			return
 		if(!istype(usr, /mob/living/carbon/human/bst))
 			usr << "<span class='alert'>Your hand seems to go right through the [src] ID. It's like it doesn't exist.</span>"
+			return
+		else
+			..()
+
+/obj/item/device/pda/captain/bst
+	hidden = 1
+	silent = 1
+//	ttone = "DO SOMETHING HERE"
+
+	attack_hand()
+		if(!usr)
+			return
+		if(!istype(usr, /mob/living/carbon/human/bst))
+			usr << "<span class='alert'>Your hand seems to go right through the pda. It's like it doesn't exist.</span>"
 			return
 		else
 			..()

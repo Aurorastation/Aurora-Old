@@ -13,6 +13,8 @@
 	var/times_used = 0 //Number of times it's been used.
 	var/broken = 0     //Is the flash burnt out?
 	var/last_used = 0 //last world.time it was used.
+	var/flashready = 0 //overcharge flashes
+	var/overcharge = 0 //overcharge check
 
 /obj/item/device/flash/proc/clown_check(var/mob/user)
 	if(user && (CLUMSY in user.mutations) && prob(50))
@@ -51,7 +53,11 @@
 	switch(times_used)
 		if(0 to 5)
 			last_used = world.time
-			if(prob(times_used))	//if you use it 5 times in a minute it has a 10% chance to break!
+			if(overcharge == 1)
+				icon_state = "cellflashburnt"
+				broken = 1
+				user << "<span class='warning'>The bulb has burnt out!</span>"
+			else if(prob(times_used))	//if you use it 5 times in a minute it has a 10% chance to break!
 				broken = 1
 				user << "<span class='warning'>The bulb has burnt out!</span>"
 				icon_state = "flashburnt"
@@ -65,6 +71,13 @@
 
 	if(iscarbon(M))
 		var/safety = M:eyecheck()
+		if(overcharge == 1)
+			M.adjust_fire_stacks(5)
+			M.IgniteMob()
+			user.visible_message("<span class='notice'>[user]'s supercharged flash ignites [M]!</span>")
+//			broken = 1
+//			if(overcharge == 1)
+//				icon_state = "cellflashburnt"
 		if(safety <= 0)
 			M.Weaken(10)
 			flick("e_flash", M.flash)
@@ -90,7 +103,11 @@
 			flashfail = 1
 
 	else if(issilicon(M))
-		M.Weaken(rand(5,10))
+		M.Weaken(10) //why are robots more resistant to flashes than humans when it is their only weakness.  besides ion rifles. used to be rand(5,10). changed to 10.
+		if(overcharge == 1)
+			M.adjust_fire_stacks(5)
+			M.IgniteMob()
+			user.visible_message("<span class='notice'>[user]'s supercharged flash ignites [M]!</span>")
 	else
 		flashfail = 1
 
@@ -106,7 +123,10 @@
 			del(animation)
 
 	if(!flashfail)
-		flick("flash2", src)
+		if(overcharge == 0)
+			flick("flash2", src)
+		else if(overcharge == 1)
+			flick("cellflash2", src)
 		if(!issilicon(M))
 
 			user.visible_message("<span class='disarm'>[user] blinds [M] with the flash!</span>")
@@ -134,7 +154,11 @@
 	//It will never break on the first use.
 	switch(times_used)
 		if(0 to 5)
-			if(prob(2*times_used))	//if you use it 5 times in a minute it has a 10% chance to break!
+			if(overcharge == 1)
+				icon_state = "cellflashburnt"
+				broken = 1
+				user << "<span class='warning'>The bulb has burnt out!</span>"
+			else if(prob(2*times_used))	//if you use it 5 times in a minute it has a 10% chance to break!
 				broken = 1
 				user << "<span class='warning'>The bulb has burnt out!</span>"
 				icon_state = "flashburnt"
@@ -144,7 +168,10 @@
 			user.show_message("<span class='warning'>*click* *click*</span>", 2)
 			return
 	playsound(src.loc, 'sound/weapons/flash.ogg', 100, 1)
-	flick("flash2", src)
+	if(overcharge == 0)
+		flick("flash2", src)
+	else if(overcharge == 1)
+		flick("cellflash2", src)
 	if(user && isrobot(user))
 		spawn(0)
 			var/atom/movable/overlay/animation = new(user.loc)
@@ -176,7 +203,10 @@
 		if(0 to 5)
 			if(prob(2*times_used))
 				broken = 1
-				icon_state = "flashburnt"
+				if(overcharge == 1)
+					icon_state = "cellflashburnt"
+				else if(overcharge == 0)
+					icon_state = "flashburnt"
 				return
 			times_used++
 			if(istype(loc, /mob/living/carbon))
@@ -202,11 +232,35 @@
 	if(!broken)
 		broken = 1
 		user << "\red The bulb has burnt out!"
-		icon_state = "flashburnt"
+		if(overcharge == 0)
+			icon_state = "flashburnt"
+		else if(overcharge == 1)
+			icon_state = "cellflashburnt"
 
 /obj/item/device/flash/synthetic/attack_self(mob/living/carbon/user as mob, flag = 0, emp = 0)
 	..()
 	if(!broken)
 		broken = 1
 		user << "\red The bulb has burnt out!"
-		icon_state = "flashburnt"
+		if(overcharge == 0)
+			icon_state = "flashburnt"
+		else if(overcharge == 1)
+			icon_state = "cellflashburnt"
+
+/obj/item/device/flash/attackby(obj/item/W, mob/user)
+	if(istype(W,/obj/item/weapon/cell))
+		if(flashready == 1 && overcharge == 0)
+			del(W)
+			overcharge = 1
+			icon_state = "cellflash"
+			user << "\red You attach the cell to the flash."
+			name = "cell/flash assembly"
+			desc = "When blinding and being an asshole just isn't enough."
+		else if(overcharge == 1)
+			user << "\red This flash already has a cell attached!"
+	else if(istype(W, /obj/item/weapon/screwdriver))
+		if(overcharge == 0)
+			user << "\red You ready the flash for modification."
+			flashready = 1
+		else if(flashready == 1)
+			user << "\red This flash has already been modified!."

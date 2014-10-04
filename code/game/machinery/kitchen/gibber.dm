@@ -79,6 +79,15 @@
 		src.startgibbing(user)
 
 /obj/machinery/gibber/attackby(obj/item/weapon/grab/G as obj, mob/user as mob)
+	if(istype(user, /mob/living/carbon/human))
+		var/mob/living/carbon/human/M = user
+		if(M.h_style == "Floorlength Braid" || M.h_style == "Very Long Hair")
+			if(prob(10))
+				M.apply_damage(30, BRUTE, "head")
+				M.apply_damage(45, HALLOSS)
+				M.visible_message("\red [user]'s hair catches in the [src]!", "\red Your hair gets caught in the [src]!")
+				M.say("*scream")
+
 	if(src.occupant)
 		user << "\red The gibber is full, empty it first!"
 		return
@@ -203,7 +212,7 @@
 		if(src.occupant.client) // Gibbed a cow with a client in it? log that shit
 			src.occupant.attack_log += "\[[time_stamp()]\] Was gibbed by <b>[user]/[user.ckey]</b>"
 			user.attack_log += "\[[time_stamp()]\] Gibbed <b>[src.occupant]/[src.occupant.ckey]</b>"
-			msg_admin_attack("\[[time_stamp()]\] <b>[key_name(user)]</b> gibbed <b>[key_name(src.occupant)]</b>")
+			msg_admin_attack("\[[time_stamp()]\] <b>[key_name(user)]</b> gibbed <b>[key_name(src.occupant)]</b> - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>")
 
 		src.occupant.death(1)
 		src.occupant.ghostize()

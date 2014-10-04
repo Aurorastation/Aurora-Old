@@ -40,6 +40,9 @@
 	h_style = "blue IPC screen"
 	..(new_loc, "Machine")
 
+/mob/living/carbon/human/machine/isipc()
+	return 1
+
 /mob/living/carbon/human/kocasslani/New(var/new_loc)
 	h_style = "Bald"
 	..(new_loc, "Kocasslani")
@@ -888,13 +891,13 @@
 
 	if(!lastpuke)
 		lastpuke = 1
-		src << "<spawn class='warning'>You feel nauseous..."
+		src << "<spawn class='warning'>You feel nauseous...</spawn>"
 		spawn(150)	//15 seconds until second warning
-			src << "<spawn class='warning'>You feel like you are about to throw up!"
+			src << "<spawn class='warning'>You feel like you are about to throw up!</spawn>"
 			spawn(100)	//and you have 10 more for mad dash to the bucket
 				Stun(5)
 
-				src.visible_message("<spawn class='warning'>[src] throws up!","<spawn class='warning'>You throw up!")
+				src.visible_message("<spawn class='warning'>[src] throws up!","<spawn class='warning'>You throw up!</spawn>")
 				playsound(loc, 'sound/effects/splat.ogg', 50, 1)
 
 				var/turf/location = loc
