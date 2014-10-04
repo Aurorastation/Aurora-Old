@@ -326,6 +326,7 @@
 		user << "<span class='warning'>\The [src] is out of charge.</span>"
 	add_fingerprint(user)
 
+/*
 /obj/item/device/modkit/fluff/omnivac_modkit //Ornate box - Zander Moon - omnivac - SPRITE
 	name = "ornate box"
 	desc = "An ornate box, containing the handle of an energy blade."
@@ -334,6 +335,7 @@
 	parts = MODKIT_HELMET
 	from_helmet = list(/obj/item/weapon/melee)
 	to_helmet = list(/obj/item/weapon/melee/baton/fluff/omnivac_baton)
+*/
 
 /obj/item/clothing/head/soft/fluff/nebula_cap //Black baseball cap - Roxy Wallace - nebulaflare - DONE
 	name = "black baseball cap"
@@ -734,6 +736,7 @@
 	icon_state = "leo_coat"
 	item_state = "leo_coat"
 
+/*
 /obj/item/device/modkit/fluff/leo_modkit //Weapon case - Leo Wyatt - keinto - DONE
 	name = "weapon case"
 	desc = "A sturdy leather case, with a velvet covered interior.."
@@ -742,6 +745,7 @@
 	parts = MODKIT_HELMET
 	from_helmet = list(/obj/item/weapon/gun/projectile/detective/semiauto)
 	to_helmet = list(/obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun)
+*/
 
 /obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun //Instant Prosecutor - Leo Wyatt - keinto - DONE (stab)
 	name = "\improper Instant Prosecutor"
