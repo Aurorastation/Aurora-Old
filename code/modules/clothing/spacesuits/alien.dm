@@ -390,14 +390,14 @@
 	desc = "A special helmet designed for work in a hazardous, low pressure environment. Has minor radiation shielding."
 	icon_state = "rig0-medical"
 	item_state = "medical_helm"
-	species_restricted = list("tajara")
+	species_restricted = list("Tajaran")
 
 /obj/item/clothing/head/helmet/space/rig/medical/unathi
 	name = "medical hardsuit helmet"
 	desc = "A special helmet designed for work in a hazardous, low pressure environment. Has minor radiation shielding."
 	icon_state = "rig0-medical"
 	item_state = "medical_helm"
-	species_restricted = list("unathi")
+	species_restricted = list("Unathi")
 
 /obj/item/clothing/head/helmet/space/rig/medical/skrell
 	name = "medical hardsuit helmet"

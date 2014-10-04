@@ -86,6 +86,8 @@
 			continue
 		S.charge = S.capacity
 		S.output = 200000
+		spawn(600)
+			S.output = S.last_output
 		S.online = 1
 		S.updateicon()
 		S.power_change()

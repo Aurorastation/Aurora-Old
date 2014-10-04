@@ -45,6 +45,7 @@
 		M.primed = 1
 		M.throw_at(target, missile_range, missile_speed)
 		message_admins("[key_name_admin(user)] fired a rocket from a rocket launcher ([src.name]).")
+		message_mods("[key_name_admin(user)] fired a rocket from a rocket launcher ([src.name]).")
 		log_game("[key_name_admin(user)] used a rocket launcher ([src.name]).")
 		rockets -= I
 		del(I)

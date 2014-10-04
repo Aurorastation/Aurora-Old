@@ -135,7 +135,7 @@ Commenting out right now, due to a lack of sprites existing. I hate on-mob weapo
 	fire_delay_unwielded = 105 //3x difference, let's be an arse about this, and push the issue
 	var/zoom = 0
 
-	accuracy = -90
+	accuracy = -110
 	rangedrop = -5 // fully accurate up to first 10 tiles.  the last 4 zoomed tiles you are on your
 
 /obj/item/weapon/gun/energy/rifle/sniperrifle/dropped(mob/user)
@@ -210,7 +210,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	slot_flags = SLOT_BACK //Just realized... Going to need A LOT more on-back sprites now... FECK...
 	var/mode = 2
 	fire_delay_wielded = 8
-	fire_delay_unwielded = 75
+	fire_delay_unwielded = 24
 
 //	attack_self(mob/living/user as mob)
 //Let's do some magical things, make this a verb, yes?

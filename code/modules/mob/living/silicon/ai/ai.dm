@@ -747,12 +747,12 @@ var/list/ai_list = list()
 	if(centcomm_message_cooldown)
 		usr << "\red Arrays recycling.  Please stand by."
 		return
-	var/input = stripped_input(usr, "Please choose a message to transmit to Centcomm via quantum entanglement.  Please be aware that this process is very expensive, and abuse will lead to... termination.  Transmission does not guarantee a response. There is a 30 second delay before you may send another message, be clear, full and concise.", "To abort, send an empty message.", "")
+	var/input = stripped_input(usr, "Please choose a message to transmit to Centcomm via quantum entanglement.  Please be aware that this process is very expensive, and abuse will lead to... termination.  Transmission does not guarantee a response. There is a 10 minute delay before you may send another message, be clear, full and concise.", "To abort, send an empty message.", "")
 	if(!input || !(usr in view(1,src)))
 		return
-	Centcomm_announce(input, usr)
+	Centcomm_announce(input, usr, 1)
 	usr << "\blue Message transmitted."
 	log_say("[key_name(usr)] has made an IA Centcomm announcement: [input]")
 	centcomm_message_cooldown = 1
-	spawn(300)//10 minute cooldown
+	spawn(6000)//10 minute cooldown
 		centcomm_message_cooldown = 0
