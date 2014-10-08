@@ -168,7 +168,7 @@
 				var/turf/simulated/L = loc
 				if(istype(L))
 					var/datum/gas_mixture/env = L.return_air()
-					if(env.temperature != set_temperature + T0C)
+					if(env.temperature < set_temperature + T0C)
 
 						var/transfer_moles = 0.25 * env.total_moles()
 
