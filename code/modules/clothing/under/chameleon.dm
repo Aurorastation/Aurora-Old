@@ -15,7 +15,7 @@
 	New()
 		..()
 		var/blocked = list(/obj/item/clothing/under/chameleon, /obj/item/clothing/under/cloud,
-			/obj/item/clothing/under/golem, /obj/item/clothing/under/gimmick)//Prevent infinite loops and bad jumpsuits.
+			/obj/item/clothing/under/golem, /obj/item/clothing/under/gimmick, /obj/item/clothing/under/rank/centcom_officer/bst)//Prevent infinite loops and bad jumpsuits.
 		for(var/U in typesof(/obj/item/clothing/under)-blocked)
 			var/obj/item/clothing/under/V = new U
 			src.clothing_choices[V.name] = U
@@ -172,7 +172,7 @@
 	New()
 		..()
 		var/blocked = list(/obj/item/clothing/shoes/chameleon,
-			/obj/item/clothing/shoes/golem, /obj/item/clothing/shoes/syndigaloshes, /obj/item/clothing/shoes/cyborg)//prevent infinite loops and bad shoes.
+			/obj/item/clothing/shoes/golem, /obj/item/clothing/shoes/syndigaloshes, /obj/item/clothing/shoes/cyborg, /obj/item/clothing/shoes/black/bst)//prevent infinite loops and bad shoes.
 		for(var/U in typesof(/obj/item/clothing/shoes)-blocked)
 			var/obj/item/clothing/shoes/V = new U
 			src.clothing_choices[V.name] = U
@@ -222,7 +222,7 @@
 
 	New()
 		..()
-		var/blocked = list(/obj/item/weapon/storage/backpack/chameleon, /obj/item/weapon/storage/backpack/satchel/withwallet)
+		var/blocked = list(/obj/item/weapon/storage/backpack/chameleon, /obj/item/weapon/storage/backpack/satchel/withwallet, /obj/item/weapon/storage/backpack/holding/bst)
 		for(var/U in typesof(/obj/item/weapon/storage/backpack)-blocked)//Prevent infinite loops and bad backpacks.
 			var/obj/item/weapon/storage/backpack/V = new U
 			src.clothing_choices[V.name] = U
@@ -273,7 +273,7 @@
 
 	New()
 		..()
-		var/blocked = list(/obj/item/clothing/gloves/chameleon)//Prevent infinite loops and bad hats.
+		var/blocked = list(/obj/item/clothing/gloves/chameleon, /obj/item/clothing/gloves/swat/bst)//Prevent infinite loops and bad hats.
 		for(var/U in typesof(/obj/item/clothing/gloves)-blocked)
 			var/obj/item/clothing/gloves/V = new U
 			src.clothing_choices[V.name] = U
@@ -373,7 +373,7 @@
 
 	New()
 		..()
-		var/blocked = list(/obj/item/clothing/glasses/chameleon)//Prevent infinite loops and bad hats.
+		var/blocked = list(/obj/item/clothing/glasses/chameleon, /obj/item/clothing/glasses/sunglasses/bst)//Prevent infinite loops and bad hats.
 		for(var/U in typesof(/obj/item/clothing/glasses)-blocked)
 			var/obj/item/clothing/glasses/V = new U
 			src.clothing_choices[V.name] = U

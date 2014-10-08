@@ -118,6 +118,7 @@
 				W.reagents = R
 				R.my_atom = W
 				if(!W || !src) return
+				if(!W.reagents) return
 				src.reagents.trans_to(W,1)
 				for(var/b=0, b<5, b++)
 					step_towards(W,my_target)
@@ -126,11 +127,14 @@
 					for(var/atom/atm in get_turf(W))
 						if(!W) return
 						W.reagents.reaction(atm)
+						if(isliving(atm)) //For extinguishing mobs on fire
+							var/mob/living/M = atm
+							M.ExtinguishMob()
 					if(W.loc == my_target) break
 					sleep(2)
-//				spawn(20)
+				spawn(20)
+					W.Del()
 
-				W.Del()
 		if((istype(usr.loc, /turf/space)) || (usr.lastarea.has_gravity == 0))
 			user.inertia_dir = get_dir(target, user)
 			step(user, user.inertia_dir)
