@@ -65,13 +65,13 @@
 
 	if (organ_name in organs_by_name)
 		var/datum/organ/external/O = get_organ(organ_name)
-	
+
 		if(amount > 0)
 			O.take_damage(amount, 0, sharp=is_sharp(damage_source), edge=has_edge(damage_source), used_weapon=damage_source)
 		else
 			//if you don't want to heal robot organs, they you will have to check that yourself before using this proc.
 			O.heal_damage(-amount, 0, internal=0, robo_repair=(O.status & ORGAN_ROBOT))
-	
+
 	hud_updateflag |= 1 << HEALTH_HUD
 
 /mob/living/carbon/human/proc/adjustFireLossByPart(var/amount, var/organ_name, var/obj/damage_source = null)
@@ -80,13 +80,13 @@
 
 	if (organ_name in organs_by_name)
 		var/datum/organ/external/O = get_organ(organ_name)
-	
+
 		if(amount > 0)
 			O.take_damage(0, amount, sharp=is_sharp(damage_source), edge=has_edge(damage_source), used_weapon=damage_source)
 		else
 			//if you don't want to heal robot organs, they you will have to check that yourself before using this proc.
 			O.heal_damage(0, -amount, internal=0, robo_repair=(O.status & ORGAN_ROBOT))
-	
+
 	hud_updateflag |= 1 << HEALTH_HUD
 
 /mob/living/carbon/human/Stun(amount)
@@ -165,6 +165,10 @@
 		hud_updateflag |= 1 << HEALTH_HUD
 	updatehealth()
 
+
+/*
+In most cases it makes more sense to use apply_damage() instead! And make sure to check armour if applicable.
+*/
 //Damages ONE external organ, organ gets randomly selected from damagable ones.
 //It automatically updates damage overlays if necesary
 //It automatically updates health status
@@ -260,10 +264,20 @@ This function restores all organs.
 /mob/living/carbon/human/apply_damage(var/damage = 0, var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, var/sharp = 0, var/edge = 0, var/obj/used_weapon = null)
 
 	//visible_message("Hit debug. [damage] | [damagetype] | [def_zone] | [blocked] | [sharp] | [used_weapon]")
+	
+	//Handle other types of damage
 	if((damagetype != BRUTE) && (damagetype != BURN))
+		if(damagetype == HALLOSS)
+			if ((damage > 25 && prob(20)) || (damage > 50 && prob(60)))
+				emote("scream")
+		
+		
 		..(damage, damagetype, def_zone, blocked)
 		return 1
 
+	//Handle BRUTE and BURN damage
+	handle_suit_punctures(damagetype, damage)
+	
 	if(blocked >= 2)	return 0
 
 	var/datum/organ/external/organ = null

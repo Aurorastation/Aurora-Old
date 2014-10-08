@@ -27,6 +27,7 @@ emp_act
 */
 // END TASER NERF
 
+	//Laserproof armour
 	if(wear_suit && istype(wear_suit, /obj/item/clothing/suit/armor/laserproof))
 		if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam))
 			var/reflectchance = 40 - round(P.damage/3)
@@ -189,6 +190,7 @@ emp_act
 	..()
 
 
+//Returns 1 if the attack hit, 0 if it missed.
 /mob/living/carbon/human/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone)
 	if(!I || !user)	return 0
 
@@ -296,3 +298,14 @@ emp_act
 	if(w_uniform)
 		w_uniform.add_blood(source)
 		update_inv_w_uniform(0)
+
+/mob/living/carbon/human/proc/handle_suit_punctures(var/damtype, var/damage)
+
+	if(!wear_suit) return
+	if(!istype(wear_suit,/obj/item/clothing/suit/space)) return
+	if(damtype != BURN && damtype != BRUTE) return
+
+	var/obj/item/clothing/suit/space/SS = wear_suit
+	var/penetrated_dam = max(0,(damage - SS.breach_threshold)) // - SS.damage)) - Consider uncommenting this if suits seem too hardy on dev.
+
+	if(penetrated_dam) SS.create_breaches(damtype, penetrated_dam)
