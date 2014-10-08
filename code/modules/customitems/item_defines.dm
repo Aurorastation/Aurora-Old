@@ -840,3 +840,131 @@
 			spawn(20)
 				spamcheck = 0
 			return
+
+/obj/item/clothing/tie/fluff/hamil_badge
+	name = "Internal Investigations Badge"
+	desc = "An Internal Investigation badge. Used by a special branch of the Elyran police force."
+	icon = 'icons/obj/custom_items.dmi'
+	item_state = "hamil_badge"
+
+/obj/item/clothing/tie/fluff/hamil_badge/attack_self(mob/user as mob)
+	if(isliving(user))
+		user.visible_message("\red [user] flashes their [src].\nIt reads: Muhammad Hamil, Internal Investigations, Persepolis..","\red You display the [src].\nIt reads: Muhammad Hamil, Internal Investigations, Persepolis.")
+
+/obj/item/clothing/tie/fluff/hamil_badge/attack(mob/living/carbon/human/M, mob/living/user)
+	if(isliving(user))
+		user.visible_message("\red [user] invades [M]'s personal space, thrusting [src] into their face insistently.","\red You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.")
+
+/obj/item/clothing/mask/gas/fluff/stefan_mask
+	desc = "This odd looking gas mask is quite clearly not of NanoTrasen origin as it sports a black metal polish, as well as a reflective face plate that mirrors the view of the mask itself. This particular mask appears to breathe with the user, hissing when they exhale, and whining softly as they inhale."
+	name = "Modified Gas Mask"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "stefan_mask"
+	item_state = "stefan_mask"
+
+/obj/item/weapon/melee/fluff/balisong
+	name = "Orihara's Balisong"
+	desc = "A small, black butterfly knife with comfortable handles and a mean looking blade. Perfect for dangerous towns where being stylish is just as important as being deadly."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "balisong_0"
+	item_state = "balisong_m"
+	flags = FPRINT | TABLEPASS
+	slot_flags = SLOT_BELT
+	w_class = 1
+	force = 2
+	var/on = 0
+
+/obj/item/weapon/melee/fluff/balisong/attack_self(mob/user as mob)
+	on = !on
+	if(on)
+		user.visible_message("\red With but a flashy twirl of their fingers, [user] flicks open the balisong.",\
+		"\red You with a bit a flair, open the balisong. The metallic shine of the blade touching your gaze.",\
+		"You hear an ominous click.")
+		icon_state = "balisong_1"
+		item_state = "balisong_m"
+		w_class = 3
+		force = 2
+		attack_verb = list("prodded")
+	else
+		user.visible_message("\blue Without even looking, [user] casually flicks the balisong closed.",\
+		"\blue You skilfully close the balisong.",\
+		"You hear a click.")
+		icon_state = "balisong_0"
+		w_class = 2
+		force = 2
+		attack_verb = list("thumped")
+
+	if(istype(user,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = user
+		H.update_inv_l_hand()
+		H.update_inv_r_hand()
+
+	playsound(src.loc, 'sound/weapons/empty.ogg', 50, 1)
+	add_fingerprint(user)
+
+	if(blood_overlay && blood_DNA && (blood_DNA.len >= 1))
+		var/icon/I = new /icon(src.icon, src.icon_state)
+		I.Blend(new /icon('icons/effects/blood.dmi', rgb(255,255,255)),ICON_ADD)
+		I.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY)
+		blood_overlay = I
+
+		overlays += blood_overlay
+
+	return
+
+/obj/structure/stool/bed/chair/wheelchair/fluff/kit
+	name = "Kit's Hotrod"
+	desc = "A wheelchair, that has large flames on the back of the seat. It has a nametag on one of the arms, reading 'Kit.'"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "kit_wheels"
+	anchored = 0
+	movable = 1
+
+obj/structure/stool/bed/chair/wheelchair/fluff/kit/handle_rotation()
+	overlays = null
+	var/image/O = image(icon = 'icons/obj/custom_items.dmi', icon_state = "kit_w_overlay", layer = FLY_LAYER, dir = src.dir)
+	overlays += O
+	if(buckled_mob)
+		buckled_mob.dir = dir
+
+/obj/item/weapon/storage/fluff/binder
+	name = "Black Binder"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "kit_binder"
+	w_class = 2
+	can_hold = list(
+		"/obj/item/weapon/paper",
+		"/obj/item/weapon/folder",
+		"/obj/item/weapon/pen"
+	)
+
+/obj/item/weapon/storage/fluff/binder/New()
+	..()
+	new /obj/item/weapon/folder/blue(src)
+	new /obj/item/weapon/folder/red(src)
+	new /obj/item/weapon/folder/white(src)
+	new /obj/item/weapon/folder/yellow(src)
+	new /obj/item/weapon/pen/fluff/kit_pen(src)
+
+/obj/item/weapon/pen/fluff/kit_pen
+	desc = "A small fountain pen. It has several spots to change the cartridge inside for another color, as well as a selector switch for ease of use."
+	name = "fountain pen"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "kit_pen"
+	item_state = "pen"
+	var/ink = 1
+
+/obj/item/weapon/pen/fluff/kit_pen/attack_self(mob/user)
+	switch(ink)
+		if(1)
+			ink = 2
+			colour = "blue"
+			user << "<span class='notice'>You cycle the pen to use the blue ink cartridge.</span>"
+		if(2)
+			ink = 3
+			colour = "red"
+			user << "<span class='notice'>You cycle the pen to use the red ink cartridge.</span>"
+		if(3)
+			ink = 1
+			colour = "black"
+			user << "<span class='notice'>You cycle the pen to use the black ink cartridge.</span>"
