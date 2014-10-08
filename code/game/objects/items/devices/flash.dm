@@ -75,6 +75,16 @@
 			M.adjust_fire_stacks(5)
 			M.IgniteMob()
 			user.visible_message("<span class='notice'>[user]'s supercharged flash ignites [M]!</span>")
+			if(prob(60))
+
+				var/mob/living/ur = user
+				var/LIMB
+				if(ur.hand)
+					LIMB = "l_hand"
+				else
+					LIMB = "r_hand"
+				ur.apply_damage(45, BURN, LIMB)
+				user << "<span class='warning'>You burn your hand as the flash goes off</span>"
 //			broken = 1
 //			if(overcharge == 1)
 //				icon_state = "cellflashburnt"
@@ -108,6 +118,15 @@
 			M.adjust_fire_stacks(5)
 			M.IgniteMob()
 			user.visible_message("<span class='notice'>[user]'s supercharged flash ignites [M]!</span>")
+			if(prob(60))
+				var/mob/living/ur = user
+				var/LIMB
+				if(ur.hand)
+					LIMB = "l_hand"
+				else
+					LIMB = "r_hand"
+				ur.apply_damage(45, BURN, LIMB)
+				user << "<span class='warning'>You burn your hand as the flash goes off</span>"
 	else
 		flashfail = 1
 

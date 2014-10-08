@@ -44,8 +44,8 @@
 		playsound(user.loc, 'sound/effects/bang.ogg', 50, 1)
 		M.primed = 1
 		M.throw_at(target, missile_range, missile_speed)
-		message_admins("[key_name_admin(user)] fired a rocket from a rocket launcher ([src.name]).")
-		message_mods("[key_name_admin(user)] fired a rocket from a rocket launcher ([src.name]).")
+		message_admins("[key_name_admin(user)] fired a rocket from a rocket launcher ([src.name]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+		message_mods("[key_name_admin(user)] fired a rocket from a rocket launcher ([src.name]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 		log_game("[key_name_admin(user)] used a rocket launcher ([src.name]).")
 		rockets -= I
 		del(I)

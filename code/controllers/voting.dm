@@ -80,11 +80,22 @@ datum/controller/vote
 		for(var/option in choices)
 			var/votes = choices[option]
 			total_votes += votes
+			for(var/client/C in admins)
+				if((C.holder.rights & R_ADMIN) || (C.holder.rights & R_MOD))
+					var/tempvotething
+					if(!votes)
+						tempvotething = 0
+					else
+						tempvotething = votes
+					C << "Option: [option] got [tempvotething] votes"
 			if(votes > greatest_votes)
 				greatest_votes = votes
 		//default-vote for everyone who didn't vote
 		if(!config.vote_no_default && choices.len)
 			var/non_voters = (clients.len - total_votes)
+			for(var/client/C in admins)
+				if((C.holder.rights & R_ADMIN) || (C.holder.rights & R_MOD))
+					C << "Non-voters: [non_voters] | Total Votes: [total_votes]"
 			if(non_voters > 0)
 				if(mode == "restart")
 					choices["Continue Playing"] += non_voters
