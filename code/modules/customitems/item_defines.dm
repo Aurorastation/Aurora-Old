@@ -326,7 +326,6 @@
 		user << "<span class='warning'>\The [src] is out of charge.</span>"
 	add_fingerprint(user)
 
-/*
 /obj/item/device/modkit/fluff/omnivac_modkit //Ornate box - Zander Moon - omnivac - SPRITE
 	name = "ornate box"
 	desc = "An ornate box, containing the handle of an energy blade."
@@ -335,7 +334,6 @@
 	parts = MODKIT_HELMET
 	from_helmet = list(/obj/item/weapon/melee)
 	to_helmet = list(/obj/item/weapon/melee/baton/fluff/omnivac_baton)
-*/
 
 /obj/item/clothing/head/soft/fluff/nebula_cap //Black baseball cap - Roxy Wallace - nebulaflare - DONE
 	name = "black baseball cap"
@@ -736,7 +734,6 @@
 	icon_state = "leo_coat"
 	item_state = "leo_coat"
 
-/*
 /obj/item/device/modkit/fluff/leo_modkit //Weapon case - Leo Wyatt - keinto - DONE
 	name = "weapon case"
 	desc = "A sturdy leather case, with a velvet covered interior.."
@@ -745,7 +742,6 @@
 	parts = MODKIT_HELMET
 	from_helmet = list(/obj/item/weapon/gun/projectile/detective/semiauto)
 	to_helmet = list(/obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun)
-*/
 
 /obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun //Instant Prosecutor - Leo Wyatt - keinto - DONE (stab)
 	name = "\improper Instant Prosecutor"
@@ -844,26 +840,3 @@
 			spawn(20)
 				spamcheck = 0
 			return
-
-/obj/item/clothing/tie/medal/fluff/vivian_heart
-	name = "platinum heart"
-	desc = "The medal is white-plated platinum, and bears a red-cross on the front, the back is engraved, Vivian Rival, Medical Doctor & Species Rights Activist."
-	icon = 'icons/obj/custom_items.dmi'
-	icon_state = "vivian_heart"
-	item_color = "vivian_heart"
-
-/obj/item/clothing/head/ushanka/fluff/ava_ushanka	//Worn Ushanka - Ava Kalashnikova - demonofthefall - DONE
-	name = "worn ushanka"
-	desc = "An old ushanka, it looks well worn."
-	icon_state = "ushanka_avadown"
-	item_state = "ushankadown"	//Skull getting lazy with code.
-
-/obj/item/clothing/head/ushanka/fluff/ava_ushanka/attack_self(mob/user as mob)
-	if(src.icon_state == "ushankadown")
-		src.icon_state = "ushankaup"
-		src.item_state = "ushanka_avaup"
-		user << "You raise the ear flaps on the ushanka."
-	else
-		src.icon_state = "ushankadown"
-		src.item_state = "ushanka_avadown"
-		user << "You lower the ear flaps on the ushanka."

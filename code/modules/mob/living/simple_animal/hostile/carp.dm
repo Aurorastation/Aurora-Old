@@ -38,15 +38,13 @@
 
 	faction = "carp"
 
-	var/attackv = "nashes"
-
 /mob/living/simple_animal/hostile/carp/Process_Spacemove(var/check_drift = 0)
 	return 1	//No drifting in space for space carp!	//original comments do not steal
 
 /mob/living/simple_animal/hostile/carp/FindTarget()
 	. = ..()
 	if(.)
-		custom_emote(1,"[attackv] at [.]")
+		custom_emote(1,"nashes at [.]")
 
 /mob/living/simple_animal/hostile/carp/AttackingTarget()
 	. =..()
@@ -55,15 +53,3 @@
 		if(prob(15))
 			L.Weaken(3)
 			L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
-
-//////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////SPACE RAKK! Or, namely, critters!////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-/mob/living/simple_animal/hostile/carp/critter
-	name = "winged critter"
-	desc = "An apparently winged creature, bat-like in appearance, with sharp teeth and claws."
-	icon_state = "critter"
-	icon_living = "critter"
-	icon_dead = "critter_dead"
-	attackv = "swoops"

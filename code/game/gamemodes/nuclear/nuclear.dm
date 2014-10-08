@@ -215,7 +215,6 @@
 
 	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/syndicate(synd_mob)
 	R.set_frequency(radio_freq)
-	R.freerange = 1
 	synd_mob.equip_to_slot_or_del(R, slot_l_ear)
 
 	synd_mob.equip_to_slot_or_del(new /obj/item/clothing/under/syndicate(synd_mob), slot_w_uniform)
@@ -230,30 +229,29 @@
 	synd_mob.equip_to_slot_or_del(new /obj/item/weapon/reagent_containers/pill/cyanide(synd_mob), slot_in_backpack)
 	synd_mob.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/automatic/c20r(synd_mob), slot_belt)
 	synd_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/box/engineer(synd_mob.back), slot_in_backpack)
-	synd_mob.equip_to_slot_or_del(new /obj/item/weapon/reagent_containers/pill/cyanide(synd_mob), slot_in_backpack)
-
-/*	Commented; nukes now have a suit cycler for changing rig-suits, they don't need to spawn with them
-	var/obj/item/clothing/suit/space/rig/syndi/new_suit = new(synd_mob)
-	var/obj/item/clothing/head/helmet/space/rig/syndi/new_helmet = new(synd_mob)
 
 	if(synd_mob.species)
-
 		var/race = synd_mob.species.name
 
-		switch(race)
-			if("Unathi")
-				new_suit.species_restricted = list("Unathi")
-			if("Tajaran")
-				new_suit.species_restricted = list("Tajaran")
-			if("Skrell")
-				new_suit.species_restricted = list("Skrell")
+		if(race == "Unathi")
+			synd_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/syndi/unathi(synd_mob), slot_wear_suit)
+			synd_mob.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/rig/syndi/unathi(synd_mob), slot_head)
+		else if(race == "Tajaran")
+			synd_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/syndi/tajara(synd_mob), slot_wear_suit)
+			synd_mob.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/rig/syndi/tajara(synd_mob), slot_head)
+		else if(race == "Skrell")
+			synd_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/syndi/skrell(synd_mob), slot_wear_suit)
+			synd_mob.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/rig/syndi/skrell(synd_mob), slot_head)
+		else
+			synd_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/syndi/human(synd_mob), slot_wear_suit)
+			synd_mob.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/rig/syndi/human(synd_mob), slot_head)
+	else
+		synd_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/syndi/human(synd_mob), slot_wear_suit)
+		synd_mob.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/rig/syndi/human(synd_mob), slot_head)
 
-	synd_mob.equip_to_slot_or_del(new_suit, slot_in_backpack)
-	synd_mob.equip_to_slot_or_del(new_helmet, slot_in_backpack)*/
-
-//	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive(synd_mob)
-//	E.imp_in = synd_mob
-//	E.implanted = 1
+	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive(synd_mob)
+	E.imp_in = synd_mob
+	E.implanted = 1
 	synd_mob.update_icons()
 	return 1
 
