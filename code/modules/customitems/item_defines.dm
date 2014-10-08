@@ -844,3 +844,26 @@
 			spawn(20)
 				spamcheck = 0
 			return
+
+/obj/item/clothing/tie/medal/fluff/vivian_heart
+	name = "platinum heart"
+	desc = "The medal is white-plated platinum, and bears a red-cross on the front, the back is engraved, Vivian Rival, Medical Doctor & Species Rights Activist."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "vivian_heart"
+	item_color = "vivian_heart"
+
+/obj/item/clothing/head/ushanka/fluff/ava_ushanka	//Worn Ushanka - Ava Kalashnikova - demonofthefall - DONE
+	name = "worn ushanka"
+	desc = "An old ushanka, it looks well worn."
+	icon_state = "ushanka_avadown"
+	item_state = "ushankadown"	//Skull getting lazy with code.
+
+/obj/item/clothing/head/ushanka/fluff/ava_ushanka/attack_self(mob/user as mob)
+	if(src.icon_state == "ushankadown")
+		src.icon_state = "ushankaup"
+		src.item_state = "ushanka_avaup"
+		user << "You raise the ear flaps on the ushanka."
+	else
+		src.icon_state = "ushankadown"
+		src.item_state = "ushanka_avadown"
+		user << "You lower the ear flaps on the ushanka."
