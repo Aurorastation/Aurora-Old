@@ -294,7 +294,6 @@ var/list/admin_verbs_mod = list(
 	/datum/admins/proc/show_skills,
 	/datum/admins/proc/show_player_panel,
 	/client/proc/check_antagonists,
-	/datum/admins/proc/adjump,
 	/client/proc/jobbans,
 	/client/proc/cmd_admin_subtle_message 	/*send an message to somebody as a 'voice in their head'*/
 )
@@ -663,8 +662,8 @@ var/list/admin_verbs_mod = list(
 			return
 		for (var/mob/V in hearers(O))
 			V.show_message(message, 2)
-		log_admin("[key_name(usr)] made [O] at [O.x], [O.y], [O.z]. make a sound")
-		message_admins("\blue [key_name_admin(usr)] made [O] at [O.x], [O.y], [O.z]. make a sound", 1)
+		log_admin("[key_name(usr)] made [O] at [O.x], [O.y], [O.z]. make a sound ([message])")
+		message_admins("\blue [key_name_admin(usr)] made [O] at [O.x], [O.y], [O.z]. make a sound ([message])", 1)
 		feedback_add_details("admin_verb","MS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/make_area_sound(var/turf/T in world) // -- TLE
@@ -681,8 +680,8 @@ var/list/admin_verbs_mod = list(
 		for(var/area/SubA in A.related)
 			for (var/mob/V in SubA)
 				V.show_message(message, 2)
-		log_admin("[key_name(usr)] made [A.name] make a sound")
-		message_admins("\blue [key_name_admin(usr)] made [A.name] make a sound", 1)
+		log_admin("[key_name(usr)] made [A.name] make a sound ([message])")
+		message_admins("\blue [key_name_admin(usr)] made [A.name] make a sound ([message])", 1)
 		feedback_add_details("admin_verb","MAS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/togglebuildmodeself()

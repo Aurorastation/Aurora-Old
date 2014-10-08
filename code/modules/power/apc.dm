@@ -961,14 +961,14 @@
 /obj/machinery/power/apc/Topic(href, href_list, var/usingUI = 1)
 	if(!(isrobot(usr) && (href_list["apcwires"] || href_list["pulse"])))
 		if(!can_use(usr, 1))
-			return
+			return 0
 	src.add_fingerprint(usr)
 
 	if (href_list["apcwires"])
 		var/t1 = text2num(href_list["apcwires"])
 		if (!( istype(usr.get_active_hand(), /obj/item/weapon/wirecutters) ))
 			usr << "You need wirecutters!"
-			return
+			return 0
 		if (src.isWireColorCut(t1))
 			src.mend(t1)
 		else
@@ -977,10 +977,10 @@
 		var/t1 = text2num(href_list["pulse"])
 		if (!istype(usr.get_active_hand(), /obj/item/device/multitool))
 			usr << "You need a multitool!"
-			return
+			return 0
 		if (src.isWireColorCut(t1))
 			usr << "You can't pulse a cut wire."
-			return
+			return 0
 		else
 			src.pulse(t1)
 	else if (href_list["lock"])
@@ -1027,11 +1027,11 @@
 	else if( href_list["close"] )
 		nanomanager.close_user_uis(usr, src)
 
-		return
+		return 0
 	else if (href_list["close2"])
 		usr << browse(null, "window=apcwires")
 
-		return
+		return 0
 
 	else if (href_list["overload"])
 		if( istype(usr, /mob/living/silicon) && !src.aidisabled )
@@ -1042,7 +1042,7 @@
 		if( istype(malfai, /mob/living/silicon/ai) && !src.aidisabled )
 			if (malfai.malfhacking)
 				malfai << "You are already hacking an APC."
-				return
+				return 0
 			malfai << "Beginning override of APC systems. This takes some time, and you cannot perform other actions during the process."
 			malfai.malfhack = src
 			malfai.malfhacking = 1
@@ -1071,7 +1071,7 @@
 	if(usingUI)
 		src.updateDialog()
 
-	return
+	return 1
 
 /*/obj/machinery/power/apc/proc/malfoccupy(var/mob/living/silicon/ai/malf)
 	if(!istype(malf))
@@ -1424,18 +1424,5 @@
 	/*if(occupant)
 		malfvacate(1)*/
 	..()
-
-/obj/machinery/power/apc/proc/shock(mob/user, prb)
-	if(!prob(prb))
-		return 0
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(5, 1, src)
-	s.start()
-	if(isalien(user))
-		return 0
-	if (electrocute_mob(user, src, src))
-		return 1
-	else
-		return 0
 
 #undef APC_UPDATE_ICON_COOLDOWN
