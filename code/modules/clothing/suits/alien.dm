@@ -5,7 +5,7 @@
 	desc = "A traditional Unathi garment."
 	icon_state = "robe-unathi"
 	item_state = "robe-unathi"
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS
 
 /obj/item/clothing/suit/unathi/mantle
 	name = "hide mantle"
@@ -14,7 +14,6 @@
 	item_state = "mantle-unathi"
 	body_parts_covered = UPPER_TORSO
 
-
 //Taj clothing.
 
 /obj/item/clothing/suit/tajaran/furs
@@ -22,11 +21,7 @@
 	desc = "A traditional Zhan-Khazan garment."
 	icon_state = "zhan_furs"
 	item_state = "zhan_furs"
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
-/*
-	sprite_sheets = list(
-		"Tajaran" = 'icons/mob/species/tajaran/suit.dmi',
-		)*/
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS
 
 /obj/item/clothing/head/tajaran/scarf
 	name = "headscarf"
