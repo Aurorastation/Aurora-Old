@@ -50,7 +50,7 @@
 
 
 
-/obj/machinery/containment_field/shock(mob/living/user as mob)
+/obj/machinery/containment_field/proc/shock(mob/living/user as mob)
 	if(hasShocked)
 		return 0
 	if(!FG1 || !FG2)
@@ -63,8 +63,17 @@
 
 		hasShocked = 1
 		var/shock_damage = min(rand(30,40),rand(30,40))
-		user.electrocute_act(shock_damage, src)
+		user.burn_skin(shock_damage)
+		user.updatehealth()
+		user.visible_message("\red [user.name] was shocked by the [src.name]!", \
+			"\red <B>You feel a powerful shock course through your body sending you flying!</B>", \
+			"\red You hear a heavy electrical crack")
 
+		var/stun = min(shock_damage, 15)
+		user.Stun(stun)
+		user.Weaken(10)
+
+		user.updatehealth()
 		var/atom/target = get_edge_target_turf(user, get_dir(src, get_step_away(user, src)))
 		user.throw_at(target, 200, 4)
 

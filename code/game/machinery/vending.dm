@@ -588,6 +588,19 @@
 			src.shoot_inventory = !src.shoot_inventory
 
 
+/obj/machinery/vending/proc/shock(mob/user, prb)
+	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
+		return 0
+	if(!prob(prb))
+		return 0
+	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+	s.set_up(5, 1, src)
+	s.start()
+	if (electrocute_mob(user, get_area(src), src, 0.7))
+		return 1
+	else
+		return 0
+
 /*
  * Vending machine types
  */

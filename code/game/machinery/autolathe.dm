@@ -143,7 +143,18 @@ var/global/list/autolathe_recipes_hidden = list( \
 			user << browse("<HTML><HEAD><TITLE>Autolathe Control Panel</TITLE></HEAD><BODY><TT>[dat]</TT></BODY></HTML>", "window=autolathe_regular")
 			onclose(user, "autolathe_regular")
 
-
+		shock(mob/user, prb)
+			if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
+				return 0
+			if(!prob(prb))
+				return 0
+			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+			s.set_up(5, 1, src)
+			s.start()
+			if (electrocute_mob(user, get_area(src), src, 0.7))
+				return 1
+			else
+				return 0
 
 	interact(mob/user as mob)
 		if(istype(user, /mob/living/carbon/human))
