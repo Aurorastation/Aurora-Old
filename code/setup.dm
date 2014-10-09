@@ -697,7 +697,7 @@ var/list/be_special_flags = list(
 #define IMPLOYAL_HUD		5 // loyality implant
 #define IMPCHEM_HUD		6 // chemical implant
 #define IMPTRACK_HUD		7 // tracking implant
-#define SPECIALROLE_HUD 	9 // AntagHUD image
+#define SPECIALROLE_HUD 	8 // AntagHUD image
 #define STATUS_HUD_OOC		9 // STATUS_HUD without virus db check for someone being ill.
 
 //Pulse levels, very simplified

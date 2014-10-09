@@ -215,11 +215,6 @@
 	if(!mob.lastarea)
 		mob.lastarea = get_area(mob.loc)
 
-	if(mob.floating && mob.mob_has_gravity(mob.loc))
-		mob.float(0)
-	else if(!mob.floating && !mob.mob_has_gravity(mob.loc))
-		mob.float(1)
-
 	if((istype(mob.loc, /turf/space)) || (mob.lastarea.has_gravity == 0))
 		if(!mob.Process_Spacemove(0))	return 0
 
