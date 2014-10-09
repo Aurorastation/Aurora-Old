@@ -69,7 +69,6 @@
 	..()
 
 
-
 /mob/dead/observer/Topic(href, href_list)
 	if (href_list["track"])
 		var/mob/target = locate(href_list["track"]) in mob_list
@@ -122,6 +121,10 @@ Works together with spawning an observer, noted above.
 	if(medHUD)
 		process_medHUD(src)
 
+/mob/dead/observer/float(var/on)
+	if(floating)
+		float(0)
+	return
 
 /mob/dead/proc/process_medHUD(var/mob/M)
 	var/client/C = M.client

@@ -979,7 +979,7 @@ datum
 
 			reaction_obj(var/obj/O, var/volume)
 				if(istype(O,/obj/effect/decal/cleanable/blood))
-					var/obj/effect/decal/cleanable/blood/W
+					var/obj/effect/decal/cleanable/blood/W = O
 					W.invisibility = 1
 					W.color = "#007fff"
 					W.basecolor = "#007fff"

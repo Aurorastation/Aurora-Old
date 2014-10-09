@@ -95,7 +95,7 @@
 /mob/proc/Life()
 //	if(organStructure)
 //		organStructure.ProcessOrgans()
-	if(floating && mob_has_gravity(loc) && buckled)
+	if((floating && mob_has_gravity(loc)) || (floating && buckled))
 		float(0)
 	else if(!floating && !mob_has_gravity(loc) && !buckled)
 		float(1)
