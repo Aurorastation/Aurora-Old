@@ -12,7 +12,7 @@ RSF
 	density = 0
 	anchored = 0.0
 	var/matter = 0
-	var/mode = 2
+	var/mode = 1
 	flags = TABLEPASS
 	w_class = 3.0
 
@@ -52,12 +52,12 @@ RSF
 		user << "Changed dispensing mode to 'Dice Pack'"
 		return
 	if (mode == 5)
-		mode = 1 //6
+		mode = 6
 		user << "Changed dispensing mode to 'Cigarette'"
 		return
 	if (mode == 6)
-		mode = 2
-		user << "Changed dispensing mode to 'Drinking Glass'" //dosh removed by request
+		mode = 1
+		user << "Changed dispensing mode to 'Dosh'"
 		return
 	// Change mode
 
