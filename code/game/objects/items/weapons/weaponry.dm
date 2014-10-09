@@ -190,7 +190,7 @@
 	throwforce = 5.0
 	throw_speed = 5
 	throw_range = 10
-	w_class = 3.0
+	w_class = 4.0
 	flags = FPRINT | TABLEPASS
 	attack_verb = list("struck out", "beat", "bludgeoned", "homerunned")
 
@@ -203,7 +203,7 @@
 	throwforce = 5.0
 	throw_speed = 5
 	throw_range = 10
-	w_class = 3.0
+	w_class = 4.0
 	flags = FPRINT | TABLEPASS
 	attack_verb = list("struck out", "beat", "bludgeoned", "homerunned")
 
@@ -216,6 +216,6 @@
 	throwforce = 5.0
 	throw_speed = 5
 	throw_range = 10
-	w_class = 3.0
+	w_class = 4.0
 	flags = FPRINT | TABLEPASS
 	attack_verb = list("struck out", "beat", "bludgeoned", "homerunned")
