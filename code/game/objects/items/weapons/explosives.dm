@@ -34,7 +34,12 @@
 			if(target)
 
 				var/mob/mob = get_mob_by_key(src.fingerprintslast)
-				var/hit_site = target.loc.loc.name
+				var/hit_site
+				if(!target.loc.loc)
+					hit_site = target.loc.name
+				else
+					hit_site = target.loc.loc.name
+
 				var/log_str = "Plastic explosives went off <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[target.x];Y=[target.y];Z=[target.z]'>[hit_site]</a> "
 				if(ismob(target))
 					log_str += " planted on ([target.name]) "
