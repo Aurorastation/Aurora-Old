@@ -97,7 +97,7 @@
 //		organStructure.ProcessOrgans()
 	if((floating && mob_has_gravity(loc)) || (floating && buckled))
 		float(0)
-	else if(!floating && !mob_has_gravity(loc) && !buckled)
+	else if(!floating && !mob_has_gravity(loc) && !buckled && stat != DEAD)
 		float(1)
 	return
 
