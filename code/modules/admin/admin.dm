@@ -210,9 +210,9 @@ var/global/floorIsLava = 0
 /datum/admins/proc/PlayerNotes()
 	set category = "Admin"
 	set name = "Player Notes"
-/*	if (!istype(src,/datum/admins))
-		src = usr.client.holder
 	if (!istype(src,/datum/admins))
+		src = usr.client.holder
+/*	if (!istype(src,/datum/admins))
 		usr << "Error: you are not an admin!"
 		return
 */

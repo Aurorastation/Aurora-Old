@@ -116,5 +116,12 @@
 				playsound(src, 'sound/effects/screech.ogg', 100, 1, 1)
 			if(power_drained >= max_power)
 				processing_objects.Remove(src)
+				var/hit_site
+				if(!src.loc.loc)
+					hit_site = src.loc.name
+				else
+					hit_site = src.loc.loc.name
+				message_admins("Powersink expoded in [hit_site] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>")
+				message_mods("Powersink expoded in [hit_site] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>")
 				explosion(src.loc, 3,6,9,12)
 				del(src)
