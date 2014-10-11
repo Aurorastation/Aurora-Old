@@ -73,6 +73,9 @@
 			return 1
 		return (..())
 
+	float()
+		return 0
+
 
 /mob/living/blob/verb/create_node()
 	set category = "Blob"

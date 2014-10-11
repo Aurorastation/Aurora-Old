@@ -17,6 +17,10 @@
 /mob/aiEye/Move()
 	return 0
 
+//Just no
+/mob/aiEye/float()
+	return 0
+
 // Hide popout menu verbs
 /mob/aiEye/examine()
 	set popup_menu = 0
