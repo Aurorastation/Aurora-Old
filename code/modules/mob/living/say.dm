@@ -121,10 +121,10 @@ var/list/department_radio_keys = list(
 	spawn(30) del(speech_bubble)
 
 	if(used_radios.len)
-		for(var/mob/living/M in hearers(5, src))
-			if(M != src)
-				M.show_message("<span class='notice'>[src] talks into [used_radios.len ? used_radios[1] : "radio"]</span>")
-
+		if (!istype(src, /mob/living/silicon/ai)) // Atlantis: Prevents nearby people from hearing the AI when it talks using it's integrated radio.
+			for(var/mob/living/M in hearers(5, src))
+				if(M != src)
+					M.show_message("<span class='notice'>[src] talks into [used_radios.len ? used_radios[1] : "the radio."]</span>")
 
 	for(var/mob/M in listening)
 		M << speech_bubble
