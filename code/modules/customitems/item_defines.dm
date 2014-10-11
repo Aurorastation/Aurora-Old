@@ -845,18 +845,18 @@
 				spamcheck = 0
 			return
 
-/obj/item/clothing/tie/medal/fluff/vivian_heart
+/obj/item/clothing/tie/medal/fluff/vivian_heart // Platinum Heart - Vivian - XanderDox - DONE
 	name = "platinum heart"
 	desc = "The medal is white-plated platinum, and bears a red-cross on the front, the back is engraved, Vivian Rival, Medical Doctor & Species Rights Activist."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "vivian_heart"
 	item_color = "vivian_heart"
 
-/obj/item/clothing/head/ushanka/fluff/ava_ushanka	//Worn Ushanka - Ava Kalashnikova - demonofthefall - DONE
+/obj/item/clothing/head/ushanka/fluff/ava_ushanka	// Worn Ushanka - Ava Kalashnikova - demonofthefall - DONE
 	name = "worn ushanka"
 	desc = "An old ushanka, it looks well worn."
-	icon_state = "ushanka_avadown"
-	item_state = "ushankadown"	//Skull getting lazy with code.
+	item_state = "ushanka_avadown"
+	icon_state = "ushankadown"
 
 /obj/item/clothing/head/ushanka/fluff/ava_ushanka/attack_self(mob/user as mob)
 	if(src.icon_state == "ushankadown")
@@ -868,7 +868,7 @@
 		src.item_state = "ushanka_avadown"
 		user << "You lower the ear flaps on the ushanka."
 
-/obj/item/clothing/tie/fluff/hamil_badge
+/obj/item/clothing/tie/fluff/hamil_badge // Internal Investigations Badge - Muhammad Hamil - Jackboot - DONE
 	name = "Internal Investigations Badge"
 	desc = "An Internal Investigation badge. Used by a special branch of the Elyran police force."
 	icon = 'icons/obj/custom_items.dmi'
@@ -882,14 +882,14 @@
 	if(isliving(user))
 		user.visible_message("\red [user] invades [M]'s personal space, thrusting [src] into their face insistently.","\red You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.")
 
-/obj/item/clothing/mask/gas/fluff/stefan_mask
+/obj/item/clothing/mask/gas/fluff/stefan_mask // Modified Gas Mask - Oliver Stefan - Nbielinski - DONE
 	desc = "This odd looking gas mask is quite clearly not of NanoTrasen origin as it sports a black metal polish, as well as a reflective face plate that mirrors the view of the mask itself. This particular mask appears to breathe with the user, hissing when they exhale, and whining softly as they inhale."
 	name = "Modified Gas Mask"
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "stefan_mask"
 	item_state = "stefan_mask"
 
-/obj/item/weapon/melee/fluff/balisong
+/obj/item/weapon/melee/fluff/balisong // Orihara's Balisong - Shizuo Orihara - GlamourChariot - DONE
 	name = "Orihara's Balisong"
 	desc = "A small, black butterfly knife with comfortable handles and a mean looking blade. Perfect for dangerous towns where being stylish is just as important as being deadly."
 	icon = 'icons/obj/custom_items.dmi'
@@ -939,8 +939,8 @@
 
 	return
 
-/obj/structure/stool/bed/chair/wheelchair/fluff/kit
-	name = "Kit's Hotrod"
+/obj/structure/stool/bed/chair/wheelchair/fluff/kit // Kit's Wheelchair - Cassidy Kit - Meowykins - DONE
+	name = "Kit's Wheelchair"
 	desc = "A wheelchair, that has large flames on the back of the seat. It has a nametag on one of the arms, reading 'Kit.'"
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "kit_wheels"
@@ -954,7 +954,7 @@ obj/structure/stool/bed/chair/wheelchair/fluff/kit/handle_rotation()
 	if(buckled_mob)
 		buckled_mob.dir = dir
 
-/obj/item/weapon/storage/fluff/binder
+/obj/item/weapon/storage/fluff/binder // Black Binder - Cassidy Kit - Meowykins - DONE
 	name = "Black Binder"
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "kit_binder"
@@ -973,7 +973,7 @@ obj/structure/stool/bed/chair/wheelchair/fluff/kit/handle_rotation()
 	new /obj/item/weapon/folder/yellow(src)
 	new /obj/item/weapon/pen/fluff/kit_pen(src)
 
-/obj/item/weapon/pen/fluff/kit_pen
+/obj/item/weapon/pen/fluff/kit_pen // Fountain Pen - Cassidy Kit - Meowykins - DONE
 	desc = "A small fountain pen. It has several spots to change the cartridge inside for another color, as well as a selector switch for ease of use."
 	name = "fountain pen"
 	icon = 'icons/obj/custom_items.dmi'

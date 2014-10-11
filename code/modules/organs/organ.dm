@@ -11,7 +11,7 @@
 	proc/receive_chem(chemical as obj)
 		return 0
 
-/datum/organ/proc/get_icon()
+/datum/organ/proc/get_icon(var/icon/race_icon, var/icon/deform_icon)
 	return icon('icons/mob/human.dmi',"blank")
 
 //Handles chem traces
