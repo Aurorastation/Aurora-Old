@@ -41,7 +41,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 
 	world << "\red \b Resetting Gravity Simulation."
 	gravity_is_on = 1
-	spawn(10)
+	spawn(1)
 		for(var/area/A in world)
 			if(A.name == "Space")
 				continue
@@ -164,6 +164,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 /obj/machinery/gravity_field_generator/main/Del() // If we somehow get deleted, remove all of our other parts.
 	log_debug("Gravity Generator Destroyed")
 	investigate_log("was destroyed!", "gravity")
+	captain_announce("Gravity generator: location missing!")
 	on = 0
 	update_list()
 	for(var/obj/machinery/gravity_field_generator/part/O in parts)
@@ -353,6 +354,8 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	update_list()
 	src.updateUsrDialog()
 	if(alert)
+		if(!(stat & BROKEN))
+			captain_announce("Gravity generator: shutdown successful.")
 		shake_everyone()
 
 // Charge/Discharge and turn on/off gravity when you reach 0/100 percent.

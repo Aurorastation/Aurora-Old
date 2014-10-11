@@ -11,6 +11,9 @@
 		del(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/flatdough/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W,/obj/item/weapon/kitchenknife))
+		..()
+		return
 	if(istype(W,/obj/item/weapon/reagent_containers/food))
 		var/obj/item/weapon/reagent_containers/food/snacks/customizable/pizza/S = new(get_turf(user))
 		S.attackby(W,user)

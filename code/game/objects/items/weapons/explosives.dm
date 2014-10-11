@@ -32,6 +32,24 @@
 		user << "Bomb has been planted. Timer counting down from [timer]."
 		spawn(timer*10)
 			if(target)
+
+				var/mob/mob = get_mob_by_key(src.fingerprintslast)
+				var/hit_site
+				if(!target.loc.loc)
+					hit_site = target.loc.name
+				else
+					hit_site = target.loc.loc.name
+
+				var/log_str = "Plastic explosives went off <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[target.x];Y=[target.y];Z=[target.z]'>[hit_site]</a> "
+				if(ismob(target))
+					log_str += " planted on ([target.name]) "
+				var/last_touch_info = ""
+				if(mob)
+					last_touch_info = "(<A HREF='?_src_=holder;adminmoreinfo=\ref[mob]'>?</A>)"
+
+				log_str += " Last touched by: [src.fingerprintslast][last_touch_info]"
+				bombers += log_str
+
 				explosion(location, -1, -1, 2, 3)
 				if (istype(target, /turf/simulated/wall)) target:dismantle_wall(1)
 				else target.ex_act(1)

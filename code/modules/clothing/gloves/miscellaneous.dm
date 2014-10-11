@@ -60,3 +60,27 @@
 	item_state = "ggloves"
 	permeability_coefficient = 0.9
 	siemens_coefficient = 0.9
+
+/obj/item/clothing/gloves/watch
+	desc = "A small wristwatch, capable of telling time."
+	name = "watch"
+	icon_state = "watch"
+	item_state = "watchgloves"
+	w_class = 1
+	var/time = 1
+
+	verb/checktime()
+		set category = "Object"
+		set name = "Check Time"
+		set src in usr
+
+		if(time == 1)
+			usr << "You check your watch, spotting a digital collection of numbers reading '[worldtime2text()]'"
+
+	verb/pointatwatch()
+		set category = "Object"
+		set name = "Point at watch"
+		set src in usr
+
+		if(time == 1)
+			usr.visible_message ("<span class='notice'>[usr] taps their foot on the floor, arrogantly pointing at the [src] on their wrist with a look of derision in their eyes.</span>", "<span class='notice'>You point down at the [src], an arrogant look about your eyes.</span>")
