@@ -136,8 +136,6 @@ Please contact me on #coderbus IRC. ~Carn x
 	var/list/overlays_standing[TOTAL_LAYERS]
 	var/list/overlays_lying[TOTAL_LAYERS]
 	var/previous_damage_appearance // store what the body last looked like, so we only have to update it if something changed
-	var/icon/race_icon
-	var/icon/deform_icon
 
 
 /mob/living/carbon/human/proc/apply_overlay(cache_index)
@@ -285,11 +283,14 @@ proc/get_damage_icon_part(damage_state, body_part)
 
 	//BEGIN CACHED ICON GENERATION.
 
-		//Icon is not cached, generate and store it.
+		// Why don't we just make skeletons/shadows/golems a species? ~Z
+		var/race_icon =   (skeleton ? 'icons/mob/human_races/r_skeleton.dmi' : species.icobase)
+		var/deform_icon = (skeleton ? 'icons/mob/human_races/r_skeleton.dmi' : species.icobase)
+
 		//Robotic limbs are handled in get_icon() so all we worry about are missing or dead limbs.
 		//No icon stored, so we need to start with a basic one.
 		var/datum/organ/external/chest = get_organ("chest")
-		base_icon = chest.get_icon(g)
+		base_icon = chest.get_icon(race_icon,deform_icon,g)
 
 		for(var/datum/organ/external/part in organs)
 
@@ -299,9 +300,9 @@ proc/get_damage_icon_part(damage_state, body_part)
 				continue
 
 			if (istype(part, /datum/organ/external/groin) || istype(part, /datum/organ/external/head))
-				temp = part.get_icon(g)
+				temp = part.get_icon(race_icon,deform_icon,g)
 			else
-				temp = part.get_icon()
+				temp = part.get_icon(race_icon,deform_icon)
 
 			if(part.status & ORGAN_DEAD)
 				temp.ColorTone(necrosis_color_mod)
@@ -486,18 +487,9 @@ proc/get_damage_icon_part(damage_state, body_part)
 
 /mob/living/carbon/human/proc/update_mutantrace(var/update_icons=1)
 	var/fat
+
 	if( FAT in mutations )
 		fat = "fat"
-//	var/g = "m"
-//	if (gender == FEMALE)	g = "f"
-//BS12 EDIT
-	var/skeleton = (SKELETON in src.mutations)
-	if(skeleton)
-		race_icon = 'icons/mob/human_races/r_skeleton.dmi'
-	else
-		//Icon data is kept in species datums within the mob.
-		race_icon = species.icobase
-		deform_icon = species.deform
 
 	if(dna)
 		switch(dna.mutantrace)
