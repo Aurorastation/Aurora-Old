@@ -188,7 +188,9 @@ var/list/admin_verbs_debug = list(
 	/client/proc/toggledebuglogs,
 	/client/proc/SDQL_query,
 	/client/proc/SDQL2_query,
-	/client/proc/cmd_dev_reset_gravity
+	/client/proc/cmd_dev_reset_gravity,
+	/client/proc/cleartox,
+	/client/proc/fillspace
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -961,3 +963,42 @@ var/list/admin_verbs_mod = list(
 		usr << "You now will get advanced debug logs"
 	else
 		usr << "You now won't get advanced debug logs"
+
+/client/proc/cleartox()
+	set category = "Special Verbs"
+	set name = "Clear Toxin/Fire in Zone"
+	if(!check_rights(R_DEBUG))
+		return
+
+	var/datum/gas_mixture/environment = usr.loc.return_air()
+	environment.toxins_archived = null
+	environment.toxins = 0
+	environment.carbon_dioxide = 0
+	environment.carbon_dioxide_archived = null
+	environment.oxygen = 21.8366
+	environment.oxygen_archived = null
+	environment.nitrogen = 82.1472
+	environment.nitrogen_archived = null
+	environment.temperature_archived = null
+	environment.temperature = 293.15
+	environment.update_values()
+	var/turf/simulated/location = get_turf(usr)
+	if(location.zone)
+		for(var/turf/T in location.zone.contents)
+			for(var/obj/fire/F in T.contents)
+				del(F)
+		for(var/obj/fire/FF in world)
+			del(FF)
+
+/client/proc/fillspace()
+	set category = "Special Verbs"
+	set name = "Fill Space with floor"
+	if(!check_rights(R_DEBUG))
+		return
+	var/area/location = usr.loc.loc
+	if(location.name != "Space")
+		for(var/turf/space/S in location)
+			S.ChangeTurf(/turf/simulated/floor/plating)
+	if(location.name == "Space")
+		for(var/turf/space/S in range(2,usr.loc))
+			S.ChangeTurf(/turf/simulated/floor/plating)
