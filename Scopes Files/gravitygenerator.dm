@@ -55,6 +55,29 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 
 	feedback_add_details("admin_verb","RSG")
 
+/client/proc/cmd_dev_reset_floating()
+	set category = "Debug"
+	set name = "Reset floating mobs"
+	set desc = "Stops all mobs floating instantly."
+
+	if(!check_rights(R_DEBUG|R_DEV))	return
+
+	if(!holder)
+		return //how did they get here?
+
+	if(!ticker)
+		alert("Wait until the game starts")
+		return
+
+	if(ticker.current_state < GAME_STATE_PLAYING)
+		src << "\red The game hasn't started yet!"
+		return
+
+	for(var/mob/living/M in world)
+		M.float(0)
+
+	feedback_add_details("admin_verb","RSF")
+
 /obj/machinery/gravity_field_generator
 	name = "gravitational generator"
 	desc = "A device which produces a graviton field when set up."
