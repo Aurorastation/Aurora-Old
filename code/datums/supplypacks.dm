@@ -1305,3 +1305,15 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	containername = "Pill Bottle Kit"
 	access = access_medical
 	group = "Medical / Science"
+
+/datum/supply_packs/candlepacks
+	name = "Candlepack Crate"
+	contains = list(/obj/item/weapon/storage/fancy/candle_box,
+					/obj/item/weapon/storage/fancy/candle_box,
+					/obj/item/weapon/storage/fancy/candle_box,
+					/obj/item/weapon/storage/box/matches,
+					/obj/item/weapon/storage/box/matches,)
+	cost = 10
+	containertype = /obj/structure/closet/crate
+	containername = "candlepack crate"
+	group = "Hospitality"

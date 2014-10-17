@@ -2253,3 +2253,11 @@ datum
 			result = "ecye"
 			required_reagents = list("synaptizine" = 1, "plasma" = 1)
 			result_amount = 2
+
+// MEOW MIX (I'm not even sorry.)
+		milksub
+			name = "Milk substitute"
+			id = "milk"
+			result = "milk"
+			required_reagents = list("water" = 1, "cream" = 2)
+			result_amount = 2
