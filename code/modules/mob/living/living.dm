@@ -775,12 +775,6 @@
 		src << "Never mind, you left."
 		return
 
-	if(!ignore_items)
-		for(var/obj/item/carried_item in contents)//If the monkey got on objects.
-			if( !istype(carried_item, /obj/item/weapon/implant) && !istype(carried_item, /obj/item/clothing/mask/facehugger) )//If it's not an implant or a facehugger
-				src << "\red You can't be carrying items or have items equipped when vent crawling!"
-				return
-
 	if(isslime(src))
 		var/mob/living/carbon/slime/S = src
 		if(S.Victim)

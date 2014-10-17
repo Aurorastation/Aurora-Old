@@ -33,6 +33,12 @@
 		layer = MOB_LAYER
 		src << text("\blue You have stopped hiding.")
 
+/mob/living/silicon/robot/drone/verb/ventcrawl()
+	set name = "Crawl through Vent"
+	set desc = "Enter an air vent and crawl through the pipe system."
+	set category = "Drone"
+	handle_ventcrawl()
+
 //Actual picking-up event.
 /mob/living/silicon/robot/drone/attack_hand(mob/living/carbon/human/M as mob)
 
