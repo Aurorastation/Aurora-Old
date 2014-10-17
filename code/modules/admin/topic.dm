@@ -2687,5 +2687,8 @@
 			usr << "This mob has no ckey"
 			return
 
+		if(alert("Wind [M]?",,"Yes","No")!="Yes")
+			return
+
 		M.weakened = 500
 		return
