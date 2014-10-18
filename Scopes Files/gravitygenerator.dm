@@ -368,6 +368,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 		if(gravity_in_level() == 1)
 			alert = 1
 			gravity_is_on = 0
+			captain_announce("Gravity generator: shutdown successful.")
 			investigate_log("was brought offline and there is now no gravity for this level.", "gravity")
 			message_admins("The gravity generator was brought offline with no backup generator. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>[area.name]</a>)")
 			message_mods("The gravity generator was brought offline with no backup generator. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>[area.name]</a>)")
@@ -377,8 +378,6 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	update_list()
 	src.updateUsrDialog()
 	if(alert)
-		if(!(stat & BROKEN))
-			captain_announce("Gravity generator: shutdown successful.")
 		shake_everyone()
 
 // Charge/Discharge and turn on/off gravity when you reach 0/100 percent.
