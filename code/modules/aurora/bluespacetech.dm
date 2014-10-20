@@ -173,6 +173,9 @@
 	has_sensor = 0
 	sensor_mode = 0
 	canremove = 0
+	siemens_coefficient = 0
+	cold_protection = FULL_BODY
+	heat_protection = FULL_BODY
 
 	attack_hand()
 		if(!usr)
@@ -188,7 +191,7 @@
 	name = "Bluespace Technician's gloves"
 	desc = "A pair of modified gloves, 'BST' marked on the side."
 	siemens_coefficient = 0
-	permeability_coefficient = 0.05
+	permeability_coefficient = 0
 	canremove = 0
 
 	attack_hand()
