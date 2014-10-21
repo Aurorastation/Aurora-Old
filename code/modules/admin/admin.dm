@@ -879,8 +879,8 @@ var/global/floorIsLava = 0
 	if (!ticker || ticker.current_state != GAME_STATE_PREGAME)
 		ticker.delay_end = !ticker.delay_end
 		log_admin("[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].")
-		message_admins("\blue [key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].", 1)
-		message_mods("\blue [key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].", 1)
+		message_admins("\blue [key_name(usr)] [ticker.delay_end ? "<font color=#FF0000>delayed</font> the round end" : "has made the round end <font color=#00FF00>normally</font>"].", 1)
+		message_mods("\blue [key_name(usr)] [ticker.delay_end ? "<font color=#FF0000>delayed</font> the round end" : "has made the round end <font color=#00FF00>normally</font>"].", 1)
 		return //alert("Round end delayed", null, null, null, null, null)
 	going = !( going )
 	if (!( going ))

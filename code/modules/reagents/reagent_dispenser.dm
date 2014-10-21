@@ -154,13 +154,13 @@
 		examine()
 	if(!src.defuse && user.client.holder)
 		src.defuse = 1
-		message_admins("[key_name_admin(user)] defused fueltank at ([loc.x],[loc.y],[loc.z]).")
-		message_mods("[key_name_admin(user)] defused fueltank at ([loc.x],[loc.y],[loc.z]).")
+		message_admins("[key_name_admin(user)] <font color=#00FF00>defused</font> fueltank at ([loc.x],[loc.y],[loc.z]).")
+		message_mods("[key_name_admin(user)] <font color=#00FF00>defused</font> fueltank at ([loc.x],[loc.y],[loc.z]).")
 	else
 		if(!src.armed && user.client.holder)
 			src.defuse = 0
-			message_admins("[key_name_admin(user)] reset fuse on fueltank at ([loc.x],[loc.y],[loc.z]).")
-			message_mods("[key_name_admin(user)] reset fuse on fueltank at ([loc.x],[loc.y],[loc.z]).")
+			message_admins("[key_name_admin(user)] <font color=#FF0000>reset</font> fuse on fueltank at ([loc.x],[loc.y],[loc.z]).")
+			message_mods("[key_name_admin(user)] <font color=#FF0000>reset</font> fuse on fueltank at ([loc.x],[loc.y],[loc.z]).")
 
 /obj/structure/reagent_dispensers/fueltank/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet))
