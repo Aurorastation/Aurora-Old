@@ -119,6 +119,8 @@
 		if(damage > explosion_point)
 			for(var/mob/living/mob in living_mob_list)
 				if(istype(mob, /mob/living/carbon/human))
+					if(mob.loc.z != src.z)
+						continue
 					//Hilariously enough, running into a closet should make you get hit the hardest.
 					mob:hallucination += max(50, min(300, DETONATION_HALLUCINATION * sqrt(1 / (get_dist(mob, src) + 1)) ) )
 				var/rads = DETONATION_RADS * sqrt( 1 / (get_dist(mob, src) + 1) )
@@ -170,7 +172,7 @@
 
 	//Also keep in mind we are only adding this temperature to (efficiency)% of the one tile the rock
 	//is on. An increase of 4*C @ 25% efficiency here results in an increase of 1*C / (#tilesincore) overall.
-	
+
 	var/thermal_power = THERMAL_RELEASE_MODIFIER
 	if(removed.total_moles < 35) thermal_power += 750   //If you don't add coolant, you are going to have a bad time.
 
