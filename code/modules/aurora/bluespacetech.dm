@@ -80,6 +80,7 @@
 
 	//Add the rest of the languages
 	//Because universal speak doesn't work right.
+	bst.add_language("Sol Common")
 	bst.add_language("Sinta'unathi")
 	bst.add_language("Siik'Maas")
 	bst.add_language("Skrellian")
@@ -126,10 +127,16 @@
 			if(species.name != "Tajaran")
 				var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
 				ghost.key = key
-				ghost.mind.name = "[ghost.key] BSTech"
-				ghost.name = "[ghost.key] BSTech"
-				ghost.real_name = "[ghost.key] BSTech"
-				ghost.voice_name = "[ghost.key] BSTech"
+				if(species.name == "Machine")
+					ghost.mind.name = "Bluespace Bot"
+					ghost.name = "Bluespace Bot"
+					ghost.real_name = "Bluespace Bot"
+					ghost.voice_name = "Bluespace Bot"
+				else
+					ghost.mind.name = "[ghost.key] BSTech"
+					ghost.name = "[ghost.key] BSTech"
+					ghost.real_name = "[ghost.key] BSTech"
+					ghost.voice_name = "[ghost.key] BSTech"
 			del(src)
 
 	proc/bsc(var/kill = 0) //because we all have our unrealistic snowflakes right?
