@@ -123,13 +123,26 @@
 			s.start()
 			spawn(5)
 				del(s)
-			var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
-			ghost.key = key
-			ghost.mind.name = "[ghost.key] BSTech"
-			ghost.name = "[ghost.key] BSTech"
-			ghost.real_name = "[ghost.key] BSTech"
-			ghost.voice_name = "[ghost.key] BSTech"
+			if(species.name != "Tajaran")
+				var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
+				ghost.key = key
+				ghost.mind.name = "[ghost.key] BSTech"
+				ghost.name = "[ghost.key] BSTech"
+				ghost.real_name = "[ghost.key] BSTech"
+				ghost.voice_name = "[ghost.key] BSTech"
 			del(src)
+
+	proc/bsc(var/kill = 0) //because we all have our unrealistic snowflakes right?
+		if(set_species("Tajaran"))
+			name = "Bluespace Cat"
+			voice_name = "Bluespace Cat"
+			real_name = "Bluespace Cat"
+			mind.name = "Bluespace Cat"
+			regenerate_icons()
+		else
+			ghostize(0)
+			key = null
+			suicide()
 
 	say(var/message)
 		var/verb = "says in a subdued tone"
