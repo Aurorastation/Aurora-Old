@@ -98,6 +98,8 @@
 	spawn(5)
 		s.start()
 		bst.anchored = 0
+		spawn(10)
+			del(s)
 	log_debug("Bluespace Tech Spawned: X:[bst.x] Y:[bst.y] Z:[bst.z] User:[src]")
 	feedback_add_details("admin_verb","BST")
 	return 1
@@ -119,6 +121,8 @@
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(5, 1, src)
 			s.start()
+			spawn(5)
+				del(s)
 			var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
 			ghost.key = key
 			ghost.mind.name = "[ghost.key] BSTech"
@@ -156,6 +160,8 @@
 	translate_binary = 1
 	translate_hive = 1
 	canremove = 0
+	keyslot1 = new /obj/item/device/encryptionkey/binary
+	keyslot2 = new /obj/item/device/encryptionkey/ert
 
 	attack_hand()
 		if(!usr)
