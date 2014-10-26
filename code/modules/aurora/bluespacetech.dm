@@ -40,8 +40,7 @@
 	bst.name = "Bluespace Technician"
 	bst.real_name = "Bluespace Technician"
 	bst.voice_name = "Bluespace Technician"
-//	bst.h_style = "hair_crewcut"
-//	bst.update_hair()
+	bst.h_style = "Crewcut"
 
 	//Items
 	var/obj/item/clothing/under/U = new /obj/item/clothing/under/rank/centcom_officer/bst(bst)
@@ -77,6 +76,7 @@
 	id.name = "[id.assignment]"
 	bst.equip_to_slot_or_del(id, slot_wear_id)
 	bst.update_inv_wear_id()
+	bst.regenerate_icons()
 
 	//Add the rest of the languages
 	//Because universal speak doesn't work right.
@@ -125,6 +125,9 @@
 			spawn(5)
 				del(s)
 			if(species.name != "Tajaran")
+				if(species.name == "Machine")
+					h_style = "blue IPC screen"
+					regenerate_icons()
 				var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
 				ghost.key = key
 				if(species.name == "Machine")
@@ -141,6 +144,7 @@
 
 	proc/bsc(var/kill = 0) //because we all have our unrealistic snowflakes right?
 		if(set_species("Tajaran"))
+			h_style = "Tajaran Ears"
 			name = "Bluespace Cat"
 			voice_name = "Bluespace Cat"
 			real_name = "Bluespace Cat"
