@@ -1255,7 +1255,7 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	cost = 40
 	containertype = /obj/structure/closet/crate/secure
 	containername = "engineer hardsuit kit"
-	access_engine_equip
+	access = access_engine_equip
 	group = "Engineering"
 
 /datum/supply_packs/hardsuitcrate_s
