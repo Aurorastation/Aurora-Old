@@ -9,14 +9,17 @@
 
 
 /proc/error(msg)
+	msg_scopes("## ERROR: [msg]")
 	world.log << "## ERROR: [msg][log_end]"
 
 //print a warning message to world.log
 /proc/warning(msg)
+	msg_scopes("## WARNING: [msg]")
 	world.log << "## WARNING: [msg][log_end]"
 
 //print a testing-mode debug message to world.log
 /proc/testing(msg)
+	msg_scopes("## TESTING: [msg]")
 	world.log << "## TESTING: [msg][log_end]"
 
 /proc/log_admin(text)
