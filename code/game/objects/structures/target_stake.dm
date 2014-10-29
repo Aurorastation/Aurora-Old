@@ -142,8 +142,8 @@
 	M.loc = src.loc
 	M.dir = src.dir
 	M.update_canmove()
-	if(!M.mob_has_gravity(M.loc))
-		M.float(0)
+//	if(!M.mob_has_gravity(M.loc))
+//		M.float(0)
 	src.buckled_mob = M
 	src.add_fingerprint(user)
 	return

@@ -338,7 +338,7 @@
 		mob:AdjustStunned(2)
 		mob:AdjustWeakened(2)
 
-	mob:float(0)
+//	mob:float(0)
 	mob << "Gravity!"
 
 /proc/has_gravity(atom/AT, turf/T)
