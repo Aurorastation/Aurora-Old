@@ -125,21 +125,22 @@
 			spawn(5)
 				del(s)
 			if(species.name != "Tajaran")
-				if(species.name == "Machine")
+				if(species.name == "Machine" && key)
 					h_style = "blue IPC screen"
 					regenerate_icons()
-				var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
-				ghost.key = key
-				if(species.name == "Machine")
-					ghost.mind.name = "Bluespace Bot"
-					ghost.name = "Bluespace Bot"
-					ghost.real_name = "Bluespace Bot"
-					ghost.voice_name = "Bluespace Bot"
-				else
-					ghost.mind.name = "[ghost.key] BSTech"
-					ghost.name = "[ghost.key] BSTech"
-					ghost.real_name = "[ghost.key] BSTech"
-					ghost.voice_name = "[ghost.key] BSTech"
+				if(key)
+					var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
+					ghost.key = key
+					if(species.name == "Machine")
+						ghost.mind.name = "Bluespace Bot"
+						ghost.name = "Bluespace Bot"
+						ghost.real_name = "Bluespace Bot"
+						ghost.voice_name = "Bluespace Bot"
+					else
+						ghost.mind.name = "[ghost.key] BSTech"
+						ghost.name = "[ghost.key] BSTech"
+						ghost.real_name = "[ghost.key] BSTech"
+						ghost.voice_name = "[ghost.key] BSTech"
 			del(src)
 
 	proc/bsc(var/kill = 0) //because we all have our unrealistic snowflakes right?
@@ -149,6 +150,19 @@
 			voice_name = "Bluespace Cat"
 			real_name = "Bluespace Cat"
 			mind.name = "Bluespace Cat"
+			regenerate_icons()
+		else
+			ghostize(0)
+			key = null
+			suicide()
+
+	proc/bsb(var/kill = 0)
+		if(set_species("Machine"))
+			h_style = "blue IPC screen"
+			name = "Bluespace Bot"
+			voice_name = "Bluespace Bot"
+			real_name = "Bluespace Bot"
+			mind.name = "Bluespace Bot"
 			regenerate_icons()
 		else
 			ghostize(0)
