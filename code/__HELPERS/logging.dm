@@ -87,7 +87,7 @@
 //SoundScopes extra stuffs
 //I'm sending debug messages through here for when an admin log is made at the same time.
 //What's the point in making 2 recorded logs for one thing.
-/proc/msg_scopes(var/msg, tell_devs = 0)
+/proc/msg_scopes(var/msg, tell_devs = 0, override = 0)
 	if(tell_devs)
 		msg = "DEBUG: [msg]"
 	else
@@ -96,7 +96,7 @@
 	for(var/client/C in admins)
 		if(R_DEV & C.holder.rights)
 			if(tell_devs)
-				if((C.prefs.toggles & CHAT_DEBUGLOGS) && !(R_ADMIN & C.holder.rights))
+				if(((C.prefs.toggles & CHAT_DEBUGLOGS) || (override)) && !(C.holder.rights & R_ADMIN))
 					C << msg
 			if(R_ADMIN & C.holder.rights)
 				if(C.prefs.toggles & CHAT_SCOPES_DEBUG)
