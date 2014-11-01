@@ -102,6 +102,7 @@
 		spawn(10)
 			del(s)
 	log_debug("Bluespace Tech Spawned: X:[bst.x] Y:[bst.y] Z:[bst.z] User:[src]")
+
 	feedback_add_details("admin_verb","BST")
 	return 1
 
@@ -124,26 +125,43 @@
 			s.start()
 			spawn(5)
 				del(s)
-			if(species.name != "Tajaran")
+
+			if(key && species.name != "Human")
+				switch(species.name)
+					if("Tajaran")
+						bsc()
+					if("Machine")
+						bsb()
+					if("Diona")
+						bsd()
+					if("Unathi")
+						bsu()
+					if("Skrell")
+						bss()
+
+/*			if(species.name != "Tajaran")
 				if(species.name == "Machine" && key)
 					h_style = "blue IPC screen"
 					regenerate_icons()
-				if(key)
-					var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
-					ghost.key = key
-					if(species.name == "Machine")
+*/
+			if(key)
+				var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
+				ghost.key = key
+/*					if(species.name == "Machine")
 						ghost.mind.name = "Bluespace Bot"
 						ghost.name = "Bluespace Bot"
 						ghost.real_name = "Bluespace Bot"
 						ghost.voice_name = "Bluespace Bot"
 					else
-						ghost.mind.name = "[ghost.key] BSTech"
-						ghost.name = "[ghost.key] BSTech"
-						ghost.real_name = "[ghost.key] BSTech"
-						ghost.voice_name = "[ghost.key] BSTech"
+*/
+				ghost.mind.name = "[ghost.key] BSTech"
+				ghost.name = "[ghost.key] BSTech"
+				ghost.real_name = "[ghost.key] BSTech"
+				ghost.voice_name = "[ghost.key] BSTech"
+
 			del(src)
 
-	proc/bsc(var/kill = 0) //because we all have our unrealistic snowflakes right?
+	proc/bsc() //because we all have our unrealistic snowflakes right?
 		if(set_species("Tajaran"))
 			h_style = "Tajaran Ears"
 			name = "Bluespace Cat"
@@ -156,13 +174,51 @@
 			key = null
 			suicide()
 
-	proc/bsb(var/kill = 0)
+	proc/bsb()
 		if(set_species("Machine"))
 			h_style = "blue IPC screen"
 			name = "Bluespace Bot"
 			voice_name = "Bluespace Bot"
 			real_name = "Bluespace Bot"
 			mind.name = "Bluespace Bot"
+			regenerate_icons()
+		else
+			ghostize(0)
+			key = null
+			suicide()
+
+	proc/bsd()
+		if(set_species("Diona"))
+			name = "Bluespace Tree"
+			voice_name = "Bluespace Tree"
+			real_name = "Bluespace Tree"
+			mind.name = "Bluespace Tree"
+			regenerate_icons()
+		else
+			ghostize(0)
+			key = null
+			suicide()
+
+	proc/bsu()
+		if(set_species("Unathi"))
+			h_style = "Unathi Horns"
+			name = "Bluespace Snake"
+			voice_name = "Bluespace Snake"
+			real_name = "Bluespace Snake"
+			mind.name = "Bluespace Snake"
+			regenerate_icons()
+		else
+			ghostize(0)
+			key = null
+			suicide()
+
+	proc/bss()
+		if(set_species("Skrell"))
+			h_style = "Skrell Male Tentacles"
+			name = "Bluespace Squid"
+			voice_name = "Bluespace Squid"
+			real_name = "Bluespace Squid"
+			mind.name = "Bluespace Squid"
 			regenerate_icons()
 		else
 			ghostize(0)
