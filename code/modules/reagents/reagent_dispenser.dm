@@ -152,12 +152,14 @@
 /obj/structure/reagent_dispensers/fueltank/attack_ghost(mob/user as mob)
 	if(user.client && user.client.inquisitive_ghost)
 		examine()
-	if(!src.defuse && user.client.holder)
+	if(!user.client.holder)
+		return
+	if(!src.defuse && ((user.client.holder.rights & R_ADMIN) || (user.client.holder.rights & R_MOD)))
 		src.defuse = 1
 		message_admins("[key_name_admin(user)] <font color=#00FF00>defused</font> fueltank at ([loc.x],[loc.y],[loc.z]).")
 		message_mods("[key_name_admin(user)] <font color=#00FF00>defused</font> fueltank at ([loc.x],[loc.y],[loc.z]).")
 	else
-		if(!src.armed && user.client.holder)
+		if(!src.armed && ((user.client.holder.rights & R_ADMIN) || (user.client.holder.rights & R_MOD)))
 			src.defuse = 0
 			message_admins("[key_name_admin(user)] <font color=#FF0000>reset</font> fuse on fueltank at ([loc.x],[loc.y],[loc.z]).")
 			message_mods("[key_name_admin(user)] <font color=#FF0000>reset</font> fuse on fueltank at ([loc.x],[loc.y],[loc.z]).")
