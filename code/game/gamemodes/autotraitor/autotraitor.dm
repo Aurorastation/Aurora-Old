@@ -209,6 +209,7 @@
 
 		//var/r = rand(5)
 		//var/target_traitors = 1
+
 		var/max_traitors = 2
 		var/traitor_prob = 0
 		max_traitors = round(playercount / 10) + 1
@@ -222,6 +223,9 @@
 			//message_admins("Number of Traitors is below maximum.  Rolling for New Arrival Traitor.")
 			//message_admins("The probability of a new traitor is [traitor_prob]%")
 			if(prob(traitor_prob))
+				if(character.mind.assigned_role in restricted_jobs)
+					msg_scopes("Retricted job almost made a bad guy")
+					return
 				message_admins("New traitor roll passed.  Making a new Traitor.")
 				if (!config.objectives_disabled)
 					forge_traitor_objectives(character.mind)
