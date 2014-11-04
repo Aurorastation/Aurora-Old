@@ -1663,7 +1663,7 @@ datum/design/lawgiver
 	req_tech = list("combat" = 6, "plasmatech" = 4, "bluespace" = 5, "materials" = 7)
 	build_type = PROTOLATHE
 	materials = list("$metal" = 6000, "$glass" = 1000, "$uranium" = 1000, "$plasma" = 1000, "$diamond" = 3000)
-	build_path = "/obj/item/weapon/gun/energy/lawgiver"
+	build_path = "/obj/item/weapon/storage/lockbox/lawgiver"
 
 datum/design/bprotopistol
 	name = "Basic Protopistol"
