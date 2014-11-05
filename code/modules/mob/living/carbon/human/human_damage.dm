@@ -17,7 +17,7 @@
 
 /mob/living/carbon/human/getBrainLoss()
 	var/res = brainloss
-	var/datum/organ/internal/brain/sponge = internal_organs["brain"]
+	var/datum/organ/internal/brain/sponge = internal_organs_by_name["brain"]
 	if (sponge.is_bruised())
 		res += 20
 	if (sponge.is_broken())
@@ -308,20 +308,4 @@ This function restores all organs.
 	// Will set our damageoverlay icon to the next level, which will then be set back to the normal level the next mob.Life().
 	updatehealth()
 	hud_updateflag |= 1 << HEALTH_HUD
-
-	//Embedded projectile code.
-	if(!organ) return
-	if(istype(used_weapon,/obj/item/weapon))
-		var/obj/item/weapon/W = used_weapon  //Sharp objects will always embed if they do enough damage.
-		if( (damage > (10*W.w_class)) && ( (sharp && !ismob(W.loc)) || prob(damage/W.w_class) ) )
-			organ.implants += W
-			visible_message("<span class='danger'>\The [W] sticks in the wound!</span>")
-			embedded_flag = 1
-			src.verbs += /mob/proc/yank_out_object
-			W.add_blood(src)
-			if(ismob(W.loc))
-				var/mob/living/H = W.loc
-				H.drop_item()
-			W.loc = src
-
 	return 1

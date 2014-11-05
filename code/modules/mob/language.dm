@@ -6,11 +6,11 @@
 	var/name = "an unknown language" // Fluff name of language if any.
 	var/desc = "A language."         // Short description for 'Check Languages'.
 	var/speech_verb = "says"         // 'says', 'hisses', 'farts'.
+	var/signlang_verb = list()       // list of emotes that might be displayed if this language has NONVERBAL or SIGNLANG flags
 	var/colour = "body"         // CSS style to use for strings in this language.
 	var/key = "x"                    // Character used to speak in language eg. :o for Unathi.
 	var/flags = 0                    // Various language flags.
 	var/native                       // If set, non-native speakers will have trouble speaking.
-	var/vocal = 1                    // Is a spoken language
 
 /datum/language/unathi
 	name = "Sinta'unathi"
@@ -82,13 +82,13 @@
 	key = "z"
 	flags = WHITELISTED
 
-/datum/language/sign
+/*/datum/language/sign
 	name = "Sign language"
 	desc = "A mixture of manual communication and body-languaged, used to communication with those who have impaired hearing."
 	speech_verb = "signs"
 	colour = "say_quote"
 	key = "4"
-	vocal = 0
+	vocal = 0*/
 
 // Language handling.
 /mob/proc/add_language(var/language)
@@ -106,6 +106,11 @@
 	languages.Remove(all_languages[rem_language])
 
 	return 0
+
+// Can we speak this language, as opposed to just understanding it?
+/mob/proc/can_speak(datum/language/speaking)
+
+	return (universal_speak || speaking in src.languages)
 
 //TBD
 /mob/verb/check_languages()

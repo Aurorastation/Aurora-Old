@@ -40,6 +40,12 @@
 	pixel_y = rand(-8, 8)
 	pixel_x = rand(-9, 9)
 	stamps = ""
+
+	if(info != initial(info))
+		info = html_encode(info)
+		info = replacetext(info, "\n", "<BR>")
+		info = parsepencode(info)
+
 	spawn(2)
 		update_icon()
 		updateinfolinks()
@@ -96,8 +102,8 @@
 
 /obj/item/weapon/paper/attack_ai(var/mob/living/silicon/ai/user as mob)
 	var/dist
-	if(istype(user) && user.current) //is AI
-		dist = get_dist(src, user.current)
+	if(istype(user) && user.camera) //is AI
+		dist = get_dist(src, user.camera)
 	else //cyborg or AI not seeing through a camera
 		dist = get_dist(src, user)
 	if(dist < 2)
@@ -113,6 +119,22 @@
 		user.visible_message("<span class='notice'>You show the paper to [M]. </span>", \
 			"<span class='notice'> [user] holds up a paper and shows it to [M]. </span>")
 		M << examine()
+
+	else if(user.zone_sel.selecting == "mouth") // lipstick wiping
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(H == user)
+				user << "<span class='notice'>You wipe off the lipstick with [src].</span>"
+				H.lip_style = null
+				H.update_body()
+			else
+				user.visible_message("<span class='warning'>[user] begins to wipe [H]'s lipstick off with \the [src].</span>", \
+								 	 "<span class='notice'>You begin to wipe off [H]'s lipstick.</span>")
+				if(do_after(user, 10) && do_after(H, 10, 5, 0))	//user needs to keep their active hand, H does not.
+					user.visible_message("<span class='notice'>[user] wipes [H]'s lipstick off with \the [src].</span>", \
+										 "<span class='notice'>You wipe off [H]'s lipstick.</span>")
+					H.lip_style = null
+					H.update_body()
 
 /obj/item/weapon/paper/proc/addtofield(var/id, var/text, var/links = 0)
 	var/locid = 0
@@ -182,7 +204,7 @@
 	t = replacetext(t, "\[/u\]", "</U>")
 	t = replacetext(t, "\[large\]", "<font size=\"4\">")
 	t = replacetext(t, "\[/large\]", "</font>")
-	t = replacetext(t, "\[sign\]", "<font face=\"[signfont]\"><i>[user.real_name]</i></font>")
+	t = replacetext(t, "\[sign\]", "<font face=\"[signfont]\"><i>[user ? user.real_name : "Anonymous"]</i></font>")
 	t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
 
 	if(!iscrayon)
@@ -192,8 +214,15 @@
 		t = replacetext(t, "\[/small\]", "</font>")
 		t = replacetext(t, "\[list\]", "<ul>")
 		t = replacetext(t, "\[/list\]", "</ul>")
+		t = replacetext(t, "\[table\]", "<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
+		t = replacetext(t, "\[/table\]", "</td></tr></table>")
+		t = replacetext(t, "\[grid\]", "<table>")
+		t = replacetext(t, "\[/grid\]", "</td></tr></table>")
+		t = replacetext(t, "\[row\]", "</td><tr>")
+		t = replacetext(t, "\[cell\]", "<td>")
+		t = replacetext(t, "\[logo\]", "<img src = http://baystation12.net/wiki/logo.png>")
 
-		t = "<font face=\"[deffont]\" color=[P.colour]>[t]</font>"
+		t = "<font face=\"[deffont]\" color=[P ? P.colour : "black"]>[t]</font>"
 	else // If it is a crayon, and he still tries to use these, make them empty!
 		t = replacetext(t, "\[*\]", "")
 		t = replacetext(t, "\[hr\]", "")
@@ -201,8 +230,13 @@
 		t = replacetext(t, "\[/small\]", "")
 		t = replacetext(t, "\[list\]", "")
 		t = replacetext(t, "\[/list\]", "")
+		t = replacetext(t, "\[table\]", "")
+		t = replacetext(t, "\[/table\]", "")
+		t = replacetext(t, "\[row\]", "")
+		t = replacetext(t, "\[cell\]", "")
+		t = replacetext(t, "\[logo\]", "")
 
-		t = "<font face=\"[crayonfont]\" color=[P.colour]><b>[t]</b></font>"
+		t = "<font face=\"[crayonfont]\" color=[P ? P.colour : "black"]><b>[t]</b></font>"
 
 //	t = replacetext(t, "#", "") // Junk converted to nothing!
 
@@ -282,9 +316,10 @@
 			iscrayon = 1
 
 
-		if((!in_range(src, usr) && loc != usr && !( istype(loc, /obj/item/weapon/clipboard) ) && loc.loc != usr && usr.get_active_hand() != i)) // Some check to see if he's allowed to write
+		// if paper is not in usr, then it must be near them, or in a clipboard or folder, which must be in or near usr
+		if(src.loc != usr && !src.Adjacent(usr) && !((istype(src.loc, /obj/item/weapon/clipboard) || istype(src.loc, /obj/item/weapon/folder)) && (src.loc.loc == usr || src.loc.Adjacent(usr)) ) )
 			return
-
+/*
 		t = checkhtml(t)
 
 		// check for exploits
@@ -294,7 +329,8 @@
 				log_admin("PAPER: [usr] ([usr.ckey]) tried to use forbidden word in [src]: [bad].")
 				message_admins("PAPER: [usr] ([usr.ckey]) tried to use forbidden word in [src]: [bad].")
 				return
-
+*/
+		t = html_encode(t)
 		t = replacetext(t, "\n", "<BR>")
 		t = parsepencode(t, i, usr, iscrayon) // Encode everything from pencode to html
 

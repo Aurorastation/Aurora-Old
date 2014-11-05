@@ -80,6 +80,9 @@
 		throw_item(A)
 		return
 
+	if(!istype(A,/obj/item/weapon/gun) && !isturf(A) && !istype(A,/obj/screen))
+		last_target_click = world.time
+
 	var/obj/item/W = get_active_hand()
 
 	if(W == A)
@@ -249,13 +252,16 @@
 
 /atom/proc/AltClick(var/mob/user)
 	var/turf/T = get_turf(src)
-	if(T && T.AdjacentQuick(user))
+	if(T && user.TurfAdjacent(T))
 		if(user.listed_turf == T)
 			user.listed_turf = null
 		else
 			user.listed_turf = T
 			user.client.statpanel = T.name
 	return
+
+/mob/proc/TurfAdjacent(var/turf/T)
+	return T.AdjacentQuick(src)
 
 /*
 	Misc helpers
@@ -295,14 +301,29 @@
 
 // Simple helper to face what you clicked on, in case it should be needed in more than one place
 /mob/proc/face_atom(var/atom/A)
-	if( stat || buckled || !A || !x || !y || !A.x || !A.y ) return
+
+	// Snowflake for space vines.
+	var/is_buckled = 0
+	if(buckled)
+		if(istype(buckled))
+			if(!buckled.movable)
+				is_buckled = 1
+		else
+			is_buckled = 0
+
+	if( stat || is_buckled || !A || !x || !y || !A.x || !A.y ) return
 	var/dx = A.x - x
 	var/dy = A.y - y
 	if(!dx && !dy) return
 
+	var/direction
 	if(abs(dx) < abs(dy))
-		if(dy > 0)	usr.dir = NORTH
-		else		usr.dir = SOUTH
+		if(dy > 0)	direction = NORTH
+		else		direction = SOUTH
 	else
-		if(dx > 0)	usr.dir = EAST
-		else		usr.dir = WEST
+		if(dx > 0)	direction = EAST
+		else		direction = WEST
+	usr.dir = direction
+	if(buckled && buckled.movable)
+		buckled.dir = direction
+		buckled.handle_rotation()

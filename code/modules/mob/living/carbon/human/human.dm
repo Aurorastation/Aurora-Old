@@ -1,4 +1,3 @@
-
 /mob/living/carbon/human
 	name = "unknown"
 	real_name = "unknown"
@@ -52,7 +51,7 @@
 
 	if(!species)
 		if(new_species)
-			set_species(new_species)
+			set_species(new_species,null,1)
 		else
 			set_species()
 
@@ -121,7 +120,7 @@
 			return
 
 		//BubbleWrap: people in handcuffs are always switched around as if they were on 'help' intent to prevent a person being pulled from being seperated from their puller
-		if((tmob.a_intent == "help" || tmob.restrained()) && (a_intent == "help" || src.restrained()) && tmob.canmove && canmove) // mutual brohugs all around!
+		if((tmob.a_intent == "help" || tmob.restrained()) && (a_intent == "help" || src.restrained()) && tmob.canmove && !tmob.buckled && canmove) // mutual brohugs all around!
 			var/turf/oldloc = loc
 			loc = tmob.loc
 			tmob.loc = oldloc
@@ -180,10 +179,9 @@
 		if(ticker.mode:malf_mode_declared)
 			stat(null, "Time left: [max(ticker.mode:AI_win_timeleft/(ticker.mode:apcs/3), 0)]")
 	if(emergency_shuttle)
-		if(emergency_shuttle.online && emergency_shuttle.location < 2)
-			var/timeleft = emergency_shuttle.timeleft()
-			if (timeleft)
-				stat(null, "ETA-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
+		var/eta_status = emergency_shuttle.get_status_panel_eta()
+		if(eta_status)
+			stat(null, eta_status)
 
 	if (client.statpanel == "Status")
 		if (internal)
@@ -326,7 +324,6 @@
 		apply_damage(damage, BRUTE, affecting, armor)
 		if(armor >= 2)	return
 
-
 /mob/living/carbon/human/proc/is_loyalty_implanted(mob/living/carbon/human/M)
 	for(var/L in M.contents)
 		if(istype(L, /obj/item/weapon/implant/loyalty))
@@ -346,7 +343,7 @@
 
 		var/damage = rand(1, 3)
 
-		if(istype(M, /mob/living/carbon/slime/adult))
+		if(M.is_adult)
 			damage = rand(10, 35)
 		else
 			damage = rand(5, 25)
@@ -449,11 +446,16 @@
 	return
 
 // called when something steps onto a human
-// this could be made more general, but for now just handle mulebot
-/mob/living/carbon/human/HasEntered(var/atom/movable/AM)
-	var/obj/machinery/bot/mulebot/MB = AM
-	if(istype(MB))
+// this handles mulebots and vehicles
+/mob/living/carbon/human/Crossed(var/atom/movable/AM)
+	if(istype(AM, /obj/machinery/bot/mulebot))
+		var/obj/machinery/bot/mulebot/MB = AM
 		MB.RunOver(src)
+
+/*	if(istype(AM, /obj/vehicle))
+		var/obj/vehicle/V = AM
+		V.RunOver(src)
+*/
 
 //gets assignment from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers
@@ -526,13 +528,18 @@
 	if(wear_id)
 		return wear_id.GetID()
 
-//Added a safety check in case you want to shock a human mob directly through electrocute_act.
-/mob/living/carbon/human/electrocute_act(var/shock_damage, var/obj/source, var/siemens_coeff = 1.0, var/safety = 0)
-	if(!safety)
-		if(gloves)
-			var/obj/item/clothing/gloves/G = gloves
-			siemens_coeff = G.siemens_coefficient
-	return ..(shock_damage,source,siemens_coeff)
+//Removed the horrible safety parameter. It was only being used by ninja code anyways.
+//Now checks siemens_coefficient of the affected area by default
+/mob/living/carbon/human/electrocute_act(var/shock_damage, var/obj/source, var/base_siemens_coeff = 1.0, var/def_zone = null)
+	if(status_flags & GODMODE)	return 0	//godmode
+
+	if (!def_zone)
+		def_zone = pick("l_hand", "r_hand")
+
+	var/datum/organ/external/affected_organ = get_organ(check_zone(def_zone))
+	var/siemens_coeff = base_siemens_coeff * get_siemens_coefficient_organ(affected_organ)
+
+	return ..(shock_damage, source, siemens_coeff, def_zone)
 
 
 /mob/living/carbon/human/Topic(href, href_list)
@@ -822,6 +829,27 @@
 	if (href_list["lookmob"])
 		var/mob/M = locate(href_list["lookmob"])
 		M.examine()
+
+	if (href_list["flavor_change"])
+		switch(href_list["flavor_change"])
+			if("done")
+				src << browse(null, "window=flavor_changes")
+				return
+			if("general")
+				var/msg = input(usr,"Update the general description of your character. This will be shown regardless of clothing, and may include OOC notes and preferences.","Flavor Text",html_decode(flavor_texts[href_list["flavor_change"]])) as message
+				if(msg != null)
+					msg = copytext(msg, 1, MAX_MESSAGE_LEN)
+					msg = html_encode(msg)
+				flavor_texts[href_list["flavor_change"]] = msg
+				return
+			else
+				var/msg = input(usr,"Update the flavor text for your [href_list["flavor_change"]].","Flavor Text",html_decode(flavor_texts[href_list["flavor_change"]])) as message
+				if(msg != null)
+					msg = copytext(msg, 1, MAX_MESSAGE_LEN)
+					msg = html_encode(msg)
+				flavor_texts[href_list["flavor_change"]] = msg
+				set_flavor()
+				return
 	..()
 	return
 
@@ -1091,8 +1119,7 @@
 					H.brainmob.mind.transfer_to(src)
 					del(H)
 
-	for(var/E in internal_organs)
-		var/datum/organ/internal/I = internal_organs[E]
+	for(var/datum/organ/internal/I in internal_organs)
 		I.damage = 0
 
 	for (var/datum/disease/virus in viruses)
@@ -1104,11 +1131,11 @@
 	..()
 
 /mob/living/carbon/human/proc/is_lung_ruptured()
-	var/datum/organ/internal/lungs/L = internal_organs["lungs"]
+	var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
 	return L.is_bruised()
 
 /mob/living/carbon/human/proc/rupture_lung()
-	var/datum/organ/internal/lungs/L = internal_organs["lungs"]
+	var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
 
 	if(!L.is_bruised())
 		src.custom_pain("You feel a stabbing pain in your chest!", 1)
@@ -1171,16 +1198,11 @@
 	var/list/visible_implants = list()
 	for(var/datum/organ/external/organ in src.organs)
 		for(var/obj/item/weapon/O in organ.implants)
-			if(!istype(O,/obj/item/weapon/implant) && O.w_class > class)
+			if(!istype(O,/obj/item/weapon/implant) && (O.w_class > class) && !istype(O,/obj/item/weapon/shard/shrapnel))
 				visible_implants += O
 
 	return(visible_implants)
-/*
-/mob/living/carbon/human/generate_name()
-	name = species.makeName(gender,src)
-	real_name = name
-	return name
-*/
+
 /mob/living/carbon/human/proc/handle_embedded_objects()
 
 	for(var/datum/organ/external/organ in src.organs)
@@ -1229,14 +1251,14 @@
 		return
 
 	usr << "Don't move until counting is finished."
-	var/time = world.timeofday
+	var/time = world.time
 	sleep(60)
 	if(usr.l_move_time >= time)	//checks if our mob has moved during the sleep()
 		usr << "You moved while counting. Try again."
 	else
 		usr << "\blue [self ? "Your" : "[src]'s"] pulse is [src.get_pulse(GETPULSE_HAND)]."
 
-/mob/living/carbon/human/proc/set_species(var/new_species, var/force_organs)
+/mob/living/carbon/human/proc/set_species(var/new_species, var/force_organs, var/default_colour)
 
 	if(!dna)
 		if(!new_species)
@@ -1261,11 +1283,22 @@
 	if(species.language)
 		add_language(species.language)
 
+	if(species.base_color && default_colour)
+		//Apply colour.
+		r_skin = hex2num(copytext(species.base_color,2,4))
+		g_skin = hex2num(copytext(species.base_color,4,6))
+		b_skin = hex2num(copytext(species.base_color,6,8))
+	else
+		r_skin = 0
+		g_skin = 0
+		b_skin = 0
+
+	species.handle_post_spawn(src)
+
 	spawn(0)
 		update_icons()
 
 	if(species)
-		species.handle_post_spawn(src)
 		return 1
 	else
 		return 0
@@ -1356,7 +1389,7 @@
 	if(last_special > world.time)
 		return
 
-	if(stat || paralysis || stunned || weakened || lying)
+	if(stat || paralysis || stunned || weakened || lying || restrained() || buckled)
 		src << "You cannot leap in your current state."
 		return
 
@@ -1366,17 +1399,24 @@
 			choices += M
 	choices -= src
 
-	var/mob/living/T = input(src,"Who do you wish to leap at?") in null|choices
+	var/mob/living/T = input(src,"Who do you wish to leap at?") as null|anything in choices
 
 	if(!T || !src || src.stat) return
 
 	if(get_dist(get_turf(T), get_turf(src)) > 6) return
 
-	last_special = world.time + 100
+	if(last_special > world.time)
+		return
+
+	if(stat || paralysis || stunned || weakened || lying || restrained() || buckled)
+		src << "You cannot leap in your current state."
+		return
+
+	last_special = world.time + 75
 	status_flags |= LEAPING
 
 	src.visible_message("<span class='warning'><b>\The [src]</b> leaps at [T]!</span>")
-	src.throw_at(get_step(get_turf(T),get_turf(src)), 5, 1)
+	src.throw_at(get_step(get_turf(T),get_turf(src)), 5, 1, src)
 	playsound(src.loc, 'sound/voice/shriek1.ogg', 50, 1)
 
 	sleep(5)
@@ -1388,6 +1428,11 @@
 		return
 
 	T.Weaken(5)
+
+	//Only official raider vox get the grab and no self-prone."
+	if(src.mind && src.mind.special_role != "Vox Raider")
+		src.Weaken(5)
+		return
 
 	var/use_hand = "left"
 	if(l_hand)
@@ -1445,3 +1490,77 @@
 		M.apply_damage(50,BRUTE)
 		if(M.stat == 2)
 			M.gib()
+
+/mob/living/carbon/human/proc/commune()
+	set category = "IC"
+	set name = "Commune with creature"
+	set desc = "Send a telepathic message to an unlucky recipient."
+
+	var/list/targets = list()
+	var/target = null
+	var/text = null
+
+	targets += getmobs() //Fill list, prompt user with list
+	target = input("Select a creature!", "Speak to creature", null, null) as null|anything in targets
+
+	if(!target) return
+
+	text = input("What would you like to say?", "Speak to creature", null, null)
+
+	text = trim(copytext(sanitize(text), 1, MAX_MESSAGE_LEN))
+
+	if(!text) return
+
+	var/mob/M = targets[target]
+
+	if(istype(M, /mob/dead/observer) || M.stat == DEAD)
+		src << "Not even a [src.species.name] can speak to the dead."
+		return
+
+	log_say("[key_name(src)] communed to [key_name(M)]: [text]")
+
+	M << "\blue Like lead slabs crashing into the ocean, alien thoughts drop into your mind: [text]"
+	if(istype(M,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = M
+		if(H.species.name == src.species.name)
+			return
+		H << "\red Your nose begins to bleed..."
+		H.drip(1)
+
+/mob/living/carbon/human/print_flavor_text()
+	var/list/equipment = list(src.head,src.wear_mask,src.glasses,src.w_uniform,src.wear_suit,src.gloves,src.shoes)
+	var/head_exposed = 1
+	var/face_exposed = 1
+	var/eyes_exposed = 1
+	var/torso_exposed = 1
+	var/arms_exposed = 1
+	var/legs_exposed = 1
+	var/hands_exposed = 1
+	var/feet_exposed = 1
+
+	for(var/obj/item/clothing/C in equipment)
+		if(C.body_parts_covered & HEAD)
+			head_exposed = 0
+		if(C.body_parts_covered & FACE)
+			face_exposed = 0
+		if(C.body_parts_covered & EYES)
+			eyes_exposed = 0
+		if(C.body_parts_covered & UPPER_TORSO)
+			torso_exposed = 0
+		if(C.body_parts_covered & ARMS)
+			arms_exposed = 0
+		if(C.body_parts_covered & HANDS)
+			hands_exposed = 0
+		if(C.body_parts_covered & LEGS)
+			legs_exposed = 0
+		if(C.body_parts_covered & FEET)
+			feet_exposed = 0
+
+	flavor_text = flavor_texts["general"]
+	flavor_text += "\n\n"
+	for (var/T in flavor_texts)
+		if(flavor_texts[T] && flavor_texts[T] != "")
+			if((T == "head" && head_exposed) || (T == "face" && face_exposed) || (T == "eyes" && eyes_exposed) || (T == "torso" && torso_exposed) || (T == "arms" && arms_exposed) || (T == "hands" && hands_exposed) || (T == "legs" && legs_exposed) || (T == "feet" && feet_exposed))
+				flavor_text += flavor_texts[T]
+				flavor_text += "\n\n"
+	return ..()

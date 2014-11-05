@@ -883,7 +883,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	set category = "Admin"
 	set name = "Call Shuttle"
 
-	if ((!( ticker ) || emergency_shuttle.location))
+	if ((!( ticker ) || !emergency_shuttle.location()))
 		return
 
 	if(!check_rights(R_ADMIN))	return
@@ -891,16 +891,21 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	var/confirm = alert(src, "You sure?", "Confirm", "Yes", "No")
 	if(confirm != "Yes") return
 
+	var/choice
 	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction" || ticker.mode.name == "confliction")
-		var/choice = input("The shuttle will just return if you call it. Call anyway?") in list("Confirm", "Cancel")
+		choice = input("The shuttle will just return if you call it. Call anyway?") in list("Confirm", "Cancel")
 		if(choice == "Confirm")
-			emergency_shuttle.fake_recall = rand(300,500)
+			emergency_shuttle.auto_recall = 1	//enable auto-recall
 		else
 			return
 
-	emergency_shuttle.incall()
-	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
-	world << sound('sound/AI/shuttlecalled.ogg')
+	choice = input("Is this an emergency evacuation or a crew transfer?") in list("Emergency", "Crew Transfer")
+	if (choice == "Emergency")
+		emergency_shuttle.call_evac()
+	else
+		emergency_shuttle.call_transfer()
+
+
 	feedback_add_details("admin_verb","CSHUT") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] admin-called the emergency shuttle.")
 	message_admins("\blue [key_name_admin(usr)] admin-called the emergency shuttle.", 1)
@@ -914,7 +919,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 	if(alert(src, "You sure?", "Confirm", "Yes", "No") != "Yes") return
 
-	if(!ticker || emergency_shuttle.location || emergency_shuttle.direction == 0)
+	if(!ticker || !emergency_shuttle.can_recall())
 		return
 
 	emergency_shuttle.recall()

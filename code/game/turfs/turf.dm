@@ -22,6 +22,10 @@
 	var/icon_old = null
 	var/pathweight = 1
 
+	//Mining resource generation stuff.
+	var/has_resources
+	var/list/resources
+
 /turf/New()
 	..()
 	for(var/atom/movable/AM as mob|obj in src)
@@ -128,14 +132,6 @@
 			M:inertia_dir = 0
 	..()
 	var/objects = 0
-	for(var/atom/A as mob|obj|turf|area in src)
-		if(objects > loopsanity)	break
-		objects++
-		spawn( 0 )
-			if ((A && M))
-				A.HasEntered(M, 1)
-			return
-	objects = 0
 	for(var/atom/A as mob|obj|turf|area in range(1))
 		if(objects > loopsanity)	break
 		objects++
@@ -143,6 +139,9 @@
 			if ((A && M))
 				A.HasProximity(M, 1)
 			return
+	return
+
+/turf/proc/adjacent_fire_act(turf/simulated/floor/source, temperature, volume)
 	return
 
 /turf/proc/is_plating()
@@ -215,6 +214,7 @@
 ///// Z-Level Stuff
 
 	var/old_lumcount = lighting_lumcount - initial(lighting_lumcount)
+	var/obj/fire/old_fire = fire
 
 	//world << "Replacing [src.type] with [N]"
 
@@ -243,6 +243,9 @@
 			W.lighting_changed = 1
 			lighting_controller.changed_turfs += W
 
+		if(old_fire)
+			fire = old_fire
+
 		if (istype(W,/turf/simulated/floor))
 			W.RemoveLattice()
 
@@ -263,6 +266,9 @@
 		if(old_lumcount != W.lighting_lumcount)
 			W.lighting_changed = 1
 			lighting_controller.changed_turfs += W
+
+		if(old_fire)
+			old_fire.RemoveFire()
 
 		if(air_master)
 			air_master.mark_for_update(src)
