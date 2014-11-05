@@ -10,7 +10,7 @@
 	density = 1
 	use_power = 0
 	idle_power_usage = 500
-	active_power_usage = 10000
+	active_power_usage = 70000 //70 kW per unit of strength
 	construction_state = 0
 	active = 0
 	dir = 1
@@ -20,6 +20,7 @@
 
 /obj/machinery/particle_accelerator/control_box/New()
 	connected_parts = list()
+	active_power_usage = initial(active_power_usage) * (strength + 1)
 	..()
 
 
@@ -29,7 +30,7 @@
 
 /obj/machinery/particle_accelerator/control_box/update_state()
 	if(construction_state < 3)
-		use_power = 0
+		update_use_power(0)
 		assembled = 0
 		active = 0
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
@@ -39,17 +40,11 @@
 		connected_parts = list()
 		return
 	if(!part_scan())
-		use_power = 1
+		update_use_power(1)
 		active = 0
 		connected_parts = list()
 
 	return
-
-/obj/machinery/particle_accelerator/control_box/Del()
-	if(active)
-		toggle_power()
-		process()
-	..()
 
 /obj/machinery/particle_accelerator/control_box/update_icon()
 	if(active)
@@ -93,6 +88,7 @@
 	else if(href_list["scan"])
 		src.part_scan()
 	else if(href_list["strengthup"])
+		var/old_strength = strength
 		strength++
 		if(strength > 2)
 			strength = 2
@@ -104,8 +100,13 @@
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
 			part.strength = strength
 			part.update_icon()
+		
+		if (strength != old_strength)
+			active_power_usage = initial(active_power_usage) * (strength + 1)
+			use_power(0) //update power usage
 
 	else if(href_list["strengthdown"])
+		var/old_strength = strength
 		strength--
 		if(strength < 0)
 			strength = 0
@@ -117,6 +118,10 @@
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
 			part.strength = strength
 			part.update_icon()
+		
+		if (strength != old_strength)
+			active_power_usage = initial(active_power_usage) * (strength + 1)
+			use_power(0) //update power usage
 	src.updateDialog()
 	src.update_icon()
 	return
@@ -126,9 +131,9 @@
 	..()
 	if(stat & NOPOWER)
 		active = 0
-		use_power = 0
+		update_use_power(0)
 	else if(!stat && construction_state == 3)
-		use_power = 1
+		update_use_power(1)
 	return
 
 
@@ -191,7 +196,6 @@
 		if(PA.connect_master(src))
 			if(PA.report_ready(src))
 				src.connected_parts.Add(PA)
-				PA.master = src
 				return 1
 	return 0
 
@@ -199,13 +203,13 @@
 /obj/machinery/particle_accelerator/control_box/proc/toggle_power()
 	src.active = !src.active
 	if(src.active)
-		src.use_power = 2
+		update_use_power(2)
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
 			part.strength = src.strength
 			part.powered = 1
 			part.update_icon()
 	else
-		src.use_power = 1
+		update_use_power(1)
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
 			part.strength = null
 			part.powered = 0
@@ -225,7 +229,7 @@
 	dat += "Particle Accelerator Control Panel<BR>"
 	dat += "<A href='?src=\ref[src];close=1'>Close</A><BR><BR>"
 	dat += "Status:<BR>"
-	if(!assembled || connected_parts.len < 6)
+	if(!assembled)
 		dat += "Unable to detect all parts!<BR>"
 		dat += "<A href='?src=\ref[src];scan=1'>Run Scan</A><BR><BR>"
 	else

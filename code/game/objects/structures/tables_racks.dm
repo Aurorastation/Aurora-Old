@@ -19,9 +19,11 @@
 	anchored = 1.0
 	layer = 2.8
 	throwpass = 1	//You can throw objects over this, despite it's density.")
+	climbable = 1
+
 	var/parts = /obj/item/weapon/table_parts
 	var/flipped = 0
-	var/health = 200
+	var/health = 100
 
 /obj/structure/table/proc/update_adjacent()
 	for(var/direction in list(1,2,4,8,5,6,9,10))
@@ -274,7 +276,6 @@
 
 /obj/structure/table/attack_alien(mob/user)
 	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
-	destroy()
 
 /obj/structure/table/attack_animal(mob/living/simple_animal/user)
 	if(user.wall_smash)
@@ -298,6 +299,8 @@
 		return (check_cover(mover,target))
 	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
+	if(locate(/obj/structure/table) in get_turf(mover))
+		return 1
 	if (flipped)
 		if (get_dir(loc, target) == dir)
 			return !density
@@ -311,14 +314,14 @@
 	if (get_dist(P.starting, loc) <= 1) //Tables won't help you if people are THIS close
 		return 1
 	if (get_turf(P.original) == cover)
-		var/chance = 30
+		var/chance = 20
 		if (ismob(P.original))
 			var/mob/M = P.original
 			if (M.lying)
-				chance += 50				//Lying down lets you catch less bullets
+				chance += 20				//Lying down lets you catch less bullets
 		if(flipped)
 			if(get_dir(loc, from) == dir)	//Flipped tables catch mroe bullets
-				chance += 50
+				chance += 20
 			else
 				return 1					//But only from one side
 		if(prob(chance))
@@ -343,8 +346,9 @@
 	return 1
 
 /obj/structure/table/MouseDrop_T(obj/O as obj, mob/user as mob)
+
 	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
-		return
+		return ..()
 	if(isrobot(user))
 		return
 	user.drop_item()
@@ -373,7 +377,7 @@
 				G.affecting.loc = src.loc
 				G.affecting.Weaken(5)
 				visible_message("\red [G.assailant] puts [G.affecting] on \the [src].")
-				del(W)
+			del(W)
 			return
 
 	if (istype(W, /obj/item/weapon/wrench))
@@ -414,54 +418,25 @@
 			return 0
 	return T.straight_table_check(direction)
 
-/obj/structure/table/verb/can_touch(var/mob/user)
-	if (!user)
-		return 0
-	if (user.stat)	//zombie goasts go away
-		return 0
-	if (issilicon(user))
-		user << "<span class='notice'>You need hands for this.</span>"
-		return 0
-	return 1
-
-
-/obj/structure/table/verb/do_climb()
-	set name = "Climb table"
-	set desc = "Climbs onto a table."
-	set category = "Object"
-	set src in oview(1)
-
-	if (!can_touch(usr))
-		return
-
-	usr.visible_message("<span class='warning'>[usr] starts climbing onto \the [src]!</span>")
-
-	if(!do_after(usr,50))
-		return
-
-	usr.loc = get_turf(src)
-	for(var/mob/living/M in get_turf(src))
-		M.Weaken(5)
-	if (get_turf(usr) == get_turf(src))
-		usr.visible_message("<span class='warning'>[usr] climbs onto \the [src]!</span>")
-
 /obj/structure/table/verb/do_flip()
 	set name = "Flip table"
 	set desc = "Flips a non-reinforced table"
 	set category = "Object"
 	set src in oview(1)
-	if(ismouse(usr))
+
+	if (!can_touch(usr) || ismouse(usr))
 		return
-	if (!can_touch(usr))
-		return
+
 	if(!flip(get_cardinal_dir(usr,src)))
 		usr << "<span class='notice'>It won't budge.</span>"
-	else
-		usr.visible_message("<span class='warning'>[usr] flips \the [src]!</span>")
-	for(var/mob/living/M in get_turf(src))
-		M.Weaken(5)
-		M << "\red You topple as \the [src] moves under you!"
 		return
+
+	usr.visible_message("<span class='warning'>[usr] flips \the [src]!</span>")
+
+	if(climbable)
+		structure_shaken()
+
+	return
 
 /obj/structure/table/proc/unflipping_check(var/direction)
 	for(var/mob/M in oview(src,0))
@@ -545,7 +520,7 @@
 	desc = "Do not apply fire to this. Rumour says it burns easily."
 	icon_state = "wood_table"
 	parts = /obj/item/weapon/table_parts/wood
-	health = 100
+	health = 50
 /*
  * Reinforced tables
  */
@@ -553,7 +528,7 @@
 	name = "reinforced table"
 	desc = "A version of the four legged table. It is stronger."
 	icon_state = "reinf_table"
-	health = 400
+	health = 200
 	var/status = 2
 	parts = /obj/item/weapon/table_parts/reinforced
 

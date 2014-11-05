@@ -12,6 +12,7 @@ var/global/datum/controller/gameticker/ticker
 
 	var/hide_mode = 0
 	var/datum/game_mode/mode = null
+	var/post_game = 0
 	var/event_time = null
 	var/event = 0
 
@@ -35,6 +36,8 @@ var/global/datum/controller/gameticker/ticker
 	var/delay_end = 0	//if set to nonzero, the round will not restart on it's own
 
 	var/triai = 0//Global holder for Triumvirate
+
+	var/round_end_announced = 0 // Spam Prevention. Announce round end only once.
 
 /datum/controller/gameticker/proc/pregame()
 	login_music = pick(\
@@ -132,6 +135,8 @@ var/global/datum/controller/gameticker/ticker
 	//here to initialize the random events nicely at round start
 	setup_economy()
 
+	shuttle_controller.setup_shuttle_docks()
+
 	spawn(0)//Forking here so we dont have to wait for this to finish
 		mode.post_setup()
 		//Cleanup some stuff
@@ -154,7 +159,7 @@ var/global/datum/controller/gameticker/ticker
 	if(admins_number == 0)
 		send2adminirc("Round has started with no admins online.")
 
-	supply_shuttle.process() 		//Start the supply shuttle regenerating points -- TLE
+	supply_controller.process() 		//Start the supply shuttle regenerating points -- TLE
 	master_controller.process()		//Start master_controller.process()
 	lighting_controller.process()	//Start processing DynamicAreaLighting updates
 
@@ -297,6 +302,7 @@ var/global/datum/controller/gameticker/ticker
 					captainless=0
 				if(player.mind.assigned_role != "MODE")
 					job_master.EquipRank(player, player.mind.assigned_role, 0)
+					UpdateFactionList(player)
 					EquipCustomItems(player)
 		if(captainless)
 			for(var/mob/M in player_list)
@@ -312,10 +318,16 @@ var/global/datum/controller/gameticker/ticker
 
 		emergency_shuttle.process()
 
-		delta_level.process()
+		var/game_finished = 0
+		var/mode_finished = 0
+		if (config.continous_rounds)
+			game_finished = (emergency_shuttle.returned() || mode.station_was_nuked)
+			mode_finished = (!post_game && mode.check_finished())
+		else
+			game_finished = (mode.check_finished() || (emergency_shuttle.returned() && emergency_shuttle.evac == 1))
+			mode_finished = game_finished
 
-		var/mode_finished = mode.check_finished() || (emergency_shuttle.location == 2 && emergency_shuttle.alert == 1)
-		if(!mode.explosion_in_progress && mode_finished)
+		if(!mode.explosion_in_progress && game_finished && (mode_finished || post_game))
 			current_state = GAME_STATE_FINISHED
 
 			spawn
@@ -345,6 +357,18 @@ var/global/datum/controller/gameticker/ticker
 						world << "\blue <B>An admin has delayed the round end</B>"
 				else
 					world << "\blue <B>An admin has delayed the round end</B>"
+
+		else if (mode_finished)
+			post_game = 1
+
+			mode.cleanup()
+
+			//call a transfer shuttle vote
+			spawn(50)
+				if(!round_end_announced) // Spam Prevention. Now it should announce only once.
+					world << "\red The round has ended!"
+					round_end_announced = 1
+				vote.autotransfer()
 
 		return 1
 

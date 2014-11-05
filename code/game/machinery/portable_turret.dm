@@ -270,10 +270,12 @@ Status: []<BR>"},
 	if(!anchored)
 		icon_state = "turretCover"
 		return
+	
+	..()
 	if(stat & BROKEN)
 		icon_state = "[lasercolor]destroyed_target_prism"
 	else
-		if( powered() )
+		if( !(stat & NOPOWER) )
 			if (on)
 				if (installation == /obj/item/weapon/gun/energy/laser || installation == /obj/item/weapon/gun/energy/pulse_rifle)
 					// laser guns and pulse rifles have an orange icon
@@ -283,11 +285,9 @@ Status: []<BR>"},
 					icon_state = "[lasercolor]target_prism"
 			else
 				icon_state = "[lasercolor]grey_target_prism"
-			stat &= ~NOPOWER
 		else
 			spawn(rand(0, 15))
 				src.icon_state = "[lasercolor]grey_target_prism"
-				stat |= NOPOWER
 
 
 
@@ -401,8 +401,8 @@ Status: []<BR>"},
 		check_records=pick(0,1)
 		criminals=pick(0,1)
 		auth_weapons=pick(0,1)
-		stun_all=pick(0,1) // stun_all is a pretty big deal, so it's least likely to get turned on //but think of the fun
-		if(prob(50)) emagged=1
+		stun_all=pick(0,0,0,0,1) // stun_all is a pretty big deal, so it's least likely to get turned on
+		if(prob(5)) emagged=1
 		on=0
 		sleep(rand(60,600))
 		if(!on)
