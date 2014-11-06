@@ -59,7 +59,11 @@ var/list/admin_verbs_admin = list(
 	/client/proc/secrets,
 	/client/proc/toggleprayers,
 	/datum/admins/proc/toggleooc,		/*toggles ooc on/off for everyone*/
+	/datum/admins/proc/toggledevooc,
+	/datum/admins/proc/togglemodooc,
 	/datum/admins/proc/togglelooc,
+	/datum/admins/proc/togglemodlooc,
+	/datum/admins/proc/toggledevlooc,
 	/datum/admins/proc/toggleoocdead,	/*toggles ooc on/off for everyone who is dead*/
 	/datum/admins/proc/toggledsay,		/*toggles dsay on/off for everyone*/
 	/client/proc/game_panel,			/*game panel, allows to change game-mode etc*/
@@ -138,6 +142,7 @@ var/list/admin_verbs_dev = list(
 	/client/proc/cmd_dev_say,
 	/client/proc/cmd_dev_bst,
 	/client/proc/cmd_dev_reset_gravity,
+	/client/proc/cmd_dev_reset_floating,
 	/client/proc/togglescopeslogs
 )
 var/list/admin_verbs_spawn = list(
@@ -188,7 +193,10 @@ var/list/admin_verbs_debug = list(
 	/client/proc/toggledebuglogs,
 	/client/proc/SDQL_query,
 	/client/proc/SDQL2_query,
-	/client/proc/cmd_dev_reset_gravity
+	/client/proc/cmd_dev_reset_gravity,
+	/client/proc/cmd_dev_reset_floating,
+	/client/proc/cleartox,
+	/client/proc/fillspace
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -330,6 +338,7 @@ var/list/admin_verbs_mod = list(
 		admin_verbs_rejuv,
 		admin_verbs_sounds,
 		admin_verbs_spawn,
+		admin_verbs_dev,
 		/*Debug verbs added by "show debug verbs"*/
 		/client/proc/Cell,
 		/client/proc/do_not_use_these,
@@ -961,3 +970,39 @@ var/list/admin_verbs_mod = list(
 		usr << "You now will get advanced debug logs"
 	else
 		usr << "You now won't get advanced debug logs"
+
+/client/proc/cleartox()
+	set category = "Special Verbs"
+	set name = "Clear Toxin/Fire in Zone"
+	if(!check_rights(R_DEBUG))
+		return
+
+	var/datum/gas_mixture/environment = usr.loc.return_air()
+	environment.gas["phoron"] = 0
+	environment.gas["nitrogen"] = 82.1472
+	environment.gas["oxygen"] = 21.8366
+	environment.gas["carbon_dioxide"] = 0
+	environment.gas["sleeping_agent"] = 0
+	environment.gas["oxygen_agent_b"] = 0
+	environment.temperature = 293.15
+	environment.update_values()
+	var/turf/simulated/location = get_turf(usr)
+	if(location.zone)
+		for(var/turf/T in location.zone.contents)
+			for(var/obj/fire/F in T.contents)
+				del(F)
+		for(var/obj/fire/FF in world)
+			del(FF)
+
+/client/proc/fillspace()
+	set category = "Special Verbs"
+	set name = "Fill Space with floor"
+	if(!check_rights(R_DEBUG))
+		return
+	var/area/location = usr.loc.loc
+	if(location.name != "Space")
+		for(var/turf/space/S in location)
+			S.ChangeTurf(/turf/simulated/floor/plating)
+	if(location.name == "Space")
+		for(var/turf/space/S in range(2,usr.loc))
+			S.ChangeTurf(/turf/simulated/floor/plating)
