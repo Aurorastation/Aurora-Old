@@ -740,11 +740,49 @@ var/global/floorIsLava = 0
 	ooc_allowed = !( ooc_allowed )
 	if (ooc_allowed)
 		world << "<B>The OOC channel has been globally enabled!</B>"
+		ooc_dev_allowed = 1
+		ooc_mod_allowed = 1
 	else
 		world << "<B>The OOC channel has been globally disabled!</B>"
 	log_admin("[key_name(usr)] toggled OOC.")
 	message_admins("[key_name_admin(usr)] toggled OOC.", 1)
 	feedback_add_details("admin_verb","TOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/datum/admins/proc/toggledevooc()
+	set category = "Server"
+	set desc="Toggles Developer OOC"
+	set name="Toggle Dev OOC"
+	if(ooc_allowed)
+		usr << "OOC needs to be muted first"
+		return
+	ooc_dev_allowed = !( ooc_dev_allowed )
+	var/looc_status
+	if (ooc_dev_allowed)
+		looc_status = "Enabled"
+	else
+		looc_status = "Disabled"
+	log_admin("[key_name(usr)] [looc_status] Developer OOC.")
+	message_admins("[key_name_admin(usr)] [looc_status] Developer OOC.", 1)
+	msg_scopes("<B>Developer OOC has been [looc_status]</B>",1,1)
+	feedback_add_details("admin_verb","TDOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/datum/admins/proc/togglemodooc()
+	set category = "Server"
+	set desc="Toggles Moderators OOC"
+	set name="Toggle Mod OOC"
+	if(ooc_allowed)
+		usr << "OOC needs to be muted first"
+		return
+	ooc_mod_allowed = !( ooc_mod_allowed )
+	var/looc_status
+	if (ooc_mod_allowed)
+		looc_status = "Enabled"
+	else
+		looc_status = "Disabled"
+	log_admin("[key_name(usr)] toggled Mod OOC.")
+	message_admins("[key_name_admin(usr)] [looc_status] Moderator OOC.", 1)
+	message_mods("<B>Moderator OOC has been [looc_status]</B>")
+	feedback_add_details("admin_verb","TMOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /datum/admins/proc/togglelooc()
 	set category = "Server"
@@ -753,14 +791,49 @@ var/global/floorIsLava = 0
 	looc_allowed = !( looc_allowed )
 	if (looc_allowed)
 		world << "<B>The LOOC channel has been globally enabled!</B>"
+		looc_dev_allowed = 1
+		looc_mod_allowed = 1
 	else
 		world << "<B>The LOOC channel has been globally disabled!</B>"
 	log_admin("[key_name(usr)] toggled LOOC.")
 	message_admins("[key_name_admin(usr)] toggled LOOC.", 1)
 	feedback_add_details("admin_verb","TLOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+/datum/admins/proc/toggledevlooc()
+	set category = "Server"
+	set desc="Toggles Developer LOOC"
+	set name="Toggle Dev LOOC"
+	if(looc_allowed)
+		usr << "Looc needs to be muted first"
+		return
+	looc_dev_allowed = !( looc_dev_allowed )
+	var/looc_status
+	if (looc_dev_allowed)
+		looc_status = "Enabled"
+	else
+		looc_status = "Disabled"
+	log_admin("[key_name(usr)] [looc_status] Developer LOOC.")
+	message_admins("[key_name_admin(usr)] [looc_status] Developer LOOC.", 1)
+	msg_scopes("<B>Developer LOOC has been [looc_status]</B>",1,1)
+	feedback_add_details("admin_verb","TDLOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-
+/datum/admins/proc/togglemodlooc()
+	set category = "Server"
+	set desc="Toggles Moderator LOOC"
+	set name="Toggle Mod LOOC"
+	if(looc_allowed)
+		usr << "Looc needs to be muted first"
+		return
+	looc_mod_allowed = !( looc_mod_allowed )
+	var/looc_status
+	if (looc_mod_allowed)
+		looc_status = "Enabled"
+	else
+		looc_status = "Disabled"
+	log_admin("[key_name(usr)] [looc_status] Moderator LOOC.")
+	message_admins("[key_name_admin(usr)] [looc_status] Moderator LOOC.", 1)
+	message_mods("<B>Moderator LOOC has been [looc_status]</B>")
+	feedback_add_details("admin_verb","TMLOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /datum/admins/proc/toggledsay()
 	set category = "Server"
@@ -879,8 +952,8 @@ var/global/floorIsLava = 0
 	if (!ticker || ticker.current_state != GAME_STATE_PREGAME)
 		ticker.delay_end = !ticker.delay_end
 		log_admin("[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].")
-		message_admins("\blue [key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].", 1)
-		message_mods("\blue [key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].", 1)
+		message_admins("\blue [key_name(usr)] [ticker.delay_end ? "<font color=#FF0000>delayed</font> the round end" : "has made the round end <font color=#00FF00>normally</font>"].", 1)
+		message_mods("\blue [key_name(usr)] [ticker.delay_end ? "<font color=#FF0000>delayed</font> the round end" : "has made the round end <font color=#00FF00>normally</font>"].", 1)
 		return //alert("Round end delayed", null, null, null, null, null)
 	going = !( going )
 	if (!( going ))

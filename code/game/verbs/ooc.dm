@@ -39,17 +39,27 @@ var/global/normal_ooc_colour = "#002eb8"
 			message_admins("[key_name_admin(src)] has attempted to advertise in OOC: [msg]")
 			return
 
+	if(holder)
+		if(holder.rights & R_DEV && !(holder.rights & R_ADMIN))
+			if(!ooc_allowed && !ooc_dev_allowed)
+				src << "\red OOC is muted for developers"
+				return
+		if(holder.rights & R_MOD && !(holder.rights & R_ADMIN))
+			if(!ooc_allowed && !ooc_mod_allowed)
+				src << "\red OOC is muted for moderators"
+				return
+
 	log_ooc("[mob.name]/[key] : [msg]")
 
 	var/display_colour = normal_ooc_colour
 	if(holder && !holder.fakekey)
 		display_colour = "#0099cc"	//light blue
 		if(holder.rights & R_MOD && !(holder.rights & R_ADMIN))
-			display_colour = "#184880"	//dark blue
-		if(holder.rights & R_DEBUG && !(holder.rights & R_ADMIN))
 			display_colour = "#1b521f"	//dark green
+		if(holder.rights & R_DEBUG && !(holder.rights & R_ADMIN))
+			display_colour = "#184880"	//dark blue
 		if(holder.rights & R_DEV && !(holder.rights & R_ADMIN))
-			display_colour = "#1b521f"
+			display_colour = "#184880"	//dark blue
 		else if(holder.rights & R_ADMIN)
 			if(config.allow_admin_ooccolor)
 				display_colour = src.prefs.ooccolor
@@ -131,6 +141,16 @@ var/global/normal_ooc_colour = "#002eb8"
 			log_admin("[key_name(src)] has attempted to advertise in OOC: [msg]")
 			message_admins("[key_name_admin(src)] has attempted to advertise in OOC: [msg]")
 			return
+
+	if(holder)
+		if(holder.rights & R_DEV && !(holder.rights & R_ADMIN))
+			if(!looc_allowed && !looc_dev_allowed)
+				src << "\red LOOC is muted for developers"
+				return
+		if(holder.rights & R_MOD && !(holder.rights & R_ADMIN))
+			if(!looc_allowed && !looc_mod_allowed)
+				src << "\red LOOC is muted for moderators"
+				return
 
 	log_ooc("(LOCAL) [mob.name]/[key] : [msg]")
 
