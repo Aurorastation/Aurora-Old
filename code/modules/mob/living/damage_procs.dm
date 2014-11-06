@@ -50,7 +50,7 @@
 		if(PARALYZE)
 			Paralyse(effect/(blocked+1))
 		if(AGONY)
-			halloss += effect // Useful for objects that cause "subdual" damage. PAIN!
+			adjustHalLoss(effect) // Useful for objects that cause "subdual" damage. PAIN! //ducknote: tasers did not previously care about armor.  i assume this was deliberate and am leaving it alone since taserdamage is mitigated by siemens
 		if(IRRADIATE)
 			radiation += max((((effect - (effect*(getarmor(null, "rad")/100))))/(blocked+1)),0)//Rads auto check armor
 		if(STUTTER)

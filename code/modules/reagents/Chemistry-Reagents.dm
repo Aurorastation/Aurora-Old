@@ -813,6 +813,7 @@ datum
 				if (volume > overdose)
 					M.hallucination = max(M.hallucination, 2)
 				..()
+				M.adjustHalLoss(-5)
 				return
 
 		tramadol
@@ -827,6 +828,7 @@ datum
 				if (volume > overdose)
 					M.hallucination = max(M.hallucination, 2)
 				..()
+				M.adjustHalLoss(-20)
 				return
 
 		oxycodone
@@ -842,6 +844,7 @@ datum
 					M.druggy = max(M.druggy, 10)
 					M.hallucination = max(M.hallucination, 3)
 				..()
+				M.adjustHalLoss(-70)
 				return
 
 
@@ -1973,7 +1976,7 @@ datum
 						M.confused += 2
 						M.drowsyness += 2
 					if(2 to 199)
-						M.Weaken(30)
+						M.Weaken(2)
 					if(200 to INFINITY)
 						M.sleeping += 1
 				..()
