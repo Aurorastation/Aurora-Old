@@ -2,15 +2,26 @@
 	var/ending = copytext(text, length(text))
 
 	if (ending == "?")
-		return "queries"
+		return speak_query
 	else if (ending == "!")
-		return "declares"
+		return speak_exclamation
 
-	return "states"
+	return speak_statement
 
 #define IS_AI 1
 #define IS_ROBOT 2
 #define IS_PAI 3
+
+/mob/living/silicon/say_understands(var/other,var/datum/language/speaking = null)
+	//These only pertain to common. Languages are handled by mob/say_understands()
+	if (!speaking)
+		if (istype(other, /mob/living/carbon))
+			return 1
+		if (istype(other, /mob/living/silicon))
+			return 1
+		if (istype(other, /mob/living/carbon/brain))
+			return 1
+	return ..()
 
 /mob/living/silicon/say(var/message)
 	if (!message)
@@ -49,39 +60,39 @@
 		return
 
 	var/verb = say_quote(message)
-	var/message_mode = null
+
+	//parse radio key and consume it
+	var/message_mode = parse_message_mode(message, "general")
+	if (message_mode)
+		if (message_mode == "general")
+			message = trim(copytext(message,2))
+		else
+			message = trim(copytext(message,3))
+
+	if(message_mode && bot_type == IS_ROBOT && message_mode != "binary" && !R.is_component_functioning("radio"))
+		src << "\red Your radio isn't functional at this time."
+		return
 
 
-	if(copytext(message,1,2) == ";")
-		message_mode = "general"  			// I don't know why but regular radio = fuck you we ain't broadcasting, pAI mode was what was in old say code.
-		message = trim(copytext(message,2))
+	//parse language key and consume it
+	var/datum/language/speaking = parse_language(message)
+	if (speaking)
+		verb = speaking.speech_verb
+		message = copytext(message,3)
 
-	else if(length(message) >= 2)
-		var/channel_prefix = copytext(message, 1 ,3)
-		if(!message_mode)
-			message_mode = department_radio_keys[channel_prefix]
-
-	if(message_mode && bot_type == IS_ROBOT)
-		if(message_mode != "binary" && !R.is_component_functioning("radio"))
-			src << "\red Your radio isn't functional at this time."
-			return
-
-
-	if(message_mode && message_mode != "general")
-		message = trim(copytext(message,3))
 
 	switch(message_mode)
 		if("department")
 			switch(bot_type)
 				if(IS_AI)
-					AI.holopad_talk(message)
+					return AI.holopad_talk(message)
 				if(IS_ROBOT)
 					log_say("[key_name(src)] : [message]")
-					R.radio.talk_into(src,message,message_mode,verb)
+					R.radio.talk_into(src,message,message_mode,verb,speaking)
 				if(IS_PAI)
 					log_say("[key_name(src)] : [message]")
-					P.radio.talk_into(src,message,message_mode,verb)
-			return
+					P.radio.talk_into(src,message,message_mode,verb,speaking)
+			return 1
 
 		if("binary")
 			switch(bot_type)
@@ -94,35 +105,43 @@
 					return
 
 			robot_talk(message)
-			return
+			return 1
 		if("general")
 			switch(bot_type)
 				if(IS_AI)
-					src << "Yeah, not yet, sorry"
+					if (AI.aiRadio.disabledAi)
+						src << "\red System Error - Transceiver Disabled"
+						return
+					else
+						log_say("[key_name(src)] : [message]")
+						AI.aiRadio.talk_into(src,message,null,verb,speaking)
 				if(IS_ROBOT)
 					log_say("[key_name(src)] : [message]")
-					R.radio.talk_into(src,message,null,verb)
+					R.radio.talk_into(src,message,null,verb,speaking)
 				if(IS_PAI)
 					log_say("[key_name(src)] : [message]")
-					P.radio.talk_into(src,message,null,verb)
-			return
+					P.radio.talk_into(src,message,null,verb,speaking)
+			return 1
 
 		else
 			if(message_mode && message_mode in radiochannels)
 				switch(bot_type)
 					if(IS_AI)
-						src << "You don't have this function yet, I'm working on it"
-						return
+						if (AI.aiRadio.disabledAi)
+							src << "\red System Error - Transceiver Disabled"
+							return
+						else
+							log_say("[key_name(src)] : [message]")
+							AI.aiRadio.talk_into(src,message,message_mode,verb,speaking)
 					if(IS_ROBOT)
 						log_say("[key_name(src)] : [message]")
-						R.radio.talk_into(src,message,message_mode,verb)
+						R.radio.talk_into(src,message,message_mode,verb,speaking)
 					if(IS_PAI)
 						log_say("[key_name(src)] : [message]")
-						P.radio.talk_into(src,message,message_mode,verb)
-				return
+						P.radio.talk_into(src,message,message_mode,verb,speaking)
+				return 1
 
-
-	return ..(message,null,verb)
+	return ..(message,speaking,verb)
 
 //For holopads only. Usable by AI.
 /mob/living/silicon/ai/proc/holopad_talk(var/message)
@@ -134,8 +153,8 @@
 	if (!message)
 		return
 
-	var/obj/machinery/hologram/holopad/T = src.current
-	if(istype(T) && T.hologram && T.master == src)//If there is a hologram and its master is the user.
+	var/obj/machinery/hologram/holopad/T = src.holo
+	if(T && T.hologram && T.master == src)//If there is a hologram and its master is the user.
 		var/verb = say_quote(message)
 
 		//Human-like, sorta, heard by those who understand humans.
@@ -155,7 +174,8 @@
 		This is another way of saying that we won't bother dealing with them.*/
 	else
 		src << "No holopad connected."
-	return
+		return
+	return 1
 
 /mob/living/proc/robot_talk(var/message)
 

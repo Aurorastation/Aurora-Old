@@ -12,6 +12,7 @@
 	var/ready_evolve = 0
 	universal_understand = 0 // Dionaea do not need to speak to people
 	universal_speak = 0      // before becoming an adult. Use *chirp.
+	holder_type = /obj/item/weapon/holder/diona
 
 /mob/living/carbon/monkey/diona/attack_hand(mob/living/carbon/human/M as mob)
 
@@ -24,14 +25,7 @@
 			src.verbs -= /mob/living/carbon/monkey/diona/proc/merge
 			src.loc = M
 		else
-			var/obj/item/weapon/holder/diona/D = new(loc)
-			src.loc = D
-			D.name = loc.name
-			D.attack_hand(M)
-			M << "You scoop up [src]."
-			src << "[M] scoops you up."
-		M.status_flags |= PASSEMOTES
-		return
+			get_scooped(M)
 
 	..()
 
@@ -114,7 +108,7 @@
 
 	var/list/trays = list()
 	for(var/obj/machinery/hydroponics/tray in range(1))
-		if(tray.nutrilevel < 10)
+		if(tray.nutrilevel < 10 && src.Adjacent(tray))
 			trays += tray
 
 	var/obj/machinery/hydroponics/target = input("Select a tray:") as null|anything in trays
@@ -133,7 +127,7 @@
 
 	var/list/trays = list()
 	for(var/obj/machinery/hydroponics/tray in range(1))
-		if(tray.weedlevel > 0)
+		if(tray.weedlevel > 0 && src.Adjacent(tray))
 			trays += tray
 
 	var/obj/machinery/hydroponics/target = input("Select a tray:") as null|anything in trays
@@ -192,7 +186,8 @@
 
 	var/list/choices = list()
 	for(var/mob/living/carbon/human/H in oview(1,src))
-		choices += H
+		if(src.Adjacent(H)) 
+			choices += H
 
 	var/mob/living/carbon/human/M = input(src,"Who do you wish to take a sample from?") in null|choices
 

@@ -177,7 +177,9 @@
 
 	if(mob.stat==2)	return
 
-	if(isAI(mob))	return AIMove(n,direct,mob)
+	// handle possible AI movement
+	if(isAI(mob))
+		return AIMove(n,direct,mob)
 
 	if(mob.monkeyizing)	return//This is sota the goto stop mobs from moving var
 
@@ -197,17 +199,11 @@
 					if(s.zoom)
 						s.zoom()
 
-
 	if(Process_Grab())	return
 
-//	if(mob.buckled)							//if we're buckled to something, tell it we moved.
-//		return mob.buckled.relaymove(mob, direct)
-
-//	if(!mob.canmove)	return
 
 	if(!mob.canmove)
-		if (mob.buckled && (istype(mob.buckled, /obj/structure/stool/bed/chair/wheelchair))) // Exception for wheelchairs
-		else return
+		return
 
 	//if(istype(mob.loc, /turf/space) || (mob.flags & NOGRAV))
 	//	if(!mob.Process_Spacemove(0))	return 0
@@ -217,6 +213,7 @@
 
 	if((istype(mob.loc, /turf/space)) || (mob.lastarea.has_gravity == 0))
 		if(!mob.Process_Spacemove(0))	return 0
+
 
 	if(isobj(mob.loc) || ismob(mob.loc))//Inside an object, tell it we moved
 		var/atom/O = mob.loc
@@ -252,6 +249,13 @@
 			move_delay -= 1.3
 			var/tickcomp = ((1/(world.tick_lag))*1.3)
 			move_delay = move_delay + tickcomp
+
+//		if(istype(mob.buckled, /obj/vehicle))
+//			return mob.buckled.relaymove(mob,direct)
+
+		if(istype(mob.machine, /obj/machinery))
+			if(mob.machine.relaymove(mob,direct))
+				return
 
 		if(mob.pulledby || mob.buckled) // Wheelchair driving!
 			if(istype(mob.loc, /turf/space))

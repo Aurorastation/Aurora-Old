@@ -206,15 +206,9 @@
 
 	proc/TemperatureAct(temperature)
 		for(var/turf/simulated/floor/target_tile in range(2,loc))
-
-			var/datum/gas_mixture/napalm = new
-
 			var/toxinsToDeduce = temperature/10
+			target_tile.assume_gas("toxins", toxinsToDeduce, 200+T0C)
 
-			napalm.toxins = toxinsToDeduce
-			napalm.temperature = 200+T0C
-
-			target_tile.assume_air(napalm)
 			spawn (0) target_tile.hotspot_expose(temperature, 400)
 
 			hardness -= toxinsToDeduce/100

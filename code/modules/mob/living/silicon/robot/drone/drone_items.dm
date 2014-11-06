@@ -28,6 +28,19 @@
 	//Item currently being held.
 	var/obj/item/wrapped = null
 
+/obj/item/weapon/gripper/paperwork
+	name = "paperwork gripper"
+	desc = "A simple grasping tool for clerical work."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "gripper"
+
+	can_hold = list(
+		/obj/item/weapon/clipboard,
+		/obj/item/weapon/paper,
+		/obj/item/weapon/paper_bundle,
+		/obj/item/weapon/card/id
+		)
+
 /obj/item/weapon/gripper/attack_self(mob/user as mob)
 	if(wrapped)
 		wrapped.attack_self(user)
@@ -56,9 +69,9 @@
 /obj/item/weapon/gripper/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	return
 
-/obj/item/weapon/gripper/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, params)
+/obj/item/weapon/gripper/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, proximity, params)
 
-	if(!target || !flag) //Target is invalid or we are not adjacent.
+	if(!target || !proximity) //Target is invalid or we are not adjacent.
 		return
 
 	//There's some weirdness with items being lost inside the arm. Trying to fix all cases. ~Z
@@ -67,25 +80,22 @@
 			wrapped = thing
 			break
 
-	if(wrapped) //Already have an item.
-
+	if(wrapped) //Already have an item.		
+		
+		//Temporary put wrapped into user so target's attackby() checks pass.
 		wrapped.loc = user
-		//Pass the attack on to the target.
+		
+		//Pass the attack on to the target. This might delete/relocate wrapped.
 		target.attackby(wrapped,user)
-
-		if(wrapped && src && wrapped.loc == user)
+		
+		//If wrapped did neither get deleted nor put into target, put it back into the gripper.
+		if(wrapped && user && (wrapped.loc == user))
 			wrapped.loc = src
-
-		//Sanity/item use checks.
-
-		if(!wrapped || !user)
-			return
-
-		if(wrapped.loc != src.loc)
+		else
 			wrapped = null
 			return
 
-	if(istype(target,/obj/item)) //Check that we're not pocketing a mob.
+	else if(istype(target,/obj/item)) //Check that we're not pocketing a mob.
 
 		//...and that the item is not in a container.
 		if(!isturf(target.loc))
@@ -145,9 +155,9 @@
 /obj/item/weapon/matter_decompiler/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	return
 
-/obj/item/weapon/matter_decompiler/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, params)
+/obj/item/weapon/matter_decompiler/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, proximity, params)
 
-	if(!flag) return //Not adjacent.
+	if(!proximity) return //Not adjacent.
 
 	//We only want to deal with using this on turfs. Specific items aren't important.
 	var/turf/T = get_turf(target)
