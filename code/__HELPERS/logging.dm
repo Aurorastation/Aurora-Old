@@ -12,6 +12,7 @@
 	msg_scopes("## ERROR: [msg]")
 	world.log << "## ERROR: [msg][log_end]"
 
+#define WARNING(MSG) warning("[MSG] in [__FILE__] at line [__LINE__] src: [src] usr: [usr].")
 //print a warning message to world.log
 /proc/warning(msg)
 	msg_scopes("## WARNING: [msg]")

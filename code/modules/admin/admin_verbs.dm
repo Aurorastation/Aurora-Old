@@ -978,15 +978,12 @@ var/list/admin_verbs_mod = list(
 		return
 
 	var/datum/gas_mixture/environment = usr.loc.return_air()
-	environment.toxins_archived = null
-	environment.toxins = 0
-	environment.carbon_dioxide = 0
-	environment.carbon_dioxide_archived = null
-	environment.oxygen = 21.8366
-	environment.oxygen_archived = null
-	environment.nitrogen = 82.1472
-	environment.nitrogen_archived = null
-	environment.temperature_archived = null
+	environment.gas["phoron"] = 0
+	environment.gas["nitrogen"] = 82.1472
+	environment.gas["oxygen"] = 21.8366
+	environment.gas["carbon_dioxide"] = 0
+	environment.gas["sleeping_agent"] = 0
+	environment.gas["oxygen_agent_b"] = 0
 	environment.temperature = 293.15
 	environment.update_values()
 	var/turf/simulated/location = get_turf(usr)

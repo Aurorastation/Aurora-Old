@@ -58,7 +58,7 @@
 	fire_sound = 'sound/weapons/Laser.ogg'
 	slot_flags = SLOT_BACK
 	w_class = 4
-	m_amt = 2000
+	matter = list("metal" = 2000)
 	charge_cost = 50 //odd numbers due to a requirement to have 20 shots. Easiest way.
 	origin_tech = "combat=3;magnets=2"
 	projectile_type = "/obj/item/projectile/beam"

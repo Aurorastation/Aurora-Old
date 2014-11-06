@@ -346,52 +346,46 @@ var/global/datum/controller/occupations/job_master
 
 
 	proc/EquipRank(var/mob/living/carbon/human/H, var/rank, var/joined_late = 0)
+
 		if(!H)	return 0
+
 		var/datum/job/job = GetJob(rank)
+		var/list/spawn_in_storage = list()
+
 		if(job)
+
 			//Equip custom gear loadout.
-			switch(rank)
-				if("Cyborg","AI","Clown")//Because yeah
-				else
-					if(H.client.prefs.gear && H.client.prefs.gear.len)
+			if(H.client.prefs.gear && H.client.prefs.gear.len && job.title != "Cyborg" && job.title != "AI")
 
-						for(var/thing in H.client.prefs.gear)
-							var/datum/gear/G = gear_datums[thing]
-							if(G)
-								var/permitted
-								if(G.allowed_roles)
-									for(var/job_name in G.allowed_roles)
-										if(job.title == job_name)
-											permitted = 1
-								else
+				for(var/thing in H.client.prefs.gear)
+					var/datum/gear/G = gear_datums[thing]
+					if(G)
+						var/permitted
+						if(G.allowed_roles)
+							for(var/job_name in G.allowed_roles)
+								if(job.title == job_name)
 									permitted = 1
+						else
+							permitted = 1
 
-								if(G.whitelisted && !is_alien_whitelisted(H, G.whitelisted))
-									permitted = 0
+						if(G.whitelisted && !is_alien_whitelisted(H, G.whitelisted))
+							permitted = 0
 
-								if(!permitted)
-									H << "\red Your current job or whitelist status does not permit you to spawn with [thing]!"
-									continue
+						if(!permitted)
+							H << "\red Your current job or whitelist status does not permit you to spawn with [thing]!"
+							continue
 
-								if(G.slot)
-									if(!H.equip_to_slot_or_del(new G.path(H), G.slot))
-										spawn(6)
-											if(!H.equip_to_slot_or_del(new G.path(H.back), slot_in_backpack))
-												new G.path(H.loc)
-								else
-									if(H.backbag)
-										spawn(6) //I can't beleive this worked: 4 works but I want to give a little time for lags
-											if(!H.equip_to_slot_or_del(new G.path(H.back), slot_in_backpack))
-												new G.path(H.loc)
-									else
-										msg_scopes("G.path = [G.path] | This got called, see if [H.name] has it") // If I never see this in game then Yiss
-										new G.path(H.loc)
-//							spawn(1)
-//								new G.path(get_turf(H.loc))
+						if(G.slot)
+							H.equip_to_slot_or_del(new G.path(H), G.slot)
+							H << "\blue Equipping you with [thing]!"
+
+						else
+							spawn_in_storage += thing
+
+
 			//Equip job items.
 			job.equip(H)
 		else
-			msg_scopes("[H.mind.name] has rank: [rank] and this thing happened.")
 			H << "Your job is [rank] and the game just can't handle it! Please report this bug to an administrator."
 
 		H.job = rank
@@ -407,7 +401,7 @@ var/global/datum/controller/occupations/job_master
 				S = locate("start*[rank]") // use old stype
 			if(istype(S, /obj/effect/landmark/start) && istype(S.loc, /turf))
 				H.loc = S.loc
-	// Moving wheelchair if they have one
+			// Moving wheelchair if they have one
 			if(H.buckled && istype(H.buckled, /obj/structure/stool/bed/chair/wheelchair))
 				H.buckled.loc = H.loc
 				H.buckled.dir = H.dir
@@ -469,9 +463,45 @@ var/global/datum/controller/occupations/job_master
 							new /obj/item/weapon/storage/box/survival(BPK)
 							H.equip_to_slot_or_del(BPK, slot_back,1)
 
+					//Deferred item spawning.
+					if(spawn_in_storage && spawn_in_storage.len)
+						var/obj/item/weapon/storage/B
+						for(var/obj/item/weapon/storage/S in H.contents)
+							B = S
+							break
+
+						if(!isnull(B))
+							for(var/thing in spawn_in_storage)
+								H << "\blue Placing [thing] in your [B]!"
+								var/datum/gear/G = gear_datums[thing]
+								new G.path(B)
+						else
+							H << "\red Failed to locate a storage object on your mob, either you spawned with no arms and no backpack or this is a bug."
+
 		//TODO: Generalize this by-species
-		if(H.species && (H.species.name == "Tajaran" || H.species.name == "Unathi"))
-			H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(H),slot_shoes,1)
+		if(H.species)
+			if(H.species.name == "Tajaran" || H.species.name == "Unathi")
+				H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(H),slot_shoes,1)
+			else if(H.species.name == "Vox")
+				H.equip_to_slot_or_del(new /obj/item/clothing/mask/breath(H), slot_wear_mask)
+				if(!H.r_hand)
+					H.equip_to_slot_or_del(new /obj/item/weapon/tank/nitrogen(H), slot_r_hand)
+					H.internal = H.r_hand
+				else if (!H.l_hand)
+					H.equip_to_slot_or_del(new /obj/item/weapon/tank/nitrogen(H), slot_l_hand)
+					H.internal = H.l_hand
+				H.internals.icon_state = "internal1"
+
+		if(istype(H)) //give humans wheelchairs, if they need them.
+			var/datum/organ/external/l_foot = H.get_organ("l_foot")
+			var/datum/organ/external/r_foot = H.get_organ("r_foot")
+			if((!l_foot || l_foot.status & ORGAN_DESTROYED) && (!r_foot || r_foot.status & ORGAN_DESTROYED))
+				var/obj/structure/stool/bed/chair/wheelchair/W = new /obj/structure/stool/bed/chair/wheelchair(H.loc)
+				H.buckled = W
+				H.update_canmove()
+				W.dir = H.dir
+				W.buckled_mob = H
+				W.add_fingerprint(H)
 
 		H << "<B>You are the [alt_title ? alt_title : rank].</B>"
 		H << "<b>As the [alt_title ? alt_title : rank] you answer directly to [job.supervisors]. Special circumstances may change this.</b>"
