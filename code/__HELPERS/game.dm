@@ -468,3 +468,10 @@ datum/projectile_data
 					rstats[i] = environment.vars[stats[i]]
 		temps[direction] = rstats
 	return temps
+
+/proc/flick_overlay(image/I, list/show_to, duration)
+	for(var/client/C in show_to)
+		C.images += I
+	sleep(duration)
+	for(var/client/C in show_to)
+		C.images -= I

@@ -24,6 +24,7 @@
 		else
 			src.dna = user.dna.unique_enzymes
 			user << "\blue You feel your palm heat up as the gun reads your DNA profile."
+			desc += "<br>Linked to: [user.real_name]"
 
 	Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0)
 		if(src.dna != user.dna.unique_enzymes)

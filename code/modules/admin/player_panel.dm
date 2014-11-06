@@ -81,7 +81,9 @@
 					body += "<a href='?src=\ref[src];traitor="+ref+"'>TP</a> - "
 					body += "<a href='?src=\ref[usr];priv_msg=\ref"+ref+"'>PM</a> - "
 					body += "<a href='?src=\ref[src];subtlemessage="+ref+"'>SM</a> - "
-					body += "<a href='?src=\ref[src];adminplayerobservejump="+ref+"'>JMP</a><br>"
+					body += "<a href='?src=\ref[src];adminplayerobservejump="+ref+"'>JMP</a> - "
+					body += "<a href='?src=\ref[src];admin_wind_player="+ref+"'>WIND</a><br>"
+
 					if(antagonist > 0)
 						body += "<font size='2'><a href='?src=\ref[src];check_antagonist=1'><font color='red'><b>Antagonist</b></font></a></font>";
 
@@ -369,7 +371,6 @@
 
 
 		if(usr.client)
-			var/client/C = usr.client
 			if(!check_rights(R_ADMIN|R_MOD, 0))
 				dat += {"<td align=center> N/A </td>"}
 			else

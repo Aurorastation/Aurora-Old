@@ -51,8 +51,8 @@
 		A.toggle_secure()	//this calls update_icon(), which calls update_icon() on the holder (i.e. the bomb).
 
 		bombers += "[key_name(user)] attached a [item] to a transfer valve."
-		message_admins("[key_name_admin(user)] attached a [item] to a transfer valve.")
-		message_mods("[key_name_admin(user)] attached a [item] to a transfer valve.")
+		message_admins("[key_name_admin(user)] attached a [item] to a <font color='red'>transfer valve</font>.")
+		message_mods("[key_name_admin(user)] attached a [item] to a <font color='red'>transfer valve</font>.")
 		log_game("[key_name_admin(user)] attached a [item] to a transfer valve.")
 		attacher = user
 		nanomanager.update_uis(src) // update all UIs attached to src

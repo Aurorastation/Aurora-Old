@@ -226,8 +226,8 @@
 			f_loss += 60
 
 			if (prob(getarmor(null, "bomb")))
-				b_loss = b_loss/1.5
-				f_loss = f_loss/1.5
+				b_loss = b_loss/3 //was 1.5
+				f_loss = f_loss/3 //was 1.5
 
 			if (!istype(l_ear, /obj/item/clothing/ears/earmuffs) && !istype(r_ear, /obj/item/clothing/ears/earmuffs))
 				ear_damage += 30
@@ -238,7 +238,7 @@
 		if(3.0)
 			b_loss += 30
 			if (prob(getarmor(null, "bomb")))
-				b_loss = b_loss/2
+				b_loss = b_loss/b_loss //was 2.
 			if (!istype(l_ear, /obj/item/clothing/ears/earmuffs) && !istype(r_ear, /obj/item/clothing/ears/earmuffs))
 				ear_damage += 15
 				ear_deaf += 60

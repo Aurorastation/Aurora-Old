@@ -101,11 +101,15 @@
 	if(HULK in mutations)	return
 	..()
 
-/mob/living/carbon/human/adjustCloneLoss(var/amount)
+/mob/living/carbon/human/adjustHalLoss(var/amount)
+	if(species.flags & NO_PAIN) //pain immune
+		return
 	..()
 
+/mob/living/carbon/human/adjustCloneLoss(var/amount)
 	if(species.flags & IS_SYNTHETIC)
 		return
+	..()
 
 	var/heal_prob = max(0, 80 - getCloneLoss())
 	var/mut_prob = min(80, getCloneLoss()+10)
@@ -264,20 +268,20 @@ This function restores all organs.
 /mob/living/carbon/human/apply_damage(var/damage = 0, var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, var/sharp = 0, var/edge = 0, var/obj/used_weapon = null)
 
 	//visible_message("Hit debug. [damage] | [damagetype] | [def_zone] | [blocked] | [sharp] | [used_weapon]")
-	
+
 	//Handle other types of damage
 	if((damagetype != BRUTE) && (damagetype != BURN))
 		if(damagetype == HALLOSS)
 			if ((damage > 25 && prob(20)) || (damage > 50 && prob(60)))
 				emote("scream")
-		
-		
+
+
 		..(damage, damagetype, def_zone, blocked)
 		return 1
 
 	//Handle BRUTE and BURN damage
 	handle_suit_punctures(damagetype, damage)
-	
+
 	if(blocked >= 2)	return 0
 
 	var/datum/organ/external/organ = null

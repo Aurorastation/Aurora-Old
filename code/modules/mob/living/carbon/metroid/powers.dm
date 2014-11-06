@@ -204,35 +204,35 @@
 			var/new_powerlevel = round(powerlevel / 4)
 			for(var/i=1,i<=4,i++)
 				var/mob/living/carbon/slime/M = new /mob/living/carbon/slime/(loc)
-				if(prob(mutation_chance))
-					M.colour = slime_mutation[rand(1,4)]
-				else
-					var/mutations = pick("one","two","three","four")
-					switch(mutations)
-						if("one")
-							var/mob/living/carbon/slime/O = new mutationone(loc)
-							O.nutrition = new_nutrition
-							O.powerlevel = new_powerlevel
-							if(i != 1) step_away(M,src)
-							babies += O
-						if("two")
-							var/mob/living/carbon/slime/K = new mutationtwo(loc)
-							K.nutrition = new_nutrition
-							K.powerlevel = new_powerlevel
-							if(i != 1) step_away(M,src)
-							babies += K
-						if("three")
-							var/mob/living/carbon/slime/L = new mutationthree(loc)
-							L.nutrition = new_nutrition
-							L.powerlevel = new_powerlevel
-							if(i != 1) step_away(M,src)
-							babies += L
-						if("four")
-							var/mob/living/carbon/slime/N = new mutationfour(loc)
-							N.nutrition = new_nutrition
-							N.powerlevel = new_powerlevel
-							if(i != 1) step_away(M,src)
-							babies += N
+//				if(prob(mutation_chance))
+//					M.colour = slime_mutation[rand(1,4)]
+//				else
+				var/mutations = pick("one","two","three","four")
+				switch(mutations)
+					if("one")
+						var/mob/living/carbon/slime/O = new mutationone(loc)
+						O.nutrition = new_nutrition
+						O.powerlevel = new_powerlevel
+						if(i != 1) step_away(M,src)
+						babies += O
+					if("two")
+						var/mob/living/carbon/slime/K = new mutationtwo(loc)
+						K.nutrition = new_nutrition
+						K.powerlevel = new_powerlevel
+						if(i != 1) step_away(M,src)
+						babies += K
+					if("three")
+						var/mob/living/carbon/slime/L = new mutationthree(loc)
+						L.nutrition = new_nutrition
+						L.powerlevel = new_powerlevel
+						if(i != 1) step_away(M,src)
+						babies += L
+					if("four")
+						var/mob/living/carbon/slime/N = new mutationfour(loc)
+						N.nutrition = new_nutrition
+						N.powerlevel = new_powerlevel
+						if(i != 1) step_away(M,src)
+						babies += N
 
 			var/mob/living/carbon/slime/new_slime = pick(babies)
 			new_slime.universal_speak = universal_speak

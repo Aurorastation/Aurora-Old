@@ -197,7 +197,8 @@
 	if(!on_fire)
 		return 1
 	var/datum/gas_mixture/G = loc.return_air() // Check if we're standing in an oxygenless environment
-	if(G.oxygen < 1) //Investigate this when it's NOT 2332hrs local, K? - Skull132
+	if(!G.gas["oxygen"])
+//	if(G.oxygen < 1) //Investigate this when it's NOT 2332hrs local, K? - Skull132
 		ExtinguishMob() //If there's no oxygen in the tile we're on, put out the fire
 		return
 	var/turf/location = get_turf(src)

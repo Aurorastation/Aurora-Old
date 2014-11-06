@@ -63,6 +63,7 @@
 	var/kick_inactive = 0				//force disconnect for inactive players
 	var/load_jobs_from_txt = 0
 	var/ToRban = 0
+	var/ip_blacklist_enabled = 0
 	var/automute_on = 0					//enables automuting/spam prevention
 	var/jobs_have_minimal_access = 1	//determines whether jobs use minimal access or expanded access.
 

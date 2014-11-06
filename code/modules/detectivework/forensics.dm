@@ -52,7 +52,7 @@
 		return
 	else if(user.zone_sel.selecting == "mouth")
 		user.visible_message("[user] swabs [M]'s mouth for a saliva sample.", "You swab [M]'s mouth for a saliva sample.")
-		dna = M.dna.unique_enzymes
+		dna += M.dna.unique_enzymes
 		used = 1
 		name = "swab of [M]'s DNA"
 		desc = "[initial(desc)] <br> \blue The label on the vial reads 'Sample of [M]'s DNA'."

@@ -2768,3 +2768,20 @@
 			if("list")
 				PlayerNotesPage(text2num(href_list["index"]))
 		return
+
+	if(href_list["admin_wind_player"])
+
+		var/mob/M = locate(href_list["admin_wind_player"])
+		if(!ismob(M))
+			usr << "This can only be used on instances of type /mob"
+			return
+
+		if(!M.ckey)	//sanity
+			usr << "This mob has no ckey"
+			return
+
+		if(alert("Wind [M]?",,"Yes","No")!="Yes")
+			return
+
+		M.weakened = 500
+		return

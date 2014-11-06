@@ -134,7 +134,21 @@ Please contact me on #coderbus IRC. ~Carn x
 
 /mob/living/carbon/human
 	var/list/overlays_standing[TOTAL_LAYERS]
+	var/list/overlays_lying[TOTAL_LAYERS]
 	var/previous_damage_appearance // store what the body last looked like, so we only have to update it if something changed
+
+/mob/living/carbon/human/proc/apply_overlay(cache_index)
+	var/image/I = lying ? overlays_lying[cache_index] : overlays_standing[cache_index]
+	if(I)
+		overlays += I
+
+/mob/living/carbon/human/proc/remove_overlay(cache_index)
+	if(overlays_lying[cache_index])
+		overlays -= overlays_lying[cache_index]
+		overlays_lying[cache_index] = null
+	if(overlays_standing[cache_index])
+		overlays -= overlays_standing[cache_index]
+		overlays_standing[cache_index] = null
 
 //UPDATES OVERLAYS FROM OVERLAYS_LYING/OVERLAYS_STANDING
 //this proc is messy as I was forced to include some old laggy cloaking code to it so that I don't break cloakers
