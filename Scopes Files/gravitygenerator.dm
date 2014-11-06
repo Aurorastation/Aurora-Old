@@ -170,7 +170,6 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	power_channel = ENVIRON
 	sprite_number = 8
 	use_power = 1
-	interact_offline = 1
 	var/on = 1
 	var/breaker = 1
 	var/list/parts = list()

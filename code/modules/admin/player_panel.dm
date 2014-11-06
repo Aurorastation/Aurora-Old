@@ -371,7 +371,6 @@
 
 
 		if(usr.client)
-			var/client/C = usr.client
 			if(!check_rights(R_ADMIN|R_MOD, 0))
 				dat += {"<td align=center> N/A </td>"}
 			else

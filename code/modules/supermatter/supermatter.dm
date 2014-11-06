@@ -204,16 +204,8 @@
 			equilibrium_power = 250
 			icon_state = base_icon_state
 
-<<<<<<< HEAD
 		temp_factor = ( (equilibrium_power/DECAY_FACTOR)**3 )/800
 		power = max( (removed.temperature * temp_factor) * oxygen + power, 0)
-=======
-	//Also keep in mind we are only adding this temperature to (efficiency)% of the one tile the rock
-	//is on. An increase of 4*C @ 25% efficiency here results in an increase of 1*C / (#tilesincore) overall.
-
-	var/thermal_power = THERMAL_RELEASE_MODIFIER
-	if(removed.total_moles < 35) thermal_power += 750   //If you don't add coolant, you are going to have a bad time.
->>>>>>> master
 
 		//We've generated power, now let's transfer it to the collectors for storing/usage
 		transfer_energy()
