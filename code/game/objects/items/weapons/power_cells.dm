@@ -48,6 +48,7 @@
 	name = "heavy-duty power cell"
 	origin_tech = "powerstorage=1"
 	maxcharge = 5000
+	charge = 5000
 	matter = list("metal" = 700, "glass" = 50)
 
 /obj/item/weapon/cell/high
