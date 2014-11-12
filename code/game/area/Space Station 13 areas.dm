@@ -97,6 +97,7 @@ var/list/ghostteleportlocs = list()
 	requires_power = 1
 	always_unpowered = 1
 	lighting_use_dynamic = 1
+	has_gravity = 0
 	power_light = 0
 	power_equip = 0
 	power_environ = 0

@@ -7,6 +7,24 @@ body {
     font-family: Verdana, Geneva, sans-serif;
     background: #272727 url(uiBackground.png) 50% 0 repeat-x;
 }
+
+#uiNoScript {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin: -60px 0 0 -150px;
+    width: 280px;
+    height: 120px;
+    background: #ffffff;
+    border: 2px solid #ff0000;
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    z-index: 9999;
+    padding: 0px 10px;
+    text-align: center;
+}
+
 hr {
     background-color: #40628a;
     height: 1px;
@@ -30,7 +48,7 @@ hr {
     padding: 0px 4px 4px 0px;
 }
 
-a:hover, .linkActive:hover {
+a:hover, .zoomLink:hover, .linkActive:hover {
     background: #507aac;
 }
 .linkPending, .linkPending:hover {
@@ -50,6 +68,11 @@ a.white:hover {
     color: #ffffff;
     background: #40628a;
 }
+
+.hidden {
+    display: none;
+}
+
 .linkOn, a.linkOn:link, a.linkOn:visited, a.linkOn:active, a.linkOn:hover, .selected, a.selected:link, a.selected:visited, a.selected:active, a.selected:hover {
     color: #ffffff;
     background: #2f943c;
@@ -70,6 +93,17 @@ a.icon img, .linkOn.icon img, .linkOff.icon img, .selected.icon img, .disabled.i
     width: 18px;
     height: 18px;
 }
+
+.linkDanger, a.linkDanger:link, a.linkDanger:visited, a.linkDanger:active {
+    color: #ffffff;
+    background-color: #ff0000;
+    border-color: #aa0000;
+}
+
+.linkDanger:hover {
+    background-color: #ff6666;
+}
+
 ul {
     padding: 4px 0 0 10px;
     margin: 0;
@@ -168,6 +202,12 @@ h4 {
     color: #ee0000;
     font-weight: bold;
 }
+
+.idle {
+    color: #272727;
+    font-weight: bold;
+}
+
 .redBackground {
 	background: #ea0000;
 }
@@ -509,6 +549,17 @@ th.misc
         color: #ffffff;
 }
 
+th.eng {
+    background: #b27300;
+    font-weight: bold;
+    color: #ffffff;
+}
 
 
+.toxin {
+    color: green;
+}
 
+.oxyloss {
+    color: blue;
+}
