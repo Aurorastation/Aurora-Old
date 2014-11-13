@@ -686,9 +686,9 @@
 	var/co2_dangerlevel = get_danger_level(environment.gas["carbon_dioxide"]*partial_pressure, current_settings)
 	var/co2_percent = round(environment.gas["carbon_dioxide"] / total * 100, 2)
 
-	current_settings = TLV["phoron"]
-	var/phoron_dangerlevel = get_danger_level(environment.gas["phoron"]*partial_pressure, current_settings)
-	var/phoron_percent = round(environment.gas["phoron"] / total * 100, 2)
+	current_settings = TLV["toxins"]
+	var/phoron_dangerlevel = get_danger_level(environment.gas["toxins"]*partial_pressure, current_settings)
+	var/phoron_percent = round(environment.gas["toxins"] / total * 100, 2)
 
 	//current_settings = TLV["other"]
 	//var/other_moles = 0.0

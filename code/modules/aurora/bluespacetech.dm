@@ -168,6 +168,7 @@
 			voice_name = "Bluespace Cat"
 			real_name = "Bluespace Cat"
 			mind.name = "Bluespace Cat"
+			gender = "female"
 			regenerate_icons()
 		else
 			ghostize(0)
@@ -219,6 +220,7 @@
 			voice_name = "Bluespace Squid"
 			real_name = "Bluespace Squid"
 			mind.name = "Bluespace Squid"
+			gender = "female"
 			regenerate_icons()
 		else
 			ghostize(0)

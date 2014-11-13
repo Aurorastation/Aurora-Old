@@ -978,7 +978,7 @@ var/list/admin_verbs_mod = list(
 		return
 
 	var/datum/gas_mixture/environment = usr.loc.return_air()
-	environment.gas["phoron"] = 0
+	environment.gas["toxins"] = 0
 	environment.gas["nitrogen"] = 82.1472
 	environment.gas["oxygen"] = 21.8366
 	environment.gas["carbon_dioxide"] = 0

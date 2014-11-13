@@ -1142,7 +1142,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		if(Rad.anchored)
 			if(!Rad.P)
 				var/obj/item/weapon/tank/plasma/Plasma = new/obj/item/weapon/tank/plasma(Rad)
-				Plasma.air_contents.gas["phoron"] = 70
+				Plasma.air_contents.gas["toxins"] = 70
 				Rad.drainratio = 0
 				Rad.P = Plasma
 				Plasma.loc = Rad
