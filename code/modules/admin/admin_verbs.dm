@@ -1019,16 +1019,21 @@ var/list/admin_verbs_mod = list(
 	set category = "Special Verbs"
 	set name = "Fill Space with floor"
 
-	return
-
-/*
 	if(!check_rights(R_DEBUG))
 		return
-	var/area/location = usr.loc.loc
-	if(location.name != "Space")
-		for(var/turf/space/S in location)
+
+	if (alert(usr, "This will break everything if done in space", "Fill Space with floor?", "Yes", "No") != "Yes") //Confirmation box incase of miss-clicks
+		return
+
+	if (alert(usr, "Seriously not in a space area", "Fill Space with floor?", "Yes", "No") != "Yes") //Confirmation box incase of miss-clicks
+		return
+
+	var/area/location = get_turf(usr)
+	var/area/A = location.loc
+	A = A.master
+	if(A.name != "Space")
+		for(var/turf/space/S in location.loc)
 			S.ChangeTurf(/turf/simulated/floor/plating)
-	if(location.name == "Space")
-		for(var/turf/space/S in range(2,usr.loc))
+	if(A.name == "Space")
+		for(var/turf/space/S in range(2,usr))
 			S.ChangeTurf(/turf/simulated/floor/plating)
-*/

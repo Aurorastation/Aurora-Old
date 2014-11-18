@@ -469,7 +469,7 @@ proc/populate_gear_list()
 	display_name = "shoulder holster"
 	path = /obj/item/clothing/tie/holster/armpit
 	cost = 3
-	allowed_roles = list("Captain", "Head of Personnel", "Security Officer", "Head of Security")
+	allowed_roles = list("Captain", "Head of Personnel", "Security Officer", "Head of Security", "Warden")
 
 
 /datum/gear/normal_beret
