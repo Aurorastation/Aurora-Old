@@ -104,6 +104,11 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 			if(X.prefs.toggles & SOUND_ADMINHELP)
 				X << 'sound/effects/adminhelp.ogg'
 			X << msg
+			continue
+		if((R_FUN) & X.holder.rights)
+			if(X.prefs.toggles & SOUND_ADMINHELP)
+				X << 'sound/effects/adminhelp.ogg'
+			X << msg
 
 	//show it to the person adminhelping too
 	src << "<font color='blue'>PM to-<b>Admins</b>: [original_msg]</font>"

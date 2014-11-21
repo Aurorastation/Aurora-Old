@@ -90,6 +90,13 @@
 	nitrogen = 0.001
 	temperature = TCMB
 
+/turf/simulated/floor/engine/plasma
+	name = "plasma floor"
+	icon_state = "engine"
+	oxygen = 0
+	nitrogen = 0
+	toxins = 500000
+
 /turf/simulated/floor/plating
 	name = "plating"
 	icon_state = "plating"
