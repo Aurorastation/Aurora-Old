@@ -24,6 +24,7 @@
 	var/flush_every_ticks = 30 //Every 30 ticks it will look whether it is ready to flush
 	var/flush_count = 0 //this var adds 1 once per tick. When it reaches flush_every_ticks it resets and tries to flush.
 	var/last_sound = 0
+	var/bomb_safe = 0
 	active_power_usage = 3500	//the pneumatic pump power. 3 HP ~ 2200W
 	idle_power_usage = 100
 
@@ -128,6 +129,11 @@
 	user.drop_item()
 	if(I)
 		I.loc = src
+
+	if(istype(I, /obj/item/device/transfer_valve))
+		if(!bomb_safe)
+			message_admins("[key_name_admin(user)] placed <font color='red'>[I]</font> into [src].(<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[usr.x];Y=[usr.y];Z=[usr.z]'>JMP</A>)")
+			message_mods("[key_name_admin(user)] placed <font color='red'>[I]</font> into [src].(<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[usr.x];Y=[usr.y];Z=[usr.z]'>JMP</A>)")
 
 	user << "You place \the [I] into the [src]."
 	for(var/mob/M in viewers(src))
