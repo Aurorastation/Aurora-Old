@@ -171,7 +171,7 @@
 			break
 
 	build_network()
-	
+
 	update_icon()
 	update_underlays()
 
@@ -230,7 +230,7 @@
 	name = "digital valve"
 	desc = "A digitally controlled valve."
 	icon = 'icons/atmos/digital_valve.dmi'
-	
+
 	var/frequency = 0
 	var/id = null
 	var/datum/radio_frequency/radio_connection
@@ -245,6 +245,9 @@
 		user << "\red Access denied."
 		return
 	..()
+	message_admins("[src] [open?"<font color='red'>OPENED</font>":"<font color='green'>CLOSED</font>"] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
+	message_mods("[src] [open?"<font color='red'>OPENED</font>":"<font color='green'>CLOSED</font>"] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)")
+	log_game("[src] [open?"<font color='red'>OPENED</font>":"<font color='green'>CLOSED</font>"] by [usr.ckey]([usr]) in ([x],[y],[z])")
 
 /obj/machinery/atmospherics/valve/digital/open
 	open = 1
