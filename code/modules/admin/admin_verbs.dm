@@ -959,11 +959,17 @@ var/list/admin_verbs_mod = list(
 		"Blue",
 		"Red",
 		"Delta",
+		"Cancel",
 	)
 
 	var/current_level = get_security_level()
 	var/input = input("Select the alert level.", "Alert Level -( [current_level] )", null, null) in L
+	if(!input)
+		return
+
 	switch(input)
+		if("Cancel")
+			return
 		if("Green")
 			set_security_level(SEC_LEVEL_GREEN)
 		if("Blue")
