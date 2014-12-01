@@ -2852,7 +2852,7 @@
 "bcR" = (/obj/machinery/atmospherics/unary/vent_pump{on = 1},/obj/structure/banner,/turf/simulated/floor/carpet,/area/chapel/main)
 "bcS" = (/obj/machinery/atmospherics/unary/vent_scrubber{dir = 1; on = 1},/obj/structure/banner,/turf/simulated/floor/carpet,/area/chapel/main)
 "bcT" = (/obj/item/latexballon,/turf/simulated/floor/plating,/area/chapel/main)
-"bcU" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/firealarm{dir = 8; pixel_x = -24},/obj/machinery/atmospherics/unary/vent_pump{on = 1},/turf/simulated/floor,/area/hallway/secondary/exit)
+"bcU" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/firealarm{dir = 8; pixel_x = -24},/obj/machinery/atmospherics/unary/vent_pump{on = 1},/obj/machinery/camera{c_tag = "Escape Arm"; dir = 4; network = list("SS13")},/turf/simulated/floor,/area/hallway/secondary/exit)
 "bcV" = (/obj/machinery/status_display{layer = 4; pixel_x = 32},/obj/machinery/atmospherics/pipe/simple/hidden,/turf/simulated/floor{dir = 4; icon_state = "warning"},/area/hallway/secondary/exit)
 "bcW" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/machinery/door/firedoor/border_only{dir = 2},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/hallway/secondary/exit)
 "bcX" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/machinery/door/firedoor/border_only{dir = 2},/turf/simulated/floor/plating,/area/hallway/secondary/exit)
