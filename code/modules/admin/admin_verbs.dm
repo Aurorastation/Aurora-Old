@@ -6,7 +6,7 @@ var/list/admin_verbs_default = list(
 	/client/proc/hide_verbs,			/*hides all our adminverbs*/
 	/client/proc/hide_most_verbs,		/*hides all our hideable adminverbs*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game. +VAREDIT needed to modify*/
-	/client/proc/cmd_mentor_check_new_players
+//	/client/proc/cmd_mentor_check_new_players //redundant
 //	/client/proc/deadchat				/*toggles deadchat on/off*/
 	)
 var/list/admin_verbs_admin = list(
@@ -85,7 +85,9 @@ var/list/admin_verbs_admin = list(
 	/client/proc/response_team, // Response Teams admin verb
 	/client/proc/toggle_antagHUD_use,
 	/client/proc/toggle_antagHUD_restrictions,
-	/client/proc/allow_character_respawn    /* Allows a ghost to respawn */
+	/client/proc/allow_character_respawn,   /* Allows a ghost to respawn */
+	/client/proc/set_ooc,
+	/client/proc/cleartox
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -96,23 +98,43 @@ var/list/admin_verbs_sounds = list(
 	/client/proc/play_sound
 	)
 var/list/admin_verbs_fun = list(
-	/client/proc/object_talk,
-	/client/proc/cmd_admin_dress,
-	/client/proc/cmd_admin_gib_self,
-	/client/proc/drop_bomb,
-	/client/proc/everyone_random,
-	/client/proc/cinematic,
-	/client/proc/one_click_antag,
+//Hey look it's in order of letters ^_^
+	/datum/admins/proc/access_news_network,
 	/datum/admins/proc/toggle_aliens,
 	/datum/admins/proc/toggle_space_ninja,
-	/client/proc/send_space_ninja,
+	/client/proc/admin_ghost,
+	/client/proc/alertlevels,
+	/client/proc/check_ai_laws,
+	/client/proc/cinematic,
 	/client/proc/cmd_admin_add_freeform_ai_law,
 	/client/proc/cmd_admin_add_random_ai_law,
-	/client/proc/make_sound,
+	/client/proc/cmd_admin_change_custom_event,
+	/client/proc/cmd_admin_create_centcom_report,
+	/client/proc/cmd_admin_delete,
+	/client/proc/cmd_admin_direct_narrate,
+	/client/proc/cmd_admin_dress,
+	/client/proc/cmd_admin_gib_self,
+	/client/proc/cmd_admin_pm_context,
+	/client/proc/cmd_admin_pm_panel,
+	/client/proc/cmd_admin_subtle_message,
+	/client/proc/cmd_admin_world_narrate,
+	/client/proc/cmd_debug_tog_aliens,
+	/client/proc/cmd_mod_say,
+	/client/proc/drop_bomb,
+	/client/proc/dsay,
+	/client/proc/editappear,
+	/client/proc/everyone_random,
+	/client/proc/Getmob,
+	/client/proc/Getkey,
+	/client/proc/Jump,
+	/client/proc/jumptokey,
+	/client/proc/jumptomob,
 	/client/proc/make_area_sound,
-	/client/proc/toggle_random_events,
-	/client/proc/set_ooc,
-	/client/proc/editappear
+	/client/proc/make_sound,
+	/client/proc/object_talk,
+	/client/proc/one_click_antag,
+	/client/proc/secrets,
+	/client/proc/send_space_ninja
 	)
 var/list/admin_verbs_dev = list(
 	/client/proc/dsay,
@@ -130,7 +152,6 @@ var/list/admin_verbs_dev = list(
 	/client/proc/cmd_debug_mob_lists,
 	/client/proc/cmd_admin_delete,
 	/client/proc/cmd_debug_del_all,
-	/client/proc/cmd_debug_tog_aliens,
 	/datum/admins/proc/restart,
 	/client/proc/air_report,
 	/client/proc/reload_admins,
@@ -195,7 +216,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/SDQL2_query,
 	/client/proc/cmd_dev_reset_gravity,
 	/client/proc/cmd_dev_reset_floating,
-	/client/proc/cleartox,
 	/client/proc/fillspace
 	)
 var/list/admin_verbs_possess = list(
@@ -908,6 +928,8 @@ var/list/admin_verbs_mod = list(
 	set category = "Fun"
 	set name = "Man Up"
 	set desc = "Tells mob to man up and deal with it."
+	if(!check_rights(R_ADMIN))
+		return
 
 	T << "<span class='notice'><b><font size=3>Man up and deal with it.</font></b></span>"
 	T << "<span class='notice'>Move on.</span>"
@@ -919,6 +941,8 @@ var/list/admin_verbs_mod = list(
 	set category = "Fun"
 	set name = "Man Up Global"
 	set desc = "Tells everyone to man up and deal with it."
+	if(!check_rights(R_ADMIN))
+		return
 
 	for (var/mob/T as mob in mob_list)
 		T << "<br><center><span class='notice'><b><font size=4>Man up.<br> Deal with it.</font></b><br>Move on.</span></center><br>"
@@ -938,11 +962,17 @@ var/list/admin_verbs_mod = list(
 		"Blue",
 		"Red",
 		"Delta",
+		"Cancel",
 	)
 
 	var/current_level = get_security_level()
 	var/input = input("Select the alert level.", "Alert Level -( [current_level] )", null, null) in L
+	if(!input)
+		return
+
 	switch(input)
+		if("Cancel")
+			return
 		if("Green")
 			set_security_level(SEC_LEVEL_GREEN)
 		if("Blue")
@@ -974,7 +1004,7 @@ var/list/admin_verbs_mod = list(
 /client/proc/cleartox()
 	set category = "Special Verbs"
 	set name = "Clear Toxin/Fire in Zone"
-	if(!check_rights(R_DEBUG))
+	if(!check_rights(R_ADMIN))
 		return
 
 	var/datum/gas_mixture/environment = usr.loc.return_air()
@@ -997,12 +1027,22 @@ var/list/admin_verbs_mod = list(
 /client/proc/fillspace()
 	set category = "Special Verbs"
 	set name = "Fill Space with floor"
+
 	if(!check_rights(R_DEBUG))
 		return
-	var/area/location = usr.loc.loc
-	if(location.name != "Space")
-		for(var/turf/space/S in location)
+
+	if (alert(usr, "This will break everything if done in space", "Fill Space with floor?", "Yes", "No") != "Yes") //Confirmation box incase of miss-clicks
+		return
+
+	if (alert(usr, "Seriously not in a space area", "Fill Space with floor?", "Yes", "No") != "Yes") //Confirmation box incase of miss-clicks
+		return
+
+	var/area/location = get_turf(usr)
+	var/area/A = location.loc
+	A = A.master
+	if(A.name != "Space")
+		for(var/turf/space/S in location.loc)
 			S.ChangeTurf(/turf/simulated/floor/plating)
-	if(location.name == "Space")
-		for(var/turf/space/S in range(2,usr.loc))
+	if(A.name == "Space")
+		for(var/turf/space/S in range(2,usr))
 			S.ChangeTurf(/turf/simulated/floor/plating)

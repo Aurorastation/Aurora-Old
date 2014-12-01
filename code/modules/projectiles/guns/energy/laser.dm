@@ -37,11 +37,24 @@
 	force = 10
 	origin_tech = null
 	var/charge_tick = 0
+	var/damaged = 0
 	w_class = 3
 
 	isHandgun()
 		return 1
 
+	Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0)
+/*
+		if(!power_supply) return 0
+		if(power_supply.charge < 100)
+			damaged = 1
+*/
+		if(damaged)
+			user << "\red The gun makes a faint humming sound."
+			return 0
+		..()
+
+/*
 	New()
 		..()
 		processing_objects.Add(src)
@@ -51,7 +64,6 @@
 		processing_objects.Remove(src)
 		..()
 
-
 	process()
 		charge_tick++
 		if(charge_tick < 4) return 0
@@ -60,7 +72,7 @@
 		power_supply.give(100)
 		update_icon()
 		return 1
-
+*/
 
 
 /obj/item/weapon/gun/energy/laser/cyborg/load_into_chamber()
