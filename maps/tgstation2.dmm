@@ -3130,7 +3130,7 @@
 "bij" = (/obj/machinery/light,/turf/simulated/floor,/area/hallway/primary/starboard)
 "bik" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 1; on = 1},/obj/machinery/camera{c_tag = "Starboard Primary Hallway 4"; dir = 1},/turf/simulated/floor,/area/hallway/primary/starboard)
 "bil" = (/obj/structure/extinguisher_cabinet{pixel_y = -30},/obj/machinery/light,/turf/simulated/floor,/area/hallway/secondary/exit)
-"bim" = (/turf/simulated/floor{dir = 6; icon_state = "warning"},/area/hallway/secondary/exit)
+"bim" = (/obj/machinery/embedded_controller/radio/docking_port_multi{child_names_txt = "Airlock One;Airlock Two"; child_tags_txt = "escape_dock_north_airlock;escape_dock_south_airlock"; frequency = 1380; id_tag = "escape_dock"; pixel_y = -25; req_one_access_txt = "13"},/turf/simulated/floor{dir = 6; icon_state = "warning"},/area/hallway/secondary/exit)
 "bin" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/machinery/door/firedoor/border_only{dir = 2; layer = 2.6},/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/hallway/secondary/exit)
 "bio" = (/obj/machinery/door/airlock/external{frequency = 1380; icon_state = "door_locked"; id_tag = "specops_dock_outer"; locked = 1; name = "Arrival Airlock"; req_one_access_txt = "13"},/turf/simulated/floor/plating,/area/hallway/secondary/entry)
 "bip" = (/obj/machinery/atmospherics/unary/vent_pump/high_volume{dir = 2; frequency = 1380; id_tag = "specops_dock_pump"},/turf/simulated/floor/plating,/area/hallway/secondary/entry)
