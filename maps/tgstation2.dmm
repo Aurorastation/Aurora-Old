@@ -9872,7 +9872,7 @@
 "dHR" = (/obj/effect/gibspawner/human,/turf/simulated/floor/airless{icon_state = "damaged2"},/area/mine/abandoned)
 "dHS" = (/obj/effect/alien/weeds{icon_state = "weeds1"},/obj/effect/decal/remains/xeno,/turf/simulated/floor/plating,/area/mine/abandoned)
 "dHT" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/transit_tube{icon_state = "N-S"},/obj/machinery/door/firedoor/border_only{dir = 2; layer = 2.6},/turf/simulated/floor/plating,/area/research_outpost/entry)
-"dHU" = (/obj/machinery/computer/research_shuttle,/turf/simulated/floor{icon_state = "bot"},/area/research_outpost/entry)
+"dHU" = (/obj/machinery/computer/shuttle_control/research,/turf/simulated/floor{icon_state = "bot"},/area/research_outpost/entry)
 "dHV" = (/turf/simulated/floor,/area/research_outpost/entry)
 "dHW" = (/obj/machinery/embedded_controller/radio/simple_docking_controller{frequency = 1380; id_tag = "research_outpost_dock"; pixel_x = 0; pixel_y = 30; req_access_txt = "0"; req_one_access_txt = "13;65"; tag_door = "research_outpost_hatch"},/turf/simulated/floor,/area/research_outpost/entry)
 "dHX" = (/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{dir = 6},/turf/simulated/floor,/area/research_outpost/entry)
