@@ -106,6 +106,7 @@
 	icon_state = "sun"
 	item_state = "sunglasses"
 	darkness_view = -1
+	matter = list("metal" = 500, "glass" = 1000)
 
 /obj/item/clothing/glasses/welding
 	name = "welding goggles"

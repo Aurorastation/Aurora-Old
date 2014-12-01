@@ -123,6 +123,7 @@
 	allow_quick_gather = 1
 	use_to_pickup = 1
 	storage_slots = 14
+	matter = list("metal" = 100, "glass" = 700)
 	use_sound = null
 
 /obj/item/weapon/storage/pill_bottle/verb/rename()

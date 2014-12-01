@@ -5,7 +5,7 @@
 /mob/living/carbon/proc/updateshock()
 	src.traumatic_shock = 			\
 	1	* src.getOxyLoss() + 		\
-	0.7	* src.getToxLoss() + 		\
+	0.5	* src.getToxLoss() + 		\
 	1.5	* src.getFireLoss() + 		\
 	1.2	* src.getBruteLoss() + 		\
 	1.7	* src.getCloneLoss() + 		\
@@ -13,6 +13,8 @@
 
 	if(reagents.has_reagent("alkysine"))
 		src.traumatic_shock -= 10
+	if(reagents.has_reagent("ethanol"))
+		src.traumatic_shock -= 20
 	if(reagents.has_reagent("inaprovaline"))
 		src.traumatic_shock -= 25
 	if(reagents.has_reagent("synaptizine"))

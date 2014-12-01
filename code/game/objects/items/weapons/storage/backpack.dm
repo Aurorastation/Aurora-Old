@@ -193,3 +193,9 @@
 	desc = "An exclusive satchel for Nanotrasen officers."
 	icon_state = "satchel-cap"
 	item_state = "captainpack"
+
+/obj/item/weapon/storage/backpack/ert
+	name = "combat ruck"
+	desc = "A large rucksack with supports and webbing, specifically designed for combat operations and equipment carrying."
+	icon_state = "ert_ruck"
+	item_state = "ert_ruck"

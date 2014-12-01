@@ -76,7 +76,7 @@
 			else
 				user << "<span class='notice'>You need a tighter grip.</span>"
 
-	if(cistern)
+	if(cistern && !istype(user,/mob/living/silicon/robot)) //STOP PUTTING YOUR MODULES IN THE TOILET.
 		if(I.w_class > 3)
 			user << "<span class='notice'>\The [I] does not fit.</span>"
 			return
@@ -190,7 +190,7 @@
 				del(mymist)
 				ismist = 0
 
-/obj/machinery/shower/HasEntered(atom/movable/O)
+/obj/machinery/shower/Crossed(atom/movable/O)
 	..()
 	wash(O)
 	if(ismob(O))
@@ -362,8 +362,8 @@
 		user << "\red Someone's already washing here."
 		return
 
-	if (istype(O, /obj/item/weapon/reagent_containers))
-		var/obj/item/weapon/reagent_containers/RG = O
+	var/obj/item/weapon/reagent_containers/RG = O
+	if (istype(RG) && RG.is_open_container())
 		RG.reagents.add_reagent("water", min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
 		user.visible_message("\blue [user] fills \the [RG] using \the [src].","\blue You fill \the [RG] using \the [src].")
 		return
@@ -402,6 +402,11 @@
 	if(user.get_active_hand() != I) return		//Person has switched hands or the item in their hands
 
 	O.clean_blood()
+
+	if(istype(O, /obj/item/clothing))
+		var/obj/item/clothing/G = O
+		G.gsr = 0
+
 	user.visible_message( \
 		"\blue [user] washes \a [I] using \the [src].", \
 		"\blue You wash \a [I] using \the [src].")

@@ -8,8 +8,24 @@
 	origin_tech = "combat=4;materials=2"
 	ammo_type = "/obj/item/ammo_casing/c9mm"
 	automatic = 1
-
 	fire_delay = 0
+	fire_cooldown = 0
+	projectiles_per_shot = 1
+
+/obj/item/weapon/gun/projectile/automatic/verb/toggle_burst()
+	set name = "Toggle Burst"
+	set category = "Object"
+
+	if (projectiles_per_shot == 3)
+		loc << "\red [src.name] is now set to single shot.."
+		projectiles_per_shot = 1
+		fire_cooldown = 0
+	else
+		loc << "\red [src.name] is now set to fire in bursts."
+		projectiles_per_shot = 3
+		fire_cooldown = 1
+	update_icon()
+
 
 //	isHandgun()
 //		return 0

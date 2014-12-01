@@ -6,6 +6,7 @@
 	var/list/fingerprintshidden
 	var/fingerprintslast = null
 	var/list/blood_DNA
+	var/list/stored_DNA = list()
 	var/blood_color
 	var/last_bumped = 0
 	var/pass_flags = 0
@@ -21,27 +22,6 @@
 
 	//Detective Work, used for the duplicate data points kept in the scanners
 	var/list/original_atom
-
-/atom/proc/throw_impact(atom/hit_atom, var/speed)
-	if(istype(hit_atom,/mob/living))
-		var/mob/living/M = hit_atom
-		M.hitby(src,speed)
-
-	else if(isobj(hit_atom))
-		var/obj/O = hit_atom
-		if(!O.anchored)
-			step(O, src.dir)
-		O.hitby(src,speed)
-
-	else if(isturf(hit_atom))
-		var/turf/T = hit_atom
-		if(T.density)
-			spawn(2)
-				step(src, turn(src.dir, 180))
-			if(istype(src,/mob/living))
-				var/mob/living/M = src
-				M.take_organ_damage(20)
-
 
 /atom/proc/assume_air(datum/gas_mixture/giver)
 	return null
@@ -237,6 +217,8 @@ its easier to just keep the beam vertical.
 	return
 
 /atom/proc/hitby(atom/movable/AM as mob|obj)
+	if (density)
+		AM.throwing = 0
 	return
 
 /atom/proc/add_hiddenprint(mob/living/M as mob)
@@ -416,7 +398,6 @@ its easier to just keep the beam vertical.
 		// Make toxins vomit look different
 		if(toxvomit)
 			this.icon_state = "vomittox_[pick(1,4)]"
-
 
 /atom/proc/clean_blood()
 	src.germ_level = 0

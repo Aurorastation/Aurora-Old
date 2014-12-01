@@ -25,6 +25,13 @@
 //	Please check gun.dm for infomation on making a weapon able to be used with two hands
 //	- SoundScopes
 
+/obj/item/weapon/gun/energy/rifle/verb/wield()
+	set name = "Wield"
+	set category = "Object"
+	set src in usr
+
+	toggle_wield(usr)
+
 /obj/item/weapon/gun/energy/rifle
 	can_wield()
 		return 1
@@ -51,7 +58,7 @@
 	fire_sound = 'sound/weapons/Laser.ogg'
 	slot_flags = SLOT_BACK
 	w_class = 4
-	m_amt = 2000
+	matter = list("metal" = 2000)
 	charge_cost = 50 //odd numbers due to a requirement to have 20 shots. Easiest way.
 	origin_tech = "combat=3;magnets=2"
 	projectile_type = "/obj/item/projectile/beam"
@@ -59,7 +66,7 @@
 	fire_delay_unwielded = 24 //4x difference, let's be an arse about this, and push the issue
 	force_wielded = 10 //10 is amped force, due to better grip
 	force_unwielded = 5 //5 is normal force
-
+	rangedrop = -5 //lasers are more accurate than bullets. fully accurate up to three tiles unaimed. 40% miss at 7 tiles.  aimed: 6 tiles accurate, 10% miss at 7
 /*
 /obj/item/weapon/gun/energy/rifle/laser/update_icon()  //Currently only here to fuck with the on-mob icons.
 	icon_state = "laser[wielded]"
@@ -127,6 +134,9 @@ Commenting out right now, due to a lack of sprites existing. I hate on-mob weapo
 	fire_delay_wielded = 35 //35 is normal fire_delay -- this is going to suck. Yiss, what we want!
 	fire_delay_unwielded = 105 //3x difference, let's be an arse about this, and push the issue
 	var/zoom = 0
+
+	accuracy = -110
+	rangedrop = -5 // fully accurate up to first 10 tiles.  the last 4 zoomed tiles you are on your
 
 /obj/item/weapon/gun/energy/rifle/sniperrifle/dropped(mob/user)
 	user.client.view = world.view
@@ -199,8 +209,8 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	w_class = 4
 	slot_flags = SLOT_BACK //Just realized... Going to need A LOT more on-back sprites now... FECK...
 	var/mode = 2
-	fire_delay_wielded = 25
-	fire_delay_unwielded = 75
+	fire_delay_wielded = 8
+	fire_delay_unwielded = 24
 
 //	attack_self(mob/living/user as mob)
 //Let's do some magical things, make this a verb, yes?
@@ -252,7 +262,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	desc = "A basic energy-based rifle with two settings: Stun and kill."
 	icon = 'icons/obj/erifle.dmi'
 	icon_state = "eriflestun100"
-	item_state = null	//so the human update icon uses the icon_state instead.
+	item_state = "laser"	//so the human update icon uses the icon_state instead.
 	fire_sound = 'sound/weapons/Taser.ogg'
 
 	charge_cost = 50 //How much energy is needed to fire.

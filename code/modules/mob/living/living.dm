@@ -18,7 +18,7 @@
 //This proc is used for mobs which are affected by pressure to calculate the amount of pressure that actually
 //affects them once clothing is factored in. ~Errorage
 /mob/living/proc/calculate_affecting_pressure(var/pressure)
-	return 0
+	return
 
 
 //sort of a legacy burn method for /electrocute, /shock, and the e_chair
@@ -202,15 +202,6 @@
 	return 0
 
 
-/mob/living/proc/electrocute_act(var/shock_damage, var/obj/source, var/siemens_coeff = 1.0)
-	  return 0 //only carbon liveforms have this proc
-
-/mob/living/emp_act(severity)
-	var/list/L = src.get_contents()
-	for(var/obj/O in L)
-		O.emp_act(severity)
-	..()
-
 /mob/living/proc/can_inject()
 	return 1
 
@@ -295,6 +286,8 @@
 	ear_deaf = 0
 	ear_damage = 0
 	heal_overall_damage(getBruteLoss(), getFireLoss())
+	fire_stacks = 0
+	on_fire = 0
 
 	// restore all of a human's blood
 	if(ishuman(src))
@@ -309,9 +302,13 @@
 		dead_mob_list -= src
 		living_mob_list += src
 		tod = null
+		timeofdeath = 0
 
 	// restore us to conciousness
 	stat = CONSCIOUS
+
+	//checks if we are on fire.
+	update_fire()
 
 	// make the icons look correct
 	regenerate_icons()
@@ -478,7 +475,7 @@
 		H << "\red <B>You begin doggedly resisting the parasite's control (this will take approximately sixty seconds).</B>"
 		B.host << "\red <B>You feel the captive mind of [src] begin to resist your control.</B>"
 
-		spawn(rand(350,450)+B.host.brainloss)
+		spawn(rand(400,500)+B.host.brainloss)
 
 			if(!B || !B.controlling)
 				return
@@ -486,14 +483,8 @@
 			B.host.adjustBrainLoss(rand(5,10))
 			H << "\red <B>With an immense exertion of will, you regain control of your body!</B>"
 			B.host << "\red <B>You feel control of the host brain ripped from your grasp, and retract your probosci before the wild neural impulses can damage you.</b>"
-			B.controlling = 0
 
-			B.ckey = B.host.ckey
-			B.host.ckey = H.ckey
-
-			H.ckey = null
-			H.name = "host brain"
-			H.real_name = "host brain"
+			B.detatch()
 
 			verbs -= /mob/living/carbon/proc/release_control
 			verbs -= /mob/living/carbon/proc/punish_host
@@ -622,6 +613,16 @@
 	//breaking out of handcuffs
 	else if(iscarbon(L))
 		var/mob/living/carbon/CM = L
+		if(CM.on_fire && CM.canmove)
+			CM.fire_stacks -= 5
+			CM.weakened = 5
+			CM.visible_message("<span class='danger'>[CM] rolls on the floor, trying to put themselves out!</span>", \
+				"<span class='notice'>You stop, drop, and roll!</span>")
+			if(fire_stacks <= 0)
+				CM.visible_message("<span class='danger'>[CM] has successfully extinguished themselves!</span>", \
+				"<span class='notice'>You extinguish yourself.</span>")
+				ExtinguishMob()
+			return
 		if(CM.handcuffed && CM.canmove && (CM.last_special <= world.time))
 			CM.next_move = world.time + 100
 			CM.last_special = world.time + 100

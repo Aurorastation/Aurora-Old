@@ -21,7 +21,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 /client/proc/cmd_dev_reset_gravity()
 	set category = "Debug"
 	set name = "Restore Default Gravity"
-	set desc = "Resets all gravity on the entire server"
+	set desc = "Resets all gravity on the entire server."
 
 	if(!check_rights(R_DEBUG|R_DEV))	return
 
@@ -36,9 +36,12 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 		src << "\red The game hasn't started yet!"
 		return
 
+	if(alert(usr, "Make people fall on their face?", "Restore gravity", "No", "Yes") == "No")
+		return 0
+
 	world << "\red \b Resetting Gravity Simulation."
 	gravity_is_on = 1
-	spawn(10)
+	spawn(1)
 		for(var/area/A in world)
 			if(A.name == "Space")
 				continue
@@ -51,6 +54,29 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 		world << "\red Gravity Simulation reset."
 
 	feedback_add_details("admin_verb","RSG")
+
+/client/proc/cmd_dev_reset_floating()
+	set category = "Debug"
+	set name = "Reset floating mobs"
+	set desc = "Stops all mobs floating instantly."
+
+	if(!check_rights(R_DEBUG|R_DEV))	return
+
+	if(!holder)
+		return //how did they get here?
+
+	if(!ticker)
+		alert("Wait until the game starts")
+		return
+
+	if(ticker.current_state < GAME_STATE_PLAYING)
+		src << "\red The game hasn't started yet!"
+		return
+
+	for(var/mob/living/M in world)
+		M.float(0)
+
+	feedback_add_details("admin_verb","RSF")
 
 /obj/machinery/gravity_field_generator
 	name = "gravitational generator"
@@ -120,9 +146,6 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	middle.overlays += "activated"
 	log_debug("Gravity Generator spawned: initialize()")
 	update_list()
-	spawn(100)
-		if(round_start >= 1)
-			round_start--
 
 //
 // Generator an admin can spawn
@@ -140,11 +163,10 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 /obj/machinery/gravity_field_generator/main
 	icon_state = "on_8"
 	idle_power_usage = 0
-	active_power_usage = 3000
+	active_power_usage = 12000
 	power_channel = ENVIRON
 	sprite_number = 8
 	use_power = 1
-	interact_offline = 1
 	var/on = 1
 	var/breaker = 1
 	var/list/parts = list()
@@ -156,10 +178,12 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	var/list/localareas = list()
 	var/effectiverange = 255  //Currently unused due to errors
 	var/round_start = 2 //To help stop a bug with round start
+	var/has_been_charged = 0
 
 /obj/machinery/gravity_field_generator/main/Del() // If we somehow get deleted, remove all of our other parts.
 	log_debug("Gravity Generator Destroyed")
 	investigate_log("was destroyed!", "gravity")
+	captain_announce("Gravity generator: location missing!")
 	on = 0
 	update_list()
 	for(var/obj/machinery/gravity_field_generator/part/O in parts)
@@ -329,6 +353,8 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	var/alert = 0
 	var/area/area = get_area(src)
 	if(new_state) // If we turned on
+		if(has_been_charged)
+			return
 		if(gravity_in_level() == 0)
 			alert = 1
 			gravity_is_on = 1
@@ -338,8 +364,11 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 		if(gravity_in_level() == 1)
 			alert = 1
 			gravity_is_on = 0
+			captain_announce("Gravity generator: shutdown successful.")
 			investigate_log("was brought offline and there is now no gravity for this level.", "gravity")
 			message_admins("The gravity generator was brought offline with no backup generator. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>[area.name]</a>)")
+			message_mods("The gravity generator was brought offline with no backup generator. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>[area.name]</a>)")
+
 
 	update_icon()
 	update_list()
@@ -355,8 +384,10 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	if(charging_state != POWER_IDLE)
 		if(charging_state == POWER_UP && charge_count >= 100)
 			set_state(1)
+			has_been_charged = 1
 		else if(charging_state == POWER_DOWN && charge_count <= 0)
 			set_state(0)
+			has_been_charged = 0
 		else
 			if(charging_state == POWER_UP)
 				charge_count += 2
@@ -421,16 +452,18 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 		if(!gravity_field_generators["[T.z]"])
 			gravity_field_generators["[T.z]"] = list()
 		if(on)
+			msg_scopes("Well here is a list of people on their face")
 			for(var/area/A in localareas)
 				A.has_gravity = 1
 				if(round_start)
 					A.gravitychange(A.has_gravity,A,1)
 				else
 					A.gravitychange(A.has_gravity,A)
-			if(round_start == 1)
-				round_start = 0
+			if(round_start >= 1)
+				round_start--
 			gravity_field_generators["[T.z]"] |= src
 		else
+			msg_scopes("Here is a lovely list of floaty people")
 			for(var/area/A in localareas)
 				A.has_gravity = 0
 				A.gravitychange(A.has_gravity,A)
@@ -476,6 +509,8 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	)
 	for (var/type in SPECIALS)
 		if ( istype(A,type) )
+			if(A.type == /area/prison/gas_chamber)
+				return AREA_STATION
 			return AREA_SPECIAL
 	return AREA_STATION
 

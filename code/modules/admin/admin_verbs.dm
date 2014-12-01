@@ -1,17 +1,17 @@
 //admin verb groups - They can overlap if you so wish. Only one of each verb will exist in the verbs list regardless
 var/list/admin_verbs_default = list(
-	/datum/admins/proc/show_player_panel,	/*shows an interface for individual players, with various links (links require additional flags*/
 	/client/proc/player_panel,
 	/client/proc/toggleadminhelpsound,	/*toggles whether we hear a sound when adminhelps/PMs are used*/
 	/client/proc/deadmin_self,			/*destroys our own admin datum so we can play as a regular player*/
 	/client/proc/hide_verbs,			/*hides all our adminverbs*/
 	/client/proc/hide_most_verbs,		/*hides all our hideable adminverbs*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game. +VAREDIT needed to modify*/
-	/client/proc/check_antagonists,		/*shows all antags*/
-	/client/proc/cmd_mentor_check_new_players
+//	/client/proc/cmd_mentor_check_new_players //redundant
 //	/client/proc/deadchat				/*toggles deadchat on/off*/
 	)
 var/list/admin_verbs_admin = list(
+	/datum/admins/proc/show_player_panel,	/*shows an interface for individual players, with various links (links require additional flags*/
+	/client/proc/check_antagonists,		/*shows all antags*/
 	/client/proc/alertlevels,
 	/client/proc/cmd_admin_wind,
 	/client/proc/cmd_admin_unwind,
@@ -53,13 +53,17 @@ var/list/admin_verbs_admin = list(
 	/client/proc/check_antagonists,
 	/client/proc/admin_memo,			/*admin memo system. show/delete/write. +SERVER needed to delete admin memos of others*/
 	/client/proc/dsay,					/*talk in deadchat using our ckey/fakekey*/
-	/client/proc/toggleprayers,			/*toggles prayers on/off*/
 //	/client/proc/toggle_hear_deadcast,	/*toggles whether we hear deadchat*/
 	/client/proc/toggle_hear_radio,		/*toggles whether we hear the radio*/
 	/client/proc/investigate_show,		/*various admintools for investigation. Such as a singulo grief-log*/
 	/client/proc/secrets,
+	/client/proc/toggleprayers,
 	/datum/admins/proc/toggleooc,		/*toggles ooc on/off for everyone*/
+	/datum/admins/proc/toggledevooc,
+	/datum/admins/proc/togglemodooc,
 	/datum/admins/proc/togglelooc,
+	/datum/admins/proc/togglemodlooc,
+	/datum/admins/proc/toggledevlooc,
 	/datum/admins/proc/toggleoocdead,	/*toggles ooc on/off for everyone who is dead*/
 	/datum/admins/proc/toggledsay,		/*toggles dsay on/off for everyone*/
 	/client/proc/game_panel,			/*game panel, allows to change game-mode etc*/
@@ -81,7 +85,9 @@ var/list/admin_verbs_admin = list(
 	/client/proc/response_team, // Response Teams admin verb
 	/client/proc/toggle_antagHUD_use,
 	/client/proc/toggle_antagHUD_restrictions,
-	/client/proc/allow_character_respawn    /* Allows a ghost to respawn */
+	/client/proc/allow_character_respawn,   /* Allows a ghost to respawn */
+	/client/proc/set_ooc,
+	/client/proc/cleartox
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -92,28 +98,47 @@ var/list/admin_verbs_sounds = list(
 	/client/proc/play_sound
 	)
 var/list/admin_verbs_fun = list(
-	/client/proc/object_talk,
-	/client/proc/cmd_admin_dress,
-	/client/proc/cmd_admin_gib_self,
-	/client/proc/drop_bomb,
-        /client/proc/everyone_random,
-	/client/proc/cinematic,
-	/client/proc/one_click_antag,
+//Hey look it's in order of letters ^_^
+	/datum/admins/proc/access_news_network,
 	/datum/admins/proc/toggle_aliens,
 	/datum/admins/proc/toggle_space_ninja,
-	/client/proc/send_space_ninja,
+	/client/proc/admin_ghost,
+	/client/proc/alertlevels,
+	/client/proc/check_ai_laws,
+	/client/proc/cinematic,
 	/client/proc/cmd_admin_add_freeform_ai_law,
 	/client/proc/cmd_admin_add_random_ai_law,
+	/client/proc/cmd_admin_change_custom_event,
+	/client/proc/cmd_admin_create_centcom_report,
+	/client/proc/cmd_admin_delete,
+	/client/proc/cmd_admin_direct_narrate,
+	/client/proc/cmd_admin_dress,
+	/client/proc/cmd_admin_gib_self,
+	/client/proc/cmd_admin_pm_context,
+	/client/proc/cmd_admin_pm_panel,
+	/client/proc/cmd_admin_subtle_message,
+	/client/proc/cmd_admin_world_narrate,
+	/client/proc/cmd_debug_tog_aliens,
+	/client/proc/cmd_mod_say,
+	/client/proc/drop_bomb,
+	/client/proc/dsay,
+	/client/proc/editappear,
+	/client/proc/everyone_random,
+	/client/proc/Getmob,
+	/client/proc/Getkey,
+	/client/proc/Jump,
+	/client/proc/jumptokey,
+	/client/proc/jumptomob,
+	/client/proc/make_area_sound,
 	/client/proc/make_sound,
-	/client/proc/toggle_random_events,
-	/client/proc/set_ooc,
-	/client/proc/editappear
+	/client/proc/object_talk,
+	/client/proc/one_click_antag,
+	/client/proc/secrets,
+	/client/proc/send_space_ninja
 	)
 var/list/admin_verbs_dev = list(
 	/client/proc/dsay,
 	/client/proc/togglebuildmodeself,
-	/datum/admins/proc/restart,
-	/datum/admins/proc/delay,
 	/client/proc/giveruntimelog,
 	/client/proc/getruntimelog,
 	/client/proc/cmd_admin_list_open_jobs,
@@ -127,19 +152,19 @@ var/list/admin_verbs_dev = list(
 	/client/proc/cmd_debug_mob_lists,
 	/client/proc/cmd_admin_delete,
 	/client/proc/cmd_debug_del_all,
-	/client/proc/cmd_debug_tog_aliens,
+	/datum/admins/proc/restart,
 	/client/proc/air_report,
 	/client/proc/reload_admins,
 	/client/proc/restart_controller,
 	/client/proc/enable_debug_verbs,
-	/client/proc/callproc,
-	/client/proc/toggleattacklogs,
 	/client/proc/toggledebuglogs,
 	/client/proc/SDQL_query,
 	/client/proc/SDQL2_query,
 	/client/proc/cmd_dev_say,
 	/client/proc/cmd_dev_bst,
-	/client/proc/cmd_dev_reset_gravity
+	/client/proc/cmd_dev_reset_gravity,
+	/client/proc/cmd_dev_reset_floating,
+	/client/proc/togglescopeslogs
 )
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom,		/*allows us to spawn instances*/
@@ -167,8 +192,10 @@ var/list/admin_verbs_server = list(
 	/client/proc/check_customitem_activity
 	)
 var/list/admin_verbs_debug = list(
-        /client/proc/getruntimelog,                     /*allows us to access runtime logs to somebody*/
+	/client/proc/getruntimelog,                     /*allows us to access runtime logs to somebody*/
 	/client/proc/cmd_admin_list_open_jobs,
+	/datum/admins/proc/restart,
+	/datum/admins/proc/delay,
 	/client/proc/Debug2,
 	/client/proc/kill_air,
 	/client/proc/ZASSettings,
@@ -187,8 +214,9 @@ var/list/admin_verbs_debug = list(
 	/client/proc/toggledebuglogs,
 	/client/proc/SDQL_query,
 	/client/proc/SDQL2_query,
-	/client/proc/cmd_dev_bst,
-	/client/proc/cmd_dev_reset_gravity
+	/client/proc/cmd_dev_reset_gravity,
+	/client/proc/cmd_dev_reset_floating,
+	/client/proc/fillspace
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -239,6 +267,7 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/cmd_admin_add_random_ai_law,
 	/client/proc/cmd_admin_create_centcom_report,
 	/client/proc/make_sound,
+	/client/proc/make_area_sound,
 	/client/proc/toggle_random_events,
 	/client/proc/cmd_admin_add_random_ai_law,
 	/client/proc/Set_Holiday,
@@ -273,6 +302,8 @@ var/list/admin_verbs_hideable = list(
 	/proc/release
 	)
 var/list/admin_verbs_mod = list(
+	/client/proc/check_antagonists,		/*shows all antags*/
+	/client/proc/cmd_admin_check_contents,
 	/client/proc/cmd_admin_wind,
 	/client/proc/cmd_admin_unwind,
 	/client/proc/cmd_admin_pm_context,	/*right-click adminPM interface*/
@@ -280,9 +311,11 @@ var/list/admin_verbs_mod = list(
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game.*/
 	/client/proc/toggleattacklogs,
 	/client/proc/toggledebuglogs,
+	/client/proc/toggleprayers,
 	/datum/admins/proc/PlayerNotes,
 	/client/proc/admin_ghost,			/*allows us to ghost/reenter body at will*/
 	/client/proc/cmd_mod_say,
+	/client/proc/check_ai_laws,
 	/datum/admins/proc/show_player_info,
 	/client/proc/player_panel_new,
 	/client/proc/dsay,
@@ -325,6 +358,7 @@ var/list/admin_verbs_mod = list(
 		admin_verbs_rejuv,
 		admin_verbs_sounds,
 		admin_verbs_spawn,
+		admin_verbs_dev,
 		/*Debug verbs added by "show debug verbs"*/
 		/client/proc/Cell,
 		/client/proc/do_not_use_these,
@@ -519,7 +553,7 @@ var/list/admin_verbs_mod = list(
 #define AUTOBANTIME 10
 
 /client/proc/warn(warned_ckey)
-	if(!check_rights(R_ADMIN))	return
+	if(!check_rights(R_ADMIN|R_MOD))	return
 
 	if(!warned_ckey || !istext(warned_ckey))	return
 	if(warned_ckey in admin_datums)
@@ -539,18 +573,22 @@ var/list/admin_verbs_mod = list(
 		ban_unban_log_save("[ckey] warned [warned_ckey], resulting in a [AUTOBANTIME] minute autoban.")
 		if(C)
 			message_admins("[key_name_admin(src)] has warned [key_name_admin(C)] resulting in a [AUTOBANTIME] minute ban.")
+			message_mods("[key_name_admin(src)] has warned [key_name_admin(C)] resulting in a [AUTOBANTIME] minute ban.")
 			C << "<font color='red'><BIG><B>You have been autobanned due to a warning by [ckey].</B></BIG><br>This is a temporary ban, it will be removed in [AUTOBANTIME] minutes."
 			del(C)
 		else
 			message_admins("[key_name_admin(src)] has warned [warned_ckey] resulting in a [AUTOBANTIME] minute ban.")
+			message_mods("[key_name_admin(src)] has warned [warned_ckey] resulting in a [AUTOBANTIME] minute ban.")
 		AddBan(warned_ckey, D.last_id, "Autobanning due to too many formal warnings", ckey, 1, AUTOBANTIME)
 		feedback_inc("ban_warn",1)
 	else
 		if(C)
 			C << "<font color='red'><BIG><B>You have been formally warned by an administrator.</B></BIG><br>Further warnings will result in an autoban.</font>"
 			message_admins("[key_name_admin(src)] has warned [key_name_admin(C)]. They have [MAX_WARNS-D.warns] strikes remaining.")
+			message_mods("[key_name_admin(src)] has warned [key_name_admin(C)]. They have [MAX_WARNS-D.warns] strikes remaining.")
 		else
 			message_admins("[key_name_admin(src)] has warned [warned_ckey] (DC). They have [MAX_WARNS-D.warns] strikes remaining.")
+			message_mods("[key_name_admin(src)] has warned [warned_ckey] (DC). They have [MAX_WARNS-D.warns] strikes remaining.")
 
 	feedback_add_details("admin_verb","WARN") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -653,10 +691,27 @@ var/list/admin_verbs_mod = list(
 			return
 		for (var/mob/V in hearers(O))
 			V.show_message(message, 2)
-		log_admin("[key_name(usr)] made [O] at [O.x], [O.y], [O.z]. make a sound")
-		message_admins("\blue [key_name_admin(usr)] made [O] at [O.x], [O.y], [O.z]. make a sound", 1)
+		log_admin("[key_name(usr)] made [O] at [O.x], [O.y], [O.z]. make a sound ([message])")
+		message_admins("\blue [key_name_admin(usr)] made [O] at [O.x], [O.y], [O.z]. make a sound ([message])", 1)
 		feedback_add_details("admin_verb","MS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+/client/proc/make_area_sound(var/turf/T in world) // -- TLE
+	set category = "Special Verbs"
+	set name = "Make Area Sound"
+	set desc = "Display a message to everyone in the area (Experimental)"
+	if(T)
+		var/message = input("What do you want the message to be?", "Make Area Sound (Experimental)") as text|null
+		if(!message)
+			return
+		var/area/A = get_area(T)
+		if(!A == A.master)
+			A = A.master
+		for(var/area/SubA in A.related)
+			for (var/mob/V in SubA)
+				V.show_message(message, 2)
+		log_admin("[key_name(usr)] made [A.name] make a sound ([message])")
+		message_admins("\blue [key_name_admin(usr)] made [A.name] make a sound ([message])", 1)
+		feedback_add_details("admin_verb","MAS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/togglebuildmodeself()
 	set name = "Toggle Build Mode Self"
@@ -796,6 +851,9 @@ var/list/admin_verbs_mod = list(
 /client/proc/playernotes()
 	set name = "Show Player Info"
 	set category = "Admin"
+	if(!check_rights(R_ADMIN|R_MOD))
+		return
+
 	if(holder)
 		holder.PlayerNotes()
 	return
@@ -870,6 +928,8 @@ var/list/admin_verbs_mod = list(
 	set category = "Fun"
 	set name = "Man Up"
 	set desc = "Tells mob to man up and deal with it."
+	if(!check_rights(R_ADMIN))
+		return
 
 	T << "<span class='notice'><b><font size=3>Man up and deal with it.</font></b></span>"
 	T << "<span class='notice'>Move on.</span>"
@@ -881,6 +941,8 @@ var/list/admin_verbs_mod = list(
 	set category = "Fun"
 	set name = "Man Up Global"
 	set desc = "Tells everyone to man up and deal with it."
+	if(!check_rights(R_ADMIN))
+		return
 
 	for (var/mob/T as mob in mob_list)
 		T << "<br><center><span class='notice'><b><font size=4>Man up.<br> Deal with it.</font></b><br>Move on.</span></center><br>"
@@ -900,10 +962,17 @@ var/list/admin_verbs_mod = list(
 		"Blue",
 		"Red",
 		"Delta",
+		"Cancel",
 	)
 
-	var/input = input("Select the alert level.", "Alert Level", null, null) in L
+	var/current_level = get_security_level()
+	var/input = input("Select the alert level.", "Alert Level -( [current_level] )", null, null) in L
+	if(!input)
+		return
+
 	switch(input)
+		if("Cancel")
+			return
 		if("Green")
 			set_security_level(SEC_LEVEL_GREEN)
 		if("Blue")
@@ -916,3 +985,64 @@ var/list/admin_verbs_mod = list(
 			set_security_level(SEC_LEVEL_DELTA)
 			delta_level:active = 1
 			delta_level.activate()
+
+//SoundScopes extra messages, most of which will be almost useless >_>
+/client/proc/togglescopeslogs()
+	set name = "Toggle Scopes Debug"
+	set category = "Preferences"
+	set desc = "SoundScopes Advanced debug logs, this will create spam for yourself"
+
+	if(!check_rights(R_DEV))	return
+	if(!check_rights(R_ADMIN))	return
+
+	prefs.toggles ^= CHAT_SCOPES_DEBUG
+	if (prefs.toggles & CHAT_SCOPES_DEBUG)
+		usr << "You now will get advanced debug logs"
+	else
+		usr << "You now won't get advanced debug logs"
+
+/client/proc/cleartox()
+	set category = "Special Verbs"
+	set name = "Clear Toxin/Fire in Zone"
+	if(!check_rights(R_ADMIN))
+		return
+
+	var/datum/gas_mixture/environment = usr.loc.return_air()
+	environment.gas["toxins"] = 0
+	environment.gas["nitrogen"] = 82.1472
+	environment.gas["oxygen"] = 21.8366
+	environment.gas["carbon_dioxide"] = 0
+	environment.gas["sleeping_agent"] = 0
+	environment.gas["oxygen_agent_b"] = 0
+	environment.temperature = 293.15
+	environment.update_values()
+	var/turf/simulated/location = get_turf(usr)
+	if(location.zone)
+		for(var/turf/T in location.zone.contents)
+			for(var/obj/fire/F in T.contents)
+				del(F)
+		for(var/obj/fire/FF in world)
+			del(FF)
+
+/client/proc/fillspace()
+	set category = "Special Verbs"
+	set name = "Fill Space with floor"
+
+	if(!check_rights(R_DEBUG))
+		return
+
+	if (alert(usr, "This will break everything if done in space", "Fill Space with floor?", "Yes", "No") != "Yes") //Confirmation box incase of miss-clicks
+		return
+
+	if (alert(usr, "Seriously not in a space area", "Fill Space with floor?", "Yes", "No") != "Yes") //Confirmation box incase of miss-clicks
+		return
+
+	var/area/location = get_turf(usr)
+	var/area/A = location.loc
+	A = A.master
+	if(A.name != "Space")
+		for(var/turf/space/S in location.loc)
+			S.ChangeTurf(/turf/simulated/floor/plating)
+	if(A.name == "Space")
+		for(var/turf/space/S in range(2,usr))
+			S.ChangeTurf(/turf/simulated/floor/plating)

@@ -51,9 +51,16 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	var/list/datum/mind/possible_changelings = get_players_for_role(BE_CHANGELING)
 
 	for(var/datum/mind/player in possible_changelings)
+//This could be the fuckup with game start
+		if(player.current.client.prefs.species == "Machine") //Removing ipc's
+			possible_changelings -= player
+			msg_scopes("[player.key] has an invalid mob for this role.")
+			continue
 		for(var/job in restricted_jobs)//Removing robots from the list
 			if(player.assigned_role == job)
 				possible_changelings -= player
+				msg_scopes("[player.key] has an invalid job for this role.")
+				break
 
 	changeling_amount = 1 + round(num_players() / 10)
 

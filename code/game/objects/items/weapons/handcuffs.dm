@@ -10,7 +10,7 @@
 	w_class = 2.0
 	throw_speed = 2
 	throw_range = 5
-	m_amt = 500
+	matter = list("metal" = 500)
 	origin_tech = "materials=1"
 	var/dispenser = 0
 	var/breakouttime = 1200 //Deciseconds = 120s = 2 minutes
@@ -54,7 +54,7 @@
 
 				C.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been handcuffed (attempt) by [user.name] ([user.ckey])</font>")
 				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Attempted to handcuff [C.name] ([C.ckey])</font>")
-				msg_admin_attack("[key_name(user)] attempted to handcuff [key_name(C)]")
+				msg_admin_attack("[key_name(user)] attempted to handcuff [key_name(C)] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[C.x];Y=[C.y];Z=[C.z]'>JMP</a>")
 
 				var/obj/effect/equip_e/human/O = new /obj/effect/equip_e/human(  )
 				O.source = user

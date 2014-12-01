@@ -3,6 +3,7 @@
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "freezer_0"
 	density = 1
+	var/setup = 0
 
 	anchored = 1.0
 
@@ -11,6 +12,12 @@
 /obj/machinery/atmospherics/unary/cold_sink/freezer/New()
 	..()
 	initialize_directions = dir
+	anchored = 1
+
+/obj/machinery/atmospherics/unary/cold_sink/freezer/cargo/New()
+	..()
+	spawn(1)
+		anchored = 0
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/initialize()
 	if(node) return
@@ -22,6 +29,7 @@
 			node = target
 			break
 
+	setup = 1
 	update_icon()
 
 
@@ -36,13 +44,22 @@
 	return
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/attack_ai(mob/user as mob)
-	src.ui_interact(user)
+	if(anchored == 1)
+		src.ui_interact(user)
+	else
+		user << "The machine is not wrenched down, you cannot interface with it."
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/attack_paw(mob/user as mob)
-	src.ui_interact(user)
+	if(anchored == 1)
+		src.ui_interact(user)
+	else
+		user << "The machine is not wrenched down, you cannot interface with it."
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/attack_hand(mob/user as mob)
-	src.ui_interact(user)
+	if(anchored == 1)
+		src.ui_interact(user)
+	else
+		user << "The machine is not wrenched down, you cannot interface with it."
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	// this is the data which will be sent to the ui
@@ -53,7 +70,7 @@
 	data["minGasTemperature"] = round(T0C - 200)
 	data["maxGasTemperature"] = round(T20C)
 	data["targetGasTemperature"] = round(current_temperature)
-	
+
 	var/temp_class = "good"
 	if (air_contents.temperature > (T0C - 20))
 		temp_class = "bad"
@@ -74,7 +91,7 @@
 		// auto update every Master Controller tick
 		ui.set_auto_update(1)
 
-/obj/machinery/atmospherics/unary/cold_sink/freezer/Topic(href, href_list)	
+/obj/machinery/atmospherics/unary/cold_sink/freezer/Topic(href, href_list)
 	if (href_list["toggleStatus"])
 		src.on = !src.on
 		update_icon()
@@ -91,11 +108,51 @@
 /obj/machinery/atmospherics/unary/cold_sink/freezer/process()
 	..()
 
+/obj/machinery/atmospherics/unary/cold_sink/freezer/attackby(var/obj/item/W as obj, var/mob/user as mob)
+	if(src.on)
+		user << "You need to turn the machine off before unwrenching it."
+	else
+		if(istype(W, /obj/item/weapon/wrench))
+			switch(anchored)
+				if(0)
+					playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
+					spawn(10)
+					user.visible_message("[user.name] secures [src.name] to the floor.", "You secure [src.name] to the floor.", "You hear a ratchet")
+					anchored = 1
+					initialize_directions = dir
+					if(!setup)
+						initialize()
+				if(1)
+					playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
+					spawn(10)
+					user.visible_message("[user.name] unsecures [src.name] reinforcing bolts from the floor.", "You unsecure [src.name] from the floor.", "You hear a ratchet")
+					anchored = 0
+	return
+
+/obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate()
+	set name = "Rotate Object"
+	set category = "Object"
+	set src in oview(1)
+
+	if(anchored)
+		usr << "It is fastened to the floor therefore you can't rotate it!"
+		return 0
+
+	dir = turn(dir, 90)
+	initialize_directions = dir
+	return
+
+///////////////////////////////////
+///////SPACING BECAUSE YES/////////
+////////HEATER DOWN BELOW//////////
+///////////////////////////////////
+
 /obj/machinery/atmospherics/unary/heat_reservoir/heater
 	name = "gas heating system"
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "freezer_0"
 	density = 1
+	var/setup = 0
 
 	anchored = 1.0
 
@@ -104,6 +161,12 @@
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/New()
 	..()
 	initialize_directions = dir
+	anchored = 1
+
+/obj/machinery/atmospherics/unary/heat_reservoir/heater/cargo/New()
+	..()
+	spawn(1)
+		anchored = 0
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/initialize()
 	if(node) return
@@ -115,6 +178,7 @@
 			node = target
 			break
 
+	setup = 1
 	update_icon()
 
 
@@ -129,14 +193,23 @@
 	return
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/attack_ai(mob/user as mob)
-	src.ui_interact(user)
+	if(anchored == 1)
+		src.ui_interact(user)
+	else
+		user << "The machine is not wrenched down, you cannot interface with it."
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/attack_paw(mob/user as mob)
-	src.ui_interact(user)
+	if(anchored == 1)
+		src.ui_interact(user)
+	else
+		user << "The machine is not wrenched down, you cannot interface with it."
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/attack_hand(mob/user as mob)
-	src.ui_interact(user)
-	
+	if(anchored == 1)
+		src.ui_interact(user)
+	else
+		user << "The machine is not wrenched down, you cannot interface with it."
+
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	// this is the data which will be sent to the ui
 	var/data[0]
@@ -146,7 +219,7 @@
 	data["minGasTemperature"] = round(T20C)
 	data["maxGasTemperature"] = round(T20C+280)
 	data["targetGasTemperature"] = round(current_temperature)
-	
+
 	var/temp_class = "normal"
 	if (air_contents.temperature > (T20C+40))
 		temp_class = "bad"
@@ -175,9 +248,43 @@
 			src.current_temperature = min((T20C+280), src.current_temperature+amount)
 		else
 			src.current_temperature = max(T20C, src.current_temperature+amount)
-	
+
 	src.add_fingerprint(usr)
 	return 1
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/process()
 	..()
+
+/obj/machinery/atmospherics/unary/heat_reservoir/heater/attackby(var/obj/item/W as obj, var/mob/user as mob)
+	if(src.on)
+		user << "You need to turn the machine off before unwrenching it."
+	else
+		if(istype(W, /obj/item/weapon/wrench))
+			switch(anchored)
+				if(0)
+					playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
+					spawn(10)
+					user.visible_message("[user.name] secures [src.name] to the floor.", "You secure [src.name] to the floor.", "You hear a ratchet")
+					anchored = 1
+					initialize_directions = dir
+					if(!setup)
+						initialize()
+				if(1)
+					playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
+					spawn(10)
+					user.visible_message("[user.name] unsecures [src.name] reinforcing bolts from the floor.", "You unsecure [src.name] from the floor.", "You hear a ratchet")
+					anchored = 0
+	return
+
+/obj/machinery/atmospherics/unary/heat_reservoir/verb/rotate()
+	set name = "Rotate Object"
+	set category = "Object"
+	set src in oview(1)
+
+	if(anchored)
+		usr << "It is fastened to the floor therefore you can't rotate it!"
+		return 0
+
+	dir = turn(dir, 90)
+	initialize_directions = dir
+	return

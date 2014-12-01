@@ -48,6 +48,9 @@ datum/delta_level/proc/dotheboom()
 
 datum/delta_level/proc/process()
 	if(!active)
+		if(ticker.mode:explosion_in_progress == 1)
+			ticker.mode:explosion_in_progress = 0
+			settimeleft(0)
 		return
 	var/timeleft = timeleft()
 	if(timeleft > 1e5)		// midnight rollover protection

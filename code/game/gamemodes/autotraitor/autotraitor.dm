@@ -80,7 +80,7 @@
 		if(emergency_shuttle.departed)
 			return
 		//message_admins("Performing AutoTraitor Check")
-		log_debug("Doing AFK traitor check")
+		msg_scopes("Doing AFK traitor check")
 		var/scopesdebug = 0 //tempory marker 4464-45
 		var/playercount = 0
 		var/traitorcount = 0
@@ -100,9 +100,11 @@
 				if(istype(player, "/mob/living/silicon/robot/drone"))
 					possible_traitors -= player
 					scopesdebug++
+		msg_scopes("possible_traitors [possible_traitors.len]")
+
 
 		if(scopesdebug) //4464-45
-			log_debug("Drones Found: [scopesdebug]")
+			msg_scopes("Drones Found: [scopesdebug]")
 
 		//message_admins("Live Players: [playercount]")
 		//message_admins("Live Traitors: [traitorcount]")
@@ -114,16 +116,19 @@
 		var/list/old_afk_traitors = afk_traitor_count
 
 		for(var/mob/living/player in traitors)
+			msg_scopes("Checking [player.ckey]")
 			if(player.client.is_afk() && !(player in afk_traitor_count))
+				msg_scopes("[player.ckey] is afk")
 				afk_traitor_count += player
 
 		for(var/mob/living/player in afk_traitor_count) //Need to make it so it registers if someone has come back -- SoundScopes
 			if(player in old_afk_traitors)
 				continue
 
-			log_debug("Traitors are afk, forcing a new traitor")
+			msg_scopes("Traitors are afk, forcing a new traitor")
 			need_new_traitor = 1
-			log_debug("afk_traitor_count = [afk_traitor_count.len] : old count: [old_afk_traitors.len]")
+			msg_scopes("afk_traitor_count = [afk_traitor_count.len]")
+			msg_scopes("old count: [old_afk_traitors.len]")
 
 //		var/r = rand(5)
 //		var/target_traitors = 1
@@ -134,6 +139,7 @@
 		if(traitorcount < max_traitors - 1)
 			traitor_prob += 50
 
+		msg_scopes("Need traitor = [need_new_traitor]")
 		if(traitorcount < max_traitors || need_new_traitor)
 			//message_admins("Number of Traitors is below maximum.  Rolling for new Traitor.")
 			//message_admins("The probability of a new traitor is [traitor_prob]%")
@@ -142,14 +148,15 @@
 				message_admins("Making a new Traitor.")
 				if(!possible_traitors.len)
 					if(need_new_traitor)
-						log_debug("No potential traitors.  Cancelling new traitor.")
+						msg_scopes("No potential traitors.  Cancelling new traitor.")
 					message_admins("No potential traitors.  Cancelling new traitor.")
 					traitorcheckloop()
 					return
 				var/mob/living/newtraitor = pick(possible_traitors)
+				msg_scopes("[newtraitor.real_name] has been picked with the job of [newtraitor.mind.assigned_role]")
 				//message_admins("[newtraitor.real_name] is the new Traitor.")
 				if(need_new_traitor)
-					log_debug("Traitor forced and selected")
+					msg_scopes("Traitor forced and selected")
 
 				if (!config.objectives_disabled)
 					forge_traitor_objectives(newtraitor.mind)
@@ -202,6 +209,7 @@
 
 		//var/r = rand(5)
 		//var/target_traitors = 1
+
 		var/max_traitors = 2
 		var/traitor_prob = 0
 		max_traitors = round(playercount / 10) + 1
@@ -215,6 +223,9 @@
 			//message_admins("Number of Traitors is below maximum.  Rolling for New Arrival Traitor.")
 			//message_admins("The probability of a new traitor is [traitor_prob]%")
 			if(prob(traitor_prob))
+				if(character.mind.assigned_role in restricted_jobs)
+					msg_scopes("Retricted job almost made a bad guy")
+					return
 				message_admins("New traitor roll passed.  Making a new Traitor.")
 				if (!config.objectives_disabled)
 					forge_traitor_objectives(character.mind)

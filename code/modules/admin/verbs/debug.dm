@@ -7,10 +7,12 @@
 		Debug2 = 0
 		message_admins("[key_name(src)] toggled debugging off.")
 		log_admin("[key_name(src)] toggled debugging off.")
+		log_debug("[key_name(src)] toggled debugging off.")
 	else
 		Debug2 = 1
 		message_admins("[key_name(src)] toggled debugging on.")
 		log_admin("[key_name(src)] toggled debugging on.")
+		log_debug("[key_name(src)] toggled debugging off.")
 
 	feedback_add_details("admin_verb","DG2") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -29,7 +31,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	set category = "Debug"
 	set name = "Advanced ProcCall"
 
-	if(!check_rights(R_DEBUG|R_DEV)) return
+	if(!check_rights(R_DEBUG))	 return
 
 	spawn(0)
 		var/target = null
@@ -141,11 +143,11 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 	var/datum/gas_mixture/env = T.return_air()
 
-	var/t = ""
-	t+= "Nitrogen : [env.nitrogen]\n"
-	t+= "Oxygen : [env.oxygen]\n"
-	t+= "Plasma : [env.toxins]\n"
-	t+= "CO2: [env.carbon_dioxide]\n"
+	var/t = "\blue Coordinates: [T.x],[T.y],[T.z]\n"
+	t += "\red Temperature: [env.temperature]\n"
+	t += "\red Pressure: [env.return_pressure()]kPa\n"
+	for(var/g in env.gas)
+		t += "\blue [g]: [env.gas[g]] / [env.gas[g] * R_IDEAL_GAS_EQUATION * env.temperature / env.volume]kPa\n"
 
 	usr.show_message(t, 1)
 	feedback_add_details("admin_verb","ASL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -407,7 +409,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	set name = "Assume direct control"
 	set desc = "Direct intervention"
 
-	if(!check_rights(R_DEBUG|R_ADMIN|R_DEV))	return
+	if(!check_rights(R_DEBUG|R_ADMIN|R_DEV|R_FUN))	return
 	if(M.ckey)
 		if(alert("This mob is being controlled by [M.ckey]. Are you sure you wish to assume control of it? [M.ckey] will be made a ghost.",,"Yes","No") != "Yes")
 			return
@@ -434,6 +436,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	GLOBAL_RADIO_TYPE = !GLOBAL_RADIO_TYPE // toggle
 	log_admin("[key_name(src)] has turned the experimental radio system [GLOBAL_RADIO_TYPE ? "on" : "off"].")
 	message_admins("[key_name_admin(src)] has turned the experimental radio system [GLOBAL_RADIO_TYPE ? "on" : "off"].", 0)
+	msg_scopes("[key_name_admin(src)] has turned the experimental radio system [GLOBAL_RADIO_TYPE ? "on" : "off"].", 1)
 	feedback_add_details("admin_verb","SRM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/cmd_admin_areatest()
@@ -558,6 +561,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		"ert sub officer",
 		"ert commander",
 		"nanotrasen representative",
+		"central command duty officer",
 		"nanotrasen officer",
 		"nanotrasen captain",
 		"shadowling"
@@ -774,6 +778,33 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			W.registered_name = M.real_name
 			M.equip_if_possible(W, slot_wear_id)
 
+		if("central command duty officer")
+			M.equip_if_possible(new /obj/item/clothing/under/rank/centcom/officer(M), slot_w_uniform)
+			M.equip_if_possible(new /obj/item/clothing/shoes/centcom(M), slot_shoes)
+			M.equip_if_possible(new /obj/item/clothing/gloves/white(M), slot_gloves)
+			M.equip_if_possible(new /obj/item/device/radio/headset/ert(M), slot_l_ear)
+			M.equip_if_possible(new /obj/item/clothing/glasses/sunglasses/sechud(M), slot_glasses)
+			M.equip_if_possible(new /obj/item/clothing/head/beret/centcom/officer(M), slot_head)
+			M.equip_if_possible(new /obj/item/weapon/melee/telebaton(M), slot_l_store)
+			M.equip_if_possible(new /obj/item/weapon/storage/lockbox/dutyofficer(M), slot_l_hand)
+
+			var/obj/item/device/pda/central/pda = new(M)
+			pda.owner = M.real_name
+			pda.ownjob = "Central Command Duty Officer"
+			pda.name = "PDA-[M.real_name] ([pda.ownjob])"
+
+			M.equip_if_possible(pda, slot_r_store)
+
+			var/obj/item/weapon/card/id/W = new(M)
+			W.name = "[M.real_name]'s ID Card"
+			W.icon_state = "centcom"
+			W.item_state = "id_inv"
+			W.access = get_all_accesses()
+			W.access += get_all_centcom_access()
+			W.assignment = "Central Command Duty Officer"
+			W.registered_name = M.real_name
+			M.equip_if_possible(W, slot_wear_id)
+
 		if("nanotrasen officer")
 			M.equip_if_possible(new /obj/item/clothing/under/rank/centcom/officer(M), slot_w_uniform)
 			M.equip_if_possible(new /obj/item/clothing/shoes/centcom(M), slot_shoes)
@@ -781,7 +812,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			M.equip_if_possible(new /obj/item/device/radio/headset/heads/captain(M), slot_l_ear)
 			M.equip_if_possible(new /obj/item/clothing/head/beret/centcom/officer(M), slot_head)
 
-			var/obj/item/device/pda/heads/pda = new(M)
+			var/obj/item/device/pda/central/pda = new(M)
 			pda.owner = M.real_name
 			pda.ownjob = "NanoTrasen Navy Officer"
 			pda.name = "PDA-[M.real_name] ([pda.ownjob])"
@@ -806,7 +837,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			M.equip_if_possible(new /obj/item/device/radio/headset/heads/captain(M), slot_l_ear)
 			M.equip_if_possible(new /obj/item/clothing/head/beret/centcom/captain(M), slot_head)
 
-			var/obj/item/device/pda/heads/pda = new(M)
+			var/obj/item/device/pda/central/pda = new(M)
 			pda.owner = M.real_name
 			pda.ownjob = "NanoTrasen Navy Captain"
 			pda.name = "PDA-[M.real_name] ([pda.ownjob])"
@@ -831,7 +862,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(M), slot_l_ear)
 			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun(M), slot_belt)
 			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(M), slot_glasses)
-			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(M), slot_back)
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/ert(M), slot_back)
 
 			var/obj/item/weapon/card/id/W = new(M)
 			W.name = "[M.real_name]'s ID Card"
@@ -850,7 +881,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(M), slot_l_ear)
 			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun(M), slot_belt)
 			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(M), slot_glasses)
-			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(M), slot_back)
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/ert(M), slot_back)
 
 			var/obj/item/weapon/card/id/W = new(M)
 			W.name = "[M.real_name]'s ID Card"
@@ -869,7 +900,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(M), slot_l_ear)
 			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun(M), slot_belt)
 			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(M), slot_glasses)
-			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(M), slot_back)
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/ert(M), slot_back)
 
 			var/obj/item/weapon/card/id/W = new(M)
 			W.name = "[M.real_name]'s ID Card"
@@ -888,7 +919,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(M), slot_l_ear)
 			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun(M), slot_belt)
 			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(M), slot_glasses)
-			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(M), slot_back)
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/ert(M), slot_back)
 
 			var/obj/item/weapon/card/id/W = new(M)
 			W.name = "[M.real_name]'s ID Card"
@@ -907,7 +938,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(M), slot_l_ear)
 			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun(M), slot_belt)
 			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(M), slot_glasses)
-			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(M), slot_back)
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/ert(M), slot_back)
 
 			var/obj/item/weapon/card/id/W = new(M)
 			W.name = "[M.real_name]'s ID Card"
@@ -1072,10 +1103,11 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	return
 
 /client/proc/startSinglo()
-
 	set category = "Debug"
 	set name = "Start Singularity"
 	set desc = "Sets up the singularity and all machines to get power flowing through the station"
+
+	if(!check_rights(R_DEBUG))	return
 
 	if(alert("Are you sure? This will start up the engine. Should only be used during debug!",,"Yes","No") != "Yes")
 		return
@@ -1110,7 +1142,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		if(Rad.anchored)
 			if(!Rad.P)
 				var/obj/item/weapon/tank/plasma/Plasma = new/obj/item/weapon/tank/plasma(Rad)
-				Plasma.air_contents.toxins = 70
+				Plasma.air_contents.gas["toxins"] = 70
 				Rad.drainratio = 0
 				Rad.P = Plasma
 				Plasma.loc = Rad

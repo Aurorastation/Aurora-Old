@@ -46,6 +46,7 @@
 			status = 1
 			bombers += "[key_name(user)] welded a single tank bomb. Temp: [bombtank.air_contents.temperature-T0C]"
 			message_admins("[key_name_admin(user)] welded a single tank bomb. Temp: [bombtank.air_contents.temperature-T0C]")
+			message_mods("[key_name_admin(user)] welded a single tank bomb. Temp: [bombtank.air_contents.temperature-T0C]")
 			user << "<span class='notice'>A pressure hole has been bored to [bombtank] valve. \The [bombtank] can now be ignited.</span>"
 		else
 			status = 0
@@ -100,7 +101,7 @@
 	return
 
 /obj/item/weapon/tank/proc/ignite()	//This happens when a bomb is told to explode
-	var/fuel_moles = air_contents.toxins + air_contents.oxygen/6
+	var/fuel_moles = air_contents.gas["toxins"] + air_contents.gas["oxygen"] / 6
 	var/strength = 1
 
 	var/turf/ground_zero = get_turf(loc)
@@ -148,7 +149,7 @@
 	del(src)
 
 /obj/item/weapon/tank/proc/release()	//This happens when the bomb is not welded. Tank contents are just spat out.
-	var/datum/gas_mixture/removed = air_contents.remove(air_contents.total_moles())
+	var/datum/gas_mixture/removed = air_contents.remove(air_contents.total_moles)
 	var/turf/simulated/T = get_turf(src)
 	if(!T)
 		return

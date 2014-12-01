@@ -24,7 +24,7 @@
 	force = 5.0
 	throwforce = 7.0
 	w_class = 2.0
-	m_amt = 150
+	matter = list("metal" = 150)
 	origin_tech = "materials=1;engineering=1"
 	attack_verb = list("bashed", "battered", "bludgeoned", "whacked")
 
@@ -44,8 +44,7 @@
 	throwforce = 5.0
 	throw_speed = 3
 	throw_range = 5
-	g_amt = 0
-	m_amt = 75
+	matter = list("metal" = 75)
 	attack_verb = list("stabbed")
 
 	suicide_act(mob/user)
@@ -103,7 +102,7 @@
 	throw_speed = 2
 	throw_range = 9
 	w_class = 2.0
-	m_amt = 80
+	matter = list("metal" = 80)
 	origin_tech = "materials=1;engineering=1"
 	attack_verb = list("pinched", "nipped")
 	sharp = 1
@@ -143,8 +142,7 @@
 	w_class = 2.0
 
 	//Cost to make in the autolathe
-	m_amt = 70
-	g_amt = 30
+	matter = list("metal" = 70, "glass" = 30)
 
 	//R&D tech level
 	origin_tech = "engineering=1"
@@ -245,7 +243,7 @@
 		location.hotspot_expose(700, 5)
 
 
-/obj/item/weapon/weldingtool/afterattack(obj/O as obj, mob/user as mob, proximity)
+/obj/item/weapon/weldingtool/afterattack(obj/O as obj|mob, mob/user as mob, proximity)
 	if(!proximity) return
 	if (istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,O) <= 1 && !src.welding)
 		O.reagents.trans_to(src, max_fuel)
@@ -260,6 +258,7 @@
 		tank.armed = 1
 		user.visible_message("[user] begins heating the [O].", "You start to heat the [O].")
 		message_admins("[key_name_admin(user)] is attempting a welder bomb at ([loc.x],[loc.y],[loc.z]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[O.x];Y=[O.y];Z=[O.z]'>JMP</a>")
+		message_mods("[key_name_admin(user)] is attempting a welder bomb at ([loc.x],[loc.y],[loc.z]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[O.x];Y=[O.y];Z=[O.z]'>JMP</a>")
 		if(do_after(user,100))
 //			var/obj/structure/reagent_dispensers/fueltank/tank = O
 			if(tank.defuse)
@@ -282,6 +281,11 @@
 		var/turf/location = get_turf(user)
 		if (istype(location, /turf))
 			location.hotspot_expose(700, 50, 1)
+
+		if(isliving(O))
+			var/mob/living/L = O
+			L.IgniteMob()
+
 	return
 
 
@@ -376,7 +380,7 @@
 	var/safety = user:eyecheck()
 	if(istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = user
-		var/datum/organ/internal/eyes/E = H.internal_organs["eyes"]
+		var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 		if(H.species.flags & IS_SYNTHETIC)
 			return
 		switch(safety)
@@ -415,24 +419,21 @@
 /obj/item/weapon/weldingtool/largetank
 	name = "Industrial Welding Tool"
 	max_fuel = 40
-	m_amt = 70
-	g_amt = 60
+	matter = list("metal" = 70, "glass" = 60)
 	origin_tech = "engineering=2"
 
 /obj/item/weapon/weldingtool/hugetank
 	name = "Upgraded Welding Tool"
 	max_fuel = 80
 	w_class = 3.0
-	m_amt = 70
-	g_amt = 120
+	matter = list("metal" = 70, "glass" = 120)
 	origin_tech = "engineering=3"
 
 /obj/item/weapon/weldingtool/experimental
 	name = "Experimental Welding Tool"
 	max_fuel = 40
 	w_class = 3.0
-	m_amt = 70
-	g_amt = 120
+	matter = list("metal" = 70, "glass" = 120)
 	origin_tech = "engineering=4;plasma=3"
 	var/last_gen = 0
 
@@ -459,7 +460,7 @@
 	throwforce = 7.0
 	item_state = "crowbar"
 	w_class = 2.0
-	m_amt = 50
+	matter = list("metal" = 50)
 	origin_tech = "engineering=1"
 	attack_verb = list("attacked", "bashed", "battered", "bludgeoned", "whacked")
 

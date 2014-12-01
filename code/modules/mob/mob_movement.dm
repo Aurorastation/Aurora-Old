@@ -177,7 +177,9 @@
 
 	if(mob.stat==2)	return
 
-	if(isAI(mob))	return AIMove(n,direct,mob)
+	// handle possible AI movement
+	if(isAI(mob))
+		return AIMove(n,direct,mob)
 
 	if(mob.monkeyizing)	return//This is sota the goto stop mobs from moving var
 
@@ -192,13 +194,16 @@
 					var/obj/item/weapon/gun/energy/rifle/sniperrifle/s = locate() in mob
 					if(s.zoom)
 						s.zoom()
+				if(locate(/obj/item/weapon/gun/energy/laser/modular, mob.contents))		// If mob moves while zoomed in with modular rifle, unzoom them.
+					var/obj/item/weapon/gun/energy/laser/modular/s = locate() in mob
+					if(s.zoom)
+						s.zoom()
 
 	if(Process_Grab())	return
 
-	if(mob.buckled)							//if we're buckled to something, tell it we moved.
-		return mob.buckled.relaymove(mob, direct)
 
-	if(!mob.canmove)	return
+	if(!mob.canmove)
+		return
 
 	//if(istype(mob.loc, /turf/space) || (mob.flags & NOGRAV))
 	//	if(!mob.Process_Spacemove(0))	return 0
@@ -209,8 +214,6 @@
 	if((istype(mob.loc, /turf/space)) || (mob.lastarea.has_gravity == 0))
 		if(!mob.Process_Spacemove(0))	return 0
 
-	if(mob.floating & mob.mob_has_gravity(mob.loc))
-		mob.float(0)
 
 	if(isobj(mob.loc) || ismob(mob.loc))//Inside an object, tell it we moved
 		var/atom/O = mob.loc
@@ -247,8 +250,27 @@
 			var/tickcomp = ((1/(world.tick_lag))*1.3)
 			move_delay = move_delay + tickcomp
 
+//		if(istype(mob.buckled, /obj/vehicle))
+//			return mob.buckled.relaymove(mob,direct)
 
+		if(istype(mob.machine, /obj/machinery))
+			if(mob.machine.relaymove(mob,direct))
+				return
 
+		if(mob.pulledby || mob.buckled) // Wheelchair driving!
+			if(istype(mob.loc, /turf/space))
+				return // No wheelchair driving in space
+			if(istype(mob.pulledby, /obj/structure/stool/bed/chair/wheelchair))
+				return mob.pulledby.relaymove(mob, direct)
+			else if(istype(mob.buckled, /obj/structure/stool/bed/chair/wheelchair))
+				if(ishuman(mob.buckled))
+					var/mob/living/carbon/human/driver = mob.buckled
+					var/datum/organ/external/l_hand = driver.get_organ("l_hand")
+					var/datum/organ/external/r_hand = driver.get_organ("r_hand")
+					if((!l_hand || (l_hand.status & ORGAN_DESTROYED)) && (!r_hand || (r_hand.status & ORGAN_DESTROYED)))
+						return // No hands to drive your chair? Tough luck!
+				move_delay += 2
+				return mob.buckled.relaymove(mob,direct)
 
 		//We are now going to move
 		moving = 1
@@ -445,8 +467,6 @@
 		return 0
 	//If not then we can reset inertia and move
 	inertia_dir = 0
-	if(!floating)
-		src.float(1)
 	return 1
 
 
@@ -469,9 +489,17 @@
 	return 0
 
 /mob/proc/float(var/on)
-	if(on)
+	if(on && !buckled)
+		if(!real_name)
+			msg_scopes("[name] was made to float")
+		else
+			msg_scopes("[real_name] was made to float")
 		animate(src, pixel_y = 2, time = 10, loop = -1)
 		floating = 1
 	else
+		if(!real_name)
+			msg_scopes("[name] was made to stop floating")
+		else
+			msg_scopes("[real_name] was made to stop floating")
 		animate(src, pixel_y = initial(pixel_y), time = 10)
 		floating = 0

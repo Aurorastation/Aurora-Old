@@ -11,6 +11,7 @@
 	sight |= SEE_TURFS|SEE_MOBS|SEE_OBJS
 	see_in_dark = 8
 	see_invisible = SEE_INVISIBLE_LEVEL_TWO
+	remove_ai_verbs(src)
 
 	var/callshuttle = 0
 
@@ -39,10 +40,11 @@
 		callshuttle = 0
 
 	if(callshuttle == 3) //if all three conditions are met
-		emergency_shuttle.incall(2)
+		emergency_shuttle.call_evac()
 		log_game("All the AIs, comm consoles and boards are destroyed. Shuttle called.")
 		message_admins("All the AIs, comm consoles and boards are destroyed. Shuttle called.", 1)
-		captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
+		message_mods("All the AIs, comm consoles and boards are destroyed. Shuttle called.")
+//		captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
 		world << sound('sound/AI/shuttlecalled.ogg')
 
 	if(explosive)

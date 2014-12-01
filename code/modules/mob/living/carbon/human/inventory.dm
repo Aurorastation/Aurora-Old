@@ -110,6 +110,7 @@
 		head = null
 		if((W.flags & BLOCKHAIR) || (W.flags & BLOCKHEADHAIR))
 			update_hair(0)	//rebuild hair
+			update_inv_ears(0)
 		success = 1
 		update_inv_head()
 	else if (W == l_ear)
@@ -133,6 +134,7 @@
 		success = 1
 		if((W.flags & BLOCKHAIR) || (W.flags & BLOCKHEADHAIR))
 			update_hair(0)	//rebuild hair
+			update_inv_ears(0)
 		if(internal)
 			if(internals)
 				internals.icon_state = "internal0"
@@ -214,6 +216,7 @@
 			src.wear_mask = W
 			if((wear_mask.flags & BLOCKHAIR) || (wear_mask.flags & BLOCKHEADHAIR))
 				update_hair(redraw_mob)	//rebuild hair
+				update_inv_ears(0)
 			W.equipped(src, slot)
 			update_inv_wear_mask(redraw_mob)
 		if(slot_handcuffed)
@@ -269,6 +272,7 @@
 			src.head = W
 			if((head.flags & BLOCKHAIR) || (head.flags & BLOCKHEADHAIR))
 				update_hair(redraw_mob)	//rebuild hair
+				update_inv_ears(0)
 			if(istype(W,/obj/item/clothing/head/kitty))
 				W.update_icon(src)
 			W.equipped(src, slot)
@@ -671,20 +675,38 @@ It can still be worn/put on as normal.
 			slot_to_process = slot_handcuffed
 			if (target.handcuffed)
 				strip_item = target.handcuffed
+			else if (source != target && ishuman(source))
+				//check that we are still grabbing them
+				var/grabbing = 0
+				for (var/obj/item/weapon/grab/G in target.grabbed_by)
+					if (G.loc == source && G.state >= GRAB_AGGRESSIVE)
+						grabbing = 1
+				if (!grabbing)
+					slot_to_process = null
+					source << "\red Your grasp was broken before you could restrain [target]!"
+
 		if("legcuff")
 			slot_to_process = slot_legcuffed
 			if (target.legcuffed)
 				strip_item = target.legcuffed
 		if("splints")
-			for(var/organ in list("l_leg","r_leg","l_arm","r_arm"))
-				var/datum/organ/external/o = target.get_organ(organ)
-				if (o && o.status & ORGAN_SPLINTED)
-					var/obj/item/W = new /obj/item/stack/medical/splint(amount=1)
-					o.status &= ~ORGAN_SPLINTED
-					if (W)
-						W.loc = target.loc
-						W.layer = initial(W.layer)
-						W.add_fingerprint(source)
+			var/can_reach_splints = 1
+			if(target.wear_suit && istype(target.wear_suit,/obj/item/clothing/suit/space))
+				var/obj/item/clothing/suit/space/suit = target.wear_suit
+				if(suit.supporting_limbs && suit.supporting_limbs.len)
+					source << "You cannot remove the splints - [target]'s [suit] is supporting some of the breaks."
+					can_reach_splints = 0
+
+			if(can_reach_splints)
+				for(var/organ in list("l_leg","r_leg","l_arm","r_arm"))
+					var/datum/organ/external/o = target.get_organ(organ)
+					if (o && o.status & ORGAN_SPLINTED)
+						var/obj/item/W = new /obj/item/stack/medical/splint(amount=1)
+						o.status &= ~ORGAN_SPLINTED
+						if (W)
+							W.loc = target.loc
+							W.layer = initial(W.layer)
+							W.add_fingerprint(source)
 		if("CPR")
 			if ((target.health > config.health_threshold_dead && target.health < config.health_threshold_crit))
 				var/suff = min(target.getOxyLoss(), 5) //Pre-merge level, less healing, more prevention of dieing.

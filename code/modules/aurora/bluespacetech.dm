@@ -31,7 +31,7 @@
 	//This whole section looks like a hack, I don't like it.
 	var/T = get_turf(usr)
 	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(5, 1, T)
+	s.set_up(3, 1, T)
 	s.start()
 	var/mob/living/carbon/human/bst/bst = new(get_turf(T))
 //	bst.original_mob = usr
@@ -40,8 +40,7 @@
 	bst.name = "Bluespace Technician"
 	bst.real_name = "Bluespace Technician"
 	bst.voice_name = "Bluespace Technician"
-//	bst.h_style = "hair_crewcut"
-//	bst.update_hair()
+	bst.h_style = "Crewcut"
 
 	//Items
 	var/obj/item/clothing/under/U = new /obj/item/clothing/under/rank/centcom_officer/bst(bst)
@@ -58,6 +57,9 @@
 		bst.equip_to_slot_or_del(new /obj/item/weapon/storage/box/ids(bst), slot_r_hand)
 	else
 		bst.equip_to_slot_or_del(new /obj/item/weapon/storage/box/ids(bst.back), slot_in_backpack)
+		bst.equip_to_slot_or_del(new /obj/item/device/t_scanner(bst.back), slot_in_backpack)
+		bst.equip_to_slot_or_del(new /obj/item/device/signaltool(bst.back), slot_in_backpack)
+		bst.equip_to_slot_or_del(new /obj/item/device/pda/captain/bst(bst.back), slot_in_backpack)
 
 	//Implant because access
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(bst)
@@ -74,11 +76,13 @@
 	id.name = "[id.assignment]"
 	bst.equip_to_slot_or_del(id, slot_wear_id)
 	bst.update_inv_wear_id()
+	bst.regenerate_icons()
 
 	//Add the rest of the languages
 	//Because universal speak doesn't work right.
+	bst.add_language("Sol Common")
 	bst.add_language("Sinta'unathi")
-	bst.add_language("Siik'tajr")
+	bst.add_language("Siik'Maas")
 	bst.add_language("Skrellian")
 	bst.add_language("Vox-pidgin")
 	bst.add_language("Rootspeak")
@@ -95,12 +99,14 @@
 	spawn(5)
 		s.start()
 		bst.anchored = 0
+		spawn(10)
+			del(s)
 	log_debug("Bluespace Tech Spawned: X:[bst.x] Y:[bst.y] Z:[bst.z] User:[src]")
+
 	feedback_add_details("admin_verb","BST")
 	return 1
 
 /mob/living/carbon/human/bst
-	universal_speak = 1
 	universal_understand = 1
 	status_flags = GODMODE
 	var/bluespace_trail = new /datum/effect/effect/system/ion_trail_follow
@@ -117,8 +123,138 @@
 			s.set_up(5, 1, src)
 			s.start()
 			spawn(5)
-				s.start()
+				del(s)
+
+			if(key && species.name != "Human")
+				switch(species.name)
+					if("Tajaran")
+						bsc()
+					if("Machine")
+						bsb()
+					if("Diona")
+						bsd()
+					if("Unathi")
+						bsu()
+					if("Skrell")
+						bss()
+
+/*			if(species.name != "Tajaran")
+				if(species.name == "Machine" && key)
+					h_style = "blue IPC screen"
+					regenerate_icons()
+*/
+			if(key)
+				var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
+				ghost.key = key
+/*					if(species.name == "Machine")
+						ghost.mind.name = "Bluespace Bot"
+						ghost.name = "Bluespace Bot"
+						ghost.real_name = "Bluespace Bot"
+						ghost.voice_name = "Bluespace Bot"
+					else
+*/
+				ghost.mind.name = "[ghost.key] BSTech"
+				ghost.name = "[ghost.key] BSTech"
+				ghost.real_name = "[ghost.key] BSTech"
+				ghost.voice_name = "[ghost.key] BSTech"
+
 			del(src)
+
+	proc/bsc() //because we all have our unrealistic snowflakes right?
+		if(set_species("Tajaran"))
+			h_style = "Tajaran Ears"
+			name = "Bluespace Cat"
+			voice_name = "Bluespace Cat"
+			real_name = "Bluespace Cat"
+			mind.name = "Bluespace Cat"
+			if(wear_id)
+				var/obj/item/weapon/card/id/id = wear_id
+				if(istype(wear_id, /obj/item/device/pda))
+					var/obj/item/device/pda/pda = wear_id
+					id = pda.id
+				id.registered_name = "Bluespace Cat"
+			gender = "female"
+			regenerate_icons()
+		else
+			ghostize(0)
+			key = null
+			suicide()
+
+	proc/bsb()
+		if(set_species("Machine"))
+			h_style = "blue IPC screen"
+			name = "Bluespace Bot"
+			voice_name = "Bluespace Bot"
+			real_name = "Bluespace Bot"
+			mind.name = "Bluespace Bot"
+			if(wear_id)
+				var/obj/item/weapon/card/id/id = wear_id
+				if(istype(wear_id, /obj/item/device/pda))
+					var/obj/item/device/pda/pda = wear_id
+					id = pda.id
+				id.registered_name = "Bluespace Bot"
+			regenerate_icons()
+		else
+			ghostize(0)
+			key = null
+			suicide()
+
+	proc/bsd()
+		if(set_species("Diona"))
+			name = "Bluespace Tree"
+			voice_name = "Bluespace Tree"
+			real_name = "Bluespace Tree"
+			mind.name = "Bluespace Tree"
+			if(wear_id)
+				var/obj/item/weapon/card/id/id = wear_id
+				if(istype(wear_id, /obj/item/device/pda))
+					var/obj/item/device/pda/pda = wear_id
+					id = pda.id
+				id.registered_name = "Bluespace Tree"
+			regenerate_icons()
+		else
+			ghostize(0)
+			key = null
+			suicide()
+
+	proc/bsu()
+		if(set_species("Unathi"))
+			h_style = "Unathi Horns"
+			name = "Bluespace Snake"
+			voice_name = "Bluespace Snake"
+			real_name = "Bluespace Snake"
+			mind.name = "Bluespace Snake"
+			if(wear_id)
+				var/obj/item/weapon/card/id/id = wear_id
+				if(istype(wear_id, /obj/item/device/pda))
+					var/obj/item/device/pda/pda = wear_id
+					id = pda.id
+				id.registered_name = "Bluespace Snake"
+			regenerate_icons()
+		else
+			ghostize(0)
+			key = null
+			suicide()
+
+	proc/bss()
+		if(set_species("Skrell"))
+			h_style = "Skrell Male Tentacles"
+			name = "Bluespace Squid"
+			voice_name = "Bluespace Squid"
+			real_name = "Bluespace Squid"
+			mind.name = "Bluespace Squid"
+			if(wear_id)
+				var/obj/item/weapon/card/id/id = wear_id
+				if(istype(wear_id, /obj/item/device/pda))
+					var/obj/item/device/pda/pda = wear_id
+					id = pda.id
+				id.registered_name = "Bluespace Squid"
+			gender = "female"
+			regenerate_icons()
+		else
+			ghostize(0)
+			key = null
+			suicide()
 
 	say(var/message)
 		var/verb = "says in a subdued tone"
@@ -149,6 +285,8 @@
 	translate_binary = 1
 	translate_hive = 1
 	canremove = 0
+	keyslot1 = new /obj/item/device/encryptionkey/binary
+	keyslot2 = new /obj/item/device/encryptionkey/ert
 
 	attack_hand()
 		if(!usr)
@@ -166,6 +304,9 @@
 	has_sensor = 0
 	sensor_mode = 0
 	canremove = 0
+	siemens_coefficient = 0
+	cold_protection = FULL_BODY
+	heat_protection = FULL_BODY
 
 	attack_hand()
 		if(!usr)
@@ -181,7 +322,7 @@
 	name = "Bluespace Technician's gloves"
 	desc = "A pair of modified gloves, 'BST' marked on the side."
 	siemens_coefficient = 0
-	permeability_coefficient = 0.05
+	permeability_coefficient = 0
 	canremove = 0
 
 	attack_hand()
@@ -250,6 +391,20 @@
 			return
 		if(!istype(usr, /mob/living/carbon/human/bst))
 			usr << "<span class='alert'>Your hand seems to go right through the [src] ID. It's like it doesn't exist.</span>"
+			return
+		else
+			..()
+
+/obj/item/device/pda/captain/bst
+	hidden = 1
+	silent = 1
+//	ttone = "DO SOMETHING HERE"
+
+	attack_hand()
+		if(!usr)
+			return
+		if(!istype(usr, /mob/living/carbon/human/bst))
+			usr << "<span class='alert'>Your hand seems to go right through the pda. It's like it doesn't exist.</span>"
 			return
 		else
 			..()

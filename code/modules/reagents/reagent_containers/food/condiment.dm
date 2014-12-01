@@ -168,3 +168,179 @@
 	New()
 		..()
 		reagents.add_reagent("blackpepper", 20)
+
+
+/obj/item/weapon/reagent_containers/food/condi/
+	name = "Plastic Packet"
+	desc = "Just your average condiment packet."
+	icon = 'icons/obj/condi.dmi'
+	icon_state = "condi_empty"
+	flags = FPRINT | TABLEPASS | OPENCONTAINER
+	possible_transfer_amounts = list(1,5,10)
+	volume = 10
+
+	attackby(obj/item/weapon/W as obj, mob/user as mob)
+
+		return
+	attack_self(mob/user as mob)
+		return
+	attack(mob/M as mob, mob/user as mob, def_zone)
+		var/datum/reagents/R = src.reagents
+
+		if(!R || !R.total_volume)
+			user << "\red None of [src] left, oh no!"
+			return 0
+
+		if(M == user)
+			M << "\blue You swallow some of contents of the [src]."
+			if(reagents.total_volume)
+				reagents.trans_to_ingest(M, 10)
+
+			playsound(M.loc,'sound/items/drink.ogg', rand(10,50), 1)
+			return 1
+		else if( istype(M, /mob/living/carbon/human) )
+
+			for(var/mob/O in viewers(world.view, user))
+				O.show_message("\red [user] attempts to feed [M] [src].", 1)
+			if(!do_mob(user, M)) return
+			for(var/mob/O in viewers(world.view, user))
+				O.show_message("\red [user] feeds [M] [src].", 1)
+
+			M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been fed [src.name] by [user.name] ([user.ckey]) Reagents: [reagentlist(src)]</font>")
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Fed [src.name] by [M.name] ([M.ckey]) Reagents: [reagentlist(src)]</font>")
+			msg_admin_attack("[user.name] ([user.ckey]) fed [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+
+			if(reagents.total_volume)
+				reagents.trans_to_ingest(M, 10)
+
+			playsound(M.loc,'sound/items/drink.ogg', rand(10,50), 1)
+			return 1
+		return 0
+
+	attackby(obj/item/I as obj, mob/user as mob)
+
+		return
+
+	afterattack(obj/target, mob/user , flag)
+		if(istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
+
+			if(!target.reagents.total_volume)
+				user << "\red [target] is empty."
+				return
+
+			if(reagents.total_volume >= reagents.maximum_volume)
+				user << "\red [src] is full."
+				return
+
+			var/trans = target.reagents.trans_to(src, target:amount_per_transfer_from_this)
+			user << "\blue You fill [src] with [trans] units of the contents of [target]."
+
+		//Something like a glass or a food item. Player probably wants to transfer TO it.
+		else if(target.is_open_container() || istype(target, /obj/item/weapon/reagent_containers/food/snacks))
+			if(!reagents.total_volume)
+				user << "\red [src] is empty."
+				return
+			if(target.reagents.total_volume >= target.reagents.maximum_volume)
+				user << "\red you can't add anymore to [target]."
+				return
+			var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
+			user << "\blue You transfer [trans] units of the condiment to [target]."
+
+	on_reagent_change()
+		if(reagents.reagent_list.len > 0)
+			switch(reagents.get_master_reagent_id())
+				if("sodiumchloride")
+					name = "Salt Packet"
+					desc = "Salt. From space oceans, presumably."
+					icon_state = "condi_salt"
+				if("blackpepper")
+					name = "Pepper Pepper"
+					desc = "Often used to flavor food or make people sneeze."
+					icon_state = "condi_peper"
+				if("sugar")
+					name = "Sugar Packet"
+					desc = "Tastey space sugar!"
+					icon_state = "condi_sugar"
+				if("soysauce")
+					name = "Soy Sauce Packet"
+					desc = "A salty soy-based flavoring."
+					icon_state = "condi_soysauce"
+				if("hotsauce")
+					name = "Hot Sauce Packet"
+					desc = "This stuff is hot. Beware."
+					icon_state = "condi_hotsauce"
+				if("ketchup")
+					name = "Ketchup Packet"
+					desc = "You feel more American already."
+					icon_state = "condi_ketchup"
+		else
+			icon_state = "condi_empty"
+			name = "Plastic Packet"
+			desc = "An empty packet."
+			return
+
+/obj/item/weapon/reagent_containers/food/condi/s_packet
+	name = "Salt Packet"
+	desc = "A tiny packet of salt, for any food dishes."
+	icon_state = "condi_salt"
+	possible_transfer_amounts = list(1,10) //for clown turning the lid off
+	amount_per_transfer_from_this = 1
+	volume = 10
+	New()
+		..()
+		reagents.add_reagent("sodiumchloride", 10)
+
+/obj/item/weapon/reagent_containers/food/condi/p_packet
+	name = "Pepper Packet"
+	desc = "A tiny packet of pepper, for any food dishes."
+	icon_state = "condi_peper"
+	possible_transfer_amounts = list(1,10) //for clown turning the lid off
+	amount_per_transfer_from_this = 1
+	volume = 10
+	New()
+		..()
+		reagents.add_reagent("blackpepper", 10)
+
+/obj/item/weapon/reagent_containers/food/condi/sr_packet
+	name = "Sugar Packet"
+	desc = "A tiny packet of sugar, for any food dishes."
+	icon_state = "condi_sugar"
+	possible_transfer_amounts = list(1,10) //for clown turning the lid off
+	amount_per_transfer_from_this = 1
+	volume = 10
+	New()
+		..()
+		reagents.add_reagent("sugar", 10)
+
+/obj/item/weapon/reagent_containers/food/condi/h_packet
+	name = "Hot Sauce Packet"
+	desc = "A tiny packet of hot sauce, for any food dishes.Tajaran Beware."
+	icon_state = "condi_hotsauce"
+	possible_transfer_amounts = list(1,10) //for clown turning the lid off
+	amount_per_transfer_from_this = 1
+	volume = 10
+	New()
+		..()
+		reagents.add_reagent("capsaicin", 10)
+
+/obj/item/weapon/reagent_containers/food/condi/k_packet
+	name = "Ketchup Packet"
+	desc = "A tiny packet of ketchup, for any food dishes."
+	icon_state = "condi_ketchup"
+	possible_transfer_amounts = list(1,10) //for clown turning the lid off
+	amount_per_transfer_from_this = 1
+	volume = 10
+	New()
+		..()
+		reagents.add_reagent("ketchup", 10)
+
+/obj/item/weapon/reagent_containers/food/condi/soy_packet
+	name = "Soy Sauce Packet"
+	desc = "A tiny packet of soy sauce, for any food dishes."
+	icon_state = "condi_soysauce"
+	possible_transfer_amounts = list(1,10) //for clown turning the lid off
+	amount_per_transfer_from_this = 1
+	volume = 10
+	New()
+		..()
+		reagents.add_reagent("soysauce", 10)

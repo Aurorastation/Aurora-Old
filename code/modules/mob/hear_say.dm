@@ -1,7 +1,12 @@
 // At minimum every mob has a hear_say proc.
 
-/mob/proc/hear_say(var/message, var/verb = "says", var/datum/language/language = null, var/alt_name = "",var/italics = 0, var/mob/speaker = null)
+/mob/proc/hear_say(var/message, var/verb = "says", var/datum/language/language = null, var/alt_name = "",var/italics = 0, var/mob/speaker = null, var/sound/speech_sound, var/sound_vol)
 	if(!client)
+		return
+
+	if(speaker && !speaker.client && istype(src,/mob/dead/observer) && client.prefs.toggles & CHAT_GHOSTEARS && !speaker in view(src))
+			//Does the speaker have a client?  It's either random stuff that observers won't care about (Experiment 97B says, 'EHEHEHEHEHEHEHE')
+			//Or someone snoring.  So we make it where they won't hear it.
 		return
 
 	if(sleeping || stat == 1)
@@ -9,6 +14,12 @@
 		return
 
 	var/style = "body"
+	
+	//non-verbal languages are garbled if you can't see the speaker. Yes, this includes if they are inside a closet.
+	if (language && (language.flags & NONVERBAL))
+		if (!speaker || (src.sdisabilities & BLIND || src.blinded) || !(speaker in view(src)))
+			message = stars(message)
+	
 	if(!say_understands(speaker,language))
 		if(istype(speaker,/mob/living/simple_animal))
 			var/mob/living/simple_animal/S = speaker
@@ -17,7 +28,6 @@
 			message = stars(message)
 
 	if(language)
-		verb = language.speech_verb
 		style = language.colour
 
 	var/speaker_name = speaker.name
@@ -42,9 +52,12 @@
 		if(speaker == src)
 			src << "<span class='warning'>You cannot hear yourself speak!</span>"
 		else
-			src << "<span class='name'>[speaker_name]</span>[alt_name] talks but you cannot hear them."
+			src << "<span class='name'>[speaker_name]</span>[alt_name] talks but you cannot hear \him."
 	else
 		src << "<span class='game say'><span class='name'>[speaker_name]</span>[alt_name] [track][verb], <span class='message'><span class='[style]'>\"[message]\"</span></span></span>"
+		if (speech_sound && (get_dist(speaker, src) <= world.view && src.z == speaker.z))
+			var/turf/source = speaker? get_turf(speaker) : get_turf(src)
+			src.playsound_local(source, speech_sound, sound_vol, 1)
 
 
 /mob/proc/hear_radio(var/message, var/verb="says", var/datum/language/language=null, var/part_a, var/part_b, var/mob/speaker = null, var/hard_to_hear = 0, var/vname ="")
@@ -60,6 +73,11 @@
 
 	var/style = "body"
 
+	//non-verbal languages are garbled if you can't see the speaker. Yes, this includes if they are inside a closet.
+	if (language && (language.flags & NONVERBAL))
+		if (!speaker || (src.sdisabilities & BLIND || src.blinded) || !(speaker in view(src)))
+			message = stars(message)
+	
 	if(!say_understands(speaker,language))
 		if(istype(speaker,/mob/living/simple_animal))
 			var/mob/living/simple_animal/S = speaker
@@ -143,6 +161,22 @@
 	else
 		src << "[part_a][speaker_name][part_b][verb], <span class=\"[style]\">\"[message]\"</span></span></span>"
 
+/mob/proc/hear_signlang(var/message, var/verb = "gestures", var/datum/language/language, var/mob/speaker = null)
+	if(!client)
+		return
+	
+	if(say_understands(speaker, language))
+		message = "<B>[src]</B> [verb], \"[message]\""
+	else
+		message = "<B>[src]</B> [verb]."
+
+	if(src.status_flags & PASSEMOTES)
+		for(var/obj/item/weapon/holder/H in src.contents)
+			H.show_message(message)
+		for(var/mob/living/M in src.contents)
+			M.show_message(message)
+	src.show_message(message)
+
 /mob/proc/hear_sleep(var/message)
 	var/heard = ""
 	if(prob(15))
@@ -160,48 +194,3 @@
 		heard = "<span class = 'game_say'>...<i>You almost hear someone talking</i>...</span>"
 
 	src << heard
-
-/mob/proc/see_say(var/message, var/verb = "signs", var/datum/language/language = null, var/alt_name = "",var/italics = 0, var/mob/signer = null)
-	if(!client)
-		return
-
-	if(sleeping || stat == 1)
-		return
-
-	var/style = "body"
-	if(!say_understands(signer,language))
-		if(istype(signer,/mob/living/simple_animal))
-			var/mob/living/simple_animal/S = signer
-			message = pick(S.speak)
-		else
-			message = stars(message)
-
-	if(language)
-		verb = language.speech_verb
-		style = language.colour
-
-	var/signer_name = signer.name
-	if(istype(signer, /mob/living/carbon/human))
-		var/mob/living/carbon/human/H = signer
-		signer_name = H.GetVoice()
-
-	if(italics)
-		message = "<i>[message]</i>"
-
-	var/track = null
-	if(istype(src, /mob/dead/observer))
-		if(italics && client.prefs.toggles & CHAT_GHOSTRADIO)
-			return
-		if(signer_name != signer.real_name && signer.real_name)
-			signer_name = "[signer.real_name] ([signer_name])"
-		track = "(<a href='byond://?src=\ref[src];track=\ref[signer]'>follow</a>) "
-		if(client.prefs.toggles & CHAT_GHOSTEARS && signer in view(src))
-			message = "<b>[message]</b>"
-	if(sdisabilities & BLIND)
-		if(signer == src)
-			src << "<span class='warning'>You cannot see yourself sign!</span>"
-	else
-		if((signer_name != signer.name) || (istype(src.wear_mask, /obj/item/clothing/mask/gas)))
-			src << "<span class='game say'><span class='name'>[signer.name]</span>[track] [verb], <span class='message'><span class='[style]'>\"[message]\"</span></span></span>"
-		else
-			src << "<span class='game say'><span class='name'>[signer_name]</span>[alt_name]</span>[track] [verb], <span class='message'><span class='[style]'>\"[message]\"</span></span></span>"

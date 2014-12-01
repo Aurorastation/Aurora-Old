@@ -413,16 +413,7 @@ datum
 			on_reaction(var/datum/reagents/holder, var/created_volume)
 				var/turf/location = get_turf(holder.my_atom.loc)
 				for(var/turf/simulated/floor/target_tile in range(0,location))
-
-					var/datum/gas_mixture/napalm = new
-					var/datum/gas/volatile_fuel/fuel = new
-					fuel.moles = created_volume
-					napalm.trace_gases += fuel
-
-					napalm.temperature = 400+T0C
-					napalm.update_values()
-
-					target_tile.assume_air(napalm)
+					target_tile.assume_gas("volatile_fuel", created_volume, 400+T0C)
 					spawn (0) target_tile.hotspot_expose(700, 400)
 				holder.del_reagent("napalm")
 				return
@@ -713,6 +704,12 @@ datum
 			required_reagents = list("ammonia" = 1, "water" = 1)
 			result_amount = 2
 
+		luminol
+			name = "Luminol"
+			id = "luminol"
+			result = "luminol"
+			required_reagents = list("hydrogen" = 3, "carbon" = 3, "ammonia" = 3)
+
 		plantbgone
 			name = "Plant-B-Gone"
 			id = "plantbgone"
@@ -848,8 +845,8 @@ datum
 				if(chosen)
 				// Calculate previous position for transition
 
-					var/turf/FROM = get_turf_loc(holder.my_atom) // the turf of origin we're travelling FROM
-					var/turf/TO = get_turf_loc(chosen)			 // the turf of origin we're travelling TO
+					var/turf/FROM = get_turf(holder.my_atom) // the turf of origin we're travelling FROM
+					var/turf/TO = get_turf(chosen)			 // the turf of origin we're travelling TO
 
 					playsound(TO, 'sound/effects/phasein.ogg', 100, 1)
 
@@ -910,16 +907,16 @@ datum
 					)//exclusion list for things you don't want the reaction to create.
 				var/list/critters = typesof(/mob/living/simple_animal/hostile) - blocked // list of possible hostile mobs
 
-				playsound(get_turf_loc(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
+				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
-				for(var/mob/living/carbon/human/M in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/living/carbon/human/M in viewers(get_turf(holder.my_atom), null))
 					if(M:eyecheck() <= 0)
 						flick("e_flash", M.flash)
 
 				for(var/i = 1, i <= created_volume, i++)
 					var/chosen = pick(critters)
 					var/mob/living/simple_animal/hostile/C = new chosen
-					C.loc = get_turf_loc(holder.my_atom)
+					C.loc = get_turf(holder.my_atom)
 					if(prob(50))
 						for(var/j = 1, j <= rand(1, 3), j++)
 							step(C, pick(NORTH,SOUTH,EAST,WEST))
@@ -936,9 +933,9 @@ datum
 				var/list/borks = typesof(/obj/item/weapon/reagent_containers/food/snacks) - /obj/item/weapon/reagent_containers/food/snacks
 				// BORK BORK BORK
 
-				playsound(get_turf_loc(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
+				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
-				for(var/mob/living/carbon/human/M in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/living/carbon/human/M in viewers(get_turf(holder.my_atom), null))
 					if(M:eyecheck() <= 0)
 						flick("e_flash", M.flash)
 
@@ -946,7 +943,7 @@ datum
 					var/chosen = pick(borks)
 					var/obj/B = new chosen
 					if(B)
-						B.loc = get_turf_loc(holder.my_atom)
+						B.loc = get_turf(holder.my_atom)
 						if(prob(50))
 							for(var/j = 1, j <= rand(1, 3), j++)
 								step(B, pick(NORTH,SOUTH,EAST,WEST))
@@ -1016,10 +1013,10 @@ datum
 			required_container = /obj/item/slime_extract/grey
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
-				for(var/mob/O in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 					O.show_message(text("\red Infused with plasma, the core begins to quiver and grow, and soon a new baby slime emerges from it!"), 1)
 				var/mob/living/carbon/slime/S = new /mob/living/carbon/slime
-				S.loc = get_turf_loc(holder.my_atom)
+				S.loc = get_turf(holder.my_atom)
 
 
 		slimemonkey
@@ -1033,7 +1030,7 @@ datum
 			on_reaction(var/datum/reagents/holder)
 				for(var/i = 1, i <= 3, i++)
 					var /obj/item/weapon/reagent_containers/food/snacks/monkeycube/M = new /obj/item/weapon/reagent_containers/food/snacks/monkeycube
-					M.loc = get_turf_loc(holder.my_atom)
+					M.loc = get_turf(holder.my_atom)
 
 //Green
 		slimemutate
@@ -1057,23 +1054,22 @@ datum
 			on_reaction(var/datum/reagents/holder)
 				var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal
 				M.amount = 15
-				M.loc = get_turf_loc(holder.my_atom)
+				M.loc = get_turf(holder.my_atom)
 				var/obj/item/stack/sheet/plasteel/P = new /obj/item/stack/sheet/plasteel
 				P.amount = 5
-				P.loc = get_turf_loc(holder.my_atom)
+				P.loc = get_turf(holder.my_atom)
 
 //Gold
 		slimecrit
 			name = "Slime Crit"
 			id = "m_tele"
 			result = null
-			required_reagents = list("plasma" = 5)
+			required_reagents = list("water" = 5)
 			result_amount = 1
 			required_container = /obj/item/slime_extract/gold
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
-
-				/*var/blocked = list(/mob/living/simple_animal/hostile,
+				var/blocked = list(/mob/living/simple_animal/hostile,
 					/mob/living/simple_animal/hostile/pirate,
 					/mob/living/simple_animal/hostile/pirate/ranged,
 					/mob/living/simple_animal/hostile/russian,
@@ -1092,22 +1088,84 @@ datum
 					)//exclusion list for things you don't want the reaction to create.
 				var/list/critters = typesof(/mob/living/simple_animal/hostile) - blocked // list of possible hostile mobs
 
-				playsound(get_turf_loc(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
+				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
-				for(var/mob/living/carbon/human/M in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/living/carbon/human/M in viewers(get_turf(holder.my_atom), null))
 					if(M:eyecheck() <= 0)
 						flick("e_flash", M.flash)
-
 				for(var/i = 1, i <= 5, i++)
 					var/chosen = pick(critters)
 					var/mob/living/simple_animal/hostile/C = new chosen
 					C.faction = "slimesummon"
-					C.loc = get_turf_loc(holder.my_atom)
+					C.loc = get_turf(holder.my_atom)
 					if(prob(50))
 						for(var/j = 1, j <= rand(1, 3), j++)
-							step(C, pick(NORTH,SOUTH,EAST,WEST))*/
-				for(var/mob/O in viewers(get_turf_loc(holder.my_atom), null))
-					O.show_message(text("\red The slime core fizzles disappointingly,"), 1)
+							step(C, pick(NORTH,SOUTH,EAST,WEST))
+//				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
+//					O.show_message(text("\red The slime core fizzles disappointingly,"), 1)
+
+		slimecatalyst
+			name = "slime catalyst"
+			id = "m_catalyst"
+			result = null
+			required_reagents = list("plasma" = 5)
+			result_amount = 1
+			required_container = /obj/item/slime_extract/gold
+			required_other = 1
+			on_reaction(var/datum/reagents/holder)
+				var/obj/item/weapon/slimecatalyst/P = new /obj/item/weapon/slimecatalyst
+				P.loc = get_turf(holder.my_atom)
+/*
+		slimecritlesser
+			name = "Slime Crit Lesser"
+			id = "m_tele3"
+			result = null
+			required_reagents = list("blood" = 1)
+			result_amount = 1
+			required_container = /obj/item/slime_extract/gold
+			required_other = 1
+		/datum/chemical_reaction/slimecritlesser/on_reaction(var/datum/reagents/holder)
+			feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
+			for(var/mob/O in viewers(get_turf(holder.my_atom), null))
+				O.show_message(text("<span class='danger'>The slime extract begins to vibrate violently !</span>"), 1)
+			spawn(50)
+
+				if(holder && holder.my_atom)
+
+					var/blocked = list(/mob/living/simple_animal/hostile,
+						/mob/living/simple_animal/hostile/pirate,
+						/mob/living/simple_animal/hostile/pirate/ranged,
+						/mob/living/simple_animal/hostile/russian,
+						/mob/living/simple_animal/hostile/russian/ranged,
+						/mob/living/simple_animal/hostile/syndicate,
+						/mob/living/simple_animal/hostile/syndicate/melee,
+						/mob/living/simple_animal/hostile/syndicate/melee/space,
+						/mob/living/simple_animal/hostile/syndicate/ranged,
+						/mob/living/simple_animal/hostile/syndicate/ranged/space,
+						/mob/living/simple_animal/hostile/alien/queen/large,
+						/mob/living/simple_animal/hostile/retaliate,
+						/mob/living/simple_animal/hostile/retaliate/clown,
+						/mob/living/simple_animal/hostile/mushroom,
+/*						/mob/living/simple_animal/hostile/asteroid,
+						/mob/living/simple_animal/hostile/asteroid/basilisk,
+						/mob/living/simple_animal/hostile/asteroid/goldgrub,
+						/mob/living/simple_animal/hostile/asteroid/goliath,
+						/mob/living/simple_animal/hostile/asteroid/hivelord,
+						/mob/living/simple_animal/hostile/asteroid/hivelordbrood,
+						/mob/living/simple_animal/hostile/carp/holocarp*/ Monsters we don't have
+						)//exclusion list for things you don't want the reaction to create.
+					var/list/critters = typesof(/mob/living/simple_animal/hostile) - blocked // list of possible hostile mobs
+
+					playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
+
+					for(var/mob/living/carbon/human/M in viewers(get_turf(holder.my_atom), null))
+						if(M:eyecheck() <= 0)
+							flick("e_flash", M.flash)
+
+					var/chosen = pick(critters)
+					var/mob/living/simple_animal/hostile/C = new chosen
+					C.faction |= "neutral"
+					C.loc = get_turf(holder.my_atom)*/
 
 //Silver
 		slimebork
@@ -1123,9 +1181,9 @@ datum
 				var/list/borks = typesof(/obj/item/weapon/reagent_containers/food/snacks) - /obj/item/weapon/reagent_containers/food/snacks
 				// BORK BORK BORK
 
-				playsound(get_turf_loc(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
+				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
-				for(var/mob/living/carbon/human/M in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/living/carbon/human/M in viewers(get_turf(holder.my_atom), null))
 					if(M:eyecheck() <= 0)
 						flick("e_flash", M.flash)
 
@@ -1133,7 +1191,7 @@ datum
 					var/chosen = pick(borks)
 					var/obj/B = new chosen
 					if(B)
-						B.loc = get_turf_loc(holder.my_atom)
+						B.loc = get_turf(holder.my_atom)
 						if(prob(50))
 							for(var/j = 1, j <= rand(1, 3), j++)
 								step(B, pick(NORTH,SOUTH,EAST,WEST))
@@ -1158,11 +1216,11 @@ datum
 			required_container = /obj/item/slime_extract/darkblue
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
-				for(var/mob/O in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 					O.show_message(text("\red The slime extract begins to vibrate violently !"), 1)
 				sleep(50)
-				playsound(get_turf_loc(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
-				for(var/mob/living/M in range (get_turf_loc(holder.my_atom), 7))
+				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
+				for(var/mob/living/M in range (get_turf(holder.my_atom), 7))
 					M.bodytemperature -= 140
 					M << "\blue You feel a chill!"
 
@@ -1185,18 +1243,12 @@ datum
 			required_container = /obj/item/slime_extract/orange
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
-				for(var/mob/O in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 					O.show_message(text("\red The slime extract begins to vibrate violently !"), 1)
 				sleep(50)
 				var/turf/location = get_turf(holder.my_atom.loc)
 				for(var/turf/simulated/floor/target_tile in range(0,location))
-
-					var/datum/gas_mixture/napalm = new
-
-					napalm.toxins = 25
-					napalm.temperature = 1400
-
-					target_tile.assume_air(napalm)
+					target_tile.assume_gas("toxins", 25, 1400)
 					spawn (0) target_tile.hotspot_expose(700, 400)
 
 //Yellow
@@ -1209,7 +1261,7 @@ datum
 			required_container = /obj/item/slime_extract/yellow
 			required_other = 1
 			on_reaction(var/datum/reagents/holder, var/created_volume)
-				empulse(get_turf_loc(holder.my_atom), 3, 7)
+				empulse(get_turf(holder.my_atom), 3, 7)
 
 
 		slimecell
@@ -1222,7 +1274,7 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder, var/created_volume)
 				var/obj/item/weapon/cell/slime/P = new /obj/item/weapon/cell/slime
-				P.loc = get_turf_loc(holder.my_atom)
+				P.loc = get_turf(holder.my_atom)
 
 		slimeglow
 			name = "Slime Glow"
@@ -1233,7 +1285,7 @@ datum
 			required_container = /obj/item/slime_extract/yellow
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
-				for(var/mob/O in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 					O.show_message(text("\red The contents of the slime core harden and begin to emit a warm, bright light."), 1)
 				var/obj/item/device/flashlight/slime/F = new /obj/item/device/flashlight/slime
 				F.loc = get_turf(holder.my_atom)
@@ -1250,7 +1302,7 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
 				var/obj/item/weapon/slimesteroid/P = new /obj/item/weapon/slimesteroid
-				P.loc = get_turf_loc(holder.my_atom)
+				P.loc = get_turf(holder.my_atom)
 
 
 
@@ -1276,7 +1328,7 @@ datum
 			on_reaction(var/datum/reagents/holder)
 				var/obj/item/stack/sheet/mineral/plasma/P = new /obj/item/stack/sheet/mineral/plasma
 				P.amount = 10
-				P.loc = get_turf_loc(holder.my_atom)
+				P.loc = get_turf(holder.my_atom)
 
 //Red
 		slimeglycerol
@@ -1298,10 +1350,9 @@ datum
 			required_container = /obj/item/slime_extract/red
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
-				for(var/mob/living/carbon/slime/slime in viewers(get_turf_loc(holder.my_atom), null))
-					slime.tame = 0
+				for(var/mob/living/carbon/slime/slime in viewers(get_turf(holder.my_atom), null))
 					slime.rabid = 1
-					for(var/mob/O in viewers(get_turf_loc(holder.my_atom), null))
+					for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 						O.show_message(text("\red The [slime] is driven into a frenzy!."), 1)
 
 //Pink
@@ -1315,7 +1366,7 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
 				var/obj/item/weapon/slimepotion/P = new /obj/item/weapon/slimepotion
-				P.loc = get_turf_loc(holder.my_atom)
+				P.loc = get_turf(holder.my_atom)
 
 
 //Black
@@ -1338,10 +1389,10 @@ datum
 			required_container = /obj/item/slime_extract/oil
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
-				for(var/mob/O in viewers(get_turf_loc(holder.my_atom), null))
+				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 					O.show_message(text("\red The slime extract begins to vibrate violently !"), 1)
 				sleep(50)
-				explosion(get_turf_loc(holder.my_atom), 1 ,3, 6)
+				explosion(get_turf(holder.my_atom), 1 ,3, 6)
 //Light Pink
 		slimepotion2
 			name = "Slime Potion 2"
@@ -1353,7 +1404,7 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
 				var/obj/item/weapon/slimepotion2/P = new /obj/item/weapon/slimepotion2
-				P.loc = get_turf_loc(holder.my_atom)
+				P.loc = get_turf(holder.my_atom)
 //Adamantine
 		slimegolem
 			name = "Slime Golem"
@@ -1365,7 +1416,7 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
 				var/obj/effect/golemrune/Z = new /obj/effect/golemrune
-				Z.loc = get_turf_loc(holder.my_atom)
+				Z.loc = get_turf(holder.my_atom)
 				Z.announce_to_ghosts()
 //////////////////////////////////////////FOOD MIXTURES////////////////////////////////////
 
@@ -1961,7 +2012,7 @@ datum
 			name = "Tall Black Russian"
 			id = "tallrussian"
 			result = "tallrussian"
-			required_reagents = list("vodka" = 1, "kahlua" = 1, "cola" = 1)
+			required_reagents = list("blackrussian" = 1, "cola" = 1)
 
 			result_amount = 3
 
@@ -2171,3 +2222,18 @@ datum
 			result = "suidream"
 			required_reagents = list("space_up" = 2, "bluecuracao" = 1, "melonliquor" = 1)
 			result_amount = 4
+
+//////////////////////////SKULL'S DRUGS///////////////////////
+		philodex
+			name = "Philodexphid"
+			id = "philodex"
+			result = "philodex"
+			required_reagents = list("cryptobiolin" = 1, "impedrezene" = 1, "mercury" = 1)
+			result_amount = 2
+
+		ecye
+			name = "Ecyeipate"
+			id = "ecye"
+			result = "ecye"
+			required_reagents = list("synaptizine" = 1, "plasma" = 1)
+			result_amount = 2

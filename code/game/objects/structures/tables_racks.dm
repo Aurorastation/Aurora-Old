@@ -19,6 +19,8 @@
 	anchored = 1.0
 	layer = 2.8
 	throwpass = 1	//You can throw objects over this, despite it's density.")
+	climbable = 1
+
 	var/parts = /obj/item/weapon/table_parts
 	var/flipped = 0
 	var/health = 100
@@ -297,6 +299,8 @@
 		return (check_cover(mover,target))
 	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
+	if(locate(/obj/structure/table) in get_turf(mover))
+		return 1
 	if (flipped)
 		if (get_dir(loc, target) == dir)
 			return !density
@@ -342,8 +346,9 @@
 	return 1
 
 /obj/structure/table/MouseDrop_T(obj/O as obj, mob/user as mob)
+
 	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
-		return
+		return ..()
 	if(isrobot(user))
 		return
 	user.drop_item()
@@ -363,6 +368,7 @@
 					if (prob(15))	M.Weaken(5)
 					M.apply_damage(8,def_zone = "head")
 					visible_message("\red [G.assailant] slams [G.affecting]'s face against \the [src]!")
+					msg_admin_attack("[user.name]([user.ckey]) slams [M.name]'s([M.ckey]) face against \the [src]! - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
 					playsound(src.loc, 'sound/weapons/tablehit1.ogg', 50, 1)
 				else
 					user << "\red You need a better grip to do that!"
@@ -412,30 +418,25 @@
 			return 0
 	return T.straight_table_check(direction)
 
-/obj/structure/table/verb/can_touch(var/mob/user)
-	if (!user)
-		return 0
-	if (user.stat)	//zombie goasts go away
-		return 0
-	if (issilicon(user))
-		user << "<span class='notice'>You need hands for this.</span>"
-		return 0
-	return 1
-
 /obj/structure/table/verb/do_flip()
 	set name = "Flip table"
 	set desc = "Flips a non-reinforced table"
 	set category = "Object"
 	set src in oview(1)
-	if(ismouse(usr))
+
+	if (!can_touch(usr) || ismouse(usr))
 		return
-	if (!can_touch(usr))
-		return
+
 	if(!flip(get_cardinal_dir(usr,src)))
 		usr << "<span class='notice'>It won't budge.</span>"
-	else
-		usr.visible_message("<span class='warning'>[usr] flips \the [src]!</span>")
 		return
+
+	usr.visible_message("<span class='warning'>[usr] flips \the [src]!</span>")
+
+	if(climbable)
+		structure_shaken()
+
+	return
 
 /obj/structure/table/proc/unflipping_check(var/direction)
 	for(var/mob/M in oview(src,0))

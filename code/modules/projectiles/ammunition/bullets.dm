@@ -29,14 +29,19 @@
 /obj/item/ammo_casing/c38
 	desc = "A .38 bullet casing."
 	caliber = "38"
-	projectile_type = "/obj/item/projectile/bullet/weakbullet"
+	projectile_type = "/obj/item/projectile/bullet/midbullet2"
 
 
 /obj/item/ammo_casing/c9mm
 	desc = "A 9mm bullet casing."
 	caliber = "9mm"
 	projectile_type = "/obj/item/projectile/bullet/midbullet2"
-
+/* do this later
+/obj/item/ammo_casing/c9mmsilver
+	desc = "A silver 9mm bullet casing."
+	caliber = "9mm"
+	projectile_type = "/obj/item/projectile/bullet/midbullet2"
+*/
 
 /obj/item/ammo_casing/c45
 	desc = "A .45 bullet casing."
@@ -60,7 +65,13 @@
 	icon_state = "gshell"
 	caliber = "shotgun"
 	projectile_type = "/obj/item/projectile/bullet"
-	m_amt = 12500
+	matter = list("metal" = 12500)
+
+/obj/item/ammo_casing/shotgun/incendiary
+	name = "shotgun shell"
+	desc = "A 12 gauge shell."
+	icon_state = "ishell"
+	projectile_type = "/obj/item/projectile/bullet/incendiary/shell"
 
 
 /obj/item/ammo_casing/shotgun/blank
@@ -68,7 +79,7 @@
 	desc = "A blank shell."
 	icon_state = "blshell"
 	projectile_type = ""
-	m_amt = 250
+	matter = list("metal" = 250)
 
 
 /obj/item/ammo_casing/shotgun/beanbag
@@ -76,7 +87,7 @@
 	desc = "A weak beanbag shell."
 	icon_state = "bshell"
 	projectile_type = "/obj/item/projectile/bullet/weakbullet/beanbag"
-	m_amt = 500
+	matter = list("metal" = 500)
 
 
 /obj/item/ammo_casing/shotgun/stunshell
@@ -84,7 +95,7 @@
 	desc = "A stunning shell."
 	icon_state = "stunshell"
 	projectile_type = "/obj/item/projectile/bullet/stunshot"
-	m_amt = 2500
+	matter = list("metal" = 2500)
 
 
 /obj/item/ammo_casing/shotgun/dart
@@ -92,7 +103,7 @@
 	desc = "A dart for use in shotguns."
 	icon_state = "dart"
 	projectile_type = "/obj/item/projectile/energy/dart"
-	m_amt = 12500
+	matter = list("metal" = 12500)
 
 /obj/item/ammo_casing/a762
 	desc = "A 7.62 bullet casing."

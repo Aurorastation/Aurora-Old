@@ -11,7 +11,7 @@
 	force = 5.0
 	var/list/grenades = new/list()
 	var/max_grenades = 3
-	m_amt = 2000
+	matter = list("metal" = 2000)
 
 	examine()
 		set src in view()
@@ -56,8 +56,9 @@
 			var/obj/item/weapon/grenade/chem_grenade/F = grenades[1] //Now with less copypasta!
 			grenades -= F
 			F.loc = user.loc
-			F.throw_at(target, 30, 2)
-			message_admins("[key_name_admin(user)] fired a grenade ([F.name]) from a grenade launcher ([src.name]).")
+			F.throw_at(target, 30, 2, user)
+			message_admins("[key_name_admin(user)] fired a grenade ([F.name]) from a grenade launcher ([src.name]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+			message_mods("[key_name_admin(user)] fired a grenade ([F.name]) from a grenade launcher ([src.name]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 			log_game("[key_name_admin(user)] used a grenade ([src.name]).")
 			F.active = 1
 			F.icon_state = initial(icon_state) + "_active"

@@ -17,7 +17,7 @@
 
 /mob/living/carbon/human/getBrainLoss()
 	var/res = brainloss
-	var/datum/organ/internal/brain/sponge = internal_organs["brain"]
+	var/datum/organ/internal/brain/sponge = internal_organs_by_name["brain"]
 	if (sponge.is_bruised())
 		res += 20
 	if (sponge.is_broken())
@@ -65,13 +65,13 @@
 
 	if (organ_name in organs_by_name)
 		var/datum/organ/external/O = get_organ(organ_name)
-	
+
 		if(amount > 0)
 			O.take_damage(amount, 0, sharp=is_sharp(damage_source), edge=has_edge(damage_source), used_weapon=damage_source)
 		else
 			//if you don't want to heal robot organs, they you will have to check that yourself before using this proc.
 			O.heal_damage(-amount, 0, internal=0, robo_repair=(O.status & ORGAN_ROBOT))
-	
+
 	hud_updateflag |= 1 << HEALTH_HUD
 
 /mob/living/carbon/human/proc/adjustFireLossByPart(var/amount, var/organ_name, var/obj/damage_source = null)
@@ -80,13 +80,13 @@
 
 	if (organ_name in organs_by_name)
 		var/datum/organ/external/O = get_organ(organ_name)
-	
+
 		if(amount > 0)
 			O.take_damage(0, amount, sharp=is_sharp(damage_source), edge=has_edge(damage_source), used_weapon=damage_source)
 		else
 			//if you don't want to heal robot organs, they you will have to check that yourself before using this proc.
 			O.heal_damage(0, -amount, internal=0, robo_repair=(O.status & ORGAN_ROBOT))
-	
+
 	hud_updateflag |= 1 << HEALTH_HUD
 
 /mob/living/carbon/human/Stun(amount)
@@ -101,11 +101,15 @@
 	if(HULK in mutations)	return
 	..()
 
-/mob/living/carbon/human/adjustCloneLoss(var/amount)
+/mob/living/carbon/human/adjustHalLoss(var/amount)
+	if(species.flags & NO_PAIN) //pain immune
+		return
 	..()
 
+/mob/living/carbon/human/adjustCloneLoss(var/amount)
 	if(species.flags & IS_SYNTHETIC)
 		return
+	..()
 
 	var/heal_prob = max(0, 80 - getCloneLoss())
 	var/mut_prob = min(80, getCloneLoss()+10)
@@ -165,6 +169,10 @@
 		hud_updateflag |= 1 << HEALTH_HUD
 	updatehealth()
 
+
+/*
+In most cases it makes more sense to use apply_damage() instead! And make sure to check armour if applicable.
+*/
 //Damages ONE external organ, organ gets randomly selected from damagable ones.
 //It automatically updates damage overlays if necesary
 //It automatically updates health status
@@ -260,9 +268,19 @@ This function restores all organs.
 /mob/living/carbon/human/apply_damage(var/damage = 0, var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, var/sharp = 0, var/edge = 0, var/obj/used_weapon = null)
 
 	//visible_message("Hit debug. [damage] | [damagetype] | [def_zone] | [blocked] | [sharp] | [used_weapon]")
+
+	//Handle other types of damage
 	if((damagetype != BRUTE) && (damagetype != BURN))
+		if(damagetype == HALLOSS)
+			if ((damage > 25 && prob(20)) || (damage > 50 && prob(60)))
+				emote("scream")
+
+
 		..(damage, damagetype, def_zone, blocked)
 		return 1
+
+	//Handle BRUTE and BURN damage
+	handle_suit_punctures(damagetype, damage)
 
 	if(blocked >= 2)	return 0
 
@@ -294,20 +312,4 @@ This function restores all organs.
 	// Will set our damageoverlay icon to the next level, which will then be set back to the normal level the next mob.Life().
 	updatehealth()
 	hud_updateflag |= 1 << HEALTH_HUD
-
-	//Embedded projectile code.
-	if(!organ) return
-	if(istype(used_weapon,/obj/item/weapon))
-		var/obj/item/weapon/W = used_weapon  //Sharp objects will always embed if they do enough damage.
-		if( (damage > (10*W.w_class)) && ( (sharp && !ismob(W.loc)) || prob(damage/W.w_class) ) )
-			organ.implants += W
-			visible_message("<span class='danger'>\The [W] sticks in the wound!</span>")
-			embedded_flag = 1
-			src.verbs += /mob/proc/yank_out_object
-			W.add_blood(src)
-			if(ismob(W.loc))
-				var/mob/living/H = W.loc
-				H.drop_item()
-			W.loc = src
-
 	return 1

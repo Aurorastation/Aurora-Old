@@ -91,17 +91,17 @@
 	desc = "A rather grungy looking eyepatch. If you're holding it, a certain man is probably freaking out right now."
 
 /obj/item/clothing/shoes/sandal/fluff/raieed_sandals //Treasured Sandals - Raieed Amari - nikolaithebeast - DONE
-	name = "Treasured Sandals"
+	name = "treasured sandals"
 	desc = "A pair of black sandals, which seem to hold the entire world on themselves."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "raieed_sandals"
 	item_state = "raieed_sandals"
 
 /obj/item/clothing/suit/storage/fluff/raieed_labcoat //Treasured Labcoat - Raieed Amari - nikolaithebeast - DONE
-	name = "Treasured Labcoat"
-	desc = "A coat that seems to emanate the love that was put into its creation."
+	name = "torn labcoat"
+	desc = "A old labcoat, torn beyond reorganization, but yet it still seems to be kept for."
 	icon = 'icons/obj/custom_items.dmi'
-	icon_state = "raieed_labcoat_open"
+	icon_state = "raieed_labcoat"
 	item_state = "raieed_labcoat"
 
 /obj/item/weapon/folder/fluff/may_notebook //May Izumi's Notebook - May Izumi - lk600 - DONE
@@ -283,6 +283,7 @@
 	icon_on = "toolpipeon"  //Note - these are in masks.dmi
 	icon_off = "pipeoff"
 	smoketime = 100
+	can_hurt_mob = 0
 
 /obj/item/weapon/reagent_containers/food/drinks/flask/fluff/tool_flask //Worn flask - Michael Tool - mrimatool - DONE
 	name = "worn flask"
@@ -325,14 +326,16 @@
 		user << "<span class='warning'>\The [src] is out of charge.</span>"
 	add_fingerprint(user)
 
+/*
 /obj/item/device/modkit/fluff/omnivac_modkit //Ornate box - Zander Moon - omnivac - SPRITE
 	name = "ornate box"
 	desc = "An ornate box, containing the handle of an energy blade."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "omni_modkit"
 	parts = MODKIT_HELMET
-	from_helmet = /obj/item/weapon/melee
-	to_helmet = /obj/item/weapon/melee/baton/fluff/omnivac_baton
+	from_helmet = list(/obj/item/weapon/melee)
+	to_helmet = list(/obj/item/weapon/melee/baton/fluff/omnivac_baton)
+*/
 
 /obj/item/clothing/head/soft/fluff/nebula_cap //Black baseball cap - Roxy Wallace - nebulaflare - DONE
 	name = "black baseball cap"
@@ -733,14 +736,16 @@
 	icon_state = "leo_coat"
 	item_state = "leo_coat"
 
+/*
 /obj/item/device/modkit/fluff/leo_modkit //Weapon case - Leo Wyatt - keinto - DONE
 	name = "weapon case"
 	desc = "A sturdy leather case, with a velvet covered interior.."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "leo_mod"
 	parts = MODKIT_HELMET
-	from_helmet = /obj/item/weapon/gun/projectile/detective/semiauto
-	to_helmet = /obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun
+	from_helmet = list(/obj/item/weapon/gun/projectile/detective/semiauto)
+	to_helmet = list(/obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun)
+*/
 
 /obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun //Instant Prosecutor - Leo Wyatt - keinto - DONE (stab)
 	name = "\improper Instant Prosecutor"
@@ -785,34 +790,13 @@
 	icon_state = "corpsoft"
 	item_color = "corp"
 
-/obj/item/fluff/jenifer_bear //Doctor SnuggleBuns - Jenifer Clewett - bluesp34r - SPRITE
+/obj/item/toy/teddy/fluff/jenifer_bear //Doctor SnuggleBuns - Jenifer Clewett - bluesp34r - SPRITE
 	name = "Doctor SnuggleBuns"
 	desc = "A fluffy-wuffy brown teddy bear! This one is wearing a blue lab coat, much like a Chief Medical Officer!"
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "jenifer_bear"
-	w_class = 2
-	force = 1
-	throwforce = 2
-	var/headless = 0
 
-	attack_self(mob/user as mob)
-		if(user.a_intent == "hurt")
-			if(headless == 1)
-				user.visible_message("<span class='warning'>[user] stares at [src] full of anger, but elects not to tear any more limbs off of it.</span>", "<span class='notice'>You've already ripped [src]'s head off, what else do you want to do to it!?</span>")
-			else
-				user.visible_message("<span class='warning'>[user] clutches [src] with anger, and rips its head off, dropping it to the ground!</span>", "<span class='warning'>You are unable to contain your anger any longer! Off with its head!</span>")
-				headless = 1
-				var/turf/T = get_turf(user)
-				new /obj/item/fluff/jenifer_bear_head(T)
-				desc = "A fluffy-wuffy brown teddy bear! This one is wearing a blue lab coat, much like a Chief Medical Officer! \red It's lacking a head!"
-				update_icon()
-		else
-			if(headless == 1)
-				user.visible_message("<span class='notice'>[user] clutches [src] with both arms, weeping slightly as they embrace the headless toy.</span>", "<span class='notice'>You clutch the toy, shivering and weeping slightly. Who would do such a monsterous thing?</span>")
-			else
-				user.visible_message("<span class='notice'>[user] clutches [src] and embraces it!</span>", "<span class='notice'>You hug the toy, and suddenly feel how the weight of the world is lifted from your shoulders!</span>")
-
-/obj/item/fluff/jenifer_bear_head
+/obj/item/toy/fluff/jenifer_bear_head
 	name = "\improper teddybear head"
 	desc = "The head of a brown teddy, cruelly torn from its original body. You can see stuffing fall out of it."
 	icon = 'icons/obj/custom_items.dmi'
@@ -860,3 +844,154 @@
 			spawn(20)
 				spamcheck = 0
 			return
+
+/obj/item/clothing/tie/medal/fluff/vivian_heart // Platinum Heart - Vivian - XanderDox - DONE
+	name = "platinum heart"
+	desc = "The medal is white-plated platinum, and bears a red-cross on the front, the back is engraved, Vivian Rival, Medical Doctor & Species Rights Activist."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "vivian_heart"
+	item_color = "vivian_heart"
+
+/obj/item/clothing/head/ushanka/fluff/ava_ushanka	// Worn Ushanka - Ava Kalashnikova - demonofthefall - DONE
+	name = "worn ushanka"
+	desc = "An old ushanka, it looks well worn."
+	item_state = "ushanka_avadown"
+	icon_state = "ushankadown"
+
+/obj/item/clothing/head/ushanka/fluff/ava_ushanka/attack_self(mob/user as mob)
+	if(src.icon_state == "ushankadown")
+		src.icon_state = "ushankaup"
+		src.item_state = "ushanka_avaup"
+		user << "You raise the ear flaps on the ushanka."
+	else
+		src.icon_state = "ushankadown"
+		src.item_state = "ushanka_avadown"
+		user << "You lower the ear flaps on the ushanka."
+
+/obj/item/clothing/tie/fluff/hamil_badge // Internal Investigations Badge - Muhammad Hamil - Jackboot - DONE
+	name = "Internal Investigations Badge"
+	desc = "An Internal Investigation badge. Used by a special branch of the Elyran police force."
+	icon = 'icons/obj/custom_items.dmi'
+	item_state = "hamil_badge"
+
+/obj/item/clothing/tie/fluff/hamil_badge/attack_self(mob/user as mob)
+	if(isliving(user))
+		user.visible_message("\red [user] flashes their [src].\nIt reads: Muhammad Hamil, Internal Investigations, Persepolis..","\red You display the [src].\nIt reads: Muhammad Hamil, Internal Investigations, Persepolis.")
+
+/obj/item/clothing/tie/fluff/hamil_badge/attack(mob/living/carbon/human/M, mob/living/user)
+	if(isliving(user))
+		user.visible_message("\red [user] invades [M]'s personal space, thrusting [src] into their face insistently.","\red You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.")
+
+/obj/item/clothing/mask/gas/fluff/stefan_mask // Modified Gas Mask - Oliver Stefan - Nbielinski - DONE
+	desc = "This odd looking gas mask is quite clearly not of NanoTrasen origin as it sports a black metal polish, as well as a reflective face plate that mirrors the view of the mask itself. This particular mask appears to breathe with the user, hissing when they exhale, and whining softly as they inhale."
+	name = "Modified Gas Mask"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "stefan_mask"
+	item_state = "stefan_mask"
+
+/obj/item/weapon/melee/fluff/balisong // Orihara's Balisong - Shizuo Orihara - GlamourChariot - DONE
+	name = "Orihara's Balisong"
+	desc = "A small, black butterfly knife with comfortable handles and a mean looking blade. Perfect for dangerous towns where being stylish is just as important as being deadly."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "balisong_0"
+	item_state = "balisong_m"
+	flags = FPRINT | TABLEPASS
+	slot_flags = SLOT_BELT
+	w_class = 1
+	force = 2
+	var/on = 0
+
+/obj/item/weapon/melee/fluff/balisong/attack_self(mob/user as mob)
+	on = !on
+	if(on)
+		user.visible_message("\red With but a flashy twirl of their fingers, [user] flicks open the balisong.",\
+		"\red You with a bit a flair, open the balisong. The metallic shine of the blade touching your gaze.",\
+		"You hear an ominous click.")
+		icon_state = "balisong_1"
+		item_state = "balisong_m"
+		w_class = 3
+		force = 2
+		attack_verb = list("prodded")
+	else
+		user.visible_message("\blue Without even looking, [user] casually flicks the balisong closed.",\
+		"\blue You skilfully close the balisong.",\
+		"You hear a click.")
+		icon_state = "balisong_0"
+		w_class = 2
+		force = 2
+		attack_verb = list("thumped")
+
+	if(istype(user,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = user
+		H.update_inv_l_hand()
+		H.update_inv_r_hand()
+
+	playsound(src.loc, 'sound/weapons/empty.ogg', 50, 1)
+	add_fingerprint(user)
+
+	if(blood_overlay && blood_DNA && (blood_DNA.len >= 1))
+		var/icon/I = new /icon(src.icon, src.icon_state)
+		I.Blend(new /icon('icons/effects/blood.dmi', rgb(255,255,255)),ICON_ADD)
+		I.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY)
+		blood_overlay = I
+
+		overlays += blood_overlay
+
+	return
+
+/obj/structure/stool/bed/chair/wheelchair/fluff/kit // Kit's Wheelchair - Cassidy Kit - Meowykins - DONE
+	name = "Kit's Wheelchair"
+	desc = "A wheelchair, that has large flames on the back of the seat. It has a nametag on one of the arms, reading 'Kit.'"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "kit_wheels"
+	anchored = 0
+	movable = 1
+
+obj/structure/stool/bed/chair/wheelchair/fluff/kit/handle_rotation()
+	overlays = null
+	var/image/O = image(icon = 'icons/obj/custom_items.dmi', icon_state = "kit_w_overlay", layer = FLY_LAYER, dir = src.dir)
+	overlays += O
+	if(buckled_mob)
+		buckled_mob.dir = dir
+
+/obj/item/weapon/storage/fluff/binder // Black Binder - Cassidy Kit - Meowykins - DONE
+	name = "Black Binder"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "kit_binder"
+	w_class = 2
+	can_hold = list(
+		"/obj/item/weapon/paper",
+		"/obj/item/weapon/folder",
+		"/obj/item/weapon/pen"
+	)
+
+/obj/item/weapon/storage/fluff/binder/New()
+	..()
+	new /obj/item/weapon/folder/blue(src)
+	new /obj/item/weapon/folder/red(src)
+	new /obj/item/weapon/folder/white(src)
+	new /obj/item/weapon/folder/yellow(src)
+	new /obj/item/weapon/pen/fluff/kit_pen(src)
+
+/obj/item/weapon/pen/fluff/kit_pen // Fountain Pen - Cassidy Kit - Meowykins - DONE
+	desc = "A small fountain pen. It has several spots to change the cartridge inside for another color, as well as a selector switch for ease of use."
+	name = "fountain pen"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "kit_pen"
+	item_state = "pen"
+	var/ink = 1
+
+/obj/item/weapon/pen/fluff/kit_pen/attack_self(mob/user)
+	switch(ink)
+		if(1)
+			ink = 2
+			colour = "blue"
+			user << "<span class='notice'>You cycle the pen to use the blue ink cartridge.</span>"
+		if(2)
+			ink = 3
+			colour = "red"
+			user << "<span class='notice'>You cycle the pen to use the red ink cartridge.</span>"
+		if(3)
+			ink = 1
+			colour = "black"
+			user << "<span class='notice'>You cycle the pen to use the black ink cartridge.</span>"

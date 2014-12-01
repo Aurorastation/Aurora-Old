@@ -4,6 +4,7 @@
 	var/image/blood_overlay = null //this saves our blood splatter overlay, which will be processed not to go over the edges of the sprite
 	var/abstract = 0
 	var/item_state = null
+	var/wasbloody = 0
 	var/r_speed = 1.0
 	var/health = null
 	var/burn_point = null
@@ -38,8 +39,22 @@
 	var/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	var/list/allowed = null //suit storage stuff.
 	var/obj/item/device/uplink/hidden/hidden_uplink = null // All items can have an uplink hidden inside, just remember to add the triggers.
+
+	/* Species-specific sprites, concept stolen from Paradise//vg/.
+	ex:
+	sprite_sheets = list(
+		"Tajaran" = 'icons/cat/are/bad'
+		)
+	If index term exists and icon_override is not set, this sprite sheet will be used.
+	*/
+	var/list/sprite_sheets = null
 	var/icon_override = null  //Used to override hardcoded clothing dmis in human clothing proc.
 
+	/* Species-specific sprite sheets for inventory sprites
+	Works similarly to worn sprite_sheets, except the alternate sprites are used when the clothing/refit_for_species() proc is called.
+	*/
+	var/list/sprite_sheets_obj = null
+	
 /obj/item/device
 	icon = 'icons/obj/device.dmi'
 
@@ -103,7 +118,7 @@
 			size = "huge"
 		else
 	//if ((CLUMSY in usr.mutations) && prob(50)) t = "funny-looking"
-	usr << "This is a [src.blood_DNA ? "bloody " : ""]\icon[src][src.name]. It is a [size] item."
+	usr << "This is a [src.blood_DNA ? "bloody " : ""][src.wasbloody == 2 ? "luminol covered " : ""]\icon[src][src.name]. It is a [size] item."
 	if(src.desc)
 		usr << src.desc
 	return
@@ -476,6 +491,12 @@
 /obj/item/proc/IsShield()
 	return 0
 
+/obj/item/proc/get_loc_turf()
+	var/atom/L = loc
+	while(L && !istype(L, /turf/))
+		L = L.loc
+	return loc
+
 /obj/item/proc/eyestab(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 
 	var/mob/living/carbon/human/H = M
@@ -524,7 +545,9 @@
 			"\red You stab yourself in the eyes with [src]!" \
 		)
 	if(istype(M, /mob/living/carbon/human))
-		var/datum/organ/internal/eyes/eyes = H.internal_organs["eyes"]
+		var/datum/organ/internal/eyes/eyes = H.internal_organs_by_name["eyes"]
+		if(!eyes)
+			return
 		eyes.damage += rand(3,4)
 		if(eyes.damage >= eyes.min_bruised_damage)
 			if(M.stat != 2)
@@ -552,9 +575,21 @@
 	. = ..()
 	if(blood_overlay)
 		overlays.Remove(blood_overlay)
+		blood_overlay = null
 	if(istype(src, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = src
 		G.transfer_blood = 0
+	if(wasbloody == 2)
+		wasbloody = 1
+		return
+
+/obj/item/proc/reveal_blood()
+	if(wasbloody == 1)
+		wasbloody = 2
+		generate_blood_overlay()
+		blood_overlay.color = "#007fff"
+		/*blood_overlay.invisibility = INVISIBILITY_LUMINOL*/
+		overlays += blood_overlay
 
 
 /obj/item/add_blood(mob/living/carbon/human/M as mob)
@@ -578,6 +613,8 @@
 	if(blood_DNA[M.dna.unique_enzymes])
 		return 0 //already bloodied with this blood. Cannot add more.
 	blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
+	stored_DNA[M.dna.unique_enzymes] = M.dna.b_type
+	wasbloody = 1
 	return 1 //we applied blood to the item
 
 /obj/item/proc/generate_blood_overlay()

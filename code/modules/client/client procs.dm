@@ -54,7 +54,7 @@
 			return
 		cmd_admin_irc_pm()
 		return
-		
+
 
 
 	//Logs all hrefs
@@ -155,6 +155,12 @@
 	if(holder)
 		add_admin_verbs()
 		admin_memo_show()
+		if(!ooc_allowed)
+			src << "<span class='alert'>OOC is Disabled</span>"
+		if(!looc_allowed)
+			src << "<span class='alert'>LOOC is Disabled</span>"
+		if(!dsay_allowed)
+			src << "<span class='alert'>Deadchat is Disabled</span>"
 
 	log_client_to_db()
 
@@ -255,7 +261,7 @@
 //send resources to the client. It's here in its own proc so we can move it around easiliy if need be
 /client/proc/send_resources()
 //	preload_vox() //Causes long delays with initial start window and subsequent windows when first logged in.
-	
+
 	getFiles(
 		'html/search.js',
 		'html/panels.css',

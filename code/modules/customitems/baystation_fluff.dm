@@ -248,8 +248,13 @@
 
 	attack_self(mob/user)
 		if(user.r_hand == src || user.l_hand == src)
+			var/mobgender
+			if(user.gender == "male")
+				mobgender = "guy"
+			else
+				mobgender = "gal"
 			for(var/mob/O in viewers(user, null))
-				O.show_message(text("\red [] uses [] to comb their hair with incredible style and sophistication. What a guy.", user, src), 1)
+				O.show_message(text("\red [] uses [] to comb their hair with incredible style and sophistication. What a [mobgender].", user, src), 1)
 		return
 
 /obj/item/weapon/fluff/hugo_cinderbacth_1 //thatoneguy: Hugo Cinderbatch
@@ -308,7 +313,7 @@
 	desc = "The message: 'Please do not be removing this beaker from the chemistry lab. If lost, return to Nashida Bisha'ra' can be seen etched into the side of this 100 unit beaker."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "beakerlarge"
-	g_amt = 5000
+	matter = list("glass" = 5000)
 	volume = 100
 
 /obj/item/weapon/reagent_containers/glass/beaker/fluff/eleanor_stone //Rkf45: Eleanor Stone

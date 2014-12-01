@@ -6,6 +6,13 @@
 
 #define R_IDEAL_GAS_EQUATION	8.31 //kPa*L/(K*mol)
 #define ONE_ATMOSPHERE		101.325	//kPa
+#define IDEAL_GAS_ENTROPY_CONSTANT 	1164	//(mol^3 * s^3) / (kg^3 * L). Equal to (4*pi/(avrogadro's number * planck's constant)^2)^(3/2) / (avrogadro's number * 1000 Liters per m^3).
+
+//radiation constants
+#define STEFAN_BOLTZMANN_CONSTANT		0.0000000567	//W/(m^2*K^4)
+#define COSMIC_RADIATION_TEMPERATURE	3.15		//K
+#define AVERAGE_SOLAR_RADIATION			200			//W/m^2. Kind of arbitrary. Really this should depend on the sun position much like solars.
+#define RADIATOR_OPTIMUM_PRESSURE		110			//kPa at 20 C
 
 #define CELL_VOLUME 2500	//liters in a cell
 #define MOLES_CELLSTANDARD (ONE_ATMOSPHERE*CELL_VOLUME/(T20C*R_IDEAL_GAS_EQUATION))	//moles in a 2.5 m^3 cell at 101.325 Pa and 20 degC
@@ -27,6 +34,8 @@
 #define HUMAN_NEEDED_OXYGEN	MOLES_CELLSTANDARD*BREATH_PERCENTAGE*0.16
 	//Amount of air needed before pass out/suffocation commences
 
+#define SOUND_MINIMUM_PRESSURE 10
+
 // Pressure limits.
 #define HAZARD_HIGH_PRESSURE 550	//This determins at what pressure the ultra-high pressure red icon is displayed. (This one is set as a constant)
 #define WARNING_HIGH_PRESSURE 325 	//This determins when the orange pressure icon is displayed (it is 0.7 * HAZARD_HIGH_PRESSURE)
@@ -35,10 +44,10 @@
 
 #define TEMPERATURE_DAMAGE_COEFFICIENT 1.5	//This is used in handle_temperature_damage() for humans, and in reagents that affect body temperature. Temperature damage is multiplied by this amount.
 #define BODYTEMP_AUTORECOVERY_DIVISOR 12 //This is the divisor which handles how much of the temperature difference between the current body temperature and 310.15K (optimal temperature) humans auto-regenerate each tick. The higher the number, the slower the recovery. This is applied each tick, so long as the mob is alive.
-#define BODYTEMP_AUTORECOVERY_MINIMUM 10 //Minimum amount of kelvin moved toward 310.15K per tick. So long as abs(310.15 - bodytemp) is more than 50.
+#define BODYTEMP_AUTORECOVERY_MINIMUM 1 //Minimum amount of kelvin moved toward 310.15K per tick. So long as abs(310.15 - bodytemp) is more than 50.
 #define BODYTEMP_COLD_DIVISOR 6 //Similar to the BODYTEMP_AUTORECOVERY_DIVISOR, but this is the divisor which is applied at the stage that follows autorecovery. This is the divisor which comes into play when the human's loc temperature is lower than their body temperature. Make it lower to lose bodytemp faster.
 #define BODYTEMP_HEAT_DIVISOR 6 //Similar to the BODYTEMP_AUTORECOVERY_DIVISOR, but this is the divisor which is applied at the stage that follows autorecovery. This is the divisor which comes into play when the human's loc temperature is higher than their body temperature. Make it lower to gain bodytemp faster.
-#define BODYTEMP_COOLING_MAX 30 //The maximum number of degrees that your body can cool in 1 tick, when in a cold area.
+#define BODYTEMP_COOLING_MAX -30 //The maximum number of degrees that your body can cool in 1 tick, when in a cold area.
 #define BODYTEMP_HEATING_MAX 30 //The maximum number of degrees that your body can heat up in 1 tick, when in a hot area.
 
 #define BODYTEMP_HEAT_DAMAGE_LIMIT 360.15 // The limit the human body can take before it starts taking damage from heat.
@@ -62,10 +71,7 @@
 
 #define PRESSURE_DAMAGE_COEFFICIENT 4 //The amount of pressure damage someone takes is equal to (pressure / HAZARD_HIGH_PRESSURE)*PRESSURE_DAMAGE_COEFFICIENT, with the maximum of MAX_PRESSURE_DAMAGE
 #define MAX_HIGH_PRESSURE_DAMAGE 4	//This used to be 20... I got this much random rage for some retarded decision by polymorph?! Polymorph now lies in a pool of blood with a katana jammed in his spleen. ~Errorage --PS: The katana did less than 20 damage to him :(
-#define LOW_PRESSURE_DAMAGE 2 	//The amounb of damage someone takes when in a low pressure area (The pressure threshold is so low that it doesn't make sense to do any calculations, so it just applies this flat value).
-
-#define PRESSURE_SUIT_REDUCTION_COEFFICIENT 0.8 //This is how much (percentual) a suit with the flag STOPSPRESSUREDMAGE reduces pressure.
-#define PRESSURE_HEAD_REDUCTION_COEFFICIENT 0.4 //This is how much (percentual) a helmet/hat with the flag STOPSPRESSUREDMAGE reduces pressure.
+#define LOW_PRESSURE_DAMAGE 4 	//The amounb of damage someone takes when in a low pressure area (The pressure threshold is so low that it doesn't make sense to do any calculations, so it just applies this flat value).
 
 // Doors!
 #define DOOR_CRUSH_DAMAGE 10
@@ -132,6 +138,11 @@
 #define T0C 273.15					// 0degC
 #define T20C 293.15					// 20degC
 #define TCMB 2.7					// -270.3degC
+
+//XGM gas flags
+#define XGM_GAS_FUEL 1
+#define XGM_GAS_OXIDIZER 2
+#define XGM_GAS_CONTAMINANT 4
 
 //Used to be used by FEA
 //var/turf/space/Space_Tile = locate(/turf/space) // A space tile to reference when atmos wants to remove excess heat.
@@ -261,21 +272,23 @@ var/MAX_EXPLOSION_RANGE = 14
 
 // bitflags for clothing parts
 #define HEAD			1
-#define UPPER_TORSO		2
-#define LOWER_TORSO		4
-#define LEG_LEFT		8
-#define LEG_RIGHT		16
-#define LEGS			24
-#define FOOT_LEFT		32
-#define FOOT_RIGHT		64
-#define FEET			96
-#define ARM_LEFT		128
-#define ARM_RIGHT		256
-#define ARMS			384
-#define HAND_LEFT		512
-#define HAND_RIGHT		1024
-#define HANDS			1536
-#define FULL_BODY		2047
+#define FACE			2
+#define EYES			4
+#define UPPER_TORSO		8
+#define LOWER_TORSO		16
+#define LEG_LEFT		32
+#define LEG_RIGHT		64
+#define LEGS			96
+#define FOOT_LEFT		128
+#define FOOT_RIGHT		256
+#define FEET			384
+#define ARM_LEFT		512
+#define ARM_RIGHT		1024
+#define ARMS			1536
+#define HAND_LEFT		2048
+#define HAND_RIGHT		4096
+#define HANDS			6144
+#define FULL_BODY		8191
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
 // Used with human/proc/get_heat_protection() and human/proc/get_cold_protection()
@@ -480,7 +493,7 @@ var/list/liftable_structures = list(\
 
 	/obj/machinery/autolathe, \
 	/obj/machinery/constructable_frame, \
-	/obj/machinery/hydroponics, \
+	/obj/machinery/portable_atmospherics/hydroponics, \
 	/obj/machinery/computer, \
 	/obj/machinery/optable, \
 	/obj/structure/dispenser, \
@@ -636,6 +649,7 @@ var/list/liftable_structures = list(\
 #define CHAT_DEBUGLOGS	2048
 #define CHAT_LOOC		4096
 #define CHAT_GHOSTRADIO 8192
+#define CHAT_SCOPES_DEBUG 16384
 
 
 #define TOGGLES_DEFAULT (SOUND_ADMINHELP|SOUND_MIDI|SOUND_AMBIENCE|SOUND_LOBBY|CHAT_OOC|CHAT_DEAD|CHAT_GHOSTEARS|CHAT_GHOSTSIGHT|CHAT_PRAYER|CHAT_RADIO|CHAT_ATTACKLOGS|CHAT_LOOC)
@@ -653,6 +667,7 @@ var/list/liftable_structures = list(\
 #define BE_NINJA		1024
 #define BE_RAIDER		2048
 #define BE_PLANT		4096
+#define BE_VAMPIRE		8192
 
 var/list/be_special_flags = list(
 	"Traitor" = BE_TRAITOR,
@@ -667,7 +682,8 @@ var/list/be_special_flags = list(
 	"Monkey" = BE_MONKEY,
 	"Ninja" = BE_NINJA,
 	"Raider" = BE_RAIDER,
-	"Diona" = BE_PLANT
+	"Diona" = BE_PLANT,
+	"Vampire" = BE_VAMPIRE
 	)
 
 #define AGE_MIN 17			//youngest a character can be
@@ -742,8 +758,10 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define IS_SYNTHETIC 16384
 
 //Language flags.
-#define WHITELISTED 1  // Language is available if the speaker is whitelisted.
-#define RESTRICTED 2   // Language can only be accquired by spawning or an admin.
+#define WHITELISTED 1  		// Language is available if the speaker is whitelisted.
+#define RESTRICTED 2   		// Language can only be accquired by spawning or an admin.
+#define NONVERBAL 4    		// Language has a significant non-verbal component. Speech is garbled without line-of-sight
+#define SIGNLANG 8     		// Language is completely non-verbal. Speech is displayed through emotes for those who can understand.
 
 //Flags for zone sleeping
 #define ZONE_ACTIVE 1
@@ -758,3 +776,91 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define COLOR_YELLOW 	"#FFFF00"
 #define COLOR_ORANGE 	"#FF9900"
 #define COLOR_WHITE 	"#FFFFFF"
+
+// Vampire power defines
+#define VAMP_REJUV 1
+#define VAMP_GLARE 2
+#define VAMP_HYPNO 3
+#define VAMP_SHAPE 4
+#define VAMP_VISION 5
+#define VAMP_DISEASE 6
+#define VAMP_CLOAK 7
+#define VAMP_BATS 8
+#define VAMP_SCREAM 9
+#define VAMP_JAUNT 10
+#define VAMP_SLAVE 11
+#define VAMP_BLINK 12
+#define VAMP_FULL 13
+
+
+/*
+	Germs and infections
+*/
+
+#define GERM_LEVEL_AMBIENT		110		//maximum germ level you can reach by standing still
+#define GERM_LEVEL_MOVE_CAP		200		//maximum germ level you can reach by running around
+
+#define INFECTION_LEVEL_ONE		100
+#define INFECTION_LEVEL_TWO		500
+#define INFECTION_LEVEL_THREE	1000
+
+
+/*
+	Shuttles
+*/
+
+// these define the time taken for the shuttle to get to SS13
+// and the time before it leaves again
+#define SHUTTLE_PREPTIME 				300	// 5 minutes = 300 seconds - after this time, the shuttle departs centcom and cannot be recalled
+#define SHUTTLE_LEAVETIME 				180	// 3 minutes = 180 seconds - the duration for which the shuttle will wait at the station after arriving
+#define SHUTTLE_TRANSIT_DURATION		300	// 5 minutes = 300 seconds - how long it takes for the shuttle to get to the station
+#define SHUTTLE_TRANSIT_DURATION_RETURN 120	// 2 minutes = 120 seconds - for some reason it takes less time to come back, go figure.
+
+//Shuttle moving status
+#define SHUTTLE_IDLE		0
+#define SHUTTLE_WARMUP		1
+#define SHUTTLE_INTRANSIT	2
+
+//Ferry shuttle processing status
+#define IDLE_STATE		0
+#define WAIT_LAUNCH		1
+#define WAIT_ARRIVE		2
+#define WAIT_FINISH		3
+
+//computer3 error codes, move lower in the file when it passes dev -Sayu
+ #define PROG_CRASH      1  // Generic crash
+ #define MISSING_PERIPHERAL  2  // Missing hardware
+ #define BUSTED_ASS_COMPUTER  4  // Self-perpetuating error.  BAC will continue to crash forever.
+ #define MISSING_PROGRAM    8  // Some files try to automatically launch a program.  This is that failing.
+ #define FILE_DRM      16  // Some files want to not be copied/moved.  This is them complaining that you tried.
+ #define NETWORK_FAILURE  32
+
+//Some on_mob_life() procs check for alien races.
+#define IS_DIONA 1
+#define IS_VOX 2
+#define IS_SKRELL 3
+#define IS_UNATHI 4
+
+#define MAX_GEAR_COST 5 //Used in chargen for loadout limit.
+
+
+/*
+	Atmos Machinery
+*/
+#define MAX_SIPHON_FLOWRATE		2500	//L/s	This can be used to balance how fast a room is siphoned. Anything higher than CELL_VOLUME has no effect.
+#define MAX_SCRUBBER_FLOWRATE	200		//L/s	Max flow rate when scrubbing from a turf.
+
+//These balance how easy or hard it is to create huge pressure gradients with pumps and filters. Lower values means it takes longer to create large pressures differences.
+//Has no effect on pumping gasses from high pressure to low, only from low to high. Must be between 0 and 1.
+#define ATMOS_PUMP_EFFICIENCY	2.5
+#define ATMOS_FILTER_EFFICIENCY	2.5
+
+//will not bother pumping or filtering if the gas source as fewer than this amount of moles, to help with performance.
+#define MINUMUM_MOLES_TO_PUMP	0.01
+#define MINUMUM_MOLES_TO_FILTER	0.1
+
+//The flow rate/effectiveness of various atmos devices is limited by their internal volume, so for many atmos devices these will control maximum flow rates in L/s
+#define ATMOS_DEFAULT_VOLUME_PUMP	200	//L
+#define ATMOS_DEFAULT_VOLUME_FILTER	200	//L
+#define ATMOS_DEFAULT_VOLUME_MIXER	200	//L
+#define ATMOS_DEFAULT_VOLUME_PIPE	70	//L

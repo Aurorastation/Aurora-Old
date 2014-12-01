@@ -186,6 +186,7 @@ client
 				OXY:<font size='1'><a href='?_src_=vars;mobToDamage=\ref[D];adjustDamage=oxygen'>[M.getOxyLoss()]</a>
 				CLONE:<font size='1'><a href='?_src_=vars;mobToDamage=\ref[D];adjustDamage=clone'>[M.getCloneLoss()]</a>
 				BRAIN:<font size='1'><a href='?_src_=vars;mobToDamage=\ref[D];adjustDamage=brain'>[M.getBrainLoss()]</a>
+				HEALTH:<font size='1'>[M.health]
 				</font>
 
 
@@ -430,6 +431,7 @@ client
 		if( !new_name || !M )	return
 
 		message_admins("Admin [key_name_admin(usr)] renamed [key_name_admin(M)] to [new_name].")
+		msg_scopes("[key_name_admin(usr)] renamed [key_name_admin(M)] to [new_name].", 1) //The 1 makes dev's see it too
 		M.fully_replace_character_name(M.real_name,new_name)
 		href_list["datumrefresh"] = href_list["rename"]
 
@@ -464,7 +466,7 @@ client
 		cmd_mass_modify_object_variables(A, href_list["varnamemass"])
 
 	else if(href_list["mob_player_panel"])
-		if(!check_rights(0))	return
+		if(!check_rights(R_ADMIN|R_MOD|R_FUN))	return
 
 		var/mob/M = locate(href_list["mob_player_panel"])
 		if(!istype(M))
@@ -495,7 +497,7 @@ client
 
 		src.give_disease(M)
 		href_list["datumrefresh"] = href_list["give_spell"]
-		
+
 	else if(href_list["give_disease2"])
 		if(!check_rights(R_ADMIN|R_FUN))	return
 
@@ -614,6 +616,7 @@ client
 					return
 				log_admin("[key_name(usr)] deleted all objects of type [O_type] ([i] objects deleted) ")
 				message_admins("\blue [key_name(usr)] deleted all objects of type [O_type] ([i] objects deleted) ")
+				msg_scopes("\blue [key_name(usr)] deleted all objects of type [O_type] ([i] objects deleted) ", 1)
 			if("Type and subtypes")
 				var/i = 0
 				for(var/obj/Obj in world)
@@ -625,6 +628,7 @@ client
 					return
 				log_admin("[key_name(usr)] deleted all objects of type or subtype of [O_type] ([i] objects deleted) ")
 				message_admins("\blue [key_name(usr)] deleted all objects of type or subtype of [O_type] ([i] objects deleted) ")
+				msg_scopes("\blue [key_name(usr)] deleted all objects of type or subtype of [O_type] ([i] objects deleted) ", 1)
 
 	else if(href_list["explode"])
 		if(!check_rights(R_DEBUG|R_FUN))	return
@@ -829,7 +833,7 @@ client
 		if(!check_rights(R_DEBUG|R_DEV))      return
 
 		var/mob/living/H = locate(href_list["addverb"])
-		
+
 		if(!istype(H))
 			usr << "This can only be done to instances of type /mob/living"
 			return
@@ -845,7 +849,7 @@ client
 				possibleverbs += typesof(/mob/living/silicon/proc,/mob/living/silicon/ai/proc,/mob/living/silicon/ai/verb)
 		possibleverbs -= H.verbs
 		possibleverbs += "Cancel" 								// ...And one for the bottom
-		
+
 		var/verb = input("Select a verb!", "Verbs",null) as anything in possibleverbs
 		if(!H)
 			usr << "Mob doesn't exist anymore"
@@ -854,7 +858,7 @@ client
 			return
 		else
 			H.verbs += verb
-		
+
 	else if(href_list["remverb"])
 		if(!check_rights(R_DEBUG|R_DEV))      return
 
@@ -872,7 +876,7 @@ client
 		else
 			H.verbs -= verb
 
-	
+
 	else if(href_list["fix_nano"])
 		if(!check_rights(R_DEBUG)) return
 
@@ -881,11 +885,11 @@ client
 		if(!istype(H) || !H.client)
 			usr << "This can only be done on mobs with clients"
 			return
-		
-				
+
+
 
 		nanomanager.send_resources(H.client)
-		
+
 		usr << "Resource files sent"
 		H << "Your NanoUI Resource files have been refreshed"
 

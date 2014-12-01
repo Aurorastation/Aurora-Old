@@ -5,6 +5,9 @@
 	opacity = 1
 	density = 1
 
+	damage_cap = 200
+	max_temperature = 6000
+
 	walltype = "rwall"
 
 	var/d_state = 0
@@ -38,6 +41,28 @@
 
 	//get the user's location
 	if( !istype(user.loc, /turf) )	return	//can't do this stuff whilst inside objects and such
+
+	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
+		var/obj/item/weapon/grab/G = W
+		if (istype(G.affecting, /mob/living))
+			var/mob/living/M = G.affecting
+			if(user.a_intent == "hurt")
+				if (G.state >= 2)
+					if (prob(15))	M.Weaken(5)
+					M.apply_damage(16,def_zone = "head")
+					visible_message("\red [G.assailant] slams [G.affecting]'s face against \the [src]!")
+					msg_admin_attack("[user.name]([user.ckey]) slams [M.name]'s([M.ckey]) face against \the [src]! - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
+//					switch(rand(1,3))
+//						if(1)
+//							playsound(src.loc, 'sound/weapons/genhit1.ogg', 50, 1)
+//						if(2)
+//							playsound(src.loc, 'sound/weapons/genhit2.ogg', 50, 1)
+//						if(3)
+//							playsound(src.loc, 'sound/weapons/genhit3.ogg', 50, 1)
+					return
+				else
+					user << "\red You need a better grip to do that!"
+					return
 
 	if(rotting)
 		if(istype(W, /obj/item/weapon/weldingtool) )
@@ -80,6 +105,19 @@
 	else if(istype(W, /obj/item/weapon/melee/energy/blade))
 		user << "<span class='notice'>This wall is too thick to slice through. You will need to find a different path.</span>"
 		return
+
+	if(damage && istype(W, /obj/item/weapon/weldingtool))
+		var/obj/item/weapon/weldingtool/WT = W
+		if(WT.remove_fuel(0,user))
+			user << "<span class='notice'>You start repairing the damage to [src].</span>"
+			playsound(src, 'sound/items/Welder.ogg', 100, 1)
+			if(do_after(user, max(5, damage / 5)) && WT && WT.isOn())
+				user << "<span class='notice'>You finish repairing the damage to [src].</span>"
+				take_damage(-damage)
+			return
+		else
+			user << "<span class='warning'>You need more welding fuel to complete this task.</span>"
+			return
 
 	var/turf/T = user.loc	//get user's location for delay checks
 

@@ -14,15 +14,13 @@
 	var/energy = 100
 	var/max_energy = 100
 	var/amount = 30
-	var/accept_glass = 0
-	var/beaker = null
+	var/accept_glass = 0 //At 0 ONLY accepts glass containers. Kinda misleading varname.
+	var/atom/beaker = null
 	var/recharged = 0
 	var/hackedcheck = 0
 	var/list/dispensable_reagents = list("hydrogen","lithium","carbon","nitrogen","oxygen","fluorine",
 	"sodium","aluminum","silicon","phosphorus","sulfur","chlorine","potassium","iron",
 	"copper","mercury","radium","water","ethanol","sugar","sacid","tungsten")
-	var/list/broken_requirements = list()
-	var/broken_on_spawn = 0
 
 /obj/machinery/chem_dispenser/proc/recharge()
 	if(stat & (BROKEN|NOPOWER)) return
@@ -34,15 +32,10 @@
 		nanomanager.update_uis(src) // update all UIs attached to src
 
 /obj/machinery/chem_dispenser/power_change()
-	if(powered())
-		stat &= ~NOPOWER
-	else
-		spawn(rand(0, 15))
-			stat |= NOPOWER
+	..()
 	nanomanager.update_uis(src) // update all UIs attached to src
 
 /obj/machinery/chem_dispenser/process()
-
 	if(recharged <= 0)
 		recharge()
 		recharged = 15
@@ -54,27 +47,6 @@
 	recharge()
 	dispensable_reagents = sortList(dispensable_reagents)
 
-	if(broken_on_spawn)
-		var/amount = pick(1,2,2,3,4)
-		var/list/options = list()
-		options[/obj/item/weapon/stock_parts/capacitor/adv] = "Add an advanced capacitor to fix it."
-		options[/obj/item/weapon/stock_parts/console_screen] = "Replace the console screen to fix it."
-		options[/obj/item/weapon/stock_parts/manipulator/pico] = "Upgrade to a pico manipulator to fix it."
-		options[/obj/item/weapon/stock_parts/matter_bin/adv] = "Give it an advanced matter bin to fix it."
-		options[/obj/item/stack/sheet/mineral/diamond] = "Line up a cut diamond with the nozzle to fix it."
-		options[/obj/item/stack/sheet/mineral/uranium] = "Position a uranium sheet inside to fix it."
-		options[/obj/item/stack/sheet/mineral/plasma] = "Enter a block of plasma to fix it."
-		options[/obj/item/stack/sheet/mineral/silver] = "Cover the internals with a silver lining to fix it."
-		options[/obj/item/stack/sheet/mineral/gold] = "Wire a golden filament to fix it."
-		options[/obj/item/stack/sheet/plasteel] = "Surround the outside with a plasteel cover to fix it."
-		options[/obj/item/stack/sheet/rglass] = "Insert a pane of reinforced glass to fix it."
-		stat |= BROKEN
-		while(amount > 0)
-			amount -= 1
-
-			var/index = pick(options)
-			broken_requirements[index] = options[index]
-			options -= index
 
 /obj/machinery/chem_dispenser/ex_act(severity)
 	switch(severity)
@@ -104,18 +76,15 @@
   *
   * @return nothing
   */
-/obj/machinery/chem_dispenser/ui_interact(mob/user, ui_key = "main",var/datum/nanoui/ui = null)
-	if(broken_requirements.len)
-		user << "<span class='warning'>[src] is broken. [broken_requirements[broken_requirements[1]]]</span>"
-		return
+/obj/machinery/chem_dispenser/ui_interact(mob/user, ui_key = "main",var/datum/nanoui/ui = null, var/force_open = 1)
 	if(stat & (BROKEN|NOPOWER)) return
 	if(user.stat || user.restrained()) return
 
 	// this is the data which will be sent to the ui
 	var/data[0]
 	data["amount"] = amount
-	data["energy"] = energy
-	data["maxEnergy"] = max_energy
+	data["energy"] = round(energy)
+	data["maxEnergy"] = round(max_energy)
 	data["isBeakerLoaded"] = beaker ? 1 : 0
 	data["glass"] = accept_glass
 	var beakerContents[0]
@@ -141,11 +110,11 @@
 	data["chemicals"] = chemicals
 
 	// update the ui if it exists, returns null if no ui is passed/found
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "chem_dispenser.tmpl", ui_title, 380, 650)
+		ui = new(user, src, ui_key, "chem_dispenser.tmpl", ui_title, 390, 655)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
 		// open the new ui window
@@ -163,7 +132,7 @@
 			amount = 100
 
 	if(href_list["dispense"])
-		if (dispensable_reagents.Find(href_list["dispense"]) && beaker != null)
+		if (dispensable_reagents.Find(href_list["dispense"]) && beaker != null && beaker.is_open_container())
 			var/obj/item/weapon/reagent_containers/B = src.beaker
 			var/datum/reagents/R = B.reagents
 			var/space = R.maximum_volume - R.total_volume
@@ -180,21 +149,8 @@
 	add_fingerprint(usr)
 	return 1 // update UIs attached to this object
 
-/obj/machinery/chem_dispenser/attackby(var/obj/item/weapon/reagent_containers/B as obj, var/mob/user as mob)
+/obj/machinery/chem_dispenser/attackby(var/obj/item/weapon/B as obj, var/mob/user as mob)
 	if(isrobot(user))
-		return
-
-	if(broken_requirements.len && B.type == broken_requirements[1])
-		broken_requirements -= broken_requirements[1]
-		user << "<span class='notice'>You fix [src].</span>"
-		if(istype(B,/obj/item/stack))
-			var/obj/item/stack/S = B
-			S.use(1)
-		else
-			user.drop_item()
-			del(B)
-		if(broken_requirements.len==0)
-			stat ^= BROKEN
 		return
 	if(src.beaker)
 		user << "Something is already loaded into the machine."
@@ -245,6 +201,7 @@
 				dispensable_reagents -= list("thirteenloko")
 				hackedcheck = 0
 				return
+
 /obj/machinery/chem_dispenser/beer
 	icon_state = "booze_dispenser"
 	name = "booze dispenser"
@@ -315,13 +272,6 @@
 /obj/machinery/chem_master/meteorhit()
 	del(src)
 	return
-
-/obj/machinery/chem_master/power_change()
-	if(powered())
-		stat &= ~NOPOWER
-	else
-		spawn(rand(0, 15))
-			stat |= NOPOWER
 
 /obj/machinery/chem_master/attackby(var/obj/item/weapon/B as obj, var/mob/user as mob)
 
@@ -614,18 +564,16 @@
 
 
 /obj/machinery/computer/pandemic/power_change()
-
+	..()
 	if(stat & BROKEN)
 		icon_state = (src.beaker?"mixer1_b":"mixer0_b")
 
-	else if(powered())
+	else if(!(stat & NOPOWER))
 		icon_state = (src.beaker?"mixer1":"mixer0")
-		stat &= ~NOPOWER
 
 	else
 		spawn(rand(0, 15))
 			src.icon_state = (src.beaker?"mixer1_nopower":"mixer0_nopower")
-			stat |= NOPOWER
 
 
 /obj/machinery/computer/pandemic/Topic(href, href_list)
@@ -855,8 +803,8 @@
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "juicer1"
 	layer = 2.9
-	density = 1
-	anchored = 1
+	density = 0
+	anchored = 0
 	use_power = 1
 	idle_power_usage = 5
 	active_power_usage = 100
@@ -872,7 +820,7 @@
 		/obj/item/stack/sheet/mineral/silver = list("silver" = 20),
 		/obj/item/stack/sheet/mineral/gold = list("gold" = 20),
 		/obj/item/weapon/grown/nettle = list("sacid" = 0),
-		/obj/item/weapon/grown/deathnettle = list("pacid" = 0),
+		/obj/item/weapon/grown/nettle/death = list("pacid" = 0),
 
 		//Blender Stuff
 		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans = list("soymilk" = 0),
@@ -986,6 +934,15 @@
 	var/processing_chamber = ""
 	var/beaker_contents = ""
 	var/dat = ""
+
+	if(istype(user, /mob/living/carbon/human))
+		var/mob/living/carbon/human/M = user
+		if(M.h_style == "Floorlength Braid" || M.h_style == "Very Long Hair")
+			if(prob(10))
+				M.apply_damage(30, BRUTE, "head")
+				M.apply_damage(45, HALLOSS)
+				M.visible_message("\red [user]'s hair catches in the [src]!", "\red Your hair gets caught in the [src]!")
+				M.say("*scream")
 
 	if(!inuse)
 		for (var/obj/item/O in holdingitems)
@@ -1236,3 +1193,42 @@
 		O.reagents.trans_to(beaker, amount)
 		if(!O.reagents.total_volume)
 			remove_object(O)
+
+/obj/machinery/reagentgrinder/MouseDrop_T(mob/living/carbon/human/target as mob, mob/user as mob)
+	if (!istype(target) || target.buckled || get_dist(user, src) > 1 || get_dist(user, target) > 1 || user.stat || istype(user, /mob/living/silicon/ai))
+		return
+	if(target == user)
+		if(target.h_style == "Floorlength Braid" || target.h_style == "Very Long Hair")
+			user.visible_message("\blue [user] looks like they're about to feed their own hair into the [src], but think better of it.", "\blue You grasp your hair and are about to feed it into the [src], but stop and come to your sense.")
+			return
+	src.add_fingerprint(user)
+	var/target_loc = target.loc
+	if(target != user && !user.restrained() && !user.stat && !user.weakened && !user.stunned && !user.paralysis)
+		if(target.h_style != "Cut Hair" || target.h_style != "Short Hair" || target.h_style != "Skinhead" || target.h_style != "Buzzcut" || target.h_style != "Crewcut" || target.h_style != "Bald" || target.h_style != "Balding Hair")
+			user.visible_message("\red [user] starts feeding [target]'s hair into the [src]!", "\red You start feeding [target]'s hair into the [src]!")
+		if(!do_after(usr, 50))
+			return
+		if(target_loc != target.loc)
+			return
+		if(target != user && !user.restrained() && !user.stat && !user.weakened && !user.stunned && !user.paralysis)
+			user.visible_message("\red [user] feeds the [target]'s hair into the [src] and flicks it on!", "\red You turn the [src] on!")
+			target.apply_damage(30, BRUTE, "head")
+			target.apply_damage(25, HALLOSS)
+			target.say("*scream")
+
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has fed [target.name]'s ([target.ckey]) hair into a [src].</font>")
+			target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had their hair fed into [src] by [user.name] ([user.ckey])</font>")
+			msg_admin_attack("[user] ([user.ckey]) fed [target]'s ([target.ckey]) in a [src]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+		else
+			return
+		if(!do_after(usr, 35))
+			return
+		if(target_loc != target.loc)
+			return
+		if(target != user && !user.restrained() && !user.stat && !user.weakened && !user.stunned && !user.paralysis)
+			user.visible_message("\red [user] starts tugging on [target]'s head as the [src] keeps running!", "\red You start tugging on [target]'s head!")
+			target.apply_damage(25, BRUTE, "head")
+			target.apply_damage(10, HALLOSS)
+			target.say("*scream")
+			spawn(10)
+			user.visible_message("\red [user] stops the [src] and leaves [target] resting as they are.", "\red You turn the [src] off and let go of [target].")

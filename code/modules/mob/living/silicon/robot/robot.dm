@@ -5,12 +5,12 @@
 	icon_state = "robot"
 	maxHealth = 200
 	health = 200
-	universal_speak = 1
 
 	var/sight_mode = 0
 	var/custom_name = ""
 	var/custom_sprite = 0 //Due to all the sprites involved, a var for our custom borgs may be best
 	var/crisis //Admin-settable for combat module use.
+	var/crisis_override = 0
 
 //Hud stuff
 
@@ -65,7 +65,6 @@
 	var/speed = 0 //Cause sec borgs gotta go fast //No they dont!
 	var/scrambledcodes = 0 // Used to determine if a borg shows up on the robotics console.  Setting to one hides them.
 	var/braintype = "Cyborg"
-	var/pose
 
 /mob/living/silicon/robot/New(loc,var/syndie = 0,var/unfinished = 0)
 	spark_system = new /datum/effect/effect/system/spark_spread()
@@ -89,18 +88,7 @@
 		hands.icon_state = "standard"
 		icon_state = "secborg"
 		modtype = "Security"
-	else if(istype(src,/mob/living/silicon/robot/drone))
-		laws = new /datum/ai_laws/drone()
-		connected_ai = null
-	else
-		laws = new /datum/ai_laws/nanotrasen()
-		connected_ai = select_active_ai_with_fewest_borgs()
-		if(connected_ai)
-			connected_ai.connected_robots += src
-			lawsync()
-			lawupdate = 1
-		else
-			lawupdate = 0
+	init()
 
 	radio = new /obj/item/device/radio/borg(src)
 	if(!scrambledcodes && !camera)
@@ -139,11 +127,19 @@
 	hud_list[IMPTRACK_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[SPECIALROLE_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
 
-
-	if(istype(src,/mob/living/silicon/robot/drone))
-		playsound(src.loc, 'sound/machines/twobeep.ogg', 50, 0)
+/mob/living/silicon/robot/proc/init()
+	aiCamera = new/obj/item/device/camera/siliconcam/robot_camera(src)
+	laws = new /datum/ai_laws/nanotrasen()
+	connected_ai = select_active_ai_with_fewest_borgs()
+	if(connected_ai)
+		connected_ai.connected_robots += src
+		lawsync()
+		photosync()
+		lawupdate = 1
 	else
-		playsound(loc, 'sound/voice/liveagain.ogg', 75, 1)
+		lawupdate = 0
+
+	playsound(loc, 'sound/voice/liveagain.ogg', 75, 1)
 
 // setup the PDA and its name
 /mob/living/silicon/robot/proc/setup_PDA()
@@ -164,8 +160,8 @@
 /mob/living/silicon/robot/proc/pick_module()
 	if(module)
 		return
-	var/list/modules = list("Standard", "Engineering", "Medical", "Miner", "Janitor", "Service", "Security")
-	if(crisis && security_level == SEC_LEVEL_RED) //Leaving this in until it's balanced appropriately.
+	var/list/modules = list("Standard", "Engineering", "Construction", "Surgeon", "Crisis", "Miner", "Janitor", "Service", "Clerical", "Security")
+	if((crisis && security_level == SEC_LEVEL_RED) || crisis_override) //Leaving this in until it's balanced appropriately.
 		src << "\red Crisis mode active. Combat module available."
 		modules+="Combat"
 	modtype = input("Please, select a module!", "Robot", null, null) in modules
@@ -190,6 +186,14 @@
 			module_sprites["Rich"] = "maximillion"
 			module_sprites["Default"] = "Service2"
 
+		if("Clerical")
+			module = new /obj/item/weapon/robot_module/clerical(src)
+			module_sprites["Waitress"] = "Service"
+			module_sprites["Kent"] = "toiletbot"
+			module_sprites["Bro"] = "Brobot"
+			module_sprites["Rich"] = "maximillion"
+			module_sprites["Default"] = "Service2"
+
 		if("Miner")
 			module = new /obj/item/weapon/robot_module/miner(src)
 			module.channels = list("Supply" = 1)
@@ -199,15 +203,26 @@
 			module_sprites["Advanced Droid"] = "droid-miner"
 			module_sprites["Treadhead"] = "Miner"
 
-		if("Medical")
-			module = new /obj/item/weapon/robot_module/medical(src)
+		if("Crisis")
+			module = new /obj/item/weapon/robot_module/crisis(src)
 			module.channels = list("Medical" = 1)
 			if(camera && "Robots" in camera.network)
 				camera.network.Add("Medical")
 			module_sprites["Basic"] = "Medbot"
+			module_sprites["Standard"] = "surgeon"
 			module_sprites["Advanced Droid"] = "droid-medical"
 			module_sprites["Needles"] = "medicalrobot"
+
+		if("Surgeon")
+			module = new /obj/item/weapon/robot_module/surgeon(src)
+			module.channels = list("Medical" = 1)
+			if(camera && "Robots" in camera.network)
+				camera.network.Add("Medical")
+
+			module_sprites["Basic"] = "Medbot"
 			module_sprites["Standard"] = "surgeon"
+			module_sprites["Advanced Droid"] = "droid-medical"
+			module_sprites["Needles"] = "medicalrobot"
 
 		if("Security")
 			module = new /obj/item/weapon/robot_module/security(src)
@@ -226,6 +241,15 @@
 			module_sprites["Antique"] = "engineerrobot"
 			module_sprites["Landmate"] = "landmate"
 
+		if("Construction")
+			module = new /obj/item/weapon/robot_module/construction(src)
+			module.channels = list("Engineering" = 1)
+			if(camera && "Robots" in camera.network)
+				camera.network.Add("Engineering")
+			module_sprites["Basic"] = "Engineering"
+			module_sprites["Antique"] = "engineerrobot"
+			module_sprites["Landmate"] = "landmate"
+
 		if("Janitor")
 			module = new /obj/item/weapon/robot_module/janitor(src)
 			module_sprites["Basic"] = "JanBot2"
@@ -236,6 +260,9 @@
 			module = new /obj/item/weapon/robot_module/combat(src)
 			module_sprites["Combat Android"] = "droid-combat"
 			module.channels = list("Security" = 1)
+
+	//languages
+	module.add_languages(src)
 
 	//Custom_sprite check and entry
 	if (custom_sprite == 1)
@@ -254,10 +281,13 @@
 /mob/living/silicon/robot/proc/updatename(var/prefix as text)
 	if(prefix)
 		modtype = prefix
-	if(istype(mmi, /obj/item/device/mmi/posibrain))
-		braintype = "Android"
+	if(mmi)
+		if(istype(mmi, /obj/item/device/mmi/posibrain))
+			braintype = "Android"
+		else
+			braintype = "Cyborg"
 	else
-		braintype = "Cyborg"
+		braintype = "Robot"
 
 	var/changed_name = ""
 	if(custom_name)
@@ -315,7 +345,7 @@
 // this verb lets cyborgs see the stations manifest
 /mob/living/silicon/robot/verb/cmd_station_manifest()
 	set category = "Robot Commands"
-	set name = "Show Station Manifest"
+	set name = "Show Crew Manifest"
 	show_station_manifest()
 
 
@@ -483,6 +513,7 @@
 	..(Proj)
 	updatehealth()
 	if(prob(75) && Proj.damage > 0) spark_system.start()
+	update_fire()
 	return 2
 
 
@@ -565,6 +596,10 @@
 				return
 
 	if (istype(W, /obj/item/weapon/weldingtool))
+		if (src == user)
+			user << "<span class='warning'>You lack the reach to be able to repair yourself.</span>"
+			return
+
 		if (!getBruteLoss())
 			user << "Nothing to fix here!"
 			return
@@ -730,6 +765,7 @@
 					connected_ai = null
 					user << "You emag [src]'s interface."
 					message_admins("[key_name_admin(user)] emagged cyborg [key_name_admin(src)].  Laws overridden.")
+					message_mods("[key_name_admin(user)] emagged cyborg [key_name_admin(src)].  Laws overridden.")
 					log_game("[key_name(user)] emagged cyborg [key_name(src)].  Laws overridden.")
 					clear_supplied_laws()
 					clear_inherent_laws()
@@ -784,6 +820,7 @@
 	else
 		if( !(istype(W, /obj/item/device/robotanalyzer) || istype(W, /obj/item/device/healthanalyzer)) )
 			spark_system.start()
+			update_fire()
 		return ..()
 
 /mob/living/silicon/robot/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
@@ -867,7 +904,7 @@
 
 		var/damage = rand(1, 3)
 
-		if(istype(src, /mob/living/carbon/slime/adult))
+		if(M.is_adult)
 			damage = rand(20, 40)
 		else
 			damage = rand(5, 35)
@@ -979,6 +1016,7 @@
 /mob/living/silicon/robot/proc/updateicon()
 
 	overlays.Cut()
+	update_fire()
 	if(stat == 0)
 		overlays += "eyes"
 		overlays.Cut()
@@ -1065,17 +1103,26 @@
 /mob/living/silicon/robot/Topic(href, href_list)
 	..()
 
+	if(usr != src)
+		return
+
 	if (href_list["showalerts"])
 		robot_alerts()
 		return
 
 	if (href_list["mod"])
 		var/obj/item/O = locate(href_list["mod"])
-		if (O)
+		if (istype(O) && (O.loc == src))
 			O.attack_self(src)
 
 	if (href_list["act"])
 		var/obj/item/O = locate(href_list["act"])
+		if (!istype(O))
+			return
+
+		if(!((O in src.module.modules) || (O == src.module.emag)))
+			return
+
 		if(activated(O))
 			src << "Already activated"
 			return
@@ -1220,20 +1267,6 @@
 		W.attack_self(src)
 
 	return
-
-/mob/living/silicon/robot/verb/pose()
-	set name = "Set Pose"
-	set desc = "Sets a description which will be shown when someone examines you."
-	set category = "IC"
-
-	pose =  copytext(sanitize(input(usr, "This is [src]. It is...", "Pose", null)  as text), 1, MAX_MESSAGE_LEN)
-
-/mob/living/silicon/robot/verb/set_flavor()
-	set name = "Set Flavour Text"
-	set desc = "Sets an extended description of your character's features."
-	set category = "IC"
-
-	flavor_text =  copytext(sanitize(input(usr, "Please enter your new flavour text.", "Flavour text", null)  as text), 1)
 
 /mob/living/silicon/robot/proc/choose_icon(var/triesleft, var/list/module_sprites)
 
