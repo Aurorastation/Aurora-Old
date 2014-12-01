@@ -166,7 +166,7 @@
 	origin_tech = "combat=2"
 	ammo_type = "/obj/item/ammo_casing/shotgun"
 	max_ammo = 8
-	m_amt = 100000
+	matter = list("metal" = 100000)
 /* no buckshots.  never again.  too hard to steal forever.
 /obj/item/ammo_magazine/shotgun/buck
 	name = "Ammunition Box (buckshot)"
@@ -177,17 +177,17 @@
 	name = "Ammunition Box (stun shells)"
 	ammo_type = "/obj/item/ammo_casing/shotgun/stunshell"
 	max_ammo = 8
-	m_amt = 20000
+	matter = list("metal" = 20000)
 
 /obj/item/ammo_magazine/shotgun/beanbag
 	name = "Ammunition Box (beanbag shells)"
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
 	max_ammo = 8
-	m_amt = 4000
+	matter = list("metal" = 4000)
 
 /obj/item/ammo_magazine/shotgun/incendiary
 	name = "Ammunition Box (incendiary shells)"
 	ammo_type = "/obj/item/ammo_casing/shotgun/incendiary"
 	max_ammo = 8
-	m_amt = 100000
+	matter = list("metal" = 100000)
 

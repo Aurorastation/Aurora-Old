@@ -58,7 +58,6 @@
 	dizziness = 0
 	jitteriness = 0
 
-
 	hud_updateflag |= 1 << HEALTH_HUD
 	hud_updateflag |= 1 << STATUS_HUD
 
@@ -86,6 +85,8 @@
 
 		verbs -= /mob/living/carbon/proc/release_control
 
+	callHook("death", list(src, gibbed))
+
 	//Check for heist mode kill count.
 	if(ticker.mode && ( istype( ticker.mode,/datum/game_mode/heist) ) )
 		//Check for last assailant's mutantrace.
@@ -106,7 +107,7 @@
 
 		update_canmove()
 		if(client)	blind.layer = 0
-	worldtod = world.time
+
 	tod = worldtime2text()		//weasellos time of death patch
 	if(mind)	mind.store_memory("Time of death: [tod]", 0)
 	if(ticker && ticker.mode)
@@ -114,8 +115,6 @@
 		sql_report_death(src)
 		ticker.mode.check_win()		//Calls the rounds wincheck, mainly for wizard, malf, and changeling now
 	return ..(gibbed)
-
-
 
 /mob/living/carbon/human/proc/makeSkeleton()
 	if(SKELETON in src.mutations)	return

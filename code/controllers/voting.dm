@@ -225,6 +225,9 @@ datum/controller/vote
 					choices.Add(config.votable_modes)
 				if("crew_transfer")
 					if(check_rights(R_ADMIN|R_MOD, 0))
+						if (get_security_level() == "red" || get_security_level() == "delta")
+							if(alert("It's code [get_security_level()], are you sure?",,"Yes","No")!="Yes")
+								return 0
 						question = "End the shift?"
 						choices.Add("Initiate Crew Transfer", "Continue The Round")
 					else
@@ -243,6 +246,8 @@ datum/controller/vote
 						var/option = capitalize(html_encode(input(usr,"Please enter an option or hit cancel to finish") as text|null))
 						if(!option || mode || !usr.client)	break
 						choices.Add(option)
+					if(!choices.len)
+						choices.Add("Yes","No")
 				else			return 0
 			mode = vote_type
 			initiator = initiator_key
@@ -302,10 +307,13 @@ datum/controller/vote
 		if(!C)	return
 		var/admin = 0
 		var/trialmin = 0
+		var/funmin = 0
 		if(C.holder)
 			admin = 1
 			if(C.holder.rights & R_ADMIN)
 				trialmin = 1
+			else if(C.holder.rights & R_FUN)
+				funmin = 1
 		voting |= C
 
 		. = "<html><head><title>Voting Panel</title></head><body>"
@@ -349,7 +357,7 @@ datum/controller/vote
 
 			. += "</li>"
 			//custom
-			if(trialmin)
+			if(trialmin||funmin)
 				. += "<li><a href='?src=\ref[src];vote=custom'>Custom</a></li>"
 			. += "</ul><hr>"
 		. += "<a href='?src=\ref[src];vote=close' style='position:absolute;right:50px'>Close</a></body></html>"

@@ -100,7 +100,7 @@
 			break
 		if(istype (M, /mob/dead/observer))
 			continue
-		if(M.buckled)
+		if(M.buckled || M.pinned.len)
 			continue
 
 		if(M.client)
@@ -120,8 +120,7 @@
 	return 1
 
 /obj/structure/closet/proc/toggle(mob/user as mob)
-	. = src.opened ? src.close() : src.open()
-	if(!.)
+	if(!(src.opened ? src.close() : src.open()))
 		user << "<span class='notice'>It won't budge!</span>"
 	return
 

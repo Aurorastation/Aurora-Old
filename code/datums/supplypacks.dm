@@ -1207,7 +1207,7 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 /*
  *Skull's additions to satisfy the cravings of any atmospheric tech begin here.
  */
-
+/*
 /datum/supply_packs/atmos_freezer
 	name = "Gas Cooling Unit"
 	contains = list(/obj/machinery/atmospherics/unary/cold_sink/freezer/cargo)
@@ -1225,7 +1225,7 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	containername = "gas heating unit crate"
 	access = access_atmospherics
 	group = "Engineering"
-
+*/
 ///datum/supply_packs/atmos_airtank
 //	name = "Large Air Tank"
 //	contains = list() //MAKE A LARGE RED AIRTANK THAT IS UNWRENCHED, AND CAN BE MANIPULATED AT SPAWN. This may cause issues, hueh.
@@ -1255,7 +1255,7 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	cost = 40
 	containertype = /obj/structure/closet/crate/secure
 	containername = "engineer hardsuit kit"
-	access_engine_equip
+	access = access_engine_equip
 	group = "Engineering"
 
 /datum/supply_packs/hardsuitcrate_s

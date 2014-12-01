@@ -63,7 +63,21 @@ var/global/floorIsLava = 0
 		<a href='?src=\ref[usr];priv_msg=\ref[M]'>PM</a>
 	"}
 
-	if(check_rights(R_ADMIN|R_MOD))
+	if(check_rights(R_FUN,0) && !check_rights(R_ADMIN|R_MOD,0))
+		body += {"
+			 -<a href='?src=\ref[src];traitor=\ref[M]'>TP</a> -
+			<a href='?src=\ref[src];subtlemessage=\ref[M]'>SM</a> -
+			<a href='?src=\ref[src];adminplayerobservejump=\ref[M]'>JMP</a>\] </b><br>
+			<b>Mob type</b> = [M.type]<br><br>
+			<A href='?src=\ref[src];jumpto=\ref[M]'><b>Jump to</b></A> |
+			<A href='?src=\ref[src];getmob=\ref[M]'>Get</A> |
+			<A href='?src=\ref[src];sendmob=\ref[M]'>Send To</A>
+			<br><br>\[
+			<A href='?src=\ref[src];narrateto=\ref[M]'>Narrate to</A> |
+			<A href='?src=\ref[src];subtlemessage=\ref[M]'>Subtle message</A>
+		"}
+
+	if(check_rights(R_ADMIN|R_MOD,0))
 		body += {"
 			 -<a href='?src=\ref[src];traitor=\ref[M]'>TP</a> -
 			<a href='?src=\ref[src];subtlemessage=\ref[M]'>SM</a> -
@@ -77,7 +91,11 @@ var/global/floorIsLava = 0
 		"}
 
 		if(M.client)
-			body += "| <A HREF='?src=\ref[src];sendtoprison=\ref[M]'>Prison</A> | "
+			body += {"
+				| <A HREF='?src=\ref[src];sendtoprison=\ref[M]'>Prison</A> |
+				<a href='?src=\ref[src];admin_wind_player=\ref[M]'>Wind</a>
+				<br>
+			"}
 			var/muted = M.client.prefs.muted
 			body += {"<br><b>Mute: </b>
 				\[<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_IC]'><font color='[(muted & MUTE_IC)?"red":"blue"]'>IC</font></a> |
@@ -636,6 +654,20 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=spacevines'>Spawn Space-Vines</A><BR>
 			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
 			<BR>
+			<B>Shuttles</B><BR>
+			<BR>
+			<A href='?src=\ref[src];secretsfun=launchshuttle'>Launch a shuttle</A><BR>
+			<A href='?src=\ref[src];secretsfun=forcelaunchshuttle'>Force launch a shuttle</A><BR>
+			"}
+	if(check_rights(R_DEBUG,0))
+		dat += {"
+			<I>These shouldn't be used in game</I><BR>
+			<A href='?src=\ref[src];secretsfun=jumpshuttle'>Jump a shuttle</A><BR>
+			<A href='?src=\ref[src];secretsfun=moveshuttle'>Move a shuttle</A><BR>
+			"}
+	if(check_rights(R_FUN,0))
+		dat += {"
+			<BR>
 			<B>Fun Secrets</B><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=sec_clothes'>Remove 'internal' clothing</A><BR>
@@ -657,10 +689,6 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=fakeguns'>Make all items look like guns</A><BR>
 			<A href='?src=\ref[src];secretsfun=schoolgirl'>Japanese Animes Mode</A><BR>
 			<A href='?src=\ref[src];secretsfun=eagles'>Egalitarian Station Mode</A><BR>
-			<A href='?src=\ref[src];secretsfun=moveadminshuttle'>Move Administration Shuttle</A><BR>
-			<A href='?src=\ref[src];secretsfun=moveferry'>Move Ferry</A><BR>
-			<A href='?src=\ref[src];secretsfun=movealienship'>Move Alien Dinghy</A><BR>
-			<A href='?src=\ref[src];secretsfun=moveminingshuttle'>Move Mining Shuttle</A><BR>
 			<A href='?src=\ref[src];secretsfun=blackout'>Break all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=whiteout'>Fix all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=friendai'>Best Friend AI</A><BR>
@@ -740,11 +768,49 @@ var/global/floorIsLava = 0
 	ooc_allowed = !( ooc_allowed )
 	if (ooc_allowed)
 		world << "<B>The OOC channel has been globally enabled!</B>"
+		ooc_dev_allowed = 1
+		ooc_mod_allowed = 1
 	else
 		world << "<B>The OOC channel has been globally disabled!</B>"
 	log_admin("[key_name(usr)] toggled OOC.")
 	message_admins("[key_name_admin(usr)] toggled OOC.", 1)
 	feedback_add_details("admin_verb","TOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/datum/admins/proc/toggledevooc()
+	set category = "Server"
+	set desc="Toggles Developer OOC"
+	set name="Toggle Dev OOC"
+	if(ooc_allowed)
+		usr << "OOC needs to be muted first"
+		return
+	ooc_dev_allowed = !( ooc_dev_allowed )
+	var/looc_status
+	if (ooc_dev_allowed)
+		looc_status = "Enabled"
+	else
+		looc_status = "Disabled"
+	log_admin("[key_name(usr)] [looc_status] Developer OOC.")
+	message_admins("[key_name_admin(usr)] [looc_status] Developer OOC.", 1)
+	msg_scopes("<B>Developer OOC has been [looc_status]</B>",1,1)
+	feedback_add_details("admin_verb","TDOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/datum/admins/proc/togglemodooc()
+	set category = "Server"
+	set desc="Toggles Moderators OOC"
+	set name="Toggle Mod OOC"
+	if(ooc_allowed)
+		usr << "OOC needs to be muted first"
+		return
+	ooc_mod_allowed = !( ooc_mod_allowed )
+	var/looc_status
+	if (ooc_mod_allowed)
+		looc_status = "Enabled"
+	else
+		looc_status = "Disabled"
+	log_admin("[key_name(usr)] toggled Mod OOC.")
+	message_admins("[key_name_admin(usr)] [looc_status] Moderator OOC.", 1)
+	message_mods("<B>Moderator OOC has been [looc_status]</B>")
+	feedback_add_details("admin_verb","TMOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /datum/admins/proc/togglelooc()
 	set category = "Server"
@@ -753,14 +819,49 @@ var/global/floorIsLava = 0
 	looc_allowed = !( looc_allowed )
 	if (looc_allowed)
 		world << "<B>The LOOC channel has been globally enabled!</B>"
+		looc_dev_allowed = 1
+		looc_mod_allowed = 1
 	else
 		world << "<B>The LOOC channel has been globally disabled!</B>"
 	log_admin("[key_name(usr)] toggled LOOC.")
 	message_admins("[key_name_admin(usr)] toggled LOOC.", 1)
 	feedback_add_details("admin_verb","TLOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+/datum/admins/proc/toggledevlooc()
+	set category = "Server"
+	set desc="Toggles Developer LOOC"
+	set name="Toggle Dev LOOC"
+	if(looc_allowed)
+		usr << "Looc needs to be muted first"
+		return
+	looc_dev_allowed = !( looc_dev_allowed )
+	var/looc_status
+	if (looc_dev_allowed)
+		looc_status = "Enabled"
+	else
+		looc_status = "Disabled"
+	log_admin("[key_name(usr)] [looc_status] Developer LOOC.")
+	message_admins("[key_name_admin(usr)] [looc_status] Developer LOOC.", 1)
+	msg_scopes("<B>Developer LOOC has been [looc_status]</B>",1,1)
+	feedback_add_details("admin_verb","TDLOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-
+/datum/admins/proc/togglemodlooc()
+	set category = "Server"
+	set desc="Toggles Moderator LOOC"
+	set name="Toggle Mod LOOC"
+	if(looc_allowed)
+		usr << "Looc needs to be muted first"
+		return
+	looc_mod_allowed = !( looc_mod_allowed )
+	var/looc_status
+	if (looc_mod_allowed)
+		looc_status = "Enabled"
+	else
+		looc_status = "Disabled"
+	log_admin("[key_name(usr)] [looc_status] Moderator LOOC.")
+	message_admins("[key_name_admin(usr)] [looc_status] Moderator LOOC.", 1)
+	message_mods("<B>Moderator LOOC has been [looc_status]</B>")
+	feedback_add_details("admin_verb","TMLOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /datum/admins/proc/toggledsay()
 	set category = "Server"
@@ -879,8 +980,8 @@ var/global/floorIsLava = 0
 	if (!ticker || ticker.current_state != GAME_STATE_PREGAME)
 		ticker.delay_end = !ticker.delay_end
 		log_admin("[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].")
-		message_admins("\blue [key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].", 1)
-		message_mods("\blue [key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].", 1)
+		message_admins("\blue [key_name(usr)] [ticker.delay_end ? "<font color=#FF0000>delayed</font> the round end" : "has made the round end <font color=#00FF00>normally</font>"].", 1)
+		message_mods("\blue [key_name(usr)] [ticker.delay_end ? "<font color=#FF0000>delayed</font> the round end" : "has made the round end <font color=#00FF00>normally</font>"].", 1)
 		return //alert("Round end delayed", null, null, null, null, null)
 	going = !( going )
 	if (!( going ))

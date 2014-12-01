@@ -449,7 +449,7 @@
 
 	if(isrobot(user))
 		return
-
+		
 	..()
 
 /obj/structure/table/holotable/wood

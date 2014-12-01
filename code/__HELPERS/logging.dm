@@ -9,14 +9,18 @@
 
 
 /proc/error(msg)
+	msg_scopes("## ERROR: [msg]")
 	world.log << "## ERROR: [msg][log_end]"
 
+#define WARNING(MSG) warning("[MSG] in [__FILE__] at line [__LINE__] src: [src] usr: [usr].")
 //print a warning message to world.log
 /proc/warning(msg)
+	msg_scopes("## WARNING: [msg]")
 	world.log << "## WARNING: [msg][log_end]"
 
 //print a testing-mode debug message to world.log
 /proc/testing(msg)
+	msg_scopes("## TESTING: [msg]")
 	world.log << "## TESTING: [msg][log_end]"
 
 /proc/log_admin(text)
@@ -84,7 +88,7 @@
 //SoundScopes extra stuffs
 //I'm sending debug messages through here for when an admin log is made at the same time.
 //What's the point in making 2 recorded logs for one thing.
-/proc/msg_scopes(var/msg, tell_devs = 0)
+/proc/msg_scopes(var/msg, tell_devs = 0, override = 0)
 	if(tell_devs)
 		msg = "DEBUG: [msg]"
 	else
@@ -93,7 +97,7 @@
 	for(var/client/C in admins)
 		if(R_DEV & C.holder.rights)
 			if(tell_devs)
-				if((C.prefs.toggles & CHAT_DEBUGLOGS) && !(R_ADMIN & C.holder.rights))
+				if(((C.prefs.toggles & CHAT_DEBUGLOGS) || (override)) && !(C.holder.rights & R_ADMIN))
 					C << msg
 			if(R_ADMIN & C.holder.rights)
 				if(C.prefs.toggles & CHAT_SCOPES_DEBUG)

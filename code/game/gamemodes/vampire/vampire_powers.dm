@@ -109,7 +109,14 @@
 	if(C==usr)
 		M.current << "\red You can't do that to yourself"
 		return
-	M.current.visible_message("<span class='warning'>[M]'s eyes flash briefly as he stares into [C.name]'s eyes</span>")
+
+	var/vampgender
+	if(M.current.gender == "male")
+		vampgender = "he"
+	else
+		vampgender = "she"
+
+	M.current.visible_message("<span class='warning'>[M]'s eyes flash briefly as [vampgender] stares into [C.name]'s eyes</span>")
 //	M.current.remove_vampire_blood(20) Moved to remove if it works only.
 	if(M.current.vampire_power(0, 0)) //if(M.current.vampire_power(20, 0))
 		M.current.verbs -= /client/vampire/proc/vampire_hypnotise
