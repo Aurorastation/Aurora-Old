@@ -1,4 +1,4 @@
-#define EMITTER_DAMAGE_POWER_TRANSFER 450 //used to transfer power to containment field generators
+#define EMITTER_DAMAGE_POWER_TRANSFER 2500 //used to transfer power to containment field generators
 
 /obj/machinery/power/emitter
 	name = "Emitter"
@@ -16,9 +16,6 @@
 	var/active = 0
 	var/powered = 0
 	var/fire_delay = 100
-	var/max_burst_delay = 100
-	var/min_burst_delay = 20
-	var/burst_shots = 3
 	var/last_shot = 0
 	var/shot_number = 0
 	var/state = 0
@@ -54,6 +51,7 @@
 		icon_state = "emitter_+a"
 	else
 		icon_state = "emitter"
+
 
 /obj/machinery/power/emitter/attack_hand(mob/user as mob)
 	src.add_fingerprint(user)
@@ -109,7 +107,8 @@
 		return
 	if(((src.last_shot + src.fire_delay) <= world.time) && (src.active == 1))
 
-		if(surplus() >= active_power_usage && add_load(active_power_usage) >= active_power_usage) //does the laser have enough power to shoot?
+		if(!active_power_usage || avail(active_power_usage))
+			add_load(active_power_usage)
 			if(!powered)
 				powered = 1
 				update_icon()
@@ -122,19 +121,13 @@
 			return
 
 		src.last_shot = world.time
-		if(src.shot_number < burst_shots)
+		if(src.shot_number < 3)
 			src.fire_delay = 2
 			src.shot_number ++
 		else
-			src.fire_delay = rand(min_burst_delay, max_burst_delay)
+			src.fire_delay = rand(20,100)
 			src.shot_number = 0
-		
-		//need to calculate the power per shot as the emitter doesn't fire continuously.
-		var/burst_time = (min_burst_delay + max_burst_delay)/2 + 2*(burst_shots-1)
-		var/power_per_shot = active_power_usage * (burst_time/10) / burst_shots
 		var/obj/item/projectile/beam/emitter/A = new /obj/item/projectile/beam/emitter( src.loc )
-		A.damage = round(power_per_shot/EMITTER_DAMAGE_POWER_TRANSFER)
-		
 		playsound(src.loc, 'sound/weapons/emitter.ogg', 25, 1)
 		if(prob(35))
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
