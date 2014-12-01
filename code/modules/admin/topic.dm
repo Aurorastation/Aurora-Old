@@ -2019,6 +2019,8 @@
 					alert("The [shuttle_tag] shuttle launch cannot be forced at this time. It's busy, or hasn't been launched yet.")
 
 			if("jumpshuttle")
+				if(!check_rights(R_DEBUG))	return
+
 				if(!shuttle_controller) return // Something is very wrong, the shuttle controller has not been created.
 
 				feedback_inc("admin_secrets_fun_used",1)
@@ -2051,6 +2053,7 @@
 					log_admin("[key_name_admin(usr)] has initiated a jump from [origin_area] to [destination_area] for the [shuttle_tag] shuttle")
 
 			if("moveshuttle")
+				if(!check_rights(R_DEBUG))	return
 
 				if(!shuttle_controller) return // Something is very wrong, the shuttle controller has not been created.
 
