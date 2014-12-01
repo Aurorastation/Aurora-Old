@@ -107,7 +107,6 @@
 	return 1
 
 /mob/living/carbon/human/bst
-	universal_speak = 1
 	universal_understand = 1
 	status_flags = GODMODE
 	var/bluespace_trail = new /datum/effect/effect/system/ion_trail_follow

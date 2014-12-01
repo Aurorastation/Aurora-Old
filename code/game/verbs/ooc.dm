@@ -97,6 +97,10 @@ var/global/normal_ooc_colour = "#002eb8"
 	set name = "Set Player OOC Colour"
 	set desc = "Set to yellow for eye burning goodness."
 	set category = "Fun"
+	if(!check_rights(R_ADMIN))
+		return
+	if(!check_rights(R_FUN))
+		return
 	normal_ooc_colour = newColor
 
 

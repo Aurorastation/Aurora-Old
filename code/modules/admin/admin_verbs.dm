@@ -134,8 +134,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/object_talk,
 	/client/proc/one_click_antag,
 	/client/proc/secrets,
-	/client/proc/send_space_ninja,
-	/client/proc/toggle_random_events
+	/client/proc/send_space_ninja
 	)
 var/list/admin_verbs_dev = list(
 	/client/proc/dsay,
@@ -929,6 +928,8 @@ var/list/admin_verbs_mod = list(
 	set category = "Fun"
 	set name = "Man Up"
 	set desc = "Tells mob to man up and deal with it."
+	if(!check_rights(R_ADMIN))
+		return
 
 	T << "<span class='notice'><b><font size=3>Man up and deal with it.</font></b></span>"
 	T << "<span class='notice'>Move on.</span>"
@@ -940,6 +941,8 @@ var/list/admin_verbs_mod = list(
 	set category = "Fun"
 	set name = "Man Up Global"
 	set desc = "Tells everyone to man up and deal with it."
+	if(!check_rights(R_ADMIN))
+		return
 
 	for (var/mob/T as mob in mob_list)
 		T << "<br><center><span class='notice'><b><font size=4>Man up.<br> Deal with it.</font></b><br>Move on.</span></center><br>"
