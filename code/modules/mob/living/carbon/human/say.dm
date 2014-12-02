@@ -56,9 +56,11 @@
 		if(ending=="?")
 			verb="asks"
 
-//	if(speaking && speaking.flags & SIGNLANG || speaking.flags & NONVERBAL)
-//		..(message, speaking, verb, alt_name, italics, message_range)
-//		return
+	if(speaking && speaking.flags & SIGNLANG)
+		message_mode = null
+		..(message, speaking, verb, alt_name, italics, message_range)
+		return
+
 
 	var/list/obj/item/used_radios = new
 
