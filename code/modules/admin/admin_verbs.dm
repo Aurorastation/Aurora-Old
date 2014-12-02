@@ -189,7 +189,8 @@ var/list/admin_verbs_server = list(
 	/datum/admins/proc/toggle_aliens,
 	/datum/admins/proc/toggle_space_ninja,
 	/client/proc/toggle_random_events,
-	/client/proc/check_customitem_activity
+	/client/proc/check_customitem_activity,
+	/client/proc/nanomapgen_DumpImage
 	)
 var/list/admin_verbs_debug = list(
 	/client/proc/getruntimelog,                     /*allows us to access runtime logs to somebody*/
@@ -377,7 +378,11 @@ var/list/admin_verbs_mod = list(
 		/client/proc/cmd_admin_grantfullaccess,
 		/client/proc/kaboom,
 		/client/proc/splash,
-		/client/proc/cmd_admin_areatest
+		/client/proc/cmd_admin_areatest,
+		/client/proc/view_power_update_stats_area,
+		/client/proc/view_power_update_stats_machines,
+		/client/proc/toggle_power_update_profiling,
+		/client/proc/atmos_toggle_debug
 		)
 
 /client/proc/hide_most_verbs()//Allows you to keep some functionality while hiding some verbs
