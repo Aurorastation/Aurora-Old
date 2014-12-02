@@ -197,7 +197,10 @@
 				permissionlist[rights2text(i)] = i
 			var/new_permission = input("Select a permission to turn on/off", "Permission toggle", null, null) as null|anything in permissionlist
 			if(!new_permission)	return
+			var/client/C = directory[adm_ckey]
+			D.disassociate()
 			D.rights ^= permissionlist[new_permission]
+			D.associate(C)
 
 			message_admins("[key_name_admin(usr)] toggled the [new_permission] permission of [adm_ckey]")
 			log_admin("[key_name(usr)] toggled the [new_permission] permission of [adm_ckey]")
@@ -1188,7 +1191,7 @@
 		message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Observer.)", 1)
 
 	else if(href_list["revive"])
-		if(!check_rights(R_REJUVINATE))	return
+		if(!check_rights(R_REJUVINATE|R_FUN))	return
 
 		var/mob/living/L = locate(href_list["revive"])
 		if(!istype(L))
@@ -1310,7 +1313,7 @@
 		show_player_panel(M)
 
 	else if(href_list["adminplayerobservejump"])
-		if(!check_rights(R_MOD,0) && !check_rights(R_ADMIN))	return
+		if(!check_rights(R_ADMIN|R_MOD|R_FUN))	return
 
 		var/mob/M = locate(href_list["adminplayerobservejump"])
 
@@ -1323,7 +1326,7 @@
 		check_antagonists()
 
 	else if(href_list["adminplayerobservecoodjump"])
-		if(!check_rights(R_MOD,0) && !check_rights(R_ADMIN))	return
+		if(!check_rights(R_ADMIN|R_MOD|R_FUN))	return
 
 		var/x = text2num(href_list["X"])
 		var/y = text2num(href_list["Y"])
@@ -1540,18 +1543,18 @@
 
 		src.owner << "Message reply to transmitted successfully."
 		log_admin("[key_name(src.owner)] replied to a fax message from [key_name(H)]: [input]")
-		message_admins("[key_name_admin(src.owner)] replied to a fax message from [key_name_admin(H)]", 1)
+		message_admins("[key_name_admin(src.owner)] replied to a fax message from [key_name_admin(H)] <a href='?_src_=holder;CentcommFaxView=\ref[input]'>view message</a>", 1)
 		message_mods("[key_name_admin(src.owner)] replied to a fax message from [key_name_admin(H)]")
 
 
 	else if(href_list["jumpto"])
-		if(!check_rights(R_ADMIN))	return
+		if(!check_rights(R_ADMIN|R_FUN))	return
 
 		var/mob/M = locate(href_list["jumpto"])
 		usr.client.jumptomob(M)
 
 	else if(href_list["getmob"])
-		if(!check_rights(R_ADMIN))	return
+		if(!check_rights(R_ADMIN|R_FUN))	return
 
 		if(alert(usr, "Confirm?", "Message", "Yes", "No") != "Yes")	return
 		var/mob/M = locate(href_list["getmob"])
@@ -1564,19 +1567,19 @@
 		usr.client.sendmob(M)
 
 	else if(href_list["narrateto"])
-		if(!check_rights(R_ADMIN))	return
+		if(!check_rights(R_ADMIN|R_FUN))	return
 
 		var/mob/M = locate(href_list["narrateto"])
 		usr.client.cmd_admin_direct_narrate(M)
 
 	else if(href_list["subtlemessage"])
-		if(!check_rights(R_MOD,0) && !check_rights(R_ADMIN))  return
+		if(!check_rights(R_MOD,0) && !check_rights(R_ADMIN|R_FUN))  return
 
 		var/mob/M = locate(href_list["subtlemessage"])
 		usr.client.cmd_admin_subtle_message(M)
 
 	else if(href_list["traitor"])
-		if(!check_rights(R_ADMIN|R_MOD))	return
+		if(!check_rights(R_ADMIN|R_MOD|R_FUN))	return
 
 		if(!ticker || !ticker.mode)
 			alert("The game hasn't started yet!")
@@ -2016,6 +2019,8 @@
 					alert("The [shuttle_tag] shuttle launch cannot be forced at this time. It's busy, or hasn't been launched yet.")
 
 			if("jumpshuttle")
+				if(!check_rights(R_DEBUG))	return
+
 				if(!shuttle_controller) return // Something is very wrong, the shuttle controller has not been created.
 
 				feedback_inc("admin_secrets_fun_used",1)
@@ -2048,6 +2053,7 @@
 					log_admin("[key_name_admin(usr)] has initiated a jump from [origin_area] to [destination_area] for the [shuttle_tag] shuttle")
 
 			if("moveshuttle")
+				if(!check_rights(R_DEBUG))	return
 
 				if(!shuttle_controller) return // Something is very wrong, the shuttle controller has not been created.
 
@@ -2783,5 +2789,8 @@
 		if(alert("Wind [M]?",,"Yes","No")!="Yes")
 			return
 
-		M.weakened = 500
+		M.SetWeakened(200)
+		log_admin("[key_name(usr)] winded [key_name(M)]!")
+		message_admins("[key_name_admin(usr)] winded [key_name_admin(M)]!", 1)
+		message_mods("[key_name_admin(usr)] winded [key_name_admin(M)]!")
 		return

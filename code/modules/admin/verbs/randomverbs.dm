@@ -992,7 +992,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	set name = "Toggle random events on/off"
 
 	set desc = "Toggles random events such as meteors, black holes, blob (but not space dust) on/off"
-	if(!check_rights(R_SERVER))	return
+	if(!check_rights(R_SERVER|R_FUN))	return
 
 	if(!config.allow_random_events)
 		config.allow_random_events = 1

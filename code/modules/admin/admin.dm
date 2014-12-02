@@ -63,7 +63,21 @@ var/global/floorIsLava = 0
 		<a href='?src=\ref[usr];priv_msg=\ref[M]'>PM</a>
 	"}
 
-	if(check_rights(R_ADMIN|R_MOD))
+	if(check_rights(R_FUN,0) && !check_rights(R_ADMIN|R_MOD,0))
+		body += {"
+			 -<a href='?src=\ref[src];traitor=\ref[M]'>TP</a> -
+			<a href='?src=\ref[src];subtlemessage=\ref[M]'>SM</a> -
+			<a href='?src=\ref[src];adminplayerobservejump=\ref[M]'>JMP</a>\] </b><br>
+			<b>Mob type</b> = [M.type]<br><br>
+			<A href='?src=\ref[src];jumpto=\ref[M]'><b>Jump to</b></A> |
+			<A href='?src=\ref[src];getmob=\ref[M]'>Get</A> |
+			<A href='?src=\ref[src];sendmob=\ref[M]'>Send To</A>
+			<br><br>\[
+			<A href='?src=\ref[src];narrateto=\ref[M]'>Narrate to</A> |
+			<A href='?src=\ref[src];subtlemessage=\ref[M]'>Subtle message</A>
+		"}
+
+	if(check_rights(R_ADMIN|R_MOD,0))
 		body += {"
 			 -<a href='?src=\ref[src];traitor=\ref[M]'>TP</a> -
 			<a href='?src=\ref[src];subtlemessage=\ref[M]'>SM</a> -
@@ -77,7 +91,11 @@ var/global/floorIsLava = 0
 		"}
 
 		if(M.client)
-			body += "| <A HREF='?src=\ref[src];sendtoprison=\ref[M]'>Prison</A> | "
+			body += {"
+				| <A HREF='?src=\ref[src];sendtoprison=\ref[M]'>Prison</A> |
+				<a href='?src=\ref[src];admin_wind_player=\ref[M]'>Wind</a>
+				<br>
+			"}
 			var/muted = M.client.prefs.muted
 			body += {"<br><b>Mute: </b>
 				\[<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_IC]'><font color='[(muted & MUTE_IC)?"red":"blue"]'>IC</font></a> |
@@ -636,6 +654,20 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=spacevines'>Spawn Space-Vines</A><BR>
 			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
 			<BR>
+			<B>Shuttles</B><BR>
+			<BR>
+			<A href='?src=\ref[src];secretsfun=launchshuttle'>Launch a shuttle</A><BR>
+			<A href='?src=\ref[src];secretsfun=forcelaunchshuttle'>Force launch a shuttle</A><BR>
+			"}
+	if(check_rights(R_DEBUG,0))
+		dat += {"
+			<I>These shouldn't be used in game</I><BR>
+			<A href='?src=\ref[src];secretsfun=jumpshuttle'>Jump a shuttle</A><BR>
+			<A href='?src=\ref[src];secretsfun=moveshuttle'>Move a shuttle</A><BR>
+			"}
+	if(check_rights(R_FUN,0))
+		dat += {"
+			<BR>
 			<B>Fun Secrets</B><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=sec_clothes'>Remove 'internal' clothing</A><BR>
@@ -657,10 +689,6 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=fakeguns'>Make all items look like guns</A><BR>
 			<A href='?src=\ref[src];secretsfun=schoolgirl'>Japanese Animes Mode</A><BR>
 			<A href='?src=\ref[src];secretsfun=eagles'>Egalitarian Station Mode</A><BR>
-			<A href='?src=\ref[src];secretsfun=moveadminshuttle'>Move Administration Shuttle</A><BR>
-			<A href='?src=\ref[src];secretsfun=moveferry'>Move Ferry</A><BR>
-			<A href='?src=\ref[src];secretsfun=movealienship'>Move Alien Dinghy</A><BR>
-			<A href='?src=\ref[src];secretsfun=moveminingshuttle'>Move Mining Shuttle</A><BR>
 			<A href='?src=\ref[src];secretsfun=blackout'>Break all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=whiteout'>Fix all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=friendai'>Best Friend AI</A><BR>

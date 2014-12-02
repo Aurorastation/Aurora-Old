@@ -31,7 +31,7 @@
 	//This whole section looks like a hack, I don't like it.
 	var/T = get_turf(usr)
 	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(5, 1, T)
+	s.set_up(3, 1, T)
 	s.start()
 	var/mob/living/carbon/human/bst/bst = new(get_turf(T))
 //	bst.original_mob = usr
@@ -107,7 +107,6 @@
 	return 1
 
 /mob/living/carbon/human/bst
-	universal_speak = 1
 	universal_understand = 1
 	status_flags = GODMODE
 	var/bluespace_trail = new /datum/effect/effect/system/ion_trail_follow
@@ -168,6 +167,12 @@
 			voice_name = "Bluespace Cat"
 			real_name = "Bluespace Cat"
 			mind.name = "Bluespace Cat"
+			if(wear_id)
+				var/obj/item/weapon/card/id/id = wear_id
+				if(istype(wear_id, /obj/item/device/pda))
+					var/obj/item/device/pda/pda = wear_id
+					id = pda.id
+				id.registered_name = "Bluespace Cat"
 			gender = "female"
 			regenerate_icons()
 		else
@@ -182,6 +187,12 @@
 			voice_name = "Bluespace Bot"
 			real_name = "Bluespace Bot"
 			mind.name = "Bluespace Bot"
+			if(wear_id)
+				var/obj/item/weapon/card/id/id = wear_id
+				if(istype(wear_id, /obj/item/device/pda))
+					var/obj/item/device/pda/pda = wear_id
+					id = pda.id
+				id.registered_name = "Bluespace Bot"
 			regenerate_icons()
 		else
 			ghostize(0)
@@ -194,6 +205,12 @@
 			voice_name = "Bluespace Tree"
 			real_name = "Bluespace Tree"
 			mind.name = "Bluespace Tree"
+			if(wear_id)
+				var/obj/item/weapon/card/id/id = wear_id
+				if(istype(wear_id, /obj/item/device/pda))
+					var/obj/item/device/pda/pda = wear_id
+					id = pda.id
+				id.registered_name = "Bluespace Tree"
 			regenerate_icons()
 		else
 			ghostize(0)
@@ -207,6 +224,12 @@
 			voice_name = "Bluespace Snake"
 			real_name = "Bluespace Snake"
 			mind.name = "Bluespace Snake"
+			if(wear_id)
+				var/obj/item/weapon/card/id/id = wear_id
+				if(istype(wear_id, /obj/item/device/pda))
+					var/obj/item/device/pda/pda = wear_id
+					id = pda.id
+				id.registered_name = "Bluespace Snake"
 			regenerate_icons()
 		else
 			ghostize(0)
@@ -220,6 +243,12 @@
 			voice_name = "Bluespace Squid"
 			real_name = "Bluespace Squid"
 			mind.name = "Bluespace Squid"
+			if(wear_id)
+				var/obj/item/weapon/card/id/id = wear_id
+				if(istype(wear_id, /obj/item/device/pda))
+					var/obj/item/device/pda/pda = wear_id
+					id = pda.id
+				id.registered_name = "Bluespace Squid"
 			gender = "female"
 			regenerate_icons()
 		else

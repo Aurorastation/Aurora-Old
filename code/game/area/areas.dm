@@ -328,16 +328,17 @@
 			L << sound(sound, repeat = 0, wait = 0, volume = musVolume, channel = 1)
 			L.client.played = world.time
 
-/area/proc/gravitychange(var/gravitystate = 0, var/area/A)
+/area/proc/gravitychange(var/gravitystate = 0, var/area/A, var/bypass_thunk = 0)
 
 	A.has_gravity = gravitystate
 
 	for(var/area/SubA in A.related)
 		SubA.has_gravity = gravitystate
 
-		if(gravitystate)
-			for(var/mob/living/carbon/human/M in SubA)
-				thunk(M)
+		if(!bypass_thunk)
+			if(gravitystate)
+				for(var/mob/living/carbon/human/M in SubA)
+					thunk(M)
 
 /area/proc/thunk(mob)
 	if(istype(mob,/mob/living/carbon/human/))  // Only humans can wear magboots, so we give them a chance to.

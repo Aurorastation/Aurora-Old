@@ -146,9 +146,6 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	middle.overlays += "activated"
 	log_debug("Gravity Generator spawned: initialize()")
 	update_list()
-	spawn(100)
-		if(round_start >= 1)
-			round_start--
 
 //
 // Generator an admin can spawn
@@ -462,8 +459,8 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 					A.gravitychange(A.has_gravity,A,1)
 				else
 					A.gravitychange(A.has_gravity,A)
-			if(round_start == 1)
-				round_start = 0
+			if(round_start >= 1)
+				round_start--
 			gravity_field_generators["[T.z]"] |= src
 		else
 			msg_scopes("Here is a lovely list of floaty people")

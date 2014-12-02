@@ -30,9 +30,11 @@
 	icon_state = "engine"
 
 /area/shuttle/engineering/station
+	name = "Engineering Shuttle"
 	icon_state = "shuttle2"
 
 /area/shuttle/engineering/outpost
+	name = "Engineering Shuttle"
 	icon_state = "shuttle"
 
 /area/engi/gas
