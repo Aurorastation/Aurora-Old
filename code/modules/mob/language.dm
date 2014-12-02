@@ -82,14 +82,14 @@
 	key = "z"
 	flags = WHITELISTED
 
-/datum/language/sign
+/*/datum/language/sign
 	name = "Sign language"
 	desc = "A mixture of manual communication and body-languaged, used to communication with those who have impaired hearing."
 	speech_verb = "signs"
 	signlang_verb = list("signs")
 	key = "4"
 	flags = SIGNLANG
-
+*/
 // Language handling.
 /mob/proc/add_language(var/language)
 
