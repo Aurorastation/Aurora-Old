@@ -56,14 +56,14 @@
 
 /obj/item/weapon/stool/proc/deploy(var/mob/user)
 
-	if(!origin)
-		del src
+//	if(!origin)
+//		del src
 
 	origin.loc = get_turf(src)
 
-	if(user)
-		user.u_equip(src)
-		user.visible_message("\blue [user] puts [src] down.", "\blue You put [src] down.")
+//	if(user)
+	user.u_equip(src)
+	user.visible_message("\blue [user] puts [src] down.", "\blue You put [src] down.")
 
 	del src
 
