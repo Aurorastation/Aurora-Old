@@ -415,6 +415,7 @@
 	close_up()
 
 //I'm not sure how much of this is necessary, but I would rather avoid issues.
+//You gave issues from not checking if their is a client there. Runtimes!
 /mob/living/silicon/pai/proc/close_up()
 
 	last_special = world.time + 100
@@ -426,8 +427,10 @@
 	if(istype(T)) T.visible_message("<b>[src]</b> neatly folds inwards, compacting down to a rectangular card.")
 
 	src.stop_pulling()
-	src.client.perspective = EYE_PERSPECTIVE
-	src.client.eye = card
+
+	if(src.client)
+		src.client.perspective = EYE_PERSPECTIVE
+		src.client.eye = card
 
 	//This seems redundant but not including the forced loc setting messes the behavior up.
 	src.loc = card
