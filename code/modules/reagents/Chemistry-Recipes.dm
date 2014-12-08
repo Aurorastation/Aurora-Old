@@ -1104,7 +1104,7 @@ datum
 //				for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 //					O.show_message(text("\red The slime core fizzles disappointingly,"), 1)
 
-		slimecatalyst
+/*		slimecatalyst
 			name = "slime catalyst"
 			id = "m_catalyst"
 			result = null
@@ -1114,7 +1114,7 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
 				var/obj/item/weapon/slimecatalyst/P = new /obj/item/weapon/slimecatalyst
-				P.loc = get_turf(holder.my_atom)
+				P.loc = get_turf(holder.my_atom)*/
 /*
 		slimecritlesser
 			name = "Slime Crit Lesser"

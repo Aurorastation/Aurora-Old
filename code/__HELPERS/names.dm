@@ -44,7 +44,7 @@ var/religion_name = null
 	return capitalize(name)
 
 /proc/system_name()
-	return "Nyx"
+	return "Tau Ceti"
 
 /proc/station_name()
 	if (station_name)
@@ -312,3 +312,10 @@ var/syndicate_code_response//Code response for traitors.
 
 	return
 */
+
+/proc/forum_link()
+	if(forum_link)
+		return forum_link
+	else
+		var/forum_link = "http://"
+		return forum_link

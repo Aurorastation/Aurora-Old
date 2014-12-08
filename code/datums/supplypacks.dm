@@ -1207,33 +1207,34 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 /*
  *Skull's additions to satisfy the cravings of any atmospheric tech begin here.
  */
-/*
+
 /datum/supply_packs/atmos_freezer
-	name = "Gas Cooling Unit"
-	contains = list(/obj/machinery/atmospherics/unary/cold_sink/freezer/cargo)
+	name = "Gas Cooling Unit Materials"
+	contains = list(/obj/item/weapon/circuitboard/unary_atmos/cooler,
+					/obj/item/weapon/cable_coil,
+					/obj/item/weapon/stock_parts/matter_bin,
+					/obj/item/weapon/stock_parts/manipulator,
+					/obj/item/weapon/stock_parts/capacitor,
+					/obj/item/weapon/stock_parts/capacitor)
 	cost = 50
-	containertype = /obj/structure/closet/crate/secure/large
-	containername = "gas cooling unit crate"
+	containertype = /obj/structure/closet/crate/secure
+	containername = "gas cooling unit materials crate"
 	access = access_atmospherics
 	group = "Engineering"
 
 /datum/supply_packs/atmos_heater
-	name = "Gas Heating Unit"
-	contains = list(/obj/machinery/atmospherics/unary/heat_reservoir/heater/cargo)
+	name = "Gas Heating Unit Materials"
+	contains = list(/obj/item/weapon/circuitboard/unary_atmos/heater,
+					/obj/item/weapon/cable_coil,
+					/obj/item/weapon/stock_parts/matter_bin,
+					/obj/item/weapon/stock_parts/manipulator,
+					/obj/item/weapon/stock_parts/capacitor,
+					/obj/item/weapon/stock_parts/capacitor)
 	cost = 50
-	containertype = /obj/structure/closet/crate/secure/large
-	containername = "gas heating unit crate"
+	containertype = /obj/structure/closet/crate/secure
+	containername = "gas heating unit materials crate"
 	access = access_atmospherics
 	group = "Engineering"
-*/
-///datum/supply_packs/atmos_airtank
-//	name = "Large Air Tank"
-//	contains = list() //MAKE A LARGE RED AIRTANK THAT IS UNWRENCHED, AND CAN BE MANIPULATED AT SPAWN. This may cause issues, hueh.
-//	cost = 65
-//	containertype = /obj/structure/closet/crate/secure/large //test if this works ((should))
-//	containername = "large air tank crate"
-//	access = access_atmospherics
-//	group = "Engineering"
 
 /datum/supply_packs/aliengloves
 	name = "Non-Human Glove Kit"
@@ -1264,7 +1265,7 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 					/obj/item/clothing/suit/space/rig/security)
 	cost = 40
 	containertype = /obj/structure/closet/crate/secure
-	containername = "Security Hardsuit Kit"
+	containername = "security hardsuit kit"
 	access = access_security
 	group = "Security"
 
@@ -1277,6 +1278,16 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	containername = "medical hardsuit kit"
 	access = access_medical
 	group = "Medical / Science"
+
+/datum/supply_packs/hardsuitcrate_a
+	name = "Atmospherics Hardsuit"
+	contains = list(/obj/item/clothing/head/helmet/space/rig/atmos,
+					/obj/item/clothing/suit/space/rig/atmos)
+	cost = 40
+	containertype = /obj/structure/closet/crate/secure
+	containername = "atmospherics hardsuit kit"
+	access = access_engine_equip
+	group = "Engineering"
 
 /datum/supply_packs/condiments
 	name = "Condiment Supply"
