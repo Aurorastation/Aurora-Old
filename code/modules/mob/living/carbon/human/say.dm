@@ -1,5 +1,4 @@
-/mob/living/carbon/human/say(var/message)
-	var/verb = "says"
+/mob/living/carbon/human/say(var/message, var/verb = "says")
 	var/alt_name = ""
 	var/message_range = world.view
 	var/italics = 0
@@ -234,7 +233,7 @@
 					handled = 1
 
 	if((HULK in mutations) && health >= 25 && length(message))
-		message = "[uppertext(message)]!!!"
+//		message = "[uppertext(message)]!!!" //No!
 		verb = pick("yells","roars","hollers")
 		handled = 1
 	if(slurring)

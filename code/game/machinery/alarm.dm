@@ -893,12 +893,12 @@ table tr:first-child th:first-child { border: none;}
 				"oxygen"         = "O<sub>2</sub>",
 				"carbon dioxide" = "CO<sub>2</sub>",
 				"plasma"         = "Toxin",
-				"other"          = "Other",)
+				"other"          = "Other")
 
 			var/list/selected
 			for (var/g in gases)
 				output += "<TR><th>[gases[g]]</th>"
-				selected = TLV[g]
+				selected += TLV[g]
 				for(var/i = 1, i <= 4, i++)
 					output += "<td><A href='?src=\ref[src];command=set_threshold;env=[g];var=[i]'>[selected[i] >= 0 ? selected[i] :"OFF"]</A></td>"
 				output += "</TR>"

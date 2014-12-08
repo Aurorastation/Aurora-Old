@@ -4,7 +4,7 @@
 	icon_state = "grey baby slime"
 	pass_flags = PASSTABLE
 	var/is_adult = 0
-	speak_emote = list("hums")
+	speak_emote = list("telepathically chirps")
 
 	layer = 5
 
@@ -13,7 +13,7 @@
 	gender = NEUTER
 
 	update_icon = 0
-	nutrition = 700 // 1000 = max
+	nutrition = 700
 
 	see_in_dark = 8
 	update_slimes = 0
@@ -48,29 +48,8 @@
 	///////////TIME FOR SUBSPECIES
 
 	var/colour = "grey"
-	var/primarytype = /mob/living/carbon/slime
-	var/mutationone = /mob/living/carbon/slime/orange
-	var/mutationtwo = /mob/living/carbon/slime/metal
-	var/mutationthree = /mob/living/carbon/slime/blue
-	var/mutationfour = /mob/living/carbon/slime/purple
-	var/adulttype = /mob/living/carbon/slime/adult
 	var/coretype = /obj/item/slime_extract/grey
-
-	///////////GOLD SLIME CATALYST VAR
-	var/catalyst = 0
-
-/mob/living/carbon/slime/adult
-	name = "adult slime"
-	icon = 'icons/mob/slimes.dmi'
-	icon_state = "grey adult slime"
-	speak_emote = list("telepathically chirps")
-
-	health = 200
-	gender = NEUTER
-
-	update_icon = 0
-	nutrition = 800 // 1200 = max
-
+	var/list/slime_mutation[4]
 
 /mob/living/carbon/slime/New()
 	create_reagents(100)
@@ -79,7 +58,7 @@
 		name = "[colour] [is_adult ? "adult" : "baby"] slime ([number])"
 		icon_state = "[colour] [is_adult ? "adult" : "baby"] slime"
 		real_name = name
-//		slime_mutation = mutation_table(colour)
+		slime_mutation = mutation_table(colour)
 		mutation_chance = rand(25, 35)
 		var/sanitizedcolour = replacetext(colour, " ", "")
 		coretype = text2path("/obj/item/slime_extract/[sanitizedcolour]")
@@ -108,7 +87,7 @@
 		if(reagents.has_reagent("hyperzine")) // Hyperzine slows slimes down
 			tally *= 2
 
-		if(reagents.has_reagent("frostoil")) // frostoil also makes them move VEEERRYYYYY slow
+		if(reagents.has_reagent("frostoil")) // Frostoil also makes them move VEEERRYYYYY slow
 			tally *= 5
 
 	if(health <= 0) // if damaged, the slime moves twice as slow
@@ -648,7 +627,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	var/Uses = 1 // uses before it goes inert
 	var/enhanced = 0 //has it been enhanced before?
 
-/*	attackby(obj/item/O as obj, mob/user as mob)
+	attackby(obj/item/O as obj, mob/user as mob)
 		if(istype(O, /obj/item/weapon/slimesteroid2))
 			if(enhanced == 1)
 				user << "<span class='warning'> This extract has already been enhanced!</span>"
@@ -660,7 +639,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			Uses = 3
 			enhanced = 1
 			del(O)
-*/
+
 /obj/item/slime_extract/New()
 		..()
 		create_reagents(100)
@@ -843,34 +822,26 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 		user <<"You feed the slime the steroid. It now has triple the amount of extract."
 		M.cores = 3
-		del (src)
+		del(src)
 
-////////Slime Catalyst. Makes it halve into slimes of the same type.
-
-/obj/item/weapon/slimecatalyst
-	name = "slime catalyst"
-	desc = "A potent chemical mixture that will influence a slime's splitting behaviour."
+/obj/item/weapon/slimesteroid2
+	name = "extract enhancer"
+	desc = "A potent chemical mix that will give a slime extract three uses."
 	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle15"
+	icon_state = "bottle17"
 
-	attack(mob/living/carbon/slime/M as mob, mob/user as mob)
-		if(!istype(M, /mob/living/carbon/slime))//If target is not a slime.
-			user << "\red The steroid only works on baby slimes!"
-			return ..()
-		if(istype(M, /mob/living/carbon/slime/adult)) //Can't tame adults
-			user << "\red Only baby slimes can use the steroid!"
-			return..()
-		if(M.stat)
-			user << "\red The slime is dead!"
-			return..()
-		if(M.catalyst == 1)
-			user <<"\red The slime has already been fed a catalyst!"
-			return..()
-
-		user <<"You feed the slime the catalyst. It's core now glows golden."
-		M.catalyst = 1
-		del (src)
-
+	/*afterattack(obj/target, mob/user , flag)
+		if(istype(target, /obj/item/slime_extract))
+			if(target.enhanced == 1)
+				user << "<span class='warning'> This extract has already been enhanced!</span>"
+				return ..()
+			if(target.Uses == 0)
+				user << "<span class='warning'> You can't enhance a used extract!</span>"
+				return ..()
+			user <<"You apply the enhancer. It now has triple the amount of uses."
+			target.Uses = 3
+			target.enahnced = 1
+			del(src)*/
 
 ////////Adamantine Golem stuff I dunno where else to put it
 
