@@ -82,6 +82,7 @@ var/station_name = "NSS Aurora"
 var/game_version = "Baystation12"
 var/changelog_hash = ""
 var/game_year = (text2num(time2text(world.realtime, "YYYY")) + 442)
+var/forum_link = "http://aurorastation.org/forums/"
 
 var/datum/air_tunnel/air_tunnel1/SS13_airtunnel = null
 var/going = 1.0
@@ -140,7 +141,7 @@ var/list/newplayer_start = list()
 
 //Spawnpoints.
 var/list/latejoin = list()
-var/list/latejoin_gateway = list()
+//var/list/latejoin_gateway = list()
 var/list/latejoin_cryo = list()
 
 var/list/prisonwarp = list()	//prisoners go to these
