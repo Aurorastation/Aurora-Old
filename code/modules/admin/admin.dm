@@ -982,6 +982,9 @@ var/global/floorIsLava = 0
 
 	if(!check_rights(R_SERVER|R_DEBUG))	return
 	if (!ticker || ticker.current_state != GAME_STATE_PREGAME)
+		if(ticker.delay_end)
+			if(alert(usr, "End the round normally?", "End Normally?", "No", "Yes") == "No")
+				return 0
 		ticker.delay_end = !ticker.delay_end
 		log_admin("[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].")
 		message_admins("\blue [key_name(usr)] [ticker.delay_end ? "<font color=#FF0000>delayed</font> the round end" : "has made the round end <font color=#00FF00>normally</font>"].", 1)
