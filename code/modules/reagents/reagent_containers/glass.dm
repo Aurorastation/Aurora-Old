@@ -281,6 +281,25 @@
 			user.drop_from_inventory(src)
 			del(src)
 
+	afterattack(obj/target, mob/user , flag)
+
+		if(istype(target, /obj/machinery/portable_atmospherics/hydroponics))
+
+			if(!reagents.total_volume)
+				user << "\red [src] is empty."
+				return
+
+			if(target.reagents.total_volume >= target.reagents.maximum_volume)
+				user << "\red [target] is full."
+				return
+
+			var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
+			user << "\blue You transfer [trans] units of the solution to [target]."
+
+			return 1
+
+		..()
+
 	update_icon()
 		overlays.Cut()
 

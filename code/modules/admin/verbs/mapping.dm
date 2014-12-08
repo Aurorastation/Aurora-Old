@@ -159,8 +159,12 @@ var/list/debug_verbs = list (
         ,/client/proc/ZoneTick
         ,/client/proc/rebootAirMaster
         ,/client/proc/hide_debug_verbs
-	,/client/proc/testZAScolors
-	,/client/proc/testZAScolors_remove
+        ,/client/proc/testZAScolors
+        ,/client/proc/testZAScolors_remove
+        ,/client/proc/view_power_update_stats_area
+        ,/client/proc/view_power_update_stats_machines
+        ,/client/proc/toggle_power_update_profiling
+        ,/client/proc/atmos_toggle_debug
 	)
 
 

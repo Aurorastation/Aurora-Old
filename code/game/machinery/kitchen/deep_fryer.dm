@@ -152,6 +152,7 @@
 		S.name = "deep fried [frying.name]"
 		S.desc = I.desc
 		frying.loc = S	//this might be a bad idea.
+		del(I)
 
 	icon_state = "fryer_off"
 	on = FALSE
