@@ -134,7 +134,8 @@ var/list/admin_verbs_fun = list(
 	/client/proc/object_talk,
 	/client/proc/one_click_antag,
 	/client/proc/secrets,
-	/client/proc/send_space_ninja
+	/client/proc/send_space_ninja,
+	/client/proc/toggle_view_range
 	)
 var/list/admin_verbs_dev = list(
 	/client/proc/dsay,

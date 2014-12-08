@@ -335,12 +335,12 @@ table tr:first-child th:first-child { border: none;}
 				"oxygen"         = "O<sub>2</sub>",
 				"carbon dioxide" = "CO<sub>2</sub>",
 				"plasma"         = "Toxin",
-				"other"          = "Other",
+				"other"          = "Other"
 			)
 			var/list/tlv
 			for (var/g in gases)
 				output += "<TR><th>[gases[g]]</th>"
-				tlv = current.TLV[g]
+				tlv += current.TLV[g]
 				for (var/i = 1, i <= 4, i++)
 					output += "<td><A href='?src=\ref[src];alarm=\ref[current];command=set_threshold;env=[g];var=[i]'>[tlv[i] >= 0?tlv[i]:"OFF"]</A></td>"
 				output += "</TR>"
