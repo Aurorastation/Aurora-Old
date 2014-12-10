@@ -295,7 +295,6 @@
 			if("larva")				M.change_mob_type( /mob/living/carbon/alien/larva , null, null, delmob )
 			if("human")				M.change_mob_type( /mob/living/carbon/human , null, null, delmob )
 			if("slime")			M.change_mob_type( /mob/living/carbon/slime , null, null, delmob )
-			if("adultslime")		M.change_mob_type( /mob/living/carbon/slime/adult , null, null, delmob )
 			if("monkey")			M.change_mob_type( /mob/living/carbon/monkey , null, null, delmob )
 			if("robot")				M.change_mob_type( /mob/living/silicon/robot , null, null, delmob )
 			if("cat")				M.change_mob_type( /mob/living/simple_animal/cat , null, null, delmob )
@@ -2793,4 +2792,11 @@
 		log_admin("[key_name(usr)] winded [key_name(M)]!")
 		message_admins("[key_name_admin(usr)] winded [key_name_admin(M)]!", 1)
 		message_mods("[key_name_admin(usr)] winded [key_name_admin(M)]!")
+		return
+
+	if(href_list["toggle_holodeck_safety"])
+		var/obj/machinery/computer/HolodeckControl/A = locate(href_list["toggle_holodeck_safety"])
+		A.emagged = 0
+		usr << "Holodeck safeties reset."
+		message_admins("Holdeck reset.")
 		return
