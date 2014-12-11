@@ -376,7 +376,6 @@
 	storage_capacity["glass"] = tot_rating  * 12500
 
 /obj/machinery/autolathe/dismantle()
-	..()
 	var/list/sheets = list("metal" = /obj/item/stack/sheet/metal, "glass" = /obj/item/stack/sheet/glass)
 
 	for(var/mat in stored_material)
@@ -385,3 +384,5 @@
 		if(stored_material[mat] > S.perunit)
 			S.amount = round(stored_material[mat] / S.perunit)
 			S.loc = loc
+
+	..()
