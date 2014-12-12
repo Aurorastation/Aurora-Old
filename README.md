@@ -78,4 +78,4 @@ Included in the repo is an IRC bot capable of relaying adminhelps to a specified
 
 ### NOTICE:
 
-This is a project based on the [Baystation12](http://baystation12.net/) code for Space Station 13, which can be located here, lisenced under GPL3. The original, unmodified Baystation 12 code can be found [here](https://github.com/Baystation12/Baystation12).
+This is a project based on the [Baystation12](http://baystation12.net/) code for Space Station 13, which can be located here, licenced under GPL3. The original, unmodified Baystation 12 code can be found [here](https://github.com/Baystation12/Baystation12).
