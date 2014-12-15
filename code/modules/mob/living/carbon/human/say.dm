@@ -1,5 +1,4 @@
-/mob/living/carbon/human/say(var/message)
-	var/verb = "says"
+/mob/living/carbon/human/say(var/message, var/verb = "says")
 	var/alt_name = ""
 	var/message_range = world.view
 	var/italics = 0
@@ -56,45 +55,54 @@
 		if(ending=="?")
 			verb="asks"
 
+	if(speaking && speaking.flags & SIGNLANG)
+		message_mode = null
+		..(message, speaking, verb, alt_name, italics, message_range)
+		return
+
+
 	var/list/obj/item/used_radios = new
 
 	switch (message_mode)
 		if("headset")
-			if(l_ear && istype(l_ear,/obj/item/device/radio))
-				var/obj/item/device/radio/R = l_ear
-				R.talk_into(src,message,null,verb,speaking)
-				used_radios += l_ear
-			else if(r_ear && istype(r_ear,/obj/item/device/radio))
-				var/obj/item/device/radio/R = r_ear
-				R.talk_into(src,message,null,verb,speaking)
-				used_radios += r_ear
+			if(!(stunned >= 4))
+				if(l_ear && istype(l_ear,/obj/item/device/radio))
+					var/obj/item/device/radio/R = l_ear
+					R.talk_into(src,message,null,verb,speaking)
+					used_radios += l_ear
+				else if(r_ear && istype(r_ear,/obj/item/device/radio))
+					var/obj/item/device/radio/R = r_ear
+					R.talk_into(src,message,null,verb,speaking)
+					used_radios += r_ear
 
 		if("right ear")
-			var/obj/item/device/radio/R
-			var/has_radio = 0
-			if(r_ear && istype(r_ear,/obj/item/device/radio))
-				R = r_ear
-				has_radio = 1
-			if(r_hand && istype(r_hand, /obj/item/device/radio))
-				R = r_hand
-				has_radio = 1
-			if(has_radio)
-				R.talk_into(src,message,null,verb,speaking)
-				used_radios += R
+			if(!(stunned >= 4))
+				var/obj/item/device/radio/R
+				var/has_radio = 0
+				if(r_ear && istype(r_ear,/obj/item/device/radio))
+					R = r_ear
+					has_radio = 1
+				if(r_hand && istype(r_hand, /obj/item/device/radio))
+					R = r_hand
+					has_radio = 1
+				if(has_radio)
+					R.talk_into(src,message,null,verb,speaking)
+					used_radios += R
 
 
 		if("left ear")
-			var/obj/item/device/radio/R
-			var/has_radio = 0
-			if(l_ear && istype(l_ear,/obj/item/device/radio))
-				R = l_ear
-				has_radio = 1
-			if(l_hand && istype(l_hand,/obj/item/device/radio))
-				R = l_hand
-				has_radio = 1
-			if(has_radio)
-				R.talk_into(src,message,null,verb,speaking)
-				used_radios += R
+			if(!(stunned >= 4))
+				var/obj/item/device/radio/R
+				var/has_radio = 0
+				if(l_ear && istype(l_ear,/obj/item/device/radio))
+					R = l_ear
+					has_radio = 1
+				if(l_hand && istype(l_hand,/obj/item/device/radio))
+					R = l_hand
+					has_radio = 1
+				if(has_radio)
+					R.talk_into(src,message,null,verb,speaking)
+					used_radios += R
 
 		if("intercom")
 			for(var/obj/item/device/radio/intercom/I in view(1, null))
@@ -114,14 +122,15 @@
 						Changeling << "<i><font color=#800080><b>[mind.changeling.changelingID]:</b> [message]</font></i>"
 			return
 		else
-			if(message_mode)
-				if(message_mode in (radiochannels | "department"))
-					if(l_ear && istype(l_ear,/obj/item/device/radio))
-						l_ear.talk_into(src,message, message_mode, verb, speaking)
-						used_radios += l_ear
-					else if(r_ear && istype(r_ear,/obj/item/device/radio))
-						r_ear.talk_into(src,message, message_mode, verb, speaking)
-						used_radios += r_ear
+			if(!(stunned >= 4))
+				if(message_mode)
+					if(message_mode in (radiochannels | "department"))
+						if(l_ear && istype(l_ear,/obj/item/device/radio))
+							l_ear.talk_into(src,message, message_mode, verb, speaking)
+							used_radios += l_ear
+						else if(r_ear && istype(r_ear,/obj/item/device/radio))
+							r_ear.talk_into(src,message, message_mode, verb, speaking)
+							used_radios += r_ear
 
 	var/sound/speech_sound
 	var/sound_vol
@@ -224,7 +233,7 @@
 					handled = 1
 
 	if((HULK in mutations) && health >= 25 && length(message))
-		message = "[uppertext(message)]!!!"
+//		message = "[uppertext(message)]!!!" //No!
 		verb = pick("yells","roars","hollers")
 		handled = 1
 	if(slurring)
