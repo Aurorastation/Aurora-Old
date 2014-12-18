@@ -27,7 +27,7 @@
 			internal_bleeding = 1
 			break
 
-		return affected.open == 2 && internal_bleeding
+		return affected.open >= 2 && internal_bleeding
 
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -75,7 +75,7 @@
 		
 		var/datum/organ/external/affected = target.get_organ(target_zone)
 
-		return affected.open == 2 && (affected.status & ORGAN_DEAD)
+		return affected.open >= 2 && (affected.status & ORGAN_DEAD)
 
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)

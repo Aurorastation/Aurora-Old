@@ -47,12 +47,12 @@
 
 
 	//LETTING SIMPLE ANIMALS ATTACK? WHAT COULD GO WRONG. Defaults to zero so Ian can still be cuddly
-	var/melee_damage_lower = 0
-	var/melee_damage_upper = 0
-	var/attacktext = "attacks"
-	var/attack_sound = null
-	var/friendly = "nuzzles" //If the mob does no damage with it's attack
-	var/wall_smash = 0 //if they can smash walls
+	melee_damage_lower = 0
+	melee_damage_upper = 0
+	attacktext = "attacks"
+	attack_sound = null
+	friendly = "nuzzles" //If the mob does no damage with it's attack
+	wall_smash = 0 //if they can smash walls
 
 	var/speed = 0 //LETS SEE IF I CAN SET SPEEDS FOR SIMPLE MOBS WITHOUT DESTROYING EVERYTHING. Higher speed is slower, negative speed is faster
 
@@ -228,7 +228,7 @@
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj || Proj.nodamage)
 		return
-	
+
 	adjustBruteLoss(Proj.damage)
 	return 0
 

@@ -138,29 +138,33 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 /obj/structure/particle_accelerator/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			del(src)
+			Del(src)
 			return
 		if(2.0)
 			if (prob(50))
-				del(src)
+				Del(src)
 				return
 		if(3.0)
 			if (prob(25))
-				del(src)
+				Del(src)
 				return
 		else
 	return
 
+/obj/structure/particle_accelerator/Del()
+	if(master && master.connected_parts)
+		master.connected_parts.Remove(src)
+	..()
 
 /obj/structure/particle_accelerator/blob_act()
 	if(prob(50))
-		del(src)
+		Del(src)
 	return
 
 
 /obj/structure/particle_accelerator/meteorhit()
 	if(prob(50))
-		del(src)
+		Del(src)
 	return
 
 /obj/structure/particle_accelerator/update_icon()
@@ -201,7 +205,6 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 			master = O
 			return 1
 	return 0
-
 
 /obj/structure/particle_accelerator/proc/process_tool_hit(var/obj/O, var/mob/user)
 	if(!(O) || !(user))
@@ -325,15 +328,15 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 /obj/machinery/particle_accelerator/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			del(src)
+			Del(src)
 			return
 		if(2.0)
 			if (prob(50))
-				del(src)
+				Del(src)
 				return
 		if(3.0)
 			if (prob(25))
-				del(src)
+				Del(src)
 				return
 		else
 	return
@@ -341,13 +344,13 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 
 /obj/machinery/particle_accelerator/blob_act()
 	if(prob(50))
-		del(src)
+		Del(src)
 	return
 
 
 /obj/machinery/particle_accelerator/meteorhit()
 	if(prob(50))
-		del(src)
+		Del(src)
 	return
 
 

@@ -91,15 +91,7 @@ obj/machinery/recharger/process()
 
 		if(istype(charging, /obj/item/weapon/melee/baton))
 			var/obj/item/weapon/melee/baton/B = charging
-//Should really update the baton to use cells
-			if(B.charges < initial(B.charges))
-				B.charges++
-				icon_state = "recharger1"
-				use_power(150)
-			else
-				icon_state = "recharger2"
-
-/*			if(B.bcell)
+			if(B.bcell)
 				if(!B.bcell.fully_charged())
 					icon_state = icon_state_charging
 					B.bcell.give(active_power_usage*CELLRATE)
@@ -110,7 +102,6 @@ obj/machinery/recharger/process()
 			else
 				icon_state = icon_state_idle
 				update_use_power(1)
-*/
 			return
 
 /*		if(istype(charging, /obj/item/device/laptop))
@@ -147,12 +138,8 @@ obj/machinery/recharger/emp_act(severity)
 
 	else if(istype(charging, /obj/item/weapon/melee/baton))
 		var/obj/item/weapon/melee/baton/B = charging
-		//same here
-		if(B.charges)
-			B.charges = 0
-/*		if(B.bcell)
+		if(B.bcell)
 			B.bcell.charge = 0
-*/
 	..(severity)
 
 obj/machinery/recharger/update_icon()	//we have an update_icon() in addition to the stuff in process to make it feel a tiny bit snappier.

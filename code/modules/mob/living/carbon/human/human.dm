@@ -8,6 +8,7 @@
 	var/datum/species/species //Contains icon generation and language information, set during New().
 	var/embedded_flag	  //To check if we've need to roll for damage on movement while an item is imbedded in us.
 
+/*
 /mob/living/carbon/human/dummy
 	real_name = "Test Dummy"
 	status_flags = GODMODE|CANPUSH
@@ -47,22 +48,28 @@
 	..(new_loc, "Kocasslani")
 
 
+*/
 /mob/living/carbon/human/New(var/new_loc, var/new_species = null)
+
+	if(!dna)
+		dna = new /datum/dna(null)
+		// Species name is handled by set_species()
 
 	if(!species)
 		if(new_species)
-			set_species(new_species,null,1)
+			set_species(new_species)
 		else
 			set_species()
 
 	var/datum/reagents/R = new/datum/reagents(1000)
 	reagents = R
 	R.my_atom = src
-
+/*
 	if(!dna)
 		dna = new /datum/dna(null)
 		dna.species=species.name
 
+*/
 	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
 	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
@@ -82,6 +89,7 @@
 	prev_gender = gender // Debug for plural genders
 	make_blood()
 
+/*
 /mob/living/carbon/human/Bump(atom/movable/AM as mob|obj, yes)
 	if ((!( yes ) || now_pushing))
 		return
@@ -169,6 +177,7 @@
 		return
 	return
 
+*/
 /mob/living/carbon/human/Stat()
 	..()
 	statpanel("Status")
@@ -191,6 +200,10 @@
 				stat("Internal Atmosphere Info", internal.name)
 				stat("Tank Pressure", internal.air_contents.return_pressure())
 				stat("Distribution Pressure", internal.distribute_pressure)
+
+		var/datum/organ/internal/xenos/plasmavessel/P = internal_organs_by_name["plasma vessel"]
+		if(P)
+			stat(null, "Plasma Stored: [P.stored_plasma]/[P.max_plasma]")
 		if(mind)
 			if(mind.changeling)
 				stat("Chemical Storage", mind.changeling.chem_charges)
@@ -309,7 +322,7 @@
 	return
 
 
-/mob/living/carbon/human/attack_animal(mob/living/simple_animal/M as mob)
+/mob/living/carbon/human/attack_animal(mob/living/M as mob)
 	if(M.melee_damage_upper == 0)
 		M.emote("[M.friendly] [src]")
 	else
@@ -325,6 +338,17 @@
 		var/armor = run_armor_check(affecting, "melee")
 		apply_damage(damage, BRUTE, affecting, armor)
 		if(armor >= 2)	return
+
+
+/mob/living/carbon/human/proc/implant_loyalty(mob/living/carbon/human/M, override = FALSE) // Won't override by default.
+	if(!config.use_loyalty_implants && !override) return // Nuh-uh.
+
+	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(M)
+	L.imp_in = M
+	L.implanted = 1
+	var/datum/organ/external/affected = M.organs_by_name["head"]
+	affected.implants += L
+	L.part = affected
 
 /mob/living/carbon/human/proc/is_loyalty_implanted(mob/living/carbon/human/M)
 	for(var/L in M.contents)
@@ -860,6 +884,17 @@
 ///Returns a number between -1 to 2
 /mob/living/carbon/human/eyecheck()
 	var/number = 0
+
+	if(!species.has_organ["eyes"]) //No eyes, can't hurt them.
+		return 2
+
+	if(internal_organs_by_name["eyes"]) // Eyes are fucked, not a 'weak point'.
+		var/datum/organ/internal/I = internal_organs_by_name["eyes"]
+		if(I.status & ORGAN_CUT_AWAY)
+			return 2
+	else
+		return 2
+
 	if(istype(src.head, /obj/item/clothing/head/welding))
 		if(!src.head:up)
 			number += 2
@@ -877,7 +912,7 @@
 
 
 /mob/living/carbon/human/IsAdvancedToolUser()
-	return 1//Humans can use guns and such
+	return species.has_fine_manipulation
 
 
 /mob/living/carbon/human/abiotic(var/full_body = 0)
@@ -1134,12 +1169,12 @@
 
 /mob/living/carbon/human/proc/is_lung_ruptured()
 	var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
-	return L.is_bruised()
+	return L && L.is_bruised()
 
 /mob/living/carbon/human/proc/rupture_lung()
 	var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
 
-	if(!L.is_bruised())
+	if(L && !L.is_bruised())
 		src.custom_pain("You feel a stabbing pain in your chest!", 1)
 		L.damage = L.min_bruised_damage
 
@@ -1224,7 +1259,7 @@
 				src << msg
 
 				organ.take_damage(rand(1,3), 0, 0)
-				if(!(organ.status & ORGAN_ROBOT)) //There is no blood in protheses.
+				if(!(organ.status & ORGAN_ROBOT) && !(species.flags & NO_BLOOD)) //There is no blood in protheses.
 					organ.status |= ORGAN_BLEEDING
 					src.adjustToxLoss(rand(1,3))
 
@@ -1260,7 +1295,7 @@
 	else
 		usr << "\blue [self ? "Your" : "[src]'s"] pulse is [src.get_pulse(GETPULSE_HAND)]."
 
-/mob/living/carbon/human/proc/set_species(var/new_species, var/force_organs, var/default_colour)
+/mob/living/carbon/human/proc/set_species(var/new_species, var/default_colour)
 
 	if(!dna)
 		if(!new_species)
@@ -1271,19 +1306,28 @@
 		else
 			dna.species = new_species
 
-	if(species && (species.name && species.name == new_species))
-		return
+	if(species)
 
-	if(species && species.language)
-		remove_language(species.language)
+		if(species.name && species.name == new_species)
+			return
+		if(species.language)
+			remove_language(species.language)
+
+		if(species.default_language)
+			remove_language(species.default_language)
+
+		// Clear out their species abilities.
+		species.remove_inherent_verbs(src)
 
 	species = all_species[new_species]
 
-	if(force_organs || !organs || !organs.len)
-		species.create_organs(src)
+	species.create_organs(src)
 
 	if(species.language)
 		add_language(species.language)
+
+	if(species.default_language)
+		add_language(species.default_language)
 
 	if(species.base_color && default_colour)
 		//Apply colour.
@@ -1298,7 +1342,9 @@
 	species.handle_post_spawn(src)
 
 	spawn(0)
-		update_icons()
+		regenerate_icons()
+		vessel.add_reagent("blood",560-vessel.total_volume)
+		fixblood()
 
 	if(species)
 		return 1
@@ -1382,7 +1428,7 @@
 
 //Putting a couple of procs here that I don't know where else to dump.
 //Mostly going to be used for Vox and Vox Armalis, but other human mobs might like them (for adminbuse).
-
+/*
 /mob/living/carbon/human/proc/leap()
 	set category = "IC"
 	set name = "Leap"
@@ -1456,6 +1502,7 @@
 	G.icon_state = "grabbed1"
 	G.synch()
 
+
 /mob/living/carbon/human/proc/gut()
 	set category = "IC"
 	set name = "Gut"
@@ -1528,7 +1575,7 @@
 			return
 		H << "\red Your nose begins to bleed..."
 		H.drip(1)
-
+*/
 /mob/living/carbon/human/print_flavor_text()
 	var/list/equipment = list(src.head,src.wear_mask,src.glasses,src.w_uniform,src.wear_suit,src.gloves,src.shoes)
 	var/head_exposed = 1
@@ -1566,3 +1613,27 @@
 				flavor_text += flavor_texts[T]
 				flavor_text += "\n\n"
 	return ..()
+
+/mob/living/carbon/human/getDNA()
+	if(species.flags & NO_SCAN)
+		return null
+	..()
+
+/mob/living/carbon/human/setDNA()
+	if(species.flags & NO_SCAN)
+		return
+	..()
+
+/mob/living/carbon/human/has_brain()
+	if(internal_organs_by_name["brain"])
+		var/datum/organ/internal/brain = internal_organs_by_name["brain"]
+		if(brain && istype(brain))
+			return 1
+	return 0
+
+/mob/living/carbon/human/has_eyes()
+	if(internal_organs_by_name["eyes"])
+		var/datum/organ/internal/eyes = internal_organs_by_name["eyes"]
+		if(eyes && istype(eyes) && !eyes.status & ORGAN_CUT_AWAY)
+			return 1
+	return 0
