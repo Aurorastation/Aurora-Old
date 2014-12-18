@@ -14,12 +14,12 @@
 		return
 
 	var/style = "body"
-	
+
 	//non-verbal languages are garbled if you can't see the speaker. Yes, this includes if they are inside a closet.
 	if (language && (language.flags & NONVERBAL))
 		if (!speaker || (src.sdisabilities & BLIND || src.blinded) || !(speaker in view(src)))
 			message = stars(message)
-	
+
 	if(!say_understands(speaker,language))
 		if(istype(speaker,/mob/living/simple_animal))
 			var/mob/living/simple_animal/S = speaker
@@ -77,7 +77,7 @@
 	if (language && (language.flags & NONVERBAL))
 		if (!speaker || (src.sdisabilities & BLIND || src.blinded) || !(speaker in view(src)))
 			message = stars(message)
-	
+
 	if(!say_understands(speaker,language))
 		if(istype(speaker,/mob/living/simple_animal))
 			var/mob/living/simple_animal/S = speaker
@@ -164,9 +164,31 @@
 /mob/proc/hear_signlang(var/message, var/verb = "gestures", var/datum/language/language, var/mob/speaker = null)
 	if(!client)
 		return
-	
+
+	if(sleeping || stat == 1)
+		return
+
+	var/speaker_name
+	var/alt_name
+
+//	var/mob/S = speaker
+//	if(!S && !S.head && !istype(S.head, /obj/item/clothing/head/helmet))
+	speaker_name = speaker.real_name
+//	else
+//		speaker_name = "unknown"
+
+	var/track = null
+	if(istype(src, /mob/dead/observer))
+		if(speaker_name != speaker.real_name && speaker.real_name)
+			speaker_name = "[speaker.real_name] ([speaker_name])"
+		track = "(<a href='byond://?src=\ref[src];track=\ref[speaker]'>follow</a>) "
+
+		if(client.prefs.toggles & CHAT_GHOSTEARS && speaker in view(src))
+			message = "<b>[message]</b>"
+
+
 	if(say_understands(speaker, language))
-		message = "<B>[speaker.real_name]</B> [verb], \"[message]\""
+		message = "<span class='game say'><span class='name'>[speaker.real_name]</span>[alt_name] [track][verb], <span class='message'>\"[message]\"</span></span>"
 	else
 		message = "<B>[speaker.real_name]</B> gestures."
 
@@ -175,7 +197,9 @@
 			H.show_message(message)
 		for(var/mob/living/M in src.contents)
 			M.show_message(message)
-	src.show_message(message)
+	src << message
+
+////////////////////////////////////////////////////////////////////////
 
 /mob/proc/hear_sleep(var/message)
 	var/heard = ""

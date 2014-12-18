@@ -694,8 +694,12 @@
 		translator_on = 0
 
 		remove_language("Sinta'unathi")
-		remove_language("Siik'tajr")
+//		remove_language("Siik'tajr")
+		remove_language("Siik'Maas")
 		remove_language("Skrellian")
+		remove_language("Vox-pidgin")
+		remove_language("Rootspeak")
+		remove_language("Sign language")
 
 		src << "\blue Translator Module toggled OFF."
 
@@ -703,7 +707,11 @@
 		translator_on = 1
 
 		add_language("Sinta'unathi")
-		add_language("Siik'tajr")
+//		add_language("Siik'tajr")
+		add_language("Siik'Maas")
 		add_language("Skrellian")
+		add_language("Vox-pidgin")
+		add_language("Rootspeak")
+		add_language("Sign language")
 
 		src << "\blue Translator Module toggled ON."

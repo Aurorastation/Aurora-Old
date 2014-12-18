@@ -21,8 +21,10 @@
 
 	flick("gibbed-h", animation)
 	if(species)
+		flick(species.gibbed_anim, animation)
 		hgibs(loc, viruses, dna, species.flesh_color, species.blood_color)
 	else
+		flick("gibbed-h", animation)
 		hgibs(loc, viruses, dna)
 
 	spawn(15)
@@ -42,8 +44,8 @@
 	animation.icon = 'icons/mob/mob.dmi'
 	animation.master = src
 
-	flick("dust-h", animation)
-	new /obj/effect/decal/remains/human(loc)
+	flick(species.dusted_anim, animation)
+	new species.remains_type(loc)
 
 	spawn(15)
 		if(animation)	del(animation)

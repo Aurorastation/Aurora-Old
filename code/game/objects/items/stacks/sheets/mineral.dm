@@ -51,7 +51,7 @@ var/global/list/datum/stack_recipe/sandstone_recipes = list ( \
 	w_class = 3.0
 	throw_range = 3
 	origin_tech = "materials=6"
-	perunit = 3750
+	perunit = 2000
 	sheettype = "diamond"
 
 var/global/list/datum/stack_recipe/diamond_recipes = list ( \

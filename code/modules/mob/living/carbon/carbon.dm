@@ -423,7 +423,7 @@
 		return
 	if(alert(src,"You sure you want to sleep for a while?","Sleep","Yes","No") == "Yes")
 		usr.sleeping = 20 //Short nap
-
+/*
 //Brain slug proc for voluntary removal of control.
 /mob/living/carbon/proc/release_control()
 
@@ -492,3 +492,4 @@
 	else
 		src << "You do not have enough chemicals stored to reproduce."
 		return
+*/

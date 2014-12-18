@@ -42,6 +42,8 @@
 	reagents = R
 	R.my_atom = src
 
+	verbs += /mob/living/proc/ventcrawl
+
 	if(name == initial(name)) //To stop Pun-Pun becoming generic.
 		name = "[name] ([rand(1, 1000)])"
 		real_name = name

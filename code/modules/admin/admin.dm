@@ -145,8 +145,8 @@ var/global/floorIsLava = 0
 			else if(ishuman(M))
 				body += {"<A href='?src=\ref[src];makeai=\ref[M]'>Make AI</A> |
 					<A href='?src=\ref[src];makerobot=\ref[M]'>Make Robot</A> |
-					<A href='?src=\ref[src];makealien=\ref[M]'>Make Alien</A> |
-					<A href='?src=\ref[src];makeslime=\ref[M]'>Make slime</A>
+					<A href='?src=\ref[src];makeslime=\ref[M]'>Make slime</A> |
+					<A href='?src=\ref[src];makealien=\ref[M]'>Make Alien(BROKEN)</A> |
 				"}
 
 			//Simple Animals
@@ -156,7 +156,7 @@ var/global/floorIsLava = 0
 				body += "<A href='?src=\ref[src];makeanimal=\ref[M]'>Animalize</A> | "
 
 			// DNA2 - Admin Hax
-			if(iscarbon(M))
+			if(M.dna && iscarbon(M))
 				body += "<br><br>"
 				body += "<b>DNA Blocks:</b><br><table border='2'><tr><th>&nbsp;</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>"
 				var/bname
@@ -189,19 +189,20 @@ var/global/floorIsLava = 0
 				<A href='?src=\ref[src];simplemake=corgi;mob=\ref[M]'>Corgi</A> |
 				<A href='?src=\ref[src];simplemake=ian;mob=\ref[M]'>Ian</A> |
 				<A href='?src=\ref[src];simplemake=crab;mob=\ref[M]'>Crab</A> |
-				<A href='?src=\ref[src];simplemake=coffee;mob=\ref[M]'>Coffee</A><br>
+				<A href='?src=\ref[src];simplemake=coffee;mob=\ref[M]'>Coffee</A> |
+				<A href='?src=\ref[src];simplemake=nymph;mob=\ref[M]'>Nymph</A><br>
 
+				Construct: <A href='?src=\ref[src];simplemake=constructarmoured;mob=\ref[M]'>Armoured</A> |
+				<A href='?src=\ref[src];simplemake=constructbuilder;mob=\ref[M]'>Builder</A> |
+				<A href='?src=\ref[src];simplemake=constructwraith;mob=\ref[M]'>Wraith</A> |
+				<A href='?src=\ref[src];simplemake=shade;mob=\ref[M]'>Shade</A><br>
+
+				<br><b>Note from sound, Aliens are broken (Disabled)</b><br>
 				Alien: <A href='?src=\ref[src];simplemake=drone;mob=\ref[M]'>Drone</A> |
 				<A href='?src=\ref[src];simplemake=hunter;mob=\ref[M]'>Hunter</A> |
 				<A href='?src=\ref[src];simplemake=queen;mob=\ref[M]'>Queen</A> |
 				<A href='?src=\ref[src];simplemake=sentinel;mob=\ref[M]'>Sentinel</A> |
 				<A href='?src=\ref[src];simplemake=larva;mob=\ref[M]'>Larva</A><br>
-
-				Construct: <A href='?src=\ref[src];simplemake=constructarmoured;mob=\ref[M]'>Armoured</A> |
-				<A href='?src=\ref[src];simplemake=constructbuilder;mob=\ref[M]'>Builder</A> |
-				<A href='?src=\ref[src];simplemake=constructwraith;mob=\ref[M]'>Wraith</A> |
-				<A href='?src=\ref[src];simplemake=shade;mob=\ref[M]'>Shade</A>
-				<br>
 			"}
 
 	if (M.client)

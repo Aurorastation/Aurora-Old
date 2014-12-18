@@ -7,7 +7,7 @@
 	status_flags = CANPARALYSE
 	heal_rate = 5
 	plasma_rate = 20
-
+	var/move_delay_add = 0
 
 /mob/living/carbon/alien/humanoid/queen/New()
 	var/datum/reagents/R = new/datum/reagents(100)

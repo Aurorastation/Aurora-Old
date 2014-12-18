@@ -728,6 +728,28 @@ note dizziness decrements automatically in the mob's Life() proc.
 				stat(null,"MasterController-ERROR")
 			if(delta_level:active)
 				stat(null,"Delta Countdown-[delta_level.timeleft()]")
+			if(!ooc_allowed)
+				stat(null,"OOC is globaly muted")
+			if(!looc_allowed)
+				stat(null,"LOOC is globaly muted")
+			if(client.holder.rights & (R_ADMIN|R_MOD))
+				var/players = 0
+				var/ghosts = 0
+				var/lobby = 0
+				var/total = 0
+				var/staff = 0
+				for(var/client/C in clients)
+					if(C.holder.rights & R_ADMIN || C.holder.rights & R_MOD)
+						staff++
+					if(istype(C.mob, /mob/living))
+						players++
+					if(istype(C.mob, /mob/dead))
+						ghosts++
+					if(istype(C.mob, /mob/new_player))
+						lobby++
+					total++
+				stat(null, "Players: [total]\tModeration Staff: [staff]")
+				stat(null, "Living: [players]\tGhosts: [ghosts]\tLobby: [lobby]")
 
 	if(listed_turf && client)
 		if(!TurfAdjacent(listed_turf))
@@ -1063,3 +1085,12 @@ mob/proc/yank_out_object()
 	if(paralysis)
 		AdjustParalysis(-1)
 	return paralysis
+
+//Check for brain worms in head.
+/mob/proc/has_brain_worms()
+
+	for(var/I in contents)
+		if(istype(I,/mob/living/simple_animal/borer))
+			return I
+
+	return 0
