@@ -292,6 +292,7 @@
 	icon_state = "tool_flask"
 	volume = 60
 
+/*
 /obj/item/weapon/melee/baton/fluff/omnivac_baton //Tiger Claw - Zander Moon - omnivac - DONE
 	name = "Tiger Claw"
 	desc = "A small energy dagger given to Golden Tigers meant to incapacitate people quickly."
@@ -325,7 +326,7 @@
 		status = 0
 		user << "<span class='warning'>\The [src] is out of charge.</span>"
 	add_fingerprint(user)
-
+*/
 /*
 /obj/item/device/modkit/fluff/omnivac_modkit //Ornate box - Zander Moon - omnivac - SPRITE
 	name = "ornate box"

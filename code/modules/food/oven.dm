@@ -16,12 +16,22 @@
 	updatefood()
 
 /obj/machinery/cooking/attackby(obj/item/I, mob/user)
+
 	if(on)
 		user << "The machine is already running."
 		return
 	else
-		if(!istype(I, /obj/item/weapon/reagent_containers/food))
+		if(!istype(I, /obj/item/weapon/reagent_containers/food/snacks))
 			user << "You think yourself better than to place [I] in there"
+			return
+		if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/deepfryholder))
+			user << "<span class='userdanger'>You cannot cook this twice.</span>"
+			return
+		if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable/candy))
+			user << "<span class='warning'>That would probably taste bad.</span>"
+			return
+		if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/cereal))
+			user << "<span class='warning'>That isn't going to be nice.</span>"
 			return
 
 		var/obj/item/F = I

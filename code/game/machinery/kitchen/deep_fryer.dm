@@ -67,6 +67,12 @@
 	if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/deepfryholder))
 		user << "<span class='userdanger'>You cannot doublefry.</span>"
 		return
+	if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable/candy))
+		user << "<span class='warning'>That would probably break [src].</span>"
+		return
+	if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/cereal))
+		user << "<span class='warning'>That isn't going to fit.</span>"
+		return
 	else
 		fry_food(I, user)
 

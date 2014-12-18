@@ -1,6 +1,8 @@
 /datum/organ
 	var/name = "organ"
 	var/mob/living/carbon/human/owner = null
+	var/status = 0
+	var/vital //Lose a vital limb, die immediately.
 
 	var/list/datum/autopsy_data/autopsy_data = list()
 	var/list/trace_chemicals = list() // traces of chemicals in the organ,

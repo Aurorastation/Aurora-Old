@@ -111,7 +111,13 @@
 			return 1
 
 		if("hurt")
+
+			// See if they can attack, and which attacks to use.
 			var/datum/unarmed_attack/attack = M.species.unarmed
+			if(!attack.is_usable(M))
+				attack = M.species.secondary_unarmed
+			if(!attack.is_usable(M))
+				return 0
 			//Vampire code
 			if(M.zone_sel && M.zone_sel.selecting == "head")
 				if(M.mind && M.mind.vampire && (M.mind in ticker.mode.vampires) && !M.mind.vampire.draining)
