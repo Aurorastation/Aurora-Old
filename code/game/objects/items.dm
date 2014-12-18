@@ -156,15 +156,6 @@
 
 /obj/item/attack_paw(mob/user as mob)
 
-	if(isalien(user)) // -- TLE
-		var/mob/living/carbon/alien/A = user
-
-		if(!A.has_fine_manipulation || w_class >= 4)
-			if(src in A.contents) // To stop Aliens having items stuck in their pockets
-				A.drop_from_inventory(src)
-			user << "Your claws aren't capable of such fine manipulation."
-			return
-
 	if (istype(src.loc, /obj/item/weapon/storage))
 		for(var/mob/M in range(1, src.loc))
 			if (M.s_active == src.loc)
@@ -263,6 +254,12 @@
 	if(ishuman(M))
 		//START HUMAN
 		var/mob/living/carbon/human/H = M
+		var/list/mob_equip = list()
+		if(H.species.hud && H.species.hud.equip_slots)
+			mob_equip = H.species.hud.equip_slots
+
+		if(H.species && !(slot in mob_equip))
+			return 0
 
 		switch(slot)
 			if(slot_l_hand)
@@ -306,7 +303,7 @@
 			if(slot_belt)
 				if(H.belt)
 					return 0
-				if(!H.w_uniform)
+				if(!H.w_uniform && (slot_w_uniform in mob_equip))
 					if(!disable_warning)
 						H << "\red You need a jumpsuit before you can attach this [name]."
 					return 0
@@ -354,7 +351,7 @@
 			if(slot_wear_id)
 				if(H.wear_id)
 					return 0
-				if(!H.w_uniform)
+				if(!H.w_uniform && (slot_w_uniform in mob_equip))
 					if(!disable_warning)
 						H << "\red You need a jumpsuit before you can attach this [name]."
 					return 0
@@ -364,7 +361,7 @@
 			if(slot_l_store)
 				if(H.l_store)
 					return 0
-				if(!H.w_uniform)
+				if(!H.w_uniform && (slot_w_uniform in mob_equip))
 					if(!disable_warning)
 						H << "\red You need a jumpsuit before you can attach this [name]."
 					return 0
@@ -375,7 +372,7 @@
 			if(slot_r_store)
 				if(H.r_store)
 					return 0
-				if(!H.w_uniform)
+				if(!H.w_uniform && (slot_w_uniform in mob_equip))
 					if(!disable_warning)
 						H << "\red You need a jumpsuit before you can attach this [name]."
 					return 0
@@ -387,7 +384,7 @@
 			if(slot_s_store)
 				if(H.s_store)
 					return 0
-				if(!H.wear_suit)
+				if(!H.wear_suit && (slot_wear_suit in mob_equip))
 					if(!disable_warning)
 						H << "\red You need a suit before you can attach this [name]."
 					return 0
@@ -517,8 +514,8 @@
 		user << "\red You're going to need to remove the eye covering first."
 		return
 
-	if(istype(M, /mob/living/carbon/alien) || istype(M, /mob/living/carbon/slime))//Aliens don't have eyes./N     slimes also don't have eyes!
-		user << "\red You cannot locate any eyes on this creature!"
+	if(!M.has_eyes())
+		user << "\red You cannot locate any eyes on [M]!"
 		return
 
 	user.attack_log += "\[[time_stamp()]\]<font color='red'> Attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>"
@@ -534,20 +531,22 @@
 		M.weakened += 4
 		M.adjustBruteLoss(10)
 		*/
-	if(M != user)
-		for(var/mob/O in (viewers(M) - user - M))
-			O.show_message("\red [M] has been stabbed in the eye with [src] by [user].", 1)
-		M << "\red [user] stabs you in the eye with [src]!"
-		user << "\red You stab [M] in the eye with [src]!"
-	else
-		user.visible_message( \
-			"\red [user] has stabbed themself with [src]!", \
-			"\red You stab yourself in the eyes with [src]!" \
-		)
+
 	if(istype(M, /mob/living/carbon/human))
+
 		var/datum/organ/internal/eyes/eyes = H.internal_organs_by_name["eyes"]
-		if(!eyes)
-			return
+
+		if(M != user)
+			for(var/mob/O in (viewers(M) - user - M))
+				O.show_message("\red [M] has been stabbed in the eye with [src] by [user].", 1)
+			M << "\red [user] stabs you in the eye with [src]!"
+			user << "\red You stab [M] in the eye with [src]!"
+		else
+			user.visible_message( \
+				"\red [user] has stabbed themself with [src]!", \
+				"\red You stab yourself in the eyes with [src]!" \
+			)
+
 		eyes.damage += rand(3,4)
 		if(eyes.damage >= eyes.min_bruised_damage)
 			if(M.stat != 2)

@@ -218,7 +218,8 @@ var/list/admin_verbs_debug = list(
 	/client/proc/SDQL2_query,
 	/client/proc/cmd_dev_reset_gravity,
 	/client/proc/cmd_dev_reset_floating,
-	/client/proc/fillspace
+	/client/proc/fillspace,
+	/client/proc/hide_activity
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -1052,3 +1053,21 @@ var/list/admin_verbs_mod = list(
 	if(A.name == "Space")
 		for(var/turf/space/S in range(2,usr))
 			S.ChangeTurf(/turf/simulated/floor/plating)
+
+/client/proc/hide_activity()
+	set category = "Preferences"
+	set name = "Hide Var Edits"
+	set desc = "Hide Var edit logs from devs"
+
+	if(!check_rights(R_DEBUG))
+		holder.hide_activity = 0
+		return
+
+	if(holder)
+		holder.hide_activity = !holder.hide_activity
+
+	if (holder.hide_activity)
+		usr << "Your varedits will now be hidden from developers"
+	else
+		usr << "Your varedits will now be shown to developers"
+	return

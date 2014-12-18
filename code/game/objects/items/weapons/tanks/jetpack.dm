@@ -21,6 +21,9 @@
 /obj/item/weapon/tank/jetpack/examine()
 	set src in usr
 	..()
+	if (!in_range(src, usr))
+		return
+
 	if(air_contents.gas["oxygen"] < 10)
 		usr << text("\red <B>The meter on the [src.name] indicates you are almost out of air!</B>")
 		playsound(usr, 'sound/effects/alert.ogg', 50, 1)

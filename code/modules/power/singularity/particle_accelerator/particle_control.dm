@@ -23,6 +23,10 @@
 	active_power_usage = initial(active_power_usage) * (strength + 1)
 	..()
 
+/obj/machinery/particle_accelerator/control_box/Del()
+	if(src.active)
+		src.toggle_power()
+	..()
 
 /obj/machinery/particle_accelerator/control_box/attack_hand(mob/user as mob)
 	if(construction_state >= 3)
@@ -100,7 +104,7 @@
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
 			part.strength = strength
 			part.update_icon()
-		
+
 		if (strength != old_strength)
 			active_power_usage = initial(active_power_usage) * (strength + 1)
 			use_power(0) //update power usage
@@ -118,7 +122,7 @@
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
 			part.strength = strength
 			part.update_icon()
-		
+
 		if (strength != old_strength)
 			active_power_usage = initial(active_power_usage) * (strength + 1)
 			use_power(0) //update power usage
@@ -130,6 +134,8 @@
 /obj/machinery/particle_accelerator/control_box/power_change()
 	..()
 	if(stat & NOPOWER)
+		if(active)
+			toggle_power()
 		active = 0
 		update_use_power(0)
 	else if(!stat && construction_state == 3)
@@ -143,6 +149,7 @@
 		if( length(connected_parts) < 6 )
 			investigate_log("lost a connected part; It <font color='red'>powered down</font>.","singulo")
 			src.toggle_power()
+			assembled = 0
 			return
 		//emit some particles
 		for(var/obj/structure/particle_accelerator/particle_emitter/PE in connected_parts)
