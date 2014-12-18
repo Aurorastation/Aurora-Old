@@ -7,11 +7,11 @@
 ### GETTING THE CODE
 The simplest way to obtain the code is using the github .zip feature.
 
-Click [here](https://github.com/Baystation12/Baystation12/archive/master.zip) to get the latest code as a .zip file, then unzip it to wherever you want.
+Click [here](https://github.com/Aurorastation/Aurora/archive/master.zip) to get the latest code as a .zip file, then unzip it to wherever you want.
 
 The more complicated and easier to update method is using git.  You'll need to download git or some client from [here](http://git-scm.com/).  When that's installed, right click in any folder and click on "Git Bash".  When that opens, type in:
 
-    git clone https://github.com/Baystation12/Baystation12.git
+    git clone https://github.com/Aurorastation/Aurora.git
 
 (hint: hold down ctrl and press insert to paste into git bash)
 
@@ -78,4 +78,4 @@ Included in the repo is an IRC bot capable of relaying adminhelps to a specified
 
 ### NOTICE:
 
-This is a project based on the [Baystation12](http://baystation12.net/) code for Space Station 13, which can be located here, lisenced under GPL3. The original, unmodified Baystation 12 code can be found [here](https://github.com/Baystation12/Baystation12).
+This is a project based on the [Baystation12](http://baystation12.net/) code for Space Station 13, which can be located here, licenced under GPL3. The original, unmodified Baystation 12 code can be found [here](https://github.com/Baystation12/Baystation12).
