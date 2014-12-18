@@ -29,6 +29,8 @@
 /mob/living/silicon/robot/drone/New()
 
 	..()
+	verbs += /mob/living/proc/ventcrawl
+	verbs += /mob/living/proc/hide
 
 	if(camera && "Robots" in camera.network)
 		camera.network.Add("Engineering")
