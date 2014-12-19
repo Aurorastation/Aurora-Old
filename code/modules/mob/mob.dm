@@ -739,7 +739,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 				var/total = 0
 				var/staff = 0
 				for(var/client/C in clients)
-					if(C.holder.rights & R_ADMIN || C.holder.rights & R_MOD)
+					if(C.holder && (C.holder.rights & R_ADMIN || C.holder.rights & R_MOD))
 						staff++
 					if(istype(C.mob, /mob/living))
 						players++
