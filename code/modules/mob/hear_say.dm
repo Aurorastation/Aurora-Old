@@ -186,6 +186,7 @@
 		if(client.prefs.toggles & CHAT_GHOSTEARS && speaker in view(src))
 			message = "<b>[message]</b>"
 
+	message = "<i>[message]</i>" // to give it it's unique thing because I'm lazy for now
 
 	if(say_understands(speaker, language))
 		message = "<span class='game say'><span class='name'>[speaker.real_name]</span>[alt_name] [track][verb], <span class='message'>\"[message]\"</span></span>"
