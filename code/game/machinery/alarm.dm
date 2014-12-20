@@ -687,8 +687,8 @@
 	var/co2_percent = round(environment.gas["carbon_dioxide"] / total * 100, 2)
 
 	current_settings = TLV["toxins"]
-	var/phoron_dangerlevel = get_danger_level(environment.gas["toxins"]*partial_pressure, current_settings)
-	var/phoron_percent = round(environment.gas["toxins"] / total * 100, 2)
+	var/toxins_dangerlevel = get_danger_level(environment.gas["toxins"]*partial_pressure, current_settings)
+	var/toxins_percent = round(environment.gas["toxins"] / total * 100, 2)
 
 	//current_settings = TLV["other"]
 	//var/other_moles = 0.0
@@ -703,7 +703,7 @@
 Pressure: <span class='dl[pressure_dangerlevel]'>[environment_pressure]</span>kPa<br>
 Oxygen: <span class='dl[oxygen_dangerlevel]'>[oxygen_percent]</span>%<br>
 Carbon dioxide: <span class='dl[co2_dangerlevel]'>[co2_percent]</span>%<br>
-Toxins: <span class='dl[phoron_dangerlevel]'>[phoron_percent]</span>%<br>
+Toxins: <span class='dl[toxins_dangerlevel]'>[toxins_percent]</span>%<br>
 "}
 	//if (other_dangerlevel==2)
 	//	output += "Notice: <span class='dl2'>High Concentration of Unknown Particles Detected</span><br>"
@@ -714,7 +714,7 @@ Toxins: <span class='dl[phoron_dangerlevel]'>[phoron_percent]</span>%<br>
 
 	//'Local Status' should report the LOCAL status, damnit.
 	output += "Local Status: "
-	switch(max(pressure_dangerlevel,oxygen_dangerlevel,co2_dangerlevel,phoron_dangerlevel,other_dangerlevel,temperature_dangerlevel))
+	switch(max(pressure_dangerlevel,oxygen_dangerlevel,co2_dangerlevel,toxins_dangerlevel,other_dangerlevel,temperature_dangerlevel))
 		if(2)
 			output += "<span class='dl2'>DANGER: Internals Required</span><br>"
 		if(1)
@@ -843,7 +843,7 @@ siphoning
 Carbon Dioxide
 <A href='?src=\ref[src];id_tag=[id_tag];command=co2_scrub;val=[!data["filter_co2"]]'>[data["filter_co2"]?"on":"off"]</A>;
 Toxins
-<A href='?src=\ref[src];id_tag=[id_tag];command=tox_scrub;val=[!data["filter_phoron"]]'>[data["filter_phoron"]?"on":"off"]</A>;
+<A href='?src=\ref[src];id_tag=[id_tag];command=tox_scrub;val=[!data["filter_toxins"]]'>[data["filter_toxins"]?"on":"off"]</A>;
 Nitrous Oxide
 <A href='?src=\ref[src];id_tag=[id_tag];command=n2o_scrub;val=[!data["filter_n2o"]]'>[data["filter_n2o"]?"on":"off"]</A>
 <BR>
@@ -893,12 +893,12 @@ table tr:first-child th:first-child { border: none;}
 				"oxygen"         = "O<sub>2</sub>",
 				"carbon dioxide" = "CO<sub>2</sub>",
 				"plasma"         = "Toxin",
-				"other"          = "Other",)
+				"other"          = "Other")
 
 			var/list/selected
 			for (var/g in gases)
 				output += "<TR><th>[gases[g]]</th>"
-				selected = TLV[g]
+				selected += TLV[g]
 				for(var/i = 1, i <= 4, i++)
 					output += "<td><A href='?src=\ref[src];command=set_threshold;env=[g];var=[i]'>[selected[i] >= 0 ? selected[i] :"OFF"]</A></td>"
 				output += "</TR>"

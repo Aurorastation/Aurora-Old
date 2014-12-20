@@ -125,7 +125,7 @@
 /obj/item/weapon/melee/energy/sword:4:Energy Sword;
 /obj/item/weapon/storage/box/syndicate:10:Syndicate Bundle;
 /obj/item/weapon/storage/box/emps:3:5 EMP Grenades;
-/obj/item/weapon/melee/baton/stunrod:4:Stunrod;
+/obj/item/weapon/melee/baton/stunrod/loaded:4:Stunrod;
 Whitespace:Seperator;
 Stealthy and Inconspicuous Weapons;
 /obj/item/weapon/pen/paralysis:3:Paralysis Pen;

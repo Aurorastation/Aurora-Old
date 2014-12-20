@@ -148,6 +148,14 @@
 	flags_inv = HIDEJUMPSUIT
 	siemens_coefficient = 0.6
 
+/obj/item/clothing/suit/armor/hos/vest
+	name = "armored vest"
+	desc = "A platecarrier worns by the head of security."
+	icon_state = "hos-armor"
+	item_state = "armor"
+	flags_inv = 0
+	siemens_coefficient = 0.6
+
 
 /obj/item/clothing/head/helmet/HoS/dermal
 	name = "Dermal Armour Patch"

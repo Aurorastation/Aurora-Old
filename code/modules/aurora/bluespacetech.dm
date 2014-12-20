@@ -117,48 +117,37 @@
 		return 0
 
 	suicide()
-		src.custom_emote(1,"presses a button on his suit, followed by a polite bow.")
+		if(key && species.name != "Human")
+			switch(species.name)
+				if("Tajaran")
+					bsc()
+				if("Machine")
+					bsb()
+				if("Diona")
+					bsd()
+				if("Unathi")
+					bsu()
+				if("Skrell")
+					bss()
+			return
+
+		src.custom_emote(1,"presses a button on their suit, followed by a polite bow.")
 		spawn(10)
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(5, 1, src)
 			s.start()
 			spawn(5)
 				del(s)
-
-			if(key && species.name != "Human")
-				switch(species.name)
-					if("Tajaran")
-						bsc()
-					if("Machine")
-						bsb()
-					if("Diona")
-						bsd()
-					if("Unathi")
-						bsu()
-					if("Skrell")
-						bss()
-
-/*			if(species.name != "Tajaran")
-				if(species.name == "Machine" && key)
-					h_style = "blue IPC screen"
-					regenerate_icons()
-*/
 			if(key)
 				var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
 				ghost.key = key
-/*					if(species.name == "Machine")
-						ghost.mind.name = "Bluespace Bot"
-						ghost.name = "Bluespace Bot"
-						ghost.real_name = "Bluespace Bot"
-						ghost.voice_name = "Bluespace Bot"
-					else
-*/
 				ghost.mind.name = "[ghost.key] BSTech"
 				ghost.name = "[ghost.key] BSTech"
 				ghost.real_name = "[ghost.key] BSTech"
 				ghost.voice_name = "[ghost.key] BSTech"
 
 			del(src)
+		return
 
 	proc/bsc() //because we all have our unrealistic snowflakes right?
 		if(set_species("Tajaran"))

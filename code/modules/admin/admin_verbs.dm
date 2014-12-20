@@ -134,7 +134,8 @@ var/list/admin_verbs_fun = list(
 	/client/proc/object_talk,
 	/client/proc/one_click_antag,
 	/client/proc/secrets,
-	/client/proc/send_space_ninja
+	/client/proc/send_space_ninja,
+	/client/proc/toggle_view_range
 	)
 var/list/admin_verbs_dev = list(
 	/client/proc/dsay,
@@ -189,7 +190,8 @@ var/list/admin_verbs_server = list(
 	/datum/admins/proc/toggle_aliens,
 	/datum/admins/proc/toggle_space_ninja,
 	/client/proc/toggle_random_events,
-	/client/proc/check_customitem_activity
+	/client/proc/check_customitem_activity,
+	/client/proc/nanomapgen_DumpImage
 	)
 var/list/admin_verbs_debug = list(
 	/client/proc/getruntimelog,                     /*allows us to access runtime logs to somebody*/
@@ -216,7 +218,8 @@ var/list/admin_verbs_debug = list(
 	/client/proc/SDQL2_query,
 	/client/proc/cmd_dev_reset_gravity,
 	/client/proc/cmd_dev_reset_floating,
-	/client/proc/fillspace
+	/client/proc/fillspace,
+	/client/proc/hide_activity
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -377,7 +380,11 @@ var/list/admin_verbs_mod = list(
 		/client/proc/cmd_admin_grantfullaccess,
 		/client/proc/kaboom,
 		/client/proc/splash,
-		/client/proc/cmd_admin_areatest
+		/client/proc/cmd_admin_areatest,
+		/client/proc/view_power_update_stats_area,
+		/client/proc/view_power_update_stats_machines,
+		/client/proc/toggle_power_update_profiling,
+		/client/proc/atmos_toggle_debug
 		)
 
 /client/proc/hide_most_verbs()//Allows you to keep some functionality while hiding some verbs
@@ -1046,3 +1053,21 @@ var/list/admin_verbs_mod = list(
 	if(A.name == "Space")
 		for(var/turf/space/S in range(2,usr))
 			S.ChangeTurf(/turf/simulated/floor/plating)
+
+/client/proc/hide_activity()
+	set category = "Preferences"
+	set name = "Hide Var Edits"
+	set desc = "Hide Var edit logs from devs"
+
+	if(!check_rights(R_DEBUG))
+		holder.hide_activity = 0
+		return
+
+	if(holder)
+		holder.hide_activity = !holder.hide_activity
+
+	if (holder.hide_activity)
+		usr << "Your varedits will now be hidden from developers"
+	else
+		usr << "Your varedits will now be shown to developers"
+	return

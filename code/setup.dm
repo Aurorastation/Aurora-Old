@@ -741,6 +741,8 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define NO_BREATHE 2
 #define NO_SCAN 4
 #define NO_PAIN 8
+#define NO_SLIP 16
+#define NO_POISON 32
 
 #define HAS_SKIN_TONE 16
 #define HAS_SKIN_COLOR 32
@@ -762,6 +764,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define RESTRICTED 2   		// Language can only be accquired by spawning or an admin.
 #define NONVERBAL 4    		// Language has a significant non-verbal component. Speech is garbled without line-of-sight
 #define SIGNLANG 8     		// Language is completely non-verbal. Speech is displayed through emotes for those who can understand.
+#define HIVEMIND 16         // Broadcast to all mobs with this language.
 
 //Flags for zone sleeping
 #define ZONE_ACTIVE 1
@@ -840,6 +843,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define IS_VOX 2
 #define IS_SKRELL 3
 #define IS_UNATHI 4
+#define IS_XENOS 5
 
 #define MAX_GEAR_COST 5 //Used in chargen for loadout limit.
 
@@ -864,3 +868,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define ATMOS_DEFAULT_VOLUME_FILTER	200	//L
 #define ATMOS_DEFAULT_VOLUME_MIXER	200	//L
 #define ATMOS_DEFAULT_VOLUME_PIPE	70	//L
+
+// Reagent metabolism defines.
+#define FOOD_METABOLISM 0.4
+#define ALCOHOL_METABOLISM 0.1

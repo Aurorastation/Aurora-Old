@@ -3,6 +3,7 @@ var/list/department_radio_keys = list(
 	  ":l" = "left ear",	"#l" = "left ear",		".l" = "left ear",
 	  ":i" = "intercom",	"#i" = "intercom",		".i" = "intercom",
 	  ":h" = "department",	"#h" = "department",	".h" = "department",
+	  ":+" = "special",		"#+" = "special",		".+" = "special", //activate radio-specific special functions
 	  ":c" = "Command",		"#c" = "Command",		".c" = "Command",
 	  ":n" = "Science",		"#n" = "Science",		".n" = "Science",
 	  ":m" = "Medical",		"#m" = "Medical",		".m" = "Medical",
@@ -94,6 +95,7 @@ var/list/department_radio_keys = list(
 
 		if (speaking.flags & SIGNLANG)
 			say_signlang(message, pick(speaking.signlang_verb), speaking)
+			log_say("[name]/[key] : [message]")
 			return 1
 
 	//speaking into radios
@@ -171,8 +173,21 @@ var/list/department_radio_keys = list(
 	return 1
 
 /mob/living/proc/say_signlang(var/message, var/verb="gestures", var/datum/language/language)
-	for (var/mob/O in viewers(src, null))
+	var/list/listening = list()
+
+	for (var/mob/O in viewers(world.view, src))
+		listening += O
+
+	for(var/mob/M in player_list)
+		if(istype(M, /mob/new_player))
+			continue
+
+		if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTEARS))
+			listening |= M
+
+	for (var/mob/O in listening)
 		O.hear_signlang(message, verb, language, src)
+
 
 /obj/effect/speech_bubble
 	var/mob/parent

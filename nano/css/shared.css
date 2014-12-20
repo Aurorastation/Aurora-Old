@@ -555,6 +555,15 @@ th.eng {
     color: #ffffff;
 }
 
+/* Damage colors for crew monitoring computer */
+
+.burn {
+    color: orange;
+}
+
+.brute {
+    color: red;
+}
 
 .toxin {
     color: green;

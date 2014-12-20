@@ -12,6 +12,8 @@ var/global/list/machines = list()
 var/global/list/processing_objects = list()
 var/global/list/active_diseases = list()
 var/global/list/events = list()
+var/global/list/med_hud_users = list() //list of all entities using a medical HUD.
+var/global/list/sec_hud_users = list() //list of all entities using a security HUD.
 		//items that ask to be called every cycle
 
 var/global/defer_powernet_rebuild = 0		// true if net rebuild will be called manually after an event
@@ -82,6 +84,7 @@ var/station_name = "NSS Aurora"
 var/game_version = "Baystation12"
 var/changelog_hash = ""
 var/game_year = (text2num(time2text(world.realtime, "YYYY")) + 442)
+var/forum_link = "http://aurorastation.org/forums/"
 
 var/datum/air_tunnel/air_tunnel1/SS13_airtunnel = null
 var/going = 1.0
@@ -140,7 +143,7 @@ var/list/newplayer_start = list()
 
 //Spawnpoints.
 var/list/latejoin = list()
-var/list/latejoin_gateway = list()
+//var/list/latejoin_gateway = list()
 var/list/latejoin_cryo = list()
 
 var/list/prisonwarp = list()	//prisoners go to these

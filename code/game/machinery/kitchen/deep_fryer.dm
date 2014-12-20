@@ -67,6 +67,12 @@
 	if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/deepfryholder))
 		user << "<span class='userdanger'>You cannot doublefry.</span>"
 		return
+	if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable/candy))
+		user << "<span class='warning'>That would probably break [src].</span>"
+		return
+	if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/cereal))
+		user << "<span class='warning'>That isn't going to fit.</span>"
+		return
 	else
 		fry_food(I, user)
 
@@ -152,6 +158,7 @@
 		S.name = "deep fried [frying.name]"
 		S.desc = I.desc
 		frying.loc = S	//this might be a bad idea.
+		del(I)
 
 	icon_state = "fryer_off"
 	on = FALSE

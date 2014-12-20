@@ -88,7 +88,14 @@
 //SoundScopes extra stuffs
 //I'm sending debug messages through here for when an admin log is made at the same time.
 //What's the point in making 2 recorded logs for one thing.
-/proc/msg_scopes(var/msg, tell_devs = 0, override = 0)
+/proc/msg_scopes(var/msg, tell_devs = 0, override = 0, var/client = null)
+	if(client)
+		var/client/C = client
+		if(!C || !C.holder)
+			return
+		if(C.holder.hide_activity)
+			return
+
 	if(tell_devs)
 		msg = "DEBUG: [msg]"
 	else

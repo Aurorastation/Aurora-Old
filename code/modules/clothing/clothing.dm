@@ -10,6 +10,10 @@
 	*/
 	var/list/sprite_sheets_refit = null
 
+//Updates the icons of the mob wearing the clothing item, if any.
+/obj/item/clothing/proc/update_clothing_icon()
+	return
+
 //BS12: Species-restricted clothing check.
 /obj/item/clothing/mob_can_equip(M as mob, slot)
 
@@ -121,6 +125,11 @@
 	if(istype(src,/obj/item/clothing/ears/offear))
 		del(src)
 
+/obj/item/clothing/ears/update_clothing_icon()
+	if (ismob(src.loc))
+		var/mob/M = src.loc
+		M.update_inv_ears()
+
 /obj/item/clothing/ears/offear
 	name = "Other ear"
 	w_class = 5.0
@@ -163,6 +172,10 @@ SEE_PIXELS// if an object is located on an unlit area, but some of its pixels ar
 BLIND     // can't see anything
 */
 
+/obj/item/clothing/glasses/update_clothing_icon()
+	if (ismob(src.loc))
+		var/mob/M = src.loc
+		M.update_inv_glasses()
 
 //Gloves
 /obj/item/clothing/gloves
@@ -184,6 +197,11 @@ BLIND     // can't see anything
 	set src in usr
 	..()
 	return
+
+/obj/item/clothing/gloves/update_clothing_icon()
+	if (ismob(src.loc))
+		var/mob/M = src.loc
+		M.update_inv_gloves()
 
 /obj/item/clothing/gloves/emp_act(severity)
 	if(cell)
@@ -225,6 +243,12 @@ BLIND     // can't see anything
 	slot_flags = SLOT_HEAD
 	w_class = 2.0
 
+/obj/item/clothing/head/update_clothing_icon()
+	if (ismob(src.loc))
+		var/mob/M = src.loc
+		M.update_inv_head()
+
+///////////////////////////////////////////////////////////////////////
 //Mask
 /obj/item/clothing/mask
 	name = "mask"
@@ -234,7 +258,13 @@ BLIND     // can't see anything
 //	body_parts_covered = FACE|EYES
 	sprite_sheets = list("Vox" = 'icons/mob/species/vox/masks.dmi')
 
+/obj/item/clothing/mask/update_clothing_icon()
+	if (ismob(src.loc))
+		var/mob/M = src.loc
+		M.update_inv_wear_mask()
+
 /obj/item/clothing/mask/proc/filter_air(datum/gas_mixture/air)
+	return
 
 //Shoes
 /obj/item/clothing/shoes
@@ -251,6 +281,10 @@ BLIND     // can't see anything
 	species_restricted = list("exclude","Unathi","Tajaran")
 	sprite_sheets = list("Vox" = 'icons/mob/species/vox/shoes.dmi')
 
+/obj/item/clothing/shoes/update_clothing_icon()
+	if (ismob(src.loc))
+		var/mob/M = src.loc
+		M.update_inv_shoes()
 
 /obj/item/proc/negates_gravity()
 	return 0
@@ -269,6 +303,10 @@ BLIND     // can't see anything
 	siemens_coefficient = 0.9
 	w_class = 3
 
+/obj/item/clothing/suit/update_clothing_icon()
+	if (ismob(src.loc))
+		var/mob/M = src.loc
+		M.update_inv_wear_suit()
 //Spacesuit
 //Note: Everything in modules/clothing/spacesuits should have the entire suit grouped together.
 //      Meaning the the suit is defined directly after the corrisponding helmet. Just like below!
@@ -360,6 +398,11 @@ BLIND     // can't see anything
 	var/rolled_sleeves = 0
 	var/basecolor
 	sprite_sheets = list("Vox" = 'icons/mob/species/vox/uniform.dmi')
+
+/obj/item/clothing/under/update_clothing_icon()
+	if (ismob(src.loc))
+		var/mob/M = src.loc
+		M.update_inv_w_uniform()
 
 /obj/item/clothing/under/attackby(obj/item/I, mob/user)
 	if(hastie)
@@ -486,7 +529,7 @@ BLIND     // can't see anything
 	if(basecolor + "_d_s" in icon_states('icons/mob/uniform.dmi'))
 		body_parts_covered = "[basecolor]" ? LEGS|LOWER_TORSO : UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
 		item_color = item_color == "[basecolor]" ? "[basecolor]_d" : "[basecolor]"
-		usr.update_inv_w_uniform()
+		update_clothing_icon()
 		if(rolled_down)
 			usr << "You roll [src] up"
 			rolled_down = 0
@@ -509,7 +552,7 @@ BLIND     // can't see anything
 		basecolor = item_color
 	if(basecolor + "_r_s" in icon_states('icons/mob/uniform.dmi'))
 		item_color = item_color == "[basecolor]" ? "[basecolor]_r" : "[basecolor]"
-		usr.update_inv_w_uniform()
+		update_clothing_icon()
 		if(rolled_sleeves)
 			usr << "You roll [src] sleeves down"
 			rolled_sleeves = 0
@@ -527,10 +570,7 @@ BLIND     // can't see anything
 
 	hastie.on_removed(user)
 	hastie = null
-
-	if(istype(loc, /mob/living/carbon/human))
-		var/mob/living/carbon/human/H = loc
-		H.update_inv_w_uniform()
+	update_clothing_icon()
 
 /obj/item/clothing/under/verb/removetie()
 	set name = "Remove Accessory"

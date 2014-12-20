@@ -23,16 +23,14 @@
 		environment = loc.return_air()
 
 	if (stat != DEAD)
-		if(!istype(src,/mob/living/carbon/monkey/diona)) //still breathing
-			//First, resolve location and get a breath
-			if(air_master.current_cycle%4==2)
-				//Only try to take a breath every 4 seconds, unless suffocating
-				breathe()
-			else //Still give containing object the chance to interact
-				if(istype(loc, /obj/))
-					var/obj/location_as_object = loc
-					location_as_object.handle_internal_lifeform(src, 0)
-
+		//First, resolve location and get a breath
+		if(air_master.current_cycle%4==2)
+			//Only try to take a breath every 4 seconds, unless suffocating
+			breathe()
+		else //Still give containing object the chance to interact
+			if(istype(loc, /obj/))
+				var/obj/location_as_object = loc
+				location_as_object.handle_internal_lifeform(src, 0)
 
 		//Updates the number of stored chemicals for powers
 		handle_changeling()
@@ -489,7 +487,7 @@
 			silent = 0
 		else				//ALIVE. LIGHTS ARE ON
 			updatehealth()
-			if(health < config.health_threshold_dead || brain_op_stage == 4.0)
+			if(health < config.health_threshold_dead || !has_brain())
 				death()
 				blinded = 1
 				stat = DEAD
