@@ -6,7 +6,8 @@ proc
 emit_particle()
 
 1 power box
-the only part of this thing that uses power, can hack to mess with the pa/make it better
+the only part of this thing that uses power, can hack to mess with the pa/make it better.
+Lies, only the control computer draws power.
 
 1 fuel chamber
 contains procs for mixing gas and whatever other fuel it uses
@@ -70,7 +71,6 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	var/powered = 0
 	var/strength = null
 	var/desc_holder = null
-
 
 /obj/structure/particle_accelerator/end_cap
 	name = "Alpha Particle Generation Array"
@@ -158,13 +158,13 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 
 /obj/structure/particle_accelerator/blob_act()
 	if(prob(50))
-		Del()
+		Del(src)
 	return
 
 
 /obj/structure/particle_accelerator/meteorhit()
 	if(prob(50))
-		Del()
+		Del(src)
 	return
 
 /obj/structure/particle_accelerator/update_icon()
@@ -205,7 +205,6 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 			master = O
 			return 1
 	return 0
-
 
 /obj/structure/particle_accelerator/proc/process_tool_hit(var/obj/O, var/mob/user)
 	if(!(O) || !(user))
@@ -329,15 +328,15 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 /obj/machinery/particle_accelerator/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			del(src)
+			Del(src)
 			return
 		if(2.0)
 			if (prob(50))
-				del(src)
+				Del(src)
 				return
 		if(3.0)
 			if (prob(25))
-				del(src)
+				Del(src)
 				return
 		else
 	return
@@ -345,13 +344,13 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 
 /obj/machinery/particle_accelerator/blob_act()
 	if(prob(50))
-		del(src)
+		Del(src)
 	return
 
 
 /obj/machinery/particle_accelerator/meteorhit()
 	if(prob(50))
-		del(src)
+		Del(src)
 	return
 
 

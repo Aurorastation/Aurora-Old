@@ -163,7 +163,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	else
 		//The construction/deconstruction of the console code.
 		..()
-	
+
 	src.updateUsrDialog()
 	return
 
@@ -263,9 +263,9 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 									files.UpdateTech(T, temp_tech[T])
 							if(linked_destroy.loaded_item.reliability < 100 && linked_destroy.loaded_item.crit_fail)
 								files.UpdateDesign(linked_destroy.loaded_item.type)
-							if(linked_lathe) //Also sends salvaged materials to a linked protolathe, if any.
-								linked_lathe.m_amount += min((linked_lathe.max_material_storage - linked_lathe.TotalMaterials()), (linked_destroy.loaded_item.m_amt*linked_destroy.decon_mod))
-								linked_lathe.g_amount += min((linked_lathe.max_material_storage - linked_lathe.TotalMaterials()), (linked_destroy.loaded_item.g_amt*linked_destroy.decon_mod))
+							if(linked_lathe && linked_destroy.loaded_item.matter) //Also sends salvaged materials to a linked protolathe, if any.
+								linked_lathe.m_amount += min((linked_lathe.max_material_storage - linked_lathe.TotalMaterials()), (linked_destroy.loaded_item.matter["metal"]*linked_destroy.decon_mod))
+								linked_lathe.g_amount += min((linked_lathe.max_material_storage - linked_lathe.TotalMaterials()), (linked_destroy.loaded_item.matter["glass"]*linked_destroy.decon_mod))
 							linked_destroy.loaded_item = null
 						for(var/obj/I in linked_destroy.contents)
 							for(var/mob/M in I.contents)
@@ -282,7 +282,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 								if(!(I in linked_destroy.component_parts))
 									del(I)
 									linked_destroy.icon_state = "d_analyzer"
-						use_power(250)
+						use_power(linked_destroy.active_power_usage)
 						screen = 1.0
 						updateUsrDialog()
 
@@ -319,7 +319,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 							files.RefreshResearch()
 							server_processed = 1
 						if(!istype(S, /obj/machinery/r_n_d/server/centcom) && server_processed)
-							S.produce_heat(100)
+							S.produce_heat()
 					screen = 1.6
 					updateUsrDialog()
 
@@ -334,10 +334,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					being_built = D
 					break
 			if(being_built)
-				var/power = 2000
+				var/power = linked_lathe.active_power_usage
 				for(var/M in being_built.materials)
 					power += round(being_built.materials[M] / 5)
-				power = max(2000, power)
+				power = max(linked_lathe.active_power_usage, power)
 				screen = 0.3
 				linked_lathe.busy = 1
 				flick("protolathe_n",linked_lathe)
@@ -390,10 +390,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					being_built = D
 					break
 			if(being_built)
-				var/power = 2000
+				var/power = linked_imprinter.active_power_usage
 				for(var/M in being_built.materials)
 					power += round(being_built.materials[M] / 5)
-				power = max(2000, power)
+				power = max(linked_imprinter.active_power_usage, power)
 				screen = 0.4
 				linked_imprinter.busy = 1
 				flick("circuit_imprinter_ani",linked_imprinter)
@@ -769,7 +769,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += "Eject: "
 			if(linked_lathe.plasma_amount >= 2000) dat += "<A href='?src=\ref[src];lathe_ejectsheet=plasma;lathe_ejectsheet_amt=1'>(1 Sheet)</A> "
 			if(linked_lathe.plasma_amount >= 10000) dat += "<A href='?src=\ref[src];lathe_ejectsheet=plasma;lathe_ejectsheet_amt=5'>(5 Sheets)</A> "
-			if(linked_lathe.plasma_amount >= 2000) dat += "<A href='?src=\ref[src];lathe_ejectsheet=plasmalathe_ejectsheet_amt=50'>(Max Sheets)</A>"
+			if(linked_lathe.plasma_amount >= 2000) dat += "<A href='?src=\ref[src];lathe_ejectsheet=plasma;lathe_ejectsheet_amt=50'>(Max Sheets)</A>"
 			dat += "<BR>"
 			//Uranium
 			dat += "* [linked_lathe.uranium_amount] cm<sup>3</sup> of Uranium || "

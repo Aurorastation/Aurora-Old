@@ -14,18 +14,11 @@
 	name = "Health Scanner HUD"
 	desc = "A heads-up display that scans the humans in view and provides accurate data about their health status."
 	icon_state = "healthhud"
-
+	body_parts_covered = 0
 
 
 /obj/item/clothing/glasses/hud/health/process_hud(var/mob/M)
-	if(!M)	return
-	if(!M.client)	return
-	var/client/C = M.client
-	for(var/mob/living/carbon/human/patient in view(get_turf(M)))
-		if(M.see_invisible < patient.invisibility)
-			continue
-		C.images += patient.hud_list[HEALTH_HUD]
-		C.images += patient.hud_list[STATUS_HUD]
+	process_med_hud(M, 1)
 
 /obj/item/clothing/glasses/hud/health/prescription
 	name = "prescription glasses/HUD assembly"
@@ -46,6 +39,7 @@
 	name = "Security HUD"
 	desc = "A heads-up display that scans the humans in view and provides accurate data about their ID status and security records."
 	icon_state = "securityhud"
+	body_parts_covered = 0
 	var/global/list/jobs[0]
 
 /obj/item/clothing/glasses/hud/security/prescription
@@ -72,16 +66,4 @@
 	invisa_view = 2
 
 /obj/item/clothing/glasses/hud/security/process_hud(var/mob/M)
-
-	if(!M)	return
-	if(!M.client)	return
-	var/client/C = M.client
-	for(var/mob/living/carbon/human/perp in view(get_turf(M)))
-		if(M.see_invisible < perp.invisibility)
-			continue
-		if(!C) continue
-		C.images += perp.hud_list[ID_HUD]
-		C.images += perp.hud_list[WANTED_HUD]
-		C.images += perp.hud_list[IMPTRACK_HUD]
-		C.images += perp.hud_list[IMPLOYAL_HUD]
-		C.images += perp.hud_list[IMPCHEM_HUD]
+	process_sec_hud(M, 1)

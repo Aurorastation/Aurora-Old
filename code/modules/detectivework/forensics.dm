@@ -52,7 +52,7 @@
 		return
 	else if(user.zone_sel.selecting == "mouth")
 		user.visible_message("[user] swabs [M]'s mouth for a saliva sample.", "You swab [M]'s mouth for a saliva sample.")
-		dna = M.dna.unique_enzymes
+		dna += M.dna.unique_enzymes
 		used = 1
 		name = "swab of [M]'s DNA"
 		desc = "[initial(desc)] <br> \blue The label on the vial reads 'Sample of [M]'s DNA'."
@@ -544,10 +544,12 @@
 
 	// this is the data which will be sent to the ui
 	var/data[0]
-	data["scan_progress"] = round(scanner_progress)
-	data["scanning"] = scanning
-	data["bloodsamp"] = (bloodsamp ? bloodsamp.name : "")
-	data["bloodsamp_desc"] = (bloodsamp ? (bloodsamp.desc ? bloodsamp.desc : "No information on record.") : "")
+	data = list(
+		"scan_progress" = round(scanner_progress),
+		"scanning" = scanning,
+		"bloodsamp" = (bloodsamp ? bloodsamp.name : ""),
+		"bloodsamp_desc" = (bloodsamp ? (bloodsamp.desc ? bloodsamp.desc : "No information on record.") : ""),
+	)
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
 	if (!ui)

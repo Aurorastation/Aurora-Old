@@ -63,6 +63,7 @@
 	var/kick_inactive = 0				//force disconnect for inactive players
 	var/load_jobs_from_txt = 0
 	var/ToRban = 0
+	var/ip_blacklist_enabled = 0
 	var/automute_on = 0					//enables automuting/spam prevention
 	var/jobs_have_minimal_access = 1	//determines whether jobs use minimal access or expanded access.
 
@@ -111,6 +112,8 @@
 	var/revival_cloning = 1
 	var/revival_brain_life = -1
 
+	var/use_loyalty_implants = 0
+
 	//Used for modifying movement speed for mobs.
 	//Unversal modifiers
 	var/run_speed = 0
@@ -144,6 +147,7 @@
 	var/admin_irc = ""
 	var/python_path = "" //Path to the python executable.  Defaults to "python" on windows and "/usr/bin/env python2" on unix
 	var/use_lib_nudge = 0 //Use the C library nudge instead of the python nudge.
+	var/use_overmap = 0
 
 /datum/configuration/New()
 	var/list/L = typesof(/datum/game_mode) - /datum/game_mode
@@ -496,6 +500,9 @@
 				if("max_maint_drones")
 					config.max_maint_drones = text2num(value)
 
+				if("use_overmap")
+					config.use_overmap = 1
+
 				else
 					log_misc("Unknown setting in configuration: '[name]'")
 
@@ -541,6 +548,8 @@
 					config.bones_can_break = value
 				if("limbs_can_break")
 					config.limbs_can_break = value
+				if("use_loyalty_implants")
+					config.use_loyalty_implants = 1
 				else
 					log_misc("Unknown setting in configuration: '[name]'")
 

@@ -49,8 +49,17 @@ obj/machinery/cooker/proc/checkValid(obj/item/check, mob/user)
 /*	if(istype(check, /obj/item/flag))
 		user << "<span class='warning'>That isn't going to fit.</span>"
 		return 0*/
-	if(!istype(check, /obj/item/weapon/reagent_containers/food))
+	if(!istype(check, /obj/item/weapon/reagent_containers/food/snacks))
 		user << "<span class='warning'>That isn't going to work.</span>"
+		return 0
+	if(istype(check, /obj/item/weapon/reagent_containers/food/snacks/customizable/candy))
+		user << "<span class='warning'>That would probably break [src].</span>"
+		return 0
+	if(istype(check, /obj/item/weapon/reagent_containers/food/snacks/cereal))
+		user << "<span class='warning'>That isn't going to fit.</span>"
+		return 0
+	if(istype(check, /obj/item/weapon/reagent_containers/food/snacks/deepfryholder))
+		user << "<span class='userdanger'>You cannot cook this twice.</span>"
 		return 0
 	return 1
 

@@ -5,10 +5,6 @@
 #define REAGENTS_OVERDOSE 30
 #define REM REAGENTS_EFFECT_MULTIPLIER
 
-//Some on_mob_life() procs check for alien races.
-#define IS_DIONA 1
-#define IS_VOX 2
-
 //The reaction procs must ALWAYS set src = null, this detaches the proc from the object (the reagent)
 //so that it can continue working when the reagent is deleted while the proc is still active.
 
@@ -26,6 +22,7 @@ datum
 		var/custom_metabolism = REAGENTS_METABOLISM
 		var/overdose = 0
 		var/overdose_dam = 1
+		var/scannable = 0 //shows up on health analyzers
 		//var/list/viruses = list()
 		var/color = "#000000" // rgb: 0, 0, 0 (does not support alpha channels - yet!)
 
@@ -241,7 +238,7 @@ datum
 
 				var/hotspot = (locate(/obj/fire) in T)
 				if(hotspot && !istype(T, /turf/space))
-					var/datum/gas_mixture/lowertemp = T.remove_air( T:air:total_moles() )
+					var/datum/gas_mixture/lowertemp = T.remove_air( T:air:total_moles )
 					lowertemp.temperature = max( min(lowertemp.temperature-2000,lowertemp.temperature / 2) ,0)
 					lowertemp.react()
 					T.assume_air(lowertemp)
@@ -252,7 +249,7 @@ datum
 				var/turf/T = get_turf(O)
 				var/hotspot = (locate(/obj/fire) in T)
 				if(hotspot && !istype(T, /turf/space))
-					var/datum/gas_mixture/lowertemp = T.remove_air( T:air:total_moles() )
+					var/datum/gas_mixture/lowertemp = T.remove_air( T:air:total_moles )
 					lowertemp.temperature = max( min(lowertemp.temperature-2000,lowertemp.temperature / 2) ,0)
 					lowertemp.react()
 					T.assume_air(lowertemp)
@@ -278,7 +275,7 @@ datum
 			description = "An ashen-obsidian-water mix, this solution will alter certain sections of the brain's rationality."
 			color = "#E0E8EF" // rgb: 224, 232, 239
 
-			on_mob_life(var/mob/living/carbon/human/M as mob)
+			on_mob_life(var/mob/living/M as mob)
 				if(ishuman(M))
 					if((M.mind in ticker.mode.cult) && prob(10))
 						M << "\blue A cooling sensation from inside you brings you an untold calmness."
@@ -296,7 +293,6 @@ datum
 								O.show_message(text("\red []'s skin sizzles and burns.", M), 1)
 				holder.remove_reagent(src.id, 10 * REAGENTS_METABOLISM) //high metabolism to prevent extended uncult rolls.
 				return
-
 
 		lube
 			name = "Space Lube"
@@ -431,6 +427,7 @@ datum
 			reagent_state = LIQUID
 			color = "#C8A5DC" // rgb: 200, 165, 220
 			overdose = REAGENTS_OVERDOSE*2
+			scannable = 1
 
 			on_mob_life(var/mob/living/M as mob, var/alien)
 				if(!M) M = holder.my_atom
@@ -808,11 +805,14 @@ datum
 			reagent_state = LIQUID
 			color = "#C855DC"
 			overdose = 60
+			scannable = 1
+			custom_metabolism = 0.025 // Lasts 10 minutes for 15 units
 
 			on_mob_life(var/mob/living/M as mob)
 				if (volume > overdose)
 					M.hallucination = max(M.hallucination, 2)
 				..()
+				M.adjustHalLoss(-5)
 				return
 
 		tramadol
@@ -822,11 +822,14 @@ datum
 			reagent_state = LIQUID
 			color = "#C8A5DC"
 			overdose = 30
+			scannable = 1
+			custom_metabolism = 0.025 // Lasts 10 minutes for 15 units
 
 			on_mob_life(var/mob/living/M as mob)
 				if (volume > overdose)
 					M.hallucination = max(M.hallucination, 2)
 				..()
+				M.adjustHalLoss(-20)
 				return
 
 		oxycodone
@@ -836,12 +839,14 @@ datum
 			reagent_state = LIQUID
 			color = "#C805DC"
 			overdose = 20
+			custom_metabolism = 0.25 // Lasts 10 minutes for 15 units
 
 			on_mob_life(var/mob/living/M as mob)
 				if (volume > overdose)
 					M.druggy = max(M.druggy, 10)
 					M.hallucination = max(M.hallucination, 3)
 				..()
+				M.adjustHalLoss(-70)
 				return
 
 
@@ -865,6 +870,18 @@ datum
 			description = "Sterilizes wounds in preparation for surgery."
 			reagent_state = LIQUID
 			color = "#C8A5DC" // rgb: 200, 165, 220
+
+			//makes you squeaky clean
+			reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)
+				if (method == TOUCH)
+					M.germ_level -= min(volume*20, M.germ_level)
+
+			reaction_obj(var/obj/O, var/volume)
+				O.germ_level -= min(volume*20, O.germ_level)
+
+			reaction_turf(var/turf/T, var/volume)
+				T.germ_level -= min(volume*20, T.germ_level)
+
 	/*		reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)
 				src = null
 				if (method==TOUCH)
@@ -1689,11 +1706,7 @@ datum
 
 			on_mob_life(var/mob/living/M as mob, var/alien)
 				if(!M) M = holder.my_atom
-				if(alien && alien == IS_VOX)
-					custom_metabolism = 10 //Inhaling O2 constantly puts plasma into voxblood which poisons them to hell. +Metab so one huff isn't death.
-					toxpwr = 12 //This is a hacky way of doing it.  They take 6 points of toxloss every four ticks (Breath tick).  Still less than now.
-				if(holder.has_reagent("inaprovaline"))
-					holder.remove_reagent("inaprovaline", 2*REM)
+				holder.remove_reagent("inaprovaline", 2*REM)
 				..()
 				return
 			reaction_obj(var/obj/O, var/volume)
@@ -1704,24 +1717,10 @@ datum
 						egg.Hatch()*/
 				if((!O) || (!volume))	return 0
 				var/turf/the_turf = get_turf(O)
-				var/datum/gas_mixture/napalm = new
-				var/datum/gas/volatile_fuel/fuel = new
-				fuel.moles = volume
-				napalm.trace_gases += fuel
-				the_turf.assume_air(napalm)
+				the_turf.assume_gas("volatile_fuel", volume, T20C)
 			reaction_turf(var/turf/T, var/volume)
 				src = null
-				var/datum/gas_mixture/napalm = new
-				var/datum/gas/volatile_fuel/fuel = new
-				fuel.moles = volume
-				napalm.trace_gases += fuel
-				T.assume_air(napalm)
-				return
-			reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)//Splashing people with plasma is stronger than fuel!
-				if(!istype(M, /mob/living))
-					return
-				if(method == TOUCH)
-					M.adjust_fire_stacks(volume / 5)
+				T.assume_gas("volatile_fuel", volume, T20C)
 				return
 
 		toxin/lexorin
@@ -1881,6 +1880,27 @@ datum
 				..()
 				return
 
+		//Reagents used for plant fertilizers.
+		toxin/fertilizer
+			name = "fertilizer"
+			id = "fertilizer"
+			description = "A chemical mix good for growing plants with."
+			reagent_state = LIQUID
+			toxpwr = 0.2 //It's not THAT poisonous.
+			color = "#664330" // rgb: 102, 67, 48
+
+		toxin/fertilizer/eznutrient
+			name = "EZ Nutrient"
+			id = "eznutrient"
+
+		toxin/fertilizer/left4zed
+			name = "Left-4-Zed"
+			id = "left4zed"
+
+		toxin/fertilizer/robustharvest
+			name = "Robust Harvest"
+			id = "robustharvest"
+
 		toxin/plantbgone
 			name = "Plant-B-Gone"
 			id = "plantbgone"
@@ -1907,9 +1927,20 @@ datum
 					alien_weeds.healthcheck()
 				else if(istype(O,/obj/effect/glowshroom)) //even a small amount is enough to kill it
 					del(O)
-				else if(istype(O,/obj/effect/spacevine))
+				else if(istype(O,/obj/effect/plantsegment))
 					if(prob(50)) del(O) //Kills kudzu too.
-				// Damage that is done to growing plants is separately at code/game/machinery/hydroponics at obj/item/hydroponics
+				else if(istype(O,/obj/machinery/portable_atmospherics/hydroponics))
+					var/obj/machinery/portable_atmospherics/hydroponics/tray = O
+
+					if(tray.seed)
+						tray.health -= rand(30,50)
+						if(tray.pestlevel > 0)
+							tray.pestlevel -= 2
+						if(tray.weedlevel > 0)
+							tray.weedlevel -= 3
+						tray.toxins += 4
+						tray.check_level_sanity()
+						tray.update_icon()
 
 			reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)
 				src = null
@@ -1973,7 +2004,7 @@ datum
 						M.confused += 2
 						M.drowsyness += 2
 					if(2 to 199)
-						M.Weaken(30)
+						M.Weaken(2)
 					if(200 to INFINITY)
 						M.sleeping += 1
 				..()
@@ -2550,7 +2581,7 @@ datum
 							T.wet_overlay = null
 				var/hotspot = (locate(/obj/fire) in T)
 				if(hotspot)
-					var/datum/gas_mixture/lowertemp = T.remove_air( T:air:total_moles() )
+					var/datum/gas_mixture/lowertemp = T.remove_air( T:air:total_moles )
 					lowertemp.temperature = max( min(lowertemp.temperature-2000,lowertemp.temperature / 2) ,0)
 					lowertemp.react()
 					T.assume_air(lowertemp)

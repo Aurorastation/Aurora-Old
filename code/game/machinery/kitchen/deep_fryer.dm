@@ -17,12 +17,27 @@
 		usr << "You can make out [frying] in the oil."
 
 /obj/machinery/deepfryer/attackby(obj/item/I, mob/user)
-	if(on)
+	if(istype(I, /obj/item/weapon/card/emag))
+		if(emagged)
+			user << "<span class='notice'>[src] is already emagged!</span>"
+		else
+			user << "<span class='notice'>Override the safety on [src].</span>"
+			emagged = 1
+		return
+
+	if(on || emagged)
 		var/obj/item/weapon/grab/G = I
 		if(istype(G))	// handle grabbed mob
 			if(ismob(G.affecting))
 				var/mob/living/GM = G.affecting
 				user.visible_message("<span class='warning'>[user] starts pushing [GM.name] into the fryer.</span>", "<span class='warning'>You try to force [GM.name] towards the fryer.</span>", "You hear a struggle.")
+
+				if(emagged)
+					icon_state = "fryer_on"
+					on = TRUE
+					spawn(30)
+						icon_state = "fryer_off"
+						on = TRUE
 
 				if(do_after(usr, 20))
 					var/body_part = fry_mob_by_limb(GM, user.zone_sel.selecting)
@@ -51,6 +66,12 @@
 		return
 	if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/deepfryholder))
 		user << "<span class='userdanger'>You cannot doublefry.</span>"
+		return
+	if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable/candy))
+		user << "<span class='warning'>That would probably break [src].</span>"
+		return
+	if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/cereal))
+		user << "<span class='warning'>That isn't going to fit.</span>"
 		return
 	else
 		fry_food(I, user)
@@ -137,6 +158,7 @@
 		S.name = "deep fried [frying.name]"
 		S.desc = I.desc
 		frying.loc = S	//this might be a bad idea.
+		del(I)
 
 	icon_state = "fryer_off"
 	on = FALSE

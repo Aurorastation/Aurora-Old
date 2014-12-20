@@ -13,7 +13,9 @@
 	if(stat == 2)
 		return say_dead(message)
 
-	if (istype(wear_mask, /obj/item/clothing/mask/muzzle))  //Todo:  Add this to speech_problem_flag checks.
+	var/message_mode = parse_message_mode(message, "headset")
+
+	if (istype(wear_mask, /obj/item/clothing/mask/muzzle) && message_mode != "changeling")  //Todo:  Add this to speech_problem_flag checks.
 		return
 
 	if(copytext(message,1,2) == "*")
@@ -23,10 +25,9 @@
 		alt_name = "(as [get_id_name("Unknown")])"
 
 	//parse the radio code and consume it
-	var/message_mode = parse_message_mode(message)
 	if (message_mode)
 		if (message_mode == "headset")
-			message = copytext(message,2)
+			message = copytext(message,2)	//it would be really nice if the parse procs could do this for us.
 		else
 			message = copytext(message,3)
 
@@ -35,6 +36,7 @@
 	if (speaking)
 		verb = speaking.speech_verb
 		message = copytext(message,3)
+
 	message = capitalize(trim(message))
 
 	if(speech_problem_flag)
@@ -46,22 +48,18 @@
 	if(!message || stat)
 		return
 
-	var/ending = copytext(message, length(message))
-	if(verb == "says")
-		if(ending == "!")
-			verb = pick("exclaims","shouts","yells")
-		if(ending == "?")
-			verb = "asks"
-	else
-		if(ending == "!")
-			verb = "orders"
-		if(ending == "?")
-			verb = "requests"
+	if (!speaking)
+		var/ending = copytext(message, length(message))
+		if(ending=="!")
+			verb=pick("exclaims","shouts","yells")
+		if(ending=="?")
+			verb="asks"
 
-	if(speaking)	//speaking = null if used through say without a language
-		if(!speaking.vocal)
-			sign(message, verb, speaking, alt_name, italics, message_range)
-			return
+	if(speaking && speaking.flags & SIGNLANG)
+		message_mode = null
+		..(message, speaking, verb, alt_name, italics, message_range)
+		return
+
 
 	var/list/obj/item/used_radios = new
 
@@ -111,7 +109,7 @@
 				I.talk_into(src, message, verb, speaking)
 				used_radios += I
 		if("whisper")
-			whisper(message)
+			whisper_say(message, speaking, alt_name)
 			return
 		if("binary")
 			if(robot_talk_understand || binarycheck())
@@ -134,41 +132,36 @@
 							r_ear.talk_into(src,message, message_mode, verb, speaking)
 							used_radios += r_ear
 
-
-	if(used_radios.len)
-		italics = 1
-		message_range = 1
-
-	var/datum/gas_mixture/environment = loc.return_air()
-	if(environment)
-		var/pressure = environment.return_pressure()
-		if(pressure < SAY_MINIMUM_PRESSURE)
-			italics = 1
-			message_range =1
-
+	var/sound/speech_sound
+	var/sound_vol
 	if((species.name == "Vox" || species.name == "Vox Armalis") && prob(20))
-		playsound(src.loc, 'sound/voice/shriek1.ogg', 50, 1)
+		speech_sound = sound('sound/voice/shriek1.ogg')
+		sound_vol = 50
 
-	..(message, speaking, verb, alt_name, italics, message_range, used_radios)
+	..(message, speaking, verb, alt_name, italics, message_range, used_radios, speech_sound, sound_vol)	//ohgod we should really be passing a datum here.
 
 /mob/living/carbon/human/say_understands(var/mob/other,var/datum/language/speaking = null)
 
 	if(has_brain_worms()) //Brain worms translate everything. Even mice and alien speak.
 		return 1
-	if (istype(other, /mob/living/carbon/monkey/diona) && !speaking)
-		if(other.languages.len >= 2)			//They've sucked down some blood and can speak common now.
+
+	//These only pertain to common. Languages are handled by mob/say_understands()
+	if (!speaking)
+		if (istype(other, /mob/living/carbon/monkey/diona))
+			if(other.languages.len >= 2)			//They've sucked down some blood and can speak common now.
+				return 1
+		if (istype(other, /mob/living/silicon))
+			return 1
+		if (istype(other, /mob/living/carbon/brain))
+			return 1
+		if (istype(other, /mob/living/carbon/slime))
 			return 1
 
-	if (istype(other, /mob/living/silicon))
-		return 1
-	if (istype(other, /mob/living/carbon/brain))
-		return 1
-	if (istype(other, /mob/living/carbon/slime))
-		return 1
-	if (istype(other, /mob/living/simple_animal))
-		if(other.universal_speak || src.universal_speak || src.universal_understand)
-			return 1
-		return 0
+	//This is already covered by mob/say_understands()
+	//if (istype(other, /mob/living/simple_animal))
+	//	if((other.universal_speak && !speaking) || src.universal_speak || src.universal_understand)
+	//		return 1
+	//	return 0
 
 	return ..()
 
@@ -217,6 +210,9 @@
 
 	return verb
 
+
+
+
 /mob/living/carbon/human/proc/handle_speech_problems(var/message)
 	var/list/returns[3]
 	var/verb = "says"
@@ -237,7 +233,7 @@
 					handled = 1
 
 	if((HULK in mutations) && health >= 25 && length(message))
-		//message = "[uppertext(message)]!!!"  //this is really irritating.  let's not.
+//		message = "[uppertext(message)]!!!" //No!
 		verb = pick("yells","roars","hollers")
 		handled = 1
 	if(slurring)
