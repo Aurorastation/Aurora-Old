@@ -55,6 +55,29 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 
 	feedback_add_details("admin_verb","RSG")
 
+/client/proc/cmd_dev_reset_floating()
+	set category = "Debug"
+	set name = "Reset floating mobs"
+	set desc = "Stops all mobs floating instantly."
+
+	if(!check_rights(R_DEBUG|R_DEV))	return
+
+	if(!holder)
+		return //how did they get here?
+
+	if(!ticker)
+		alert("Wait until the game starts")
+		return
+
+	if(ticker.current_state < GAME_STATE_PLAYING)
+		src << "\red The game hasn't started yet!"
+		return
+
+	for(var/mob/living/M in world)
+		M.float(0)
+
+	feedback_add_details("admin_verb","RSF")
+
 /obj/machinery/gravity_field_generator
 	name = "gravitational generator"
 	desc = "A device which produces a graviton field when set up."
@@ -123,9 +146,6 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	middle.overlays += "activated"
 	log_debug("Gravity Generator spawned: initialize()")
 	update_list()
-	spawn(100)
-		if(round_start >= 1)
-			round_start--
 
 //
 // Generator an admin can spawn
@@ -147,7 +167,6 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	power_channel = ENVIRON
 	sprite_number = 8
 	use_power = 1
-	interact_offline = 1
 	var/on = 1
 	var/breaker = 1
 	var/list/parts = list()
@@ -345,6 +364,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 		if(gravity_in_level() == 1)
 			alert = 1
 			gravity_is_on = 0
+			captain_announce("Gravity generator: shutdown successful.")
 			investigate_log("was brought offline and there is now no gravity for this level.", "gravity")
 			message_admins("The gravity generator was brought offline with no backup generator. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>[area.name]</a>)")
 			message_mods("The gravity generator was brought offline with no backup generator. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>[area.name]</a>)")
@@ -354,8 +374,6 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	update_list()
 	src.updateUsrDialog()
 	if(alert)
-		if(!(stat & BROKEN))
-			captain_announce("Gravity generator: shutdown successful.")
 		shake_everyone()
 
 // Charge/Discharge and turn on/off gravity when you reach 0/100 percent.
@@ -441,8 +459,8 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 					A.gravitychange(A.has_gravity,A,1)
 				else
 					A.gravitychange(A.has_gravity,A)
-			if(round_start == 1)
-				round_start = 0
+			if(round_start >= 1)
+				round_start--
 			gravity_field_generators["[T.z]"] |= src
 		else
 			msg_scopes("Here is a lovely list of floaty people")

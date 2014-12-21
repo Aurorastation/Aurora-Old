@@ -21,8 +21,10 @@
 
 	flick("gibbed-h", animation)
 	if(species)
+		flick(species.gibbed_anim, animation)
 		hgibs(loc, viruses, dna, species.flesh_color, species.blood_color)
 	else
+		flick("gibbed-h", animation)
 		hgibs(loc, viruses, dna)
 
 	spawn(15)
@@ -42,8 +44,8 @@
 	animation.icon = 'icons/mob/mob.dmi'
 	animation.master = src
 
-	flick("dust-h", animation)
-	new /obj/effect/decal/remains/human(loc)
+	flick(species.dusted_anim, animation)
+	new species.remains_type(loc)
 
 	spawn(15)
 		if(animation)	del(animation)
@@ -57,7 +59,6 @@
 	stat = DEAD
 	dizziness = 0
 	jitteriness = 0
-
 
 	hud_updateflag |= 1 << HEALTH_HUD
 	hud_updateflag |= 1 << STATUS_HUD
@@ -86,6 +87,8 @@
 
 		verbs -= /mob/living/carbon/proc/release_control
 
+	callHook("death", list(src, gibbed))
+
 	//Check for heist mode kill count.
 	if(ticker.mode && ( istype( ticker.mode,/datum/game_mode/heist) ) )
 		//Check for last assailant's mutantrace.
@@ -106,7 +109,7 @@
 
 		update_canmove()
 		if(client)	blind.layer = 0
-	worldtod = world.time
+
 	tod = worldtime2text()		//weasellos time of death patch
 	if(mind)	mind.store_memory("Time of death: [tod]", 0)
 	if(ticker && ticker.mode)
@@ -114,8 +117,6 @@
 		sql_report_death(src)
 		ticker.mode.check_win()		//Calls the rounds wincheck, mainly for wizard, malf, and changeling now
 	return ..(gibbed)
-
-
 
 /mob/living/carbon/human/proc/makeSkeleton()
 	if(SKELETON in src.mutations)	return

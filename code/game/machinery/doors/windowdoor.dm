@@ -25,7 +25,7 @@
 /obj/machinery/door/window/New()
 	..()
 
-	if (src.req_access && src.req_access.len)
+	if (src.req_access/* && src.req_access.len*/)
 		src.icon_state = "[src.icon_state]"
 		src.base_state = src.icon_state
 	return
@@ -173,7 +173,7 @@
 	return src.attack_hand(user)
 
 /obj/machinery/door/window/attack_paw(mob/user as mob)
-	if(istype(user, /mob/living/carbon/alien/humanoid) || istype(user, /mob/living/carbon/slime/adult))
+	if(istype(user, /mob/living/carbon/alien/humanoid))
 		if(src.operating)
 			return
 		playsound(src.loc, 'sound/effects/Glasshit.ogg', 75, 1)

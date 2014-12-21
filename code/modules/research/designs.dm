@@ -1290,6 +1290,15 @@ datum/design/mrspacman
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = "/obj/item/weapon/circuitboard/pacman/mrs"
 
+datum/design/batteryrack
+	name = "Cell rack PSU Board"
+	desc = "The circuit board for a power cell rack PSU."
+	id = "batteryrack"
+	req_tech = list("powerstorage" = 3, "engineering" = 2)
+	build_type = IMPRINTER
+	materials = list("$glass" = 2000, "sacid" = 20)
+	build_path = "/obj/item/weapon/circuitboard/batteryrack"
+
 
 /////////////////////////////////////////
 ////////////Medical Tools////////////////
@@ -1836,8 +1845,7 @@ datum/design/security_hud
 	icon_state = "datadisk2"
 	item_state = "card-id"
 	w_class = 1.0
-	m_amt = 30
-	g_amt = 10
+	matter = list("metal" = 30, "glass" = 10)
 	var/datum/design/blueprint
 
 /obj/item/weapon/disk/design_disk/New()
@@ -1960,7 +1968,7 @@ datum/design/cart_toxins
 	req_tech = list("engineering" = 2, "powerstorage" = 3)
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
-	build_path = "/obj/item/weapon/cartridge/toxins"
+	build_path = "/obj/item/weapon/cartridge/signal/science"
 datum/design/cart_quartermaster
 	name = "Space Parts & Space Vendors Cartridge"
 	desc = "A data cartridge for portable microcomputers."

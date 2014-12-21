@@ -147,7 +147,7 @@ var/list/forbidden_varedit_object_types = list(
 	var/dir
 
 	if(variable in locked)
-		if(!check_rights(R_DEBUG|R_DEV))	return
+		if(!check_rights(R_DEBUG|R_DEV|R_FUN))	return
 
 	if(isnull(variable))
 		usr << "Unable to determine variable type."
@@ -291,7 +291,7 @@ var/list/forbidden_varedit_object_types = list(
 			return
 
 		if(param_var_name == "holder" || (param_var_name in locked))
-			if(!check_rights(R_DEBUG|R_DEV))	return
+			if(!check_rights(R_DEBUG|R_DEV|R_FUN))	return
 
 		variable = param_var_name
 
@@ -349,7 +349,7 @@ var/list/forbidden_varedit_object_types = list(
 		var_value = O.vars[variable]
 
 		if(variable == "holder" || (variable in locked))
-			if(!check_rights(R_DEBUG|R_DEV))	return
+			if(!check_rights(R_DEBUG|R_DEV|R_FUN))	return
 
 	if(!autodetect_class)
 
@@ -504,4 +504,4 @@ var/list/forbidden_varedit_object_types = list(
 	world.log << "### VarEdit by [src]: [O.type] [variable]=[html_encode("[O.vars[variable]]")]"
 	log_admin("[key_name(src)] modified [original_name]'s [variable] to [O.vars[variable]]")
 	message_admins("[key_name_admin(src)] modified [original_name]'s [variable] to [O.vars[variable]]", 1)
-	msg_scopes("[key_name_admin(src)] modified [original_name]'s [variable] to [O.vars[variable]]", 1) // Tell dev's to but not log twice
+	msg_scopes("[key_name_admin(src)] modified [original_name]'s [variable] to [O.vars[variable]]", 1, 0, src) // Tell dev's to but not log twice

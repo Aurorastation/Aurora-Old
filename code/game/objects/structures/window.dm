@@ -162,12 +162,15 @@
 
 
 /obj/structure/window/attack_slime(mob/user as mob)
-	if(!isslimeadult(user)) return
+	var/mob/living/carbon/slime/S = user
+	if (!S.is_adult)
+		return
 	attack_generic(user, rand(10, 15))
 
 
 /obj/structure/window/attackby(obj/item/W as obj, mob/user as mob)
 	if(!istype(W)) return//I really wish I did not need this
+	if(W.flags & NOBLUDGEON) return
 
 	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
 		var/obj/item/weapon/grab/G = W
@@ -334,7 +337,7 @@
 
 //checks if this window is full-tile one
 /obj/structure/window/proc/is_fulltile()
-	if(dir in list(5,6,9,10))
+	if(dir & (dir - 1))
 		return 1
 	return 0
 

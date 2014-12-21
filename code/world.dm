@@ -1,7 +1,7 @@
 /world
 	mob = /mob/new_player
 	turf = /turf/space
-	area = /area
+	area = /area/space
 	view = "15x15"
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
 
@@ -40,6 +40,10 @@
 	. = ..()
 
 	sleep_offline = 1
+
+	// Set up roundstart seed list. This is here because vendors were bugging out and not
+	// populating with the correct packet names due to this list not being instantiated.
+	populate_seed_list()
 
 	master_controller = new /datum/controller/game_controller()
 	spawn(1)
@@ -283,9 +287,9 @@ var/world_topic_spam_protect_time = world.timeofday
 
 	s += "<b>[station_name()] - Heavy Roleplay</b>";
 	s += " ("
-	s += "<a href=\"http://auroraserver.freeforums.net/\">" //Change this to wherever you want the hub to link to.
+	s += "<a href=\"[forum_link()]\">" //Change this to wherever you want the hub to link to.
 //	s += "[game_version]"
-	s += "Forums"  //Replace this with something else. Or ever better, delete it and uncomment the game version.
+	s += "Forums"
 	s += "</a>"
 	s += ")"
 

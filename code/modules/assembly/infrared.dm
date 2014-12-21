@@ -4,9 +4,7 @@
 	name = "infrared emitter"
 	desc = "Emits a visible or invisible beam and is triggered when the beam is interrupted."
 	icon_state = "infrared"
-	m_amt = 1000
-	g_amt = 500
-	w_amt = 100
+	matter = list("metal" = 1000, "glass" = 500, "waste" = 100)
 	origin_tech = "magnets=2"
 
 	wires = WIRE_PULSE
@@ -253,7 +251,7 @@
 	hit()
 	return
 
-/obj/effect/beam/i_beam/HasEntered(atom/movable/AM as mob|obj)
+/obj/effect/beam/i_beam/Crossed(atom/movable/AM as mob|obj)
 	if(istype(AM, /obj/effect/beam))
 		return
 	spawn(0)

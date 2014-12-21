@@ -111,7 +111,7 @@
 <TT><B>Automatic Security Unit v1.3</B></TT><BR><BR>
 Status: []<BR>
 Behaviour controls are [src.locked ? "locked" : "unlocked"]<BR>
-Maintenance panel panel is [src.open ? "opened" : "closed"]"},
+Maintenance panel is [src.open ? "opened" : "closed"]"},
 
 "<A href='?src=\ref[src];power=1'>[src.on ? "On" : "Off"]</A>" )
 
@@ -662,13 +662,13 @@ Auto Patrol: []"},
 			threatcount -= 2
 
 	if(src.check_records)
-		for (var/datum/data/record/E in data_core.general)
-			var/perpname = perp.name
-			if(perp.wear_id)
-				var/obj/item/weapon/card/id/id = perp.wear_id.GetID()
-				if(id)
-					perpname = id.registered_name
+		var/perpname = perp.name
+		if(perp.wear_id)
+			var/obj/item/weapon/card/id/id = perp.wear_id.GetID()
+			if(id)
+				perpname = id.registered_name
 
+		for (var/datum/data/record/E in data_core.general)
 			if(E.fields["name"] == perpname)
 				for (var/datum/data/record/R in data_core.security)
 					if((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*Arrest*"))
@@ -713,9 +713,7 @@ Auto Patrol: []"},
 	Sa.overlays += image('icons/obj/aibots.dmi', "hs_hole")
 	Sa.created_name = src.name
 	new /obj/item/device/assembly/prox_sensor(Tsec)
-
-	var/obj/item/weapon/melee/baton/B = new /obj/item/weapon/melee/baton(Tsec)
-	B.charges = 0
+	new /obj/item/weapon/melee/baton(Tsec)
 
 	if(prob(50))
 		new /obj/item/robot_parts/l_arm(Tsec)
