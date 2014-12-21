@@ -1968,7 +1968,7 @@ datum/design/cart_toxins
 	req_tech = list("engineering" = 2, "powerstorage" = 3)
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
-	build_path = "/obj/item/weapon/cartridge/toxins"
+	build_path = "/obj/item/weapon/cartridge/signal/science"
 datum/design/cart_quartermaster
 	name = "Space Parts & Space Vendors Cartridge"
 	desc = "A data cartridge for portable microcomputers."

@@ -270,11 +270,11 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	if(jobban_isbanned(M, "AntagHUD"))
 		src << "\red <B>You have been banned from using this feature</B>"
 		return
-	if(config.antag_hud_restricted && !M.has_enabled_antagHUD && !(client.holder.rights & (R_ADMIN|R_MOD)))
+	if(config.antag_hud_restricted && !M.has_enabled_antagHUD && !(client.holder && (client.holder.rights & (R_ADMIN|R_MOD))))
 		var/response = alert(src, "If you turn this on, you will not be able to take any part in the round.","Are you sure you want to turn this feature on?","Yes","No")
 		if(response == "No") return
 		M.can_reenter_corpse = 0
-	if(!M.has_enabled_antagHUD && !(client.holder.rights & (R_ADMIN|R_MOD)))
+	if(!M.has_enabled_antagHUD && !(client.holder && (client.holder.rights & (R_ADMIN|R_MOD))))
 		M.has_enabled_antagHUD = 1
 	if(M.antagHUD)
 		M.antagHUD = 0

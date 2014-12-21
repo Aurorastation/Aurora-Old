@@ -71,6 +71,8 @@
 	spark_system.set_up(5, 0, src)
 	spark_system.attach(src)
 
+	add_language("Robot Talk", 1)
+
 	ident = rand(1, 999)
 	updatename("Default")
 	updateicon()
@@ -1302,3 +1304,10 @@
 			return
 	else
 		src << "Your icon has been set. You now require a module reset to change it."
+
+/mob/living/silicon/robot/binarycheck()
+	if(is_component_functioning("comms"))
+		var/datum/robot_component/RC = get_component("comms")
+		use_power(RC.energy_consumption)
+		return 1
+	return 0
