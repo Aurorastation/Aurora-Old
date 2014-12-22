@@ -32,3 +32,11 @@
 	name = "Coconuts"
 	icon = 'icons/misc/beach.dmi'
 	icon_state = "coconuts"
+
+/obj/effect/overlay/snow
+	name = "snow"
+	icon = 'icons/turf/overlays.dmi'
+	icon_state = "snowfloor"
+	density = 0
+	anchored = 1
+	layer = 3

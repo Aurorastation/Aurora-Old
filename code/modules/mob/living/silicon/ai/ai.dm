@@ -82,7 +82,7 @@ var/list/ai_verbs_default = list(
 	var/centcomm_message_cooldown = 0
 
 /mob/living/silicon/ai/proc/add_ai_verbs()
-	src.verbs += ai_verbs_default
+	src.verbs |= ai_verbs_default
 
 /mob/living/silicon/ai/proc/remove_ai_verbs()
 	src.verbs -= ai_verbs_default
@@ -130,11 +130,17 @@ var/list/ai_verbs_default = list(
 		add_ai_verbs(src)
 
 	//Languages
-	add_language("Sol Common", 0)
+
+
+	add_language("Robot Talk", 1)
 	add_language("Sinta'unathi", 0)
-	add_language("Siik'tajr", 0)
+	add_language("Siik'Maas", 0)
 	add_language("Skrellian", 0)
-	add_language("Tradeband", 1)
+	add_language("Vox-pidgin", 0)
+	add_language("Rootspeak", 0)
+	add_language("Ceti Basic", 0)
+	add_language("Sol Common", 0)
+	add_language("Tradeband", 0)
 	add_language("Gutter", 0)
 
 	if(!safety)//Only used by AIize() to successfully spawn an AI.
@@ -504,41 +510,7 @@ var/list/ai_verbs_default = list(
 	updatehealth()
 	return 2
 
-/mob/living/silicon/ai/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-	if (!ticker)
-		M << "You cannot attack people before the game has started."
-		return
-
-	if (istype(loc, /turf) && istype(loc.loc, /area/start))
-		M << "No attacking people at spawn, you jackass."
-		return
-
-	switch(M.a_intent)
-
-		if ("help")
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("\blue [M] caresses [src]'s plating with its scythe like arm."), 1)
-
-		else //harm
-			var/damage = rand(10, 20)
-			if (prob(90))
-				playsound(loc, 'sound/weapons/slash.ogg', 25, 1, -1)
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("\red <B>[] has slashed at []!</B>", M, src), 1)
-				if(prob(8))
-					flick("noise", flash)
-				adjustBruteLoss(damage)
-				updatehealth()
-			else
-				playsound(loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("\red <B>[] took a swipe at []!</B>", M, src), 1)
-	return
-
-/mob/living/silicon/ai/attack_animal(mob/living/simple_animal/M as mob)
+/mob/living/silicon/ai/attack_animal(mob/living/M as mob)
 	if(M.melee_damage_upper == 0)
 		M.emote("[M.friendly] [src]")
 	else

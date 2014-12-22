@@ -241,6 +241,7 @@
 				else
 					density = 1 // We don't want disposal bins or outlets to go density 0
 				user << "You attach the [nicetype] to the underfloor."
+				anchored = 1
 			playsound(src.loc, 'sound/items/Ratchet.ogg', 100, 1)
 			update()
 

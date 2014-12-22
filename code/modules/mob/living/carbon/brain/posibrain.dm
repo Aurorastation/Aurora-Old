@@ -132,11 +132,11 @@
 /obj/item/device/mmi/posibrain/New()
 
 	src.brainmob = new(src)
+	src.brainmob.add_language("Binary")
 	src.brainmob.name = "[pick(list("PBU","HIU","SINA","ARMA","OSI"))]-[rand(100, 999)]"
 	src.brainmob.real_name = src.brainmob.name
 	src.brainmob.loc = src
 	src.brainmob.container = src
-	src.brainmob.robot_talk_understand = 1
 	src.brainmob.stat = 0
 	src.brainmob.silent = 0
 //	src.brainmob.brain_op_stage = 4.0
