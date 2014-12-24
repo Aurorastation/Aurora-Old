@@ -88,3 +88,30 @@
 	*/
 	agony = 70
 	damage_type = HALLOSS
+
+
+/obj/item/projectile/energy/mining //not in the game.  i'll play with it later probably.
+	name = "electrode"
+	icon_state = "spark"
+	damage = 5
+	kill_count = 3
+	var/life = 5
+
+	Bump(atom/A)
+		A.bullet_act(src, def_zone)
+		src.life -= 1
+		if(life <= 0)
+			del(src)
+		return
+
+/turf/simulated/mineral/bullet_act(var/obj/item/projectile/Proj)
+	if(istype(Proj ,/obj/item/projectile/energy/mining))
+		src.GetDrilled()
+		..()
+	return 0
+
+/obj/structure/boulder/bullet_act(var/obj/item/projectile/Proj)
+	if(istype(Proj ,/obj/item/projectile/energy/mining))
+		del(src)
+		..()
+	return 0
