@@ -1,6 +1,5 @@
 /mob/living/silicon
 	gender = NEUTER
-	robot_talk_understand = 1
 	voice_name = "synthesized voice"
 	var/syndicate = 0
 	var/datum/ai_laws/laws = null//Now... THEY ALL CAN ALL HAVE LAWS
@@ -14,6 +13,10 @@
 	var/speak_query = "queries"
 	var/pose //Yes, now AIs can pose too.
 	var/obj/item/device/camera/siliconcam/aiCamera = null //photography
+	var/local_transmit //If set, can only speak to others of the same type within a short range.
+/mob/living/silicon/New()
+	..()
+	add_language("Ceti Basic")
 
 /mob/living/silicon/proc/show_laws()
 	return
@@ -164,6 +167,7 @@
 /mob/living/silicon/add_language(var/language, var/can_speak=1)
 	if (..(language) && can_speak)
 		speech_synthesizer_langs.Add(all_languages[language])
+		return 1
 
 /mob/living/silicon/remove_language(var/rem_language)
 	..(rem_language)
@@ -198,3 +202,6 @@
 	set category = "IC"
 
 	flavor_text =  copytext(sanitize(input(usr, "Please enter your new flavour text.", "Flavour text", null)  as text), 1)
+
+/mob/living/silicon/binarycheck()
+	return 1

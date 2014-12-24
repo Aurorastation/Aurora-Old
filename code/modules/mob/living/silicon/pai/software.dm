@@ -693,13 +693,16 @@
 	if(translator_on)
 		translator_on = 0
 
+		remove_language("Sign language")
 		remove_language("Sinta'unathi")
-//		remove_language("Siik'tajr")
 		remove_language("Siik'Maas")
 		remove_language("Skrellian")
 		remove_language("Vox-pidgin")
 		remove_language("Rootspeak")
-		remove_language("Sign language")
+		remove_language("Ceti Basic")
+		remove_language("Sol Common")
+		remove_language("Tradeband")
+		remove_language("Gutter")
 
 		src << "\blue Translator Module toggled OFF."
 
@@ -707,11 +710,14 @@
 		translator_on = 1
 
 		add_language("Sinta'unathi")
-//		add_language("Siik'tajr")
 		add_language("Siik'Maas")
 		add_language("Skrellian")
 		add_language("Vox-pidgin")
 		add_language("Rootspeak")
-		add_language("Sign language")
+		add_language("Ceti Basic")
+		add_language("Sol Common")
+		add_language("Tradeband")
+		add_language("Gutter")
+		add_language("Sign language", 0)
 
 		src << "\blue Translator Module toggled ON."

@@ -16,8 +16,8 @@
 	if(!istype(I) || I.anchored == 1)
 		return ..()
 
-	if(istype(I, /obj/item/weapon/evidencebag))
-		user << "<span class='notice'>You find putting an evidence bag in another evidence bag to be slightly absurd.</span>"
+	if(istype(I, /obj/item/weapon/evidencebag) || istype(I, /obj/item/weapon/storage/box))
+		user << "<span class='notice'>You find the idea of putting [I] into an evidence bag to be slightly absurd.</span>"
 		return
 
 	if(I.w_class > 3)
