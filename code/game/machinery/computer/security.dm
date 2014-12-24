@@ -381,6 +381,9 @@ What a mess.*/
 			if ("Purge All Records")
 				for(var/datum/data/record/R in data_core.security)
 					del(R)
+					message_admins("[key_name_admin(usr)] deleted all security records - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[usr.x];Y=[usr.y];Z=[usr.z]'>JMP</a>")
+					message_mods("[key_name_admin(usr)] deleted all security records - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[usr.x];Y=[usr.y];Z=[usr.z]'>JMP</a>")
+
 				temp = "All Security records deleted."
 
 			if ("Add Entry")
@@ -535,6 +538,9 @@ What a mess.*/
 							if ((!( t1 ) || !( authenticated ) || usr.stat || usr.restrained() || (!in_range(src, usr) && (!istype(usr, /mob/living/silicon))) || active1 != a1))
 								return
 							active1.fields["species"] = t1
+				message_admins("[key_name_admin(usr)] might have edited [active1.fields["name"]]'s security record - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[usr.x];Y=[usr.y];Z=[usr.z]'>JMP</a>")
+				message_mods("[key_name_admin(usr)] might have edited [active1.fields["name"]]'s security record - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[usr.x];Y=[usr.y];Z=[usr.z]'>JMP</a>")
+
 
 //TEMPORARY MENU FUNCTIONS
 			else//To properly clear as per clear screen.
@@ -564,12 +570,16 @@ What a mess.*/
 
 					if ("Delete Record (Security) Execute")
 						if (active2)
+							message_admins("[key_name_admin(usr)] deleted [active2.fields["name"]] security record - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[usr.x];Y=[usr.y];Z=[usr.z]'>JMP</a>")
+							message_mods("[key_name_admin(usr)] deleted [active2.fields["name"]] security record - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[usr.x];Y=[usr.y];Z=[usr.z]'>JMP</a>")
 							del(active2)
 
 					if ("Delete Record (ALL) Execute")
 						if (active1)
 							for(var/datum/data/record/R in data_core.medical)
 								if ((R.fields["name"] == active1.fields["name"] || R.fields["id"] == active1.fields["id"]))
+									message_admins("[key_name_admin(usr)] deleted [active1.fields["name"]]'s record - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[usr.x];Y=[usr.y];Z=[usr.z]'>JMP</a>")
+									message_mods("[key_name_admin(usr)] deleted [active1.fields["name"]]'s record - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[usr.x];Y=[usr.y];Z=[usr.z]'>JMP</a>")
 									del(R)
 								else
 							del(active1)
