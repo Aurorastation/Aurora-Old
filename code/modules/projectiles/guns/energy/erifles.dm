@@ -52,7 +52,7 @@
 ///////////LASER RIFLE//////////////
 /obj/item/weapon/gun/energy/rifle/laser
 	name = "laser rifle"
-	desc = "a basic weapon designed kill with concentrated energy bolts"
+	desc = "a basic weapon designed to kill with concentrated energy bolts"
 	icon_state = "laser"
 	item_state = "laser"
 	fire_sound = 'sound/weapons/Laser.ogg'

@@ -203,7 +203,8 @@
 
 
 	if(!mob.canmove)
-		return
+		if (mob.buckled && (istype(mob.buckled, /obj/structure/stool/bed/chair/wheelchair) || istype(mob.buckled, /obj/vehicle))) // Exception for wheelchairs
+		else return
 
 	//if(istype(mob.loc, /turf/space) || (mob.flags & NOGRAV))
 	//	if(!mob.Process_Spacemove(0))	return 0
@@ -256,6 +257,9 @@
 		if(istype(mob.machine, /obj/machinery))
 			if(mob.machine.relaymove(mob,direct))
 				return
+
+		if(istype(mob.buckled, /obj/vehicle))
+			return mob.buckled.relaymove(mob,direct)
 
 		if(mob.pulledby || mob.buckled) // Wheelchair driving!
 			if(istype(mob.loc, /turf/space))
