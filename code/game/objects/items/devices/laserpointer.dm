@@ -112,6 +112,8 @@
 				severity = min(max(severity, 0), 4)
 				var/mob/living/carbon/human/H = C
 				var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+				if(!E)
+					return
 
 				switch(severity)
 					if(0)
