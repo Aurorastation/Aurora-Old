@@ -313,7 +313,7 @@
 		if(O2_pp < safe_oxygen_min) 			// Too little oxygen
 			if(prob(20))
 				spawn(0) emote("gasp")
-			if (O2_pp == 0)
+			if (!O2_pp || O2_pp == 0)
 				O2_pp = 0.01
 			var/ratio = safe_oxygen_min/O2_pp
 			adjustOxyLoss(min(5*ratio, 7)) // Don't fuck them up too fast (space only does 7 after all!)
