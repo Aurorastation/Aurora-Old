@@ -478,10 +478,9 @@
 		var/obj/machinery/bot/mulebot/MB = AM
 		MB.RunOver(src)
 
-/*	if(istype(AM, /obj/vehicle))
+	if(istype(AM, /obj/vehicle))
 		var/obj/vehicle/V = AM
 		V.RunOver(src)
-*/
 
 //gets assignment from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers

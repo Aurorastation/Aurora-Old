@@ -816,7 +816,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return ((status & ORGAN_BROKEN) && !(status & ORGAN_SPLINTED))
 
 /datum/organ/external/proc/is_malfunctioning()
-	return ((status & ORGAN_ROBOT) && prob(brute_dam + burn_dam))
+	return ((status & ORGAN_ROBOT) && prob(brute_dam + burn_dam - 11))
 
 //for arms and hands
 /datum/organ/external/proc/process_grasp(var/obj/item/c_hand, var/hand_name)
