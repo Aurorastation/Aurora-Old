@@ -32,7 +32,6 @@ world/IsBanned(key,address,computer_id)
 					continue
 
 				var/banned_address = copytext(line, 1, length(line)+1)
-				testing("Blacklist: address:[address] - banned_address:[banned_address]")
 				if(banned_address == address)
 					log_access("Failed Login: [src] - Blacklisted IP")
 					message_admins("\blue Failed Login: [src] - Blacklisted IP")
