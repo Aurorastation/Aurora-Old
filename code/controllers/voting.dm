@@ -123,8 +123,10 @@ datum/controller/vote
 					world << "<font color='purple'>Crew Transfer Factor: [factor]</font>"
 					greatest_votes = max(choices["Initiate Crew Transfer"], choices["Continue The Round"])
 		if(mode == "crew_transfer")
-			choices["Initiate Crew Transfer"] = round(choices["Initiate Crew Transfer"] - round(total_votes / 3))
-			greatest_votes = max(choices["Initiate Crew Transfer"], choices["Continue The Round"])
+			if(round(world.time / 36000)+12 <= 14)
+				msg_scopes("It is the time before 50/50")
+				choices["Initiate Crew Transfer"] = round(choices["Initiate Crew Transfer"] - round(total_votes / 3))
+				greatest_votes = max(choices["Initiate Crew Transfer"], choices["Continue The Round"])
 
 
 		//get all options with that many votes and return them in a list
