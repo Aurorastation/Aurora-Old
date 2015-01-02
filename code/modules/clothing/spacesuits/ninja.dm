@@ -3,6 +3,7 @@
 	name = "ninja hood"
 	icon_state = "s-ninja"
 	item_state = "s-ninja_mask"
+	flags_inv = HIDEEARS|HIDEEYES|HIDEFACE
 	allowed = list(/obj/item/weapon/cell)
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 25)
 	siemens_coefficient = 0.2
@@ -18,7 +19,7 @@
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0.2
 	species_restricted = null //Workaround for spawning alien ninja without internals.
-
+	flags_inv = HIDEGLOVES|HIDEJUMPSUIT|HIDETAIL
 		//Important parts of the suit.
 	var/mob/living/carbon/affecting = null//The wearer.
 	var/obj/item/weapon/cell/cell//Starts out with a high-capacity cell using New().
