@@ -104,7 +104,7 @@
 	var/health_threshold_dead = -100
 
 	var/organ_health_multiplier = 1
-	var/organ_regeneration_multiplier = 1
+	var/organ_regeneration_multiplier = 0
 
 	var/bones_can_break = 0
 	var/limbs_can_break = 0
