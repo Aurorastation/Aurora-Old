@@ -218,6 +218,24 @@
 	else
 		..()
 
+/mob/living/carbon/human/getHalLoss()
+	if(species.flags & NO_PAIN)
+		halloss = 0
+	return ..()
+
+/mob/living/carbon/human/adjustHalLoss(var/amount)
+	if(species.flags & NO_PAIN)
+		halloss = 0
+	else
+		..()
+
+/mob/living/carbon/human/setHalLoss(var/amount)
+	if(species.flags & NO_PAIN)
+		halloss = 0
+	else
+		..()
+
+
 ////////////////////////////////////////////
 
 //Returns a list of damaged organs

@@ -58,6 +58,22 @@ var/savefile/Banlist
 	CMinutes = (world.realtime / 10) / 60
 	return 1
 
+/proc/loadBlacklist()
+	testing("Loading Blacklist")
+	var/text = file2text("data/ip_blacklist.txt")
+	if (!text)
+		error("Failed to load data/ip_blacklist.txt")
+		return
+	else
+		var/list/lines = text2list(text, "\n")
+		for(var/line in lines)
+			if (!line)
+				continue
+			if (copytext(line, 1, 2) == ";")
+				continue
+			blacklist += line
+	log_admin("Loaded Blacklist")
+
 /hook/startup/proc/loadBans()
 	return LoadBans()
 

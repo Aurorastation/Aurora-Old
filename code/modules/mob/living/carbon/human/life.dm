@@ -271,8 +271,8 @@
 
 	proc/handle_mutations_and_radiation()
 
-		if(species.flags & IS_SYNTHETIC) //Robots don't suffer from mutations or radloss.
-			return
+		if(species.flags & IS_SYNTHETIC || species.flags & IS_BUG) //Robots don't suffer from mutations or radloss.
+			return //neither do bugs.  bugs are cool.
 
 		if(getFireLoss())
 			if((COLD_RESISTANCE in mutations) || (prob(1)))
