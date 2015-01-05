@@ -754,7 +754,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define IS_PLANT 1024
 #define IS_WHITELISTED 2048
 
-#define RAD_ABSORB 4096
+#define IS_BUG 4096 //formerly RAD_ABSORB, old tag no longer used in new speciescode require_light below isn't used either.
 #define REQUIRE_LIGHT 8192
 
 #define IS_SYNTHETIC 16384
