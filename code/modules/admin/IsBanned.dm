@@ -1,3 +1,5 @@
+var/global/list/blacklist = list()
+
 //Blocks an attempt to connect before even creating our client datum thing.
 world/IsBanned(key,address,computer_id)
 	if(ckey(key) in admin_datums)
@@ -18,25 +20,17 @@ world/IsBanned(key,address,computer_id)
 		return list("reason"="Using ToR", "desc"="\nReason: The network you are using to connect has been banned.\nIf you believe this is a mistake, please request help at [config.banappeals]")
 
 	if(config && config.ip_blacklist_enabled)
-		testing("Loading Blacklist")
-		var/text = file2text("data/ip_blacklist.txt")
-		if (!text)
-			error("Failed to load data/ip_blacklist.txt")
+		msg_scopes("Doing blacklist stuff")
+		if(!blacklist)
+			loadBlacklist()
+		if(blacklist)
+			if(address in blacklist)
+				log_access("Failed Login: [src] - Blacklisted IP")
+				message_admins("\blue Failed Login: [src] - Blacklisted IP")
+				AddBan(ckey(key), computer_id, "Bad IP", "Automated Ban", 0, 0)
+				return list("reason"="IP Blacklisted", "desc"="\nReason: This IP has been blacklisted from the server.\nIf you believe this is a mistake, please request help at [config.banappeals]")
 		else
-			var/list/lines = text2list(text, "\n")
-			for(var/line in lines)
-				if (!line)
-					continue
-
-				if (copytext(line, 1, 2) == ";")
-					continue
-
-				var/banned_address = copytext(line, 1, length(line)+1)
-				if(banned_address == address)
-					log_access("Failed Login: [src] - Blacklisted IP")
-					message_admins("\blue Failed Login: [src] - Blacklisted IP")
-					AddBan(ckey(key), computer_id, "Bad IP", "Automated Ban", 0, 0)
-					return list("reason"="IP Blacklisted", "desc"="\nReason: This IP has been blacklisted from the server.\nIf you believe this is a mistake, please request help at [config.banappeals]")
+			msg_scopes("Where is the blacklist!")
 
 	if(config.ban_legacy_system)
 
