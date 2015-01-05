@@ -144,6 +144,10 @@
 		for(var/datum/organ/internal/I in H.internal_organs)
 			I.mechanize()
 
+	if(flags & IS_BUG)
+		for(var/datum/organ/internal/I in H.internal_organs)
+			I.mechanize()
+
 /datum/species/proc/hug(var/mob/living/carbon/human/H,var/mob/living/target)
 
 	var/t_him = "them"
@@ -463,7 +467,7 @@
 
 	synth_temp_gain = 10 //this should cause IPCs to stabilize at ~80 C in a 20 C environment.
 
-	flags = IS_WHITELISTED | NO_BREATHE | NO_SCAN | NO_BLOOD | NO_PAIN | IS_SYNTHETIC
+	flags = IS_WHITELISTED | NO_BREATHE | NO_SCAN | NO_BLOOD | NO_PAIN | IS_SYNTHETIC | NO_POISON
 
 	blood_color = "#1F181F"
 	flesh_color = "#575757"
@@ -472,6 +476,45 @@
 		"heart" =    /datum/organ/internal/heart,
 		"brain" =    /datum/organ/internal/brain,
 		)
+
+/datum/species/bug
+	name = "Vaurca"
+	name_plural = "varucae"
+
+	icobase = 'icons/mob/human_races/r_machine.dmi' //placeholders
+	deform = 'icons/mob/human_races/r_machine.dmi' //bloop blop butts
+	language = "Tradeband" //placeholders //vaurcese, :p to speak.  no support on language side yet
+	unarmed_type = /datum/unarmed_attack/claws //literally butts
+	secondary_unarmed_type = /datum/unarmed_attack/bite/strong
+	rarity_value = 2 //according to the code this does nothing but upset me so i guess it can stay
+	slowdown = 1 //slow
+	darksight = 666 //good at seeing
+	eyes = "blank_eyes" //made out of butts
+	brute_mod = 0.5 //note to self: remove is_synthetic checks for brmod and burnmod
+	burn_mod = 2 //bugs on fire
+	insulated = 1 //because tough feet for glass resistance and also nonconductive exoskeleton. they take 2x fire it's fair okay
+	//they will die from EMPs because their organs are mechanized in a proc up top.  ctrl+f is_bug and it'll take you there.
+	warning_low_pressure = 50 //the spacewalks are real
+	hazard_low_pressure = 0
+
+	cold_level_1 = 50
+	cold_level_2 = -1
+	cold_level_3 = -1
+
+	heat_level_1 = 330 //Default 360
+	heat_level_2 = 380 //Default 400
+	heat_level_3 = 600 //Default 1000 //bugs do not like fire because exoskeletons are poor ventilation
+
+	flags = IS_WHITELISTED | NO_SLIP | IS_BUG //IS_BUG doesn't do much at the moment.  proc up top + radiation resistance.
+	//use IS_BUG when you do the make their eyes die from being flashed thing, sounds/skull.  okay thanks.
+	blood_color = "#1F181F" // note: discover hex for yellow
+	flesh_color = "#575757" //this is a placeholder also.
+
+	inherent_verbs = list(
+		/mob/living/carbon/human/proc/bugbite //weaker version of gut. can't gib hums, dam/time outstripped lots by melee weapons
+		)
+
+	//make has_organ list when we can be bothered with bug gut sprites.  it'll be cool, i promise
 
 // Called when using the shredding behavior.
 /datum/species/proc/can_shred(var/mob/living/carbon/human/H)
