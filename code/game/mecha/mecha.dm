@@ -982,11 +982,11 @@
 		usr << "\blue <B>The [src.name] is already occupied!</B>"
 		src.log_append_to_last("Permission denied.")
 		return
-
+/*
 	if (usr.abiotic())
-		usr << "\blue <B>You need empty hands to enter the mech.</B>"
+		usr << "\blue <B>Subject cannot have abiotic items on.</B>"
 		return
-
+*/
 	var/passed
 	if(src.dna)
 		if(usr.dna.unique_enzymes==src.dna)
