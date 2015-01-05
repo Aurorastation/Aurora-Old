@@ -431,10 +431,11 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	var/turf/our_turf = get_turf(src)
 	for(var/mob/M in mob_list)
 		var/turf/their_turf = get_turf(M)
+		if(!their_turf) continue
 		if(their_turf.z == our_turf.z)
 			M.update_gravity(M.mob_has_gravity())
 			if(M.client)
-				if(!M)	return
+				if(!M)	continue
 				shake_camera(M, 5, 1)
 				M.playsound_local(our_turf, 'sound/effects/alert.ogg', 100, 1, 0.5)
 

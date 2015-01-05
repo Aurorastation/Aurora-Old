@@ -71,6 +71,9 @@ proc/sql_report_death(var/mob/living/carbon/human/H)
 	if(!H.key || !H.mind)
 		return
 
+	if(istype(H, /mob/living/carbon/human/bst))
+		return
+
 	var/turf/T = H.loc
 	var/area/placeofdeath = get_area(T.loc)
 	var/podname = placeofdeath.name

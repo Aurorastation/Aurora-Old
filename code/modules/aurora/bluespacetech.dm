@@ -80,16 +80,23 @@
 
 	//Add the rest of the languages
 	//Because universal speak doesn't work right.
-	bst.add_language("Sol Common")
 	bst.add_language("Sinta'unathi")
 	bst.add_language("Siik'Maas")
 	bst.add_language("Skrellian")
 	bst.add_language("Vox-pidgin")
 	bst.add_language("Rootspeak")
+	bst.add_language("Ceti Basic")
+	bst.add_language("Sol Common")
 	bst.add_language("Tradeband")
 	bst.add_language("Gutter")
 	bst.add_language("Sini")
 	bst.add_language("Sign language")
+	bst.add_language("Xenomorph")
+	bst.add_language("Hivemind")
+	bst.add_language("Changeling")
+	bst.add_language("Cortical Link")
+	bst.add_language("Robot Talk")
+	bst.add_language("Drone Talk")
 
 /*	bst.bluespace_trail.set_up(src)
 	bst.bluespace_trail.start()
@@ -248,6 +255,20 @@
 	say(var/message)
 		var/verb = "says in a subdued tone"
 		..(message, verb)
+
+	verb/bstwalk()
+		set name = "Ruin Everything"
+		set desc = "Uses bluespace technology to phase through solid matter and also move fast."
+		set category = "BST"
+		set popup_menu = 0
+
+		if(!src.incorporeal_move)
+			src.incorporeal_move = 2
+			src << "\blue You will now phase through solid matter."
+		else
+			src.incorporeal_move = 0
+			src << "\blue You will no-longer phase through solid matter."
+		return
 
 //Equipment. All should have canremove set to 0
 //All items with a /bst need the attack_hand() proc overrided to stop people getting overpowered items.
