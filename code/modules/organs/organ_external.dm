@@ -138,9 +138,9 @@
 				burn = max(0, burn - can_inflict)
 		//If there are still hurties to dispense
 		if (burn || brute)
-			if (status & ORGAN_ROBOT)
-				droplimb(1) //Robot limbs just kinda fail at full damage.
-			else
+//			if (status & ORGAN_ROBOT)
+//				droplimb(1) //Robot limbs just kinda fail at full damage. //this is breaking things okay
+			if (burn || brute)//else this was formerly an else.  double iffing because nobody wants to fix that much spacing
 				//List organs we can pass it to
 				var/list/datum/organ/external/possible_points = list()
 				if(parent)
