@@ -437,6 +437,9 @@
 				if("tor_ban")
 					ToRban = 1
 
+				if("ip_blacklist_enabled")
+					ip_blacklist_enabled = 1
+
 				if("automute_on")
 					automute_on = 1
 
