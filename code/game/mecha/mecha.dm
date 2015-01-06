@@ -984,7 +984,7 @@
 		return
 
 	if (usr.abiotic())
-		usr << "\blue <B>You need empty hands to enter the mech.</B>"
+		usr << "\blue <B>Subject cannot have abiotic items on.</B>"
 		return
 
 	var/passed
