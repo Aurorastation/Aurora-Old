@@ -110,6 +110,10 @@
 		M.current << "\red You can't do that to yourself"
 		return
 
+	if(!M.current.has_eyes())
+		M.current << "\red You don't have eyes"
+		return
+
 	var/vampgender
 	if(M.current.gender == "male")
 		vampgender = "he"
@@ -196,6 +200,11 @@
 	set desc= "A scary glare that incapacitates people for a short while around you."
 	var/datum/mind/M = usr.mind
 	if(!M) return
+
+	if(!M.current.has_eyes())
+		M.current << "\red You don't have eyes"
+		return
+
 	if(M.current.vampire_power(0, 1))
 		M.current.visible_message("\red <b>[M.current]'s eyes emit a blinding flash!")
 		//M.vampire.bloodusable -= 10

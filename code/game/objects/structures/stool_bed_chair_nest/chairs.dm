@@ -70,6 +70,16 @@
 
 /obj/structure/stool/bed/chair/MouseDrop_T(mob/M as mob, mob/user as mob)
 	if(!istype(M)) return
+	if(istype(M, /mob/living/simple_animal))
+		if (M == user)
+			M.visible_message(\
+				"\blue [M.name] attempts to buckle in, but fails!",\
+				"You attempt to buckle yourself to [src], but find yourself unable to.")
+		else
+			M.visible_message(\
+				"\blue [user.name] tries to buckle [M.name] in to [src], but fails!",\
+				"You are buckled in to [src] by [user.name].")
+		return
 	buckle_mob(M, user)
 	return
 
@@ -153,7 +163,7 @@
 	if(propelled)
 		var/mob/living/occupant = buckled_mob
 		unbuckle()
-		
+
 		var/def_zone = ran_zone()
 		var/blocked = occupant.run_armor_check(def_zone, "melee")
 		occupant.throw_at(A, 3, propelled)

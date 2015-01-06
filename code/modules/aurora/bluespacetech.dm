@@ -256,6 +256,20 @@
 		var/verb = "says in a subdued tone"
 		..(message, verb)
 
+	verb/bstwalk()
+		set name = "Ruin Everything"
+		set desc = "Uses bluespace technology to phase through solid matter and also move fast."
+		set category = "BST"
+		set popup_menu = 0
+
+		if(!src.incorporeal_move)
+			src.incorporeal_move = 2
+			src << "\blue You will now phase through solid matter."
+		else
+			src.incorporeal_move = 0
+			src << "\blue You will no-longer phase through solid matter."
+		return
+
 //Equipment. All should have canremove set to 0
 //All items with a /bst need the attack_hand() proc overrided to stop people getting overpowered items.
 

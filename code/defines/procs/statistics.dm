@@ -15,7 +15,6 @@ proc/sql_poll_players()
 			var/err = query.ErrorMsg()
 			log_game("SQL ERROR during player polling. Error : \[[err]\]\n")
 
-
 proc/sql_poll_admins()
 	if(!sqllogging)
 		return
@@ -29,6 +28,31 @@ proc/sql_poll_admins()
 		if(!query.Execute())
 			var/err = query.ErrorMsg()
 			log_game("SQL ERROR during admin polling. Error : \[[err]\]\n")
+
+//////////////////////////////////////////
+//Skull here, can someone explain to me why these are two different procs?
+//Constructing a table with it rigged lie this is terrible, absoloutely terrible. The null values leave empty holes :l
+//Sooo, let's do this. Merge them!
+//Leaving them here for posterity's sake.
+//////////////////////////////////////////
+
+proc/sql_poll_population()
+	if(!sqllogging)
+		return
+	var/playercount = 0
+	for(var/mob/M in player_list)
+		if(M.client)
+			playercount += 1
+	var/admincount = admins.len
+	establish_db_connection()
+	if(!dbcon.IsConnected())
+		log_game("SQL ERROR during population polling. Failed to connect.")
+	else
+		var/sqltime = time2text(world.realtime, "YYYY-MM-DD hh:mm:ss")
+		var/DBQuery/query = dbcon_old.NewQuery("INSERT INTO population (playercount, admincount, time) VALUES ([playercount], [admincount], '[sqltime]')")
+		if(!query.Execute())
+			var/err = query.ErrorMsg()
+			log_game("SQL ERROR during population polling. Error: \[[err]\]\n")
 
 proc/sql_report_round_start()
 	// TODO
@@ -116,9 +140,7 @@ proc/statistic_cycle()
 	if(!sqllogging)
 		return
 	while(1)
-		sql_poll_players()
-		sleep(600)
-		sql_poll_admins()
+		sql_poll_population()
 		sleep(6000) // Poll every ten minutes
 
 //This proc is used for feedback. It is executed at round end.

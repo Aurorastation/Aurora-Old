@@ -23,6 +23,18 @@
 		src << "\red The forum URL is not set in the server configuration."
 	return
 
+/client/verb/aurorawiki()	//Aurora's wiki verb, because yes.
+	set name = "aurorawiki"
+	set desc = "Visit the Aurorastation wiki, where the lore is found!"
+	set hidden = 1
+	if( config.aurorawikiurl )
+		if(alert("This will open the wiki in your browser. Are you sure?",,"Yes","No")=="No")
+			return
+		src << link(config.aurorawikiurl)
+	else
+		src << "\red The URL for the Aurorastation wiki is not set in the server configuration."
+	return
+
 #define RULES_FILE "config/rules.html"
 /client/verb/rules()
 	set name = "Rules"

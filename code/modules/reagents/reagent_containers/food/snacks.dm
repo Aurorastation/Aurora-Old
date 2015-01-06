@@ -1053,6 +1053,18 @@
 		reagents.add_reagent("nutriment", 10)
 		bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/pudding
+	name = "Figgy pudding"
+	icon_state = "pudding"
+	desc = "Bring it to me."
+	trash = /obj/item/trash/plate
+	filling_color = "#FFFEE0"
+
+	New()
+		..()
+		reagents.add_reagent("nutriment", 10)
+		bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/amanita_pie
 	name = "amanita pie"
 	desc = "Sweet and tasty poison pie."

@@ -750,6 +750,8 @@ note dizziness decrements automatically in the mob's Life() proc.
 					total++
 				stat(null, "Players: [total]\tModeration Staff: [staff]")
 				stat(null, "Living: [players]\tGhosts: [ghosts]\tLobby: [lobby]")
+		if(client)
+			stat(null, "Round Time: [round(world.time / 36000)]:[(world.time / 600 % 60) < 10 ? add_zero(world.time / 600 % 60, 1) : world.time / 600 % 60]")
 
 	if(listed_turf && client)
 		if(!TurfAdjacent(listed_turf))

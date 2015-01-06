@@ -33,6 +33,8 @@
 	callHook("startup")
 	//Emergency Fix
 	load_mods()
+	if(config.ip_blacklist_enabled)
+		loadBlacklist()
 	//end-emergency fix
 
 	src.update_status()

@@ -85,6 +85,7 @@
 	var/banappeals
 	var/wikiurl
 	var/forumurl
+	var/aurorawikiurl
 
 	//Alert level description
 	var/alert_desc_green = "All threats to the station have passed. Security may not have weapons visible, privacy laws are once again fully enforced."
@@ -335,6 +336,9 @@
 				if ("forumurl")
 					config.forumurl = value
 
+				if ("aurorawikiurl")
+					config.aurorawikiurl = value
+
 				if ("guest_jobban")
 					config.guest_jobban = 1
 
@@ -432,6 +436,9 @@
 
 				if("tor_ban")
 					ToRban = 1
+
+				if("ip_blacklist_enabled")
+					ip_blacklist_enabled = 1
 
 				if("automute_on")
 					automute_on = 1

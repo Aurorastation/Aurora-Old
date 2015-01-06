@@ -638,3 +638,12 @@
 	w_class = 1
 	force = 1
 	throwforce = 1
+
+/obj/item/toy/xmastree
+	name = "miniature Christmas tree"
+	desc = "Now with 99% less pine needles."
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "tinyxmastree"
+	w_class = 1
+	force = 1
+	throwforce = 1

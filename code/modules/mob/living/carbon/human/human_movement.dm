@@ -55,7 +55,7 @@
 		tally += (283.222 - bodytemperature) / 10 * 1.75
 
 	if(mRun in mutations)
-		tally = 0
+		tally = -1
 
 	return (tally+config.human_delay)
 
