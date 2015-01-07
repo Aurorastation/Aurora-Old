@@ -20,17 +20,36 @@ world/IsBanned(key,address,computer_id)
 		return list("reason"="Using ToR", "desc"="\nReason: The network you are using to connect has been banned.\nIf you believe this is a mistake, please request help at [config.banappeals]")
 
 	if(config && config.ip_blacklist_enabled)
-		msg_scopes("Doing blacklist stuff")
-		if(!blacklist)
-			loadBlacklist()
-		if(blacklist)
-			if(address in blacklist)
-				log_access("Failed Login: [src] - Blacklisted IP")
-				message_admins("\blue Failed Login: [src] - Blacklisted IP")
-				AddBan(ckey(key), computer_id, "Bad IP", "Automated Ban", 0, 0)
-				return list("reason"="IP Blacklisted", "desc"="\nReason: This IP has been blacklisted from the server.\nIf you believe this is a mistake, please request help at [config.banappeals]")
+		var/banhe = 0
+		if(!establish_db_connection())
+			//No database. Make do!
+			error("Database connection failed while checking blacklist. Reverted to old system.")
+			msg_scopes("Database connection failed while checking blacklist. Reverted to old system.")
+
+			msg_scopes("Doing blacklist stuff")
+			if(!blacklist)
+				loadBlacklist()
+			if(blacklist)
+				if(address in blacklist)
+					banhe = 1
+			else
+				msg_scopes("Where is the blacklist!")
 		else
-			msg_scopes("Where is the blacklist!")
+			//Have data, will base.
+			var/DBQuery/query = dbcon.NewQuery("SELECT ip FROM aurora_ipblacklist WHERE ip = '[address]'")
+			query.Execute()
+
+			while(query.NextRow())
+				var/bip = query.item[1]
+
+				if(bip == address)
+					banhe = 1
+
+		if(banhe == 1)
+			log_access("Failed Login: [src] - Blacklisted IP")
+			message_admins("\blue Failed Login: [src] - Blacklisted IP")
+			AddBan(ckey(key), computer_id, "Bad IP", "Automated Ban", 0, 0)
+			return list("reason"="IP Blacklisted", "desc"="\nReason: This IP has been blacklisted from the server.\nIf you believe this is a mistake, please request help at [config.banappeals]")
 
 	if(config.ban_legacy_system)
 
