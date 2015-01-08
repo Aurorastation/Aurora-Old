@@ -33,6 +33,8 @@
 		if(!(language in mind.changeling.absorbed_languages))
 			mind.changeling.absorbed_languages += language
 
+	add_language("Changeling")
+
 	return 1
 
 //removes our changeling verbs
@@ -41,6 +43,7 @@
 	for(var/datum/power/changeling/P in mind.changeling.purchasedpowers)
 		if(P.isVerb)
 			verbs -= P.verbpath
+	remove_language("Changeling")
 
 
 //Helper proc. Does all the checks and stuff for us to avoid copypasta
