@@ -23,10 +23,10 @@
 	compresses_to = /obj/item/stack/sheet/mineral/sandstone
 	oretag = "sand"
 
-/datum/ore/phoron
+/datum/ore/plasma
 	//smelts_to = something that explodes violently on the conveyor, huhuhuhu
 	compresses_to = /obj/item/stack/sheet/mineral/phoron
-	oretag = "phoron"
+	oretag = "plasma"
 
 /datum/ore/silver
 	smelts_to = /obj/item/stack/sheet/mineral/silver
@@ -50,3 +50,7 @@
 	smelts_to = /obj/item/stack/sheet/mineral/tritium
 	compresses_to = /obj/item/stack/sheet/mineral/mhydrogen
 	oretag = "hydrogen"
+
+/datum/ore/clown
+	smelts_to = /obj/item/stack/sheet/mineral/clown
+	oretag = "clown"

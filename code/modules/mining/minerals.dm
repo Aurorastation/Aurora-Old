@@ -65,8 +65,8 @@ var/list/name_to_mineral
 	spread_chance = 10
 	ore = /obj/item/weapon/ore/silver
 
-/mineral/phoron
-	name = "Phoron"
+/mineral/plasma
+	name = "Plasma"
 	result_amount = 5
 	spread_chance = 25
 	ore = /obj/item/weapon/ore/plasma

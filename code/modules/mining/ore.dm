@@ -9,6 +9,7 @@
 	name = "Bananium ore"
 	icon_state = "Clown ore"
 	origin_tech = "materials=4"
+	oretag = "clown"
 
 /obj/item/weapon/ore/uranium
 	name = "pitchblende"
