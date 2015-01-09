@@ -24,6 +24,7 @@
 	var/coinsToProduce = 10
 
 
+
 /obj/machinery/mineral/mint/New()
 	..()
 	spawn( 5 )
@@ -44,22 +45,22 @@
 		O = locate(/obj/item/stack/sheet, input.loc)
 		if(O)
 			if (istype(O,/obj/item/stack/sheet/mineral/gold))
-				amt_gold += 100 * O.amount
+				amt_gold += 100 * O.get_amount()
 				del(O)
 			if (istype(O,/obj/item/stack/sheet/mineral/silver))
-				amt_silver += 100 * O.amount
+				amt_silver += 100 * O.get_amount()
 				del(O)
 			if (istype(O,/obj/item/stack/sheet/mineral/diamond))
-				amt_diamond += 100 * O.amount
+				amt_diamond += 100 * O.get_amount()
 				del(O)
 			if (istype(O,/obj/item/stack/sheet/mineral/plasma))
-				amt_plasma += 100 * O.amount
+				amt_plasma += 100 * O.get_amount()
 				del(O)
 			if (istype(O,/obj/item/stack/sheet/mineral/uranium))
-				amt_uranium += 100 * O.amount
+				amt_uranium += 100 * O.get_amount()
 				del(O)
 			if (istype(O,/obj/item/stack/sheet/metal))
-				amt_iron += 100 * O.amount
+				amt_iron += 100 * O.get_amount()
 				del(O)
 			if (istype(O,/obj/item/stack/sheet/mineral/clown))
 				amt_clown += 100 * O.amount
@@ -68,8 +69,7 @@
 				amt_adamantine += 100 * O.amount
 				del(O) //Commented out for now. -Durandan
 
-
-/obj/machinery/mineral/mint/attack_hand(user as mob) //TODO: Adamantine coins! -Durandan
+/obj/machinery/mineral/mint/attack_hand(user as mob)
 
 	var/dat = "<b>Coin Press</b><br>"
 
@@ -105,22 +105,11 @@
 		dat += text("chosen")
 	else
 		dat += text("<A href='?src=\ref[src];choose=plasma'>Choose</A>")
-	dat += text("<br><font color='#008800'><b>uranium inserted: </b>[amt_uranium]</font> ")
+	dat += text("<br><font color='#008800'><b>Uranium inserted: </b>[amt_uranium]</font> ")
 	if (chosen == "uranium")
 		dat += text("chosen")
 	else
 		dat += text("<A href='?src=\ref[src];choose=uranium'>Choose</A>")
-	if(amt_clown > 0)
-		dat += text("<br><font color='#AAAA00'><b>Bananium inserted: </b>[amt_clown]</font> ")
-		if (chosen == "clown")
-			dat += text("chosen")
-		else
-			dat += text("<A href='?src=\ref[src];choose=clown'>Choose</A>")
-	dat += text("<br><font color='#888888'><b>Adamantine inserted: </b>[amt_adamantine]</font> ")//I don't even know these color codes, so fuck it.
-	if (chosen == "adamantine")
-		dat += text("chosen")
-	else
-		dat += text("<A href='?src=\ref[src];choose=adamantine'>Choose</A>")
 
 	dat += text("<br><br>Will produce [coinsToProduce] [chosen] coins if enough materials are available.<br>")
 	//dat += text("The dial which controls the number of conins to produce seems to be stuck. A technician has already been dispatched to fix this.")

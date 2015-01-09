@@ -42,7 +42,7 @@
 	var/death_message = "seizes up and falls limp, their eyes dead and lifeless..."
 
 	var/breath_type = "oxygen"   // Non-oxygen gas breathed, if any.
-	var/poison_type = "phoron"   // Poisonous air.
+	var/poison_type = "plasma"   // Poisonous air.
 	var/exhale_type = "carbon_dioxide"      // Exhaled gas type.
 
 	var/total_health = 100  //Point at which the mob will enter crit.
