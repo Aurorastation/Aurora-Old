@@ -54,6 +54,22 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	if(radio_controller)
 		initialize()
 
+// Interprets the message mode when talking into a radio, possibly returning a connection datum
+/obj/item/device/radio/proc/handle_message_mode(mob/living/M as mob, message, message_mode)
+	// If a channel isn't specified, send to common.
+	if(!message_mode || message_mode == "headset")
+		return radio_connection
+
+	// Otherwise, if a channel is specified, look for it.
+	if(channels)
+		if (message_mode == "department") // Department radio shortcut
+			message_mode = channels[1]
+
+		if (channels[message_mode]) // only broadcast if the channel is set on
+			return secure_radio_connections[message_mode]
+
+	// If we were to send to a channel we don't have, drop it.
+	return null
 
 /obj/item/device/radio/initialize()
 
@@ -229,6 +245,7 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	if(!(src.wires & WIRE_TRANSMIT)) // The device has to have all its wires and shit intact
 		return
 
+	M.last_target_click = world.time
 
 	if(GLOBAL_RADIO_TYPE == 1) // NEW RADIO SYSTEMS: By Doohl
 
@@ -244,26 +261,12 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 		*/
 
 	   //#### Grab the connection datum ####//
-		var/datum/radio_frequency/connection = null
-		if(channel == "headset")
-			channel = null
-		if(channel) // If a channel is specified, look for it.
-			if(channels && channels.len > 0)
-				if (channel == "department")
-					//world << "DEBUG: channel=\"[channel]\" switching to \"[channels[1]]\""
-					channel = channels[1]
-				connection = secure_radio_connections[channel]
-				if (!channels[channel]) // if the channel is turned off, don't broadcast
-					return
-			else
-				// If we were to send to a channel we don't have, drop it.
-		else // If a channel isn't specified, send to common.
-			connection = radio_connection
-			channel = null
+
+		var/datum/radio_frequency/connection = handle_message_mode(M, message, channel)
 		if (!istype(connection))
-			return
+			return 0
 		if (!connection)
-			return
+			return 0
 
 		var/turf/position = get_turf(src)
 
@@ -279,7 +282,6 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 
 
 		var/jobname // the mob's "job"
-
 		// --- Human: use their actual job ---
 		if (ishuman(M))
 			jobname = M:get_assignment()
@@ -368,7 +370,7 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 			return
 
 
-	  /* ###### Intercoms and station-bounced radios ###### */
+	 	 /* ###### Intercoms and station-bounced radios ###### */
 
 		var/filter_type = 2
 
