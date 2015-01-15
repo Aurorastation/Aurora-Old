@@ -660,6 +660,7 @@ var/list/datum/dna/hivemind_bank = list()
 		return
 
 	var/mimic_voice = input("Enter a name to mimic.", "Mimic Voice", null) as text
+	mimic_voice = strip_html(mimic_voice, MAX_NAME_LEN) //Why am I doing it like this? Because 30+ hours no sleeps
 	if(!mimic_voice)
 		return
 
