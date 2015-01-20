@@ -1121,13 +1121,13 @@
 		if("^%###^%$" || "Mercenary")
 			if(helmet)
 				helmet.name = "blood-red hardsuit helmet"
-				helmet.icon_state = "rig0-syndie"
+				helmet.icon_state = "rig0-syndi"
 				helmet.item_state = "syndie_helm"
 				helmet.item_color = "syndie"
 			if(suit)
 				suit.name = "blood-red hardsuit"
 				suit.item_state = "syndie_hardsuit"
-				suit.icon_state = "rig-syndie"
+				suit.icon_state = "rig-syndi"
 
 	if(helmet) helmet.name = "refitted [helmet.name]"
 	if(suit) suit.name = "refitted [suit.name]"
