@@ -33,6 +33,10 @@ datum/controller/game_controller
 	var/mob/list/expensive_mobs = list()
 	var/rebuild_active_areas = 0
 
+	var/list/shuttle_list	                    // For debugging and VV
+//	var/datum/ore_distribution/asteroid_ore_map // For debugging and VV.
+
+
 datum/controller/game_controller/New()
 	//There can be only one master_controller. Out with the old and in with the new.
 	if(master_controller != src)
@@ -50,7 +54,8 @@ datum/controller/game_controller/New()
 
 	if(!syndicate_code_phrase)		syndicate_code_phrase	= generate_code_phrase()
 	if(!syndicate_code_response)	syndicate_code_response	= generate_code_phrase()
-	if(!emergency_shuttle)			emergency_shuttle = new /datum/shuttle_controller/emergency_shuttle()
+	if(!emergency_shuttle)			emergency_shuttle = new /datum/emergency_shuttle_controller()
+	if(!shuttle_controller)			shuttle_controller = new /datum/shuttle_controller()
 	if(!delta_level)				delta_level = new /datum/delta_level()
 
 datum/controller/game_controller/proc/setup()
@@ -105,6 +110,24 @@ datum/controller/game_controller/proc/setup_objects()
 			var/obj/machinery/atmospherics/unary/vent_scrubber/T = U
 			T.broadcast_status()
 
+	//Create the mining ore distribution map.
+//	asteroid_ore_map = new /datum/ore_distribution()
+//	asteroid_ore_map.populate_distribution_map()
+
+	//Shitty hack to fix mining turf overlays, for some reason New() is not being called.
+	for(var/turf/simulated/floor/plating/airless/asteroid/T in world)
+		T.updateMineralOverlays()
+		T.name = "asteroid"
+
+	//Set up spawn points.
+	populate_spawn_points()
+
+	//Set up gear list.
+	populate_gear_list()
+
+	//Set up roundstart seed list.
+//	populate_seed_list()	No seeds, not yet.
+
 	world << "\red \b Initializations complete."
 	sleep(-1)
 
@@ -127,6 +150,7 @@ datum/controller/game_controller/proc/process()
 
 				vote.process()
 				transfer_controller.process()
+				shuttle_controller.process()
 				process_newscaster()
 
 				//AIR
@@ -141,6 +165,7 @@ datum/controller/game_controller/proc/process()
 							world << "<font color='red'><b>RUNTIMES IN ATMOS TICKER.  Killing air simulation!</font></b>"
 							world.log << "### ZAS SHUTDOWN"
 							message_admins("ZASALERT: unable to run [air_master.tick_progress], shutting down!")
+							msg_scopes("ZASALERT: unable to run [air_master.tick_progress], shutting down!")
 							log_admin("ZASALERT: unable run zone/process() -- [air_master.tick_progress]")
 							air_processing_killed = 1
 							air_master.failed_ticks = 0
@@ -276,10 +301,16 @@ datum/controller/game_controller/proc/process_machines_power()
 		var/area/A = active_areas[i]
 		if(A.powerupdate && A.master == A)
 			A.powerupdate -= 1
-			for(var/area/SubArea in A.related)
+			A.clear_usage()
+			for(var/j = 1; j <= A.related.len; j++)
+				var/area/SubArea = A.related[j]
 				for(var/obj/machinery/M in SubArea)
 					if(M)
-						if(M.use_power)
+						//check if the area has power for M's channel
+						//this will keep stat updated in case the machine is moved from one area to another.
+						M.power_change(A)	//we've already made sure A is a master area, above.
+
+						if(!(M.stat & NOPOWER) && M.use_power)
 							M.auto_use_power()
 
 		if(A.apc.len && A.master == A)
@@ -326,7 +357,7 @@ datum/controller/game_controller/proc/process_powernets()
 	while(i<=powernets.len)
 		var/datum/powernet/Powernet = powernets[i]
 		if(Powernet)
-			Powernet.reset()
+			Powernet.process()
 			i++
 			continue
 		powernets.Cut(i,i+1)

@@ -37,7 +37,7 @@
 /obj/item/weapon/melee/energy/sword:4:Energy Sword;
 /obj/item/weapon/storage/box/syndicate:10:Syndicate Bundle;
 /obj/item/weapon/storage/box/emps:3:5 EMP Grenades;
-/obj/item/weapon/melee/baton/stunrod:4:Stunrod;
+/obj/item/weapon/melee/baton/stunrod/loaded:4:Stunrod;
 Whitespace:Seperator;
 Stealthy and Inconspicuous Weapons;
 /obj/item/weapon/storage/box/walkingcane:5:Disguised Sword;
@@ -92,12 +92,16 @@ Implants;
 		if((player.client)&&(player.ready))
 			playerC++
 
+	msg_scopes("playerC: [playerC]")
 	if(master_mode=="secret")
+		msg_scopes("req [required_players_secret]")
 		if(playerC >= required_players_secret)
 			return 1
 	else
+		msg_scopes("req [required_players]")
 		if(playerC >= required_players)
 			return 1
+	msg_scopes("Nope, players not here or something")
 	return 0
 
 
@@ -127,10 +131,12 @@ Implants;
 
 
 /datum/game_mode/proc/check_finished() //to be called by ticker
-	if(emergency_shuttle.location==2 || station_was_nuked)
+	if(emergency_shuttle.returned() || station_was_nuked)
 		return 1
 	return 0
 
+/datum/game_mode/proc/cleanup()	//This is called when the round has ended but not the game, if any cleanup would be necessary in that case.
+	return
 
 /datum/game_mode/proc/declare_completion()
 	var/clients = 0
@@ -282,6 +288,7 @@ Implants;
 		if(BE_CULTIST)		roletext="cultist"
 		if(BE_NINJA)		roletext="ninja"
 		if(BE_RAIDER)		roletext="raider"
+		if(BE_VAMPIRE)		roletext="vampire"
 
 	// Assemble a list of active players without jobbans.
 	for(var/mob/new_player/player in player_list)
@@ -311,6 +318,7 @@ Implants;
 
 	// Remove candidates who want to be antagonist but have a job that precludes it
 	if(restricted_jobs)
+		msg_scopes("going through restricted jobs")
 		for(var/datum/mind/player in candidates)
 			for(var/job in restricted_jobs)
 				if(player.assigned_role == job)
@@ -417,7 +425,7 @@ Implants;
 //Reports player logouts//
 //////////////////////////
 proc/display_roundstart_logout_report()
-	var/msg = "\blue <b>Roundstart logout report\n\n"
+	var/msg = "\blue <b>Roundstart logout report</b>\n\n"
 	for(var/mob/living/L in mob_list)
 
 		if(L.ckey)
@@ -480,3 +488,28 @@ proc/get_nt_opposed()
 				dudes += man
 	if(dudes.len == 0) return null
 	return pick(dudes)
+
+//Announces objectives/generic antag text.
+/proc/show_generic_antag_text(var/datum/mind/player)
+	if(player.current)
+		player.current << \
+		"You are an antagonist! <font color=blue>Within the rules,</font> \
+		try to act as an opposing force to the crew. Further RP and try to make sure \
+		other players have <i>fun</i>! If you are confused or at a loss, always adminhelp, \
+		and before taking extreme actions, please try to also contact the administration! \
+		Think through your actions and make the roleplay immersive! <b>Please remember all \
+		rules aside from those without explicit exceptions apply to antagonists.</b>"
+
+/proc/show_objectives(var/datum/mind/player)
+
+	if(!player || !player.current) return
+
+	if(config.objectives_disabled)
+		show_generic_antag_text(player)
+		return
+
+	var/obj_count = 1
+	player.current << "\blue Your current objectives:"
+	for(var/datum/objective/objective in player.objectives)
+		player.current << "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
+		obj_count++

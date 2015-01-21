@@ -27,7 +27,7 @@
 	var/raised = 0			// if the turret cover is "open" and the turret is raised
 	var/raising= 0			// if the turret is currently opening or closing its cover
 	var/health = 80			// the turret's health
-	var/locked = 1			// if the turret's behaviour control access is locked
+	var/locked = 0			// if the turret's behaviour control access is locked
 
 	var/installation		// the type of weapon installed
 	var/gun_charge = 0		// the charge of the gun inserted
@@ -66,7 +66,7 @@
 		spark_system.attach(src)
 		sleep(10)
 		if(!installation)// if for some reason the turret has no gun (ie, admin spawned) it resorts to basic taser shots
-			projectile = /obj/item/projectile/energy/electrode//holder for the projectile, here it is being set
+			projectile = /obj/item/projectile/energy/electrode/high//holder for the projectile, here it is being set
 			eprojectile = /obj/item/projectile/beam//holder for the projectile when emagged, if it is different
 			reqpower = 200
 			sound = 1
@@ -128,13 +128,13 @@
 					reqpower = 700
 
 				if(/obj/item/weapon/gun/energy/taser)
-					projectile = /obj/item/projectile/energy/electrode
+					projectile = /obj/item/projectile/energy/electrode/high
 					eprojectile = projectile
 					iconholder = 1
 					reqpower = 200
 
 				if(/obj/item/weapon/gun/energy/stunrevolver)
-					projectile = /obj/item/projectile/energy/electrode
+					projectile = /obj/item/projectile/energy/electrode/high
 					eprojectile = projectile
 					iconholder = 1
 					reqpower = 200
@@ -169,8 +169,14 @@
 					iconholder = null
 					reqpower = 500
 
+				if(/obj/item/weapon/gun/energy/laser) //laser rifles are cool and all.
+					projectile = /obj/item/projectile/beam //but captainlaser and retrolaser still use energy/laser pathing.
+					eprojectile = projectile
+					iconholder = null
+					reqpower = 500
+
 				else // Energy gun shots
-					projectile = /obj/item/projectile/energy/electrode// if it hasn't been emagged, it uses normal taser shots
+					projectile = /obj/item/projectile/energy/electrode/high// if it hasn't been emagged, it uses normal taser shots
 					eprojectile = /obj/item/projectile/beam//If it has, going to kill mode
 					iconholder = 1
 					egun = 1
@@ -264,10 +270,12 @@ Status: []<BR>"},
 	if(!anchored)
 		icon_state = "turretCover"
 		return
+	
+	..()
 	if(stat & BROKEN)
 		icon_state = "[lasercolor]destroyed_target_prism"
 	else
-		if( powered() )
+		if( !(stat & NOPOWER) )
 			if (on)
 				if (installation == /obj/item/weapon/gun/energy/laser || installation == /obj/item/weapon/gun/energy/pulse_rifle)
 					// laser guns and pulse rifles have an orange icon
@@ -277,11 +285,9 @@ Status: []<BR>"},
 					icon_state = "[lasercolor]target_prism"
 			else
 				icon_state = "[lasercolor]grey_target_prism"
-			stat &= ~NOPOWER
 		else
 			spawn(rand(0, 15))
 				src.icon_state = "[lasercolor]grey_target_prism"
-				stat |= NOPOWER
 
 
 

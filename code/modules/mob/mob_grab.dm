@@ -137,7 +137,7 @@
 				affecting.loc = assailant.loc
 			affecting.attack_log += "\[[time_stamp()]\] <font color='orange'>Has had their neck grabbed by [assailant.name] ([assailant.ckey])</font>"
 			assailant.attack_log += "\[[time_stamp()]\] <font color='red'>Grabbed the neck of [affecting.name] ([affecting.ckey])</font>"
-			msg_admin_attack("[key_name(assailant)] grabbed the neck of [key_name(affecting)]")
+			msg_admin_attack("[key_name(assailant)] grabbed the neck of [key_name(affecting)] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[affecting.x];Y=[affecting.y];Z=[affecting.z]'>JMP</a>")
 			hud.icon_state = "disarm/kill"
 			hud.name = "disarm/kill"
 		else
@@ -158,7 +158,7 @@
 					assailant.visible_message("<span class='danger'>[assailant] has tightened \his grip on [affecting]'s neck!</span>")
 					affecting.attack_log += "\[[time_stamp()]\] <font color='orange'>Has been strangled (kill intent) by [assailant.name] ([assailant.ckey])</font>"
 					assailant.attack_log += "\[[time_stamp()]\] <font color='red'>Strangled (kill intent) [affecting.name] ([affecting.ckey])</font>"
-					msg_admin_attack("[key_name(assailant)] strangled (kill intent) [key_name(affecting)]")
+					msg_admin_attack("[key_name(assailant)] strangled (kill intent) [key_name(affecting)] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[affecting.x];Y=[affecting.y];Z=[affecting.z]'>JMP</a>")
 
 					assailant.next_move = world.time + 10
 					affecting.losebreath += 1
@@ -191,10 +191,22 @@
 		return
 
 	if(M == assailant && state >= GRAB_AGGRESSIVE)
-		if( (ishuman(user) && (FAT in user.mutations) && ismonkey(affecting) ) || ( isalien(user) && iscarbon(affecting) ) )
+		var/can_eat
+
+		if((FAT in user.mutations) && ismonkey(affecting))
+			can_eat = 1
+		else
+			var/mob/living/carbon/human/H = user
+			if(istype(H) && iscarbon(affecting) && H.species.gluttonous)
+				if(H.species.gluttonous == 2)
+					can_eat = 2
+				else if(!ishuman(affecting))
+					can_eat = 1
+
+		if(can_eat)
 			var/mob/living/carbon/attacker = user
 			user.visible_message("<span class='danger'>[user] is attempting to devour [affecting]!</span>")
-			if(istype(user, /mob/living/carbon/alien/humanoid/hunter))
+			if(can_eat == 2)
 				if(!do_mob(user, affecting)||!do_after(user, 30)) return
 			else
 				if(!do_mob(user, affecting)||!do_after(user, 100)) return

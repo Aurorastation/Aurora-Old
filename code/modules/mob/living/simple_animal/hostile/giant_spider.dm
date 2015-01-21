@@ -44,6 +44,7 @@
 
 /mob/living/simple_animal/hostile/giant_spider/death()
 	total_spiders -= 1
+	lying = 1
 	if(total_spiders <= (MAX_SPIDERS - 2) && !spider_can_spawn)
 		spider_can_spawn = 1
 	if(total_spiders < 0) //Admin mess around protection
@@ -53,6 +54,7 @@
 /mob/living/simple_animal/hostile/giant_spider/Life() //Checks to see if spider has been respawned from var edits
 	if(stat == DEAD)
 		if(health > 0)
+			lying = 0
 			total_spiders += 1
 	..()
 

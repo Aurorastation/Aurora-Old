@@ -12,6 +12,7 @@ var/global/datum/controller/gameticker/ticker
 
 	var/hide_mode = 0
 	var/datum/game_mode/mode = null
+	var/post_game = 0
 	var/event_time = null
 	var/event = 0
 
@@ -35,6 +36,8 @@ var/global/datum/controller/gameticker/ticker
 	var/delay_end = 0	//if set to nonzero, the round will not restart on it's own
 
 	var/triai = 0//Global holder for Triumvirate
+
+	var/round_end_announced = 0 // Spam Prevention. Announce round end only once.
 
 /datum/controller/gameticker/proc/pregame()
 	login_music = pick(\
@@ -76,6 +79,7 @@ var/global/datum/controller/gameticker/ticker
 	if((master_mode=="random") || (master_mode=="secret"))
 		runnable_modes = config.get_runnable_modes()
 		if (runnable_modes.len==0)
+			msg_scopes("Well we can't continue runnable_modes.0")
 			current_state = GAME_STATE_PREGAME
 			world << "<B>Unable to choose playable game mode.</B> Reverting to pre-game lobby."
 			return 0
@@ -92,6 +96,7 @@ var/global/datum/controller/gameticker/ticker
 	else
 		src.mode = config.pick_mode(master_mode)
 	if (!src.mode.can_start())
+		msg_scopes("Well we can't continue can_start")
 		world << "<B>Unable to start [mode.name].</B> Not enough players, [mode.required_players] players needed. Reverting to pre-game lobby."
 		del(mode)
 		current_state = GAME_STATE_PREGAME
@@ -104,6 +109,7 @@ var/global/datum/controller/gameticker/ticker
 	if(!can_continue)
 		del(mode)
 		current_state = GAME_STATE_PREGAME
+		msg_scopes("Well we can't continue pre_setup")
 		world << "<B>Error setting up [master_mode].</B> Reverting to pre-game lobby."
 		job_master.ResetOccupations()
 		return 0
@@ -129,6 +135,8 @@ var/global/datum/controller/gameticker/ticker
 	//here to initialize the random events nicely at round start
 	setup_economy()
 
+	shuttle_controller.setup_shuttle_docks()
+
 	spawn(0)//Forking here so we dont have to wait for this to finish
 		mode.post_setup()
 		//Cleanup some stuff
@@ -151,7 +159,7 @@ var/global/datum/controller/gameticker/ticker
 	if(admins_number == 0)
 		send2adminirc("Round has started with no admins online.")
 
-	supply_shuttle.process() 		//Start the supply shuttle regenerating points -- TLE
+	supply_controller.process() 		//Start the supply shuttle regenerating points -- TLE
 	master_controller.process()		//Start master_controller.process()
 	lighting_controller.process()	//Start processing DynamicAreaLighting updates
 
@@ -294,6 +302,7 @@ var/global/datum/controller/gameticker/ticker
 					captainless=0
 				if(player.mind.assigned_role != "MODE")
 					job_master.EquipRank(player, player.mind.assigned_role, 0)
+					UpdateFactionList(player)
 					EquipCustomItems(player)
 		if(captainless)
 			for(var/mob/M in player_list)
@@ -311,8 +320,16 @@ var/global/datum/controller/gameticker/ticker
 
 		delta_level.process()
 
-		var/mode_finished = mode.check_finished() || (emergency_shuttle.location == 2 && emergency_shuttle.alert == 1)
-		if(!mode.explosion_in_progress && mode_finished)
+		var/game_finished = 0
+		var/mode_finished = 0
+		if (config.continous_rounds)
+			game_finished = (emergency_shuttle.returned() || mode.station_was_nuked)
+			mode_finished = (!post_game && mode.check_finished())
+		else
+			game_finished = (mode.check_finished() || (emergency_shuttle.returned() && emergency_shuttle.evac == 1))
+			mode_finished = game_finished
+
+		if(!mode.explosion_in_progress && game_finished && (mode_finished || post_game))
 			current_state = GAME_STATE_FINISHED
 
 			spawn
@@ -342,6 +359,18 @@ var/global/datum/controller/gameticker/ticker
 						world << "\blue <B>An admin has delayed the round end</B>"
 				else
 					world << "\blue <B>An admin has delayed the round end</B>"
+
+		else if (mode_finished)
+			post_game = 1
+
+			mode.cleanup()
+
+			//call a transfer shuttle vote
+			spawn(50)
+				if(!round_end_announced) // Spam Prevention. Now it should announce only once.
+					world << "\red The round has ended!"
+					round_end_announced = 1
+				vote.autotransfer()
 
 		return 1
 
@@ -384,7 +413,7 @@ var/global/datum/controller/gameticker/ticker
 				robo.laws.show_laws(world)
 
 	if(dronecount)
-		world << "<b>There [dronecount>1 ? "were" : "was"] [dronecount] industrious maintenance [dronecount>1 ? "drones" : "drone"] this round."
+		world << "<b>There [dronecount>1 ? "were" : "was"] [dronecount] industrious maintenance [dronecount>1 ? "drones" : "drone"] this round.</b>"
 
 	mode.declare_completion()//To declare normal completion.
 

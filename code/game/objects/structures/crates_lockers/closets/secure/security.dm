@@ -104,7 +104,7 @@
 		else
 			new /obj/item/weapon/storage/backpack/satchel_sec(src)
 		new /obj/item/clothing/head/helmet/HoS(src)
-		new /obj/item/clothing/suit/armor/vest(src)
+		new /obj/item/clothing/suit/armor/hos/vest(src)
 		new /obj/item/clothing/under/rank/head_of_security/jensen(src)
 		new /obj/item/clothing/under/rank/head_of_security/corp(src)
 		new /obj/item/clothing/suit/armor/hos/jensen(src)
@@ -119,7 +119,7 @@
 		new /obj/item/weapon/storage/box/flashbangs(src)
 		new /obj/item/weapon/storage/belt/security(src)
 		new /obj/item/device/flash(src)
-		new /obj/item/weapon/melee/baton(src)
+		new /obj/item/weapon/melee/baton/loaded(src)
 		new /obj/item/weapon/gun/energy/gun/pistol(src)
 		new /obj/item/clothing/tie/holster/waist(src)
 		new /obj/item/weapon/melee/telebaton(src)
@@ -157,7 +157,7 @@
 		new /obj/item/weapon/storage/box/flashbangs(src)
 		new /obj/item/weapon/storage/belt/security(src)
 		new /obj/item/weapon/reagent_containers/spray/pepper(src)
-		new /obj/item/weapon/melee/baton(src)
+		new /obj/item/weapon/melee/baton/loaded(src)
 		new /obj/item/weapon/gun/energy/taser(src)
 		new /obj/item/weapon/storage/box/holobadge(src)
 		return
@@ -189,7 +189,7 @@
 		new /obj/item/device/flash(src)
 		new /obj/item/weapon/reagent_containers/spray/pepper(src)
 		new /obj/item/weapon/grenade/flashbang(src)
-		new /obj/item/weapon/melee/baton(src)
+		new /obj/item/weapon/melee/baton/loaded(src)
 		new /obj/item/weapon/gun/energy/taser(src)
 		new /obj/item/clothing/glasses/sunglasses/sechud(src)
 		new /obj/item/taperoll/police(src)
@@ -232,6 +232,31 @@
 		new /obj/item/device/encryptionkey/headset_med(src)
 		return
 
+/obj/structure/closet/secure_closet/forensics
+	name = "Forensic tech's closet"
+	req_access = list(access_forensics_lockers)
+	icon_state = "sec1"
+	icon_closed = "sec"
+	icon_locked = "sec1"
+	icon_opened = "secopen"
+	icon_broken = "secbroken"
+	icon_off = "secoff"
+
+	New()
+		..()
+		sleep(2)
+		new /obj/item/clothing/under/rank/navy/det/forensics(src)
+		new /obj/item/clothing/suit/storage/forensics/blue(src)
+		new /obj/item/clothing/suit/storage/forensics/red(src)
+		new /obj/item/clothing/gloves/black(src)
+		new /obj/item/clothing/shoes/brown(src)
+		new /obj/item/weapon/storage/box/evidence(src)
+		new /obj/item/device/radio/headset/headset_sec(src)
+		new /obj/item/clothing/suit/armor/det_suit(src)
+		new /obj/item/taperoll/police(src)
+		new /obj/item/clothing/tie/holobadge(src)
+		return
+
 
 /obj/structure/closet/secure_closet/detective
 	name = "Detective's Cabinet"
@@ -248,24 +273,17 @@
 		sleep(2)
 		new /obj/item/clothing/under/det(src)
 		new /obj/item/clothing/under/det/black(src)
-		new /obj/item/clothing/under/det/slob(src)
 		new /obj/item/clothing/suit/storage/det_suit(src)
 		new /obj/item/clothing/suit/storage/det_suit/black(src)
-		new /obj/item/clothing/suit/storage/forensics/blue(src)
-		new /obj/item/clothing/suit/storage/forensics/red(src)
 		new /obj/item/clothing/gloves/black(src)
 		new /obj/item/clothing/head/det_hat(src)
 		new /obj/item/clothing/head/det_hat/black(src)
 		new /obj/item/clothing/shoes/brown(src)
 		new /obj/item/weapon/storage/box/evidence(src)
 		new /obj/item/device/radio/headset/headset_sec(src)
-		new /obj/item/device/detective_scanner(src)
 		new /obj/item/clothing/suit/armor/det_suit(src)
-		new /obj/item/ammo_magazine/c45r(src)
-		new /obj/item/ammo_magazine/c45r(src)
 		new /obj/item/taperoll/police(src)
-		new /obj/item/weapon/gun/projectile/detective/semiauto(src)
-		new /obj/item/clothing/tie/holster/armpit(src)
+		new /obj/item/clothing/tie/holobadge(src)
 		return
 
 /obj/structure/closet/secure_closet/detective/update_icon()

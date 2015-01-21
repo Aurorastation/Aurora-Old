@@ -10,6 +10,12 @@
 	idle_power_usage = 2
 	active_power_usage = 4
 
+	attackby(obj/item/weapon/C as obj, mob/user as mob)
+		if(istype(C, /obj/item/device/signaltool))
+			var/obj/item/device/signaltool/ST = C
+			id = ST.change_ID(id)
+			return
+
 /obj/machinery/ignition_switch
 	name = "ignition switch"
 	icon = 'icons/obj/objects.dmi'
@@ -21,6 +27,12 @@
 	use_power = 1
 	idle_power_usage = 2
 	active_power_usage = 4
+
+	attackby(obj/item/weapon/C as obj, mob/user as mob)
+		if(istype(C, /obj/item/device/signaltool))
+			var/obj/item/device/signaltool/ST = C
+			id = ST.change_ID(id)
+			return
 
 /obj/machinery/flasher_button
 	name = "flasher button"
@@ -34,6 +46,12 @@
 	idle_power_usage = 2
 	active_power_usage = 4
 
+	attackby(obj/item/weapon/C as obj, mob/user as mob)
+		if(istype(C, /obj/item/device/signaltool))
+			var/obj/item/device/signaltool/ST = C
+			id = ST.change_ID(id)
+			return
+
 /obj/machinery/crema_switch
 	desc = "Burn baby burn!"
 	name = "crematorium igniter"
@@ -45,3 +63,9 @@
 	var/area/area = null
 	var/otherarea = null
 	var/id = 1
+
+	attackby(obj/item/weapon/C as obj, mob/user as mob)
+		if(istype(C, /obj/item/device/signaltool))
+			var/obj/item/device/signaltool/ST = C
+			id = ST.change_ID(id)
+			return

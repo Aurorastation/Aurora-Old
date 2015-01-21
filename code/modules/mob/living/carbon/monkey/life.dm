@@ -23,16 +23,14 @@
 		environment = loc.return_air()
 
 	if (stat != DEAD)
-		if(!istype(src,/mob/living/carbon/monkey/diona)) //still breathing
-			//First, resolve location and get a breath
-			if(air_master.current_cycle%4==2)
-				//Only try to take a breath every 4 seconds, unless suffocating
-				breathe()
-			else //Still give containing object the chance to interact
-				if(istype(loc, /obj/))
-					var/obj/location_as_object = loc
-					location_as_object.handle_internal_lifeform(src, 0)
-
+		//First, resolve location and get a breath
+		if(air_master.current_cycle%4==2)
+			//Only try to take a breath every 4 seconds, unless suffocating
+			breathe()
+		else //Still give containing object the chance to interact
+			if(istype(loc, /obj/))
+				var/obj/location_as_object = loc
+				location_as_object.handle_internal_lifeform(src, 0)
 
 		//Updates the number of stored chemicals for powers
 		handle_changeling()
@@ -59,6 +57,9 @@
 	if(environment)	// More error checking -- TLE
 		handle_environment(environment)
 
+	//check if we're on fire
+	handle_fire()
+
 	//Status updates, death etc.
 	handle_regular_status_updates()
 	update_canmove()
@@ -79,11 +80,6 @@
 		if(prob(1))
 			emote(pick("scratch","jump","roll","tail"))
 	updatehealth()
-
-
-/mob/living/carbon/monkey/calculate_affecting_pressure(var/pressure)
-	..()
-	return pressure
 
 /mob/living/carbon/monkey
 
@@ -139,8 +135,9 @@
 			if (radiation > 100)
 				radiation = 100
 				Weaken(10)
-				src << "\red You feel weak."
-				emote("collapse")
+				if(!lying)
+					src << "\red You feel weak."
+					emote("collapse")
 
 			switch(radiation)
 				if(1 to 49)
@@ -154,8 +151,9 @@
 					if(prob(5))
 						radiation -= 5
 						Weaken(3)
-						src << "\red You feel weak."
-						emote("collapse")
+						if(!lying)
+							src << "\red You feel weak."
+							emote("collapse")
 
 				if(75 to 100)
 					radiation -= 3
@@ -235,24 +233,13 @@
 					var/obj/location_as_object = loc
 					breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
 				else if(istype(loc, /turf/))
-					var/breath_moles = environment.total_moles()*BREATH_PERCENTAGE
+					var/breath_moles = environment.total_moles*BREATH_PERCENTAGE
 					breath = loc.remove_air(breath_moles)
 
-					if(istype(wear_mask, /obj/item/clothing/mask/gas))
-						var/obj/item/clothing/mask/gas/G = wear_mask
-						var/datum/gas_mixture/filtered = new
-
-						filtered.copy_from(breath)
-						filtered.toxins *= G.gas_filter_strength
-						for(var/datum/gas/gas in filtered.trace_gases)
-							gas.moles *= G.gas_filter_strength
-						filtered.update_values()
+					if(istype(wear_mask, /obj/item/clothing/mask) && breath)
+						var/obj/item/clothing/mask/M = wear_mask
+						var/datum/gas_mixture/filtered = M.filter_air(breath)
 						loc.assume_air(filtered)
-
-						breath.toxins *= 1 - G.gas_filter_strength
-						for(var/datum/gas/gas in breath.trace_gases)
-							gas.moles *= 1 - G.gas_filter_strength
-						breath.update_values()
 
 					// Handle chem smoke effect  -- Doohl
 					var/block = 0
@@ -314,23 +301,23 @@
 		var/SA_para_min = 0.5
 		var/SA_sleep_min = 5
 		var/oxygen_used = 0
-		var/breath_pressure = (breath.total_moles()*R_IDEAL_GAS_EQUATION*breath.temperature)/BREATH_VOLUME
+		var/breath_pressure = (breath.total_moles * R_IDEAL_GAS_EQUATION * breath.temperature) / BREATH_VOLUME
 
 		//Partial pressure of the O2 in our breath
-		var/O2_pp = (breath.oxygen/breath.total_moles())*breath_pressure
+		var/O2_pp = (breath.gas["oxygen"] / breath.total_moles) * breath_pressure
 		// Same, but for the toxins
-		var/Toxins_pp = (breath.toxins/breath.total_moles())*breath_pressure
+		var/Toxins_pp = (breath.gas["toxins"] / breath.total_moles) * breath_pressure
 		// And CO2, lets say a PP of more than 10 will be bad (It's a little less really, but eh, being passed out all round aint no fun)
-		var/CO2_pp = (breath.carbon_dioxide/breath.total_moles())*breath_pressure
+		var/CO2_pp = (breath.gas["carbon_dioxide"] / breath.total_moles) * breath_pressure
 
 		if(O2_pp < safe_oxygen_min) 			// Too little oxygen
 			if(prob(20))
 				spawn(0) emote("gasp")
-			if (O2_pp == 0)
+			if (!O2_pp || O2_pp == 0)
 				O2_pp = 0.01
 			var/ratio = safe_oxygen_min/O2_pp
 			adjustOxyLoss(min(5*ratio, 7)) // Don't fuck them up too fast (space only does 7 after all!)
-			oxygen_used = breath.oxygen*ratio/6
+			oxygen_used = breath.gas["oxygen"] * ratio / 6
 			oxygen_alert = max(oxygen_alert, 1)
 		/*else if (O2_pp > safe_oxygen_max) 		// Too much oxygen (commented this out for now, I'll deal with pressure damage elsewhere I suppose)
 			spawn(0) emote("cough")
@@ -340,11 +327,11 @@
 			oxygen_alert = max(oxygen_alert, 1)*/
 		else 									// We're in safe limits
 			adjustOxyLoss(-5)
-			oxygen_used = breath.oxygen/6
+			oxygen_used = breath.gas["oxygen"] / 6
 			oxygen_alert = 0
 
-		breath.oxygen -= oxygen_used
-		breath.carbon_dioxide += oxygen_used
+		breath.adjust_gas("oxygen", -oxygen_used)
+		breath.adjust_gas("carbon_dioxide", oxygen_used)
 
 		if(CO2_pp > safe_co2_max)
 			if(!co2overloadtime) // If it's the first breath with too much CO2 in it, lets start a counter, then have them pass out after 12s or so.
@@ -361,7 +348,7 @@
 			co2overloadtime = 0
 
 		if(Toxins_pp > safe_toxins_max) // Too much toxins
-			var/ratio = (breath.toxins/safe_toxins_max) * 10
+			var/ratio = (breath.gas["toxins"] / safe_toxins_max) * 10
 			//adjustToxLoss(Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))	//Limit amount of damage toxin exposure can do per second
 			if(reagents)
 				reagents.add_reagent("plasma", Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))
@@ -369,16 +356,15 @@
 		else
 			toxins_alert = 0
 
-		if(breath.trace_gases.len)	// If there's some other shit in the air lets deal with it here.
-			for(var/datum/gas/sleeping_agent/SA in breath.trace_gases)
-				var/SA_pp = (SA.moles/breath.total_moles())*breath_pressure
-				if(SA_pp > SA_para_min) // Enough to make us paralysed for a bit
-					Paralyse(3) // 3 gives them one second to wake up and run away a bit!
-					if(SA_pp > SA_sleep_min) // Enough to make us sleep as well
-						sleeping = max(sleeping+2, 10)
-				else if(SA_pp > 0.01)	// There is sleeping gas in their lungs, but only a little, so give them a bit of a warning
-					if(prob(20))
-						spawn(0) emote(pick("giggle", "laugh"))
+		if(breath.gas["sleeping_agent"])
+			var/SA_pp = (breath.gas["sleeping_agent"] / breath.total_moles) * breath_pressure
+			if(SA_pp > SA_para_min) // Enough to make us paralysed for a bit
+				Paralyse(3) // 3 gives them one second to wake up and run away a bit!
+				if(SA_pp > SA_sleep_min) // Enough to make us sleep as well
+					sleeping = max(sleeping+2, 10)
+			else if(SA_pp > 0.01)	// There is sleeping gas in their lungs, but only a little, so give them a bit of a warning
+				if(prob(20))
+					spawn(0) emote(pick("giggle", "laugh"))
 
 
 		if(breath.temperature > (T0C+66)) // Hot air hurts :(
@@ -399,9 +385,8 @@
 
 		//Moved these vars here for use in the fuck-it-skip-processing check.
 		var/pressure = environment.return_pressure()
-		var/adjusted_pressure = calculate_affecting_pressure(pressure) //Returns how much pressure actually affects the mob.
+		if(pressure < WARNING_HIGH_PRESSURE && pressure > WARNING_LOW_PRESSURE && abs(environment.temperature - 293.15) < 20 && abs(bodytemperature - 310.14) < 0.5 && environment.gas["toxins"] < MOLES_PLASMA_VISIBLE)
 
-		if(adjusted_pressure < WARNING_HIGH_PRESSURE && adjusted_pressure > WARNING_LOW_PRESSURE && abs(environment.temperature - 293.15) < 20 && abs(bodytemperature - 310.14) < 0.5 && environment.toxins < MOLES_PLASMA_VISIBLE)
 
 			//Hopefully should fix the walk-inside-still-pressure-warning issue.
 			if(pressure_alert)
@@ -414,18 +399,19 @@
 			var/turf/heat_turf = get_turf(src)
 			environment_heat_capacity = heat_turf.heat_capacity
 
-		if((environment.temperature > (T0C + 50)) || (environment.temperature < (T0C + 10)))
-			var/transfer_coefficient = 1
+		if(!on_fire)
+			if((environment.temperature > (T0C + 50)) || (environment.temperature < (T0C + 10)))
+				var/transfer_coefficient = 1
 
-			handle_temperature_damage(HEAD, environment.temperature, environment_heat_capacity*transfer_coefficient)
+				handle_temperature_damage(HEAD, environment.temperature, environment_heat_capacity*transfer_coefficient)
 
 		if(stat==2)
 			bodytemperature += 0.1*(environment.temperature - bodytemperature)*environment_heat_capacity/(environment_heat_capacity + 270000)
 
 		//Account for massive pressure differences
-		switch(adjusted_pressure)
+		switch(pressure)
 			if(HAZARD_HIGH_PRESSURE to INFINITY)
-				adjustBruteLoss( min( ( (adjusted_pressure / HAZARD_HIGH_PRESSURE) -1 )*PRESSURE_DAMAGE_COEFFICIENT , MAX_HIGH_PRESSURE_DAMAGE) )
+				adjustBruteLoss( min( ( (pressure / HAZARD_HIGH_PRESSURE) -1 )*PRESSURE_DAMAGE_COEFFICIENT , MAX_HIGH_PRESSURE_DAMAGE) )
 				pressure_alert = 2
 			if(WARNING_HIGH_PRESSURE to HAZARD_HIGH_PRESSURE)
 				pressure_alert = 1
@@ -501,7 +487,7 @@
 			silent = 0
 		else				//ALIVE. LIGHTS ARE ON
 			updatehealth()
-			if(health < config.health_threshold_dead || brain_op_stage == 4.0)
+			if(health < config.health_threshold_dead || !has_brain())
 				death()
 				blinded = 1
 				stat = DEAD
@@ -565,20 +551,7 @@
 				ear_damage = max(ear_damage-0.05, 0)
 
 			//Other
-			if(stunned)
-				AdjustStunned(-1)
-
-			if(weakened)
-				weakened = max(weakened-1,0)	//before you get mad Rockdtben: I done this so update_canmove isn't called multiple times
-
-			if(stuttering)
-				stuttering = max(stuttering-1, 0)
-
-			if(silent)
-				silent = max(silent-1, 0)
-
-			if(druggy)
-				druggy = max(druggy-1, 0)
+			handle_statuses()
 		return 1
 
 
@@ -688,3 +661,11 @@
 	proc/handle_changeling()
 		if(mind && mind.changeling)
 			mind.changeling.regenerate()
+
+	///FIRE CODE
+	handle_fire()
+		if(..())
+			return
+		adjustFireLoss(6)
+		return
+	//END FIRE CODE

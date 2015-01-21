@@ -59,6 +59,8 @@ var/scheduledEvent = null
 	set name = "Trigger Event (Debug Only)"
 	set category = "Debug"
 
+	if(!check_rights(R_DEBUG))	return
+
 	if(!holder)
 		return
 

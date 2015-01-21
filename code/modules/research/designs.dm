@@ -799,7 +799,7 @@ datum/design/mech_teleporter
 	desc = "An exosuit module that allows exosuits to teleport to any position in view."
 	id = "mech_teleporter"
 	build_type = MECHFAB
-	req_tech = list("bluespace" = 10, "magnets" = 5)
+	req_tech = list("bluespace" = 5, "magnets" = 5)
 	build_path = "/obj/item/mecha_parts/mecha_equipment/teleporter"
 	category = "Exosuit Equipment"
 
@@ -1290,6 +1290,15 @@ datum/design/mrspacman
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = "/obj/item/weapon/circuitboard/pacman/mrs"
 
+datum/design/batteryrack
+	name = "Cell rack PSU Board"
+	desc = "The circuit board for a power cell rack PSU."
+	id = "batteryrack"
+	req_tech = list("powerstorage" = 3, "engineering" = 2)
+	build_type = IMPRINTER
+	materials = list("$glass" = 2000, "sacid" = 20)
+	build_path = "/obj/item/weapon/circuitboard/batteryrack"
+
 
 /////////////////////////////////////////
 ////////////Medical Tools////////////////
@@ -1377,6 +1386,15 @@ datum/design/nanopaste
 	materials = list("$metal" = 7000, "$glass" = 7000)
 	build_path = "/obj/item/stack/nanopaste"
 
+datum/design/laserpointer
+	name = "laser pointer"
+	desc = "Don't shine it in your eyes!"
+	id = "laser_pointer"
+	req_tech = list("magnets" = 3)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 100, "$glass" = 50)
+	build_path = "/obj/item/device/laser_pointer"
+
 datum/design/implant_loyal
 	name = "loyalty implant"
 	desc = "Makes you loyal or such."
@@ -1403,6 +1421,15 @@ datum/design/implant_free
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/implantcase/freedom"
+
+datum/design/energy_shield
+	name = "energy shield"
+	desc = "An energy shield."
+	id = "energy_shield"
+	req_tech = list("syndicate" = 4, "materials" = 4, "magnets" = 3)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 1000, "$glass" = 3000, "$plasma" = 1000)
+	build_path = "/obj/item/weapon/shield/energy"
 
 datum/design/implant_death_alarm
 	name = "death alarm implant"
@@ -1497,7 +1524,7 @@ datum/design/nuclear_gun
 
 datum/design/stunrevolver
 	name = "Stun Revolver"
-	desc = "The prize of the Head of Security."
+	desc = "Occasionally prize of the Head of Security, but usually of asshole scientists."
 	id = "stunrevolver"
 	req_tech = list("combat" = 3, "materials" = 3, "powerstorage" = 2)
 	build_type = PROTOLATHE
@@ -1519,9 +1546,9 @@ datum/design/decloner
 	name = "Decloner"
 	desc = "Your opponent will bubble into a messy pile of goop."
 	id = "decloner"
-	req_tech = list("combat" = 8, "materials" = 7, "biotech" = 5, "powerstorage" = 6)
+	req_tech = list("combat" = 5, "materials" = 7, "biotech" = 4, "powerstorage" = 5)
 	build_type = PROTOLATHE
-	materials = list("$gold" = 5000,"$uranium" = 10000, "mutagen" = 40)
+	materials = list("$gold" = 5000,"$uranium" = 5000, "$plasma" = 1500) //"mutagen" = 40 Don't think protolathe can hold chems anymore.  Not sure.  It's redundant anyway.  Mutagen is easy.
 	build_path = "/obj/item/weapon/gun/energy/decloner"
 	locked = 1
 
@@ -1529,9 +1556,9 @@ datum/design/chemsprayer
 	name = "Chem Sprayer"
 	desc = "An advanced chem spraying device."
 	id = "chemsprayer"
-	req_tech = list("materials" = 3, "engineering" = 3, "biotech" = 2)
+	req_tech = list("materials" = 3, "engineering" = 5, "biotech" = 2)
 	build_type = PROTOLATHE
-	materials = list("$metal" = 5000, "$glass" = 1000)
+	materials = list("$metal" = 5000, "$glass" = 1000, "$plasma" = 3000)
 	reliability_base = 100
 	build_path = "/obj/item/weapon/reagent_containers/spray/chemsprayer"
 
@@ -1554,7 +1581,7 @@ datum/design/largecrossbow
 	build_path = "/obj/item/weapon/gun/energy/crossbow/largecrossbow"
 
 datum/design/temp_gun
-	name = "Temperature Gun"
+	name = "Freeze Ray"
 	desc = "A gun that shoots temperature bullet energythings to change temperature."//Change it if you want
 	id = "temp_gun"
 	req_tech = list("combat" = 3, "materials" = 4, "powerstorage" = 3, "magnets" = 2)
@@ -1592,6 +1619,16 @@ datum/design/smg
 	build_path = "/obj/item/weapon/gun/projectile/automatic"
 	locked = 1
 
+datum/design/rapidlaser
+	name = "Rapid-fire Laser"
+	desc = "A fast-firing laser that shoots bursts of weaker beams."
+	id = "rapidlaser"
+	req_tech = list("combat" = 4, "materials" = 3)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 5000, "$uranium" = 1000)
+	build_path = "/obj/item/weapon/gun/energy/automatic/rapidlaser"
+	locked = 1
+
 datum/design/ammo_9mm
 	name = "Ammunition Box (9mm)"
 	desc = "A box of prototype 9mm ammunition."
@@ -1610,6 +1647,15 @@ datum/design/stunshell
 	materials = list("$metal" = 4000)
 	build_path = "/obj/item/ammo_casing/shotgun/stunshell"
 
+datum/design/stunshellbox
+	name = "Stun Shell box"
+	desc = "A box full of stun shells."
+	id = "stunshellbox"
+	req_tech = list("combat" = 3, "materials" = 3)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 20000)
+	build_path = "/obj/item/ammo_magazine/shotgun/stun"
+
 datum/design/plasmapistol
 	name = "plasma pistol"
 	desc = "A specialized firearm designed to fire lethal bolts of toxins."
@@ -1618,6 +1664,47 @@ datum/design/plasmapistol
 	build_type = PROTOLATHE
 	materials = list("$metal" = 5000, "$glass" = 1000, "$plasma" = 3000)
 	build_path = "/obj/item/weapon/gun/energy/toxgun"
+
+datum/design/lawgiver
+	name = "Lawgiver Mk II"
+	desc = "A highly advanced firearm for the modern police force. It has multiple voice-activated firing modes."
+	id = "lawgiver"
+	req_tech = list("combat" = 6, "plasmatech" = 4, "bluespace" = 5, "materials" = 7)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 6000, "$glass" = 1000, "$uranium" = 1000, "$plasma" = 1000, "$diamond" = 3000)
+	build_path = "/obj/item/weapon/gun/energy/lawgiver"
+
+datum/design/bprotopistol
+	name = "Basic Protopistol"
+	desc = "A highly customizeable handgun.  This one looks pretty basic."
+	id = "bprotopistol"
+	req_tech = list("combat" = 3, "materials" = 3, "powerstorage" = 2)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 4000, "$glass" = 1000)
+	build_path = "/obj/item/weapon/gun/energy/laser/modular/pistol/crap"
+	locked = 1
+
+datum/design/protopistol
+	name = "Protopistol"
+	desc = "A highly customizeable handgun."
+	id = "protopistol"
+	req_tech = list("combat" = 4, "materials" = 3, "powerstorage" = 3)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 8000, "$glass" = 3000, "$uranium" = 1000, "$plasma" = 1000)
+	build_path = "/obj/item/weapon/gun/energy/laser/modular/pistol"
+	locked = 1
+
+datum/design/aprotopistol
+	name = "Advanced Protopistol"
+	desc = "A highly customizeable handgun.  This one has a more powerful frame."
+	id = "aprotopistol"
+	req_tech = list("combat" = 6, "materials" = 7, "powerstorage" = 5)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 8000, "$glass" = 4000, "$uranium" = 2000, "$plasma" = 2000, "$diamond" = 1000)
+	build_path = "/obj/item/weapon/gun/energy/laser/modular/pistol/advanced"
+	locked = 1
+
+
 /////////////////////////////////////////
 /////////////////Mining//////////////////
 /////////////////////////////////////////
@@ -1649,7 +1736,7 @@ datum/design/plasmacutter
 	materials = list("$metal" = 1500, "$glass" = 500, "$gold" = 500, "$plasma" = 500)
 	reliability_base = 79
 	build_path = "/obj/item/weapon/pickaxe/plasmacutter"
-
+/* I'm sorry, but the diamond drill is pretty much redundant.  And it messes with my immersions.
 datum/design/pick_diamond
 	name = "Diamond Pickaxe"
 	desc = "A pickaxe with a diamond pick head, this is just like minecraft."
@@ -1658,7 +1745,7 @@ datum/design/pick_diamond
 	build_type = PROTOLATHE
 	materials = list("$diamond" = 3000)
 	build_path = "/obj/item/weapon/pickaxe/diamond"
-
+*/
 datum/design/drill_diamond
 	name = "Diamond Mining Drill"
 	desc = "Yours is the drill that will pierce the heavens!"
@@ -1758,8 +1845,7 @@ datum/design/security_hud
 	icon_state = "datadisk2"
 	item_state = "card-id"
 	w_class = 1.0
-	m_amt = 30
-	g_amt = 10
+	matter = list("metal" = 30, "glass" = 10)
 	var/datum/design/blueprint
 
 /obj/item/weapon/disk/design_disk/New()
@@ -1882,7 +1968,7 @@ datum/design/cart_toxins
 	req_tech = list("engineering" = 2, "powerstorage" = 3)
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
-	build_path = "/obj/item/weapon/cartridge/toxins"
+	build_path = "/obj/item/weapon/cartridge/signal/science"
 datum/design/cart_quartermaster
 	name = "Space Parts & Space Vendors Cartridge"
 	desc = "A data cartridge for portable microcomputers."

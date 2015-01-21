@@ -144,7 +144,7 @@ var/list/debug_verbs = list (
         ,/client/proc/splash
         ,/client/proc/cmd_admin_areatest
         ,/client/proc/cmd_admin_rejuvenate
-        ,/datum/admins/proc/show_traitor_panel
+//        ,/datum/admins/proc/show_traitor_panel //What has this got to do with mapping
         ,/client/proc/print_jobban_old
         ,/client/proc/print_jobban_old_filter
         ,/client/proc/forceEvent
@@ -159,8 +159,12 @@ var/list/debug_verbs = list (
         ,/client/proc/ZoneTick
         ,/client/proc/rebootAirMaster
         ,/client/proc/hide_debug_verbs
-	,/client/proc/testZAScolors
-	,/client/proc/testZAScolors_remove
+        ,/client/proc/testZAScolors
+        ,/client/proc/testZAScolors_remove
+        ,/client/proc/view_power_update_stats_area
+        ,/client/proc/view_power_update_stats_machines
+        ,/client/proc/toggle_power_update_profiling
+        ,/client/proc/atmos_toggle_debug
 	)
 
 

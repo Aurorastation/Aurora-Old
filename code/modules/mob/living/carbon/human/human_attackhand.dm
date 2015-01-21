@@ -111,11 +111,41 @@
 			return 1
 
 		if("hurt")
-			var/datum/unarmed_attack/attack = M.species.unarmed
 
+			// See if they can attack, and which attacks to use.
+			var/datum/unarmed_attack/attack = M.species.unarmed
+			if(!attack.is_usable(M))
+				attack = M.species.secondary_unarmed
+			if(!attack.is_usable(M))
+				return 0
+			//Vampire code
+			if(M.zone_sel && M.zone_sel.selecting == "head")
+				if(M.mind && M.mind.vampire && (M.mind in ticker.mode.vampires) && !M.mind.vampire.draining)
+					if((head && (head.flags & HEADCOVERSMOUTH)) || (wear_mask && (wear_mask.flags & MASKCOVERSMOUTH)))
+						M << "\red Remove their mask!"
+						return 0
+					if((M.head && (M.head.flags & HEADCOVERSMOUTH)) || (M.wear_mask && (M.wear_mask.flags & MASKCOVERSMOUTH)))
+						M << "\red Remove your mask!"
+						return 0
+					if(mind && mind.vampire && (mind in ticker.mode.vampires))
+						M << "\red Your fangs fail to pierce [src.name]'s cold flesh"
+						return 0
+					if(isipc())
+						M << "\red They have no blood"
+						return 0
+					//we're good to suck the blood, blaah
+					//and leave an attack log
+					M.attack_log += text("\[[time_stamp()]\] <font color='red'>Bit [src.name] ([src.ckey]) in the neck and draining their blood</font>")
+					src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bit in the neck by [M.name] ([M.ckey])</font>")
+					msg_admin_attack("[M.name] ([M.ckey]) bit [src.name] ([src.ckey]) in the neck - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
+					M.handle_bloodsucking(src)
+//					var/datum/organ/external/affecting = get_organ(src.zone_sel.selecting)
+//					affecting.take_damage(10,0,1,0,"dual puncture marks") //this does not work and causes runtimes.
+					return
+			//end vampire codes
 			M.attack_log += text("\[[time_stamp()]\] <font color='red'>[pick(attack.attack_verb)]ed [src.name] ([src.ckey])</font>")
 			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [pick(attack.attack_verb)]ed by [M.name] ([M.ckey])</font>")
-			msg_admin_attack("[key_name(M)] [pick(attack.attack_verb)]ed [key_name(src)]")
+			msg_admin_attack("[key_name(M)] [pick(attack.attack_verb)]ed [key_name(src)] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
 
 			var/damage = rand(0, 5)//BS12 EDIT
 			if(!damage)
@@ -136,7 +166,7 @@
 			//Rearranged, so claws don't increase weaken chance.
 			if(damage >= 5 && prob(50))
 				visible_message("\red <B>[M] has weakened [src]!</B>")
-				apply_effect(2, WEAKEN, armor_block)
+				apply_effect(3, WEAKEN, armor_block)
 
 			damage += attack.damage
 			apply_damage(damage, BRUTE, affecting, armor_block, sharp=attack.sharp, edge=attack.edge)
@@ -146,7 +176,7 @@
 			M.attack_log += text("\[[time_stamp()]\] <font color='red'>Disarmed [src.name] ([src.ckey])</font>")
 			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been disarmed by [M.name] ([M.ckey])</font>")
 
-			msg_admin_attack("[key_name(M)] disarmed [src.name] ([src.ckey])")
+			msg_admin_attack("[key_name(M)] disarmed [src.name] ([src.ckey]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
 
 			if(w_uniform)
 				w_uniform.add_fingerprint(M)
@@ -174,7 +204,7 @@
 
 			var/randn = rand(1, 100)
 			if (randn <= 25)
-				apply_effect(4, WEAKEN, run_armor_check(affecting, "melee"))
+				apply_effect(3, WEAKEN, run_armor_check(affecting, "melee"))
 				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 				visible_message("\red <B>[M] has pushed [src]!</B>")
 				return

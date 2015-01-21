@@ -30,11 +30,23 @@
 	var/t_oxygen = null
 	var/t_sl_gas = null
 	var/t_n2 = null
+	var/gsr = 0 //forensics variable for gunshot residue
 
 	var/now_pushing = null
 
 	var/cameraFollow = null
 
 	var/tod = null // Time of death
+	var/worldtod = null //World time of death.  Used for defibs.
 	var/update_slimes = 1
+	var/on_fire = 0 //The "Are we on fire?" var
+	var/fire_stacks = 0 //Tracks how many stacks of fire we have on, max is usually 20
 	var/silent = null 		//Can't talk. Value goes down every life proc.
+
+	// Putting these here for attack_animal().
+	var/melee_damage_lower = 0
+	var/melee_damage_upper = 0
+	var/attacktext = "attacks"
+	var/attack_sound = null
+	var/friendly = "nuzzles"
+	var/wall_smash = 0

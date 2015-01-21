@@ -60,9 +60,10 @@
 			else
 				break
 
-		if(!success)
+		if(target.weakened > 100)//if you are megastunned by the isocube, there is no escape
+			target <<"An outside force prevents you from teleporting."
+		else if(!success)
 			target.loc = pick(L)
-
 	return
 
 /obj/effect/proc_holder/spell/targeted/area_teleport/invocation(area/chosenarea = null)
@@ -78,5 +79,4 @@
 					playsound(usr.loc, pick('sound/misc/null.ogg','sound/misc/null.ogg'), 100, 1)
 			if("whisper")
 				usr.whisper("[invocation] [uppertext(chosenarea.name)]")
-
 	return

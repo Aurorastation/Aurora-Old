@@ -35,6 +35,9 @@
 			// Gain Power
 			adjustOxyLoss(-1)
 
+		// Handle EMP-stun
+		handle_stunned()
+
 		//stage = 1
 		//if (istype(src, /mob/living/silicon/ai)) // Are we not sure what we are?
 		var/blind = 0
@@ -179,3 +182,7 @@
 			health = 100 - getOxyLoss() - getToxLoss() - getBruteLoss()
 		else
 			health = 100 - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()
+
+/mob/living/silicon/ai/rejuvenate()
+	..()
+	add_ai_verbs(src)

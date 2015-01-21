@@ -135,7 +135,7 @@ I said no!
 /datum/recipe/brainburger
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/bun,
-		/obj/item/brain
+		/obj/item/organ/brain
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/brainburger
 
@@ -1071,7 +1071,7 @@ I said no!
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
-		/obj/item/brain
+		/obj/item/organ/brain
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/braincake
 
@@ -1159,7 +1159,7 @@ I said no!
 		/obj/item/weapon/reagent_containers/food/snacks/grown/goldapple,
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/appletart
-
+/*
 /datum/recipe/tossedsalad
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage,
@@ -1169,7 +1169,7 @@ I said no!
 		/obj/item/weapon/reagent_containers/food/snacks/grown/apple,
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/tossedsalad
-
+*/
 /datum/recipe/aesirsalad
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiadeus,

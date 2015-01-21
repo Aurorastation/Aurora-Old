@@ -9,7 +9,7 @@
 	caliber = "357"
 	origin_tech = "combat=2;materials=2"
 	w_class = 3.0
-	m_amt = 1000
+	matter = list("metal" = 1000)
 	recoil = 1
 	var/ammo_type = "/obj/item/ammo_casing/a357"
 	var/list/loaded = list()
@@ -38,12 +38,14 @@
 	loaded -= AC //Remove casing from loaded list.
 	if(isnull(AC) || !istype(AC))
 		return 0
-	AC.loc = get_turf(src) //Eject casing onto ground.
+	if(ejectshell == 1)
+		AC.loc = get_turf(src) //Eject casing onto ground.  If 0, casings stay in the gun.  Totally a good idea trust me okay.
 	if(AC.BB)
 		AC.desc += " This one is spent."	//descriptions are magic - only when there's a projectile in the casing
 		in_chamber = AC.BB //Load projectile into chamber.
 		AC.BB.loc = src //Set projectile loc to gun.
 		return 1
+
 	return 0
 
 

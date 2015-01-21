@@ -186,6 +186,7 @@
 			src << "\red Attempting to convert [M]..."
 			log_admin("[src]([src.ckey]) attempted to convert [M].")
 			message_admins("\red [src]([src.ckey]) attempted to convert [M].")
+			message_mods("\red [src]([src.ckey]) attempted to convert [M].")
 			var/choice = alert(M,"Asked by [src]: Do you want to join the revolution?","Align Thyself with the Revolution!","No!","Yes!")
 			if(choice == "Yes!")
 				ticker.mode:add_revolutionary(M.mind)
@@ -210,12 +211,13 @@
 			var/added_heads = 0
 			for(var/mob/living/carbon/human/H in world) if(H.client && H.mind && H.client.inactivity <= 10*60*20 && H.mind in revolutionaries)
 				head_revolutionaries += H.mind
-				for(var/datum/mind/head_mind in heads)
-					var/datum/objective/mutiny/rp/rev_obj = new
-					rev_obj.owner = H.mind
-					rev_obj.target = head_mind
-					rev_obj.explanation_text = "Assassinate or capture [head_mind.name], the [head_mind.assigned_role]."
-					H.mind.objectives += rev_obj
+				if(!config.objectives_disabled)
+					for(var/datum/mind/head_mind in heads)
+						var/datum/objective/mutiny/rp/rev_obj = new
+						rev_obj.owner = H.mind
+						rev_obj.target = head_mind
+						rev_obj.explanation_text = "Assassinate or capture [head_mind.name], the [head_mind.assigned_role]."
+						H.mind.objectives += rev_obj
 
 				update_rev_icons_added(H.mind)
 				H.verbs += /mob/living/carbon/human/proc/RevConvert
@@ -257,13 +259,15 @@
 
 /datum/game_mode/revolution/rp_revolution/latespawn(mob/M)
 	if(M.mind.assigned_role in command_positions)
-		log_debug("Adding head kill/capture/convert objective for [M.name]")
+		log_debug("Adding to head list for [M.name]")
 		heads += M
 
-		for(var/datum/mind/rev_mind in head_revolutionaries)
-			var/datum/objective/mutiny/rp/rev_obj = new
-			rev_obj.owner = rev_mind
-			rev_obj.target = M.mind
-			rev_obj.explanation_text = "Assassinate, convert or capture [M.real_name], the [M.mind.assigned_role]."
-			rev_mind.objectives += rev_obj
-			rev_mind.current << "\red A new Head of Staff, [M.real_name], the [M.mind.assigned_role] has appeared. Your objectives have been updated."
+		if(!config.objectives_disabled)
+			log_debug("Adding head kill/capture/convert objective for [M.name]")
+			for(var/datum/mind/rev_mind in head_revolutionaries)
+				var/datum/objective/mutiny/rp/rev_obj = new
+				rev_obj.owner = rev_mind
+				rev_obj.target = M.mind
+				rev_obj.explanation_text = "Assassinate, convert or capture [M.real_name], the [M.mind.assigned_role]."
+				rev_mind.objectives += rev_obj
+				rev_mind.current << "\red A new Head of Staff, [M.real_name], the [M.mind.assigned_role] has appeared. Your objectives have been updated."

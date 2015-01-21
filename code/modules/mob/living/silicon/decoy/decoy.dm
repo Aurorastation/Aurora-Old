@@ -10,3 +10,6 @@
 	src.icon_state = "ai"
 	src.anchored = 1
 	src.canmove = 0
+
+/mob/living/silicon/decoy/float(var/on)
+	return //No, just no floating for these - SoundScopes

@@ -57,7 +57,7 @@
 	fire_sound = 'sound/weapons/Gunshot.ogg'
 	origin_tech = "combat=3;materials=3;powerstorage=2"
 	charge_cost = 125
-	projectile_type = "/obj/item/projectile/energy/electrode"
+	projectile_type = "/obj/item/projectile/energy/electrode/high"
 	cell_type = "/obj/item/weapon/cell"
 
 	isHandgun()
@@ -69,7 +69,7 @@
 	icon_state = "crossbow"
 	w_class = 2.0
 	item_state = "crossbow"
-	m_amt = 2000
+	matter = list("metal" = 2000)
 	origin_tech = "combat=2;magnets=2;syndicate=5"
 	silenced = 1
 	fire_sound = 'sound/weapons/Genhit.ogg'
@@ -108,7 +108,7 @@
 	desc = "A weapon favored by syndicate infiltration teams."
 	w_class = 4.0
 	force = 10
-	m_amt = 200000
+	matter = list("metal" = 200000)
 	projectile_type = "/obj/item/projectile/energy/bolt/large"
 
 

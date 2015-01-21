@@ -18,6 +18,7 @@
 		var/obj/item/weapon/weldingtool/T = W
 		if(T.welding & prob(50))
 			message_admins("[key_name_admin(user)] triggered a welderpack explosion at ([loc.x],[loc.y],[loc.z]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>")
+			message_mods("[key_name_admin(user)] triggered a welderpack explosion at ([loc.x],[loc.y],[loc.z]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>")
 			log_game("[key_name(user)] triggered a fueltank explosion.")
 			user << "\red That was stupid of you."
 			explosion(get_turf(src),-1,0,2)

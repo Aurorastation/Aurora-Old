@@ -69,6 +69,7 @@ var/global/list/datum/stack_recipe/metal_recipes = list ( \
 	new/datum/stack_recipe("apc frame", /obj/item/apc_frame, 2), \
 	new/datum/stack_recipe("air alarm frame", /obj/item/alarm_frame, 2), \
 	new/datum/stack_recipe("fire alarm frame", /obj/item/firealarm_frame, 2), \
+	new/datum/stack_recipe("metal bat", /obj/item/weapon/metal_bat, 5), \
 	null, \
 	new/datum/stack_recipe("iron door", /obj/structure/mineral_door/iron, 20, one_per_turf = 1, on_floor = 1), \
 )
@@ -78,7 +79,7 @@ var/global/list/datum/stack_recipe/metal_recipes = list ( \
 	desc = "Sheets made out off metal. It has been dubbed Metal Sheets."
 	singular_name = "metal sheet"
 	icon_state = "sheet-metal"
-	m_amt = 3750
+	matter = list("metal" = 3750)
 	throwforce = 14.0
 	flags = FPRINT | TABLEPASS | CONDUCT
 	origin_tech = "materials=1"
@@ -88,7 +89,6 @@ var/global/list/datum/stack_recipe/metal_recipes = list ( \
 	desc = "Sheets made out off metal. It has been dubbed Metal Sheets."
 	singular_name = "metal sheet"
 	icon_state = "sheet-metal"
-	m_amt = 0
 	throwforce = 14.0
 	flags = FPRINT | TABLEPASS | CONDUCT
 
@@ -102,6 +102,7 @@ var/global/list/datum/stack_recipe/metal_recipes = list ( \
  */
 var/global/list/datum/stack_recipe/plasteel_recipes = list ( \
 	new/datum/stack_recipe("AI core", /obj/structure/AIcore, 4, time = 50, one_per_turf = 1), \
+	new/datum/stack_recipe("plasteel bat", /obj/item/weapon/pla_bat, 5), \
 	new/datum/stack_recipe("Metal crate", /obj/structure/closet/crate, 10, time = 50, one_per_turf = 1), \
 	new/datum/stack_recipe("RUST fuel assembly port frame", /obj/item/rust_fuel_assembly_port_frame, 12, time = 50, one_per_turf = 1), \
 	new/datum/stack_recipe("RUST fuel compressor frame", /obj/item/rust_fuel_compressor_frame, 12, time = 50, one_per_turf = 1), \
@@ -113,7 +114,7 @@ var/global/list/datum/stack_recipe/plasteel_recipes = list ( \
 	desc = "This sheet is an alloy of iron and plasma."
 	icon_state = "sheet-plasteel"
 	item_state = "sheet-metal"
-	m_amt = 7500
+	matter = list("metal" = 7500)
 	throwforce = 15.0
 	flags = FPRINT | TABLEPASS | CONDUCT
 	origin_tech = "materials=2"
@@ -134,6 +135,7 @@ var/global/list/datum/stack_recipe/wood_recipes = list ( \
 	new/datum/stack_recipe("crossbow frame", /obj/item/weapon/crossbowframe, 5, time = 25, one_per_turf = 0, on_floor = 0), \
 	new/datum/stack_recipe("wooden door", /obj/structure/mineral_door/wood, 10, time = 20, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe("coffin", /obj/structure/closet/coffin, 5, time = 15, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("wooden bat", /obj/item/weapon/wood_bat, 5), \
 //	new/datum/stack_recipe("apiary", /obj/item/apiary, 10, time = 25, one_per_turf = 0, on_floor = 0)
 	)
 

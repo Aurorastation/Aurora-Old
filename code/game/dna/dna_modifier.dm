@@ -17,6 +17,7 @@
 	var/ckey=null
 	var/mind=null
 	var/languages=null
+	var/list/flavor=null
 
 /datum/dna2/record/proc/GetData()
 	var/list/ser=list("data" = null, "owner" = null, "label" = null, "type" = null, "ue" = 0)
@@ -276,15 +277,15 @@
 		del(src)
 
 /obj/machinery/computer/scan_consolenew/power_change()
+	..()
 	if(stat & BROKEN)
 		icon_state = "broken"
-	else if(powered())
-		icon_state = initial(icon_state)
-		stat &= ~NOPOWER
 	else
-		spawn(rand(0, 15))
-			src.icon_state = "c_unpowered"
-			stat |= NOPOWER
+		if (stat & NOPOWER)
+			spawn(rand(0, 15))
+				src.icon_state = "c_unpowered"
+		else
+			icon_state = initial(icon_state)
 
 /obj/machinery/computer/scan_consolenew/New()
 	..()
@@ -345,7 +346,7 @@
   *
   * @return nothing
   */
-/obj/machinery/computer/scan_consolenew/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/computer/scan_consolenew/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 
 	if(user == connected.occupant || user.stat)
 		return
@@ -401,7 +402,7 @@
 		occupantData["structuralEnzymes"] = null
 		occupantData["radiationLevel"] = null
 	else
-		occupantData["name"] = connected.occupant.name
+		occupantData["name"] = connected.occupant.real_name
 		occupantData["stat"] = connected.occupant.stat
 		occupantData["isViableSubject"] = 1
 		if (NOCLONE in connected.occupant.mutations || !src.connected.occupant.dna)
@@ -425,7 +426,7 @@
 				data["beakerVolume"] += R.volume
 	
 	// update the ui if it exists, returns null if no ui is passed/found
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)	
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)	
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\modules\nano\nanoui.dm
@@ -551,7 +552,7 @@
 	if (href_list["selectUIBlock"] && href_list["selectUISubblock"]) // This chunk of code updates selected block / sub-block based on click
 		var/select_block = text2num(href_list["selectUIBlock"])
 		var/select_subblock = text2num(href_list["selectUISubblock"])
-		if ((select_block <= 13) && (select_block >= 1))
+		if ((select_block <= DNA_UI_LENGTH) && (select_block >= 1))
 			src.selected_ui_block = select_block
 		if ((select_subblock <= DNA_BLOCK_SIZE) && (select_subblock >= 1))
 			src.selected_ui_subblock = select_subblock
@@ -704,7 +705,7 @@
 				databuf.types = DNA2_BUF_UE
 				databuf.dna = src.connected.occupant.dna.Clone()
 				if(ishuman(connected.occupant))
-					databuf.dna.real_name=connected.occupant.name
+					databuf.dna.real_name=connected.occupant.dna.real_name
 				databuf.name = "Unique Identifier"
 				src.buffers[bufferId] = databuf
 			return 1
@@ -715,7 +716,7 @@
 				databuf.types = DNA2_BUF_UI|DNA2_BUF_UE
 				databuf.dna = src.connected.occupant.dna.Clone()
 				if(ishuman(connected.occupant))
-					databuf.dna.real_name=connected.occupant.name
+					databuf.dna.real_name=connected.occupant.dna.real_name
 				databuf.name = "Unique Identifier + Unique Enzymes"
 				src.buffers[bufferId] = databuf
 			return 1
@@ -726,7 +727,7 @@
 				databuf.types = DNA2_BUF_SE
 				databuf.dna = src.connected.occupant.dna.Clone()
 				if(ishuman(connected.occupant))
-					databuf.dna.real_name=connected.occupant.name
+					databuf.dna.real_name=connected.occupant.dna.real_name
 				databuf.name = "Structural Enzymes"
 				src.buffers[bufferId] = databuf
 			return 1

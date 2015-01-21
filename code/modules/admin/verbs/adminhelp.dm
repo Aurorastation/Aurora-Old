@@ -33,7 +33,7 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 	if(!msg)	return
 	var/original_msg = msg
 
-	
+
 
 	//explode the input msg into a list
 	var/list/msglist = text2list(msg, " ")
@@ -94,11 +94,18 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 	msg = "\blue <b><font color=red>HELP: </font>[get_options_bar(mob, 2, 1, 1)][ai_found ? " (<A HREF='?_src_=holder;adminchecklaws=[ref_mob]'>CL</A>)" : ""]:</b> [msg]"
 
 	//send this msg to all admins
+	var/admin_number_present = 0
 	var/admin_number_afk = 0
 	for(var/client/X in admins)
 		if((R_ADMIN|R_MOD) & X.holder.rights)
+			admin_number_present++
 			if(X.is_afk())
 				admin_number_afk++
+			if(X.prefs.toggles & SOUND_ADMINHELP)
+				X << 'sound/effects/adminhelp.ogg'
+			X << msg
+			continue
+		if((R_FUN) & X.holder.rights)
 			if(X.prefs.toggles & SOUND_ADMINHELP)
 				X << 'sound/effects/adminhelp.ogg'
 			X << msg
@@ -106,7 +113,7 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 	//show it to the person adminhelping too
 	src << "<font color='blue'>PM to-<b>Admins</b>: [original_msg]</font>"
 
-	var/admin_number_present = admins.len - admin_number_afk
+	admin_number_present = (admin_number_present - admin_number_afk)
 	log_admin("HELP: [key_name(src)]: [original_msg] - heard by [admin_number_present] non-AFK admins.")
 	if(admin_number_present <= 0)
 		if(!admin_number_afk)

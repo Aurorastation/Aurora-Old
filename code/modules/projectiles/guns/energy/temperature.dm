@@ -1,17 +1,17 @@
 /obj/item/weapon/gun/energy/temperature
-	name = "temperature gun"
+	name = "freeze ray"
 	icon_state = "freezegun"
 	fire_sound = 'sound/weapons/pulse3.ogg'
-	desc = "A gun that changes temperatures."
-	var/temperature = T20C
-	var/current_temperature = T20C
-	charge_cost = 100
+	desc = "For when somebody won't let it go."
+//	var/temperature = T20C None of this commented stuff works.  Freeze gun revamping.  Now it freezes you and it freezes you hard on-hit.
+//	var/current_temperature = T20C
+	charge_cost = 25//20 shots.
 	origin_tech = "combat=3;materials=4;powerstorage=3;magnets=2"
 
 	projectile_type = "/obj/item/projectile/temp"
 	cell_type = "/obj/item/weapon/cell/crap"
 
-
+/*
 	New()
 		..()
 		processing_objects.Add(src)
@@ -38,7 +38,7 @@
 
 		user << browse(dat, "window=freezegun;size=450x300;can_resize=1;can_close=1;can_minimize=1")
 		onclose(user, "window=freezegun", src)
-
+*/
 
 	Topic(href, href_list)
 		if (..())
@@ -47,7 +47,7 @@
 		src.add_fingerprint(usr)
 
 
-
+/*
 		if(href_list["temp"])
 			var/amount = text2num(href_list["temp"])
 			if(amount > 0)
@@ -62,11 +62,11 @@
 
 	process()
 		switch(temperature)
-			if(0 to 100) charge_cost = 1000
-			if(100 to 250) charge_cost = 500
-			if(251 to 300) charge_cost = 100
-			if(301 to 400) charge_cost = 500
-			if(401 to 500) charge_cost = 1000
+			if(0 to 100) charge_cost = 0//1000
+			if(100 to 250) charge_cost = 0//500
+			if(251 to 300) charge_cost = 0//100
+			if(301 to 400) charge_cost = 0//500
+			if(401 to 500) charge_cost = 0//1000
 
 		if(current_temperature != temperature)
 			var/difference = abs(current_temperature - temperature)
@@ -78,3 +78,4 @@
 			else
 				temperature = current_temperature
 		return
+*/

@@ -22,6 +22,7 @@ var/global/list/joblist = list()					//list of all jobstypes, minus borg and AI
 //Languages/species/whitelist.
 var/global/list/all_species[0]
 var/global/list/all_languages[0]
+var/global/list/language_keys[0]					//table of say codes for all languages
 var/global/list/whitelisted_species = list("Human")
 
 // Posters
@@ -40,7 +41,7 @@ var/global/list/skin_styles_female_list = list()		//unused
 var/global/list/underwear_m = list("White", "Grey", "Green", "Blue", "Black", "Mankini", "None") //Curse whoever made male/female underwear diffrent colours
 var/global/list/underwear_f = list("Red", "White", "Yellow", "Blue", "Black", "Thong", "None")
 	//undershirt
-var/global/list/undershirt_t = list("Black Tank top", "White Tank top", "Black shirt", "White shirt", "None")
+var/global/list/undershirt_t = list("Black Tank top", "White Tank top", "Black shirt", "White shirt", "Blue Tank top", "Rainbow Tank top", "Happy Tank top", "Neutral Tank top", "Sad Tank top", "Sunny Tank top", "Red Tank top", "Telnyashka Tank top", "Telnyashka shirt", "Space Station shirt", "Ian shirt", "None")
 	//Backpacks
 var/global/list/backbaglist = list("Nothing", "Backpack", "Satchel", "Satchel Alt")
 
@@ -99,6 +100,12 @@ var/global/list/backbaglist = list("Nothing", "Backpack", "Satchel", "Satchel Al
 	for(var/T in paths)
 		var/datum/language/L = new T
 		all_languages[L.name] = L
+	
+	for (var/language_name in all_languages)
+		var/datum/language/L = all_languages[language_name]
+		language_keys[":[lowertext(L.key)]"] = L
+		language_keys[".[lowertext(L.key)]"] = L
+		language_keys["#[lowertext(L.key)]"] = L
 
 	var/rkey = 0
 	paths = typesof(/datum/species)-/datum/species

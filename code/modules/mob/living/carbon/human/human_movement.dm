@@ -1,8 +1,8 @@
 /mob/living/carbon/human/movement_delay()
 	var/tally = 0
 
-	if(species && species.flags & IS_SLOW)
-		tally = 7
+	if(species.slowdown)
+		tally = species.slowdown
 
 	if (istype(loc, /turf/space)) return -1 // It's hard to be slowed down in space by... anything
 
@@ -13,8 +13,10 @@
 
 	if(reagents.has_reagent("nuka_cola")) return -1
 
-	var/health_deficiency = (100 - health + halloss)
+	var/health_deficiency = (100 - health)
 	if(health_deficiency >= 40) tally += (health_deficiency / 25)
+
+	if(halloss >= 10) tally += (halloss / 10)
 
 	var/hungry = (500 - nutrition)/5 // So overeat would be 100 and default level would be 80
 	if (hungry >= 70) tally += hungry/50
@@ -22,17 +24,28 @@
 	if(wear_suit)
 		tally += wear_suit.slowdown
 
-	if(shoes)
-		tally += shoes.slowdown
+	if(!buckled || (buckled && !istype(buckled, /obj/structure/stool/bed/chair/wheelchair)))
+		if(shoes)
+			tally += shoes.slowdown
 
-	for(var/organ_name in list("l_foot","r_foot","l_leg","r_leg"))
-		var/datum/organ/external/E = get_organ(organ_name)
-		if(!E || (E.status & ORGAN_DESTROYED))
-			tally += 4
-		if(E.status & ORGAN_SPLINTED)
-			tally += 0.5
-		else if(E.status & ORGAN_BROKEN)
-			tally += 1.5
+		for(var/organ_name in list("l_foot","r_foot","l_leg","r_leg"))
+			var/datum/organ/external/E = get_organ(organ_name)
+			if(!E || (E.status & ORGAN_DESTROYED))
+				tally += 4
+			if(E.status & ORGAN_SPLINTED)
+				tally += 0.5
+			else if(E.status & ORGAN_BROKEN)
+				tally += 1.5
+
+	if(buckled && istype(buckled, /obj/structure/stool/bed/chair/wheelchair))
+		for(var/organ_name in list("l_hand","r_hand","l_arm","r_arm"))
+			var/datum/organ/external/E = get_organ(organ_name)
+			if(!E || (E.status & ORGAN_DESTROYED))
+				tally += 4
+			if(E.status & ORGAN_SPLINTED)
+				tally += 0.5
+			else if(E.status & ORGAN_BROKEN)
+				tally += 1.5
 
 	if(shock_stage >= 10) tally += 3
 
@@ -42,7 +55,7 @@
 		tally += (283.222 - bodytemperature) / 10 * 1.75
 
 	if(mRun in mutations)
-		tally = 0
+		tally = -1
 
 	return (tally+config.human_delay)
 
@@ -66,6 +79,10 @@
 
 /mob/living/carbon/human/Process_Spaceslipping(var/prob_slip = 5)
 	//If knocked out we might just hit it and stop.  This makes it possible to get dead bodies and such.
+
+	if(species.flags & NO_SLIP)
+		return
+
 	if(stat)
 		prob_slip = 0 // Changing this to zero to make it line up with the comment, and also, make more sense.
 

@@ -11,11 +11,17 @@ var/global/floorIsLava = 0
 		if(R_ADMIN & C.holder.rights)
 			C << msg
 
+/proc/message_mods(var/msg)
+	msg = "<span class=\"admin\"><span class=\"prefix\">MOD LOG:</span> <span class=\"message\">[msg]</span></span>"
+	for(var/client/C in admins)
+		if(R_MOD & C.holder.rights && !(R_ADMIN & C.holder.rights))
+			C << msg
+
 /proc/msg_admin_attack(var/text) //Toggleable Attack Messages
 	log_attack(text)
 	var/rendered = "<span class=\"admin\"><span class=\"prefix\">ATTACK:</span> <span class=\"message\">[text]</span></span>"
 	for(var/client/C in admins)
-		if(R_MOD || R_ADMIN & C.holder.rights)
+		if((R_ADMIN & C.holder.rights) || (R_MOD & C.holder.rights))
 			if(C.prefs.toggles & CHAT_ATTACKLOGS)
 				var/msg = rendered
 				C << msg
@@ -28,16 +34,19 @@ var/global/floorIsLava = 0
 	set name = "Show Player Panel"
 	set desc="Edit player (respawn, ban, heal, etc)"
 
+//	if(!check_rights(R_ADMIN|R_MOD))	return
+
 	if(!M)
 		usr << "You seem to be selecting a mob that doesn't exist anymore."
 		return
+
 	if (!istype(src,/datum/admins))
 		src = usr.client.holder
 	if (!istype(src,/datum/admins))
 		usr << "Error: you are not an admin!"
 		return
 
-	var/body = "<html><head><title>Options for [M.key]</title></head>"
+	var/body = "<html><head><center><title>Options for [M.key]</title></head>"
 	body += "<body>Options panel for <b>[M]</b>"
 	if(M.client)
 		body += " played by <b>[M.client]</b> "
@@ -51,39 +60,66 @@ var/global/floorIsLava = 0
 	body += {"
 		<br><br>\[
 		<a href='?_src_=vars;Vars=\ref[M]'>VV</a> -
-		<a href='?src=\ref[src];traitor=\ref[M]'>TP</a> -
-		<a href='?src=\ref[usr];priv_msg=\ref[M]'>PM</a> -
-		<a href='?src=\ref[src];subtlemessage=\ref[M]'>SM</a> -
-		<a href='?src=\ref[src];adminplayerobservejump=\ref[M]'>JMP</a>\] </b><br>
-		<b>Mob type</b> = [M.type]<br><br>
-		<A href='?src=\ref[src];boot2=\ref[M]'>Kick</A> |
-		<A href='?_src_=holder;warn=[M.ckey]'>Warn</A> |
-		<A href='?src=\ref[src];newban=\ref[M]'>Ban</A> |
-		<A href='?src=\ref[src];jobban2=\ref[M]'>Jobban</A> |
-		<A href='?src=\ref[src];notes=show;mob=\ref[M]'>Notes</A>
+		<a href='?src=\ref[usr];priv_msg=\ref[M]'>PM</a>
 	"}
 
-	if(M.client)
-		body += "| <A HREF='?src=\ref[src];sendtoprison=\ref[M]'>Prison</A> | "
-		var/muted = M.client.prefs.muted
-		body += {"<br><b>Mute: </b>
-			\[<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_IC]'><font color='[(muted & MUTE_IC)?"red":"blue"]'>IC</font></a> |
-			<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_OOC]'><font color='[(muted & MUTE_OOC)?"red":"blue"]'>OOC</font></a> |
-			<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_PRAY]'><font color='[(muted & MUTE_PRAY)?"red":"blue"]'>PRAY</font></a> |
-			<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_ADMINHELP]'><font color='[(muted & MUTE_ADMINHELP)?"red":"blue"]'>ADMINHELP</font></a> |
-			<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_DEADCHAT]'><font color='[(muted & MUTE_DEADCHAT)?"red":"blue"]'>DEADCHAT</font></a>\]
-			(<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_ALL]'><font color='[(muted & MUTE_ALL)?"red":"blue"]'>toggle all</font></a>)
+	if(check_rights(R_FUN,0) && !check_rights(R_ADMIN|R_MOD,0))
+		body += {"
+			 -<a href='?src=\ref[src];traitor=\ref[M]'>TP</a> -
+			<a href='?src=\ref[src];subtlemessage=\ref[M]'>SM</a> -
+			<a href='?src=\ref[src];adminplayerobservejump=\ref[M]'>JMP</a>\] </b><br>
+			<b>Mob type</b> = [M.type]<br><br>
+			<A href='?src=\ref[src];jumpto=\ref[M]'><b>Jump to</b></A> |
+			<A href='?src=\ref[src];getmob=\ref[M]'>Get</A> |
+			<A href='?src=\ref[src];sendmob=\ref[M]'>Send To</A>
+			<br><br>\[
+			<A href='?src=\ref[src];narrateto=\ref[M]'>Narrate to</A> |
+			<A href='?src=\ref[src];subtlemessage=\ref[M]'>Subtle message</A>
 		"}
 
-	body += {"<br><br>
-		<A href='?src=\ref[src];jumpto=\ref[M]'><b>Jump to</b></A> |
-		<A href='?src=\ref[src];getmob=\ref[M]'>Get</A> |
-		<A href='?src=\ref[src];sendmob=\ref[M]'>Send To</A>
-		<br><br>
-		[check_rights(R_ADMIN|R_MOD,0) ? "<A href='?src=\ref[src];traitor=\ref[M]'>Traitor panel</A> | " : "" ]
-		<A href='?src=\ref[src];narrateto=\ref[M]'>Narrate to</A> |
-		<A href='?src=\ref[src];subtlemessage=\ref[M]'>Subtle message</A>
-	"}
+	if(check_rights(R_ADMIN|R_MOD,0))
+		body += {"
+			 -<a href='?src=\ref[src];traitor=\ref[M]'>TP</a> -
+			<a href='?src=\ref[src];subtlemessage=\ref[M]'>SM</a> -
+			<a href='?src=\ref[src];adminplayerobservejump=\ref[M]'>JMP</a>\] </b><br>
+			<b>Mob type</b> = [M.type]<br><br>
+			<A href='?src=\ref[src];boot2=\ref[M]'>Kick</A> |
+			<A href='?_src_=holder;warn=[M.ckey]'>Warn</A> |
+			<A href='?src=\ref[src];newban=\ref[M]'>Ban</A> |
+			<A href='?src=\ref[src];jobban2=\ref[M]'>Jobban</A> |
+			<A href='?src=\ref[src];notes=show;mob=\ref[M]'>Notes</A>
+		"}
+
+		if(M.client)
+			body += {"
+				| <A HREF='?src=\ref[src];sendtoprison=\ref[M]'>Prison</A> |
+				<a href='?src=\ref[src];admin_wind_player=\ref[M]'>Wind</a>
+				<br>
+			"}
+			var/muted = M.client.prefs.muted
+			body += {"<br><b>Mute: </b>
+				\[<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_IC]'><font color='[(muted & MUTE_IC)?"red":"blue"]'>IC</font></a> |
+				<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_OOC]'><font color='[(muted & MUTE_OOC)?"red":"blue"]'>OOC</font></a> |
+				<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_PRAY]'><font color='[(muted & MUTE_PRAY)?"red":"blue"]'>PRAY</font></a> |
+				<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_ADMINHELP]'><font color='[(muted & MUTE_ADMINHELP)?"red":"blue"]'>ADMINHELP</font></a> |
+				<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_DEADCHAT]'><font color='[(muted & MUTE_DEADCHAT)?"red":"blue"]'>DEADCHAT</font></a>\]
+				(<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_ALL]'><font color='[(muted & MUTE_ALL)?"red":"blue"]'>toggle all</font></a>)
+			"}
+
+		body += {"<br><br>
+			<A href='?src=\ref[src];jumpto=\ref[M]'><b>Jump to</b></A> |
+			<A href='?src=\ref[src];getmob=\ref[M]'>Get</A> |
+			<A href='?src=\ref[src];sendmob=\ref[M]'>Send To</A>
+			<br><br>
+			[check_rights(R_ADMIN|R_MOD,0) ? "<A href='?src=\ref[src];traitor=\ref[M]'>Traitor panel</A> | " : "" ]
+			<A href='?src=\ref[src];narrateto=\ref[M]'>Narrate to</A> |
+			<A href='?src=\ref[src];subtlemessage=\ref[M]'>Subtle message</A>
+		"}
+	else
+		body += {"
+			] </b><br>
+			<b>Mob type</b> = [M.type]<br><br>
+		"}
 
 	if (M.client)
 		if(!istype(M, /mob/new_player))
@@ -109,8 +145,8 @@ var/global/floorIsLava = 0
 			else if(ishuman(M))
 				body += {"<A href='?src=\ref[src];makeai=\ref[M]'>Make AI</A> |
 					<A href='?src=\ref[src];makerobot=\ref[M]'>Make Robot</A> |
-					<A href='?src=\ref[src];makealien=\ref[M]'>Make Alien</A> |
-					<A href='?src=\ref[src];makeslime=\ref[M]'>Make slime</A>
+					<A href='?src=\ref[src];makeslime=\ref[M]'>Make slime</A> |
+					<A href='?src=\ref[src];makealien=\ref[M]'>Make Alien(BROKEN)</A> |
 				"}
 
 			//Simple Animals
@@ -120,9 +156,9 @@ var/global/floorIsLava = 0
 				body += "<A href='?src=\ref[src];makeanimal=\ref[M]'>Animalize</A> | "
 
 			// DNA2 - Admin Hax
-			if(iscarbon(M))
+			if(M.dna && iscarbon(M))
 				body += "<br><br>"
-				body += "<b>DNA Blocks:</b><br><table border='0'><tr><th>&nbsp;</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>"
+				body += "<b>DNA Blocks:</b><br><table border='2'><tr><th>&nbsp;</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>"
 				var/bname
 				for(var/block=1;block<=DNA_SE_LENGTH;block++)
 					if(((block-1)%5)==0)
@@ -141,27 +177,32 @@ var/global/floorIsLava = 0
 			body += {"<br><br>
 				<b>Rudimentary transformation:</b><font size=2><br>These transformations only create a new mob type and copy stuff over. They do not take into account MMIs and similar mob-specific things. The buttons in 'Transformations' are preferred, when possible.</font><br>
 				<A href='?src=\ref[src];simplemake=observer;mob=\ref[M]'>Observer</A> |
-				\[ Alien: <A href='?src=\ref[src];simplemake=drone;mob=\ref[M]'>Drone</A>,
-				<A href='?src=\ref[src];simplemake=hunter;mob=\ref[M]'>Hunter</A>,
-				<A href='?src=\ref[src];simplemake=queen;mob=\ref[M]'>Queen</A>,
-				<A href='?src=\ref[src];simplemake=sentinel;mob=\ref[M]'>Sentinel</A>,
-				<A href='?src=\ref[src];simplemake=larva;mob=\ref[M]'>Larva</A> \]
-				<A href='?src=\ref[src];simplemake=human;mob=\ref[M]'>Human</A>
-				\[ slime: <A href='?src=\ref[src];simplemake=slime;mob=\ref[M]'>Baby</A>,
-				<A href='?src=\ref[src];simplemake=adultslime;mob=\ref[M]'>Adult</A> \]
-				<A href='?src=\ref[src];simplemake=monkey;mob=\ref[M]'>Monkey</A> |
 				<A href='?src=\ref[src];simplemake=robot;mob=\ref[M]'>Cyborg</A> |
+				<A href='?src=\ref[src];simplemake=human;mob=\ref[M]'>Human</A><br>
+
+				Slime: <A href='?src=\ref[src];simplemake=slime;mob=\ref[M]'>Baby</A> |
+				<A href='?src=\ref[src];simplemake=adultslime;mob=\ref[M]'>Adult</A><br>
+
+				Animal: <A href='?src=\ref[src];simplemake=monkey;mob=\ref[M]'>Monkey</A> |
 				<A href='?src=\ref[src];simplemake=cat;mob=\ref[M]'>Cat</A> |
 				<A href='?src=\ref[src];simplemake=runtime;mob=\ref[M]'>Runtime</A> |
 				<A href='?src=\ref[src];simplemake=corgi;mob=\ref[M]'>Corgi</A> |
 				<A href='?src=\ref[src];simplemake=ian;mob=\ref[M]'>Ian</A> |
 				<A href='?src=\ref[src];simplemake=crab;mob=\ref[M]'>Crab</A> |
 				<A href='?src=\ref[src];simplemake=coffee;mob=\ref[M]'>Coffee</A> |
-				\[ Construct: <A href='?src=\ref[src];simplemake=constructarmoured;mob=\ref[M]'>Armoured</A> ,
-				<A href='?src=\ref[src];simplemake=constructbuilder;mob=\ref[M]'>Builder</A> ,
-				<A href='?src=\ref[src];simplemake=constructwraith;mob=\ref[M]'>Wraith</A> \]
-				<A href='?src=\ref[src];simplemake=shade;mob=\ref[M]'>Shade</A>
-				<br>
+				<A href='?src=\ref[src];simplemake=nymph;mob=\ref[M]'>Nymph</A><br>
+
+				Construct: <A href='?src=\ref[src];simplemake=constructarmoured;mob=\ref[M]'>Armoured</A> |
+				<A href='?src=\ref[src];simplemake=constructbuilder;mob=\ref[M]'>Builder</A> |
+				<A href='?src=\ref[src];simplemake=constructwraith;mob=\ref[M]'>Wraith</A> |
+				<A href='?src=\ref[src];simplemake=shade;mob=\ref[M]'>Shade</A><br>
+
+				<br><b>Note from sound, Aliens are broken (Disabled)</b><br>
+				Alien: <A href='?src=\ref[src];simplemake=drone;mob=\ref[M]'>Drone</A> |
+				<A href='?src=\ref[src];simplemake=hunter;mob=\ref[M]'>Hunter</A> |
+				<A href='?src=\ref[src];simplemake=queen;mob=\ref[M]'>Queen</A> |
+				<A href='?src=\ref[src];simplemake=sentinel;mob=\ref[M]'>Sentinel</A> |
+				<A href='?src=\ref[src];simplemake=larva;mob=\ref[M]'>Larva</A><br>
 			"}
 
 	if (M.client)
@@ -176,10 +217,10 @@ var/global/floorIsLava = 0
 		"}
 
 	body += {"<br>
-		</body></html>
+		</center></body></html>
 	"}
 
-	usr << browse(body, "window=adminplayeropts;size=550x515")
+	usr << browse(body, "window=adminplayeropts;size=550x600")
 	feedback_add_details("admin_verb","SPP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
@@ -194,8 +235,11 @@ var/global/floorIsLava = 0
 	set name = "Player Notes"
 	if (!istype(src,/datum/admins))
 		src = usr.client.holder
-	if (!istype(src,/datum/admins))
+/*	if (!istype(src,/datum/admins))
 		usr << "Error: you are not an admin!"
+		return
+*/
+	if(!check_rights(R_ADMIN|R_MOD))
 		return
 	PlayerNotesPage(1)
 
@@ -245,7 +289,6 @@ var/global/floorIsLava = 0
 	info >> infos
 	if(!infos || !infos.len) return 0
 	else return 1
-
 
 /datum/admins/proc/show_player_info(var/key as text)
 	set category = "Admin"
@@ -616,6 +659,20 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=spacevines'>Spawn Space-Vines</A><BR>
 			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
 			<BR>
+			<B>Shuttles</B><BR>
+			<BR>
+			<A href='?src=\ref[src];secretsfun=launchshuttle'>Launch a shuttle</A><BR>
+			<A href='?src=\ref[src];secretsfun=forcelaunchshuttle'>Force launch a shuttle</A><BR>
+			"}
+	if(check_rights(R_DEBUG,0))
+		dat += {"
+			<I>These shouldn't be used in game</I><BR>
+			<A href='?src=\ref[src];secretsfun=jumpshuttle'>Jump a shuttle</A><BR>
+			<A href='?src=\ref[src];secretsfun=moveshuttle'>Move a shuttle</A><BR>
+			"}
+	if(check_rights(R_FUN,0))
+		dat += {"
+			<BR>
 			<B>Fun Secrets</B><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=sec_clothes'>Remove 'internal' clothing</A><BR>
@@ -637,10 +694,6 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=fakeguns'>Make all items look like guns</A><BR>
 			<A href='?src=\ref[src];secretsfun=schoolgirl'>Japanese Animes Mode</A><BR>
 			<A href='?src=\ref[src];secretsfun=eagles'>Egalitarian Station Mode</A><BR>
-			<A href='?src=\ref[src];secretsfun=moveadminshuttle'>Move Administration Shuttle</A><BR>
-			<A href='?src=\ref[src];secretsfun=moveferry'>Move Ferry</A><BR>
-			<A href='?src=\ref[src];secretsfun=movealienship'>Move Alien Dinghy</A><BR>
-			<A href='?src=\ref[src];secretsfun=moveminingshuttle'>Move Mining Shuttle</A><BR>
 			<A href='?src=\ref[src];secretsfun=blackout'>Break all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=whiteout'>Fix all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=friendai'>Best Friend AI</A><BR>
@@ -720,11 +773,49 @@ var/global/floorIsLava = 0
 	ooc_allowed = !( ooc_allowed )
 	if (ooc_allowed)
 		world << "<B>The OOC channel has been globally enabled!</B>"
+		ooc_dev_allowed = 1
+		ooc_mod_allowed = 1
 	else
 		world << "<B>The OOC channel has been globally disabled!</B>"
 	log_admin("[key_name(usr)] toggled OOC.")
 	message_admins("[key_name_admin(usr)] toggled OOC.", 1)
 	feedback_add_details("admin_verb","TOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/datum/admins/proc/toggledevooc()
+	set category = "Server"
+	set desc="Toggles Developer OOC"
+	set name="Toggle Dev OOC"
+	if(ooc_allowed)
+		usr << "OOC needs to be muted first"
+		return
+	ooc_dev_allowed = !( ooc_dev_allowed )
+	var/looc_status
+	if (ooc_dev_allowed)
+		looc_status = "Enabled"
+	else
+		looc_status = "Disabled"
+	log_admin("[key_name(usr)] [looc_status] Developer OOC.")
+	message_admins("[key_name_admin(usr)] [looc_status] Developer OOC.", 1)
+	msg_scopes("<B>Developer OOC has been [looc_status]</B>",1,1)
+	feedback_add_details("admin_verb","TDOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/datum/admins/proc/togglemodooc()
+	set category = "Server"
+	set desc="Toggles Moderators OOC"
+	set name="Toggle Mod OOC"
+	if(ooc_allowed)
+		usr << "OOC needs to be muted first"
+		return
+	ooc_mod_allowed = !( ooc_mod_allowed )
+	var/looc_status
+	if (ooc_mod_allowed)
+		looc_status = "Enabled"
+	else
+		looc_status = "Disabled"
+	log_admin("[key_name(usr)] toggled Mod OOC.")
+	message_admins("[key_name_admin(usr)] [looc_status] Moderator OOC.", 1)
+	message_mods("<B>Moderator OOC has been [looc_status]</B>")
+	feedback_add_details("admin_verb","TMOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /datum/admins/proc/togglelooc()
 	set category = "Server"
@@ -733,14 +824,49 @@ var/global/floorIsLava = 0
 	looc_allowed = !( looc_allowed )
 	if (looc_allowed)
 		world << "<B>The LOOC channel has been globally enabled!</B>"
+		looc_dev_allowed = 1
+		looc_mod_allowed = 1
 	else
 		world << "<B>The LOOC channel has been globally disabled!</B>"
 	log_admin("[key_name(usr)] toggled LOOC.")
 	message_admins("[key_name_admin(usr)] toggled LOOC.", 1)
 	feedback_add_details("admin_verb","TLOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+/datum/admins/proc/toggledevlooc()
+	set category = "Server"
+	set desc="Toggles Developer LOOC"
+	set name="Toggle Dev LOOC"
+	if(looc_allowed)
+		usr << "Looc needs to be muted first"
+		return
+	looc_dev_allowed = !( looc_dev_allowed )
+	var/looc_status
+	if (looc_dev_allowed)
+		looc_status = "Enabled"
+	else
+		looc_status = "Disabled"
+	log_admin("[key_name(usr)] [looc_status] Developer LOOC.")
+	message_admins("[key_name_admin(usr)] [looc_status] Developer LOOC.", 1)
+	msg_scopes("<B>Developer LOOC has been [looc_status]</B>",1,1)
+	feedback_add_details("admin_verb","TDLOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-
+/datum/admins/proc/togglemodlooc()
+	set category = "Server"
+	set desc="Toggles Moderator LOOC"
+	set name="Toggle Mod LOOC"
+	if(looc_allowed)
+		usr << "Looc needs to be muted first"
+		return
+	looc_mod_allowed = !( looc_mod_allowed )
+	var/looc_status
+	if (looc_mod_allowed)
+		looc_status = "Enabled"
+	else
+		looc_status = "Disabled"
+	log_admin("[key_name(usr)] [looc_status] Moderator LOOC.")
+	message_admins("[key_name_admin(usr)] [looc_status] Moderator LOOC.", 1)
+	message_mods("<B>Moderator LOOC has been [looc_status]</B>")
+	feedback_add_details("admin_verb","TMLOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /datum/admins/proc/toggledsay()
 	set category = "Server"
@@ -855,11 +981,15 @@ var/global/floorIsLava = 0
 	set desc="Delay the game start/end"
 	set name="Delay"
 
-	if(!check_rights(R_SERVER|R_DEV))	return
+	if(!check_rights(R_SERVER|R_DEBUG))	return
 	if (!ticker || ticker.current_state != GAME_STATE_PREGAME)
+		if(ticker.delay_end)
+			if(alert(usr, "End the round normally?", "End Normally?", "No", "Yes") == "No")
+				return 0
 		ticker.delay_end = !ticker.delay_end
 		log_admin("[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].")
-		message_admins("\blue [key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].", 1)
+		message_admins("\blue [key_name(usr)] [ticker.delay_end ? "<font color=#FF0000>delayed</font> the round end" : "has made the round end <font color=#00FF00>normally</font>"].", 1)
+		message_mods("\blue [key_name(usr)] [ticker.delay_end ? "<font color=#FF0000>delayed</font> the round end" : "has made the round end <font color=#00FF00>normally</font>"].", 1)
 		return //alert("Round end delayed", null, null, null, null, null)
 	going = !( going )
 	if (!( going ))
@@ -1237,6 +1367,7 @@ proc/move_alien_ship()
 
 	log_admin("[key_name(usr)] winded [key_name(M)]!")
 	message_admins("[key_name_admin(usr)] winded [key_name_admin(M)]!", 1)
+	message_mods("[key_name_admin(usr)] winded [key_name_admin(M)]!")
 	// feedback_add_details("admin_verb","WIND") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	// Chop chop.
 	return
@@ -1249,4 +1380,5 @@ proc/move_alien_ship()
 
 	log_admin("[key_name(usr)] unwinded [key_name(M)]!")
 	message_admins("[key_name_admin(usr)] unwinded [key_name_admin(M)]!", 1)
+	message_mods("[key_name_admin(usr)] unwinded [key_name_admin(M)]!", 1)
 	return

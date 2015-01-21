@@ -10,7 +10,7 @@
 	w_class = 2.0
 	throw_speed = 2
 	throw_range = 5
-	m_amt = 500
+	matter = list("metal" = 500)
 	origin_tech = "materials=1"
 	var/dispenser = 0
 	var/breakouttime = 1200 //Deciseconds = 120s = 2 minutes
@@ -54,7 +54,7 @@
 
 				C.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been handcuffed (attempt) by [user.name] ([user.ckey])</font>")
 				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Attempted to handcuff [C.name] ([C.ckey])</font>")
-				msg_admin_attack("[key_name(user)] attempted to handcuff [key_name(C)]")
+				msg_admin_attack("[key_name(user)] attempted to handcuff [key_name(C)] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[C.x];Y=[C.y];Z=[C.z]'>JMP</a>")
 
 				var/obj/effect/equip_e/human/O = new /obj/effect/equip_e/human(  )
 				O.source = user
@@ -149,3 +149,96 @@ var/last_chew = 0
 
 /obj/item/weapon/handcuffs/cyborg
 	dispenser = 1
+
+/obj/item/weapon/handcuffs/ziptie
+	name = "zipties"
+	desc = "Sturdy, and reliable. Likely used to restain unruly people."
+	gender = PLURAL
+	icon = 'icons/obj/items.dmi'
+	icon_state = "ziptie"
+	var/singular_name = "ziptie"
+	var/amount = 1
+	var/max_amount = 6
+
+/obj/item/weapon/handcuffs/ziptie/New(var/loc, var/amount=null)
+	..()
+	if (amount)
+		src.amount=amount
+	return
+
+/obj/item/weapon/handcuffs/ziptie/Del()
+	if (src && usr && usr.machine==src)
+		usr << browse(null, "window=stack")
+	..()
+
+/obj/item/weapon/handcuffs/ziptie/examine()
+	set src in view(1)
+	..()
+	usr << "There are [src.amount] [src.singular_name]\s in the stack."
+	return
+
+/obj/item/weapon/handcuffs/ziptie/proc/use(var/amount)
+	src.amount-=amount
+	if (src.amount<=0)
+		var/oldsrc = src
+		src = null //dont kill proc after del()
+		if(usr)
+			usr.before_take_item(oldsrc)
+		del(oldsrc)
+	return
+
+/obj/item/weapon/handcuffs/ziptie/proc/add_to_stacks(mob/usr as mob)
+	var/obj/item/weapon/handcuffs/ziptie/oldsrc = src
+	src = null
+	for (var/obj/item/weapon/handcuffs/ziptie/N in usr.loc)
+		if (N==oldsrc)
+			continue
+		if (!istype(N, oldsrc.type))
+			continue
+		if (N.amount>=N.max_amount)
+			continue
+		oldsrc.attackby(N, usr)
+		usr << "You add new [N.singular_name] to the stack. It now contains [N.amount] [N.singular_name]\s."
+		if(!oldsrc)
+			break
+
+/obj/item/weapon/handcuffs/ziptie/attack_hand(mob/user as mob)
+	if (user.get_inactive_hand() == src)
+		var/obj/item/weapon/handcuffs/ziptie/F = new src.type( user, 1)
+		F.copy_evidences(src)
+		user.put_in_hands(F)
+		src.add_fingerprint(user)
+		F.add_fingerprint(user)
+		use(1)
+		if (src && usr.machine==src)
+			spawn(0) src.interact(usr)
+	else
+		..()
+	return
+
+/obj/item/weapon/handcuffs/ziptie/attackby(obj/item/W as obj, mob/user as mob)
+	..()
+	if (istype(W, src.type))
+		var/obj/item/weapon/handcuffs/ziptie/S = W
+		if (S.amount >= max_amount)
+			return 1
+		var/to_transfer as num
+		if (user.get_inactive_hand()==src)
+			to_transfer = 1
+		else
+			to_transfer = min(src.amount, S.max_amount-S.amount)
+		S.amount+=to_transfer
+		if (S && usr.machine==S)
+			spawn(0) S.interact(usr)
+		src.use(to_transfer)
+		if (src && usr.machine==src)
+			spawn(0) src.interact(usr)
+	else return ..()
+
+/obj/item/weapon/handcuffs/ziptie/proc/copy_evidences(obj/item/weapon/handcuffs/ziptie/from as obj)
+	src.blood_DNA = from.blood_DNA
+	src.fingerprints  = from.fingerprints
+	src.fingerprintshidden  = from.fingerprintshidden
+	src.fingerprintslast  = from.fingerprintslast
+
+

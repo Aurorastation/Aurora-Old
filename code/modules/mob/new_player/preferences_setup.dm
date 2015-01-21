@@ -208,7 +208,7 @@ datum/preferences
 			preview_icon.Blend(temp, ICON_OVERLAY)
 
 		//Tail
-		if(current_species && (current_species.flags & HAS_TAIL))
+		if(current_species && (current_species.tail))
 			var/icon/temp = new/icon("icon" = 'icons/effects/species.dmi', "icon_state" = "[current_species.tail]_s")
 			preview_icon.Blend(temp, ICON_OVERLAY)
 
@@ -239,11 +239,11 @@ datum/preferences
 			eyes_s.Blend(facial_s, ICON_OVERLAY)
 
 		var/icon/underwear_s = null
-		if(underwear > 0 && underwear < 7 && current_species.flags & HAS_UNDERWEAR)
+		if(underwear > 0 && underwear < 7 && (current_species && (current_species.flags & HAS_UNDERWEAR)))
 			underwear_s = new/icon("icon" = 'icons/mob/human.dmi', "icon_state" = "underwear[underwear]_[g]_s")
 
 		var/icon/undershirt_s = null
-		if(undershirt > 0 && undershirt < 5 && current_species.flags & HAS_UNDERWEAR)
+		if(undershirt > 0 && undershirt < 16 && (current_species && (current_species.flags & HAS_UNDERWEAR)))
 			undershirt_s = new/icon("icon" = 'icons/mob/human.dmi', "icon_state" = "undershirt[undershirt]_s")
 
 		var/icon/clothes_s = null
@@ -451,6 +451,19 @@ datum/preferences
 							clothes_s.Blend(new /icon('icons/mob/back.dmi', "satchel-tox"), ICON_OVERLAY)
 						if(4)
 							clothes_s.Blend(new /icon('icons/mob/back.dmi', "satchel"), ICON_OVERLAY)
+				if(XENOBIOLOGIST)
+					clothes_s = new /icon('icons/mob/uniform.dmi', "sciencewhite_s")
+					clothes_s.Blend(new /icon('icons/mob/feet.dmi', "white"), ICON_UNDERLAY)
+					clothes_s.Blend(new /icon('icons/mob/suit.dmi', "labcoat_tox_open"), ICON_OVERLAY)
+					if(prob(1))
+						clothes_s.Blend(new /icon('icons/mob/head.dmi', "metroid"), ICON_OVERLAY)
+					switch(backbag)
+						if(2)
+							clothes_s.Blend(new /icon('icons/mob/back.dmi', "backpack"), ICON_OVERLAY)
+						if(3)
+							clothes_s.Blend(new /icon('icons/mob/back.dmi', "satchel-tox"), ICON_OVERLAY)
+						if(4)
+							clothes_s.Blend(new /icon('icons/mob/back.dmi', "satchel"), ICON_OVERLAY)
 				if(CHEMIST)
 					clothes_s = new /icon('icons/mob/uniform.dmi', "chemistrywhite_s")
 					clothes_s.Blend(new /icon('icons/mob/feet.dmi', "white"), ICON_UNDERLAY)
@@ -600,13 +613,11 @@ datum/preferences
 						if(4)
 							clothes_s.Blend(new /icon('icons/mob/back.dmi', "satchel"), ICON_OVERLAY)
 				if(DETECTIVE)
-					clothes_s = new /icon('icons/mob/uniform.dmi', "detective_s")
-					clothes_s.Blend(new /icon('icons/mob/feet.dmi', "brown"), ICON_UNDERLAY)
+					clothes_s = new /icon('icons/mob/uniform.dmi', "wardentanclothes_s")
+					clothes_s.Blend(new /icon('icons/mob/feet.dmi', "laceups"), ICON_UNDERLAY)
 					clothes_s.Blend(new /icon('icons/mob/hands.dmi', "bgloves"), ICON_UNDERLAY)
 					if(prob(1))
 						clothes_s.Blend(new /icon('icons/mob/mask.dmi', "cigaron"), ICON_OVERLAY)
-					clothes_s.Blend(new /icon('icons/mob/head.dmi', "detective"), ICON_OVERLAY)
-					clothes_s.Blend(new /icon('icons/mob/suit.dmi', "detective"), ICON_OVERLAY)
 					switch(backbag)
 						if(2)
 							clothes_s.Blend(new /icon('icons/mob/back.dmi', "backpack"), ICON_OVERLAY)
@@ -614,6 +625,20 @@ datum/preferences
 							clothes_s.Blend(new /icon('icons/mob/back.dmi', "satchel-norm"), ICON_OVERLAY)
 						if(4)
 							clothes_s.Blend(new /icon('icons/mob/back.dmi', "satchel"), ICON_OVERLAY)
+
+				if(FORENSICS)
+					clothes_s = new /icon('icons/mob/uniform.dmi', "polsuit_s")
+					clothes_s.Blend(new /icon('icons/mob/feet.dmi', "laceups"), ICON_UNDERLAY)
+					clothes_s.Blend(new /icon('icons/mob/hands.dmi', "bgloves"), ICON_UNDERLAY)
+					clothes_s.Blend(new /icon('icons/mob/suit.dmi', "labcoat_open"), ICON_OVERLAY)
+					switch(backbag)
+						if(2)
+							clothes_s.Blend(new /icon('icons/mob/back.dmi', "backpack"), ICON_OVERLAY)
+						if(3)
+							clothes_s.Blend(new /icon('icons/mob/back.dmi', "satchel-norm"), ICON_OVERLAY)
+						if(4)
+							clothes_s.Blend(new /icon('icons/mob/back.dmi', "satchel"), ICON_OVERLAY)
+
 				if(OFFICER)
 					clothes_s = new /icon('icons/mob/uniform.dmi', "secred_s")
 					clothes_s.Blend(new /icon('icons/mob/feet.dmi', "jackboots"), ICON_UNDERLAY)

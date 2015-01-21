@@ -10,8 +10,7 @@
 	throwforce = 5
 	throw_speed = 1
 	throw_range = 2
-	m_amt = 750
-	w_amt = 750
+	matter = list("glass" = 750,"metal" = 750)
 	origin_tech = "powerstorage=3;syndicate=5"
 	var/drain_rate = 600000		// amount of power to drain per tick
 	var/power_drained = 0 		// has drained this much power
@@ -116,5 +115,12 @@
 				playsound(src, 'sound/effects/screech.ogg', 100, 1, 1)
 			if(power_drained >= max_power)
 				processing_objects.Remove(src)
+				var/hit_site
+				if(!src.loc.loc)
+					hit_site = src.loc.name
+				else
+					hit_site = src.loc.loc.name
+				message_admins("Powersink expoded in [hit_site] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>")
+				message_mods("Powersink expoded in [hit_site] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>")
 				explosion(src.loc, 3,6,9,12)
 				del(src)

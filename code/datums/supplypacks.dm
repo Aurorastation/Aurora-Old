@@ -43,6 +43,18 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	group = "Security"
 	hidden = 1
 
+/datum/supply_packs/forensics
+	name = "Auxiliary forensic tools"
+	contains = list(/obj/item/weapon/storage/box/swabs,
+					/obj/item/weapon/storage/box/swabs,
+					/obj/item/weapon/storage/box/swabs,
+					/obj/item/weapon/storage/box/slides,
+					/obj/item/weapon/reagent_containers/spray/luminol)
+	cost = 15
+	containertype = /obj/structure/closet/crate
+	containername = "Auxiliary forensic tools"
+	group = "Security"
+
 /datum/supply_packs/food
 	name = "Kitchen supply crate"
 	contains = list(/obj/item/weapon/reagent_containers/food/snacks/flour,
@@ -237,6 +249,22 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	cost = 20
 	containertype = /obj/structure/largecrate/mule
 	containername = "MULEbot Crate"
+	group = "Operations"
+
+/datum/supply_packs/cargotrain
+	name = "Cargo Train Tug"
+	contains = list(/obj/vehicle/train/cargo/engine)
+	cost = 30
+	containertype = /obj/structure/largecrate
+	containername = "Cargo Train Tug Crate"
+	group = "Operations"
+
+/datum/supply_packs/cargotrailer
+	name = "Cargo Train Trolley"
+	contains = list(/obj/vehicle/train/cargo/trolley)
+	cost = 20
+	containertype = /obj/structure/largecrate
+	containername = "Cargo Train Trolley Crate"
 	group = "Operations"
 
 /datum/supply_packs/lisa
@@ -724,17 +752,15 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 
 /datum/supply_packs/shotgunammo
 	name = "Shotgun shells"
-	contains = list(/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun)
-	cost = 20
+	contains = list(/obj/item/ammo_magazine/shotgun,
+					/obj/item/ammo_magazine/shotgun,
+					/obj/item/ammo_magazine/shotgun,
+					/obj/item/ammo_magazine/shotgun,
+					/obj/item/ammo_magazine/shotgun/beanbag,
+					/obj/item/ammo_magazine/shotgun/beanbag,
+					/obj/item/ammo_magazine/shotgun/incendiary,
+					/obj/item/ammo_magazine/shotgun/incendiary)
+	cost = 40
 	containertype = /obj/structure/closet/crate/secure
 	containername = "Shotgun shells"
 	access = access_armory
@@ -1111,3 +1137,198 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	containername = "Beekeeping crate"
 	access = access_hydroponics
 	group = "Hydroponics"
+
+
+//My foray into encryption key crates. - Duck
+/datum/supply_packs/sec_keys
+	name = "Security Encryption Keys"
+	contains = list(/obj/item/device/encryptionkey/headset_sec,
+					/obj/item/device/encryptionkey/headset_sec,
+					/obj/item/device/encryptionkey/headset_sec,
+					/obj/item/device/encryptionkey/headset_sec,
+					/obj/item/device/encryptionkey/headset_sec)
+	cost = 20
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Security Encryption Keys"
+	group = "Operations"
+	access = access_security
+
+/datum/supply_packs/sci_keys
+	name = "Science Encryption Keys"
+	contains = list(/obj/item/device/encryptionkey/headset_sci,
+					/obj/item/device/encryptionkey/headset_sci,
+					/obj/item/device/encryptionkey/headset_sci,
+					/obj/item/device/encryptionkey/headset_sci,
+					/obj/item/device/encryptionkey/headset_sci)
+	cost = 20
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Science Encryption Keys"
+	group = "Operations"
+	access = access_research
+
+/datum/supply_packs/eng_keys
+	name = "Engineering Encryption Keys"
+	contains = list(/obj/item/device/encryptionkey/headset_eng,
+					/obj/item/device/encryptionkey/headset_eng,
+					/obj/item/device/encryptionkey/headset_eng,
+					/obj/item/device/encryptionkey/headset_eng,
+					/obj/item/device/encryptionkey/headset_eng)
+	cost = 20
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Engineering Encryption Keys"
+	group = "Operations"
+	access = access_engine
+
+/datum/supply_packs/med_keys
+	name = "Medical Encryption Keys"
+	contains = list(/obj/item/device/encryptionkey/headset_med,
+					/obj/item/device/encryptionkey/headset_med,
+					/obj/item/device/encryptionkey/headset_med,
+					/obj/item/device/encryptionkey/headset_med,
+					/obj/item/device/encryptionkey/headset_med)
+	cost = 20
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Medical Encryption Keys"
+	group = "Operations"
+	access = access_medical
+
+
+/datum/supply_packs/cargo_keys
+	name = "Cargo Encryption Keys"
+	contains = list(/obj/item/device/encryptionkey/headset_cargo,
+					/obj/item/device/encryptionkey/headset_cargo,
+					/obj/item/device/encryptionkey/headset_cargo,
+					/obj/item/device/encryptionkey/headset_cargo,
+					/obj/item/device/encryptionkey/headset_cargo)
+	cost = 20
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Cargo Encryption Keys"
+	group = "Operations"
+	access = access_cargo
+
+/datum/supply_packs/head_keys
+	name = "Head Encryption Keys"
+	contains = list(/obj/item/device/encryptionkey/heads/captain,
+					/obj/item/device/encryptionkey/heads/rd,
+					/obj/item/device/encryptionkey/heads/hos,
+					/obj/item/device/encryptionkey/heads/ce,
+					/obj/item/device/encryptionkey/heads/cmo,
+					/obj/item/device/encryptionkey/heads/hop)
+	cost = 50
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Head Encryption Keys"
+	group = "Operations"
+	access = access_heads
+
+/*
+ *Skull's additions to satisfy the cravings of any atmospheric tech begin here.
+ */
+
+/datum/supply_packs/atmos_freezer
+	name = "Gas Cooling Unit Materials"
+	contains = list(/obj/item/weapon/circuitboard/unary_atmos/cooler,
+					/obj/item/weapon/cable_coil,
+					/obj/item/weapon/stock_parts/matter_bin,
+					/obj/item/weapon/stock_parts/manipulator,
+					/obj/item/weapon/stock_parts/capacitor,
+					/obj/item/weapon/stock_parts/capacitor)
+	cost = 50
+	containertype = /obj/structure/closet/crate/secure
+	containername = "gas cooling unit materials crate"
+	access = access_atmospherics
+	group = "Engineering"
+
+/datum/supply_packs/atmos_heater
+	name = "Gas Heating Unit Materials"
+	contains = list(/obj/item/weapon/circuitboard/unary_atmos/heater,
+					/obj/item/weapon/cable_coil,
+					/obj/item/weapon/stock_parts/matter_bin,
+					/obj/item/weapon/stock_parts/manipulator,
+					/obj/item/weapon/stock_parts/capacitor,
+					/obj/item/weapon/stock_parts/capacitor)
+	cost = 50
+	containertype = /obj/structure/closet/crate/secure
+	containername = "gas heating unit materials crate"
+	access = access_atmospherics
+	group = "Engineering"
+
+/datum/supply_packs/aliengloves
+	name = "Non-Human Glove Kit"
+	contains = list(/obj/item/clothing/gloves/yellow/specialt,
+					/obj/item/clothing/gloves/yellow/specialt,
+					/obj/item/clothing/gloves/yellow/specialt,
+					/obj/item/clothing/gloves/yellow/specialu,
+					/obj/item/clothing/gloves/yellow/specialu,
+					/obj/item/clothing/gloves/yellow/specialu)
+	cost = 25
+	containertype = /obj/structure/closet/crate
+	containername = "speciality gloves kit"
+	group = "Supply"
+
+/datum/supply_packs/hardsuitcrate_e
+	name = "Engineering Hardsuit"
+	contains = list(/obj/item/clothing/head/helmet/space/rig,
+					/obj/item/clothing/suit/space/rig)
+	cost = 40
+	containertype = /obj/structure/closet/crate/secure
+	containername = "engineer hardsuit kit"
+	access = access_engine_equip
+	group = "Engineering"
+
+/datum/supply_packs/hardsuitcrate_s
+	name = "Security Hardsuit Crate"
+	contains = list(/obj/item/clothing/head/helmet/space/rig/security,
+					/obj/item/clothing/suit/space/rig/security)
+	cost = 40
+	containertype = /obj/structure/closet/crate/secure
+	containername = "security hardsuit kit"
+	access = access_security
+	group = "Security"
+
+/datum/supply_packs/hardsuitcrate_m
+	name = "Medical Hardsuit Crate"
+	contains = list(/obj/item/clothing/head/helmet/space/rig/medical,
+					/obj/item/clothing/suit/space/rig/medical)
+	cost = 40
+	containertype = /obj/structure/closet/crate/secure
+	containername = "medical hardsuit kit"
+	access = access_medical
+	group = "Medical / Science"
+
+/datum/supply_packs/hardsuitcrate_a
+	name = "Atmospherics Hardsuit"
+	contains = list(/obj/item/clothing/head/helmet/space/rig/atmos,
+					/obj/item/clothing/suit/space/rig/atmos)
+	cost = 40
+	containertype = /obj/structure/closet/crate/secure
+	containername = "atmospherics hardsuit kit"
+	access = access_engine_equip
+	group = "Engineering"
+
+/datum/supply_packs/condiments
+	name = "Condiment Supply"
+	contains = list(/obj/item/weapon/reagent_containers/food/condi/s_packet,
+					/obj/item/weapon/reagent_containers/food/condi/s_packet,
+					/obj/item/weapon/reagent_containers/food/condi/p_packet,
+					/obj/item/weapon/reagent_containers/food/condi/p_packet,
+					/obj/item/weapon/reagent_containers/food/condi/soy_packet,
+					/obj/item/weapon/reagent_containers/food/condi/soy_packet,
+					/obj/item/weapon/reagent_containers/food/condi/k_packet,
+					/obj/item/weapon/reagent_containers/food/condi/k_packet,
+					/obj/item/weapon/reagent_containers/food/condi/h_packet,
+					/obj/item/weapon/reagent_containers/food/condi/h_packet,
+					/obj/item/weapon/reagent_containers/food/condi/sr_packet,
+					/obj/item/weapon/reagent_containers/food/condi/sr_packet)
+	cost = 20
+	containertype = /obj/structure/closet/crate/freezer
+	containername = "condiment kit"
+	group = "Supply"
+
+/datum/supply_packs/pillboxes
+	name = "Chemistry Crate"
+	contains = list(/obj/item/weapon/storage/box/pillbottles)
+	cost = 20
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Pill Bottle Kit"
+	access = access_medical
+	group = "Medical / Science"

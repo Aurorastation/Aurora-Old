@@ -122,6 +122,7 @@
 				if(src.check_access(I))
 					if (!status)
 						message_admins("\blue [key_name_admin(usr)] has initiated the global cyborg killswitch!")
+						message_mods("\blue [key_name_admin(usr)] has initiated the global cyborg killswitch!")
 						log_game("\blue [key_name(usr)] has initiated the global cyborg killswitch!")
 						src.status = 1
 						src.start_sequence()
@@ -167,6 +168,7 @@
 
 							else
 								message_admins("\blue [key_name_admin(usr)] detonated [R.name]!")
+								message_mods("\blue [key_name_admin(usr)] detonated [R.name]!")
 								log_game("\blue [key_name_admin(usr)] detonated [R.name]!")
 								R.self_destruct()
 			else
@@ -180,6 +182,7 @@
 					if(choice == "Confirm")
 						if(R && istype(R))
 							message_admins("\blue [key_name_admin(usr)] [R.canmove ? "locked down" : "released"] [R.name]!")
+							message_mods("\blue [key_name_admin(usr)] [R.canmove ? "locked down" : "released"] [R.name]!")
 							log_game("[key_name(usr)] [R.canmove ? "locked down" : "released"] [R.name]!")
 							R.canmove = !R.canmove
 							if (R.lockcharge)
@@ -197,7 +200,10 @@
 		else if (href_list["magbot"])
 			if(src.allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["magbot"])
-				if(R)
+				
+				// whatever weirdness this is supposed to be, but that is how the href gets added, so here it is again
+				if(istype(R) && istype(usr, /mob/living/silicon) && usr.mind.special_role && (usr.mind.original == usr) && !R.emagged)
+				
 					var/choice = input("Are you certain you wish to hack [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
 						if(R && istype(R))

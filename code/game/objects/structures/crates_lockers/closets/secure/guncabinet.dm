@@ -41,7 +41,7 @@
 					gun.icon_state = "projectile"
 
 				gun.pixel_x = i*4
-				overlays += gun
+//				overlays += gun //Moves the overlay layer and creates a weird sprite bug
 
 		overlays += icon(src.icon,"door")
 

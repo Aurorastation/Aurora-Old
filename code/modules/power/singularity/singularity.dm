@@ -102,7 +102,9 @@ var/global/list/uneatable = list(
 /obj/machinery/singularity/proc/admin_investigate_setup()
 	last_warning = world.time
 	var/count = locate(/obj/machinery/containment_field) in orange(30, src)
-	if(!count)	message_admins("A singulo has been created without containment fields active ([x],[y],[z])",1)
+	if(!count)
+		message_mods("A singulo has been created without containment fields active ([x],[y],[z])")
+		message_admins("A singulo has been created without containment fields active ([x],[y],[z])",1)
 	investigate_log("was created. [count?"":"<font color='red'>No containment fields were active</font>"]","singulo")
 
 /obj/machinery/singularity/proc/dissipate()
@@ -166,6 +168,10 @@ var/global/list/uneatable = list(
 				dissipate_delay = 10
 				dissipate_track = 0
 				dissipate_strength = 10
+				investigate_log("turned to a stage 4","singulo")
+				message_mods("Singluo is at stage 4 ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)")
+				message_admins("Singluo is at stage 4 ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
+				log_game("Singluo turned to a stage 4 ([x],[y],[z])")
 		if(9)//this one also lacks a check for gens because it eats everything
 			current_size = 9
 			icon = 'icons/effects/288x288.dmi'
@@ -475,8 +481,9 @@ var/global/list/uneatable = list(
 /obj/machinery/singularity/narsie/large/New()
 	..()
 	world << "<font size='28' color='red'><b>NAR-SIE HAS RISEN</b></font>"
-	if(emergency_shuttle)
-		emergency_shuttle.incall(0.5) // Cannot recall
+	if(emergency_shuttle && emergency_shuttle.can_call())
+		emergency_shuttle.call_evac()
+		emergency_shuttle.launch_time = 0	// Cannot recall
 
 /obj/machinery/singularity/narsie/process()
 	eat()

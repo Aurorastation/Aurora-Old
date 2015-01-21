@@ -60,3 +60,72 @@
 	item_state = "ggloves"
 	permeability_coefficient = 0.9
 	siemens_coefficient = 0.9
+
+/obj/item/clothing/gloves/watch
+	desc = "A small wristwatch, capable of telling time."
+	name = "watch"
+	icon_state = "watch"
+	item_state = "watchgloves"
+	w_class = 1
+	wired = 1
+//	var/time = 1
+
+	verb/checktime()
+		set category = "Object"
+		set name = "Check Time"
+		set src in usr
+
+		if(wired && !clipped)
+			usr << "You check your watch, spotting a digital collection of numbers reading '[worldtime2text()]'"
+		else if(wired && clipped)
+			usr << "You check your watch realising it's still open"
+		else
+			usr << "You check your watch as it dawns on you that it's broken"
+
+	verb/pointatwatch()
+		set category = "Object"
+		set name = "Point at watch"
+		set src in usr
+
+		if(wired && !clipped)
+			usr.visible_message ("<span class='notice'>[usr] taps their foot on the floor, arrogantly pointing at the [src] on their wrist with a look of derision in their eyes.</span>", "<span class='notice'>You point down at the [src], an arrogant look about your eyes.</span>")
+		else if(wired && clipped)
+			usr.visible_message ("<span class='notice'>[usr] taps their foot on the floor, arrogantly pointing at the [src] on their wrist with a look of derision in their eyes, not noticing it's open</span>", "<span class='notice'>You point down at the [src], an arrogant look about your eyes.</span>")
+		else
+			usr.visible_message ("<span class='notice'>[usr] taps their foot on the floor, arrogantly pointing at the [src] on their wrist with a look of derision in their eyes, not noticing it's broken</span>", "<span class='notice'>You point down at the [src], an arrogant look about your eyes.</span>")
+
+	attackby(obj/item/weapon/W, mob/user)
+		if(istype(W, /obj/item/weapon/screwdriver))
+			if (clipped) //Using clipped because adding a new var for something is dumb
+				user.visible_message("\blue [user] screws the cover of the [src] closed.","\blue You screw the cover of the [src] closed..")
+				clipped = 0
+				return
+//			playsound(src.loc, 'sound/items/Wirecutter.ogg', 100, 1)
+			user.visible_message("\blue [user] unscrew the cover of the [src].","\blue You unscrew the cover of the [src].")
+			clipped = 1
+			return
+		if(wired)
+			return
+		if(istype(W, /obj/item/weapon/cable_coil))
+			var/obj/item/weapon/cable_coil/C = W
+			if (!clipped)
+				user << "<span class='notice'>The [src] is not open.</span>"
+				return
+
+			if(wired)
+				user << "<span class='notice'>The [src] are already wired.</span>"
+				return
+
+			if(C.amount < 2)
+				user << "<span class='notice'>There is not enough wire to cover the [src].</span>"
+				return
+
+			C.use(2)
+			wired = 1
+			user << "<span class='notice'>You repair some wires in the [src].</span>"
+			return
+
+	emp_act(severity)
+		if(prob(50/severity))
+			wired = 0
+		..()

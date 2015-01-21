@@ -1,6 +1,6 @@
 /obj/machinery/door/poddoor
 	name = "Podlock"
-	desc = "Why it no open!!!"
+	desc = "That looks like it doesn't open easily."
 	icon = 'icons/obj/doors/rapid_pdoor.dmi'
 	icon_state = "pdoor1"
 	var/id = 1.0
@@ -22,6 +22,11 @@
 		return 0
 
 /obj/machinery/door/poddoor/attackby(obj/item/weapon/C as obj, mob/user as mob)
+	if(istype(C, /obj/item/device/signaltool))
+		var/obj/item/device/signaltool/ST = C
+		id = ST.change_ID(id)
+		return
+
 	src.add_fingerprint(user)
 	if (!( istype(C, /obj/item/weapon/crowbar) || (istype(C, /obj/item/weapon/twohanded/fireaxe) && C:wielded == 1) ))
 		return

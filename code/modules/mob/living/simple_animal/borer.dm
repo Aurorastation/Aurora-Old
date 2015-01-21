@@ -1,6 +1,9 @@
+/datum/game_mode/var/list/borers = list()
+
 /mob/living/captive_brain
 	name = "host brain"
 	real_name = "host brain"
+	universal_understand = 1
 
 /mob/living/captive_brain/say(var/message)
 
@@ -12,6 +15,14 @@
 			return
 
 	if(istype(src.loc,/mob/living/simple_animal/borer))
+
+		message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
+		if (!message)
+			return
+		log_say("[key_name(src)] : [message]")
+		if (stat == 2)
+			return say_dead(message)
+
 		var/mob/living/simple_animal/borer/B = src.loc
 		src << "You whisper silently, \"[message]\""
 		B.host << "The captive mind of [src] whispers, \"[message]\""
@@ -31,7 +42,7 @@
 	desc = "A small, quivering sluglike creature."
 	speak_emote = list("chirrups")
 	emote_hear = list("chirrups")
-	response_help  = "pokes the"
+	response_help  = "pokes"
 	response_disarm = "prods the"
 	response_harm   = "stomps on the"
 	icon_state = "brainslug"
@@ -45,6 +56,8 @@
 	friendly = "prods"
 	wander = 0
 	pass_flags = PASSTABLE
+	universal_understand = 1
+	holder_type = /obj/item/weapon/holder/borer
 
 	var/used_dominate
 	var/chemicals = 10                      // Chemicals used for reproduction and spitting neurotoxin.
@@ -53,6 +66,11 @@
 	var/mob/living/captive_brain/host_brain // Used for swapping control of the body back and forth.
 	var/controlling                         // Used in human death check.
 	var/docile = 0                          // Sugar can stop borers from acting.
+	var/has_reproduced
+	var/roundstart
+
+/mob/living/simple_animal/borer/roundstart
+	roundstart = 1
 
 /mob/living/simple_animal/borer/Life()
 
@@ -95,10 +113,7 @@
 /mob/living/simple_animal/borer/New()
 	..()
 	truename = "[pick("Primary","Secondary","Tertiary","Quaternary")] [rand(1000,9999)]"
-	host_brain = new/mob/living/captive_brain(src)
-
-	request_player()
-
+	if(!roundstart) request_player()
 
 /mob/living/simple_animal/borer/say(var/message)
 
@@ -128,6 +143,7 @@
 		return borer_speak(message)
 
 	if(!host)
+		//TODO: have this pick a random mob within 3 tiles to speak for the borer.
 		src << "You have no host to speak to."
 		return //No host, no audible speech.
 
@@ -140,16 +156,14 @@
 		else if(M.stat == 2 &&  M.client.prefs.toggles & CHAT_GHOSTEARS)
 			M << "[src.truename] whispers to [host], \"[message]\""
 
-
 /mob/living/simple_animal/borer/Stat()
 	..()
 	statpanel("Status")
 
 	if(emergency_shuttle)
-		if(emergency_shuttle.online && emergency_shuttle.location < 2)
-			var/timeleft = emergency_shuttle.timeleft()
-			if (timeleft)
-				stat(null, "ETA-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
+		var/eta_status = emergency_shuttle.get_status_panel_eta()
+		if(eta_status)
+			stat(null, eta_status)
 
 	if (client.statpanel == "Status")
 		stat("Chemicals", chemicals)
@@ -166,10 +180,10 @@
 
 /mob/living/simple_animal/borer/verb/dominate_victim()
 	set category = "Alien"
-	set name = "Dominate Victim"
+	set name = "Paralyze Victim"
 	set desc = "Freeze the limbs of a potential host with supernatural fear."
 
-	if(world.time - used_dominate < 300)
+	if(world.time - used_dominate < 150)
 		src << "You cannot use that ability again so soon."
 		return
 
@@ -186,7 +200,7 @@
 		if(C.stat != 2)
 			choices += C
 
-	if(world.time - used_dominate < 300)
+	if(world.time - used_dominate < 150)
 		src << "You cannot use that ability again so soon."
 		return
 
@@ -200,7 +214,7 @@
 
 	src << "\red You focus your psychic lance on [M] and freeze their limbs with a wave of terrible dread."
 	M << "\red You feel a creeping, horrible sense of dread come over you, freezing your limbs and setting your heart racing."
-	M.Weaken(3)
+	M.Weaken(10)
 
 	used_dominate = world.time
 
@@ -217,17 +231,13 @@
 		src << "You cannot do that in your current state."
 		return
 
-	if(!host.internal_organs_by_name["brain"]) //this should only run in admin-weirdness situations, but it's here non the less - RR
-		src << "<span class='warning'>There is no brain here for us to command!</span>"
-		return
-
 	if(docile)
 		src << "\blue You are feeling far too docile to do that."
 		return
 
 	src << "You begin delicately adjusting your connection to the host brain..."
 
-	spawn(300+(host.brainloss*5))
+	spawn(100+(host.brainloss*5))
 
 		if(!host || !src || controlling)
 			return
@@ -235,13 +245,46 @@
 			src << "\red <B>You plunge your probosci deep into the cortex of the host brain, interfacing directly with their nervous system.</B>"
 			host << "\red <B>You feel a strange shifting sensation behind your eyes as an alien consciousness displaces yours.</B>"
 
+			// host -> brain
+			var/h2b_id = host.computer_id
+			var/h2b_ip= host.lastKnownIP
+			host.computer_id = null
+			host.lastKnownIP = null
+
+			del(host_brain)
+			host_brain = new(src)
+
 			host_brain.ckey = host.ckey
+
+			host_brain.name = host.name
+
+			if(!host_brain.computer_id)
+				host_brain.computer_id = h2b_id
+
+			if(!host_brain.lastKnownIP)
+				host_brain.lastKnownIP = h2b_ip
+
+			// self -> host
+			var/s2h_id = src.computer_id
+			var/s2h_ip= src.lastKnownIP
+			src.computer_id = null
+			src.lastKnownIP = null
+
 			host.ckey = src.ckey
+
+			if(!host.computer_id)
+				host.computer_id = s2h_id
+
+			if(!host.lastKnownIP)
+				host.lastKnownIP = s2h_ip
+
 			controlling = 1
 
 			host.verbs += /mob/living/carbon/proc/release_control
 			host.verbs += /mob/living/carbon/proc/punish_host
 			host.verbs += /mob/living/carbon/proc/spawn_larvae
+
+			return
 
 /mob/living/simple_animal/borer/verb/secrete_chemicals()
 	set category = "Alien"
@@ -268,7 +311,7 @@
 		return
 
 	src << "\red <B>You squirt a measure of [chem] from your reservoirs into [host]'s bloodstream.</B>"
-	host.reagents.add_reagent(chem, 15)
+	host.reagents.add_reagent(chem, 10)
 	chemicals -= 50
 
 /mob/living/simple_animal/borer/verb/release_host()
@@ -294,12 +337,12 @@
 	if(!host.stat)
 		host << "An odd, uncomfortable pressure begins to build inside your skull, behind your ear..."
 
-	spawn(200)
+	spawn(100)
 
 		if(!host || !src) return
 
 		if(src.stat)
-			src << "You cannot infest a target in your current state."
+			src << "You cannot release your host in your current state."
 			return
 
 		src << "You wiggle out of [host]'s ear and plop to the ground."
@@ -307,18 +350,63 @@
 			host << "Something slimy wiggles out of your ear and plops to the ground!"
 
 		detatch()
+		leave_host()
 
-mob/living/simple_animal/borer/proc/detatch()
+/mob/living/simple_animal/borer/proc/detatch()
 
-	if(!host) return
+	if(!host || !controlling) return
 
 	if(istype(host,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = host
 		var/datum/organ/external/head = H.get_organ("head")
 		head.implants -= src
 
-	src.loc = get_turf(host)
 	controlling = 0
+
+	host.verbs -= /mob/living/carbon/proc/release_control
+	host.verbs -= /mob/living/carbon/proc/punish_host
+	host.verbs -= /mob/living/carbon/proc/spawn_larvae
+
+	if(host_brain)
+
+		// these are here so bans and multikey warnings are not triggered on the wrong people when ckey is changed.
+		// computer_id and IP are not updated magically on their own in offline mobs -walter0o
+
+		// host -> self
+		var/h2s_id = host.computer_id
+		var/h2s_ip= host.lastKnownIP
+		host.computer_id = null
+		host.lastKnownIP = null
+
+		src.ckey = host.ckey
+
+		if(!src.computer_id)
+			src.computer_id = h2s_id
+
+		if(!host_brain.lastKnownIP)
+			src.lastKnownIP = h2s_ip
+
+		// brain -> host
+		var/b2h_id = host_brain.computer_id
+		var/b2h_ip= host_brain.lastKnownIP
+		host_brain.computer_id = null
+		host_brain.lastKnownIP = null
+
+		host.ckey = host_brain.ckey
+
+		if(!host.computer_id)
+			host.computer_id = b2h_id
+
+		if(!host.lastKnownIP)
+			host.lastKnownIP = b2h_ip
+
+	del(host_brain)
+
+/mob/living/simple_animal/borer/proc/leave_host()
+
+	if(!host) return
+
+	src.loc = get_turf(host)
 
 	reset_view(null)
 	machine = null
@@ -326,24 +414,10 @@ mob/living/simple_animal/borer/proc/detatch()
 	host.reset_view(null)
 	host.machine = null
 
-	host.verbs -= /mob/living/carbon/proc/release_control
-	host.verbs -= /mob/living/carbon/proc/punish_host
-	host.verbs -= /mob/living/carbon/proc/spawn_larvae
-
-	if(host_brain.ckey)
-		src.ckey = host.ckey
-		host.ckey = host_brain.ckey
-		host_brain.ckey = null
-		host_brain.name = "host brain"
-		host_brain.real_name = "host brain"
-
 	var/mob/living/H = host
-	host = null
-
-	for(var/atom/A in H.contents)
-		if(istype(A,/mob/living/simple_animal/borer) || istype(A,/obj/item/weapon/holder))
-			return
 	H.status_flags &= ~PASSEMOTES
+	host = null
+	return
 
 /mob/living/simple_animal/borer/verb/infest()
 	set category = "Alien"
@@ -382,7 +456,7 @@ mob/living/simple_animal/borer/proc/detatch()
 	M << "Something slimy begins probing at the opening of your ear canal..."
 	src << "You slither up [M] and begin probing at their ear canal..."
 
-	if(!do_after(src,50))
+	if(!do_after(src,30))
 		src << "As [M] moves away, you are dislodged and fall to the ground."
 		return
 
@@ -409,8 +483,6 @@ mob/living/simple_animal/borer/proc/detatch()
 			var/datum/organ/external/head = H.get_organ("head")
 			head.implants += src
 
-		host_brain.name = M.name
-		host_brain.real_name = M.real_name
 		host.status_flags |= PASSEMOTES
 
 		return
@@ -477,7 +549,7 @@ mob/living/simple_animal/borer/proc/detatch()
 		src << text("\blue You have stopped hiding.")
 
 //Procs for grabbing players.
-mob/living/simple_animal/borer/proc/request_player()
+/mob/living/simple_animal/borer/proc/request_player()
 	for(var/mob/dead/observer/O in player_list)
 		if(jobban_isbanned(O, "Syndicate"))
 			continue
@@ -485,7 +557,7 @@ mob/living/simple_animal/borer/proc/request_player()
 			if(O.client.prefs.be_special & BE_ALIEN)
 				question(O.client)
 
-mob/living/simple_animal/borer/proc/question(var/client/C)
+/mob/living/simple_animal/borer/proc/question(var/client/C)
 	spawn(0)
 		if(!C)	return
 		var/response = alert(C, "A cortical borer needs a player. Are you interested?", "Cortical borer request", "Yes", "No", "Never for this round")
@@ -496,7 +568,7 @@ mob/living/simple_animal/borer/proc/question(var/client/C)
 		else if (response == "Never for this round")
 			C.prefs.be_special ^= BE_ALIEN
 
-mob/living/simple_animal/borer/proc/transfer_personality(var/client/candidate)
+/mob/living/simple_animal/borer/proc/transfer_personality(var/client/candidate)
 
 	if(!candidate)
 		return
@@ -505,3 +577,4 @@ mob/living/simple_animal/borer/proc/transfer_personality(var/client/candidate)
 	src.ckey = candidate.ckey
 	if(src.mind)
 		src.mind.assigned_role = "Cortical Borer"
+		src.mind.special_role = "Cortical Borer"

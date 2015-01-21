@@ -6,6 +6,7 @@
 	icon_state = "conveyor0"
 	name = "conveyor belt"
 	desc = "A conveyor belt."
+	layer = 3			// so they appear under stuff
 	anchored = 1
 	var/operating = 0	// 1 if running forward, -1 if backwards, 0 if off
 	var/operable = 1	// true if can operate (no broken segments in this belt run)
@@ -93,6 +94,10 @@
 
 // attack with item, place item on conveyor
 /obj/machinery/conveyor/attackby(var/obj/item/I, mob/user)
+	if(istype(I, /obj/item/device/signaltool))
+		var/obj/item/device/signaltool/ST = I
+		id = ST.change_ID(id)
+		return
 	if(isrobot(user))	return //Carn: fix for borgs dropping their modules on conveyor belts
 	user.drop_item()
 	if(I && I.loc)	I.loc = src.loc
@@ -234,6 +239,12 @@
 		if(S.id == src.id)
 			S.position = position
 			S.update()
+
+/obj/machinery/conveyor_switch/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/device/signaltool))
+		var/obj/item/device/signaltool/ST = W
+		id = ST.change_ID(id)
+		return
 
 /obj/machinery/conveyor_switch/oneway
 	var/convdir = 1 //Set to 1 or -1 depending on which way you want the convayor to go. (In other words keep at 1 and set the proper dir on the belts.)

@@ -32,6 +32,13 @@
 	return
 
 
+// This should result in the same materials used to make the window.
+/obj/structure/window/proc/destroy()
+	new /obj/item/weapon/shard(loc)
+	if(reinf)
+		new /obj/item/stack/rods(loc)
+	del(src)
+
 /obj/structure/window/ex_act(severity)
 	switch(severity)
 		if(1.0)
@@ -155,12 +162,15 @@
 
 
 /obj/structure/window/attack_slime(mob/user as mob)
-	if(!isslimeadult(user)) return
+	var/mob/living/carbon/slime/S = user
+	if (!S.is_adult)
+		return
 	attack_generic(user, rand(10, 15))
 
 
 /obj/structure/window/attackby(obj/item/W as obj, mob/user as mob)
 	if(!istype(W)) return//I really wish I did not need this
+	if(W.flags & NOBLUDGEON) return
 
 	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
 		var/obj/item/weapon/grab/G = W
@@ -173,17 +183,20 @@
 					M.apply_damage(7)
 					hit(10)
 					visible_message("\red [user] slams [M] against \the [src]!")
+					msg_admin_attack("[user.name]([user.ckey]) slams [M.name]'s([M.ckey]) against \the [src]! - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
 				if(2)
 					if (prob(50))
 						M.Weaken(1)
 					M.apply_damage(10)
 					hit(25)
 					visible_message("\red <b>[user] bashes [M] against \the [src]!</b>")
+					msg_admin_attack("[user.name]([user.ckey]) bashes [M.name]'s([M.ckey]) against \the [src]! - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
 				if(3)
 					M.Weaken(5)
 					M.apply_damage(20)
 					hit(50)
 					visible_message("\red <big><b>[user] crushes [M] against \the [src]!</b></big>")
+					msg_admin_attack("[user.name]([user.ckey]) crushes [M.name]'s([M.ckey]) against \the [src]! - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
 			return
 	if(istype(W, /obj/item/weapon/screwdriver))
 		if(reinf && state >= 1)
@@ -324,7 +337,7 @@
 
 //checks if this window is full-tile one
 /obj/structure/window/proc/is_fulltile()
-	if(dir in list(5,6,9,10))
+	if(dir & (dir - 1))
 		return 1
 	return 0
 
@@ -381,7 +394,7 @@
 	shardtype = /obj/item/weapon/shard/plasma
 	health = 120
 
-/obj/structure/window/phoronbasic/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+/obj/structure/window/plasmabasic/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature > T0C + 32000)
 		hit(round(exposed_volume / 1000), 0)
 	..()

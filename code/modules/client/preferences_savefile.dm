@@ -108,6 +108,7 @@
 	S["age"]				>> age
 	S["species"]			>> species
 	S["language"]			>> language
+	S["spawnpoint"]			>> spawnpoint
 
 	//colors to be consolidated into hex strings (requires some work with dna code)
 	S["hair_red"]			>> r_hair
@@ -142,8 +143,18 @@
 	S["job_engsec_med"]		>> job_engsec_med
 	S["job_engsec_low"]		>> job_engsec_low
 
+	//Flavour Text
+	S["flavor_texts_general"]	>> flavor_texts["general"]
+	S["flavor_texts_head"]		>> flavor_texts["head"]
+	S["flavor_texts_face"]		>> flavor_texts["face"]
+	S["flavor_texts_eyes"]		>> flavor_texts["eyes"]
+	S["flavor_texts_torso"]		>> flavor_texts["torso"]
+	S["flavor_texts_arms"]		>> flavor_texts["arms"]
+	S["flavor_texts_hands"]		>> flavor_texts["hands"]
+	S["flavor_texts_legs"]		>> flavor_texts["legs"]
+	S["flavor_texts_feet"]		>> flavor_texts["feet"]
+
 	//Miscellaneous
-	S["flavor_text"]		>> flavor_text
 	S["med_record"]			>> med_record
 	S["sec_record"]			>> sec_record
 	S["gen_record"]			>> gen_record
@@ -154,6 +165,11 @@
 	S["skills"]				>> skills
 	S["skill_specialization"] >> skill_specialization
 	S["organ_data"]			>> organ_data
+	S["gear"]				>> gear
+	S["home_system"] 		>> home_system
+	S["citizenship"] 		>> citizenship
+	S["faction"] 			>> faction
+	S["religion"] 			>> religion
 
 	S["nanotrasen_relation"] >> nanotrasen_relation
 	//S["skin_style"]			>> skin_style
@@ -168,6 +184,7 @@
 	real_name		= reject_bad_name(real_name)
 	if(isnull(species)) species = "Human"
 	if(isnull(language)) language = "None"
+	if(isnull(spawnpoint)) spawnpoint = "Arrivals Shuttle"
 	if(isnull(nanotrasen_relation)) nanotrasen_relation = initial(nanotrasen_relation)
 	if(!real_name) real_name = random_name(gender)
 	be_random_name	= sanitize_integer(be_random_name, 0, 1, initial(be_random_name))
@@ -209,7 +226,13 @@
 	if(isnull(disabilities)) disabilities = 0
 	if(!player_alt_titles) player_alt_titles = new()
 	if(!organ_data) src.organ_data = list()
+	if(!gear) src.gear = list()
 	//if(!skin_style) skin_style = "Default"
+
+	if(!home_system) home_system = "Unset"
+	if(!citizenship) citizenship = "None"
+	if(!faction)     faction =     "None"
+	if(!religion)    religion =    "None"
 
 	return 1
 
@@ -246,6 +269,7 @@
 	S["undershirt"]			<< undershirt
 	S["backbag"]			<< backbag
 	S["b_type"]				<< b_type
+	S["spawnpoint"]			<< spawnpoint
 
 	//Jobs
 	S["alternate_option"]	<< alternate_option
@@ -259,8 +283,18 @@
 	S["job_engsec_med"]		<< job_engsec_med
 	S["job_engsec_low"]		<< job_engsec_low
 
+	//Flavour Text
+	S["flavor_texts_general"]	<< flavor_texts["general"]
+	S["flavor_texts_head"]		<< flavor_texts["head"]
+	S["flavor_texts_face"]		<< flavor_texts["face"]
+	S["flavor_texts_eyes"]		<< flavor_texts["eyes"]
+	S["flavor_texts_torso"]		<< flavor_texts["torso"]
+	S["flavor_texts_arms"]		<< flavor_texts["arms"]
+	S["flavor_texts_hands"]		<< flavor_texts["hands"]
+	S["flavor_texts_legs"]		<< flavor_texts["legs"]
+	S["flavor_texts_feet"]		<< flavor_texts["feet"]
+
 	//Miscellaneous
-	S["flavor_text"]		<< flavor_text
 	S["med_record"]			<< med_record
 	S["sec_record"]			<< sec_record
 	S["gen_record"]			<< gen_record
@@ -271,6 +305,11 @@
 	S["skills"]				<< skills
 	S["skill_specialization"] << skill_specialization
 	S["organ_data"]			<< organ_data
+	S["gear"]				<< gear
+	S["home_system"] 		<< home_system
+	S["citizenship"] 		<< citizenship
+	S["faction"] 			<< faction
+	S["religion"] 			<< religion
 
 	S["nanotrasen_relation"] << nanotrasen_relation
 	//S["skin_style"]			<< skin_style

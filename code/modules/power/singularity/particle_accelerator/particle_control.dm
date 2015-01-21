@@ -10,7 +10,7 @@
 	density = 1
 	use_power = 0
 	idle_power_usage = 500
-	active_power_usage = 10000
+	active_power_usage = 70000 //70 kW per unit of strength
 	construction_state = 0
 	active = 0
 	dir = 1
@@ -20,8 +20,13 @@
 
 /obj/machinery/particle_accelerator/control_box/New()
 	connected_parts = list()
+	active_power_usage = initial(active_power_usage) * (strength + 1)
 	..()
 
+/obj/machinery/particle_accelerator/control_box/Del()
+	if(src.active)
+		src.toggle_power()
+	..()
 
 /obj/machinery/particle_accelerator/control_box/attack_hand(mob/user as mob)
 	if(construction_state >= 3)
@@ -29,7 +34,7 @@
 
 /obj/machinery/particle_accelerator/control_box/update_state()
 	if(construction_state < 3)
-		use_power = 0
+		update_use_power(0)
 		assembled = 0
 		active = 0
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
@@ -39,7 +44,7 @@
 		connected_parts = list()
 		return
 	if(!part_scan())
-		use_power = 1
+		update_use_power(1)
 		active = 0
 		connected_parts = list()
 
@@ -81,32 +86,46 @@
 	if(href_list["togglep"])
 		src.toggle_power()
 		investigate_log("turned [active?"<font color='red'>ON</font>":"<font color='green'>OFF</font>"] by [usr.key]","singulo")
-		if (active)
-			message_admins("PA Control Computer turned ON by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
-			log_game("PA Control Computer turned ON by [usr.ckey]([usr]) in ([x],[y],[z])")
+		message_admins("PA Control Computer turned [active?"<font color='red'>ON</font>":"<font color='green'>OFF</font>"] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
+		message_mods("PA Control Computer turned [active?"<font color='red'>ON</font>":"<font color='green'>OFF</font>"] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)")
+		log_game("PA Control Computer turned [active?"<font color='red'>ON</font>":"<font color='green'>OFF</font>"] by [usr.ckey]([usr]) in ([x],[y],[z])")
 	else if(href_list["scan"])
 		src.part_scan()
 	else if(href_list["strengthup"])
+		var/old_strength = strength
 		strength++
 		if(strength > 2)
 			strength = 2
 		else
 			message_admins("PA Control Computer increased to [strength] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
+			message_mods("PA Control Computer increased to [strength] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)")
 			log_game("PA Control Computer increased to [strength] by [usr.ckey]([usr]) in ([x],[y],[z])")
 			investigate_log("increased to <font color='red'>[strength]</font> by [usr.key]","singulo")
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
 			part.strength = strength
 			part.update_icon()
 
+		if (strength != old_strength)
+			active_power_usage = initial(active_power_usage) * (strength + 1)
+			use_power(0) //update power usage
+
 	else if(href_list["strengthdown"])
+		var/old_strength = strength
 		strength--
 		if(strength < 0)
 			strength = 0
 		else
+			message_admins("PA Control Computer decreased to [strength] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
+			message_mods("PA Control Computer decreased to [strength] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)")
+			log_game("PA Control Computer decreased to [strength] by [usr.ckey]([usr]) in ([x],[y],[z])")
 			investigate_log("decreased to <font color='green'>[strength]</font> by [usr.key]","singulo")
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
 			part.strength = strength
 			part.update_icon()
+
+		if (strength != old_strength)
+			active_power_usage = initial(active_power_usage) * (strength + 1)
+			use_power(0) //update power usage
 	src.updateDialog()
 	src.update_icon()
 	return
@@ -115,10 +134,12 @@
 /obj/machinery/particle_accelerator/control_box/power_change()
 	..()
 	if(stat & NOPOWER)
+		if(active)
+			toggle_power()
 		active = 0
-		use_power = 0
+		update_use_power(0)
 	else if(!stat && construction_state == 3)
-		use_power = 1
+		update_use_power(1)
 	return
 
 
@@ -128,6 +149,7 @@
 		if( length(connected_parts) < 6 )
 			investigate_log("lost a connected part; It <font color='red'>powered down</font>.","singulo")
 			src.toggle_power()
+			assembled = 0
 			return
 		//emit some particles
 		for(var/obj/structure/particle_accelerator/particle_emitter/PE in connected_parts)
@@ -188,13 +210,13 @@
 /obj/machinery/particle_accelerator/control_box/proc/toggle_power()
 	src.active = !src.active
 	if(src.active)
-		src.use_power = 2
+		update_use_power(2)
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
 			part.strength = src.strength
 			part.powered = 1
 			part.update_icon()
 	else
-		src.use_power = 1
+		update_use_power(1)
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
 			part.strength = null
 			part.powered = 0

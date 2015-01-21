@@ -43,12 +43,13 @@
 		dat += "Please ensure that only holographic weapons are used in the holodeck if a combat simulation has been loaded.<BR>"
 
 		if(emagged)
-			dat += "<A href='?src=\ref[src];burntest=1'>(<font color=red>Begin Atmospheric Burn Simulation</font>)</A><BR>"
-			dat += "Ensure the holodeck is empty before testing.<BR>"
-			dat += "<BR>"
 			dat += "<A href='?src=\ref[src];wildlifecarp=1'>(<font color=red>Begin Wildlife Simulation</font>)</A><BR>"
 			dat += "Ensure the holodeck is empty before testing.<BR>"
 			dat += "<BR>"
+			if(emagged == 2)
+				dat += "<A href='?src=\ref[src];burntest=1'>(<font color=red>Begin Atmospheric Burn Simulation</font>)</A><BR>"
+				dat += "Ensure the holodeck is empty before testing.<BR>"
+				dat += "<BR>"
 			if(issilicon(user))
 				dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=green>Re-Enable Safety Protocols?</font>)</A><BR>"
 			dat += "Safety Protocols are <font color=red> DISABLED </font><BR>"
@@ -131,15 +132,15 @@
 				if(target)
 					loadProgram(target)
 
-			else if(href_list["burntest"])
-				if(!emagged)	return
-				target = locate(/area/holodeck/source_burntest)
-				if(target)
-					loadProgram(target)
-
 			else if(href_list["wildlifecarp"])
 				if(!emagged)	return
 				target = locate(/area/holodeck/source_wildlife)
+				if(target)
+					loadProgram(target)
+
+			else if(href_list["burntest"])
+				if(emagged == 2)	return
+				target = locate(/area/holodeck/source_burntest)
 				if(target)
 					loadProgram(target)
 
@@ -147,10 +148,12 @@
 				if(!issilicon(usr))	return
 				emagged = !emagged
 				if(emagged)
-					message_admins("[key_name_admin(usr)] overrode the holodeck's safeties")
+					message_admins("[key_name_admin(usr)] overrode the holodeck's safeties (<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)")
+					message_mods("[key_name_admin(usr)] overrode the holodeck's safeties (<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)")
 					log_game("[key_name(usr)] overrided the holodeck's safeties")
 				else
 					message_admins("[key_name_admin(usr)] restored the holodeck's safeties")
+					message_mods("[key_name_admin(usr)] restored the holodeck's safeties")
 					log_game("[key_name(usr)] restored the holodeck's safeties")
 
 			src.add_fingerprint(usr)
@@ -195,6 +198,9 @@
 		emagged = 1
 		user << "\blue You vastly increase projector power and override the safety and security protocols."
 		user << "Warning.  Automatic shutoff and derezing protocols have been corrupted.  Please call Nanotrasen maintenance and do not use the simulator."
+		message_admins("[key_name_admin(usr)] emagged the holodeck's safeties (<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)")
+		message_mods("[key_name_admin(usr)] emagged the holodeck's safeties (<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)")
+		//Future ref: (<A HREF='?_src_=holder;toggle_holodeck_safety=1'>TGL</a>)
 		log_game("[key_name(usr)] emagged the Holodeck Control Computer")
 	src.updateUsrDialog()
 	return
@@ -447,7 +453,7 @@
 
 	if(isrobot(user))
 		return
-		
+
 	..()
 
 /obj/structure/table/holotable/wood

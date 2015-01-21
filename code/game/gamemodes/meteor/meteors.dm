@@ -59,7 +59,7 @@
 		max_i--
 		if(max_i<=0) return
 
-	while (!istype(pickedstart, /turf/space) || pickedstart.loc.name != "Space" ) //FUUUCK, should never happen.
+	while (!istype(pickedstart, /turf/space)) //FUUUCK, should never happen.
 
 
 	var/obj/effect/meteor/M
@@ -98,6 +98,7 @@
 
 		if (A)
 			A.meteorhit(src)
+			message_admins("Meteor hit [A] at [src.x], [src.y], [src.z]([src ? "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>" : "null"])" , 0)
 			playsound(src.loc, 'sound/effects/meteorimpact.ogg', 40, 1)
 		if (--src.hits <= 0)
 

@@ -86,7 +86,7 @@
 		message_admins("A chemical smoke reaction has taken place in ([whereLink])[contained]. Last associated key is [carry.my_atom.fingerprintslast][more].", 0, 1)
 		log_game("A chemical smoke reaction has taken place in ([where])[contained]. Last associated key is [carry.my_atom.fingerprintslast].")
 	else
-		message_admins("A chemical smoke reaction has taken place in ([whereLink]). No associated key.", 0, 1)
+		message_admins("A chemical smoke reaction has taken place in ([whereLink])[contained]. No associated key.", 0, 1)
 		log_game("A chemical smoke reaction has taken place in ([where])[contained]. No associated key.")
 
 
