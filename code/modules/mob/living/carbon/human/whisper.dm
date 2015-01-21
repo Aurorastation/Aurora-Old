@@ -6,7 +6,7 @@
 		usr << "\red Speech is currently admin-disabled."
 		return
 
-	log_whisper("[src.name]/[src.key] : [message]")
+//	log_whisper("[src.name]/[src.key] : [message]")
 
 	if (src.client)
 		if (src.client.prefs.muted & MUTE_IC)
@@ -99,7 +99,7 @@
 		if (!(M.client))
 			continue
 		if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTEARS))
-			listening |= M //I want to see if this does anything for ghosts
+//			listening |= M //I want to see if this does anything for ghosts
 			M.hear_say(message, verb, speaking, alt_name, italics, src)
 
 	//Pass whispers on to anything inside the immediate listeners.

@@ -61,9 +61,6 @@ datum/controller/game_controller/New()
 datum/controller/game_controller/proc/setup()
 	world.tick_lag = config.Ticklag
 
-	spawn(20)
-		createRandomZlevel()
-
 	if(!air_master)
 		air_master = new /datum/controller/air_system()
 		air_master.Setup()

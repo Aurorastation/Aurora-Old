@@ -36,19 +36,10 @@ var/inactive_keys = "None<br>"
 	//grab all ckeys associated with custom items
 	var/list/ckeys_with_customitems = list()
 
-	var/file = file2text("config/custom_items.txt")
-	var/lines = text2list(file, "\n")
-
-	for(var/line in lines)
-		// split & clean up
-		var/list/Entry = text2list(line, ":")
-		for(var/i = 1 to Entry.len)
-			Entry[i] = trim(Entry[i])
-
-		if(Entry.len < 1)
-			continue
-
-		var/cur_key = Entry[1]
+	var/DBQuery/query_ckeys = dbcon.NewQuery("SELECT ckey FROM aurora_customitems")
+	query_ckeys.Execute()
+	while(query_ckeys.NextRow())
+		var/cur_key = query_ckeys.item[1]
 		if(!ckeys_with_customitems.Find(cur_key))
 			ckeys_with_customitems.Add(cur_key)
 

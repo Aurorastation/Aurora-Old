@@ -33,6 +33,8 @@
 		if(!(language in mind.changeling.absorbed_languages))
 			mind.changeling.absorbed_languages += language
 
+	add_language("Changeling")
+
 	return 1
 
 //removes our changeling verbs
@@ -41,6 +43,7 @@
 	for(var/datum/power/changeling/P in mind.changeling.purchasedpowers)
 		if(P.isVerb)
 			verbs -= P.verbpath
+	remove_language("Changeling")
 
 
 //Helper proc. Does all the checks and stuff for us to avoid copypasta
@@ -657,6 +660,7 @@ var/list/datum/dna/hivemind_bank = list()
 		return
 
 	var/mimic_voice = input("Enter a name to mimic.", "Mimic Voice", null) as text
+	mimic_voice = strip_html(mimic_voice, MAX_NAME_LEN) //Why am I doing it like this? Because 30+ hours no sleeps
 	if(!mimic_voice)
 		return
 
@@ -691,6 +695,8 @@ var/list/datum/dna/hivemind_bank = list()
 
 	var/list/victims = list()
 	for(var/mob/living/carbon/C in oview(changeling.sting_range))
+		if(C.isipc())
+			continue
 		victims += C
 	var/mob/living/carbon/T = input(src, "Who will we sting?") as null|anything in victims
 
