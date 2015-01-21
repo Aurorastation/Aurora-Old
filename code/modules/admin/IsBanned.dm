@@ -46,9 +46,9 @@ world/IsBanned(key,address,computer_id)
 					banhe = 1
 
 		if(banhe == 1)
-			log_access("Failed Login: [src] - Blacklisted IP")
-			message_admins("\blue Failed Login: [src] - Blacklisted IP")
-			message_mods("\blue Failed Login: [src] - Blacklisted IP")
+			log_access("Failed Login: [key] - Blacklisted IP")
+			message_admins("\blue Failed Login: [key] - Blacklisted IP")
+			message_mods("\blue Failed Login: [key] - Blacklisted IP")
 			AddBan(ckey(key), computer_id, "Bad IP", "Automated Ban", 0, 0)
 			return list("reason"="IP Blacklisted", "desc"="\nReason: This IP has been blacklisted from the server.\nIf you believe this is a mistake, please request help at [config.banappeals]")
 
