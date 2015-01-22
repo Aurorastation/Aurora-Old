@@ -11,7 +11,7 @@
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
 //	weight = 1.0E7
-	req_one_access = list(access_security, access_forensics_lockers)
+	req_one_access = list(access_security, access_forensics, access_detective)
 	var/mob/target
 	var/oldtarget_name
 	var/threatlevel = 0
