@@ -76,7 +76,7 @@ obj/machinery/computer/forensic_scanning
 	var/scan_name = ""
 	var/scan_process = 0
 
-	req_access = list(access_forensics_lockers)
+	req_access = list(access_forensics)
 
 
 	New()

@@ -58,6 +58,16 @@
 	item_state = "warden_corporate"
 	item_color = "warden_corporate"
 
+/obj/item/clothing/under/rank/security/formal
+	icon_state = "sec_f"
+	item_state = "sec_f"
+	item_color = "sec_f"
+
+/obj/item/clothing/under/rank/warden/formal
+	icon_state = "warden_f"
+	item_state = "warden_f"
+	item_color = "warden_f"
+
 /obj/item/clothing/under/tactical
 	name = "tactical jumpsuit"
 	desc = "It's made of a slightly sturdier material than standard jumpsuits, to allow for robust protection."
@@ -128,6 +138,11 @@
 	item_state = "hos_corporate"
 	item_color = "hos_corporate"
 
+/obj/item/clothing/under/rank/head_of_security/formal
+	icon_state = "hos_f"
+	item_state = "hos_f"
+	item_color = "hos_f"
+
 /obj/item/clothing/head/helmet/HoS
 	name = "Head of Security Hat"
 	desc = "The hat of the Head of Security. For showing the officers who's in charge."
@@ -156,6 +171,11 @@
 	flags_inv = 0
 	siemens_coefficient = 0.6
 
+/obj/item/clothing/suit/armor/hos/formal
+	name = "Head of Security's jacket"
+	desc = "An armoured jacket with golden rank pips and livery."
+	icon_state = "formal_hos"
+	item_state = "formal_hos"
 
 /obj/item/clothing/head/helmet/HoS/dermal
 	name = "Dermal Armour Patch"

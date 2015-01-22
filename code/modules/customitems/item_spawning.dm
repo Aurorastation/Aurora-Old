@@ -134,8 +134,7 @@ proc/EquipCustomItems(mob/living/carbon/human/M)
 /proc/EquipCustomItems(mob/living/carbon/human/M)
 	establish_db_connection()
 	if(!dbcon.IsConnected())
-		message_admins("Custom item check failed: unable to connect to database.")
-		log_game("Custom item check failed: unable to connect to database.")
+		error("Custom item check failed: unable to connect to database.")
 		return
 
 	var/ckeyl = sanitizeSQL(M.ckey)
@@ -167,7 +166,7 @@ proc/EquipCustomItems(mob/living/carbon/human/M)
 				else
 					del(Item)
 					ok = 1
-					break
+					continue
 
 
 			skip:
@@ -175,12 +174,12 @@ proc/EquipCustomItems(mob/living/carbon/human/M)
 				if(istype(M.back,/obj/item/weapon/storage) && M.back:contents.len < M.back:storage_slots) // Try to place it in something on the mob's back
 					Item.loc = M.back
 					ok = 1
-					break
+					continue
 				else if(ok == 0)
 					for(var/obj/item/weapon/storage/S in M.contents) // Try to place it in any item that can store stuff, on the mob.
 						if (S.contents.len < S.storage_slots)
 							Item.loc = S
 							ok = 1
-							break
+							continue
 				else if(ok == 0)// Finally, since everything else failed, place it on the ground
 					Item.loc = get_turf(M.loc)
