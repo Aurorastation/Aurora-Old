@@ -198,9 +198,10 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 
 				if(!dbcon.IsConnected())
 					dat += text("<font color=red><b>ERROR</b>: Unable to contact external database. Please contact your system administrator for assistance.</font>")
+					log_game("SQL database connection failed. Attempted to fetch form information.")
 				else
 					dat += {"<table border='1'>
-					<tr><th>NCF ID</th><th>Form Name</th><td></td><td></td></tr>"}
+					<tr><th>NCF ID</th><th>Form Name</th><td></td><td></td><td></td></tr>"}
 
 					//For reference:
 					//Command forms, 	01xx series
@@ -218,7 +219,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 						var/id = query.item[1]
 						var/name = query.item[2]
 						var/department = query.item[3]
-						dat += "<tr><td>NCF-[id]</td><td>[name]</td><td><a href='?src=\ref[src];sort=[department]'>[department]</a></td><td><a href='?src=\ref[src];print=[id]'>Print</a></td></tr>"
+						dat += "<tr><td>NCF-[id]</td><td>[name]</td><td><a href='?src=\ref[src];sort=[department]'>[department]</a></td><td><a href='?src=\ref[src];print=[id]'>Print</a></td><td><a href='?src=\ref[src];whatis=[id]'>?</a></td></tr>"
 					dat += "</table>"
 					dat += text("<br><A href='?src=\ref[src];setScreen=11'>Reset Search</a>")
 				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
@@ -370,6 +371,8 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 
 		if(!dbcon.IsConnected())
 			alert("Connection to the database lost. Aborting.")
+		if(!printid)
+			alert("Invalid query. Try again.")
 		var/DBQuery/query = dbcon.NewQuery("SELECT id, name, data FROM aurora_forms WHERE id=[printid]")
 		query.Execute()
 
@@ -388,24 +391,34 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			C.info = C.parsepencode(C.info)
 			C.updateinfolinks()
 			C.name = "NFC-[id] - [name]"
+			paperstock--
 
-/*	WIP, finish in a further update.
-
-	if(href_list["info"])
-		var/whatisname = sanitizeSQL(href_list["info"])
+	if(href_list["whatis"])
+		var/whatisid = sanitizeSQL(href_list["whatis"])
 		establish_db_connection()
 
 		if(!dbcon.IsConnected())
 			alert("Connection to the database lost. Aborting.")
-		var/DBQuery/query = dbcon.NewQuery("SELECT id, name, department, info FROM aurora_forms WHERE name=[whatisname]")
+		if(!whatisid)
+			alert("Invalid query. Try again.")
+		var/DBQuery/query = dbcon.NewQuery("SELECT id, name, department, info FROM aurora_forms WHERE id=[whatisid]")
 		query.Execute()
+
+		var/dat = "<center><b>NanoTrasen Corporate Form</b><br>"
 
 		while(query.NextRow())
 			var/id = query.item[1]
 			var/name = query.item[2]
 			var/department = query.item[3]
-			var/info = query.item[1]
-*/
+			var/info = query.item[4]
+
+			dat += "<b>NCF-[id]</b><br><br>"
+			dat += "<b>[name]</b><br>"
+			dat += "<b>[department] Department</b><hr>"
+			dat += "[info]"
+		dat += "</center>"
+		usr << browse(dat, "window=Information;size=560x240")
+
 	switch( href_list["setLid"] )
 		if(null)	//skip
 		if("1")	lid = 1
