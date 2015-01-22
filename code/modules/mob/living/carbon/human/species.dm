@@ -42,7 +42,7 @@
 	var/death_message = "seizes up and falls limp, their eyes dead and lifeless..."
 
 	var/breath_type = "oxygen"   // Non-oxygen gas breathed, if any.
-	var/poison_type = "phoron"   // Poisonous air.
+	var/poison_type = "toxins"   // Poisonous air.
 	var/exhale_type = "carbon_dioxide"      // Exhaled gas type.
 
 	var/total_health = 100  //Point at which the mob will enter crit.
@@ -483,7 +483,7 @@
 
 	icobase = 'icons/mob/human_races/r_machine.dmi' //placeholders
 	deform = 'icons/mob/human_races/r_machine.dmi' //bloop blop butts
-	language = "Tradeband" //placeholders //vaurcese, :p to speak.  no support on language side yet
+	language = "Vaurcese"
 	unarmed_type = /datum/unarmed_attack/claws //literally butts
 	secondary_unarmed_type = /datum/unarmed_attack/bite/strong
 	rarity_value = 2 //according to the code this does nothing but upset me so i guess it can stay

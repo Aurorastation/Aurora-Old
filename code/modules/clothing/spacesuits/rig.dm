@@ -358,7 +358,7 @@
 /obj/item/clothing/head/helmet/space/rig/syndi
 	name = "blood-red hardsuit helmet"
 	desc = "An advanced helmet designed for work in special operations. Property of Gorlex Marauders."
-	icon_state = "rig0-syndie"
+	icon_state = "rig0-syndi"
 	item_state = "syndie_helm"
 	item_color = "syndie"
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 35, bio = 100, rad = 60)
@@ -383,7 +383,7 @@
 		usr << "This helmet has a built-in camera. It's [camera ? "" : "in"]active."
 
 /obj/item/clothing/suit/space/rig/syndi
-	icon_state = "rig-syndie"
+	icon_state = "rig-syndi"
 	name = "blood-red hardsuit"
 	desc = "An advanced suit that protects against injuries during special operations. Property of Gorlex Marauders."
 	item_state = "syndie_hardsuit"
