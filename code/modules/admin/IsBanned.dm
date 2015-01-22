@@ -21,12 +21,12 @@ world/IsBanned(key,address,computer_id)
 
 	if(config && config.ip_blacklist_enabled)
 		var/banhe = 0
+		msg_scopes("Checking [key]'s IP for blacklist.")
 		if(!establish_db_connection())
 			//No database. Make do!
 			error("Database connection failed while checking blacklist. Reverted to old system.")
-			msg_scopes("Database connection failed while checking blacklist. Reverted to old system.")
 
-			msg_scopes("Doing blacklist stuff")
+			msg_scopes("Executing old blacklisting.")
 			if(!blacklist)
 				loadBlacklist()
 			if(blacklist)
