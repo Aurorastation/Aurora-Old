@@ -17,6 +17,11 @@
 			if("nuclear emergency")
 				if(mind in ticker.mode:syndicates)
 					ticker.mode.update_all_synd_icons()
+
+			if("mutiny")
+				var/datum/game_mode/mutiny/mode = get_mutiny_mode()
+				if(mode)
+					mode.update_all_icons()
 	return .
 
 //This stuff needs to be merged from cloning.dm but I'm not in the mood to be shouted at for breaking all the things :< ~Carn
