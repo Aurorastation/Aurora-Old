@@ -19,6 +19,12 @@
 	icon_state = "policehelm"
 	flags_inv = 0
 
+/obj/item/clothing/head/helmet/secfcap
+	name = "officer's cap"
+	desc = "A security officer's cap."
+	icon_state = "officercap"
+	flags_inv = 0
+
 /obj/item/clothing/head/helmet/riot
 	name = "riot helmet"
 	desc = "It's a helmet specifically designed to protect against close range attacks."
