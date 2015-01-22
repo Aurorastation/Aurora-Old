@@ -139,48 +139,48 @@ proc/EquipCustomItems(mob/living/carbon/human/M)
 		return
 
 	var/ckeyl = sanitizeSQL(M.ckey)
-	var/namel = sanitizeSQL(M.real_name)
-	message_admins("Query: [ckeyl], [namel].")
-	var/DBQuery/query = dbcon.NewQuery("SELECT item, job FROM aurora_customitems WHERE ckey='[ckeyl]'")
+	var/DBQuery/query = dbcon.NewQuery("SELECT item, job, real_name FROM aurora_customitems WHERE ckey='[ckeyl]'")
 	query.Execute()
 
 	while(query.NextRow())
 		var/path = query.item[1]
 		var/jobs = query.item[2]
+		var/char = query.item[3]
 		//Okay, so we have a query. It will only fill the var/path if the character actually has an item.
 		//I guess recursive spawn code is a thing to do, creating a list, and running a for() on that list seems excessive
 
 		//Getting lazy, alternative would be to use two variables, but this is just self-updating, really
-		path = trim(path)
-		path = text2path(path)
-		var/obj/item/Item = new path()
+		if(char == M.real_name)
+			path = trim(path)
+			path = text2path(path)
+			var/obj/item/Item = new path()
 
-		var/ok = 0
+			var/ok = 0
 
-		if(!jobs)
-			goto skip
-
-		if(jobs)
-			jobs = text2list(jobs, ",")
-			if(M.mind.role_alt_title in jobs)
+			if(!jobs)
 				goto skip
-			else
-				del(Item)
-				ok = 1
-				break
+
+			if(jobs)
+				jobs = text2list(jobs, ",")
+				if(M.mind.role_alt_title in jobs)
+					goto skip
+				else
+					del(Item)
+					ok = 1
+					break
 
 
-		skip:
-		if(ok == 0)
-			if(istype(M.back,/obj/item/weapon/storage) && M.back:contents.len < M.back:storage_slots) // Try to place it in something on the mob's back
-				Item.loc = M.back
-				ok = 1
-				break
-			else if(ok == 0)
-				for(var/obj/item/weapon/storage/S in M.contents) // Try to place it in any item that can store stuff, on the mob.
-					if (S.contents.len < S.storage_slots)
-						Item.loc = S
-						ok = 1
-						break
-			else if(ok == 0)// Finally, since everything else failed, place it on the ground
-				Item.loc = get_turf(M.loc)
+			skip:
+			if(ok == 0)
+				if(istype(M.back,/obj/item/weapon/storage) && M.back:contents.len < M.back:storage_slots) // Try to place it in something on the mob's back
+					Item.loc = M.back
+					ok = 1
+					break
+				else if(ok == 0)
+					for(var/obj/item/weapon/storage/S in M.contents) // Try to place it in any item that can store stuff, on the mob.
+						if (S.contents.len < S.storage_slots)
+							Item.loc = S
+							ok = 1
+							break
+				else if(ok == 0)// Finally, since everything else failed, place it on the ground
+					Item.loc = get_turf(M.loc)
