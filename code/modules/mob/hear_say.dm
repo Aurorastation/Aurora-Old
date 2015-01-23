@@ -71,8 +71,12 @@
 		return
 
 	var/track = null
-
+	var/speaker_name
 	var/style = "body"
+
+	if(!language)
+		language = new /datum/language/common
+//	if(!speaker)
 
 	//non-verbal languages are garbled if you can't see the speaker. Yes, this includes if they are inside a closet.
 	if (language && (language.flags & NONVERBAL))
@@ -94,13 +98,13 @@
 
 	if(hard_to_hear)
 		message = stars(message)
-
-	var/speaker_name = speaker.name
+	if(speaker)
+		speaker_name = speaker.name
 
 	if(vname)
 		speaker_name = vname
 
-	if(istype(speaker, /mob/living/carbon/human))
+	if(speaker && (istype(speaker, /mob/living/carbon/human)))
 		var/mob/living/carbon/human/H = speaker
 		if(H.voice)
 			speaker_name = H.voice
@@ -114,7 +118,7 @@
 		var/jobname // the mob's "job"
 		var/mob/living/carbon/human/impersonating //The crewmember being impersonated, if any.
 
-		if (ishuman(speaker))
+		if (speaker && (ishuman(speaker)))
 			var/mob/living/carbon/human/H = speaker
 
 			if((H.wear_id && istype(H.wear_id,/obj/item/weapon/card/id/syndicate)) && (H.wear_mask && istype(H.wear_mask,/obj/item/clothing/mask/gas/voice)))
