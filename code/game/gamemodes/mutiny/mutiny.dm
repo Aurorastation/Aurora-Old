@@ -266,23 +266,29 @@ datum/game_mode/mutiny
 
 /datum/game_mode/mutiny/pre_setup()
 	var/list/loyalist_candidates = get_head_loyalist_candidates()
+	msg_scopes("Loyalist candidates: [loyalist_candidates]")
 	if(!loyalist_candidates || loyalist_candidates.len == 0)
 		world << "\red Mutiny mode aborted: no valid candidates for head loyalist."
 		return 0
 
 	var/list/mutineer_candidates = get_head_mutineer_candidates()
+	msg_scopes("Mutineer candidates: [mutineer_candidates]")
 	if(!mutineer_candidates || mutineer_candidates.len == 0)
 		world << "\red Mutiny mode aborted: no valid candidates for head mutineer."
 		return 0
 
 	var/list/directive_candidates = get_directive_candidates()
+	msg_scopes("Directive candidates: [directive_candidates]")
 	if(!directive_candidates || directive_candidates.len == 0)
 		world << "\red Mutiny mode aborted: no valid candidates for Directive X."
 		return 0
 
 	head_loyalist = pick(loyalist_candidates)
+	msg_scopes("Head loyalist: [head_loyalist]")
 	head_mutineer = pick(mutineer_candidates)
+	msg_scopes("Head mutineer: [head_mutineer]")
 	current_directive = pick(directive_candidates)
+	msg_scopes("Directive chosen: [current_directive]")
 
 	return 1
 
