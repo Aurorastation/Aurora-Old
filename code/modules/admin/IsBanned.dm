@@ -52,6 +52,8 @@ world/IsBanned(key,address,computer_id)
 			AddBan(ckey(key), computer_id, "Bad IP", "Automated Ban", 0, 0)
 			return list("reason"="IP Blacklisted", "desc"="\nReason: This IP has been blacklisted from the server.\nIf you believe this is a mistake, please request help at [config.banappeals]")
 
+		msg_scopes("[key]'s blacklist check completed.")
+
 	if(config.ban_legacy_system)
 
 		//Ban Checking
