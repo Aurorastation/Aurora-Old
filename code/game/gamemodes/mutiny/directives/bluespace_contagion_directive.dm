@@ -6,7 +6,7 @@ datum/directive/bluespace_contagion
 	proc/get_infection_candidates()
 		var/list/candidates[0]
 		for(var/mob/M in player_list)
-			if (M.is_ready() && !M.is_mechanical() && M != mode.head_loyalist.current)
+			if (M.is_ready() && !M.is_mechanical())
 				candidates.Add(M)
 		return candidates
 
@@ -28,6 +28,10 @@ datum/directive/bluespace_contagion/initialize()
 
 		var/mob/candidate = pick(candidates)
 		candidates.Remove(candidate)
+
+		if(!candidate.mind.assigned_role == "Captain") //Insure the loyalist doesn't get picked
+			continue
+
 		infected.Add(candidate)
 		infected_names.Add("[candidate.mind.assigned_role] [candidate.mind.name]")
 
