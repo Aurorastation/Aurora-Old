@@ -638,7 +638,7 @@
 
 /obj/item/fluff/delivander_ring //Old wedding ring - Delivander Starbreeze - gollee - DONE
 	name = "old wedding ring"
-	desc = "A tarnished gold ring, there is writing inside it, Â“To Liura, forever.Â”"
+	desc = "A tarnished gold ring, there is writing inside it, “To Liura, forever.”"
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "delivander_ring"
 	item_state = ""
@@ -996,30 +996,3 @@ obj/structure/stool/bed/chair/wheelchair/fluff/kit/handle_rotation()
 			ink = 1
 			colour = "black"
 			user << "<span class='notice'>You cycle the pen to use the black ink cartridge.</span>"
-			
-			
-/obj/structure/sign/shaw_degree //Xenonuerology Doctorate - Alexis Shaw - Tenenza
-	name = "\improper Xenonuerology degree"//Description trimmed down, summarized.
-	desc = "Certification for a doctorate in Xenonuerology, made out to Alexis Shaw by the St. Grahelm University of Beisel, authenticated by watermarking."
-	icon_state = "shaw_degree"
-
-
-/obj/item/clothing/suit/storage/fluff/dalton_coat //Black Overcoat - Robert Dalton - Valkrae
-	name = "black overcoat"
-	desc = " A black overcoat. It seems worn, and well-made. The coat smells of tobacco and smoke."
-	icon = 'icons/obj/custom_items.dmi'
-	icon_state = "dalton_coat"
-	item_state = "dalton_coat"
-
-
-/obj/item/clothing/suit/storage/rohitin_jacket //CSI Jacket - Ana Ro'hi'tin - SueTheCake
-	name = "CSI jacket"
-	desc = " A black jacket with the words 'CSI' printed in the back in bright, white letters."
-	icon_state = "rohitin_jacket"
-	item_state = "rohitin_jacket"
-	blood_overlay_type = "armor"
-	allowed = list(/obj/item/stack/medical, /obj/item/weapon/reagent_containers/dropper, /obj/item/weapon/reagent_containers/hypospray, /obj/item/weapon/reagent_containers/syringe, \
-	/obj/item/device/healthanalyzer, /obj/item/device/flashlight, /obj/item/device/radio, /obj/item/weapon/tank/emergency_oxygen)
-
-
-			
