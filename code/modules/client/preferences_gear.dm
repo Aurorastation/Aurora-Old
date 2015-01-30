@@ -544,3 +544,9 @@ proc/populate_gear_list()
 	cost = 2
 //	slot = slot_wear_suit
 	whitelisted = "Unathi"
+
+/datum/gear/cigar_case
+	display_name = "cigar case"
+	path = /obj/item/weapon/storage/fancy/cigars
+	cost = 3
+

@@ -205,6 +205,51 @@
 	item_state = "Dpacket"
 
 
+
+/*
+ * Cigar Cases
+ */
+
+/obj/item/weapon/storage/fancy/cigars  //Complications here making it a subtype of cigarette packets, simpler to make a new type.
+	name = "\improper Cigar Case"
+	desc = "A thin, wooden case containing a selection of fine cigars, fit for a gentleman."
+	icon = 'icons/obj/cigarettes.dmi'
+	icon_state = "cigarcase"
+	item_state = "cigpacket"
+	w_class = 3
+	throwforce = 3
+	flags = TABLEPASS
+	storage_slots = 6
+	can_hold = list("/obj/item/clothing/mask/cigarette",
+					"/obj/item/weapon/lighter",
+					"/obj/item/weapon/reagent_containers/pill")
+	icon_type = "cigar"
+
+
+/obj/item/weapon/storage/fancy/cigars/New()
+	..()
+	flags |= NOREACT
+	for(var/i = 1 to storage_slots)
+		new /obj/item/clothing/mask/cigarette/cigar/(src)
+	create_reagents(15 * storage_slots)//so people can inject cigarettes without opening a packet, now with being able to inject the whole one
+
+/obj/item/weapon/storage/fancy/cigars/Del()
+	del(reagents)
+	..()
+
+
+/obj/item/weapon/storage/fancy/cigars/update_icon()
+	icon_state = "[initial(icon_state)][contents.len]"
+	return
+
+/obj/item/weapon/storage/fancy/cigars/remove_from_storage(obj/item/W as obj, atom/new_location)
+		var/obj/item/clothing/mask/cigarette/cigar/C = W
+		if(!istype(C)) return // what
+		reagents.trans_to(C, (reagents.total_volume/contents.len))
+		..()
+
+
+
 /*
  * Vial Box
  */
