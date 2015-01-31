@@ -131,6 +131,10 @@
 
 			if(S.sheettype)
 				var/M = S.sheettype
+				// Ugly hack, will suffice for now. Need to fix it upstream as well, may rewrite mineral walls. ~Z
+				if(M in list("mhydrogen","osmium","tritium","platinum","iron"))
+					user << "You cannot plate the girder in that material."
+					return
 				if(!anchored)
 					if(S.amount < 2) return
 					S.use(2)
