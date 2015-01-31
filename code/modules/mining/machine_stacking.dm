@@ -93,13 +93,19 @@
 	stack_paths["plasteel"] = /obj/item/stack/sheet/plasteel
 
 	spawn( 5 )
-		src.input = locate(/obj/machinery/mineral/input) in range(1)
-		src.output = locate(/obj/machinery/mineral/output) in range(1)
+		for (var/dir in cardinal)
+			src.input = locate(/obj/machinery/mineral/input, get_step(src, dir))
+			if(src.input) break
+		for (var/dir in cardinal)
+			src.output = locate(/obj/machinery/mineral/output, get_step(src, dir))
+			if(src.output) break
+		return
 	return
 
 /obj/machinery/mineral/stacking_machine/process()
+
 	if (src.output && src.input)
-		var/turf/T = get_turf(input)
+		var/turf/T = get_turf(src.input)
 		for(var/obj/item/O in T.contents)
 			if(!O) return
 			if(istype(O,/obj/item/stack))

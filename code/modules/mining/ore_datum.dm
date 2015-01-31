@@ -25,7 +25,7 @@
 
 /datum/ore/plasma
 	//smelts_to = something that explodes violently on the conveyor, huhuhuhu
-	compresses_to = /obj/item/stack/sheet/mineral/phoron
+	compresses_to = /obj/item/stack/sheet/mineral/plasma
 	oretag = "plasma"
 
 /datum/ore/silver

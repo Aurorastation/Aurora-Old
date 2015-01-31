@@ -319,14 +319,14 @@ obj/item/stack/sheet/mineral/iron/New()
 	..()
 	recipes = uranium_recipes
 
-/obj/item/stack/sheet/mineral/phoron
-	name = "solid phoron"
-	icon_state = "sheet-phoron"
-	origin_tech = "phorontech=2;materials=2"
+/obj/item/stack/sheet/mineral/plasma
+	name = "solid plasma"
+	icon_state = "sheet-plasma"
+	origin_tech = "plasmatech=2;materials=2"
 	perunit = 2000
-	sheettype = "phoron"
+	sheettype = "plasma"
 
-/obj/item/stack/sheet/mineral/phoron/New()
+/obj/item/stack/sheet/mineral/plasma/New()
 	..()
 	recipes = plasma_recipes
 

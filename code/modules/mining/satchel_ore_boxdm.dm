@@ -36,30 +36,25 @@
 		else
 			stored_ore[O.name] = 1
 
-/obj/structure/ore_box/examine(mob/user)
-	user << "That's an [src]."
-	user << desc
+/obj/structure/ore_box/examine()
+	..()
 
-	// Borgs can now check contents too.
-	if((!istype(user, /mob/living/carbon/human)) && (!istype(user, /mob/living/silicon/robot)))
+	if(!Adjacent(usr)) //Can only check the contents of ore boxes if you can physically reach them.
 		return
 
-	if(!Adjacent(user)) //Can only check the contents of ore boxes if you can physically reach them.
-		return
-
-	add_fingerprint(user)
+	add_fingerprint(usr)
 
 	if(!contents.len)
-		user << "It is empty."
+		usr << "It is empty."
 		return
 
 	if(world.time > last_update + 10)
 		update_ore_count()
 		last_update = world.time
 
-	user << "It holds:"
+	usr << "It holds:"
 	for(var/ore in stored_ore)
-		user << "- [stored_ore[ore]] [ore]"
+		usr << "- [stored_ore[ore]] [ore]"
 	return
 
 
