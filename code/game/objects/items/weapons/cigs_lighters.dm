@@ -196,7 +196,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 
 			M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been burnt with [src.name] by [user.name] ([user.ckey])</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to burn [M.name] ([M.ckey])</font>")
-			msg_admin_attack("[key_name(user)] burnt [key_name(user)] with [src.name] (INTENT: [uppertext(user.a_intent)]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>")
+			msg_admin_attack("[key_name_admin(user)] burnt [key_name_admin(user)] with [src.name] (INTENT: [uppertext(user.a_intent)]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>")
 
 
 /obj/item/clothing/mask/cigarette/afterattack(obj/item/weapon/reagent_containers/glass/glass, mob/user as mob, proximity)
