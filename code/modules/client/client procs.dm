@@ -55,6 +55,13 @@
 		cmd_admin_irc_pm()
 		return
 
+	//For looking up warnings issued to similar accounts (based on IP and computerID)
+	//Proc referenced can be found in warning.dm
+	if(href_list["warning_similar"])
+		var/client/C = locate(href_list["warning_similar"])
+		var/ip = C.address
+		var/cid = C.computerid
+		check_similar_warns(ip, cid)
 
 
 	//Logs all hrefs
