@@ -1,12 +1,12 @@
 /obj/item/weapon/gun/energy/laser
 	name = "laser rifle"
-	desc = "a basic weapon designed kill with concentrated energy bolts"
+	desc = "a basic weapon designed to kill with concentrated energy bolts"
 	icon_state = "laser"
 	item_state = "laser"
 	fire_sound = 'sound/weapons/Laser.ogg'
 	slot_flags = SLOT_BACK
 	w_class = 4
-	m_amt = 2000
+	matter = list("metal" = 2000)
 	origin_tech = "combat=3;magnets=2"
 	projectile_type = "/obj/item/projectile/beam"
 
@@ -37,11 +37,24 @@
 	force = 10
 	origin_tech = null
 	var/charge_tick = 0
+	var/damaged = 0
 	w_class = 3
 
 	isHandgun()
 		return 1
 
+	Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0)
+/*
+		if(!power_supply) return 0
+		if(power_supply.charge < 100)
+			damaged = 1
+*/
+		if(damaged)
+			user << "\red The gun makes a faint humming sound."
+			return 0
+		..()
+
+/*
 	New()
 		..()
 		processing_objects.Add(src)
@@ -51,7 +64,6 @@
 		processing_objects.Remove(src)
 		..()
 
-
 	process()
 		charge_tick++
 		if(charge_tick < 4) return 0
@@ -60,7 +72,7 @@
 		power_supply.give(100)
 		update_icon()
 		return 1
-
+*/
 
 
 /obj/item/weapon/gun/energy/laser/cyborg/load_into_chamber()

@@ -119,7 +119,7 @@
 	return 0
 
 /obj/item/weapon/reagent_containers/food/snacks/afterattack(obj/target, mob/user, proximity)
-	return
+	return ..()
 
 /obj/item/weapon/reagent_containers/food/snacks/examine()
 	set src in view()
@@ -605,24 +605,19 @@
 		..()
 		reagents.add_reagent("nutriment", 1)
 
-/obj/item/weapon/reagent_containers/food/snacks/appendix
-//yes, this is the same as meat. I might do something different in future
-	name = "appendix"
-	desc = "An appendix which looks perfectly healthy."
+/obj/item/weapon/reagent_containers/food/snacks/organ
+
+	name = "organ"
+	desc = "It's good for you."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "appendix"
 	filling_color = "#E00D34"
 
 	New()
 		..()
-		reagents.add_reagent("nutriment", 3)
+		reagents.add_reagent("nutriment", rand(3,5))
+		reagents.add_reagent("toxin", rand(1,3))
 		src.bitesize = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/appendix/inflamed
-	name = "inflamed appendix"
-	desc = "An appendix which appears to be inflamed."
-	icon_state = "appendixinflamed"
-	filling_color = "#E00D7A"
 
 /obj/item/weapon/reagent_containers/food/snacks/tofu
 	name = "Tofu"
@@ -1058,6 +1053,18 @@
 		reagents.add_reagent("nutriment", 10)
 		bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/pudding
+	name = "Figgy pudding"
+	icon_state = "pudding"
+	desc = "Bring it to me."
+	trash = /obj/item/trash/plate
+	filling_color = "#FFFEE0"
+
+	New()
+		..()
+		reagents.add_reagent("nutriment", 10)
+		bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/amanita_pie
 	name = "amanita pie"
 	desc = "Sweet and tasty poison pie."
@@ -1316,7 +1323,7 @@
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/spagetti
-	name = "Spagetti"
+	name = "Spaghetti"
 	desc = "A bundle of raw spaghetti."
 	icon_state = "spagetti"
 	filling_color = "#EDDD00"
@@ -1700,7 +1707,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/neaeracube
 	name = "neaera cube"
-	monkey_type =/mob/living/carbon/monkey/skrell
+	monkey_type ="skrell"
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/neaeracube
 	name = "neaera cube"
@@ -3143,6 +3150,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 30)
+
 /obj/item/weapon/reagent_containers/food/snacks/deepfryholder
 	name = "Deep Fried Foods Holder Obj"
 	desc = "If you can see this description the code for the deep fryer fucked up."
@@ -3151,7 +3159,7 @@
 	bitesize = 2
 	New()
 		..()
-		reagents.add_reagent("nutriment", 30)
+		reagents.add_reagent("nutriment", 10)
 
 // Flour + egg = dough
 /obj/item/weapon/reagent_containers/food/snacks/flour/attackby(obj/item/weapon/W as obj, mob/user as mob)

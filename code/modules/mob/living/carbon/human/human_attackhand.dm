@@ -111,7 +111,13 @@
 			return 1
 
 		if("hurt")
+
+			// See if they can attack, and which attacks to use.
 			var/datum/unarmed_attack/attack = M.species.unarmed
+			if(!attack.is_usable(M))
+				attack = M.species.secondary_unarmed
+			if(!attack.is_usable(M))
+				return 0
 			//Vampire code
 			if(M.zone_sel && M.zone_sel.selecting == "head")
 				if(M.mind && M.mind.vampire && (M.mind in ticker.mode.vampires) && !M.mind.vampire.draining)
@@ -160,7 +166,7 @@
 			//Rearranged, so claws don't increase weaken chance.
 			if(damage >= 5 && prob(50))
 				visible_message("\red <B>[M] has weakened [src]!</B>")
-				apply_effect(2, WEAKEN, armor_block)
+				apply_effect(3, WEAKEN, armor_block)
 
 			damage += attack.damage
 			apply_damage(damage, BRUTE, affecting, armor_block, sharp=attack.sharp, edge=attack.edge)
@@ -198,7 +204,7 @@
 
 			var/randn = rand(1, 100)
 			if (randn <= 25)
-				apply_effect(4, WEAKEN, run_armor_check(affecting, "melee"))
+				apply_effect(3, WEAKEN, run_armor_check(affecting, "melee"))
 				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 				visible_message("\red <B>[M] has pushed [src]!</B>")
 				return

@@ -52,13 +52,13 @@
 ///////////LASER RIFLE//////////////
 /obj/item/weapon/gun/energy/rifle/laser
 	name = "laser rifle"
-	desc = "a basic weapon designed kill with concentrated energy bolts"
+	desc = "a basic weapon designed to kill with concentrated energy bolts"
 	icon_state = "laser"
 	item_state = "laser"
 	fire_sound = 'sound/weapons/Laser.ogg'
 	slot_flags = SLOT_BACK
 	w_class = 4
-	m_amt = 2000
+	matter = list("metal" = 2000)
 	charge_cost = 50 //odd numbers due to a requirement to have 20 shots. Easiest way.
 	origin_tech = "combat=3;magnets=2"
 	projectile_type = "/obj/item/projectile/beam"

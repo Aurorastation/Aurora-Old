@@ -126,8 +126,9 @@
 	flags =  FPRINT | TABLEPASS | CONDUCT
 	slot_flags = SLOT_BELT
 	w_class = 3.0
-	g_amt = 10
-	m_amt = 10
+
+	matter = list("glass" = 10,"metal" = 10)
+
 	attack_verb = list("struck", "pistol whipped", "hit", "bashed")
 	var/bullets = 7.0
 
@@ -182,8 +183,9 @@
 	icon_state = "357-7"
 	flags = FPRINT | TABLEPASS| CONDUCT
 	w_class = 1.0
-	g_amt = 10
-	m_amt = 10
+
+	matter = list("metal" = 10,"glass" = 10)
+
 	var/amount_left = 7.0
 
 	update_icon()
@@ -400,7 +402,7 @@
 		playsound(src, 'sound/effects/snap.ogg', 50, 1)
 		del(src)
 
-/obj/item/toy/snappop/HasEntered(H as mob|obj)
+/obj/item/toy/snappop/Crossed(H as mob|obj)
 	if((ishuman(H))) //i guess carp and shit shouldn't set them off
 		var/mob/living/carbon/M = H
 		if(M.m_intent == "run")
@@ -633,6 +635,15 @@
 	desc = "The head of a brown teddy, cruelly torn from its original body. You can see stuffing fall out of it."
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "monkey_head"
+	w_class = 1
+	force = 1
+	throwforce = 1
+
+/obj/item/toy/xmastree
+	name = "miniature Christmas tree"
+	desc = "Now with 99% less pine needles."
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "tinyxmastree"
 	w_class = 1
 	force = 1
 	throwforce = 1

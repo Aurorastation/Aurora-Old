@@ -1,4 +1,4 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:33
+#define EMITTER_DAMAGE_POWER_TRANSFER 2500 //used to transfer power to containment field generators
 
 /obj/machinery/power/emitter
 	name = "Emitter"
@@ -8,10 +8,10 @@
 	anchored = 0
 	density = 1
 	req_access = list(access_engine_equip)
+	var/id = null
 
-	use_power = 0
-	idle_power_usage = 10
-	active_power_usage = 300
+	use_power = 0	//uses powernet power, not APC power
+	active_power_usage = 30000	//30 kW laser. I guess that means 30 kJ per shot.
 
 	var/active = 0
 	var/powered = 0
@@ -55,6 +55,9 @@
 
 /obj/machinery/power/emitter/attack_hand(mob/user as mob)
 	src.add_fingerprint(user)
+	activate(user)
+
+/obj/machinery/power/emitter/proc/activate(mob/user as mob)
 	if(state == 2)
 		if(!powernet)
 			user << "The emitter isn't connected to a wire."

@@ -28,7 +28,7 @@ Mineral Sheets
 	sheettype = "sandstone"
 
 var/global/list/datum/stack_recipe/sandstone_recipes = list ( \
-	new/datum/stack_recipe("pile of dirt", /obj/machinery/hydroponics/soil, 3, time = 10, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("pile of dirt", /obj/machinery/portable_atmospherics/hydroponics/soil, 3, time = 10, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe("sandstone door", /obj/structure/mineral_door/sandstone, 10, one_per_turf = 1, on_floor = 1), \
 /*	new/datum/stack_recipe("sandstone wall", ???), \
 		new/datum/stack_recipe("sandstone floor", ???),\ */
@@ -51,7 +51,7 @@ var/global/list/datum/stack_recipe/sandstone_recipes = list ( \
 	w_class = 3.0
 	throw_range = 3
 	origin_tech = "materials=6"
-	perunit = 3750
+	perunit = 2000
 	sheettype = "diamond"
 
 var/global/list/datum/stack_recipe/diamond_recipes = list ( \

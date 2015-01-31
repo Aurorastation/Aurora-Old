@@ -63,6 +63,7 @@
 	var/kick_inactive = 0				//force disconnect for inactive players
 	var/load_jobs_from_txt = 0
 	var/ToRban = 0
+	var/ip_blacklist_enabled = 0
 	var/automute_on = 0					//enables automuting/spam prevention
 	var/jobs_have_minimal_access = 1	//determines whether jobs use minimal access or expanded access.
 
@@ -84,6 +85,7 @@
 	var/banappeals
 	var/wikiurl
 	var/forumurl
+	var/aurorawikiurl
 
 	//Alert level description
 	var/alert_desc_green = "All threats to the station have passed. Security may not have weapons visible, privacy laws are once again fully enforced."
@@ -102,7 +104,7 @@
 	var/health_threshold_dead = -100
 
 	var/organ_health_multiplier = 1
-	var/organ_regeneration_multiplier = 1
+	var/organ_regeneration_multiplier = 0
 
 	var/bones_can_break = 0
 	var/limbs_can_break = 0
@@ -110,6 +112,8 @@
 	var/revival_pod_plants = 1
 	var/revival_cloning = 1
 	var/revival_brain_life = -1
+
+	var/use_loyalty_implants = 0
 
 	//Used for modifying movement speed for mobs.
 	//Unversal modifiers
@@ -144,6 +148,7 @@
 	var/admin_irc = ""
 	var/python_path = "" //Path to the python executable.  Defaults to "python" on windows and "/usr/bin/env python2" on unix
 	var/use_lib_nudge = 0 //Use the C library nudge instead of the python nudge.
+	var/use_overmap = 0
 
 /datum/configuration/New()
 	var/list/L = typesof(/datum/game_mode) - /datum/game_mode
@@ -331,6 +336,9 @@
 				if ("forumurl")
 					config.forumurl = value
 
+				if ("aurorawikiurl")
+					config.aurorawikiurl = value
+
 				if ("guest_jobban")
 					config.guest_jobban = 1
 
@@ -429,6 +437,9 @@
 				if("tor_ban")
 					ToRban = 1
 
+				if("ip_blacklist_enabled")
+					ip_blacklist_enabled = 1
+
 				if("automute_on")
 					automute_on = 1
 
@@ -496,6 +507,9 @@
 				if("max_maint_drones")
 					config.max_maint_drones = text2num(value)
 
+				if("use_overmap")
+					config.use_overmap = 1
+
 				else
 					log_misc("Unknown setting in configuration: '[name]'")
 
@@ -541,6 +555,8 @@
 					config.bones_can_break = value
 				if("limbs_can_break")
 					config.limbs_can_break = value
+				if("use_loyalty_implants")
+					config.use_loyalty_implants = 1
 				else
 					log_misc("Unknown setting in configuration: '[name]'")
 

@@ -101,3 +101,13 @@
 		new /obj/item/weapon/implanter/loyalty(src)
 		new /obj/item/clothing/tie/holster/waist(src)
 		new /obj/item/weapon/gun/energy/gun/pistol(src)
+
+/obj/item/weapon/storage/lockbox/lawgiver
+	name = "Weapons lockbox"
+	desc = "A high security weapons lockbox"
+	req_access = list(access_armory)
+	storage_slots = 1
+
+	New()
+		..()
+		new /obj/item/weapon/gun/energy/lawgiver(src)

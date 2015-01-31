@@ -65,13 +65,13 @@ datum/controller/vote
 		voting.Cut()
 		current_votes.Cut()
 
-	/*	if(auto_muted && !ooc_allowed)
+		if(auto_muted && !ooc_allowed)
 			auto_muted = 0
 			ooc_allowed = !( ooc_allowed )
 			world << "<b>The OOC channel has been automatically enabled due to vote end.</b>"
 			log_admin("OOC was toggled automatically due to vote end.")
 			message_admins("OOC has been toggled on automatically.")
-	*/
+
 
 	proc/get_result()
 		//get the highest number of votes
@@ -80,11 +80,22 @@ datum/controller/vote
 		for(var/option in choices)
 			var/votes = choices[option]
 			total_votes += votes
+			for(var/client/C in admins)
+				if((C.holder.rights & R_ADMIN) || (C.holder.rights & R_MOD))
+					var/tempvotething
+					if(!votes)
+						tempvotething = 0
+					else
+						tempvotething = votes
+					C << "Option: [option] got [tempvotething] votes"
 			if(votes > greatest_votes)
 				greatest_votes = votes
 		//default-vote for everyone who didn't vote
 		if(!config.vote_no_default && choices.len)
 			var/non_voters = (clients.len - total_votes)
+			for(var/client/C in admins)
+				if((C.holder.rights & R_ADMIN) || (C.holder.rights & R_MOD))
+					C << "Non-voters: [non_voters] | Total Votes: [total_votes]"
 			if(non_voters > 0)
 				if(mode == "restart")
 					choices["Continue Playing"] += non_voters
@@ -111,6 +122,11 @@ datum/controller/vote
 					choices["Initiate Crew Transfer"] = round(choices["Initiate Crew Transfer"] * factor)
 					world << "<font color='purple'>Crew Transfer Factor: [factor]</font>"
 					greatest_votes = max(choices["Initiate Crew Transfer"], choices["Continue The Round"])
+		if(mode == "crew_transfer")
+			if(round(world.time / 36000)+12 <= 14)
+				msg_scopes("It is the time before 50/50")
+				choices["Initiate Crew Transfer"] = round(choices["Initiate Crew Transfer"] - round(total_votes / 3))
+				greatest_votes = max(choices["Initiate Crew Transfer"], choices["Continue The Round"])
 
 
 		//get all options with that many votes and return them in a list
@@ -214,6 +230,9 @@ datum/controller/vote
 					choices.Add(config.votable_modes)
 				if("crew_transfer")
 					if(check_rights(R_ADMIN|R_MOD, 0))
+						if (get_security_level() == "red" || get_security_level() == "delta")
+							if(alert("It's code [get_security_level()], are you sure?",,"Yes","No")!="Yes")
+								return 0
 						question = "End the shift?"
 						choices.Add("Initiate Crew Transfer", "Continue The Round")
 					else
@@ -232,6 +251,8 @@ datum/controller/vote
 						var/option = capitalize(html_encode(input(usr,"Please enter an option or hit cancel to finish") as text|null))
 						if(!option || mode || !usr.client)	break
 						choices.Add(option)
+					if(!choices.len)
+						choices.Add("Yes","No")
 				else			return 0
 			mode = vote_type
 			initiator = initiator_key
@@ -262,7 +283,7 @@ datum/controller/vote
 			if(mode == "gamemode" && going)
 				going = 0
 				world << "<font color='red'><b>Round start has been delayed.</b></font>"
-		/*	if(mode == "crew_transfer" && ooc_allowed)
+			if(mode == "crew_transfer" && ooc_allowed)
 				auto_muted = 1
 				ooc_allowed = !( ooc_allowed )
 				world << "<b>The OOC channel has been automatically disabled due to a crew transfer vote.</b>"
@@ -280,7 +301,6 @@ datum/controller/vote
 				world << "<b>The OOC channel has been automatically disabled due to a custom vote.</b>"
 				log_admin("OOC was toggled automatically due to custom vote.")
 				message_admins("OOC has been toggled off automatically.")
-		*/
 
 
 
@@ -292,10 +312,13 @@ datum/controller/vote
 		if(!C)	return
 		var/admin = 0
 		var/trialmin = 0
+		var/funmin = 0
 		if(C.holder)
 			admin = 1
 			if(C.holder.rights & R_ADMIN)
 				trialmin = 1
+			else if(C.holder.rights & R_FUN)
+				funmin = 1
 		voting |= C
 
 		. = "<html><head><title>Voting Panel</title></head><body>"
@@ -339,7 +362,7 @@ datum/controller/vote
 
 			. += "</li>"
 			//custom
-			if(trialmin)
+			if(trialmin||funmin)
 				. += "<li><a href='?src=\ref[src];vote=custom'>Custom</a></li>"
 			. += "</ul><hr>"
 		. += "<a href='?src=\ref[src];vote=close' style='position:absolute;right:50px'>Close</a></body></html>"

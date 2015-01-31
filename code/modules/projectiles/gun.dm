@@ -6,7 +6,7 @@
 	item_state = "gun"
 	flags =  FPRINT | TABLEPASS | CONDUCT
 	slot_flags = SLOT_BELT
-	m_amt = 2000
+	matter = list("metal" = 2000)
 	w_class = 3.0
 	throwforce = 5
 	throw_speed = 4
@@ -387,8 +387,8 @@
 				user << "<span class='notice'>You are no-longer stabilizing the [name] with both hands.</span>"
 				O.unwield()
 				unwield()
-				if(src)
-					del(src)
+		if(src)
+			del(src)
 
 /obj/item/weapon/gun/offhand/mob_can_equip(M as mob, slot)
 	return 0 //Because you can't equip your hand yet somehow you can

@@ -106,12 +106,10 @@ Class Procs:
 	var/active_power_usage = 0
 	var/power_channel = EQUIP
 		//EQUIP,ENVIRON or LIGHT
-	var/list/component_parts = null //list of all the parts used to build it, if made from certain kinds of frames.
+	var/list/component_parts = list() //list of all the parts used to build it, if made from certain kinds of frames.
 	var/uid
 	var/manual = 0
-	var/interact_offline = 0
 	var/global/gl_uid = 1
-	var/moveable = 0
 
 /obj/machinery/New()
 	..()
@@ -159,6 +157,21 @@ Class Procs:
 	if(prob(50))
 		del(src)
 
+//sets the use_power var and then forces an area power update
+/obj/machinery/proc/update_use_power(var/new_use_power)
+	if (new_use_power == use_power)
+		return	//don't need to do anything
+
+	use_power = new_use_power
+
+	//force area power update
+	force_power_update()
+
+/obj/machinery/proc/force_power_update()
+	var/area/A = get_area(src)
+	if(A && A.master)
+		A.master.powerupdate = 1
+
 /obj/machinery/proc/auto_use_power()
 	if(!powered(power_channel))
 		return 0
@@ -168,9 +181,15 @@ Class Procs:
 		use_power(active_power_usage,power_channel, 1)
 	return 1
 
+/obj/machinery/proc/operable(var/additional_flags = 0)
+	return !inoperable(additional_flags)
+
+/obj/machinery/proc/inoperable(var/additional_flags = 0)
+	return (stat & (NOPOWER|BROKEN|additional_flags))
+
 /obj/machinery/Topic(href, href_list)
 	..()
-	if(!interact_offline && stat & (NOPOWER|BROKEN))
+	if(inoperable())
 		return 1
 	if(usr.restrained() || usr.lying || usr.stat)
 		return 1
@@ -212,7 +231,7 @@ Class Procs:
 	return src.attack_hand(user)
 
 /obj/machinery/attack_hand(mob/user as mob)
-	if(!interact_offline && stat & (NOPOWER|BROKEN|MAINT))
+	if(inoperable(MAINT))
 		return 1
 	if(user.lying || user.stat)
 		return 1
@@ -261,20 +280,27 @@ Class Procs:
   state(text, "blue")
   playsound(src.loc, 'sound/machines/ping.ogg', 50, 0)
 
-/obj/machinery/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/weapon/wrench))
-		if(moveable == 1)
-			switch(anchored)
-				if(0)
-					playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
-					user.visible_message("[user.name] secures [src.name] to the floor.", "You secure [src.name] to the floor.", "You hear a ratchet")
-					spawn(10)
-					anchored = 1
-				if(1)
-					playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
-					user.visible_message("[user.name] unsecures [src.name] reinforcing bolts from the floor.", "You unsecure [src.name] from the floor.", "You hear a ratchet")
-					spawn(10)
-					anchored = 0
-			return
-		else
-			user << "The item is secured to the floor too firmly."
+/obj/machinery/proc/shock(mob/user, prb)
+	if(inoperable())
+		return 0
+	if(!prob(prb))
+		return 0
+	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+	s.set_up(5, 1, src)
+	s.start()
+	if (electrocute_mob(user, get_area(src), src, 0.7))
+		return 1
+	else
+		return 0
+
+/obj/machinery/proc/dismantle()
+	playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
+	var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(loc)
+	M.state = 2
+	M.icon_state = "box_1"
+	for(var/obj/I in component_parts)
+		if(I.reliability != 100 && crit_fail)
+			I.crit_fail = 1
+		I.loc = loc
+	del(src)
+	return 1

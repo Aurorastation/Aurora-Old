@@ -1,8 +1,6 @@
 // Sooooo Yeah.
 //
 // This is reverse of the heater code.
-// Still want to make it use super cooled N2 instead of a power cell
-// Changes will come but wanted to get it in the DME quickly
 //
 // This does work if you want to use it. Just needs sprites.
 
@@ -13,7 +11,8 @@
 	icon_state = "sheater0"
 	name = "space cooler"
 	desc = "Made by Space Amish using traditional space techniques, this cooler is guaranteed not to set the station on fire."
-	var/obj/item/weapon/cell/cell
+//	var/obj/item/weapon/cell/cell
+	var/obj/item/weapon/tank/nitrogen/N2tank
 	var/on = 0
 	var/open = 0
 	var/set_temperature = 20		// in celcius, add T0C for kelvin
@@ -24,9 +23,13 @@
 
 	New()
 		..()
+		N2tank = new(src)
+		N2tank.air_contents.temperature = TCMB
+/*
 		cell = new(src)
 		cell.charge = 1000
 		cell.maxcharge = 1000
+*/
 		update_icon()
 		return
 
@@ -46,11 +49,12 @@
 
 		usr << "The cooler is [on ? "on" : "off"] and the hatch is [open ? "open" : "closed"]."
 		if(open)
-			usr << "The power cell is [cell ? "installed" : "missing"]."
+			usr << "The power tank is [N2tank ? "installed" : "missing"]."
 		else
-			usr << "The charge meter reads [cell ? round(cell.percent(),1) : 0]%"
+			usr << "The charge meter reads [N2tank ? round(N2tank.air_contents.temperature-T0C) : 0]%"
 		return
 
+/*
 	emp_act(severity)
 		if(stat & (BROKEN|NOPOWER))
 			..(severity)
@@ -58,25 +62,25 @@
 		if(cell)
 			cell.emp_act(severity)
 		..(severity)
-
+*/
 	attackby(obj/item/I, mob/user)
-		if(istype(I, /obj/item/weapon/cell))
+		if(istype(I, /obj/item/weapon/tank/nitrogen))
 			if(open)
-				if(cell)
-					user << "There is already a power cell inside."
+				if(N2tank)
+					user << "There is already a tank inside."
 					return
 				else
 					// insert cell
-					var/obj/item/weapon/cell/C = usr.get_active_hand()
-					if(istype(C))
+					var/obj/item/weapon/tank/nitrogen/N2 = usr.get_active_hand()
+					if(istype(N2))
 						user.drop_item()
-						cell = C
-						C.loc = src
-						C.add_fingerprint(usr)
+						N2tank = N2
+						N2.loc = src
+						N2.add_fingerprint(usr)
 
-						user.visible_message("\blue [user] inserts a power cell into [src].", "\blue You insert the power cell into [src].")
+						user.visible_message("\blue [user] inserts [N2] into [src].", "\blue You insert [N2] into [src].")
 			else
-				user << "The hatch must be open to insert a power cell."
+				user << "The hatch must be open to insert a tank."
 				return
 		else if(istype(I, /obj/item/weapon/screwdriver))
 			open = !open
@@ -98,13 +102,13 @@
 		if(open)
 
 			var/dat
-			dat = "Power cell: "
-			if(cell)
-				dat += "<A href='byond://?src=\ref[src];op=cellremove'>Installed</A><BR>"
+			dat = "N2 Tank: "
+			if(N2tank)
+				dat += "<A href='byond://?src=\ref[src];op=tankremove'>Installed</A><BR>"
 			else
-				dat += "<A href='byond://?src=\ref[src];op=cellinstall'>Removed</A><BR>"
+				dat += "<A href='byond://?src=\ref[src];op=tankinstall'>Removed</A><BR>"
 
-			dat += "Power Level: [cell ? round(cell.percent(),1) : 0]%<BR><BR>"
+			dat += "Tank Temperature: [N2tank ? round(N2tank.air_contents.temperature-T0C) : 0]&deg;C<BR><BR>"
 
 			dat += "Set Temperature: "
 
@@ -141,25 +145,24 @@
 					// limit to 20-90 degC
 					set_temperature = dd_range(-50, 20, set_temperature + value)
 
-				if("cellremove")
-					if(open && cell && !usr.get_active_hand())
-						cell.updateicon()
-						usr.put_in_hands(cell)
-						cell.add_fingerprint(usr)
-						cell = null
-						usr.visible_message("\blue [usr] removes the power cell from \the [src].", "\blue You remove the power cell from \the [src].")
+				if("tankremove")
+					if(open && N2tank && !usr.get_active_hand())
+						usr.put_in_hands(N2tank)
+						N2tank.add_fingerprint(usr)
+						N2tank = null
+						usr.visible_message("\blue [usr] removes the tank from \the [src].", "\blue You remove the tank from \the [src].")
 
 
-				if("cellinstall")
-					if(open && !cell)
-						var/obj/item/weapon/cell/C = usr.get_active_hand()
-						if(istype(C))
+				if("tankinstall")
+					if(open && !N2tank)
+						var/obj/item/weapon/tank/nitrogen/N2 = usr.get_active_hand()
+						if(istype(N2))
 							usr.drop_item()
-							cell = C
-							C.loc = src
-							C.add_fingerprint(usr)
+							N2tank = N2
+							N2.loc = src
+							N2.add_fingerprint(usr)
 
-							usr.visible_message("\blue [usr] inserts a power cell into \the [src].", "\blue You insert the power cell into \the [src].")
+							usr.visible_message("\blue [usr] inserts a tank into \the [src].", "\blue You insert the tank into \the [src].")
 
 			updateDialog()
 		else
@@ -171,32 +174,28 @@
 
 	process()
 		if(on)
-			if(cell && cell.charge > 0)
+			if(N2tank)
+				var/datum/gas_mixture/tank_env
+				tank_env = N2tank.air_contents
+				if(tank_env.temperature >= T20C)
+					return
 
 				var/turf/simulated/L = loc
 				if(istype(L))
 					var/datum/gas_mixture/env = L.return_air()
-					if(env.temperature != set_temperature + T0C)
-
-						var/transfer_moles = 0.25 * env.total_moles()
-						msg_scopes("transfer_moles: [transfer_moles]")
-						var/datum/gas_mixture/removed = env.remove(transfer_moles)
-
-						if(removed)
-							var/heat_capacity = removed.heat_capacity()
-							msg_scopes("heat_capacity: [heat_capacity]")
+					if(env.temperature > set_temperature + T0C)
+						var/transfer_moles = 0.25 * env.total_moles
+						var/datum/gas_mixture/air_removed = env.remove(transfer_moles)
+						var/datum/gas_mixture/tank_removed = tank_env.remove(transfer_moles)
+						if(air_removed)
+							var/heat_capacity = air_removed.heat_capacity()
 							if(heat_capacity) // Added check to avoid divide by zero (oshi-) runtime errors -- TLE
-								if(removed.temperature > set_temperature + T0C)
-									removed.temperature = min(removed.temperature - cooling_power/heat_capacity, TCMB) // Added min() check to try and avoid wacky superheating issues in low gas scenarios -- TLE
-								else
-									removed.temperature = max(removed.temperature + cooling_power/heat_capacity, 1000)
-
-								cell.use(cooling_power/1000)
-
-						env.merge(removed)
-
-			else
-				on = 0
-				update_icon()
-
+								if(air_removed.temperature != set_temperature + T0C)
+									air_removed.temperature = min(air_removed.temperature - cooling_power/heat_capacity/3, TCMB)
+									tank_removed.temperature = max(tank_removed.temperature + rand(1,15), 50)
+						env.merge(air_removed)
+						tank_env.merge(tank_removed)
+				else
+					on = 0
+					update_icon()
 		return

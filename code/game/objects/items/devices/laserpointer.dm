@@ -7,8 +7,7 @@
 	var/pointer_icon_state
 	flags =  FPRINT | TABLEPASS | CONDUCT |  USEDELAY
 	slot_flags = SLOT_BELT
-	m_amt = 500
-	g_amt = 500
+	matter = list("glass" = 500,"metal" = 500)
 	w_class = 2 //Increased to 2, because diodes are w_class 2. Conservation of matter.
 	origin_tech = "combat=1"
 	origin_tech = "magnets=2"
@@ -113,6 +112,8 @@
 				severity = min(max(severity, 0), 4)
 				var/mob/living/carbon/human/H = C
 				var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+				if(!E)
+					return
 
 				switch(severity)
 					if(0)

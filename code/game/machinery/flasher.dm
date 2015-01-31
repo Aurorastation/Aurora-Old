@@ -28,12 +28,11 @@
 	src.sd_SetLuminosity(2)
 */
 /obj/machinery/flasher/power_change()
-	if ( powered() )
-		stat &= ~NOPOWER
+	..()
+	if ( !(stat & NOPOWER) )
 		icon_state = "[base_state]1"
 //		src.sd_SetLuminosity(2)
 	else
-		stat |= ~NOPOWER
 		icon_state = "[base_state]1-p"
 //		src.sd_SetLuminosity(0)
 
@@ -68,7 +67,7 @@
 	playsound(src.loc, 'sound/weapons/flash.ogg', 100, 1)
 	flick("[base_state]_flash", src)
 	src.last_flash = world.time
-	use_power(1000)
+	use_power(1500)
 
 	for (var/mob/O in viewers(src, null))
 		if (get_dist(src, O) > src.range)
@@ -85,8 +84,8 @@
 		O.Weaken(strength)
 		if (istype(O, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = O
-			var/datum/organ/internal/eyes/E = H.internal_organs["eyes"]
-			if ((E.damage > E.min_bruised_damage && prob(E.damage + 50)))
+			var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+			if (E && (E.damage > E.min_bruised_damage && prob(E.damage + 50)))
 				flick("e_flash", O:flash)
 				E.damage += rand(1, 5)
 		else

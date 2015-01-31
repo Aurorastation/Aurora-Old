@@ -44,7 +44,7 @@
 	set desc = "Retrieve any session logfiles saved by dreamdeamon."
 	set category = null
 
-	var/path = browse_files("data/logs/runtime/")
+	var/path = browse_files("data/runtime/")
 	if(!path)
 		return
 

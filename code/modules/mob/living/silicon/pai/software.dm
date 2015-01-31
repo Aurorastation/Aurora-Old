@@ -266,7 +266,7 @@
 				src.medHUD = !src.medHUD
 		if("translator")
 			if(href_list["toggle"])
-				src.universal_speak = !src.universal_speak
+				src.translator_toggle()
 		if("doorjack")
 			if(href_list["jack"])
 				if(src.cable && src.cable.machine)
@@ -325,7 +325,7 @@
 		if(s == "medical HUD")	//This file has to be saved as ANSI or this will not display correctly
 			dat += "<a href='byond://?src=\ref[src];software=medicalhud;sub=0'>Medical Analysis Suite</a> [(src.medHUD) ? "<font color=#55FF55>•</font>" : "<font color=#FF5555>•</font>"] <br>"
 		if(s == "universal translator")	//This file has to be saved as ANSI or this will not display correctly
-			dat += "<a href='byond://?src=\ref[src];software=translator;sub=0'>Universal Translator</a> [(src.universal_speak) ? "<font color=#55FF55>•</font>" : "<font color=#FF5555>•</font>"] <br>"
+			dat += "<a href='byond://?src=\ref[src];software=translator;sub=0'>Universal Translator</a> [(src.translator_on) ? "<font color=#55FF55>•</font>" : "<font color=#FF5555>•</font>"] <br>"
 		if(s == "projection array")
 			dat += "<a href='byond://?src=\ref[src];software=projectionarray;sub=0'>Projection Array</a> <br>"
 		if(s == "camera jack")
@@ -438,9 +438,9 @@
 	for (var/ch_name in radio.channels)
 		dat+=radio.text_sec_channel(ch_name, radio.channels[ch_name])
 	dat+={"[radio.text_wires()]</TT></body></html>"}
-	
+
 	return dat
-	
+
 // Crew Manifest
 /mob/living/silicon/pai/proc/softwareManifest()
 	var/dat = ""
@@ -497,8 +497,8 @@
 // Universal Translator
 /mob/living/silicon/pai/proc/softwareTranslator()
 	var/dat = {"<h2>Universal Translator</h2><hr>
-				When enabled, this device will automatically convert all spoken and written language into a format that any known recipient can understand.<br><br>
-				The device is currently [ (src.universal_speak) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled</font>.<br>
+				When enabled, this device will automatically convert all spoken and written languages into a format that any known recipient can understand.<br><br>
+				The device is currently [ (src.translator_on) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled</font>.<br>
 				<a href='byond://?src=\ref[src];software=translator;sub=0;toggle=1'>Toggle Device</a><br>
 				"}
 	return dat
@@ -528,17 +528,25 @@
 		dat += {"<h2>Medical Analysis Suite</h2><hr>
 				 <h4>Host Bioscan</h4>
 				"}
-		var/mob/living/M = src.loc
-		if(!istype(M, /mob/living))
-			while (!istype(M, /mob/living))
-				M = M.loc
-				if(istype(M, /turf))
-					src.temp = "Error: No biological host found. <br>"
-					src.subscreen = 0
-					return dat
+
+		var/mob/living/M
+		//If we are not deployed, check the holder of the card.
+		if(src.loc == card)
+			M = card.loc
+
+		//If we are deployed or the card is not held, check the first living mob in our turf.
+		if(!M || !istype(M))
+			var/turf/T = get_turf(src)
+			M = locate(/mob/living/) in T.contents
+
+		if(!M || !istype(M))
+			src.temp = "Error: No biological host found. <br>"
+			src.subscreen = 0
+			return dat
+
 		dat += {"<b>Bioscan Results for [M]</b>: <br>
 		Overall Status: [M.stat > 1 ? "dead" : "[M.health]% healthy"] <br><br>
-		
+
 		<b>Scan Breakdown</b>: <br>
 		Respiratory: [M.getOxyLoss() > 50 ? "<font color=#FF5555>" : "<font color=#55FF55>"][M.getOxyLoss()]</font><br>
 		Toxicology: [M.getToxLoss() > 50 ? "<font color=#FF5555>" : "<font color=#55FF55>"][M.getToxLoss()]</font><br>
@@ -568,22 +576,13 @@
 		var/datum/gas_mixture/environment = T.return_air()
 
 		var/pressure = environment.return_pressure()
-		var/total_moles = environment.total_moles()
+		var/total_moles = environment.total_moles
 
 		dat += "Air Pressure: [round(pressure,0.1)] kPa<br>"
 
-		if (total_moles)
-			var/o2_level = environment.oxygen/total_moles
-			var/n2_level = environment.nitrogen/total_moles
-			var/co2_level = environment.carbon_dioxide/total_moles
-			var/plasma_level = environment.toxins/total_moles
-			var/unknown_level =  1-(o2_level+n2_level+co2_level+plasma_level)
-			dat += "Nitrogen: [round(n2_level*100)]%<br>"
-			dat += "Oxygen: [round(o2_level*100)]%<br>"
-			dat += "Carbon Dioxide: [round(co2_level*100)]%<br>"
-			dat += "Plasma: [round(plasma_level*100)]%<br>"
-			if(unknown_level > 0.01)
-				dat += "OTHER: [round(unknown_level)]%<br>"
+		if(total_moles)
+			for(var/g in environment.gas)
+				dat += "[gas_data.name[g]]: [round((environment.gas[g] / total_moles) * 100)]%<br>"
 		dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
 	dat += "<br><a href='byond://?src=\ref[src];software=atmosensor;sub=0'>Refresh Reading</a>"
 	return dat
@@ -676,7 +675,7 @@
 			dat += "</li>"
 	dat += "</ul>"
 	dat += "Messages: <hr>"
-	
+
 	dat += "<style>td.a { vertical-align:top; }</style>"
 	dat += "<table>"
 	for(var/index in pda.tnote)
@@ -686,3 +685,39 @@
 			dat += addtext("<tr><td class='a'><i><b>From</b></i></td><td class='a'><i><b>&rarr;</b></i></td><td><i><b><a href='byond://?src=\ref[src];software=pdamessage;target=",index["target"],"'>", index["owner"],"</a>: </b></i>", index["message"], "<br></td></tr>")
 	dat += "</table>"
 	return dat
+
+/mob/living/silicon/pai/proc/translator_toggle()
+
+	// 	Sol Common, Tradeband and Gutter are added with New() and are therefore the current default, always active languages
+
+	if(translator_on)
+		translator_on = 0
+
+		remove_language("Sign language")
+		remove_language("Sinta'unathi")
+		remove_language("Siik'Maas")
+		remove_language("Skrellian")
+		remove_language("Vox-pidgin")
+		remove_language("Rootspeak")
+		remove_language("Ceti Basic")
+		remove_language("Sol Common")
+		remove_language("Tradeband")
+		remove_language("Gutter")
+
+		src << "\blue Translator Module toggled OFF."
+
+	else
+		translator_on = 1
+
+		add_language("Sinta'unathi")
+		add_language("Siik'Maas")
+		add_language("Skrellian")
+		add_language("Vox-pidgin")
+		add_language("Rootspeak")
+		add_language("Ceti Basic")
+		add_language("Sol Common")
+		add_language("Tradeband")
+		add_language("Gutter")
+		add_language("Sign language", 0)
+
+		src << "\blue Translator Module toggled ON."

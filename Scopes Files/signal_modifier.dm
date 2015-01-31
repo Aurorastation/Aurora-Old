@@ -16,8 +16,7 @@
 	throw_range = 15
 	throw_speed = 3
 	desc = "If you have this, it is a mistake." //here to
-	m_amt = 50
-	g_amt = 20
+	matter = list("metal" = 20,"glass" = 50)
 	origin_tech = "magnets=1;engineering=1"
 	var/id_setting = null
 	var/signal_setting = null

@@ -41,7 +41,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 
 	world << "\red \b Resetting Gravity Simulation."
 	gravity_is_on = 1
-	spawn(10)
+	spawn(1)
 		for(var/area/A in world)
 			if(A.name == "Space")
 				continue
@@ -54,6 +54,29 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 		world << "\red Gravity Simulation reset."
 
 	feedback_add_details("admin_verb","RSG")
+
+/client/proc/cmd_dev_reset_floating()
+	set category = "Debug"
+	set name = "Reset floating mobs"
+	set desc = "Stops all mobs floating instantly."
+
+	if(!check_rights(R_DEBUG|R_DEV))	return
+
+	if(!holder)
+		return //how did they get here?
+
+	if(!ticker)
+		alert("Wait until the game starts")
+		return
+
+	if(ticker.current_state < GAME_STATE_PLAYING)
+		src << "\red The game hasn't started yet!"
+		return
+
+	for(var/mob/living/M in world)
+		M.float(0)
+
+	feedback_add_details("admin_verb","RSF")
 
 /obj/machinery/gravity_field_generator
 	name = "gravitational generator"
@@ -123,9 +146,6 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	middle.overlays += "activated"
 	log_debug("Gravity Generator spawned: initialize()")
 	update_list()
-	spawn(100)
-		if(round_start >= 1)
-			round_start--
 
 //
 // Generator an admin can spawn
@@ -147,7 +167,6 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	power_channel = ENVIRON
 	sprite_number = 8
 	use_power = 1
-	interact_offline = 1
 	var/on = 1
 	var/breaker = 1
 	var/list/parts = list()
@@ -164,6 +183,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 /obj/machinery/gravity_field_generator/main/Del() // If we somehow get deleted, remove all of our other parts.
 	log_debug("Gravity Generator Destroyed")
 	investigate_log("was destroyed!", "gravity")
+	captain_announce("Gravity generator: location missing!")
 	on = 0
 	update_list()
 	for(var/obj/machinery/gravity_field_generator/part/O in parts)
@@ -344,6 +364,7 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 		if(gravity_in_level() == 1)
 			alert = 1
 			gravity_is_on = 0
+			captain_announce("Gravity generator: shutdown successful.")
 			investigate_log("was brought offline and there is now no gravity for this level.", "gravity")
 			message_admins("The gravity generator was brought offline with no backup generator. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>[area.name]</a>)")
 			message_mods("The gravity generator was brought offline with no backup generator. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>[area.name]</a>)")
@@ -410,10 +431,11 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 	var/turf/our_turf = get_turf(src)
 	for(var/mob/M in mob_list)
 		var/turf/their_turf = get_turf(M)
+		if(!their_turf) continue
 		if(their_turf.z == our_turf.z)
 			M.update_gravity(M.mob_has_gravity())
 			if(M.client)
-				if(!M)	return
+				if(!M)	continue
 				shake_camera(M, 5, 1)
 				M.playsound_local(our_turf, 'sound/effects/alert.ogg', 100, 1, 0.5)
 
@@ -438,8 +460,8 @@ var/list/gravity_field_generators = list() // We will keep track of this by addi
 					A.gravitychange(A.has_gravity,A,1)
 				else
 					A.gravitychange(A.has_gravity,A)
-			if(round_start == 1)
-				round_start = 0
+			if(round_start >= 1)
+				round_start--
 			gravity_field_generators["[T.z]"] |= src
 		else
 			msg_scopes("Here is a lovely list of floaty people")

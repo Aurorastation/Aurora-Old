@@ -58,6 +58,22 @@ var/savefile/Banlist
 	CMinutes = (world.realtime / 10) / 60
 	return 1
 
+/proc/loadBlacklist()
+	testing("Loading Blacklist")
+	var/text = file2text("data/ip_blacklist.txt")
+	if (!text)
+		error("Failed to load data/ip_blacklist.txt")
+		return
+	else
+		var/list/lines = text2list(text, "\n")
+		for(var/line in lines)
+			if (!line)
+				continue
+			if (copytext(line, 1, 2) == ";")
+				continue
+			blacklist += line
+	log_admin("Loaded Blacklist")
+
 /hook/startup/proc/loadBans()
 	return LoadBans()
 
@@ -227,3 +243,67 @@ var/savefile/Banlist
 	for (var/A in Banlist.dir)
 		RemoveBan(A)
 
+////////////////////////////
+//TRANSFER TO SQL DATABASE//
+////////////////////////////
+//Used to transfer the old .dbd file contents over to the SQL database. Kept on hand just for the sake of being kept on hand, frankly.
+/*
+/datum/admins/proc/bantosql()
+
+	establish_db_connection()
+
+	if(!dbcon.IsConnected())
+		usr << "\red Failed to establish database connection"
+		return
+	else
+		message_admins("Houston, we have a database!")
+
+
+	var/count = 0
+//	var/dat
+
+	//junk vars to keep track of simple shit, like serverip
+	var/serverip = ""
+	var/bantype_str
+	var/rounds = 0
+	var/duration = -1
+	var/job = ""
+	var/banckey = null
+
+	message_admins("Fetching data now.")
+
+	//var/dat = "<HR><B>Unban Player:</B> \blue(U) = Unban , (E) = Edit Ban\green (Total<HR><table border=1 rules=all frame=void cellspacing=0 cellpadding=3 >"
+	Banlist.cd = "/base"
+	for (var/A in Banlist.dir)
+		count++
+		Banlist.cd = "/base/[A]"
+		var/ref		= "\ref[src]"
+		var/key		= Banlist["key"]
+		var/id		= Banlist["id"]
+		var/ip		= Banlist["ip"]
+		var/reason	= Banlist["reason"]
+		banckey		= Banlist["bannedby"]
+		var/minutes = Banlist["minutes"]
+		var/expiry
+		if(Banlist["temp"])
+			bantype_str = "TEMPBAN"
+			duration = Banlist["minutes"]
+			expiry = GetExp(Banlist["minutes"])
+			if(!expiry)
+				expiry = "Removal Pending"
+		else
+			expiry = "Permaban"
+			bantype_str = "PERMABAN"
+			duration = -1
+
+		message_admins("Query data: [serverip], [bantype_str], [duration], [key], [id], [ip], [reason], [banckey]")
+		message_admins("Executing query")
+
+		var/DBQuery/insert_query = dbcon.NewQuery("INSERT INTO `erro_ban` (`id`,`bantime`,`serverip`,`bantype`,`reason`,`job`,`duration`,`rounds`,`expiration_time`,`ckey`,`computerid`,`ip`,`a_ckey`,`a_computerid`,`a_ip`,`who`,`adminwho`,`edits`,`unbanned`,`unbanned_datetime`,`unbanned_ckey`,`unbanned_computerid`,`unbanned_ip`) VALUES (null, Now(), '[serverip]', '[bantype_str]', '[reason]', '[job]', '[minutes]', '[rounds]', Now() + INTERVAL [(duration>0) ? duration : 0] MINUTE, '[key]', '[id]', '[ip]', '[banckey]', '', '', '', '', null, null, null, null, null, null);")
+		insert_query.Execute()
+		var/DBQuery/log_query = dbcon.NewQuery("INSERT INTO `erro_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , '[usr.ckey]', '[usr.client.address]', 'Attempted to transfer the ban of [key].');")
+		log_query.Execute()
+
+		message_admins("Salvo complete, stand by.")
+	message_admins("Rounds complete, RTB.")
+*/

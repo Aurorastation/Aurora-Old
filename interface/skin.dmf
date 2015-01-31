@@ -1469,7 +1469,7 @@ window "rpane"
 		on-close = ""
 	elem "rpanewindow"
 		type = CHILD
-		pos = 0,0
+		pos = 0,-1
 		size = 640x499
 		anchor1 = 0,0
 		anchor2 = 100,100
@@ -1495,7 +1495,7 @@ window "rpane"
 		lock = none
 	elem "rulesb"
 		type = BUTTON
-		pos = 278,0
+		pos = 328,0
 		size = 60x16
 		anchor1 = none
 		anchor2 = none
@@ -1523,7 +1523,7 @@ window "rpane"
 		button-type = pushbutton
 	elem "changelog"
 		type = BUTTON
-		pos = 341,0
+		pos = 391,0
 		size = 67x16
 		anchor1 = none
 		anchor2 = none
@@ -1551,7 +1551,7 @@ window "rpane"
 		button-type = pushbutton
 	elem "forumb"
 		type = BUTTON
-		pos = 215,0
+		pos = 265,0
 		size = 60x16
 		anchor1 = none
 		anchor2 = none
@@ -1577,9 +1577,9 @@ window "rpane"
 		is-checked = false
 		group = "rpanemode"
 		button-type = pushbutton
-	elem "wikib"
+	elem "aurorawikib"
 		type = BUTTON
-		pos = 152,0
+		pos = 202,0
 		size = 60x16
 		anchor1 = none
 		anchor2 = none
@@ -1597,7 +1597,35 @@ window "rpane"
 		right-click = false
 		saved-params = "is-checked"
 		on-size = ""
-		text = "Wiki"
+		text = "Aurora Wiki"
+		image = ""
+		command = "aurorawiki"
+		is-flat = false
+		stretch = false
+		is-checked = false
+		group = "rpanemode"
+		button-type = pushbutton
+	elem "wikib"
+		type = BUTTON
+		pos = 139,0
+		size = 60x16
+		anchor1 = none
+		anchor2 = none
+		font-family = ""
+		font-size = 0
+		font-style = ""
+		text-color = #000000
+		background-color = none
+		is-visible = true
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = "is-checked"
+		on-size = ""
+		text = "BS12 Wiki"
 		image = ""
 		command = "wiki"
 		is-flat = false

@@ -70,13 +70,7 @@
 				cancelCameraAlarm()
 				if(can_use())
 					cameranet.addCamera(src)
-			for(var/mob/O in mob_list)
-				if (istype(O.machine, /obj/machinery/computer/security))
-					var/obj/machinery/computer/security/S = O.machine
-					if (S.current == src)
-						O.unset_machine()
-						O.reset_view(null)
-						O << "The screen bursts into static."
+			kick_viewers()
 			..()
 
 
@@ -93,11 +87,6 @@
 /obj/machinery/camera/proc/setViewRange(var/num = 7)
 	src.view_range = num
 	cameranet.updateVisibility(src, 0)
-
-/obj/machinery/camera/proc/shock(var/mob/living/user)
-	if(!istype(user))
-		return
-	user.electrocute_act(10, src)
 
 /obj/machinery/camera/attack_paw(mob/living/carbon/alien/humanoid/user as mob)
 	if(!istype(user))
@@ -201,6 +190,10 @@
 	// now disconnect anyone using the camera
 	//Apparently, this will disconnect anyone even if the camera was re-activated.
 	//I guess that doesn't matter since they can't use it anyway?
+	kick_viewers()
+
+//This might be redundant, because of check_eye()
+/obj/machinery/camera/proc/kick_viewers()
 	for(var/mob/O in player_list)
 		if (istype(O.machine, /obj/machinery/computer/security))
 			var/obj/machinery/computer/security/S = O.machine

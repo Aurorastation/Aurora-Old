@@ -7,6 +7,7 @@
 	icon_state = "crate"
 	icon_opened = "crateopen"
 	icon_closed = "crate"
+	climbable = 1
 //	mouse_drag_pointer = MOUSE_ACTIVE_POINTER	//???
 	var/rigged = 0
 
@@ -36,6 +37,9 @@
 		O.loc = get_turf(src)
 	icon_state = icon_opened
 	src.opened = 1
+
+	if(climbable)
+		structure_shaken()
 	return 1
 
 /obj/structure/closet/crate/close()
@@ -319,12 +323,7 @@
 		var/datum/gas_mixture/gas = (..())
 		if(!gas)	return null
 		var/datum/gas_mixture/newgas = new/datum/gas_mixture()
-		newgas.oxygen = gas.oxygen
-		newgas.carbon_dioxide = gas.carbon_dioxide
-		newgas.nitrogen = gas.nitrogen
-		newgas.toxins = gas.toxins
-		newgas.volume = gas.volume
-		newgas.temperature = gas.temperature
+		newgas.copy_from(gas)
 		if(newgas.temperature <= target_temp)	return
 
 		if((newgas.temperature - cooling_power) > target_temp)

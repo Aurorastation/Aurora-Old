@@ -118,7 +118,7 @@
 	throwforce = 10
 	sharp = 1
 	edge = 1
-	w_class = 3
+	w_class = 4
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
 	IsShield()
@@ -143,7 +143,7 @@
 	throwforce = 10
 	sharp = 1
 	edge = 1
-	w_class = 3
+	w_class = 4
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
 	suicide_act(mob/user)
@@ -180,3 +180,42 @@
 	throwforce = 10
 	w_class = 4 //there ain't no way in fuck you're shuving this inside your rucksack. No way.
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
+
+/obj/item/weapon/metal_bat
+	desc = "The quality is a swing and a miss."
+	name = "Metal Bat"
+	icon_state = "metalbat"
+	item_state = "bat_l"
+	force = 15.0
+	throwforce = 5.0
+	throw_speed = 5
+	throw_range = 10
+	w_class = 4.0
+	flags = FPRINT | TABLEPASS
+	attack_verb = list("struck out", "beat", "bludgeoned", "homerunned")
+
+/obj/item/weapon/pla_bat
+	desc = "The quality is a swing and a miss."
+	name = "Plasteel Bat"
+	icon_state = "plabat"
+	item_state = "bat_l"
+	force = 20.0
+	throwforce = 5.0
+	throw_speed = 5
+	throw_range = 10
+	w_class = 4.0
+	flags = FPRINT | TABLEPASS
+	attack_verb = list("struck out", "beat", "bludgeoned", "homerunned")
+
+/obj/item/weapon/wood_bat
+	desc = "The quality is a swing and a miss."
+	name = "Wooden Bat"
+	icon_state = "woodbat"
+	item_state = "bat_l"
+	force = 10.0
+	throwforce = 5.0
+	throw_speed = 5
+	throw_range = 10
+	w_class = 4.0
+	flags = FPRINT | TABLEPASS
+	attack_verb = list("struck out", "beat", "bludgeoned", "homerunned")

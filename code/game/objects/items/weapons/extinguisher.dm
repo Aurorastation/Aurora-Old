@@ -11,7 +11,7 @@
 	throw_speed = 2
 	throw_range = 10
 	force = 10.0
-	m_amt = 90
+	matter = list("metal" = 90)
 	attack_verb = list("slammed", "whacked", "bashed", "thunked", "battered", "bludgeoned", "thrashed")
 	var/max_water = 50
 	var/last_use = 1.0
@@ -28,7 +28,6 @@
 	throwforce = 2
 	w_class = 2.0
 	force = 3.0
-	m_amt = 0
 	max_water = 30
 	sprite_name = "miniFE"
 
@@ -118,6 +117,7 @@
 				W.reagents = R
 				R.my_atom = W
 				if(!W || !src) return
+				if(!W.reagents) return
 				src.reagents.trans_to(W,1)
 				for(var/b=0, b<5, b++)
 					step_towards(W,my_target)
@@ -126,11 +126,14 @@
 					for(var/atom/atm in get_turf(W))
 						if(!W) return
 						W.reagents.reaction(atm)
+						if(isliving(atm)) //For extinguishing mobs on fire
+							var/mob/living/M = atm
+							M.ExtinguishMob()
 					if(W.loc == my_target) break
 					sleep(2)
-//				spawn(20)
+				spawn(20)
+					W.Del()
 
-				W.Del()
 		if((istype(usr.loc, /turf/space)) || (usr.lastarea.has_gravity == 0))
 			user.inertia_dir = get_dir(target, user)
 			step(user, user.inertia_dir)

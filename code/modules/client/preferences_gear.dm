@@ -25,6 +25,11 @@ proc/populate_gear_list()
 	path = /obj/item/weapon/dice/d20
 	cost = 1
 
+/datum/gear/watch
+	display_name = "watch"
+	path = /obj/item/clothing/gloves/watch
+	cost = 1
+
 /datum/gear/wallet
 	display_name = "wallet"
 	path = /obj/item/weapon/storage/wallet
@@ -85,6 +90,11 @@ proc/populate_gear_list()
 	display_name = "flask"
 	path = /obj/item/weapon/reagent_containers/food/drinks/flask/barflask
 	cost = 2
+
+/datum/gear/cards
+	display_name = "deck of cards"
+	path = /obj/item/weapon/deck
+	cost = 1
 
 /datum/gear/tie_horrible
 	display_name = "horrible tie"
@@ -464,7 +474,7 @@ proc/populate_gear_list()
 	display_name = "shoulder holster"
 	path = /obj/item/clothing/tie/holster/armpit
 	cost = 3
-	allowed_roles = list("Captain", "Head of Personnel", "Security Officer", "Head of Security")
+	allowed_roles = list("Captain", "Head of Personnel", "Security Officer", "Head of Security", "Warden")
 
 
 /datum/gear/normal_beret

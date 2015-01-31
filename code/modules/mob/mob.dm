@@ -16,7 +16,7 @@
 /mob/proc/generate_name()
 	return name
 
-/mob/proc/Cell()
+/*/mob/proc/Cell()
 	set category = "Admin"
 	set hidden = 1
 
@@ -34,7 +34,7 @@
 		usr << "\blue [trace_gas.type]: [trace_gas.moles] \n"
 
 	usr.show_message(t, 1)
-
+*/
 /mob/proc/show_message(msg, type, alt, alt_type)//Message, type of message (1 or 2), alternative message, alt message type (1 or 2)
 
 	if(!client)	return
@@ -95,6 +95,10 @@
 /mob/proc/Life()
 //	if(organStructure)
 //		organStructure.ProcessOrgans()
+	if((floating && mob_has_gravity(loc)) || (floating && buckled))
+		float(0)
+	else if(!floating && !mob_has_gravity(loc) && !buckled && stat != DEAD)
+		float(1)
 	return
 
 
@@ -603,6 +607,20 @@ var/list/slot_equipment_priority = list( \
 /mob/proc/is_active()
 	return (0 >= usr.stat)
 
+/mob/proc/is_dead()
+	return stat == DEAD
+
+/mob/proc/is_mechanical()
+	if(mind && (mind.assigned_role == "Cyborg" || mind.assigned_role == "AI"))
+		return 1
+	return istype(src, /mob/living/silicon) || get_species() == "Machine"
+
+/mob/proc/is_ready()
+	return client && !!mind
+
+/mob/proc/get_gender()
+	return gender
+
 /mob/proc/see(message)
 	if(!is_active())
 		return 0
@@ -710,9 +728,33 @@ note dizziness decrements automatically in the mob's Life() proc.
 				stat(null,"MasterController-ERROR")
 			if(delta_level:active)
 				stat(null,"Delta Countdown-[delta_level.timeleft()]")
+			if(!ooc_allowed)
+				stat(null,"OOC is globaly muted")
+			if(!looc_allowed)
+				stat(null,"LOOC is globaly muted")
+			if(client.holder.rights & (R_ADMIN|R_MOD))
+				var/players = 0
+				var/ghosts = 0
+				var/lobby = 0
+				var/total = 0
+				var/staff = 0
+				for(var/client/C in clients)
+					if(C.holder && (C.holder.rights & R_ADMIN || C.holder.rights & R_MOD))
+						staff++
+					if(istype(C.mob, /mob/living))
+						players++
+					if(istype(C.mob, /mob/dead))
+						ghosts++
+					if(istype(C.mob, /mob/new_player))
+						lobby++
+					total++
+				stat(null, "Players: [total]\tModeration Staff: [staff]")
+				stat(null, "Living: [players]\tGhosts: [ghosts]\tLobby: [lobby]")
+		if(client)
+			stat(null, "Round Time: [round(world.time / 36000)]:[(world.time / 600 % 60) < 10 ? add_zero(world.time / 600 % 60, 1) : world.time / 600 % 60]")
 
 	if(listed_turf && client)
-		if(get_dist(listed_turf,src) > 1)
+		if(!TurfAdjacent(listed_turf))
 			listed_turf = null
 		else
 			statpanel(listed_turf.name, null, listed_turf)
@@ -746,24 +788,37 @@ note dizziness decrements automatically in the mob's Life() proc.
 
 //Updates canmove, lying and icons. Could perhaps do with a rename but I can't think of anything to describe it.
 /mob/proc/update_canmove()
-	if(buckled)
+/*	if(istype(buckled, /obj/vehicle))
+		var/obj/vehicle/V = buckled
+		if(stat || weakened || paralysis || resting || sleeping || (status_flags & FAKEDEATH))
+			lying = 1
+			canmove = 0
+			pixel_y = V.mob_offset_y - 5
+		else
+			lying = 0
+			canmove = 1
+			pixel_y = V.mob_offset_y*/
+	if(buckled && (!buckled.movable))
 		anchored = 1
 		canmove = 0
-		if( istype(buckled,/obj/structure/stool/bed/chair) )
+		if(istype(buckled,/obj/structure/stool/bed/chair) )
 			lying = 0
 		else
 			lying = 1
+	else if (buckled && (buckled.movable))
+		anchored = 0
+		canmove = 1
+		lying = 0
 	else if( stat || weakened || paralysis || resting || sleeping || (status_flags & FAKEDEATH))
 		lying = 1
 		canmove = 0
 	else if( stunned )
-//		lying = 0
 		canmove = 0
 	else if(captured)
 		anchored = 1
 		canmove = 0
 		lying = 0
-	else
+	else if (!buckled)
 		lying = !can_stand
 		canmove = has_limbs
 
@@ -786,36 +841,34 @@ note dizziness decrements automatically in the mob's Life() proc.
 	return canmove
 
 
-/mob/verb/eastface()
-	set hidden = 1
+/mob/proc/facedir(var/ndir)
 	if(!canface())	return 0
-	dir = EAST
+	dir = ndir
+	if(buckled && buckled.movable)
+		buckled.dir = ndir
+		buckled.handle_rotation()
 	client.move_delay += movement_delay()
 	return 1
+
+
+/mob/verb/eastface()
+	set hidden = 1
+	return facedir(EAST)
 
 
 /mob/verb/westface()
 	set hidden = 1
-	if(!canface())	return 0
-	dir = WEST
-	client.move_delay += movement_delay()
-	return 1
+	return facedir(WEST)
 
 
 /mob/verb/northface()
 	set hidden = 1
-	if(!canface())	return 0
-	dir = NORTH
-	client.move_delay += movement_delay()
-	return 1
+	return facedir(NORTH)
 
 
 /mob/verb/southface()
 	set hidden = 1
-	if(!canface())	return 0
-	dir = SOUTH
-	client.move_delay += movement_delay()
-	return 1
+	return facedir(SOUTH)
 
 
 /mob/proc/IsAdvancedToolUser()//This might need a rename but it should replace the can this mob use things check
@@ -933,7 +986,7 @@ mob/proc/yank_out_object()
 	if(S == U)
 		self = 1 // Removing object from yourself.
 
-	valid_objects = get_visible_implants(1)
+	valid_objects = get_visible_implants(0)
 	if(!valid_objects.len)
 		if(self)
 			src << "You have nothing stuck in your body that is large enough to remove."
@@ -944,9 +997,9 @@ mob/proc/yank_out_object()
 	var/obj/item/weapon/selection = input("What do you want to yank out?", "Embedded objects") in valid_objects
 
 	if(self)
-		src << "<span class='warning'>You attempt to get a good grip on the [selection] in your body.</span>"
+		src << "<span class='warning'>You attempt to get a good grip on [selection] in your body.</span>"
 	else
-		U << "<span class='warning'>You attempt to get a good grip on the [selection] in [S]'s body.</span>"
+		U << "<span class='warning'>You attempt to get a good grip on [selection] in [S]'s body.</span>"
 
 	if(!do_after(U, 80))
 		return
@@ -961,8 +1014,7 @@ mob/proc/yank_out_object()
 	if(valid_objects.len == 1) //Yanking out last object - removing verb.
 		src.verbs -= /mob/proc/yank_out_object
 
-	if(istype(src,/mob/living/carbon/human))
-
+	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
 		var/datum/organ/external/affected
 
@@ -972,13 +1024,17 @@ mob/proc/yank_out_object()
 					affected = organ
 
 		affected.implants -= selection
-		H.shock_stage+=10
-		H.bloody_hands(S)
+		H.shock_stage+=20
+		affected.take_damage((selection.w_class * 3), 0, 0, 1, "Embedded object extraction")
 
-		if(prob(10)) //I'M SO ANEMIC I COULD JUST -DIE-.
-			var/datum/wound/internal_bleeding/I = new (15)
+		if(prob(selection.w_class * 5)) //I'M SO ANEMIC I COULD JUST -DIE-.
+			var/datum/wound/internal_bleeding/I = new (min(selection.w_class * 5, 15))
 			affected.wounds += I
 			H.custom_pain("Something tears wetly in your [affected] as [selection] is pulled free!", 1)
+
+		if (ishuman(U))
+			var/mob/living/carbon/human/human_user = U
+			human_user.bloody_hands(H)
 
 	selection.loc = get_turf(src)
 
@@ -988,3 +1044,55 @@ mob/proc/yank_out_object()
 		if(!pinned.len)
 			anchored = 0
 	return 1
+
+/mob/living/proc/handle_statuses()
+	handle_stunned()
+	handle_weakened()
+	handle_stuttering()
+	handle_silent()
+	handle_drugged()
+	handle_slurring()
+
+/mob/living/proc/handle_stunned()
+	if(stunned)
+		AdjustStunned(-1)
+	return stunned
+
+/mob/living/proc/handle_weakened()
+	if(weakened)
+		weakened = max(weakened-1,0)	//before you get mad Rockdtben: I done this so update_canmove isn't called multiple times
+	return weakened
+
+/mob/living/proc/handle_stuttering()
+	if(stuttering)
+		stuttering = max(stuttering-1, 0)
+	return stuttering
+
+/mob/living/proc/handle_silent()
+	if(silent)
+		silent = max(silent-1, 0)
+	return silent
+
+/mob/living/proc/handle_drugged()
+	if(druggy)
+		druggy = max(druggy-1, 0)
+	return druggy
+
+/mob/living/proc/handle_slurring()
+	if(slurring)
+		slurring = max(slurring-1, 0)
+	return slurring
+
+/mob/living/proc/handle_paralysed() // Currently only used by simple_animal.dm, treated as a special case in other mobs
+	if(paralysis)
+		AdjustParalysis(-1)
+	return paralysis
+
+//Check for brain worms in head.
+/mob/proc/has_brain_worms()
+
+	for(var/I in contents)
+		if(istype(I,/mob/living/simple_animal/borer))
+			return I
+
+	return 0
