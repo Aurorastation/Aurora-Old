@@ -234,7 +234,7 @@
 
 /obj/structure/closet/secure_closet/forensics
 	name = "Forensic tech's closet"
-	req_access = list(access_forensics_lockers)
+	req_access = list(access_forensics)
 	icon_state = "sec1"
 	icon_closed = "sec"
 	icon_locked = "sec1"
@@ -260,7 +260,7 @@
 
 /obj/structure/closet/secure_closet/detective
 	name = "Detective's Cabinet"
-	req_access = list(access_forensics_lockers)
+	req_access = list(access_detective)
 	icon_state = "cabinetdetective_locked"
 	icon_closed = "cabinetdetective"
 	icon_locked = "cabinetdetective_locked"

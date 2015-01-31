@@ -91,6 +91,11 @@ proc/populate_gear_list()
 	path = /obj/item/weapon/reagent_containers/food/drinks/flask/barflask
 	cost = 2
 
+/datum/gear/cards
+	display_name = "deck of cards"
+	path = /obj/item/weapon/deck
+	cost = 1
+
 /datum/gear/tie_horrible
 	display_name = "horrible tie"
 	path = /obj/item/clothing/tie/horrible

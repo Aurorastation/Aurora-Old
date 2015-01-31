@@ -13,19 +13,28 @@ var/global/list/seen_religions = list()
 	return
 
 var/global/list/citizenship_choices = list(
-	"Earth",
-	"Mars",
-	"Moghes",
-	"Ahdomai",
-	"Qerrbalak"
+	"Sol Alliance",
+	"Republic of Elyra",
+	"People’s Republic of Adhomai",
+	"Moghes Hegemony",
+	"Skrellian Confederacy",
+	"None",
+	"Other"
 	)
 
 var/global/list/home_system_choices = list(
 	"Sol",
-	"Nyx",
 	"Tau Ceti",
 	"Epsilon Ursae Majoris",
-	"S'randarr"
+	"Epsilon Eridani",
+	"Altair",
+	"Trimurti",
+	"Nralakk",
+	"Uueoa-Esa",
+	"S’rand’marr",
+	"Sedantis",
+	"Jedeed Isfahan",
+	"Other"
 	)
 
 var/global/list/faction_choices = list(
@@ -43,11 +52,12 @@ var/global/list/faction_choices = list(
 	)
 
 var/global/list/religion_choices = list(
-	"Unitarianism",
 	"Hinduism",
-	"Buddhist",
-	"Islamic",
+	"Buddhism",
+	"Islam",
 	"Christian",
 	"Agnostic",
-	"Deist"
+	"Deist",
+	"None",
+	"Other"
 	)

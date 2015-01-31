@@ -523,6 +523,9 @@
 	if(src.closed == 1)
 		user << "\red Open the cover before inserting the sample."
 		return
+	if(!istype(W))
+		user << "\red You struggle to put that in the machine."
+		return
 	if(W.used == 1)
 		src.bloodsamp = W
 		user.drop_item()
