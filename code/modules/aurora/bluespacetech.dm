@@ -59,6 +59,7 @@
 		bst.equip_to_slot_or_del(new /obj/item/weapon/storage/box/ids(bst.back), slot_in_backpack)
 		bst.equip_to_slot_or_del(new /obj/item/device/t_scanner(bst.back), slot_in_backpack)
 		bst.equip_to_slot_or_del(new /obj/item/device/signaltool(bst.back), slot_in_backpack)
+		bst.equip_to_slot_or_del(new /obj/item/device/multitool(bst.back), slot_in_backpack)
 		bst.equip_to_slot_or_del(new /obj/item/device/pda/captain/bst(bst.back), slot_in_backpack)
 
 	//Implant because access
