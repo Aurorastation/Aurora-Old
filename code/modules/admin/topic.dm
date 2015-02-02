@@ -2805,3 +2805,10 @@
 		usr << "Holodeck safeties reset."
 		message_admins("Holdeck reset.")
 		return
+
+	else if(href_list["warnsearchckey"] || href_list["warnsearchadmin"])
+		var/adminckey = href_list["warnsearchadmin"]
+		var/playerckey = href_list["warnsearchckey"]
+
+		warning_panel(adminckey, playerckey)
+		return
