@@ -59,8 +59,14 @@
 		bst.equip_to_slot_or_del(new /obj/item/weapon/storage/box/ids(bst.back), slot_in_backpack)
 		bst.equip_to_slot_or_del(new /obj/item/device/t_scanner(bst.back), slot_in_backpack)
 		bst.equip_to_slot_or_del(new /obj/item/device/signaltool(bst.back), slot_in_backpack)
-		bst.equip_to_slot_or_del(new /obj/item/device/multitool(bst.back), slot_in_backpack)
 		bst.equip_to_slot_or_del(new /obj/item/device/pda/captain/bst(bst.back), slot_in_backpack)
+		bst.equip_to_slot_or_del(new /obj/item/device/multitool(bst.back), slot_in_backpack)
+
+		var/obj/item/weapon/storage/box/pills = new /obj/item/weapon/storage/box
+		pills.name = "adminordrazine"
+		for(var/i = 1, i < 12, i++)
+			new /obj/item/weapon/reagent_containers/pill/adminordrazine(pills)
+		bst.equip_to_slot_or_del(pills, slot_in_backpack)
 
 	//Implant because access
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(bst)
@@ -99,11 +105,6 @@
 	bst.add_language("Robot Talk")
 	bst.add_language("Drone Talk")
 
-/*	bst.bluespace_trail.set_up(src)
-	bst.bluespace_trail.start()
-	spawn(100)
-		bst.bluepsace_trail.stop()
-*/
 	spawn(5)
 		s.start()
 		bst.anchored = 0
@@ -117,7 +118,6 @@
 /mob/living/carbon/human/bst
 	universal_understand = 1
 	status_flags = GODMODE
-	var/bluespace_trail = new /datum/effect/effect/system/ion_trail_follow
 
 	can_inject(var/mob/user, var/error_msg, var/target_zone)
 		user << "<span class='alert'>The [src] disarms you before you can inject them.</span>"
@@ -271,6 +271,22 @@
 			src << "\blue You will no-longer phase through solid matter."
 		return
 
+	verb/bstrecover()
+		set name = "Rejuv"
+		set desc = "Use the bluespace within you to restore your health"
+		set category = "BST"
+		set popup_menu = 0
+
+		src.revive()
+
+	verb/bstawake()
+		set name = "Wake up"
+		set desc = "This is a quick fix to the reloging sleep bug"
+		set category = "BST"
+		set popup_menu = 0
+
+		src.sleeping = 0
+
 //Equipment. All should have canremove set to 0
 //All items with a /bst need the attack_hand() proc overrided to stop people getting overpowered items.
 
@@ -422,3 +438,4 @@
 
 /mob/living/carbon/human/bst/restrained()
 	return 0
+
