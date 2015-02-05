@@ -41,11 +41,8 @@
 	//Chaplains are resistant to vampire powers
 	if(mind && mind.assigned_role == "Chaplain")
 		return 0
-	if(mind)//Not sure if this should be here but we can easily override.
-		var/mob/living/carbon/human/whylikethis = mind.current
-		if(istype(whylikethis))
-			if(whylikethis.species == "Machine")
-				return 0
+	if(get_species() == "Machine")
+		return 0
 	//Vampires who have reached their full potential can affect nearly everything
 	if(M && M.vampire && (VAMP_FULL in M.vampire.powers))
 		return 1 // This doesn't really need to be here because of well the line below it.
