@@ -833,8 +833,8 @@
 				M << "\red You have been kicked from the server"
 			else
 				M << "\red You have been kicked from the server: [reason]"
-			log_admin("[key_name(usr)] booted [key_name(M)].")
-			message_admins("\blue [key_name_admin(usr)] booted [key_name_admin(M)].", 1)
+			log_admin("[key_name(usr)] booted [key_name(M)]for : [reason].")
+			message_admins("\blue [key_name_admin(usr)] booted [key_name_admin(M)] for: [reason].", 1)
 			//M.client = null
 			del(M.client)
 /*
