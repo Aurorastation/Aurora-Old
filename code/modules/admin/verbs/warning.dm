@@ -108,11 +108,12 @@
 		ip = C.address
 	var/a_ckey = sanitizeSQL(ckey)
 
-	message_admins("Data to be entered: [severity], [reason], [notes], [sqlkey], [computerid], [ip], [a_ckey].")
 	var/DBQuery/query_insert = dbcon.NewQuery("INSERT INTO aurora_warnings (id, time, severity, reason, notes, ckey, computerid, ip, a_ckey) VALUES (null, Now(), '[severity]', '[reason]', '[notes]', '[sqlkey]', '[computerid]', '[ip]', '[a_ckey]')")
 	query_insert.Execute()
 	notes_add(warned_ckey, "Warning added by [a_ckey], for: [reason]. || Notes regarding the warning: [notes].")
 	feedback_add_details("admin_verb","WARN-DB")
+	if(C)
+		C << "<font color='red'><BIG><B>You have been formally warned by an administrator.</B></BIG><br>You can look up your warnings through the OOC panel, with the 'My Warnings' button.</font>"
 	message_admins("[key_name_admin(src)] has warned [warned_ckey].")
 	message_mods("[key_name_admin(src)] has warned [warned_ckey].")
 
@@ -198,7 +199,7 @@
 		alert("Connection to the SQL database lost. Aborting. Please alert an Administrator or a member of staff.")
 		return
 
-	var/dat = "<div align='center'><h3>Warning Look-up Panel</h3></div><br>"
+	var/dat = "<div align='center'><h3>Warning Look-up Panel</h3><br>"
 
 	//Totally not stealing code from the DB_ban_panel
 
@@ -207,7 +208,7 @@
 	dat += "<b>Ckey:</b> <input type='text' name='warnsearchckey' value='[playerckey]'>"
 	dat += "<b>Admin ckey:</b> <input type='text' name='warnsearchadmin' value='[adminckey]'>"
 	dat += "<input type='submit' value='search'>"
-	dat += "</form>"
+	dat += "</form></div>"
 
 	if(adminckey || playerckey)
 
