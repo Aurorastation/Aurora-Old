@@ -833,8 +833,8 @@
 				M << "\red You have been kicked from the server"
 			else
 				M << "\red You have been kicked from the server: [reason]"
-			log_admin("[key_name(usr)] booted [key_name(M)].")
-			message_admins("\blue [key_name_admin(usr)] booted [key_name_admin(M)].", 1)
+			log_admin("[key_name(usr)] booted [key_name(M)]for : [reason].")
+			message_admins("\blue [key_name_admin(usr)] booted [key_name_admin(M)] for: [reason].", 1)
 			//M.client = null
 			del(M.client)
 /*
@@ -2804,4 +2804,11 @@
 		A.emagged = 0
 		usr << "Holodeck safeties reset."
 		message_admins("Holdeck reset.")
+		return
+
+	else if(href_list["warnsearchckey"] || href_list["warnsearchadmin"])
+		var/adminckey = href_list["warnsearchadmin"]
+		var/playerckey = href_list["warnsearchckey"]
+
+		warning_panel(adminckey, playerckey)
 		return
