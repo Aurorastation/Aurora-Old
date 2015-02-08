@@ -617,6 +617,12 @@
 		else
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=wizard;jobban4=\ref[M]'>[replacetext("Wizard", " ", "&nbsp")]</a></td>"
 
+		//Vampire
+		if(jobban_isbanned(M, "vampire") || isbanned_dept)
+			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=vampire;jobban4=\ref[M]'><font color=red>[replacetext("Vampire", " ", "&nbsp")]</font></a></td>"
+		else
+			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=vampire;jobban4=\ref[M]'>[replacetext("Vampire", " ", "&nbsp")]</a></td>"
+
 		//ERT
 		if(jobban_isbanned(M, "Emergency Response Team") || isbanned_dept)
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Emergency Response Team;jobban4=\ref[M]'><font color=red>Emergency Response Team</font></a></td>"
