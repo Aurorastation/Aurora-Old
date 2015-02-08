@@ -110,11 +110,11 @@
 				if(C.prefs.toggles & CHAT_SCOPES_DEBUG)
 					C << msg
 
-/proc/msg_scopes_list(var/thing)
+/proc/msg_scopes_list(var/thing, var/name = "")
 	if(!thing)
 		return
 
-	var/output
+	var/output = "[name]: "
 	for(var/line in thing)
 		output += "[line]"
 		output += " :: "
