@@ -43,6 +43,8 @@
 	if(!possible_traitors.len)
 		return 0
 
+	msg_scopes_list(possible_traitors, "possible_traitors")
+
 	if(config.traitor_scaling)
 		num_traitors = max_traitors - 1 + prob(traitor_prob)
 		log_game("Number of traitors: [num_traitors]")
@@ -100,7 +102,7 @@
 				if(istype(player, "/mob/living/silicon/robot/drone"))
 					possible_traitors -= player
 					scopesdebug++
-		msg_scopes("possible_traitors [possible_traitors.len]")
+		msg_scopes_list(possible_traitors, "possible_traitors")
 
 
 		if(scopesdebug) //4464-45

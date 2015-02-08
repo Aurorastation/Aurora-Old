@@ -218,9 +218,3 @@
 		IgniteMob()
 
 //Mobs on Fire end
-
-//Why did I place it here?
-//Remind me to place this somewhere else
-//I sware this uses less memory
-/mob/living/proc/isipc()
-	return 0
