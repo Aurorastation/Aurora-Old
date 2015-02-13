@@ -133,3 +133,13 @@
 	permeability_coefficient = 0.05
 	item_color="yellow"
 	species_restricted = list("Unathi")
+
+/obj/item/clothing/gloves/black/unathi
+	name = "black gloves"
+	desc = "black gloves made for Unathi use."
+	species_restricted = list("Unathi")
+
+/obj/item/clothing/gloves/black/tajara
+	name = "black gloves"
+	desc = "black gloves made for Tajara use."
+	species_restricted = list("Tajaran")
