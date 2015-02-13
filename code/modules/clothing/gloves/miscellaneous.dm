@@ -53,16 +53,6 @@
 	cmo
 		item_color = "medical"		//Exists for washing machines. Is not different from latex gloves in any way.
 
-/obj/item/clothing/gloves/latex/unathi
-	name = "unathi latex gloves"
-	desc = "Sterile latex gloves. Designed for Unathi use."
-	species_restricted = list("Unathi")
-
-/obj/item/clothing/gloves/latex/tajara
-	name = "tajara latex gloves"
-	desc = "Sterile latex gloves. Designed for Tajara use."
-	species_restricted = list("Tajaran")
-
 /obj/item/clothing/gloves/botanic_leather
 	desc = "These leather gloves protect against thorns, barbs, prickles, spikes and other harmful objects of floral origin."
 	name = "botanist's leather gloves"
@@ -78,7 +68,6 @@
 	item_state = "watchgloves"
 	w_class = 1
 	wired = 1
-	species_restricted = list()
 //	var/time = 1
 
 	verb/checktime()
