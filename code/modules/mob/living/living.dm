@@ -801,7 +801,10 @@
 		return
 
 	for(var/mob/O in viewers(src, null))
-		O.show_message(text("<B>[src] scrambles into the ventillation ducts!</B>"), 1)
+		if(mind.changeling)
+			O.show_message(text("<B>\red [src] twists their body into a vile form, bones cracking and popping as its tiny body contorts into a mass of distorted limbs, quickly forcing their way through the vent!</B>"), 1)
+		else
+			O.show_message(text("<B>[src] scrambles into the ventillation ducts!</B>"), 1)
 	loc = target_vent
 
 	var/travel_time = round(get_dist(loc, target_vent.loc) / 2)
