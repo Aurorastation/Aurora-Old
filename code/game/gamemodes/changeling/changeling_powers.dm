@@ -33,6 +33,8 @@
 		if(!(language in mind.changeling.absorbed_languages))
 			mind.changeling.absorbed_languages += language
 
+	add_language("Changeling")
+
 	return 1
 
 //removes our changeling verbs
@@ -41,6 +43,7 @@
 	for(var/datum/power/changeling/P in mind.changeling.purchasedpowers)
 		if(P.isVerb)
 			verbs -= P.verbpath
+	remove_language("Changeling")
 
 
 //Helper proc. Does all the checks and stuff for us to avoid copypasta
@@ -657,6 +660,7 @@ var/list/datum/dna/hivemind_bank = list()
 		return
 
 	var/mimic_voice = input("Enter a name to mimic.", "Mimic Voice", null) as text
+	mimic_voice = strip_html(mimic_voice, MAX_NAME_LEN) //Why am I doing it like this? Because 30+ hours no sleeps
 	if(!mimic_voice)
 		return
 
@@ -691,6 +695,8 @@ var/list/datum/dna/hivemind_bank = list()
 
 	var/list/victims = list()
 	for(var/mob/living/carbon/C in oview(changeling.sting_range))
+		if(C.get_species() == "Machine")
+			continue
 		victims += C
 	var/mob/living/carbon/T = input(src, "Who will we sting?") as null|anything in victims
 
@@ -839,7 +845,7 @@ var/list/datum/dna/hivemind_bank = list()
 	if(T.reagents)	T.reagents.add_reagent("lexorin", 40)
 
 	//Becase a deadly powerful attack should be logged
-	msg_admin_attack("[usr.name] ([usr.ckey]) Death Stung [T.name] ([T.ckey]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[usr.x];Y=[usr.y];Z=[usr.z]'>JMP</a>")
+	msg_admin_attack("[key_name_admin(usr)] Death Stung [key_name_admin(T)] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[usr.x];Y=[usr.y];Z=[usr.z]'>JMP</a>")
 	usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Death stung [T.name] ([T.ckey])</font>")
 	T.attack_log += text("\[[time_stamp()]\] <font color='orange'>Was death stung by [usr.name] ([usr.ckey])</font>")
 	feedback_add_details("changeling_powers","DTHS")

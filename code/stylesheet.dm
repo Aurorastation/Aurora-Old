@@ -64,6 +64,7 @@ h1.alert, h2.alert		{color: #000000;}
 .tajaran				{color: #803B56;}
 .tajaran_signlang		{color: #941C1C;}
 .skrell					{color: #00CED1;}
+.vaurca					{color: #9e9e39;}
 .soghun					{color: #228B22;}
 .vox					{color: #AA00AA;}
 .rough					{font-family: "Trebuchet MS", cursive, sans-serif;}

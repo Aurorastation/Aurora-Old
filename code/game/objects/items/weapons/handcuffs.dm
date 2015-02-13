@@ -54,7 +54,7 @@
 
 				C.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been handcuffed (attempt) by [user.name] ([user.ckey])</font>")
 				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Attempted to handcuff [C.name] ([C.ckey])</font>")
-				msg_admin_attack("[key_name(user)] attempted to handcuff [key_name(C)] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[C.x];Y=[C.y];Z=[C.z]'>JMP</a>")
+				msg_admin_attack("[key_name_admin(user)] attempted to handcuff [key_name_admin(C)] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[C.x];Y=[C.y];Z=[C.z]'>JMP</a>")
 
 				var/obj/effect/equip_e/human/O = new /obj/effect/equip_e/human(  )
 				O.source = user

@@ -71,7 +71,7 @@ emp_act
 				c_hand = r_hand
 
 			if(c_hand && (stun_amount || agony_amount > 10))
-				msg_admin_attack("[src.name] ([src.ckey]) was disarmed by a stun effect")
+				msg_admin_attack("[key_name_admin(src)] was disarmed by a stun effect")
 
 				u_equip(c_hand)
 				if (affected.status & ORGAN_ROBOT)
@@ -354,7 +354,7 @@ emp_act
 				src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been hit with a [O], thrown by [M.name] ([assailant.ckey])</font>")
 				M.attack_log += text("\[[time_stamp()]\] <font color='red'>Hit [src.name] ([src.ckey]) with a thrown [O]</font>")
 				if(!istype(src,/mob/living/simple_animal/mouse))
-					msg_admin_attack("[src.name] ([src.ckey]) was hit by a [O], thrown by [M.name] ([assailant.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
+					msg_admin_attack("[key_name_admin(src)] was hit by a [O], thrown by [key_name_admin(M)] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
 
 		//thrown weapon embedded object code.
 		if(dtype == BRUTE && istype(O,/obj/item))
