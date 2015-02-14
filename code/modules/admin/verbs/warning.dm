@@ -114,7 +114,7 @@
 	feedback_add_details("admin_verb","WARN-DB")
 	if(C)
 		C << "<font color='red'><BIG><B>You have been formally warned by an administrator.</B></BIG><br>You can look up your warnings through the OOC panel, with the 'My Warnings' button.</font>"
-	message_admins("[key_name_admin(src)] has warned [warned_ckey].")
+	message_admins("[key_name_admin(src)] has warned [warned_ckey] for: [reason].")
 	message_mods("[key_name_admin(src)] has warned [warned_ckey].")
 
 /*
