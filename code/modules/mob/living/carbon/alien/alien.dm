@@ -47,7 +47,8 @@
 
 /mob/living/carbon/alien/Stat()
 	..()
-	stat(null, "Progress: [amount_grown]/[max_grown]")
+	if(!istype(src, /mob/living/carbon/alien/humanoid))
+		stat(null, "Progress: [amount_grown]/[max_grown]")
 
 /mob/living/carbon/alien/restrained()
 	return 0
