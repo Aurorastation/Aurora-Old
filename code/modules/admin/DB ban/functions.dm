@@ -316,8 +316,6 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 	output += "</form>"
 	output += "Please note that all jobban bans or unbans are in-effect the following round."
 
-	message_admins("Adminckey: [adminckey], playerckey: [playerckey].")
-
 	if(adminckey || playerckey)
 
 		var/blcolor = "#ffeeee" //banned light
