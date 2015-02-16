@@ -85,6 +85,7 @@
 
 	verbs += /mob/living/silicon/pai/proc/choose_chassis
 	verbs += /mob/living/silicon/pai/proc/choose_verbs
+	verbs += /mob/living/proc/hide
 
 	//PDA
 	pda = new(src)

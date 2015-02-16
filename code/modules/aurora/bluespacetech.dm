@@ -105,6 +105,10 @@
 	bst.add_language("Robot Talk")
 	bst.add_language("Drone Talk")
 
+	var/datum/organ/internal/xenos/hivenode/hivelisten = new /datum/organ/internal/xenos/hivenode(src)
+	hivelisten.owner = bst
+	bst.internal_organs += hivelisten
+
 	spawn(5)
 		s.start()
 		bst.anchored = 0
@@ -123,6 +127,9 @@
 		user << "<span class='alert'>The [src] disarms you before you can inject them.</span>"
 		user.drop_item()
 		return 0
+
+	binarycheck()
+		return 1
 
 	suicide()
 		if(key && species.name != "Human")
