@@ -348,37 +348,37 @@ proc/populate_gear_list()
 
 /datum/gear/armband
 	display_name = "red armband"
-	path = /obj/item/clothing/armband
+	path = /obj/item/clothing/tie/armband
 	cost = 1
 
 /datum/gear/armband_cargo
 	display_name = "cargo armband"
-	path = /obj/item/clothing/armband/cargo
+	path = /obj/item/clothing/tie/armband/cargo
 	cost = 1
 
 /datum/gear/armband_engineering
 	display_name = "engineering armband"
-	path = /obj/item/clothing/armband/engine
+	path = /obj/item/clothing/tie/armband/engine
 	cost = 1
 
 /datum/gear/armband_science
 	display_name = "science armband"
-	path = /obj/item/clothing/armband/science
+	path = /obj/item/clothing/tie/armband/science
 	cost = 1
 
 /datum/gear/armband_hydroponics
 	display_name = "hydroponics armband"
-	path = /obj/item/clothing/armband/hydro
+	path = /obj/item/clothing/tie/armband/hydro
 	cost = 1
 
 /datum/gear/armband_medical
 	display_name = "medical armband"
-	path = /obj/item/clothing/armband/med
+	path = /obj/item/clothing/tie/armband/med
 	cost = 1
 
 /datum/gear/armband_emt
 	display_name = "EMT armband"
-	path = /obj/item/clothing/armband/medgreen
+	path = /obj/item/clothing/tie/armband/medgreen
 	cost = 1
 
 /datum/gear/skirt_blue

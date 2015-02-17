@@ -110,17 +110,17 @@ proc/assign_sec_to_department(var/mob/living/carbon/human/H)
 	keyslot2 = new /obj/item/device/encryptionkey/headset_sci
 
 /obj/item/clothing/under/rank/security/cargo/New()
-	var/obj/item/clothing/armband/cargo/A		= new /obj/item/clothing/armband/cargo
+	var/obj/item/clothing/tie/armband/cargo/A		= new /obj/item/clothing/tie/armband/cargo
 	hastie = A
 
 /obj/item/clothing/under/rank/security/engine/New()
-	var/obj/item/clothing/armband/engine/A		= new /obj/item/clothing/armband/engine
+	var/obj/item/clothing/tie/armband/engine/A		= new /obj/item/clothing/tie/armband/engine
 	hastie = A
 
 /obj/item/clothing/under/rank/security/science/New()
-	var/obj/item/clothing/armband/science/A		= new /obj/item/clothing/armband/science
+	var/obj/item/clothing/tie/armband/science/A		= new /obj/item/clothing/tie/armband/science
 	hastie = A
 
 /obj/item/clothing/under/rank/security/med/New()
-	var/obj/item/clothing/armband/medgreen/A	= new /obj/item/clothing/armband/medgreen
+	var/obj/item/clothing/tie/armband/medgreen/A	= new /obj/item/clothing/tie/armband/medgreen
 	hastie = A
