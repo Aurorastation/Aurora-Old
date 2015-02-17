@@ -70,8 +70,8 @@ var/list/datum/power/changeling/powerinstances = list()
 	verbpath = /mob/proc/changeling_deaf_sting
 
 /datum/power/changeling/blind_sting
-	name = "Blinding Spiders"
-	desc = "With this, we can completely blinding them for a short time."
+	name = "Blinding Sting"
+	desc = "With this, we completely blind a human for a short time."
 	genomecost = 2
 	allowduringlesserform = 1
 	verbpath = /mob/proc/changeling_blind_sting
