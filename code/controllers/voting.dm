@@ -68,6 +68,8 @@ datum/controller/vote
 		if(auto_muted && !ooc_allowed)
 			auto_muted = 0
 			ooc_allowed = !( ooc_allowed )
+			ooc_dev_allowed = 1 //Because
+			ooc_mod_allowed = 1 //Because
 			world << "<b>The OOC channel has been automatically enabled due to vote end.</b>"
 			log_admin("OOC was toggled automatically due to vote end.")
 			message_admins("OOC has been toggled on automatically.")

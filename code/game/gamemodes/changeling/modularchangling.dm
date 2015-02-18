@@ -64,21 +64,21 @@ var/list/datum/power/changeling/powerinstances = list()
 
 /datum/power/changeling/deaf_sting
 	name = "Deaf Sting"
-	desc = "We silently sting a human, completely deafening them for a short time."
+	desc = "We sting a human, completely deafening them for a short time."
 	genomecost = 1
 	allowduringlesserform = 1
 	verbpath = /mob/proc/changeling_deaf_sting
 
 /datum/power/changeling/blind_sting
-	name = "Blind Sting"
-	desc = "We silently sting a human, completely blinding them for a short time."
+	name = "Blinding Sting"
+	desc = "With this, we completely blind a human for a short time."
 	genomecost = 2
 	allowduringlesserform = 1
 	verbpath = /mob/proc/changeling_blind_sting
 
 /datum/power/changeling/silence_sting
 	name = "Silence Sting"
-	desc = "We silently sting a human, completely silencing them for a short time."
+	desc = "We sting a human, completely silencing them for a short time."
 	helptext = "Does not provide a warning to a victim that they have been stung, until they try to speak and cannot."
 	genomecost = 3
 	allowduringlesserform = 1
@@ -121,7 +121,7 @@ var/list/datum/power/changeling/powerinstances = list()
 
 /datum/power/changeling/DeathSting
 	name = "Death Sting"
-	desc = "We silently sting a human, filling him with potent chemicals. His rapid death is all but assured."
+	desc = "We impale a human, filling him with potent chemicals. His rapid death is all but assured."
 	genomecost = 10
 	verbpath = /mob/proc/changeling_DEATHsting
 

@@ -108,6 +108,9 @@ world/IsBanned(key,address,computer_id)
 
 			var/desc = "\nReason: You, or another user of this computer or connection ([pckey]) is banned from playing here. The ban reason is:\n[reason]\nThis ban was applied by [ackey] on [bantime], [expires]"
 
+			log_access("Failed Login: [key] [computer_id] [address] - Banned [.["reason"]]")
+			message_admins("\blue Failed Login: [key] id:[computer_id] ip:[address] - Banned [.["reason"]]")
+
 			return list("reason"="[bantype]", "desc"="[desc]")
 
 		if (failedcid)
