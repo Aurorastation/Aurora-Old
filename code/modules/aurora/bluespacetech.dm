@@ -27,6 +27,10 @@
 		src << "\red The game hasn't started yet!"
 		return
 
+	if(istype(mob, /mob/living))
+		if(!holder.original_mob)
+			holder.original_mob = mob
+
 	//I couldn't get the normal way to work so this works.
 	//This whole section looks like a hack, I don't like it.
 	var/T = get_turf(usr)
@@ -154,13 +158,15 @@
 			spawn(5)
 				del(s)
 			if(key)
-				var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
-				ghost.key = key
-				ghost.mind.name = "[ghost.key] BSTech"
-				ghost.name = "[ghost.key] BSTech"
-				ghost.real_name = "[ghost.key] BSTech"
-				ghost.voice_name = "[ghost.key] BSTech"
-
+				if(client.holder && client.holder.original_mob)
+					client.holder.original_mob.key = key
+				else
+					var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
+					ghost.key = key
+					ghost.mind.name = "[ghost.key] BSTech"
+					ghost.name = "[ghost.key] BSTech"
+					ghost.real_name = "[ghost.key] BSTech"
+					ghost.voice_name = "[ghost.key] BSTech"
 			del(src)
 		return
 
@@ -293,6 +299,17 @@
 		set popup_menu = 0
 
 		src.sleeping = 0
+
+	verb/bstquit()
+		set name = "Teleport out"
+		set desc = "Activate bluespace to leave (and return to your original mob(if you have one))"
+		set category = "BST"
+
+		var/client/C = src.client
+		if(C.holder && C.holder.original_mob)
+			C.holder.original_mob.key = key
+			C.holder.original_mob = null
+		suicide()
 
 //Equipment. All should have canremove set to 0
 //All items with a /bst need the attack_hand() proc overrided to stop people getting overpowered items.

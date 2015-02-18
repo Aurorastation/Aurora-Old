@@ -243,6 +243,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			usr << "<span class='warning'>The astral cord that ties your body and your spirit has been severed. You are likely to wander the realm beyond until your body is finally dead and thus reunited with you.</span>"
 			return
 	mind.current.ajourn=0
+	if(mind.current == client.holder.original_mob)
+		client.holder.original_mob = null
 	mind.current.key = key
 	return 1
 

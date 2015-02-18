@@ -12,6 +12,9 @@ client
 			usr << "\red You need to be an administrator to access this."
 			return
 
+		if(!holder.rights & (R_MOD|R_ADMIN|R_FUN|R_DEV))
+			usr << "\red You need to be an admin/dev to access this."
+			return
 
 		var/title = ""
 		var/body = ""
@@ -416,7 +419,9 @@ client
 	if( (usr.client != src) || !src.holder )
 		return
 	if(href_list["Vars"])
-		debug_variables(locate(href_list["Vars"]))
+		if(!holder.rights & (R_ADMIN|R_MOD|R_FUN|R_DEV))
+			usr << "This can only be used on instances of type /mob"
+			debug_variables(locate(href_list["Vars"]))
 
 	//~CARN: for renaming mobs (updates their name, real_name, mind.name, their ID/PDA and datacore records).
 	else if(href_list["rename"])
@@ -532,7 +537,7 @@ client
 		href_list["datumrefresh"] = href_list["godmode"]
 
 	else if(href_list["gib"])
-		if(!check_rights(0))	return
+		if(!check_rights(R_SPAWN))	return
 
 		var/mob/M = locate(href_list["gib"])
 		if(!istype(M))
@@ -564,7 +569,7 @@ client
 			usr.client.cmd_admin_drop_everything(M)
 
 	else if(href_list["direct_control"])
-		if(!check_rights(0))	return
+		if(!check_rights(R_DEBUG|R_DEV))	return
 
 		var/mob/M = locate(href_list["direct_control"])
 		if(!istype(M))

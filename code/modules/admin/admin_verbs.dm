@@ -1,5 +1,6 @@
+/*
 //admin verb groups - They can overlap if you so wish. Only one of each verb will exist in the verbs list regardless
-var/list/admin_verbs_default = list(
+var/list/admin_verbs_default = 	list(
 	/client/proc/player_panel,
 	/client/proc/toggleadminhelpsound,	/*toggles whether we hear a sound when adminhelps/PMs are used*/
 	/client/proc/deadmin_self,			/*destroys our own admin datum so we can play as a regular player*/
@@ -101,6 +102,7 @@ var/list/admin_verbs_sounds = list(
 var/list/admin_verbs_fun = list(
 //Hey look it's in order of letters ^_^
 	/datum/admins/proc/access_news_network,
+	/datum/admins/proc/Game,
 	/datum/admins/proc/toggle_aliens,
 	/datum/admins/proc/toggle_space_ninja,
 	/client/proc/admin_ghost,
@@ -138,6 +140,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/send_space_ninja,
 	/client/proc/toggle_view_range
 	)
+
 var/list/admin_verbs_dev = list(
 	/client/proc/dsay,
 	/client/proc/togglebuildmodeself,
@@ -388,6 +391,7 @@ var/list/admin_verbs_mod = list(
 		/client/proc/toggle_power_update_profiling,
 		/client/proc/atmos_toggle_debug
 		)
+*/
 
 /client/proc/hide_most_verbs()//Allows you to keep some functionality while hiding some verbs
 	set name = "Adminverbs - Hide Most"
@@ -445,6 +449,9 @@ var/list/admin_verbs_mod = list(
 	else if(istype(mob,/mob/new_player))
 		src << "<font color='red'>Error: Aghost: Can't admin-ghost whilst in the lobby. Join or Observe first.</font>"
 	else
+		//first lets see if this works
+		if(!holder.original_mob)
+			holder.original_mob = mob
 		//ghostize
 		var/mob/body = mob
 		body.ghostize(1)
