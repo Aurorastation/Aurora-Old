@@ -28,7 +28,6 @@
 	maxbodytemp = 323	//Above 50 Degrees Celcius
 	universal_speak = 0
 	universal_understand = 1
-	holder_type = null
 
 /mob/living/simple_animal/mouse/Life()
 	..()
@@ -59,10 +58,22 @@
 	name = "[name] ([rand(1, 1000)])"
 	if(!body_color)
 		body_color = pick( list("brown","gray","white") )
+		if(body_color == "gray")
+			holder_type = /obj/item/weapon/holder/mouse/gray
+		else if(body_color == "brown")
+			holder_type = /obj/item/weapon/holder/mouse/brown
+		else if(body_color == "white")
+			holder_type = /obj/item/weapon/holder/mouse/white
 	icon_state = "mouse_[body_color]"
 	icon_living = "mouse_[body_color]"
 	icon_dead = "mouse_[body_color]_dead"
 	desc = "It's a small [body_color] rodent, often seen hiding in maintenance areas and making a nuisance of itself."
+	if(body_color == "gray")
+		holder_type = /obj/item/weapon/holder/mouse/gray
+	if(body_color == "brown")
+		holder_type = /obj/item/weapon/holder/mouse/brown
+	if(body_color == "white")
+		holder_type = /obj/item/weapon/holder/mouse/white
 
 /mob/living/simple_animal/mouse/proc/splat()
 	src.health = 0
@@ -72,6 +83,14 @@
 	layer = MOB_LAYER
 	if(client)
 		client.time_died_as_mouse = world.time
+
+/mob/living/simple_animal/mouse/proc/holdertype()
+	if(body_color == "gray")
+		holder_type = /obj/item/weapon/holder/mouse/gray
+	if(body_color == "brown")
+		holder_type = /obj/item/weapon/holder/mouse/brown
+	if(body_color == "white")
+		holder_type = /obj/item/weapon/holder/mouse/white
 
 /mob/living/simple_animal/mouse/start_pulling(var/atom/movable/AM)//Prevents mouse from pulling things
 	src << "<span class='warning'>You are too small to pull anything.</span>"

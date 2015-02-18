@@ -59,7 +59,7 @@
 	set name = "Dosay"
 	set hidden = 1
 
-	if(!check_rights(R_DUTYOFF)) return
+	if(!check_rights(R_ADMIN|R_DUTYOFF)) return
 
 	msg = copytext(sanitize(msg), 1, MAX_MESSAGE_LEN)
 	if(!msg)	return
