@@ -10,3 +10,4 @@
 		adjustFireLoss(-1)
 		adjustToxLoss(-1)
 		adjustOxyLoss(-1)
+

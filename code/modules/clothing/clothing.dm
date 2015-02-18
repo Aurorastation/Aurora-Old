@@ -393,6 +393,7 @@ BLIND     // can't see anything
 		3 = Report location
 		*/
 	var/obj/item/clothing/tie/hastie = null
+	var/obj/item/clothing/tie/armband/aband = null
 	var/displays_id = 1
 	var/rolled_down = 0
 	var/rolled_sleeves = 0
@@ -405,19 +406,30 @@ BLIND     // can't see anything
 		M.update_inv_w_uniform()
 
 /obj/item/clothing/under/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/clothing/tie))
+		if(istype(I, /obj/item/clothing/tie/armband))
+			if(!aband)
+				user.drop_item()
+				aband = I
+				aband.on_attached(src, user)
+
+				if(istype(loc, /mob/living/carbon/human))
+					var/mob/living/carbon/human/H = loc
+					H.update_inv_w_uniform()
+				return
+		if(!hastie)
+			user.drop_item()
+			hastie = I
+			hastie.on_attached(src, user)
+
+			if(istype(loc, /mob/living/carbon/human))
+				var/mob/living/carbon/human/H = loc
+				H.update_inv_w_uniform()
+
+			return
+
 	if(hastie)
 		hastie.attackby(I, user)
-		return
-
-	if(!hastie && istype(I, /obj/item/clothing/tie))
-		user.drop_item()
-		hastie = I
-		hastie.on_attached(src, user)
-
-		if(istype(loc, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = loc
-			H.update_inv_w_uniform()
-
 		return
 
 	..()
@@ -466,6 +478,8 @@ BLIND     // can't see anything
 			usr << "Its vital tracker and tracking beacon appear to be enabled."
 	if(hastie)
 		usr << "\A [hastie] is clipped to it."
+	if(aband)
+		usr << "\A [aband] is wrapped around the sleeve."
 
 /obj/item/clothing/under/proc/set_sensors(mob/usr as mob)
 	var/mob/M = usr
@@ -580,6 +594,23 @@ BLIND     // can't see anything
 	if(usr.stat) return
 
 	src.remove_accessory(usr)
+
+/obj/item/clothing/under/proc/remove_armband(mob/user as mob)
+	if(!aband)
+		return
+
+	aband.on_removed(user)
+	aband = null
+	update_clothing_icon()
+
+/obj/item/clothing/under/verb/removearmband()
+	set name = "Remove Armband"
+	set category = "Object"
+	set src in usr
+	if(!istype(usr, /mob/living)) return
+	if(usr.stat) return
+
+	src.remove_armband(usr)
 
 /obj/item/clothing/under/rank/New()
 	sensor_mode = pick(0,1,2,3)

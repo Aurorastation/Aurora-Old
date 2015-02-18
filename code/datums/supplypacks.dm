@@ -1265,6 +1265,19 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	containername = "speciality gloves kit"
 	group = "Supply"
 
+/datum/supply_packs/alienmedicalgloves
+	name = "Non-Human Sterile Glove Kit"
+	contains = list(/obj/item/clothing/gloves/latex/unathi,
+					/obj/item/clothing/gloves/latex/unathi,
+					/obj/item/clothing/gloves/latex/unathi,
+					/obj/item/clothing/gloves/latex/tajara,
+					/obj/item/clothing/gloves/latex/tajara,
+					/obj/item/clothing/gloves/latex/tajara)
+	cost = 25
+	containertype = /obj/structure/closet/crate
+	containername = "speciality sterile gloves kit"
+	group = "Medical / Science"
+
 /datum/supply_packs/hardsuitcrate_e
 	name = "Engineering Hardsuit"
 	contains = list(/obj/item/clothing/head/helmet/space/rig,

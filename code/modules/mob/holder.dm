@@ -71,6 +71,34 @@
 	icon_state = "cat"
 	origin_tech = null
 
+// Fuck the mice and their shitty fucking colors - Morgan
+
+/obj/item/weapon/holder/mouse/gray
+	name = "mouse"
+	desc = "It's a mouse. Squeak."
+	icon_state = "mouse_gray"
+	origin_tech = null
+
+/obj/item/weapon/holder/mouse/white
+	name = "mouse"
+	desc = "It's a mouse. Squeak."
+	icon_state = "mouse_white"
+	origin_tech = null
+
+/obj/item/weapon/holder/mouse/brown
+	name = "mouse"
+	desc = "It's a mouse. Squeak."
+	icon_state = "mouse_brown"
+	origin_tech = null
+
+// End shitty mouse section - Morgan
+
+/obj/item/weapon/holder/lizard
+	name = "lizard"
+	desc = "It's a lizard. Keep Phoebe away."
+	icon_state = "lizard"
+	origin_tech = null
+
 /obj/item/weapon/holder/borer
 	name = "cortical borer"
 	desc = "It's a slimy brain slug. Gross."

@@ -1,4 +1,4 @@
-
+/*
 /mob/living/carbon/alien/larva/verb/hide()
 	set name = "Hide"
 	set desc = "Allows to hide beneath tables or certain items. Toggled on or off."
@@ -19,8 +19,8 @@
 		for(var/mob/O in oviewers(src, null))
 			if ((O.client && !( O.blinded )))
 				O << text("[] slowly peaks up from the ground...", src)
-
-/mob/living/carbon/alien/larva/verb/evolve()
+*/
+/mob/living/carbon/alien/larva/evolve()
 	set name = "Evolve"
 	set desc = "Evolve into a fully grown Alien."
 	set category = "Alien"

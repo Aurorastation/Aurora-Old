@@ -109,3 +109,14 @@
 			if(R_ADMIN & C.holder.rights)
 				if(C.prefs.toggles & CHAT_SCOPES_DEBUG)
 					C << msg
+
+/proc/msg_scopes_list(var/thing, var/name = "")
+	if(!thing)
+		return
+
+	var/output = "[name]: "
+	for(var/line in thing)
+		output += "[line]"
+		output += " :: "
+
+	msg_scopes(output)
