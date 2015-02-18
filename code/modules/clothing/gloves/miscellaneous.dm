@@ -78,7 +78,7 @@
 	item_state = "watchgloves"
 	w_class = 1
 	wired = 1
-	species_restricted = list()
+	species_restricted = null
 //	var/time = 1
 
 	verb/checktime()

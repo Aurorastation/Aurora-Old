@@ -70,14 +70,3 @@
 	armor = list(melee = 62, bullet = 50, laser = 50,energy = 35, bomb = 10, bio = 2, rad = 0)
 	flags_inv = HIDEEARS
 	siemens_coefficient = 0.7
-
-/obj/item/clothing/head/helmet/space // For spacesuit helmets. Removing the protection from the base helmets appears to have fucked them. Fixed with this, I believe.
-	name = "spaceasshole helmet"
-	desc = "shouldn't be able to see this"
-	icon_state = "n/a"
-	item_state = "n/a"
-	flags_inv = HIDEEARS|HIDEEYES
-	cold_protection = HEAD
-	min_cold_protection_temperature = HELMET_MIN_COLD_PROTECTION_TEMPERATURE
-	heat_protection = HEAD
-	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
