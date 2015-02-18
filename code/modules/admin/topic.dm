@@ -1554,7 +1554,6 @@
 		src.owner << "Message reply to transmitted successfully."
 		log_admin("[key_name(src.owner)] replied to a fax message from [key_name(H)]: [input]")
 		message_admins("[key_name_admin(src.owner)] replied to a fax message from [key_name_admin(H)] <a href='?_src_=holder;CentcommFaxView=\ref[input]'>view message</a>", 1)
-		message_mods("[key_name_admin(src.owner)] replied to a fax message from [key_name_admin(H)]")
 
 
 	else if(href_list["jumpto"])

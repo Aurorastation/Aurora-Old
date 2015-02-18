@@ -710,24 +710,25 @@ note dizziness decrements automatically in the mob's Life() proc.
 	if(statpanel("Status"))	//not looking at that panel
 
 		if(client && client.holder)
-			stat(null,"Location:\t([x], [y], [z])")
-			stat(null,"CPU:\t[world.cpu]")
-			stat(null,"Instances:\t[world.contents.len]")
+			if(client.holder.rights & (R_ADMIN|R_MOD|R_DEV|R_FUN))
+				stat(null,"Location:\t([x], [y], [z])")
+				stat(null,"CPU:\t[world.cpu]")
+				stat(null,"Instances:\t[world.contents.len]")
 
-			if(master_controller)
-				stat(null,"MasterController-[last_tick_duration] ([master_controller.processing?"On":"Off"]-[controller_iteration])")
-				stat(null,"Air-[master_controller.air_cost]\tSun-[master_controller.sun_cost]")
-				stat(null,"Mob-[master_controller.mobs_cost]\t#[mob_list.len]")
-				stat(null,"Dis-[master_controller.diseases_cost]\t#[active_diseases.len]")
-				stat(null,"Mch-[master_controller.machines_cost]\t#[machines.len]")
-				stat(null,"Obj-[master_controller.objects_cost]\t#[processing_objects.len]")
-				stat(null,"Net-[master_controller.networks_cost]\tPnet-[master_controller.powernets_cost]")
-				stat(null,"NanoUI-[master_controller.nano_cost]\t#[nanomanager.processing_uis.len]")
-				stat(null,"Tick-[master_controller.ticker_cost]\tALL-[master_controller.total_cost]")
-			else
-				stat(null,"MasterController-ERROR")
-			if(delta_level:active)
-				stat(null,"Delta Countdown-[delta_level.timeleft()]")
+				if(master_controller)
+					stat(null,"MasterController-[last_tick_duration] ([master_controller.processing?"On":"Off"]-[controller_iteration])")
+					stat(null,"Air-[master_controller.air_cost]\tSun-[master_controller.sun_cost]")
+					stat(null,"Mob-[master_controller.mobs_cost]\t#[mob_list.len]")
+					stat(null,"Dis-[master_controller.diseases_cost]\t#[active_diseases.len]")
+					stat(null,"Mch-[master_controller.machines_cost]\t#[machines.len]")
+					stat(null,"Obj-[master_controller.objects_cost]\t#[processing_objects.len]")
+					stat(null,"Net-[master_controller.networks_cost]\tPnet-[master_controller.powernets_cost]")
+					stat(null,"NanoUI-[master_controller.nano_cost]\t#[nanomanager.processing_uis.len]")
+					stat(null,"Tick-[master_controller.ticker_cost]\tALL-[master_controller.total_cost]")
+				else
+					stat(null,"MasterController-ERROR")
+				if(delta_level:active)
+					stat(null,"Delta Countdown-[delta_level.timeleft()]")
 			if(!ooc_allowed)
 				stat(null,"OOC is globaly muted")
 			if(!looc_allowed)
@@ -739,7 +740,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 				var/total = 0
 				var/staff = 0
 				for(var/client/C in clients)
-					if(C.holder && (C.holder.rights & R_ADMIN || C.holder.rights & R_MOD))
+					if(C.holder && (C.holder.rights & (R_ADMIN|R_MOD)))
 						staff++
 					if(istype(C.mob, /mob/living))
 						players++
@@ -748,7 +749,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 					if(istype(C.mob, /mob/new_player))
 						lobby++
 					total++
-				stat(null, "Players: [total]\tModeration Staff: [staff]")
+				stat(null, "Players: [total]\t Moderation Staff: [staff]")
 				stat(null, "Living: [players]\tGhosts: [ghosts]\tLobby: [lobby]")
 		if(client)
 			stat(null, "Round Time: [round(world.time / 36000)]:[(world.time / 600 % 60) < 10 ? add_zero(world.time / 600 % 60, 1) : world.time / 600 % 60]")

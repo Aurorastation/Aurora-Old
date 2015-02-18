@@ -333,6 +333,9 @@
 
 	for(var/mob/M in mobs)
 		if(!M.ckey) continue
+		if(M.client && M.client.holder && M.client.holder.fakekey)
+			if(!usr.client.holder.rights & (R_ADMIN|R_MOD))
+				continue
 
 		dat += "<tr><td>[M.name]</td>"
 		if(isAI(M))

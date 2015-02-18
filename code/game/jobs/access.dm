@@ -184,6 +184,8 @@
 			return list(access_cent_general, access_cent_living)
 		if("Medical Officer")
 			return list(access_cent_general, access_cent_living, access_cent_medical)
+		if("Duty Officer")
+			return list(access_cent_general, access_cent_living, access_cent_medical, access_cent_captain)
 		if("Death Commando")
 			return list(access_cent_general, access_cent_specops, access_cent_living, access_cent_storage)
 		if("Research Officer")
