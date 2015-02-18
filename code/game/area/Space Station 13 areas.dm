@@ -840,6 +840,14 @@ var/list/ghostteleportlocs = list()
 	name = "\improper Cryogenic Storage"
 	icon_state = "Sleep"
 
+/area/crew_quarters/sleep/dorm_one
+	name = "\improper Dorm One"
+	icon_state = "Sleep"
+
+/area/crew_quarters/sleep/dorm_two
+	name = "\improper Dorm Two"
+	icon_state = "Sleep"
+
 /area/crew_quarters/sleep_male
 	name = "\improper Male Dorm"
 	icon_state = "Sleep"
