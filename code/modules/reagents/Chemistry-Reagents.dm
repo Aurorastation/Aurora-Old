@@ -2357,7 +2357,10 @@ datum
 							eyes_covered = 1
 							if ( !safe_thing )
 								safe_thing = victim.glasses
-						if ( eyes_covered && mouth_covered )
+						if(!(victim.species && !(victim.species.flags & IS_SYNTHETIC)))
+							victim << "\red your screen gets covered in some kind of spray."
+							return
+						else if ( eyes_covered && mouth_covered )
 							victim << "\red Your [safe_thing] protects you from the pepperspray!"
 							return
 						else if ( eyes_covered )	// Reduced effects if partially protected
@@ -2371,12 +2374,12 @@ datum
 							return
 						else if ( mouth_covered ) // Mouth cover is better than eye cover
 							victim << "\red Your [safe_thing] protects your face from the pepperspray!"
-							if (!(victim.species && (victim.species.flags & NO_PAIN)))
+							if (!(victim.species && (victim.species.flags & IS_PLANT)))
 								victim.emote("scream")
 							victim.eye_blurry = max(M.eye_blurry, 5)
 							return
-						else // Oh dear :D
-							if (!(victim.species && (victim.species.flags & NO_PAIN)))
+						else // Oh dear :D < - No idea what that's about. Looks like this is for unprotected people? The weird this is, it affects IPCs, because they have the no_pain flag. Might have a fix.
+							if (!(victim.species && (victim.species.flags & IS_PLANT)))
 								victim.emote("scream")
 							victim << "\red You're sprayed directly in the eyes with pepperspray!"
 							victim.eye_blurry = max(M.eye_blurry, 25)

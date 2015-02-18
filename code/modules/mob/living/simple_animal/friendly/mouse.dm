@@ -28,6 +28,7 @@
 	maxbodytemp = 323	//Above 50 Degrees Celcius
 	universal_speak = 0
 	universal_understand = 1
+	holder_type = null
 
 /mob/living/simple_animal/mouse/Life()
 	..()
@@ -90,6 +91,17 @@
 		client.time_died_as_mouse = world.time
 	..()
 
+/mob/living/simple_animal/mouse/MouseDrop(atom/over_object)
+
+	var/mob/living/carbon/H = over_object
+	if(!istype(H)) return ..()
+
+	if(H.a_intent == "help")
+		get_scooped(H)
+		return
+	else
+		return ..()
+
 /*
  * Mouse types
  */
@@ -97,14 +109,18 @@
 /mob/living/simple_animal/mouse/white
 	body_color = "white"
 	icon_state = "mouse_white"
+	holder_type = /obj/item/weapon/holder/mouse/white
+
 
 /mob/living/simple_animal/mouse/gray
 	body_color = "gray"
 	icon_state = "mouse_gray"
+	holder_type = /obj/item/weapon/holder/mouse/gray
 
 /mob/living/simple_animal/mouse/brown
 	body_color = "brown"
 	icon_state = "mouse_brown"
+	holder_type = /obj/item/weapon/holder/mouse/brown
 
 //TOM IS ALIVE! SQUEEEEEEEE~K :)
 /mob/living/simple_animal/mouse/brown/Tom

@@ -18,16 +18,16 @@
 //Drones use the same base as generic humanoids.
 //Drone verbs
 
-/mob/living/carbon/alien/humanoid/drone/verb/evolve() // -- TLE
-	set name = "Evolve (500)"
-	set desc = "Produce an interal egg sac capable of spawning children. Only one queen can exist at a time."
-	set category = "Alien"
+/mob/living/carbon/alien/humanoid/drone/evolve() // -- TLE
+//	set name = "Evolve (500)"
+//	set desc = "Produce an interal egg sac capable of spawning children. Only one queen can exist at a time."
+//	set category = "Alien"
 
 	if(powerc(500))
 		// Queen check
 		var/no_queen = 1
 		for(var/mob/living/carbon/alien/humanoid/queen/Q in living_mob_list)
-			if(!Q.key && Q.brain_op_stage != 4)
+			if(!Q.key && !Q.has_brain())
 				continue
 			no_queen = 0
 
