@@ -837,6 +837,7 @@
 #include "code\modules\aurora\banner.dm"
 #include "code\modules\aurora\bluespacetech.dm"
 #include "code\modules\aurora\duty officer.dm"
+#include "code\modules\aurora\generalorders.dm"
 #include "code\modules\aurora\intern.dm"
 #include "code\modules\aurora\recycler.dm"
 #include "code\modules\aurora\weldbackpack.dm"
