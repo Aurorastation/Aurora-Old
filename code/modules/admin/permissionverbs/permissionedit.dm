@@ -80,9 +80,9 @@
 	var/flags
 	switch(new_rank)
 		if("Head Developer")
-			flags = 32767
+			flags = 65535
 		if("Head Admin")
-			flags = 32767
+			flags = 65535
 		if("Primary Admin")
 			flags = 8191
 		if("Secondary Admin")
@@ -97,6 +97,8 @@
 			flags = 5672
 		if("Retired Admin")
 			flags = 8194
+		if("Duty Officer")
+			flags = 32768
 		else
 			flags = 0
 

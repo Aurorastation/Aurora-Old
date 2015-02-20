@@ -479,7 +479,8 @@ proc/display_roundstart_logout_report()
 
 	for(var/mob/M in mob_list)
 		if(M.client && M.client.holder)
-			M << msg
+			if(M.client.holder.rights & (R_ADMIN|R_MOD|R_DEV))
+				M << msg
 
 
 proc/get_nt_opposed()

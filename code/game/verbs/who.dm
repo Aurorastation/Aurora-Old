@@ -50,6 +50,8 @@
 	var/modmsg = ""
 	var/devmsg = ""
 	var/eventmsg = ""
+	var/dutymsg = ""
+	var/num_duty_online = 0
 	var/num_devs_online = 0
 	var/num_mods_online = 0
 	var/num_event_online = 0
@@ -120,6 +122,20 @@
 					devmsg += " (AFK)"
 				devmsg += "\n"
 				num_devs_online++
+			else if(R_DUTYOFF & C.holder.rights && !(C.holder.rights & (R_ADMIN|R_MOD)))
+				dutymsg += "\t[C]"
+
+				if(isobserver(C.mob))
+					devmsg += " - Observing"
+				else if(istype(C.mob,/mob/new_player))
+					devmsg += " - Lobby"
+				else
+					devmsg += " - Playing"
+
+				if(C.is_afk())
+					devmsg += " (AFK)"
+				devmsg += "\n"
+				num_duty_online++
 
 	else
 		for(var/client/C in admins)
@@ -141,5 +157,8 @@
 	if(num_event_online)
 		eventwho += "\n<b> Current Event Hosts([num_event_online]):</b>\n" + eventmsg
 
-	msg = "<b>Current Admins ([num_admins_online]):</b>\n" + msg + "\n<b> Current Moderators([num_mods_online]):</b>\n" + modmsg + eventwho + "\n<b> Current Developers([num_devs_online]):</b>\n" + devmsg
+	if(num_duty_online)
+		dutymsg = "\n<b> Current Duty Officers([num_event_online]):</b>\n" + dutymsg
+
+	msg = "<b>Current Admins ([num_admins_online]):</b>\n" + msg + "\n<b> Current Moderators([num_mods_online]):</b>\n" + modmsg + eventwho + "\n<b> Current Developers([num_devs_online]):</b>\n" + devmsg + dutymsg
 	src << msg
