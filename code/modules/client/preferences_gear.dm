@@ -14,12 +14,6 @@ proc/populate_gear_list()
 	var/whitelisted        //Term to check the whitelist for..
 
 //Standard gear datums.
-/*
-/datum/gear/cards
-	display_name = "deck of cards"
-	path = /obj/item/weapon/deck
-	cost = 2*/
-
 /datum/gear/dice
 	display_name = "d20"
 	path = /obj/item/weapon/dice/d20
@@ -34,7 +28,6 @@ proc/populate_gear_list()
 	display_name = "wallet"
 	path = /obj/item/weapon/storage/wallet
 	cost = 2
-
 
 /datum/gear/comb
 	display_name = "purple comb"
@@ -186,28 +179,28 @@ proc/populate_gear_list()
 /datum/gear/labcoat
 	display_name = "labcoat"
 	path = /obj/item/clothing/suit/storage/labcoat
-	cost = 3
+	cost = 2
 //	slot = slot_wear_suit
 
 /datum/gear/bluescrubs
 	display_name = "blue scrubs"
 	path = /obj/item/clothing/under/rank/medical/blue
-	cost = 1
+	cost = 3
 
 /datum/gear/purplescrubs
 	display_name = "purple scrubs"
 	path = /obj/item/clothing/under/rank/medical/purple
-	cost = 1
+	cost = 3
 
 /datum/gear/greenscrubs
 	display_name = "green scrubs"
 	path = /obj/item/clothing/under/rank/medical/green
-	cost = 1
+	cost = 3
 
 /datum/gear/surgeryapron
 	display_name = "surgical apron"
 	path = /obj/item/clothing/suit/apron/surgery
-	cost = 1
+	cost = 2
 
 
 /datum/gear/sandal
@@ -219,7 +212,7 @@ proc/populate_gear_list()
 /datum/gear/work_boots
 	display_name = "work boots"
 	path = /obj/item/clothing/shoes/work_boots
-	cost = 1
+	cost = 2
 
 /datum/gear/leather
 	display_name = "leather shoes"
@@ -272,13 +265,13 @@ proc/populate_gear_list()
 /datum/gear/green_gloves
 	display_name = "green gloves"
 	path = /obj/item/clothing/gloves/green
-	cost = 2
+	cost = 1
 //	slot = slot_gloves
 
 /datum/gear/white_gloves
 	display_name = "white gloves"
 	path = /obj/item/clothing/gloves/white
-	cost = 2
+	cost = 1
 //	slot = slot_gloves
 
 /datum/gear/black_shoes
@@ -338,7 +331,7 @@ proc/populate_gear_list()
 /datum/gear/jackboots
 	display_name = "jackboots"
 	path = /obj/item/clothing/shoes/jackboots
-	cost = 3
+	cost = 2
 //	slot = slot_shoes
 
 /datum/gear/webbing
@@ -455,7 +448,6 @@ proc/populate_gear_list()
 	path = /obj/item/clothing/under/lawyer/oldman
 	cost = 3
 
-
 //Security
 /datum/gear/security
 	display_name = "Security HUD"
@@ -495,22 +487,26 @@ proc/populate_gear_list()
 //	slot = slot_head
 	allowed_roles = list("Security Officer","Head of Security","Warden")
 
+/*
+// Disabled until there is an alt-uniform for each department
+// Uniforms cost 3 points.
+
 /datum/gear/formal_uni
 	display_name = "formal officer's uniform"
 	path = /obj/item/clothing/under/rank/security/formal
-	cost = 1
+	cost = 3
 	allowed_roles = list("Security Officer")
 
 /datum/gear/formal_cap
 	display_name = "officer's formal cap"
 	path = /obj/item/clothing/head/helmet/secfcap
-	cost = 1
+	cost = 2
 	allowed_roles = list("Security Officer","Head of Security","Warden")
 
 /datum/gear/formal_uniw
 	display_name = "formal warden's uniform"
 	path = /obj/item/clothing/under/rank/warden/formal
-	cost = 1
+	cost = 3
 	allowed_roles = list("Warden")
 
 /datum/gear/formal_jacketw
@@ -522,7 +518,7 @@ proc/populate_gear_list()
 /datum/gear/formal_unihos
 	display_name = "formal Head of Security's uniform"
 	path = /obj/item/clothing/under/rank/head_of_security/formal
-	cost = 1
+	cost = 3
 	allowed_roles = list("Head of Security")
 
 /datum/gear/formal_jackethos
@@ -530,7 +526,7 @@ proc/populate_gear_list()
 	path = /obj/item/clothing/suit/armor/hos/formal
 	cost = 2
 	allowed_roles = list("Head of Security")
-
+*/
 
 //Engineering
 /datum/gear/eng_beret
