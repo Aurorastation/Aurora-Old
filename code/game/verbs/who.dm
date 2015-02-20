@@ -126,15 +126,15 @@
 				dutymsg += "\t[C]"
 
 				if(isobserver(C.mob))
-					devmsg += " - Observing"
+					dutymsg += " - Observing"
 				else if(istype(C.mob,/mob/new_player))
-					devmsg += " - Lobby"
+					dutymsg += " - Lobby"
 				else
-					devmsg += " - Playing"
+					dutymsg += " - Playing"
 
 				if(C.is_afk())
-					devmsg += " (AFK)"
-				devmsg += "\n"
+					dutymsg += " (AFK)"
+				dutymsg += "\n"
 				num_duty_online++
 
 	else
