@@ -476,6 +476,12 @@ proc/populate_gear_list()
 	cost = 3
 	allowed_roles = list("Captain", "Head of Personnel", "Security Officer", "Head of Security", "Warden")
 
+/datum/gear/waist
+	display_name = "waist holster"
+	path = /obj/item/clothing/tie/holster/waist
+	cost = 3
+	allowed_roles = list("Captain", "Head of Personnel", "Security Officer", "Head of Security", "Warden")
+
 
 /datum/gear/normal_beret
 	display_name = "beret"
@@ -488,6 +494,43 @@ proc/populate_gear_list()
 	cost = 1
 //	slot = slot_head
 	allowed_roles = list("Security Officer","Head of Security","Warden")
+
+/datum/gear/formal_uni
+	display_name = "formal officer's uniform"
+	path = /obj/item/clothing/under/rank/security/formal
+	cost = 1
+	allowed_roles = list("Security Officer")
+
+/datum/gear/formal_cap
+	display_name = "officer's formal cap"
+	path = /obj/item/clothing/head/helmet/secfcap
+	cost = 1
+	allowed_roles = list("Security Officer","Head of Security","Warden")
+
+/datum/gear/formal_uniw
+	display_name = "formal warden's uniform"
+	path = /obj/item/clothing/under/rank/warden/formal
+	cost = 1
+	allowed_roles = list("Warden")
+
+/datum/gear/formal_jacketw
+	display_name = "formal warden's jacket"
+	path = /obj/item/clothing/suit/armor/vest/warden/jacket
+	cost = 2
+	allowed_roles = list("Warden")
+
+/datum/gear/formal_unihos
+	display_name = "formal Head of Security's uniform"
+	path = /obj/item/clothing/under/rank/head_of_security/formal
+	cost = 1
+	allowed_roles = list("Head of Security")
+
+/datum/gear/formal_jackethos
+	display_name = "formal Head of Security's jacket"
+	path = /obj/item/clothing/suit/armor/hos/formal
+	cost = 2
+	allowed_roles = list("Head of Security")
+
 
 //Engineering
 /datum/gear/eng_beret
@@ -549,3 +592,8 @@ proc/populate_gear_list()
 	cost = 2
 //	slot = slot_wear_suit
 	whitelisted = "Unathi"
+
+/datum/gear/cigar_case
+	display_name = "cigar case"
+	path = /obj/item/weapon/storage/fancy/cigars
+	cost = 3
