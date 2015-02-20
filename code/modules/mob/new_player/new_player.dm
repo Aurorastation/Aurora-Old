@@ -38,10 +38,14 @@
 
 		output += "<p><a href='byond://?src=\ref[src];observe=1'>Observe</A></p>"
 
+		//Station Directives
+		output += "<p><a href='byond://?src=\ref[src];showdirectives=1'>IC Station Directives</a></p>"
+
 		if(!IsGuestKey(src.key))
 			establish_db_connection()
 
 			if(dbcon.IsConnected())
+
 				var/isadmin = 0
 				if(src.client && src.client.holder)
 					isadmin = 1
@@ -59,7 +63,7 @@
 
 		output += "</div>"
 
-		src << browse(output,"window=playersetup;size=210x240;can_close=0")
+		src << browse(output,"window=playersetup;size=210x260;can_close=0")
 		return
 
 	Stat()
@@ -274,6 +278,9 @@
 					for(var/optionid = id_min; optionid <= id_max; optionid++)
 						if(!isnull(href_list["option_[optionid]"]))	//Test if this optionid was selected
 							vote_on_poll(pollid, optionid, 1)
+
+		if(href_list["showdirectives"])
+			client.directiveslookup()
 
 	proc/IsJobAvailable(rank)
 		var/datum/job/job = job_master.GetJob(rank)
