@@ -157,9 +157,7 @@ var/global/normal_ooc_colour = "#002eb8"
 			return
 
 	if(holder)
-		msg_scopes("holder")
 		if(holder.rights & R_DUTYOFF && !(holder.rights & (R_ADMIN|R_MOD|R_DEV)))
-			msg_scopes("holder 1")
 			if(!looc_allowed)
 				src << "\red LOOC is muted."
 				return
@@ -169,7 +167,6 @@ var/global/normal_ooc_colour = "#002eb8"
 			if(prefs.muted & MUTE_OOC)
 				src << "\red You cannot use OOC (muted)."
 				return
-			msg_scopes("holder 2")
 		if(holder.rights & R_DEV && !(holder.rights & R_ADMIN))
 			if(!looc_allowed && !looc_dev_allowed)
 				src << "\red LOOC is muted for developers"
@@ -201,7 +198,6 @@ var/global/normal_ooc_colour = "#002eb8"
 			C << "<font color='#6699CC'><span class='ooc'><span class='prefix'>LOOC:</span> <EM>[display_name]:</EM> <span class='message'>[msg]</span></span></font>"
 	for(var/client/C in admins)
 		if(!C.holder.rights & (R_ADMIN|R_MOD|R_DEV))
-			msg_scopes("holder 4")
 			continue
 		if(C.prefs.toggles & CHAT_LOOC)
 			var/prefix = "(R)LOOC"
