@@ -40,7 +40,7 @@ var/global/normal_ooc_colour = "#002eb8"
 			return
 
 	if(holder)
-		if(holder.rights & R_DUTYOFF && !(holder.rights & (R_ADMIN|R_MOD|R_DEV)))
+		if(holder.rights & R_DUTYOFF && !(holder.rights & (R_ADMIN|R_MOD|R_DEV|R_FUN)))
 			if(!ooc_allowed)
 				src << "\red OOC is globally muted"
 				return
@@ -191,7 +191,7 @@ var/global/normal_ooc_colour = "#002eb8"
 			var/display_name = src.key
 			if(holder)
 				if(holder.fakekey)
-					if(C.holder && C.holder.rights & (R_ADMIN|R_MOD|R_DEV))
+					if(C.holder && C.holder.rights & (R_ADMIN|R_MOD))
 						display_name = "[holder.fakekey]/([src.key])"
 					else
 						display_name = holder.fakekey
