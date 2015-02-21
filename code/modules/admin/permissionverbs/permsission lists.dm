@@ -395,7 +395,7 @@ var/list/admin_verbs_duty = list(
 	/client/proc/spawn_duty_officer,
 	/client/proc/cmd_admin_create_centcom_report,
 	/client/proc/cmd_duty_say,
-	/client/verb/returntobody
+	/client/proc/returntobody
 )
 
 /client/proc/add_admin_verbs()

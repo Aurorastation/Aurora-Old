@@ -140,10 +140,10 @@
 			W.registered_name = M.real_name
 			M.equip_if_possible(W, slot_wear_id)
 
-			verbs += /client/verb/returntobody
+			verbs += /client/proc/returntobody
 			break
 
-/client/verb/returntobody()
+/client/proc/returntobody()
 	set name = "Return to mob"
 	set desc = "The Duty is done, return to your original mob"
 	set category = "Special Verbs"
@@ -151,7 +151,7 @@
 	if(!check_rights(0))		return
 
 	if(!mob.mind || mob.mind.special_role != "Duty Officer")
-		verbs -= /client/verb/returntobody
+		verbs -= /client/proc/returntobody
 		return
 
 	if(!holder)		return
@@ -164,7 +164,7 @@
 
 	if(holder.original_mob)
 		if(holder.original_mob == M)
-			verbs -= /client/verb/returntobody
+			verbs -= /client/proc/returntobody
 			return
 		holder.original_mob.key = key
 		holder.original_mob = null
@@ -174,5 +174,5 @@
 			mob.mind.admin_mob_placeholder = null
 		else
 			mob.ghostize(0)
-	verbs -= /client/verb/returntobody
+	verbs -= /client/proc/returntobody
 	del(M)
