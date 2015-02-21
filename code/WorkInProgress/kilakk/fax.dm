@@ -179,8 +179,15 @@ var/list/alldepartments = list("Central Command")
 
 /proc/Centcomm_fax(var/sent, var/sentname, var/mob/Sender)
 
-	var/msg = "\blue <b><font color='orange'>CENTCOMM FAX: </font>[key_name(Sender,0,1,0)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;secretsadmin=check_antagonist'>CA</A>) (<a href='?_src_=holder;CentcommFaxReply=\ref[Sender]'>RPLY</a>)</b>: Receiving '[sentname]' via secure connection ... <a href='?_src_=holder;CentcommFaxView=\ref[sent]'>view message</a>"
 	for(var/client/C in admins)
+		var/msg = "\blue <b><font color='orange'>CENTCOMM FAX: </font>"
+		if(C.holder.rights & (R_ADMIN|R_FUN|R_MOD))
+			msg += "[key_name(Sender,1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;secretsadmin=check_antagonist'>CA</A>)"
+		else
+			msg += "[key_name(Sender,0,1,0)]"
+
+		msg += " (<a href='?_src_=holder;CentcommFaxReply=\ref[Sender]'>RPLY</a>)</b>: Receiving '[sentname]' via secure connection ... <a href='?_src_=holder;CentcommFaxView=\ref[sent]'>view message</a>"
+
 		if(C.holder.rights & (R_ADMIN|R_DUTYOFF|R_FUN))
 			C << msg
 

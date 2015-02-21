@@ -419,9 +419,7 @@ client
 	if( (usr.client != src) || !src.holder )
 		return
 	if(href_list["Vars"])
-		if(!holder.rights & (R_ADMIN|R_MOD|R_FUN|R_DEV))
-			usr << "This can only be used on instances of type /mob"
-			debug_variables(locate(href_list["Vars"]))
+		debug_variables(locate(href_list["Vars"]))
 
 	//~CARN: for renaming mobs (updates their name, real_name, mind.name, their ID/PDA and datacore records).
 	else if(href_list["rename"])

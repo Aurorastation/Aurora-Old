@@ -312,15 +312,16 @@ datum/controller/vote
 
 	proc/interface(var/client/C)
 		if(!C)	return
-		var/admin = 0
 		var/trialmin = 0
+		var/modmin = 0
 		var/funmin = 0
 		if(C.holder)
-			admin = 1
 			if(C.holder.rights & R_ADMIN)
 				trialmin = 1
 			else if(C.holder.rights & R_FUN)
 				funmin = 1
+			else if(C.holder.rights & R_MOD)
+				modmin = 1
 		voting |= C
 
 		. = "<html><head><title>Voting Panel</title></head><body>"
@@ -337,7 +338,7 @@ datum/controller/vote
 					. += "<li><a href='?src=\ref[src];vote=[i]'>[choices[i]] ([votes] votes)</a></li>"
 
 			. += "</ul><hr>"
-			if(admin)
+			if(trialmin||modmin)
 				. += "(<a href='?src=\ref[src];vote=cancel'>Cancel Vote</a>) "
 		else
 			. += "<h2>Start a vote:</h2><hr><ul><li>"
@@ -379,7 +380,7 @@ datum/controller/vote
 				usr << browse(null, "window=vote")
 				return
 			if("cancel")
-				if(usr.client.holder)
+				if(usr.client.holder & (R_ADMIN|R_MOD))
 					reset()
 			if("toggle_restart")
 				if(usr.client.holder)
