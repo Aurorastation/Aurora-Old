@@ -9,13 +9,13 @@
  *Proc for fetching and displaying the Station Directives
  */
 
-/client/proc/directiveslookup(var/screen = 1, var/queryid="", var/machine)
+/client/proc/directiveslookup(var/screen = 1, var/queryid="")
 	var/dat = "<div align='center'><b>Station Directives<br>NanoTrasen<br>NSS Aurora</b></div><br>"
 
 	establish_db_connection()
 	if(!dbcon.IsConnected())
 		dat += text("<div align='center'><font color=red><b>ERROR</b>: Unable to contact external database.</div></font>")
-		log_game("SQL database connection failed. Attempted to fetch form information.")
+		error("SQL database connection failed. Attempted to fetch form information.")
 
 	switch(screen)
 		if(1)
@@ -62,5 +62,5 @@
 			dat += "Punishment for a violation of Station Directives should be escalated in the following fashion:<br><ul><li>Verbal warning, and citation. Ensure that the Employee is familiar with the Station Directives.</li><li>Charge of violating article i111 - Failure to Execute an Order - of NanoTrasen Corporate Regulation</li><li>Subsequent charge of violating article i206 - Neglect of Duty - of NanoTrasen Corporate Regulation, and review of Employee by the Employee's Head of Staff.</li><li>Subsequent failure to follow Station Directives should result in suspension of contract, if not imprisonment until transfer to Central Command station.</li></ul>"
 			dat += "Obviously, dependant on the violation and actual crimes concerned, punishment may be escalated faster, with intent to ensure in the safety of station, equipment and crew.</div>"
 			dat += "<br><div align='center'><a href='?src=\ref[src];directivescreen=1'>Return to Index</a></div>"
-	usr << browse("[dat]", "window=station_directives;size=400x380")
 
+	usr << browse("[dat]", "window=station_directives;size=400x380")
