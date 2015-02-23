@@ -318,9 +318,9 @@ datum/controller/vote
 		if(C.holder)
 			if(C.holder.rights & R_ADMIN)
 				trialmin = 1
-			else if(C.holder.rights & R_FUN)
+			if(C.holder.rights & R_FUN)
 				funmin = 1
-			else if(C.holder.rights & R_MOD)
+			if(C.holder.rights & R_MOD)
 				modmin = 1
 		voting |= C
 
@@ -380,7 +380,7 @@ datum/controller/vote
 				usr << browse(null, "window=vote")
 				return
 			if("cancel")
-				if(usr.client.holder & (R_ADMIN|R_MOD))
+				if(usr.client.holder)
 					reset()
 			if("toggle_restart")
 				if(usr.client.holder)
