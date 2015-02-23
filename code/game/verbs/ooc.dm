@@ -81,7 +81,7 @@ var/global/normal_ooc_colour = "#002eb8"
 			var/display_name = src.key
 			if(holder)
 				if(holder.fakekey)
-					if(C.holder & (holder.rights & (R_ADMIN|R_MOD)))
+					if(C.holder && C.holder.rights & (R_ADMIN|R_MOD))
 						display_name = "[holder.fakekey]/([src.key])"
 					else
 						display_name = holder.fakekey
