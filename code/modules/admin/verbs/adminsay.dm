@@ -49,7 +49,25 @@
 	log_admin("[key_name(src)] : [msg]")
 
 	if(check_rights(R_DEV,0))
-		msg = "<span class='devsay'><span class='prefix'>DEV:</span> <EM>[key_name(usr, 1)]</EM>: <span class='message'>[msg]</span></span>"
+		msg = "<span class='devsay'><span class='prefix'>DEV:</span> <EM>[key_name(usr, 0, 1, 0)]</EM>: <span class='message'>[msg]</span></span>"
 		for(var/client/C in admins)
 			if(R_DEV & C.holder.rights)
+				C << msg
+
+/client/proc/cmd_duty_say(msg as text)
+	set category = "Admin"
+	set name = "Dosay"
+	set hidden = 1
+
+	if(!check_rights(R_ADMIN|R_DUTYOFF)) return
+
+	msg = copytext(sanitize(msg), 1, MAX_MESSAGE_LEN)
+	if(!msg)	return
+
+	log_admin("[key_name(src)] : [msg]")
+
+	if(check_rights(R_DUTYOFF,0))
+		msg = "<span class='dutysay'><span class='prefix'>DOfficer:</span> <EM>[key_name(usr, 0, 1, 0)]</EM>: <span class='message'>[msg]</span></span>"
+		for(var/client/C in admins)
+			if(C.holder.rights & (R_ADMIN|R_DUTYOFF))
 				C << msg

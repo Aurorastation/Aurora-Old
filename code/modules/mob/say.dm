@@ -63,7 +63,8 @@
 			continue
 
 		if(M.client && M.client.holder && (M.client.prefs.toggles & CHAT_DEAD) ) // Show the message to admins/mods with deadchat toggled on
-			M << rendered	//Admins can hear deadchat, if they choose to, no matter if they're blind/deaf or not.
+			if(M.client.holder.rights & (R_MOD|R_ADMIN|R_DEV|R_FUN))
+				M << rendered	//Admins can hear deadchat, if they choose to, no matter if they're blind/deaf or not.
 
 
 	return

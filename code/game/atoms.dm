@@ -201,6 +201,10 @@ its easier to just keep the beam vertical.
 	//usr << "[name]: Dn:[density] dir:[dir] cont:[contents] icon:[icon] is:[icon_state] loc:[loc]"
 	return
 
+/atom/proc/set_dir(new_dir)
+	. = new_dir != dir
+	dir = new_dir
+
 /atom/proc/relaymove()
 	return
 

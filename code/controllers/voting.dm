@@ -68,6 +68,8 @@ datum/controller/vote
 		if(auto_muted && !ooc_allowed)
 			auto_muted = 0
 			ooc_allowed = !( ooc_allowed )
+			ooc_dev_allowed = 1 //Because
+			ooc_mod_allowed = 1 //Because
 			world << "<b>The OOC channel has been automatically enabled due to vote end.</b>"
 			log_admin("OOC was toggled automatically due to vote end.")
 			message_admins("OOC has been toggled on automatically.")
@@ -310,15 +312,16 @@ datum/controller/vote
 
 	proc/interface(var/client/C)
 		if(!C)	return
-		var/admin = 0
 		var/trialmin = 0
+		var/modmin = 0
 		var/funmin = 0
 		if(C.holder)
-			admin = 1
 			if(C.holder.rights & R_ADMIN)
 				trialmin = 1
-			else if(C.holder.rights & R_FUN)
+			if(C.holder.rights & R_FUN)
 				funmin = 1
+			if(C.holder.rights & R_MOD)
+				modmin = 1
 		voting |= C
 
 		. = "<html><head><title>Voting Panel</title></head><body>"
@@ -335,7 +338,7 @@ datum/controller/vote
 					. += "<li><a href='?src=\ref[src];vote=[i]'>[choices[i]] ([votes] votes)</a></li>"
 
 			. += "</ul><hr>"
-			if(admin)
+			if(trialmin||modmin)
 				. += "(<a href='?src=\ref[src];vote=cancel'>Cancel Vote</a>) "
 		else
 			. += "<h2>Start a vote:</h2><hr><ul><li>"

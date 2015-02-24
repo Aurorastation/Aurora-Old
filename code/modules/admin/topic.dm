@@ -155,7 +155,7 @@
 			if(admin_ranks.len)
 				new_rank = input("Please select a rank", "New rank", null, null) as null|anything in (admin_ranks|"*New Rank*")
 			else
-				new_rank = input("Please select a rank", "New rank", null, null) as null|anything in list("Head Developer","Head Admin", "Primary Admin", "Secondary Admin", "Moderator", "Trial Moderator", "Event Host - Moderator", "Event Host", "Retired Admin", "*New Rank*")
+				new_rank = input("Please select a rank", "New rank", null, null) as null|anything in list("Head Developer","Head Admin", "Primary Admin", "Secondary Admin", "Moderator", "Trial Moderator", "Event Host - Moderator", "Event Host", "Retired Admin", "Duty Officer", "*New Rank*")
 
 			var/rights = 0
 			if(D)
@@ -1554,7 +1554,6 @@
 		src.owner << "Message reply to transmitted successfully."
 		log_admin("[key_name(src.owner)] replied to a fax message from [key_name(H)]: [input]")
 		message_admins("[key_name_admin(src.owner)] replied to a fax message from [key_name_admin(H)] <a href='?_src_=holder;CentcommFaxView=\ref[input]'>view message</a>", 1)
-		message_mods("[key_name_admin(src.owner)] replied to a fax message from [key_name_admin(H)]")
 
 
 	else if(href_list["jumpto"])

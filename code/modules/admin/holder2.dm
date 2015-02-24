@@ -8,6 +8,8 @@ var/list/admin_datums = list()
 
 	var/datum/marked_datum
 
+	var/mob/living/original_mob = null //used to return to body from Duty Officers
+
 	var/admincaster_screen = 0	//See newscaster.dm under machinery for a full description
 	var/datum/feed_message/admincaster_feed_message = new /datum/feed_message   //These two will act as holders.
 	var/datum/feed_channel/admincaster_feed_channel = new /datum/feed_channel
