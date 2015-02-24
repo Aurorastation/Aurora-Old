@@ -63,13 +63,13 @@ var/global/normal_ooc_colour = "#002eb8"
 
 	var/display_colour = normal_ooc_colour
 	if(holder && !holder.fakekey)
-		display_colour = "#0099cc"	//light blue
+//		display_colour = "#0099cc"	//light blue //We decided they didn't need to be known
 		if(holder.rights & R_MOD && !(holder.rights & R_ADMIN))
 			display_colour = "#1b521f"	//dark green
-		if(holder.rights & R_DEBUG && !(holder.rights & R_ADMIN))
-			display_colour = "#184880"	//dark blue
 		if(holder.rights & R_DEV && !(holder.rights & R_ADMIN))
 			display_colour = "#184880"	//dark blue
+		if(holder.rights & R_DEBUG && !(holder.rights & R_ADMIN)) //This is actually a higher rank
+			display_colour = "#0099cc"	//light blue
 		else if(holder.rights & R_ADMIN)
 			if(config.allow_admin_ooccolor)
 				display_colour = src.prefs.ooccolor
