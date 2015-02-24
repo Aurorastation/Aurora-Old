@@ -61,3 +61,17 @@ CREATE TABLE `aurora_directives` (
     `data` TEXT NOT NULL,
     PRIMARY KEY (`id`)
 )  ENGINE=INNODB DEFAULT CHARSET=LATIN1;
+
+-- ------------------------------
+-- SQL based Newsfeed table
+-- tgstation.aurora_news
+-- ------------------------------
+CREATE TABLE `aurora_news` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+    `publishtime` INT(11) NOT NULL,
+    `channel` VARCHAR(32) NOT NULL,
+    `author` VARCHAR(32) NOT NULL,
+    `body` TEXT NOT NULL,
+    `notpublishing` TINYINT(1) DEFAULT NULL,
+	PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
