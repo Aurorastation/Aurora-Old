@@ -3402,7 +3402,7 @@
 "bnv" = (/obj/structure/stool/bed/chair{dir = 4},/obj/machinery/light{icon_state = "tube1"; dir = 8},/turf/simulated/floor{icon_state = "white"},/area/medical/reception)
 "bnw" = (/turf/simulated/floor{dir = 4; icon_state = "whitegreen"},/area/medical/reception)
 "bnx" = (/obj/structure/window/reinforced{dir = 8},/obj/machinery/computer/med_data/laptop,/obj/structure/table/reinforced,/obj/machinery/door/firedoor,/turf/simulated/floor{icon_state = "white"},/area/medical/reception)
-"bny" = (/obj/structure/stool/bed/chair/office/dark{dir = 8},/obj/effect/landmark/start{name = "Medical Doctor"},/turf/simulated/floor{icon_state = "white"},/area/medical/reception)
+"bny" = (/obj/structure/stool/bed/chair/office/dark{dir = 8},/obj/effect/landmark/start{name = "Emergency Medical Technician"},/turf/simulated/floor{icon_state = "white"},/area/medical/reception)
 "bnz" = (/turf/simulated/floor{icon_state = "white"},/area/medical/reception)
 "bnA" = (/obj/machinery/door/firedoor/border_only,/obj/machinery/door/airlock/glass_medical{id_tag = ""; name = "Medbay"; req_access_txt = "5"},/turf/simulated/floor{icon_state = "white"},/area/medical/medbay2)
 "bnB" = (/turf/simulated/floor{dir = 4; icon_state = "whiteblue"},/area/medical/medbay2)
@@ -4168,7 +4168,7 @@
 "bCh" = (/obj/structure/stool/bed,/obj/item/weapon/bedsheet/medical,/turf/simulated/floor{icon_state = "white"},/area/medical/ward)
 "bCi" = (/obj/machinery/computer/crew,/obj/structure/sign/nosmoking_2{pixel_x = -28},/turf/simulated/floor{icon_state = "green"; dir = 4},/area/medical/sleeper)
 "bCj" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/atmospherics/pipe/manifold/hidden/supply{dir = 8},/turf/simulated/floor{icon_state = "white"},/area/medical/sleeper)
-"bCk" = (/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,/obj/machinery/atmospherics/pipe/simple/hidden/supply{dir = 4},/obj/effect/landmark/start{name = "Medical Doctor"},/turf/simulated/floor{icon_state = "white"},/area/medical/sleeper)
+"bCk" = (/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,/obj/machinery/atmospherics/pipe/simple/hidden/supply{dir = 4},/turf/simulated/floor{icon_state = "white"},/area/medical/sleeper)
 "bCl" = (/obj/machinery/atmospherics/pipe/simple/hidden/supply{dir = 4},/turf/simulated/floor{icon_state = "white"},/area/medical/sleeper)
 "bCm" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 8; on = 1},/obj/structure/disposalpipe/segment,/turf/simulated/floor{icon_state = "white"},/area/medical/sleeper)
 "bCn" = (/obj/machinery/door/firedoor/border_only{dir = 4; name = "Firelock East"},/obj/machinery/door/airlock/glass_medical{id_tag = null; name = "Cryogenics"; req_access_txt = "0"},/turf/simulated/floor{icon_state = "white"},/area/medical/sleeper)
@@ -4248,7 +4248,7 @@
 "bDJ" = (/obj/structure/stool/bed,/obj/item/weapon/bedsheet/medical,/obj/machinery/firealarm{dir = 1; pixel_y = -24},/turf/simulated/floor{icon_state = "white"},/area/medical/ward)
 "bDK" = (/obj/machinery/light{icon_state = "tube1"; dir = 8},/obj/machinery/alarm{dir = 4; icon_state = "alarm0"; pixel_x = -22},/turf/simulated/floor{icon_state = "white"},/area/medical/sleeper)
 "bDL" = (/obj/machinery/atmospherics/pipe/simple/hidden/supply,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor{icon_state = "white"},/area/medical/sleeper)
-"bDM" = (/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{dir = 5},/turf/simulated/floor{icon_state = "white"},/area/medical/sleeper)
+"bDM" = (/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{dir = 5},/obj/effect/landmark/start{name = "Emergency Medical Technician"},/turf/simulated/floor{icon_state = "white"},/area/medical/sleeper)
 "bDN" = (/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{dir = 4},/turf/simulated/floor{icon_state = "white"},/area/medical/sleeper)
 "bDO" = (/obj/machinery/atmospherics/unary/vent_scrubber{dir = 8; on = 1},/obj/structure/disposalpipe/segment,/turf/simulated/floor{icon_state = "white"},/area/medical/sleeper)
 "bDP" = (/obj/machinery/atmospherics/pipe/simple/visible{icon_state = "intact"; level = 2},/obj/structure/disposalpipe/segment,/turf/simulated/floor{dir = 8; icon_state = "warning"},/area/medical/medbay2)
@@ -13341,3 +13341,4 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 "}
+
