@@ -73,9 +73,22 @@ datum/sqlnews/proc/publish()	//Uses data stored from the update() proc and: pull
 		newMsg.author = author
 		newMsg.body = body
 
+		var/found	//Do we need a new channel or not?
 		for(var/datum/feed_channel/FC in news_network.network_channels)
 			if(FC.channel_name == channel)
 				FC.messages += newMsg
+				found = 1
+
+		if(!found)
+			var/datum/feed_channel/NC = new /datum/feed_channel
+			NC.channel_name = channel
+			NC.author = author
+			NC.locked = 1
+			NC.is_admin_channel = 1
+			news_network.network_channels += NC
+
+			NC.messages += newMsg
+
 		for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 			NEWSCASTER.newsAlert("[channel]")
 
