@@ -23,20 +23,14 @@
 			query.Execute()
 			dat += "<div align='center'><table width='90%' cellpadding='2' cellspacing='0'>"
 			dat += "<tr><td colspan='3' bgcolor='white' align='center'><a href='?src=\ref[src];directivescreen=3'>Regarding Station Directives</a><br></td></tr>"
-			var/bgcolor = "white"
-			var/even = 1	//Hacky-hacky-hacky!
 
 			while(query.NextRow())
-				var/id = query.item[1]
+				var/id = text2num(query.item[1])
 				var/name = query.item[2]
 
-				switch(even)
-					if(0)
-						bgcolor = "white"
-						even = 1
-					if(1)
-						bgcolor = "#e3e3e3"
-						even = 0
+				var/bgcolor = "#e3e3e3"
+				if(id%2 == 0)
+					bgcolor = "white"
 				dat += "<tr bgcolor='[bgcolor]'><td>Directive #[id]</td><td>[name]</td><td><a href='?src=\ref[src];directiveview=[id]'>Review</a></td></tr>"
 			dat += "</table></div>"
 		if(2)
@@ -52,7 +46,7 @@
 				var/data = searchquery.item[3]
 
 				dat += "<div align='center'><b>Directive #[id]<br>'[name]'</b></div><hr>"
-				dat += "<div align='center'>[data]</div>"
+				dat += "<div align='justify'>[data]</div>"
 
 			dat += "<div align='center'><a href='?src=\ref[src];directivescreen=1'>Return to Index</a></div>"
 		if(3)
@@ -63,4 +57,4 @@
 			dat += "Obviously, dependant on the violation and actual crimes concerned, punishment may be escalated faster, with intent to ensure in the safety of station, equipment and crew.</div>"
 			dat += "<br><div align='center'><a href='?src=\ref[src];directivescreen=1'>Return to Index</a></div>"
 
-	usr << browse("[dat]", "window=station_directives;size=400x380")
+	usr << browse("[dat]", "window=station_directives;size=400x400")

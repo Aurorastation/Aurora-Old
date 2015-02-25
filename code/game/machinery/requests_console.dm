@@ -240,20 +240,14 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				query.Execute()
 				dat += "<div align='center'><table width='90%' cellpadding='2' cellspacing='0'>"
 				dat += "<tr><td colspan='3' bgcolor='white' align='center'><a href='?src=\ref[src];setScreen=14'>Regarding Station Directives</a><br></td></tr>"
-				var/bgcolor = "white"
-				var/even = 1	//Hacky-hacky-hacky!
 
 				while(query.NextRow())
 					var/id = query.item[1]
 					var/name = query.item[2]
 
-					switch(even)
-						if(0)
-							bgcolor = "white"
-							even = 1
-						if(1)
-							bgcolor = "#e3e3e3"
-							even = 0
+					var/bgcolor = "#e3e3e3"
+					if(id%2 == 0)
+						bgcolor = "white"
 					dat += "<tr bgcolor='[bgcolor]'><td>Directive #[id]</td><td>[name]</td><td><a href='?src=\ref[src];directivesview=[id]'>Review</a></td></tr>"
 				dat += "</table></div>"
 				dat += "<br><div align='center'><a href='?src=\ref[src];setScreen=0'>Return to Main Menu</a></div>"
@@ -264,7 +258,6 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 
 				var/DBQuery/searchquery = dbcon.NewQuery("SELECT id, name, data FROM aurora_directives WHERE id=[queryid]")
 				searchquery.Execute()
-				msg_scopes("Executing query.")
 
 				while(searchquery.NextRow())
 					var/id = searchquery.item[1]
@@ -272,7 +265,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 					var/data = searchquery.item[3]
 
 					dat += "<div align='center'><b>Directive #[id]<br>'[name]'</b></div><hr>"
-					dat += "<div align='center'>[data]</div>"
+					dat += "<div align='justify'>[data]</div>"
 
 				dat += "<br><div align='center'><a href='?src=\ref[src];setScreen=12'>Return to Index</a></div>"
 				dat += "<div align='center'><a href='?src=\ref[src];setScreen=0'>Return to Main Menu</a></div>"
