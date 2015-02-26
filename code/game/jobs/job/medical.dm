@@ -47,7 +47,7 @@
 	selection_color = "#ffeef0"
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics)
 	minimal_access = list(access_medical, access_morgue, access_surgery, access_virology)
-	alt_titles = list("Surgeon","Emergency Physician","Nurse","Virologist")
+	alt_titles = list("Surgeon","Nurse","Virologist")
 
 	equip(var/mob/living/carbon/human/H)
 		if(!H)	return 0
@@ -58,9 +58,6 @@
 			if(4) H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		if (H.mind.role_alt_title)
 			switch(H.mind.role_alt_title)
-				if("Emergency Physician")
-					H.equip_to_slot_or_del(new /obj/item/clothing/under/rank/medical(H), slot_w_uniform)
-					H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/fr_jacket(H), slot_wear_suit)
 				if("Surgeon")
 					H.equip_to_slot_or_del(new /obj/item/clothing/under/rank/medical/blue(H), slot_w_uniform)
 					H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/labcoat(H), slot_wear_suit)
