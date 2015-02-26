@@ -20,7 +20,7 @@ em						{font-style: normal;	font-weight: bold;}
 .adminobserver			{color: #996600;	font-weight: bold;}
 .admin					{color: #386aff;	font-weight: bold;}
 .adminsay				{color: #9611D4;	font-weight: bold;}
-.dutysay				{color: #C19A3B;}
+.dutysay				{color: #380B61;}
 .name					{					font-weight: bold;}
 
 .say					{}

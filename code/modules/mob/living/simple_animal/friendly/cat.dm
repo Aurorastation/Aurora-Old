@@ -66,12 +66,11 @@
 
 	var/mob/living/carbon/H = over_object
 	if(!istype(H)) return ..()
+	if(in_range(usr, src))
+		if(H.a_intent == "help")
+			get_scooped(H)
+			return
 
-	if(H.a_intent == "help")
-		get_scooped(H)
-		return
-	else
-		return ..()
 
 //RUNTIME IS ALIVE! SQUEEEEEEEE~
 /mob/living/simple_animal/cat/Runtime

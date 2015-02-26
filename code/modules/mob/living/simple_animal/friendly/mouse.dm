@@ -114,12 +114,10 @@
 
 	var/mob/living/carbon/H = over_object
 	if(!istype(H)) return ..()
-
-	if(H.a_intent == "help")
-		get_scooped(H)
-		return
-	else
-		return ..()
+	if(in_range(usr, src))
+		if(H.a_intent == "help")
+			get_scooped(H)
+			return
 
 /*
  * Mouse types
@@ -151,3 +149,7 @@
 
 /mob/living/simple_animal/mouse/can_use_vents()
 	return
+
+/mob/living/simple_animal/mouse/ghost()
+	client.time_died_as_mouse = world.time
+	..()
