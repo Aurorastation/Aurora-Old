@@ -16,12 +16,14 @@
 		src << "\red The game hasn't started yet!"
 		return
 
-	if(mob.mind.special_role == "Duty Officer")
+	if(mob.mind && mob.mind.special_role == "Duty Officer")
 		src << "\red You are already a Duty Officer"
 		return
 
+	var/wasLiving = 0
 	if(istype(mob, /mob/living))
 		holder.original_mob = mob
+		wasLiving = 1
 
 	for (var/obj/effect/landmark/L in landmarks_list)
 		if(L.name == "DutyOfficer")
@@ -102,13 +104,16 @@
 			M.mind = new
 			M.mind.current = M
 			M.mind.original = M
-			M.mind.admin_mob_placeholder = mob
+			if(wasLiving)
+				M.mind.admin_mob_placeholder = mob
 			M.mind.assigned_role = "Central Command Duty Officer"
 			M.mind.special_role = "Duty Officer"
 			M.loc = L.loc
 			M.key = key
-			spawn(1)
-				holder.original_mob.key = "@[key]"
+
+			if(wasLiving)
+				spawn(1)
+					holder.original_mob.key = "@[key]"
 
 			M.equip_if_possible(new /obj/item/clothing/under/rank/centcom/officer(M), slot_w_uniform)
 			M.equip_if_possible(new /obj/item/clothing/shoes/centcom(M), slot_shoes)
@@ -135,18 +140,18 @@
 			W.registered_name = M.real_name
 			M.equip_if_possible(W, slot_wear_id)
 
-			verbs += /client/verb/returntobody
+			verbs += /client/proc/returntobody
 			break
 
-/client/verb/returntobody()
+/client/proc/returntobody()
 	set name = "Return to mob"
 	set desc = "The Duty is done, return to your original mob"
 	set category = "Special Verbs"
 
 	if(!check_rights(0))		return
 
-	if(mob.mind.special_role != "Duty Officer")
-		verbs -= /client/verb/returntobody
+	if(!mob.mind || mob.mind.special_role != "Duty Officer")
+		verbs -= /client/proc/returntobody
 		return
 
 	if(!holder)		return
@@ -159,14 +164,15 @@
 
 	if(holder.original_mob)
 		if(holder.original_mob == M)
-			verbs -= /client/verb/returntobody
+			verbs -= /client/proc/returntobody
 			return
 		holder.original_mob.key = key
+		holder.original_mob = null
 	else
 		if(mob.mind.admin_mob_placeholder)
 			mob.mind.admin_mob_placeholder.key = key
 			mob.mind.admin_mob_placeholder = null
 		else
 			mob.ghostize(0)
-	verbs -= /client/verb/returntobody
+	verbs -= /client/proc/returntobody
 	del(M)

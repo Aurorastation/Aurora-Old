@@ -40,6 +40,16 @@ var/global/normal_ooc_colour = "#002eb8"
 			return
 
 	if(holder)
+		if(holder.rights & R_DUTYOFF && !(holder.rights & (R_ADMIN|R_MOD|R_DEV|R_FUN)))
+			if(!ooc_allowed)
+				src << "\red OOC is globally muted"
+				return
+			if(!dooc_allowed && (mob.stat == DEAD))
+				usr << "\red OOC for dead mobs has been turned off."
+				return
+			if(prefs.muted & MUTE_OOC)
+				src << "\red You cannot use OOC (muted)."
+				return
 		if(holder.rights & R_DEV && !(holder.rights & R_ADMIN))
 			if(!ooc_allowed && !ooc_dev_allowed)
 				src << "\red OOC is muted for developers"
@@ -53,13 +63,13 @@ var/global/normal_ooc_colour = "#002eb8"
 
 	var/display_colour = normal_ooc_colour
 	if(holder && !holder.fakekey)
-		display_colour = "#0099cc"	//light blue
+//		display_colour = "#0099cc"	//light blue //We decided they didn't need to be known
 		if(holder.rights & R_MOD && !(holder.rights & R_ADMIN))
 			display_colour = "#1b521f"	//dark green
-		if(holder.rights & R_DEBUG && !(holder.rights & R_ADMIN))
-			display_colour = "#184880"	//dark blue
 		if(holder.rights & R_DEV && !(holder.rights & R_ADMIN))
 			display_colour = "#184880"	//dark blue
+		if(holder.rights & R_DEBUG && !(holder.rights & R_ADMIN)) //This is actually a higher rank
+			display_colour = "#0099cc"	//light blue
 		else if(holder.rights & R_ADMIN)
 			if(config.allow_admin_ooccolor)
 				display_colour = src.prefs.ooccolor
@@ -71,7 +81,7 @@ var/global/normal_ooc_colour = "#002eb8"
 			var/display_name = src.key
 			if(holder)
 				if(holder.fakekey)
-					if(C.holder & (holder.rights & (R_ADMIN|R_MOD)))
+					if(C.holder && C.holder.rights & (R_ADMIN|R_MOD))
 						display_name = "[holder.fakekey]/([src.key])"
 					else
 						display_name = holder.fakekey
@@ -147,6 +157,16 @@ var/global/normal_ooc_colour = "#002eb8"
 			return
 
 	if(holder)
+		if(holder.rights & R_DUTYOFF && !(holder.rights & (R_ADMIN|R_MOD|R_DEV)))
+			if(!looc_allowed)
+				src << "\red LOOC is muted."
+				return
+			if(!dooc_allowed && (mob.stat == DEAD))
+				usr << "\red OOC for dead mobs has been turned off."
+				return
+			if(prefs.muted & MUTE_OOC)
+				src << "\red You cannot use OOC (muted)."
+				return
 		if(holder.rights & R_DEV && !(holder.rights & R_ADMIN))
 			if(!looc_allowed && !looc_dev_allowed)
 				src << "\red LOOC is muted for developers"
@@ -171,16 +191,15 @@ var/global/normal_ooc_colour = "#002eb8"
 			var/display_name = src.key
 			if(holder)
 				if(holder.fakekey)
-					if(C.holder && C.holder.rights & (R_ADMIN|R_MOD|R_DEV))
+					if(C.holder && C.holder.rights & (R_ADMIN|R_MOD))
 						display_name = "[holder.fakekey]/([src.key])"
 					else
 						display_name = holder.fakekey
 			C << "<font color='#6699CC'><span class='ooc'><span class='prefix'>LOOC:</span> <EM>[display_name]:</EM> <span class='message'>[msg]</span></span></font>"
 	for(var/client/C in admins)
-		if(C.holder.rights & R_DUTYOFF && (!C.holder.rights & (R_ADMIN|R_MOD|R_DEV)))
-			continue
-		if(C.prefs.toggles & CHAT_LOOC)
-			var/prefix = "(R)LOOC"
-			if (C.mob in heard)
-				prefix = "LOOC"
-			C << "<font color='#6699CC'><span class='ooc'><span class='prefix'>[prefix]:</span> <EM>[src.key]:</EM> <span class='message'>[msg]</span></span></font>"
+		if(C.holder.rights & (R_ADMIN|R_MOD|R_DEV))
+			if(C.prefs.toggles & CHAT_LOOC)
+				var/prefix = "(R)LOOC"
+				if (C.mob in heard)
+					prefix = "LOOC"
+				C << "<font color='#6699CC'><span class='ooc'><span class='prefix'>[prefix]:</span> <EM>[src.key]:</EM> <span class='message'>[msg]</span></span></font>"
