@@ -36,6 +36,8 @@
 	..()
 
 /obj/machinery/door/window/Bumped(atom/movable/AM as mob|obj)
+	if(ispAI(AM))	//So that pAIs can't open all of the windoors forever.
+		return
 	if (!( ismob(AM) ))
 		var/obj/machinery/bot/bot = AM
 		if(istype(bot))
