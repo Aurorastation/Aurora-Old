@@ -17,7 +17,8 @@ var/global/list/special_roles = list( //keep synced with the defines BE_* in set
 	"ninja" = "true",									 // 10
 	"vox raider" = IS_MODE_COMPILED("heist"),			 // 11
 	"diona" = 1,                                         // 12
-	"vampire" = IS_MODE_COMPILED("vampire") 			 // 13
+	"vampire" = IS_MODE_COMPILED("vampire"), 			 // 13
+	"mutineer" = IS_MODE_COMPILED("mutiny")             // 14
 )
 
 var/const/MAX_SAVE_SLOTS = 20
@@ -1175,6 +1176,8 @@ datum/preferences
 							r_hair = hex2num(copytext(new_hair, 2, 4))
 							g_hair = hex2num(copytext(new_hair, 4, 6))
 							b_hair = hex2num(copytext(new_hair, 6, 8))
+					else if (species == "Machine")
+						alert("Please select the Body Color instead.")
 
 				if("h_style")
 					var/list/valid_hairstyles = list()
@@ -1249,12 +1252,16 @@ datum/preferences
 						s_tone = 35 - max(min( round(new_s_tone), 220),1)
 
 				if("skin")
-					if(species == "Unathi" || species == "Tajaran" || species == "Skrell")
+					if(species == "Unathi" || species == "Tajaran" || species == "Skrell" || species == "Machine")
 						var/new_skin = input(user, "Choose your character's skin colour: ", "Character Preference") as color|null
 						if(new_skin)
 							r_skin = hex2num(copytext(new_skin, 2, 4))
 							g_skin = hex2num(copytext(new_skin, 4, 6))
 							b_skin = hex2num(copytext(new_skin, 6, 8))
+							if(species == "Machine")
+								r_hair = r_skin
+								g_hair = g_skin
+								b_hair = b_skin
 
 				if("ooccolor")
 					var/new_ooccolor = input(user, "Choose your OOC colour:", "Game Preference") as color|null

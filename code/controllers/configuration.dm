@@ -86,6 +86,7 @@
 	var/wikiurl
 	var/forumurl
 	var/aurorawikiurl
+	var/githuburl
 
 	//Alert level description
 	var/alert_desc_green = "All threats to the station have passed. Security may not have weapons visible, privacy laws are once again fully enforced."
@@ -104,7 +105,7 @@
 	var/health_threshold_dead = -100
 
 	var/organ_health_multiplier = 1
-	var/organ_regeneration_multiplier = 1
+	var/organ_regeneration_multiplier = 0
 
 	var/bones_can_break = 0
 	var/limbs_can_break = 0
@@ -338,6 +339,9 @@
 
 				if ("aurorawikiurl")
 					config.aurorawikiurl = value
+
+				if ("githuburl")
+					config.githuburl = value
 
 				if ("guest_jobban")
 					config.guest_jobban = 1

@@ -40,9 +40,6 @@
 	h_style = "blue IPC screen"
 	..(new_loc, "Machine")
 
-/mob/living/carbon/human/machine/isipc()
-	return 1
-
 /mob/living/carbon/human/kocasslani/New(var/new_loc)
 	h_style = "Bald"
 	..(new_loc, "Kocasslani")

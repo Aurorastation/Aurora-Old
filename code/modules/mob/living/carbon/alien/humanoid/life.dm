@@ -260,7 +260,7 @@
 		return fire_prot
 	*/
 
-	proc/handle_chemicals_in_body()
+	handle_chemicals_in_body()
 
 		if(reagents) reagents.metabolize(src)
 
@@ -299,14 +299,14 @@
 		return //TODO: DEFERRED
 
 
-	proc/handle_regular_status_updates()
+	handle_regular_status_updates()
 		updatehealth()
 
 		if(stat == DEAD)	//DEAD. BROWN BREAD. SWIMMING WITH THE SPESS CARP
 			blinded = 1
 			silent = 0
 		else				//ALIVE. LIGHTS ARE ON
-			if(health < config.health_threshold_dead || brain_op_stage == 4.0)
+			if(health < config.health_threshold_dead || !has_brain())
 				death()
 				blinded = 1
 				stat = DEAD
@@ -363,7 +363,7 @@
 		return 1
 
 
-	proc/handle_regular_hud_updates()
+	handle_regular_hud_updates()
 
 		if (stat == 2 || (XRAY in mutations))
 			sight |= SEE_TURFS

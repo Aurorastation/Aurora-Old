@@ -15,7 +15,7 @@
 	var/list/viewingcode = list()
 	var/obj/machinery/telecomms/server/SelectedServer
 
-	var/network = "NULL"		// the network to probe
+	var/network = "tcommsat"		// the network to probe
 	var/temp = ""				// temporary feedback messages
 
 	var/storedcode = ""			// code stored

@@ -28,6 +28,7 @@
 	var/required_enemies = 0
 	var/recommended_enemies = 0
 	var/newscaster_announcements = null
+	var/ert_disabled = 0
 	var/uplink_welcome = "Syndicate Uplink Console:"
 	var/uplink_uses = 10
 	var/uplink_items = {"Highly Visible and Dangerous Weapons;
@@ -418,6 +419,9 @@ Implants;
 			heads += player.mind
 	return heads
 
+/datum/game_mode/proc/check_antagonists_topic(href, href_list[])
+	return 0
+
 /datum/game_mode/New()
 	newscaster_announcements = pick(newscaster_standard_feeds)
 
@@ -475,7 +479,8 @@ proc/display_roundstart_logout_report()
 
 	for(var/mob/M in mob_list)
 		if(M.client && M.client.holder)
-			M << msg
+			if(M.client.holder.rights & (R_ADMIN|R_MOD|R_DEV))
+				M << msg
 
 
 proc/get_nt_opposed()

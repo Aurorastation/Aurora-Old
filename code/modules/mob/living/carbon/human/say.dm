@@ -137,7 +137,7 @@
 		else
 			if(!(stunned >= 4))
 				if(message_mode)
-					if(message_mode in (radiochannels | "department"))
+					if(message_mode in (radiochannels | "department" | "special"))
 						if(l_ear && istype(l_ear,/obj/item/device/radio))
 							l_ear.talk_into(src,message, message_mode, verb, speaking)
 							used_radios += l_ear

@@ -85,6 +85,7 @@
 
 	verbs += /mob/living/silicon/pai/proc/choose_chassis
 	verbs += /mob/living/silicon/pai/proc/choose_verbs
+	verbs += /mob/living/proc/hide
 
 	//PDA
 	pda = new(src)
@@ -336,6 +337,10 @@
 	card.forceMove(src)
 	card.screen_loc = null
 
+	//Controlling the visibility of sign language.
+	if(translator_on)
+		add_language("Sign language", 0)
+
 	var/turf/T = get_turf(src)
 	if(istype(T)) T.visible_message("<b>[src]</b> folds outwards, expanding into a mobile form.")
 
@@ -437,6 +442,9 @@
 	src.forceMove(card)
 	card.forceMove(card.loc)
 	canmove = 0
+
+	if(translator_on)
+		remove_language("Sign language")
 
 /mob/living/silicon/pai/start_pulling(var/atom/movable/AM)
 

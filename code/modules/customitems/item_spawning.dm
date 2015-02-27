@@ -4,6 +4,11 @@
 //for multiple items just add mutliple entries, unless i change it to be a listlistlist
 //yes, it has to be an item, you can't pick up nonitems
 
+/*
+ *Old procs for custom items start here
+ *Includes list creation and spawn management
+ *
+
 /var/list/custom_items = list()
 
 /hook/startup/proc/loadCustomItems()
@@ -11,7 +16,7 @@
 	custom_items = text2list(custom_items_file, "\n")
 	return 1
 
-/proc/EquipCustomItems(mob/living/carbon/human/M)
+proc/EquipCustomItems(mob/living/carbon/human/M)
 	for(var/line in custom_items)
 		// split & clean up
 		var/list/Entry = text2list(line, ":")
@@ -119,4 +124,62 @@
 
 				skip:
 				if (ok == 0) // Finally, since everything else failed, place it on the ground
+					Item.loc = get_turf(M.loc)
+ *
+ *
+ *New proc, SQL based, for custom item spawning starts here.
+ *
+ */
+
+/proc/EquipCustomItems(mob/living/carbon/human/M)
+	establish_db_connection()
+	if(!dbcon.IsConnected())
+		error("Custom item check failed: unable to connect to database.")
+		return
+
+	var/ckeyl = sanitizeSQL(M.ckey)
+	var/DBQuery/query = dbcon.NewQuery("SELECT item, job, real_name FROM aurora_customitems WHERE ckey='[ckeyl]'")
+	query.Execute()
+
+	while(query.NextRow())
+		var/path = query.item[1]
+		var/jobs = query.item[2]
+		var/char = query.item[3]
+		//Okay, so we have a query. It will only fill the var/path if the character actually has an item.
+		//I guess recursive spawn code is a thing to do, creating a list, and running a for() on that list seems excessive
+
+		//Getting lazy, alternative would be to use two variables, but this is just self-updating, really
+		if(char == M.real_name)
+			path = trim(path)
+			path = text2path(path)
+			var/obj/item/Item = new path()
+
+			var/ok = 0
+
+			if(!jobs)
+				goto skip
+
+			if(jobs)
+				jobs = text2list(jobs, ",")
+				if(M.mind.role_alt_title in jobs)
+					goto skip
+				else
+					del(Item)
+					ok = 1
+					continue
+
+
+			skip:
+			if(ok == 0)
+				if(istype(M.back,/obj/item/weapon/storage) && M.back:contents.len < M.back:storage_slots) // Try to place it in something on the mob's back
+					Item.loc = M.back
+					ok = 1
+					continue
+				else if(ok == 0)
+					for(var/obj/item/weapon/storage/S in M.contents) // Try to place it in any item that can store stuff, on the mob.
+						if (S.contents.len < S.storage_slots)
+							Item.loc = S
+							ok = 1
+							continue
+				else if(ok == 0)// Finally, since everything else failed, place it on the ground
 					Item.loc = get_turf(M.loc)

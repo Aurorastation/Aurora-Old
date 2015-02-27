@@ -459,6 +459,7 @@
 		src << browse(null, "window=playersetup") //closes the player setup window
 
 	proc/has_admin_rights()
+		if(!client.holder)	return 0
 		return client.holder.rights & R_ADMIN
 
 	proc/is_species_whitelisted(datum/species/S)

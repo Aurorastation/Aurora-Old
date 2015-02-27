@@ -693,7 +693,6 @@
 	if(translator_on)
 		translator_on = 0
 
-		remove_language("Sign language")
 		remove_language("Sinta'unathi")
 		remove_language("Siik'Maas")
 		remove_language("Skrellian")
@@ -703,6 +702,9 @@
 		remove_language("Sol Common")
 		remove_language("Tradeband")
 		remove_language("Gutter")
+
+		if(canmove)	//Easiest way to check whether or not the thing is actually deployed or not, for managing Sign Language.
+			remove_language("Sign language")
 
 		src << "\blue Translator Module toggled OFF."
 
@@ -718,6 +720,8 @@
 		add_language("Sol Common")
 		add_language("Tradeband")
 		add_language("Gutter")
-		add_language("Sign language", 0)
+
+		if(canmove)
+			add_language("Sign language", 0)
 
 		src << "\blue Translator Module toggled ON."

@@ -173,6 +173,14 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	else
 		var/response = alert(src, "Are you -sure- you want to ghost?\n(You are alive. If you ghost, you won't be able to play this round for another 30 minutes! You can't change your mind so choose wisely!)","Are you sure you want to ghost?","Ghost","Stay in body")
 		if(response != "Ghost")	return	//didn't want to ghost after-all
+		if(client.holder && mind.special_role == "DutyOfficer")
+			client.holder.original_mob = null
+			var/mob/dead/observer/ghost = ghostize(0)
+			ghost.timeofdeath = world.time
+			mind.admin_mob_placeholder = null
+			del(src)
+			return
+
 		resting = 1
 		var/turf/location = get_turf(src)
 		message_admins("[key_name_admin(usr)] has ghosted. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[location.x];Y=[location.y];Z=[location.z]'>JMP</a>)")
@@ -243,6 +251,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			usr << "<span class='warning'>The astral cord that ties your body and your spirit has been severed. You are likely to wander the realm beyond until your body is finally dead and thus reunited with you.</span>"
 			return
 	mind.current.ajourn=0
+	if(client.holder && mind.current == client.holder.original_mob)
+		client.holder.original_mob = null
 	mind.current.key = key
 	return 1
 

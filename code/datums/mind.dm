@@ -34,6 +34,7 @@ datum/mind
 	var/name				//replaces mob/var/original_name
 	var/mob/living/current
 	var/mob/living/original	//TODO: remove.not used in any meaningful way ~Carn. First I'll need to tweak the way silicon-mobs handle minds.
+	var/mob/living/admin_mob_placeholder = null //Used to return to your body without varedit -Sounds-
 	var/active = 0
 
 	var/memory

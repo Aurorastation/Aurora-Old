@@ -58,10 +58,22 @@
 	name = "[name] ([rand(1, 1000)])"
 	if(!body_color)
 		body_color = pick( list("brown","gray","white") )
+		if(body_color == "gray")
+			holder_type = /obj/item/weapon/holder/mouse/gray
+		else if(body_color == "brown")
+			holder_type = /obj/item/weapon/holder/mouse/brown
+		else if(body_color == "white")
+			holder_type = /obj/item/weapon/holder/mouse/white
 	icon_state = "mouse_[body_color]"
 	icon_living = "mouse_[body_color]"
 	icon_dead = "mouse_[body_color]_dead"
 	desc = "It's a small [body_color] rodent, often seen hiding in maintenance areas and making a nuisance of itself."
+	if(body_color == "gray")
+		holder_type = /obj/item/weapon/holder/mouse/gray
+	if(body_color == "brown")
+		holder_type = /obj/item/weapon/holder/mouse/brown
+	if(body_color == "white")
+		holder_type = /obj/item/weapon/holder/mouse/white
 
 /mob/living/simple_animal/mouse/proc/splat()
 	src.health = 0
@@ -71,6 +83,14 @@
 	layer = MOB_LAYER
 	if(client)
 		client.time_died_as_mouse = world.time
+
+/mob/living/simple_animal/mouse/proc/holdertype()
+	if(body_color == "gray")
+		holder_type = /obj/item/weapon/holder/mouse/gray
+	if(body_color == "brown")
+		holder_type = /obj/item/weapon/holder/mouse/brown
+	if(body_color == "white")
+		holder_type = /obj/item/weapon/holder/mouse/white
 
 /mob/living/simple_animal/mouse/start_pulling(var/atom/movable/AM)//Prevents mouse from pulling things
 	src << "<span class='warning'>You are too small to pull anything.</span>"
@@ -90,6 +110,15 @@
 		client.time_died_as_mouse = world.time
 	..()
 
+/mob/living/simple_animal/mouse/MouseDrop(atom/over_object)
+
+	var/mob/living/carbon/H = over_object
+	if(!istype(H)) return ..()
+	if(in_range(usr, src))
+		if(H.a_intent == "help")
+			get_scooped(H)
+			return
+
 /*
  * Mouse types
  */
@@ -97,14 +126,18 @@
 /mob/living/simple_animal/mouse/white
 	body_color = "white"
 	icon_state = "mouse_white"
+	holder_type = /obj/item/weapon/holder/mouse/white
+
 
 /mob/living/simple_animal/mouse/gray
 	body_color = "gray"
 	icon_state = "mouse_gray"
+	holder_type = /obj/item/weapon/holder/mouse/gray
 
 /mob/living/simple_animal/mouse/brown
 	body_color = "brown"
 	icon_state = "mouse_brown"
+	holder_type = /obj/item/weapon/holder/mouse/brown
 
 //TOM IS ALIVE! SQUEEEEEEEE~K :)
 /mob/living/simple_animal/mouse/brown/Tom
@@ -116,3 +149,7 @@
 
 /mob/living/simple_animal/mouse/can_use_vents()
 	return
+
+/mob/living/simple_animal/mouse/ghost()
+	client.time_died_as_mouse = world.time
+	..()

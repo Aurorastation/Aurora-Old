@@ -46,6 +46,10 @@ var/global/floorIsLava = 0
 		usr << "Error: you are not an admin!"
 		return
 
+	if(!src.rights & (R_ADMIN|R_MOD|R_FUN|R_DEV))
+		usr << "Error: you are not an admin!"
+		return
+
 	var/body = "<html><head><center><title>Options for [M.key]</title></head>"
 	body += "<body>Options panel for <b>[M]</b>"
 	if(M.client)
@@ -122,99 +126,100 @@ var/global/floorIsLava = 0
 		"}
 
 	if (M.client)
-		if(!istype(M, /mob/new_player))
-			body += "<br><br>"
-			body += "<b>Transformation:</b>"
-			body += "<br>"
+		if(check_rights(R_ADMIN|R_MOD|R_FUN,0))
+			if(!istype(M, /mob/new_player))
+				body += "<br><br>"
+				body += "<b>Transformation:</b>"
+				body += "<br>"
 
-			//Monkey
-			if(ismonkey(M))
-				body += "<B>Monkeyized</B> | "
-			else
-				body += "<A href='?src=\ref[src];monkeyone=\ref[M]'>Monkeyize</A> | "
+				//Monkey
+				if(ismonkey(M))
+					body += "<B>Monkeyized</B> | "
+				else
+					body += "<A href='?src=\ref[src];monkeyone=\ref[M]'>Monkeyize</A> | "
 
-			//Corgi
-			if(iscorgi(M))
-				body += "<B>Corgized</B> | "
-			else
-				body += "<A href='?src=\ref[src];corgione=\ref[M]'>Corgize</A> | "
+				//Corgi
+				if(iscorgi(M))
+					body += "<B>Corgized</B> | "
+				else
+					body += "<A href='?src=\ref[src];corgione=\ref[M]'>Corgize</A> | "
 
-			//AI / Cyborg
-			if(isAI(M))
-				body += "<B>Is an AI</B> "
-			else if(ishuman(M))
-				body += {"<A href='?src=\ref[src];makeai=\ref[M]'>Make AI</A> |
-					<A href='?src=\ref[src];makerobot=\ref[M]'>Make Robot</A> |
-					<A href='?src=\ref[src];makeslime=\ref[M]'>Make slime</A> |
-					<A href='?src=\ref[src];makealien=\ref[M]'>Make Alien(BROKEN)</A> |
+				//AI / Cyborg
+				if(isAI(M))
+					body += "<B>Is an AI</B> "
+				else if(ishuman(M))
+					body += {"<A href='?src=\ref[src];makeai=\ref[M]'>Make AI</A> |
+						<A href='?src=\ref[src];makerobot=\ref[M]'>Make Robot</A> |
+						<A href='?src=\ref[src];makeslime=\ref[M]'>Make slime</A> |
+						<A href='?src=\ref[src];makealien=\ref[M]'>Make Alien(BROKEN)</A> |
+					"}
+
+				//Simple Animals
+				if(isanimal(M))
+					body += "<A href='?src=\ref[src];makeanimal=\ref[M]'>Re-Animalize</A> | "
+				else
+					body += "<A href='?src=\ref[src];makeanimal=\ref[M]'>Animalize</A> | "
+
+				// DNA2 - Admin Hax
+				if(M.dna && iscarbon(M))
+					body += "<br><br>"
+					body += "<b>DNA Blocks:</b><br><table border='2'><tr><th>&nbsp;</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>"
+					var/bname
+					for(var/block=1;block<=DNA_SE_LENGTH;block++)
+						if(((block-1)%5)==0)
+							body += "</tr><tr><th>[block-1]</th>"
+						bname = assigned_blocks[block]
+						body += "<td>"
+						if(bname)
+							var/bstate=M.dna.GetSEState(block)
+							var/bcolor="[(bstate)?"#006600":"#ff0000"]"
+							body += "<A href='?src=\ref[src];togmutate=\ref[M];block=[block]' style='color:[bcolor];'>[bname]</A><sub>[block]</sub>"
+						else
+							body += "[block]"
+						body+="</td>"
+					body += "</tr></table>"
+
+				body += {"<br><br>
+					<b>Rudimentary transformation:</b><font size=2><br>These transformations only create a new mob type and copy stuff over. They do not take into account MMIs and similar mob-specific things. The buttons in 'Transformations' are preferred, when possible.</font><br>
+					<A href='?src=\ref[src];simplemake=observer;mob=\ref[M]'>Observer</A> |
+					<A href='?src=\ref[src];simplemake=robot;mob=\ref[M]'>Cyborg</A> |
+					<A href='?src=\ref[src];simplemake=human;mob=\ref[M]'>Human</A><br>
+
+					Slime: <A href='?src=\ref[src];simplemake=slime;mob=\ref[M]'>Baby</A> |
+					<A href='?src=\ref[src];simplemake=adultslime;mob=\ref[M]'>Adult</A><br>
+
+					Animal: <A href='?src=\ref[src];simplemake=monkey;mob=\ref[M]'>Monkey</A> |
+					<A href='?src=\ref[src];simplemake=cat;mob=\ref[M]'>Cat</A> |
+					<A href='?src=\ref[src];simplemake=runtime;mob=\ref[M]'>Runtime</A> |
+					<A href='?src=\ref[src];simplemake=corgi;mob=\ref[M]'>Corgi</A> |
+					<A href='?src=\ref[src];simplemake=ian;mob=\ref[M]'>Ian</A> |
+					<A href='?src=\ref[src];simplemake=crab;mob=\ref[M]'>Crab</A> |
+					<A href='?src=\ref[src];simplemake=coffee;mob=\ref[M]'>Coffee</A> |
+					<A href='?src=\ref[src];simplemake=nymph;mob=\ref[M]'>Nymph</A><br>
+
+					Construct: <A href='?src=\ref[src];simplemake=constructarmoured;mob=\ref[M]'>Armoured</A> |
+					<A href='?src=\ref[src];simplemake=constructbuilder;mob=\ref[M]'>Builder</A> |
+					<A href='?src=\ref[src];simplemake=constructwraith;mob=\ref[M]'>Wraith</A> |
+					<A href='?src=\ref[src];simplemake=shade;mob=\ref[M]'>Shade</A><br>
+
+					Alien: <A href='?src=\ref[src];simplemake=drone;mob=\ref[M]'>Drone</A> |
+					<A href='?src=\ref[src];simplemake=hunter;mob=\ref[M]'>Hunter</A> |
+					<A href='?src=\ref[src];simplemake=queen;mob=\ref[M]'>Queen</A> |
+					<A href='?src=\ref[src];simplemake=sentinel;mob=\ref[M]'>Sentinel</A> |
+					<A href='?src=\ref[src];simplemake=larva;mob=\ref[M]'>Larva</A><br>
 				"}
 
-			//Simple Animals
-			if(isanimal(M))
-				body += "<A href='?src=\ref[src];makeanimal=\ref[M]'>Re-Animalize</A> | "
-			else
-				body += "<A href='?src=\ref[src];makeanimal=\ref[M]'>Animalize</A> | "
-
-			// DNA2 - Admin Hax
-			if(M.dna && iscarbon(M))
-				body += "<br><br>"
-				body += "<b>DNA Blocks:</b><br><table border='2'><tr><th>&nbsp;</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>"
-				var/bname
-				for(var/block=1;block<=DNA_SE_LENGTH;block++)
-					if(((block-1)%5)==0)
-						body += "</tr><tr><th>[block-1]</th>"
-					bname = assigned_blocks[block]
-					body += "<td>"
-					if(bname)
-						var/bstate=M.dna.GetSEState(block)
-						var/bcolor="[(bstate)?"#006600":"#ff0000"]"
-						body += "<A href='?src=\ref[src];togmutate=\ref[M];block=[block]' style='color:[bcolor];'>[bname]</A><sub>[block]</sub>"
-					else
-						body += "[block]"
-					body+="</td>"
-				body += "</tr></table>"
-
-			body += {"<br><br>
-				<b>Rudimentary transformation:</b><font size=2><br>These transformations only create a new mob type and copy stuff over. They do not take into account MMIs and similar mob-specific things. The buttons in 'Transformations' are preferred, when possible.</font><br>
-				<A href='?src=\ref[src];simplemake=observer;mob=\ref[M]'>Observer</A> |
-				<A href='?src=\ref[src];simplemake=robot;mob=\ref[M]'>Cyborg</A> |
-				<A href='?src=\ref[src];simplemake=human;mob=\ref[M]'>Human</A><br>
-
-				Slime: <A href='?src=\ref[src];simplemake=slime;mob=\ref[M]'>Baby</A> |
-				<A href='?src=\ref[src];simplemake=adultslime;mob=\ref[M]'>Adult</A><br>
-
-				Animal: <A href='?src=\ref[src];simplemake=monkey;mob=\ref[M]'>Monkey</A> |
-				<A href='?src=\ref[src];simplemake=cat;mob=\ref[M]'>Cat</A> |
-				<A href='?src=\ref[src];simplemake=runtime;mob=\ref[M]'>Runtime</A> |
-				<A href='?src=\ref[src];simplemake=corgi;mob=\ref[M]'>Corgi</A> |
-				<A href='?src=\ref[src];simplemake=ian;mob=\ref[M]'>Ian</A> |
-				<A href='?src=\ref[src];simplemake=crab;mob=\ref[M]'>Crab</A> |
-				<A href='?src=\ref[src];simplemake=coffee;mob=\ref[M]'>Coffee</A> |
-				<A href='?src=\ref[src];simplemake=nymph;mob=\ref[M]'>Nymph</A><br>
-
-				Construct: <A href='?src=\ref[src];simplemake=constructarmoured;mob=\ref[M]'>Armoured</A> |
-				<A href='?src=\ref[src];simplemake=constructbuilder;mob=\ref[M]'>Builder</A> |
-				<A href='?src=\ref[src];simplemake=constructwraith;mob=\ref[M]'>Wraith</A> |
-				<A href='?src=\ref[src];simplemake=shade;mob=\ref[M]'>Shade</A><br>
-
-				<br><b>Note from sound, Aliens are broken (Disabled)</b><br>
-				Alien: <A href='?src=\ref[src];simplemake=drone;mob=\ref[M]'>Drone</A> |
-				<A href='?src=\ref[src];simplemake=hunter;mob=\ref[M]'>Hunter</A> |
-				<A href='?src=\ref[src];simplemake=queen;mob=\ref[M]'>Queen</A> |
-				<A href='?src=\ref[src];simplemake=sentinel;mob=\ref[M]'>Sentinel</A> |
-				<A href='?src=\ref[src];simplemake=larva;mob=\ref[M]'>Larva</A><br>
-			"}
-
 	if (M.client)
-		body += {"<br><br>
-			<b>Other actions:</b>
-			<br>
-			<A href='?src=\ref[src];forcespeech=\ref[M]'>Forcesay</A> |
-			<A href='?src=\ref[src];tdome1=\ref[M]'>Thunderdome 1</A> |
-			<A href='?src=\ref[src];tdome2=\ref[M]'>Thunderdome 2</A> |
-			<A href='?src=\ref[src];tdomeadmin=\ref[M]'>Thunderdome Admin</A> |
-			<A href='?src=\ref[src];tdomeobserve=\ref[M]'>Thunderdome Observer</A> |
-		"}
+		if(check_rights(R_ADMIN|R_FUN,0))
+			body += {"<br><br>
+				<b>Other actions:</b>
+				<br>
+				<A href='?src=\ref[src];forcespeech=\ref[M]'>Forcesay</A> |
+				<A href='?src=\ref[src];tdome1=\ref[M]'>Thunderdome 1</A> |
+				<A href='?src=\ref[src];tdome2=\ref[M]'>Thunderdome 2</A> |
+				<A href='?src=\ref[src];tdomeadmin=\ref[M]'>Thunderdome Admin</A> |
+				<A href='?src=\ref[src];tdomeobserve=\ref[M]'>Thunderdome Observer</A> |
+			"}
 
 	body += {"<br>
 		</center></body></html>
@@ -590,14 +595,16 @@ var/global/floorIsLava = 0
 	usr << browse(dat, "window=ban;size=400x400")
 
 /datum/admins/proc/Game()
-	if(!check_rights(0))	return
+	if(!check_rights(R_ADMIN|R_FUN))	return
 
-	var/dat = {"
-		<center><B>Game Panel</B></center><hr>\n
-		<A href='?src=\ref[src];c_mode=1'>Change Game Mode</A><br>
-		"}
-	if(master_mode == "secret")
-		dat += "<A href='?src=\ref[src];f_secret=1'>(Force Secret Mode)</A><br>"
+	var/dat = ""
+	if(check_rights(R_ADMIN,0))
+		dat += {"
+			<center><B>Game Panel</B></center><hr>\n
+			<A href='?src=\ref[src];c_mode=1'>Change Game Mode</A><br>
+			"}
+		if(master_mode == "secret")
+			dat += "<A href='?src=\ref[src];f_secret=1'>(Force Secret Mode)</A><br>"
 
 	dat += {"
 		<BR>
@@ -605,10 +612,13 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];quick_create_object=1'>Quick Create Object</A><br>
 		<A href='?src=\ref[src];create_turf=1'>Create Turf</A><br>
 		<A href='?src=\ref[src];create_mob=1'>Create Mob</A><br>
-		<br><A href='?src=\ref[src];vsc=airflow'>Edit Airflow Settings</A><br>
-		<A href='?src=\ref[src];vsc=plasma'>Edit Plasma Settings</A><br>
-		<A href='?src=\ref[src];vsc=default'>Choose a default ZAS setting</A><br>
 		"}
+	if(check_rights(R_ADMIN,0))
+		dat += {"
+			<br><A href='?src=\ref[src];vsc=airflow'>Edit Airflow Settings</A><br>
+			<A href='?src=\ref[src];vsc=plasma'>Edit Plasma Settings</A><br>
+			<A href='?src=\ref[src];vsc=default'>Choose a default ZAS setting</A><br>
+			"}
 
 	usr << browse(dat, "window=admin2;size=210x280")
 	return

@@ -16,3 +16,13 @@
 	response_help  = "pets"
 	response_disarm = "shoos"
 	response_harm   = "stomps on"
+	holder_type = /obj/item/weapon/holder/lizard
+
+/mob/living/simple_animal/lizard/MouseDrop(atom/over_object)
+
+	var/mob/living/carbon/H = over_object
+	if(!istype(H)) return ..()
+	if(in_range(usr, src))
+		if(H.a_intent == "help")
+			get_scooped(H)
+			return

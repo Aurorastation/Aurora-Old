@@ -20,7 +20,7 @@ em						{font-style: normal;	font-weight: bold;}
 .adminobserver			{color: #996600;	font-weight: bold;}
 .admin					{color: #386aff;	font-weight: bold;}
 .adminsay				{color: #9611D4;	font-weight: bold;}
-
+.dutysay				{color: #380B61;}
 .name					{					font-weight: bold;}
 
 .say					{}
@@ -61,9 +61,11 @@ h1.alert, h2.alert		{color: #000000;}
 .mod					{color: #735638;	font-weight: bold;}
 .modooc					{color: #184880;	font-weight: bold;}
 .adminmod				{color: #402A14;	font-weight: bold;}
+.devsay					{color: #02280D;}
 .tajaran				{color: #803B56;}
 .tajaran_signlang		{color: #941C1C;}
 .skrell					{color: #00CED1;}
+.vaurca					{color: #9e9e39;}
 .soghun					{color: #228B22;}
 .vox					{color: #AA00AA;}
 .rough					{font-family: "Trebuchet MS", cursive, sans-serif;}
