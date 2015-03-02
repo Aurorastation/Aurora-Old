@@ -402,7 +402,15 @@
 	return
 	// HOLOFLOOR DOES NOT GIVE A FUCK
 
+/turf/simulated/floor/holofloor/desert
+	name = "desert sand"
+	desc = "Uncomfortably gritty for a hologram."
+	icon_state = "asteroid"
 
+/turf/simulated/floor/holofloor/desert/New()
+	..()
+	if(prob(10))
+		overlays += "asteroid[rand(0,9)]"
 
 
 

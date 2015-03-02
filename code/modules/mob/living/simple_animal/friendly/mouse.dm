@@ -149,3 +149,7 @@
 
 /mob/living/simple_animal/mouse/can_use_vents()
 	return
+
+/mob/living/simple_animal/mouse/ghost()
+	client.time_died_as_mouse = world.time
+	..()
