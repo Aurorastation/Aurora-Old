@@ -31,6 +31,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/admin_cancel_shuttle,	/*allows us to cancel the emergency shuttle, sending it back to centcomm*/
 	/client/proc/admin_ghost,			/*allows us to ghost/reenter body at will*/
 	/client/proc/admin_memo,			/*admin memo system. show/delete/write. +SERVER needed to delete admin memos of others*/
+	/client/proc/admin_memo_player,
 	/client/proc/alertlevels,
 	/client/proc/allow_character_respawn,   /* Allows a ghost to respawn */
 	/client/proc/check_ai_laws,			/*shows AI and borg laws*/
