@@ -45,6 +45,8 @@
 			continue
 
 		if(M.client && M.client.holder && (M.client.prefs.toggles & CHAT_DEAD)) // show the message to admins who have deadchat toggled on
+			if((M.client.holder.rights & R_DUTYOFF) && !(M.client.holder.rights & (R_ADMIN|R_MOD|R_DEV|R_FUN)))
+				continue
 			M.show_message(rendered, 2)
 
 		else if(M.stat == DEAD && (M.client.prefs.toggles & CHAT_DEAD)) // show the message to regular ghosts who have deadchat toggled on
