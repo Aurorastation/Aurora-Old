@@ -44,7 +44,7 @@
 			emote(pick("hisses and spits!","mrowls fiercely!","eyes [snack] hungrily."))
 		break
 
-	if(!ai_active && !stat && !resting && !buckled)
+	if(ai_active && !stat && !resting && !buckled)
 		turns_since_scan++
 		if(turns_since_scan > 5)
 			walk_to(src,0)
