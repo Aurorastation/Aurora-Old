@@ -142,6 +142,11 @@ Commenting out right now, due to a lack of sprites existing. I hate on-mob weapo
 	user.client.view = world.view
 	..()
 
+/obj/item/weapon/gun/energy/rifle/sniperrifle/ready_to_fire()
+	if(!zoom)
+		return 0
+	..()
+
 ///obj/item/weapon/gun/energy/rifle/sniperrifle/update_icon()  //Currently only here to fuck with the on-mob icons.
 //	icon_state = "sniper[wielded]"
 //	return
