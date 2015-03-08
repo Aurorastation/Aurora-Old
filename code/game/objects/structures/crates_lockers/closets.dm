@@ -13,6 +13,7 @@
 	var/health = 100
 	var/lastbang
 	var/storage_capacity = 30 //This is so that someone can't pack hundreds of items in a locker/crate
+	var/mob_capacity = 2
 							  //then open it in a populated area to crash clients.
 
 /obj/structure/closet/New()
@@ -80,6 +81,7 @@
 		return 0
 
 	var/itemcount = 0
+	var/mobcount = 0
 
 	//Cham Projector Exception
 	for(var/obj/effect/dummy/chameleon/AD in src.loc)
@@ -102,6 +104,11 @@
 			continue
 		if(M.buckled || M.pinned.len)
 			continue
+
+		if(istype(M, /mob/living/carbon/human))
+			if(mobcount >= mob_capacity)
+				continue
+			mobcount++
 
 		if(M.client)
 			M.client.perspective = EYE_PERSPECTIVE
