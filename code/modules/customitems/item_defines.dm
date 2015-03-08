@@ -1019,3 +1019,38 @@ obj/structure/stool/bed/chair/wheelchair/fluff/kit/handle_rotation()
 	blood_overlay_type = "armor"
 	allowed = list(/obj/item/stack/medical, /obj/item/weapon/reagent_containers/dropper, /obj/item/weapon/reagent_containers/hypospray, /obj/item/weapon/reagent_containers/syringe, \
 	/obj/item/device/healthanalyzer, /obj/item/device/flashlight, /obj/item/device/radio, /obj/item/weapon/tank/emergency_oxygen)
+
+
+/obj/item/device/taperecorder/fluff/language_processor //Advanced Language Processing Board - Android - TheCritsyBear
+	name = "Advanced Language Processing Board"
+	desc = "A slightly advanced, but not uncommon upgrade module considered to be the cheapest of its kind. It has the markings of an independent retailer- not standard NanoTrasen hardware."
+	icon_state = "paragon_datachip"
+	item_state = "dermal"
+	slot_flags = SLOT_HEAD
+
+/obj/item/fluff/paragon_datachip //Data Chip - PARAGON - MasterZipZero
+	name = "data chip"
+	desc = "A small bluespace data chip, marked with a tiny heart."
+	icon_state = "paragon_datachip"
+	item_state = "dermal"
+	slot_flags = SLOT_HEAD
+	w_class = 1
+
+/obj/item/clothing/tie/fluff/karima_datadrive //Data Drive Pendant -  Karima Mo'Taki - NebulaFlare
+	name = "Data drive"
+	desc = "A small necklace, the pendant flips open to reveal a data drive."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "motaki_datadrive"
+	item_state = "holobadge-cord"
+	item_color = "holobadge-cord"
+	slot_flags = SLOT_MASK
+
+
+/obj/item/clothing/tie/fluff/dove_necklace //Diamond Necklace -  Charlie Dove - Thundy
+	name = "Diamond necklace"
+	desc = "Small, gold chain with a diamond pendant. Looks expensive."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "dove_necklace"
+	item_state = "dove_necklace"
+	item_color = "dove_necklace"
+	slot_flags = SLOT_MASK
