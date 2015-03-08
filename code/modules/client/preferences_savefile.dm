@@ -179,6 +179,9 @@
 	S["UI_style_color"]		<< UI_style_color
 	S["UI_style_alpha"]		<< UI_style_alpha
 
+	S["signature"]			>> signature
+	S["signature_font"]		>> signature_font
+
 	//Sanitize
 	metadata		= sanitize_text(metadata, initial(metadata))
 	real_name		= reject_bad_name(real_name)
@@ -187,6 +190,8 @@
 	if(isnull(spawnpoint)) spawnpoint = "Arrivals Shuttle"
 	if(isnull(nanotrasen_relation)) nanotrasen_relation = initial(nanotrasen_relation)
 	if(!real_name) real_name = random_name(gender)
+	if(!signature) signature = "<i>[real_name]</i>"
+	if(!signature_font) signature_font = "Times New Roman"
 	be_random_name	= sanitize_integer(be_random_name, 0, 1, initial(be_random_name))
 	gender			= sanitize_gender(gender)
 	age				= sanitize_integer(age, AGE_MIN, AGE_MAX, initial(age))
@@ -318,6 +323,9 @@
 
 	S["UI_style_color"]		<< UI_style_color
 	S["UI_style_alpha"]		<< UI_style_alpha
+
+	S["signature"]			<< signature
+	S["signature_font"]		<< signature_font
 
 	return 1
 
