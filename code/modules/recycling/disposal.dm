@@ -499,6 +499,7 @@
 	var/destinationTag = "" // changes if contains a delivery container
 	var/tomail = 0 //changes if contains wrapped package
 	var/hasmob = 0 //If it contains a mob
+	var/contained_mobs = list()
 
 	var/partialTag = "" //set by a partial tagger the first time round, then put in destinationTag if it goes through again.
 
@@ -512,6 +513,7 @@
 		for(var/mob/living/M in D)
 			if(M && M.stat != 2 && !istype(M,/mob/living/silicon/robot/drone))
 				hasmob = 1
+				contained_mobs += M
 
 		//Checks 1 contents level deep. This means that players can be sent through disposals...
 		//...but it should require a second person to open the package. (i.e. person inside a wrapped locker)
@@ -520,6 +522,7 @@
 				for(var/mob/living/M in O.contents)
 					if(M && M.stat != 2 && !istype(M,/mob/living/silicon/robot/drone))
 						hasmob = 1
+						contained_mobs += M
 
 		// now everything inside the disposal gets put into the holder
 		// note AM since can contain mobs or objs
@@ -561,7 +564,7 @@
 		var/obj/structure/disposalpipe/last
 		while(active)
 			if(hasmob && prob(3))
-				for(var/mob/living/H in src)
+				for(var/mob/living/H in contained_mobs)
 					if(!istype(H,/mob/living/silicon/robot/drone)) //Drones use the mailing code to move through the disposal system,
 						H.take_overall_damage(20, 0, "Blunt Trauma")//horribly maim any living creature jumping down disposals.  c'est la vie
 

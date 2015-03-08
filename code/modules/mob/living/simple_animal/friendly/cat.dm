@@ -18,6 +18,7 @@
 	response_harm   = "kicks the"
 	var/turns_since_scan = 0
 	var/mob/living/simple_animal/mouse/movement_target
+	var/ai_active = 1
 	min_oxy = 16 //Require atleast 16kPA oxygen
 	minbodytemp = 223		//Below -50 Degrees Celcius
 	maxbodytemp = 323	//Above 50 Degrees Celcius
@@ -25,15 +26,16 @@
 
 /mob/living/simple_animal/cat/Life()
 	//MICE!
-	if((src.loc) && isturf(src.loc))
-		if(!stat && !resting && !buckled)
-			for(var/mob/living/simple_animal/mouse/M in view(1,src))
-				if(!M.stat)
-					M.splat()
-					emote(pick("\red splats the [M]!","\red toys with the [M]","worries the [M]"))
-					movement_target = null
-					stop_automated_movement = 0
-					break
+	if(ai_active)
+		if((src.loc) && isturf(src.loc))
+			if(!stat && !resting && !buckled)
+				for(var/mob/living/simple_animal/mouse/M in view(1,src))
+					if(!M.stat)
+						M.splat()
+						emote(pick("\red splats the [M]!","\red toys with the [M]","worries the [M]"))
+						movement_target = null
+						stop_automated_movement = 0
+						break
 
 	..()
 
@@ -42,7 +44,7 @@
 			emote(pick("hisses and spits!","mrowls fiercely!","eyes [snack] hungrily."))
 		break
 
-	if(!stat && !resting && !buckled)
+	if(ai_active && !stat && !resting && !buckled)
 		turns_since_scan++
 		if(turns_since_scan > 5)
 			walk_to(src,0)

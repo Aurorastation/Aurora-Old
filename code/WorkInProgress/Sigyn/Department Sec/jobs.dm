@@ -111,16 +111,16 @@ proc/assign_sec_to_department(var/mob/living/carbon/human/H)
 
 /obj/item/clothing/under/rank/security/cargo/New()
 	var/obj/item/clothing/tie/armband/cargo/A		= new /obj/item/clothing/tie/armband/cargo
-	hastie = A
+	aband = A
 
 /obj/item/clothing/under/rank/security/engine/New()
 	var/obj/item/clothing/tie/armband/engine/A		= new /obj/item/clothing/tie/armband/engine
-	hastie = A
+	aband = A
 
 /obj/item/clothing/under/rank/security/science/New()
 	var/obj/item/clothing/tie/armband/science/A		= new /obj/item/clothing/tie/armband/science
-	hastie = A
+	aband = A
 
 /obj/item/clothing/under/rank/security/med/New()
 	var/obj/item/clothing/tie/armband/medgreen/A	= new /obj/item/clothing/tie/armband/medgreen
-	hastie = A
+	aband = A

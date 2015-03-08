@@ -14,6 +14,8 @@
 	locked = 0
 	mecha = null//This does not appear to be used outside of reference in mecha.dm.
 
+	var/obj/item/device/radio/radio = null//Let's give it a radio.
+
 
 /obj/item/device/mmi/posibrain/attack_self(mob/user as mob)
 	if(brainmob && !brainmob.key && searching == 0)
@@ -142,4 +144,33 @@
 //	src.brainmob.brain_op_stage = 4.0
 	dead_mob_list -= src.brainmob
 
+	radio = new(src)//Spawns a radio inside the MMI.
+	radio.broadcasting = 0//So it's broadcasting from the start.
+
 	..()
+
+/obj/item/device/mmi/posibrain/verb/Toggle_Broadcasting()	//totally not nicking from certain places. Yay.
+	set name = "Toggle Broadcasting"
+	set desc = "Toggle broadcasting channel on or off."
+	set category = "Posi"
+	set src = usr.loc//In user location, or in MMI in this case.
+	set popup_menu = 0//Will not appear when right clicking.
+
+	if(brainmob.stat)//Only the brainmob will trigger these so no further check is necessary.
+		brainmob << "Can't do that while incapacitated or dead."
+
+	radio.broadcasting = radio.broadcasting==1 ? 0 : 1
+	brainmob << "\blue Radio is [radio.broadcasting==1 ? "now" : "no longer"] broadcasting."
+
+/obj/item/device/mmi/posibrain/verb/Toggle_Listening()
+	set name = "Toggle Listening"
+	set desc = "Toggle listening channel on or off."
+	set category = "Posi"
+	set src = usr.loc
+	set popup_menu = 0
+
+	if(brainmob.stat)
+		brainmob << "Can't do that while incapacitated or dead."
+
+	radio.listening = radio.listening==1 ? 0 : 1
+	brainmob << "\blue Radio is [radio.listening==1 ? "now" : "no longer"] receiving broadcast."

@@ -125,9 +125,13 @@ datum/preferences
 
 	var/uplinklocation = "PDA"
 
-		// OOC Metadata:
+	// OOC Metadata:
 	var/metadata = ""
 	var/slot_name = ""
+
+	//Signature information:
+	var/signature
+	var/signature_font
 
 /datum/preferences/New(client/C)
 	b_type = pick(4;"O-", 36;"O+", 3;"A-", 28;"A+", 1;"B-", 20;"B+", 1;"AB-", 5;"AB+")
@@ -139,6 +143,8 @@ datum/preferences
 					return
 	gender = pick(MALE, FEMALE)
 	real_name = random_name(gender)
+	signature = "<i>[real_name]</i>"
+	signature_font = "Verdanta"
 
 	gear = list()
 
@@ -400,6 +406,11 @@ datum/preferences
 
 	dat += "<a href='byond://?src=\ref[user];preference=pAI'><b>pAI Configuration</b></a><br>"
 	dat += "<br>"
+
+	dat += "<b>Character's Signature</b><br>"
+	dat += "<a href='byond://?src=\ref[user];preference=signature;task=input'>Edit</a> <a href='byond://?src=\ref[user];preference=signature;task=font'>Font</a> <a href='byond://?src=\ref[user];preference=signature;task=help'>Help</a><br>"
+	dat += "<font face=\"[signature_font ? signature_font : "Verdanta"]\">[signature]</font><br>"
+
 
 	dat += "<br><b>Hair</b><br>"
 	dat += "<a href='?_src_=prefs;preference=hair;task=input'>Change Color</a> <font face='fixedsys' size='3' color='#[num2hex(r_hair, 2)][num2hex(g_hair, 2)][num2hex(b_hair, 2)]'><table style='display:inline;' bgcolor='#[num2hex(r_hair, 2)][num2hex(g_hair, 2)][num2hex(b_hair)]'><tr><td>__</td></tr></table></font> "
@@ -1017,11 +1028,34 @@ datum/preferences
 					gear -= gear_name
 					break
 
+	else if(href_list["preference"] == "signature")
+		switch(href_list["task"])
+			if("input")
+				var/raw_signature = input(user, "Choose your character's signature:","Character Preference") as text
+				if(!isnull(raw_signature))
+					var/new_signature = checkhtml(raw_signature, signature_tag_whitelist)
+					if(new_signature && !(length(new_signature) > MAX_NAME_LEN + 12))
+						signature = new_signature
+					else
+						user << "<font color='red'>Invalid signature. Your character's signature should be at least 2 and at most [MAX_NAME_LEN + 12] characters long. For accepted formatting tags, please review the Help option.</font>"
+			if("help")
+				var/HTML
+				HTML += "A character's signature can be augmented with the following tags:<br>"
+				HTML += "<ul><li><i>Italics</i> - &lt;i&gt;Text&lt;/i&gt;</li>"
+				HTML += "<li><b>Bold</b> - &lt;b&gt;Text&lt;/b&gt;</li>"
+				HTML += "<li><small>Small size</small> - &lt;small&gt;Text&lt;/small&gt;</li>"
+				HTML += "<li><big>Big size</big> - &lt;big&gt;Text&lt;/big&gt;</li></ul>"
+				HTML += "<br><br>Beyond that, a maximum of [MAX_NAME_LEN + 12] characters are allowed for the signature text, including symbols."
+				user << browse(HTML, "window=signaturehelp;size=350x300")
+			if("font")
+				signature_font = input(user, "Choose your character's signature:", "Character Preference") as null|anything in list("Times New Roman", "Verdana")
+
 	switch(href_list["task"])
 		if("random")
 			switch(href_list["preference"])
 				if("name")
 					real_name = random_name(gender)
+					signature = "<i>[real_name]</i>"
 				if("age")
 					age = rand(AGE_MIN, AGE_MAX)
 				if("hair")
@@ -1414,6 +1448,7 @@ datum/preferences
 							religion = sanitize(copytext(raw_choice,1,MAX_MESSAGE_LEN))
 						return
 					religion = choice
+
 		else
 			switch(href_list["preference"])
 				if("gender")
@@ -1500,6 +1535,8 @@ datum/preferences
 /datum/preferences/proc/copy_to(mob/living/carbon/human/character, safety = 0)
 	if(be_random_name)
 		real_name = random_name(gender)
+		signature = "<i>[real_name]</i>"
+		signature_font = "Verdana"
 
 	if(config.humans_need_surnames)
 		var/firstspace = findtext(real_name, " ")

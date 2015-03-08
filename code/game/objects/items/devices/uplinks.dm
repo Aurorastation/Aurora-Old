@@ -141,7 +141,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 	if(uses > 4)
 		randomItems.Add("/obj/item/weapon/gun/energy/crossbow") //Energy Crossbow
 		randomItems.Add("/obj/item/device/powersink") //Powersink
-		randomItems.Add("/obj/item/weapon/storage/box/walkingcane")
+		randomItems.Add("/obj/item/weapon/cane/syndie")
 
 	if(uses > 3)
 		randomItems.Add("/obj/item/weapon/melee/energy/sword") //Energy Sword
@@ -196,7 +196,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 				uses -= 7
 			if("/obj/item/weapon/gun/projectile")
 				uses -= 6
-			if("/obj/item/weapon/gun/energy/crossbow" , "/obj/item/device/powersink" , "/obj/item/weapon/storage/box/walkingcane")
+			if("/obj/item/weapon/gun/energy/crossbow" , "/obj/item/device/powersink" , "/obj/item/weapon/cane/syndie")
 				uses -= 5
 			if("/obj/item/weapon/melee/energy/sword" , "/obj/item/clothing/mask/gas/voice" , "/obj/item/device/chameleon" , "/obj/item/weapon/melee/baton/stunrod/loaded")
 				uses -= 4
@@ -270,7 +270,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 			feedback_add_details("traitor_uplink_items_bought","SP")
 		if("/obj/item/weapon/storage/toolbox/syndicate")
 			feedback_add_details("traitor_uplink_items_bought","ST")
-		if("/obj/item/weapon/storage/box/walkingcane")
+		if("/obj/item/weapon/cane/syndie")
 			feedback_add_details("traitor_uplink_items_bought","WC")
 		if("/obj/item/weapon/storage/box/syndie_kit/masks_gas")
 			feedback_add_details("traitor_uplink_items_bought","GM")

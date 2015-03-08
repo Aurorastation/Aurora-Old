@@ -54,7 +54,7 @@
 
 /obj/structure/closet/secure_closet/medical3
 	name = "Medical Doctor's Locker"
-	req_access = list(access_surgery)
+	req_access = list(access_medical)
 	icon_state = "securemed1"
 	icon_closed = "securemed"
 	icon_locked = "securemed1"
@@ -207,3 +207,29 @@
 				icon_state = icon_closed
 		else
 			icon_state = icon_opened
+
+/obj/structure/closet/secure_closet/robotics_surgery
+	name = "surgical equipment"
+	desc = "Used to hold surgical equipment, anesthesia and MMIs."
+	icon_state = "medical1"
+	icon_closed = "medical"
+	icon_locked = "medical1"
+	icon_opened = "medicalopen"
+	icon_broken = "medicalbroken"
+	icon_off = "medicaloff"
+	req_access = list(access_robotics)
+
+	New()
+		..()
+		sleep(2)
+		new /obj/item/weapon/circular_saw(src)
+		new /obj/item/weapon/retractor(src)
+		new /obj/item/weapon/scalpel(src)
+		new /obj/item/weapon/cautery(src)
+		new /obj/item/weapon/hemostat(src)
+		new /obj/item/device/mmi(src)
+		new /obj/item/device/mmi(src)
+		new /obj/item/device/mmi(src)
+		new /obj/item/weapon/tank/anesthetic(src)
+		new /obj/item/clothing/mask/breath/medical(src)
+		return
