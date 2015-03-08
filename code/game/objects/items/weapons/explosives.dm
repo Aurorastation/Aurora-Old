@@ -50,8 +50,8 @@
 				log_str += " Last touched by: [src.fingerprintslast][last_touch_info]"
 				bombers += log_str
 
-				message_admins("C4 Explosion: Last touched by: [src.fingerprintslast][last_touch_info]([user.ckey])(<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
-				message_admins("C4 Explosion: Last touched by: [src.fingerprintslast][last_touch_info]([user.ckey])(<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
+				message_admins("C4 Explosion: Last touched by: [src.fingerprintslast][last_touch_info]([user.ckey])(<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[target.x];Y=[target.y];Z=[target.z]'>JMP</a>)")
+				message_mods("C4 Explosion: Last touched by: [src.fingerprintslast][last_touch_info]([user.ckey])(<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[target.x];Y=[target.y];Z=[target.z]'>JMP</a>)")
 
 				explosion(location, -1, -1, 2, 3)
 				if (istype(target, /turf/simulated/wall)) target:dismantle_wall(1)

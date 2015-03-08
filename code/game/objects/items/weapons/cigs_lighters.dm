@@ -92,7 +92,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	else if(istype(W, /obj/item/weapon/lighter/zippo))
 		var/obj/item/weapon/lighter/zippo/Z = W
 		if(Z.lit)
-			light("<span class='rose'>With a flick of their wrist, [user] lights their [name] with their [W].</span>")
+			light("<span class='rose'>With a flick of their wrist, [user] lights  [name] with [W].</span>")
 
 	else if(istype(W, /obj/item/weapon/lighter))
 		var/obj/item/weapon/lighter/L = W
@@ -102,7 +102,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	else if(istype(W, /obj/item/weapon/match))
 		var/obj/item/weapon/match/M = W
 		if(M.lit)
-			light("<span class='notice'>[user] lights their [name] with their [W].</span>")
+			light("<span class='notice'>[user] lights their [name] with [W].</span>")
 
 	else if(istype(W, /obj/item/weapon/melee/energy/sword))
 		var/obj/item/weapon/melee/energy/sword/S = W
