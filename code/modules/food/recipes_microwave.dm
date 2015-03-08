@@ -1273,7 +1273,7 @@ I said no!
 //////////////////////////////////////////
 
 /datum/recipe/chocolatebox
-	reagents = list("milk" = 5)
+	reagents = list("cream" = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries
