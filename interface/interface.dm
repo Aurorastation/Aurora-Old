@@ -35,6 +35,18 @@
 		src << "\red The URL for the Aurorastation wiki is not set in the server configuration."
 	return
 
+/client/verb/github()
+	set name = "github"
+	set desc = "Visit the Aurorastation Github page, where bugs and issues can be reported!"
+	set hidden = 1
+	if ( config.githuburl )
+		if(alert("This will open the Github Issues page in your browser. Are you sure?",,"Yes","No")=="No")
+			return
+		src << link(config.githuburl)
+	else
+		src << "\red The URL for the server's Github (issues) page is not set in the server configuration."
+	return
+
 #define RULES_FILE "config/rules.html"
 /client/verb/rules()
 	set name = "Rules"

@@ -52,6 +52,9 @@
 	liquidfood
 		name = "\improper \"LiquidFood\" ration"
 		icon_state = "liquidfood"
+	chocolatebox
+		name = "box of chocolates"
+		icon_state = "chocolatebox"
 
 /obj/item/trash/attack(mob/M as mob, mob/living/user as mob)
 	return
