@@ -147,82 +147,22 @@
 	item_state = null
 
 /obj/item/weapon/reagent_containers/glass/rag/fluff/rusty_handkerchief //handkerchief - Janet Fisher - rustysh4ckleford - DONE
-	name = "Handkerchief"
+	name = "handkerchief"
 	desc = "An ordinary handkerchief. It looks well used."
-	w_class = 1
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "janet_handkerchief"
-	amount_per_transfer_from_this = 5
-	possible_transfer_amounts = list(5)
-	volume = 5
-	can_be_placed_into = null
 
-/obj/item/weapon/reagent_containers/glass/rag/fluff/rusty_handkerchief/attack_self(mob/user as mob)
-	user.visible_message("[user] holds [src] up to her face.")
-	if(do_after(user,30))
-		user.visible_message("[user] moves [src] away from her face.")
-	return
-
-/obj/item/weapon/reagent_containers/glass/rag/fluff/rusty_handkerchief/attack(atom/target as obj|turf|area, mob/user as mob , flag)
-	if(ismob(target) && target.reagents && reagents.total_volume)
-		user.visible_message("\red \The [target] has been smothered with \the [src] by \the [user]!", "\red You smother \the [target] with \the [src]!", "You hear some struggling and muffled cries of surprise")
-		src.reagents.reaction(target, TOUCH)
-		spawn(5) src.reagents.clear_reagents()
-		return
-	else
-		..()
-
-/obj/item/weapon/reagent_containers/glass/rag/fluff/rusty_handkerchief/afterattack(atom/A as obj|turf|area, mob/user as mob, proximity)
-	if(!proximity) return
-	if(istype(A) && src in user)
-		user.visible_message("[user] starts to wipe down [A] with [src]!")
+	attack_self(mob/user as mob)
+		user.visible_message("[user] holds [src] up to \his face.")
 		if(do_after(user,30))
-			user.visible_message("[user] finishes wiping off the [A]!")
-			A.clean_blood()
-	return
-
-/obj/item/weapon/reagent_containers/glass/rag/fluff/rusty_handkerchief/examine()
-	if (!usr)
+			user.visible_message("[user] blows \his nose and moves the [src] away from \his face.")
 		return
-	usr << "That's \a [src]."
-	usr << desc
-	return
 
-/obj/item/clothing/tie/storage/knifeharness/fluff/skull132_harness //A crimson harness - No assign character (Allyn "Crimson" Adema) - skull132 - DONE
-	name = "a crimson harness"
-	desc = "An Unathi ceremonial harness with two pieces of crimson cloth draped across the heart of the wearer."
-	icon = 'icons/obj/custom_items.dmi'
-	icon_state = "skull_harness2"
-	item_color = "skull_harness2"
-	item_state = "skull_harness2"
-	slots = 2
-
-/*
-/obj/item/clothing/tie/storage/knifeharness/fluff/skull132_harness/attackby(var/obj/item/O as obj, mob/user as mob)
-	..()
-	update()
-
-/obj/item/clothing/tie/storage/knifeharness/fluff/skull132_harness/proc/updateskull()
-	var/count = 0
-	for(var/obj/item/I in hold)
-		if(istype(I,/obj/item/weapon/hatchet/unathiknife))
-			count++
-	if(count>2) count = 2
-	item_state = "skull_harness[count]"
-	icon_state = item_state
-	item_color = item_state
-
-	if(istype(loc, /obj/item/clothing))
-		var/obj/item/clothing/U = loc
-		if(istype(U.loc, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = U.loc
-			H.update_inv_w_uniform()
-
-/obj/item/clothing/tie/storage/knifeharness/fluff/skull132_harness/New()
-	..()
-	new /obj/item/weapon/hatchet/unathiknife(hold)
-	new /obj/item/weapon/hatchet/unathiknife(hold)
-*/
+	afterattack(atom/A as obj|turf|area, mob/user as mob, proximity)
+		if(A == user)
+			attack_self(user)
+			return
+		..()
 
 /obj/item/weapon/disk/fluff/nebula_chip //data chip - Roxy Wallace - nebulaflare - DONE
 	name = "data chip"
@@ -231,59 +171,38 @@
 	icon_state = "nebula_chip"
 	w_class = 1
 
-/obj/item/weapon/storage/fluff/nebula_glasses //chich eyewear - Roxy Wallace - nebulaflare - DONE
-	name = "Chic Eyewear"
-	desc = " A stylish pair of glasses. They look custom made."
+/obj/item/clothing/glasses/fluff/nebula_glasses	//chich eyewear - Roxy Wallace - nebulaflare - DONE
+	name = "chic eyewear"
+	desc = "A stylish pair of glasses. They look custom made."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "nebula_glasses"
-	item_state = "glasses"
-	flags = FPRINT | GLASSESCOVERSEYES
-	slot_flags = SLOT_EYES
-	can_hold = list(
-		"/obj/item/weapon/disk/fluff/nebula_chip")
-	storage_slots = 1
-	max_combined_w_class = 1
-	max_w_class = 1
-	w_class = 2
+	item_state = "nebula_glasses"
+
+	var/chip
+
 	New()
+		chip = new /obj/item/weapon/disk/fluff/nebula_chip()
 		..()
-		new /obj/item/weapon/disk/fluff/nebula_chip(src)
-		return
 
-/obj/item/weapon/storage/fluff/nebula_glasses/proc/can_use()
-        if(!ismob(loc)) return 0
-        var/mob/M = loc
-        if(src in M.get_equipped_items())
-                return 1
-        else
-                return 0
+	attack_self(mob/user as mob)
+		if(chip)
+			user.put_in_hands(chip)
+			user << "\blue You eject a small, concealed data chip from a small slot in the frames of the [src]."
+			chip = null
 
-/obj/item/weapon/storage/fluff/nebula_glasses/MouseDrop(obj/over_object as obj, src_location, over_location)
-        var/mob/M = usr
-        if(!istype(over_object, /obj/screen))
-                return ..()
-        playsound(src.loc, "rustle", 50, 1, -5)
-        if (!M.restrained() && !M.stat && can_use())
-                switch(over_object.name)
-                        if("r_hand")
-                                M.u_equip(src)
-                                M.put_in_r_hand(src)
-                        if("l_hand")
-                                M.u_equip(src)
-                                M.put_in_l_hand(src)
-                src.add_fingerprint(usr)
-                return
+	attackby(obj/item/weapon/W as obj, mob/user as mob)
+		if(istype(W, /obj/item/weapon/disk/fluff/nebula_chip) && !chip)
+			user.u_equip(W)
+			W.loc = src
+			chip = W
+			W.dropped(user)
+			W.add_fingerprint(user)
+			add_fingerprint(user)
+			user << "You slot the [W] back into its place in the frames of the [src]."
 
 /obj/item/clothing/mask/cigarette/pipe/fluff/tool_pipe //Worn pipe - Michael Tool - mrimatool - DONE
 	name = "worn pipe"
 	desc = "A worn wooden pipe with the initials S.F. scratched into the base."
-	icon = 'icons/obj/custom_items.dmi'
-	icon_state = "toolpipeoff"
-	item_state = "pipeoff"
-	icon_on = "toolpipeon"  //Note - these are in masks.dmi
-	icon_off = "pipeoff"
-	smoketime = 100
-	can_hurt_mob = 0
 
 /obj/item/weapon/reagent_containers/food/drinks/flask/fluff/tool_flask //Worn flask - Michael Tool - mrimatool - DONE
 	name = "worn flask"
@@ -292,51 +211,6 @@
 	icon_state = "tool_flask"
 	volume = 60
 
-/*
-/obj/item/weapon/melee/baton/fluff/omnivac_baton //Tiger Claw - Zander Moon - omnivac - DONE
-	name = "Tiger Claw"
-	desc = "A small energy dagger given to Golden Tigers meant to incapacitate people quickly."
-	icon = 'icons/obj/custom_items.dmi'
-	icon_state = "tigerclaw"
-	item_state = "tigerclaw"
-
-/obj/item/weapon/melee/baton/fluff/omnivac_baton/update_icon()
-	if(status)
-		icon_state = "tigerclaw_active"
-		item_state = "tigerclaw_active"
-	else
-		icon_state = "tigerclaw"
-		item_state = "tigerclaw"
-
-/obj/item/weapon/melee/baton/fluff/omnivac_baton/attack_self(mob/user as mob)
-	if(status && (CLUMSY in user.mutations) && prob(50))
-		user << "\red You grab the [src] on the wrong side."
-		user.Weaken(30)
-		charges--
-		if(charges < 1)
-			status = 0
-			update_icon()
-		return
-	if(charges > 0)
-		status = !status
-		user << "<span class='notice'>\The [src] is now [status ? "on" : "off"].</span>"
-		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
-		update_icon()
-	else
-		status = 0
-		user << "<span class='warning'>\The [src] is out of charge.</span>"
-	add_fingerprint(user)
-*/
-/*
-/obj/item/device/modkit/fluff/omnivac_modkit //Ornate box - Zander Moon - omnivac - SPRITE
-	name = "ornate box"
-	desc = "An ornate box, containing the handle of an energy blade."
-	icon = 'icons/obj/custom_items.dmi'
-	icon_state = "omni_modkit"
-	parts = MODKIT_HELMET
-	from_helmet = list(/obj/item/weapon/melee)
-	to_helmet = list(/obj/item/weapon/melee/baton/fluff/omnivac_baton)
-*/
 
 /obj/item/clothing/head/soft/fluff/nebula_cap //Black baseball cap - Roxy Wallace - nebulaflare - DONE
 	name = "black baseball cap"
@@ -410,20 +284,20 @@
 	item_state = "pen"
 	var/ink = 1
 
-/obj/item/weapon/pen/fluff/eliza_pen/attack_self(mob/user)
-	switch(ink)
-		if(1)
-			ink = 2
-			colour = "blue"
-			user << "<span class='notice'>You cycle the pen to use the blue ink cartridge.</span>"
-		if(2)
-			ink = 3
-			colour = "red"
-			user << "<span class='notice'>You cycle the pen to use the red ink cartridge.</span>"
-		if(3)
-			ink = 1
-			colour = "black"
-			user << "<span class='notice'>You cycle the pen to use the black ink cartridge.</span>"
+	attack_self(mob/user)
+		switch(ink)
+			if(1)
+				ink = 2
+				colour = "blue"
+				user << "<span class='notice'>You cycle the pen to use the blue ink cartridge.</span>"
+			if(2)
+				ink = 3
+				colour = "red"
+				user << "<span class='notice'>You cycle the pen to use the red ink cartridge.</span>"
+			if(3)
+				ink = 1
+				colour = "black"
+				user << "<span class='notice'>You cycle the pen to use the black ink cartridge.</span>"
 
 /obj/item/device/fluff/amy_player //Music player - Amy Heris - gollee - DONE - Modding
 	name = "music player"
@@ -442,74 +316,66 @@
 	"Affinity",
 	"Dream Spark"
 	)
-/obj/item/clothing/ears/headphone
-	name = "Headphone"
-	desc = "Headphones made for special players..."
-	icon_state = "earmuffs"
-	item_state = "earmuffs"
-	slot_flags = SLOT_EARS //| SLOT_TWOEARS
-
-
 
 //Totally damned surprised this worked on the first go. Huh, well, it works! Considering integration into main code as well. - Skull132
-/obj/item/device/fluff/amy_player/emp_act(severity)
-	emped = 1
-	icon_state = "amy_player_broken"
-	playing = 0
+	emp_act(severity)
+		emped = 1
+		icon_state = "amy_player_broken"
+		playing = 0
 
-/obj/item/device/fluff/amy_player/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if (emped == 1)
-		if(istype(O, /obj/item/weapon/screwdriver) && fixed == 0)
-			fixed = 1
-			user << "<span class='notice'>You unfasten the back panel.</span>"
-		if(istype(O, /obj/item/device/multitool) && fixed == 1)
-			fixed = 0
-			user << "<span class='notice'>You quickly pulse a few fires, and reset the screen and device.</span>"
-			emped = 0
-			icon_state = "amy_player_off"
+	attackby(var/obj/item/O as obj, var/mob/user as mob)
+		if (emped == 1)
+			if(istype(O, /obj/item/weapon/screwdriver) && fixed == 0)
+				fixed = 1
+				user << "<span class='notice'>You unfasten the back panel.</span>"
+			if(istype(O, /obj/item/device/multitool) && fixed == 1)
+				fixed = 0
+				user << "<span class='notice'>You quickly pulse a few fires, and reset the screen and device.</span>"
+				emped = 0
+				icon_state = "amy_player_off"
 
 
-	return
-//	else
-//		user << "<span class='notice'>You see little reason to start hacking into the player's wiring.</span>"
+		return
+	//	else
+	//		user << "<span class='notice'>You see little reason to start hacking into the player's wiring.</span>"
 
-/obj/item/device/fluff/amy_player/attack_self(mob/user)
-	if(emped)
-		user<< "<span class='notice'>The screen flickers and blinks with errors. It looks like it's about to give up the ghost.</span>"
-	else if(playing == 0)
-		var/mob/living/carbon/human/M = usr
-		var/pickedsong = input("Select the song you want to play.","Songs", null, null) in songs
-		if(istype(M.l_ear, /obj/item/clothing/ears/headphone) || istype(M.r_ear, /obj/item/clothing/ears/headphone))
-			switch(pickedsong)
-				if("Dream Spark")
-					usr << sound('sound/mp3/dreamspark.ogg')
-				if("Second Chance")
-					usr << sound('sound/mp3/secondchance.ogg')
-				if("Redoubt")
-					usr << sound('sound/mp3/redoubt.ogg')
-				if("Affinity")
-					usr << sound('sound/mp3/affinity.ogg')
-				if("Lord of Light")
-					usr << sound('sound/mp3/lordoflight.ogg')
-		else
-			for(var/mob/I in view())
+	attack_self(mob/user)
+		if(emped)
+			user<< "<span class='notice'>The screen flickers and blinks with errors. It looks like it's about to give up the ghost.</span>"
+		else if(playing == 0)
+			var/mob/living/carbon/human/M = usr
+			var/pickedsong = input("Select the song you want to play.","Songs", null, null) in songs
+			if(istype(M.l_ear, /obj/item/clothing/ears/headphone) || istype(M.r_ear, /obj/item/clothing/ears/headphone))
 				switch(pickedsong)
 					if("Dream Spark")
-						I << sound('sound/mp3/dreamspark.ogg')
+						usr << sound('sound/mp3/dreamspark.ogg')
 					if("Second Chance")
-						I << sound('sound/mp3/secondchance.ogg')
+						usr << sound('sound/mp3/secondchance.ogg')
 					if("Redoubt")
-						I << sound('sound/mp3/redoubt.ogg')
+						usr << sound('sound/mp3/redoubt.ogg')
 					if("Affinity")
-						I << sound('sound/mp3/affinity.ogg')
+						usr << sound('sound/mp3/affinity.ogg')
 					if("Lord of Light")
-						I << sound('sound/mp3/lordoflight.ogg')
-		user << "<span class='notice'>You turn on the music player, selecting a song. A song called '[pickedsong]' starts playing through the earbuds as the device sparks to life.</span>"
-		icon_state = "amy_player_on"
-		playing = 1
-	else
-		user << "<span class='notice'>You turn off the music player.</span>"
-		playing = 0
+						usr << sound('sound/mp3/lordoflight.ogg')
+			else
+				for(var/mob/I in view())
+					switch(pickedsong)
+						if("Dream Spark")
+							I << sound('sound/mp3/dreamspark.ogg')
+						if("Second Chance")
+							I << sound('sound/mp3/secondchance.ogg')
+						if("Redoubt")
+							I << sound('sound/mp3/redoubt.ogg')
+						if("Affinity")
+							I << sound('sound/mp3/affinity.ogg')
+						if("Lord of Light")
+							I << sound('sound/mp3/lordoflight.ogg')
+			user << "<span class='notice'>You turn on the music player, selecting a song. A song called '[pickedsong]' starts playing through the earbuds as the device sparks to life.</span>"
+			icon_state = "amy_player_on"
+			playing = 1
+		else
+			user << "<span class='notice'>You turn off the music player.</span>"
+			playing = 0
 
 
 /*			if(0)
@@ -528,6 +394,13 @@
 /	"Affinity"
 /	"Dream Spark"
 */
+
+/obj/item/clothing/ears/headphone
+	name = "Headphone"
+	desc = "Headphones made for special players..."
+	icon_state = "earmuffs"
+	item_state = "earmuffs"
+	slot_flags = SLOT_EARS //| SLOT_TWOEARS
 
 /obj/item/device/fluff/sten_synth //VoiceOS.V2 - Sten Asval - vtol - DONE
 	name = "VoiceOS.V2"
@@ -669,19 +542,20 @@
 	item_color = "cecillia_locket1"
 	slots = 1
 
+	New()
+		..()
+		new /obj/item/weapon/reagent_containers/pill/cecillia_pill(hold)
+		return
+
 /obj/item/weapon/reagent_containers/pill/cecillia_pill
 	name = "Cici's moonshine pill"
 	desc = "Smells of home-made remedies."
 	icon_state = "pill8"
+
 	New()
 		..()
 		reagents.add_reagent("space_drugs", 5)
 		reagents.add_reagent("paroxetine", 5)
-
-/obj/item/clothing/tie/storage/fluff/cecillia_locket/New()
-		..()
-		new /obj/item/weapon/reagent_containers/pill/cecillia_pill(hold)
-		return
 
 /obj/item/weapon/storage/backpack/satchel/fluff/cecillia_satchel //Satchel-bag - Cecillia Lambert - casperf1 - SPRITE
 	name = "satchel-bag"
@@ -736,17 +610,6 @@
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "leo_coat"
 	item_state = "leo_coat"
-
-/*
-/obj/item/device/modkit/fluff/leo_modkit //Weapon case - Leo Wyatt - keinto - DONE
-	name = "weapon case"
-	desc = "A sturdy leather case, with a velvet covered interior.."
-	icon = 'icons/obj/custom_items.dmi'
-	icon_state = "leo_mod"
-	parts = MODKIT_HELMET
-	from_helmet = list(/obj/item/weapon/gun/projectile/detective/semiauto)
-	to_helmet = list(/obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun)
-*/
 
 /obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun //Instant Prosecutor - Leo Wyatt - keinto - DONE (stab)
 	name = "\improper Instant Prosecutor"
@@ -859,15 +722,15 @@
 	item_state = "ushanka_avadown"
 	icon_state = "ushankadown"
 
-/obj/item/clothing/head/ushanka/fluff/ava_ushanka/attack_self(mob/user as mob)
-	if(src.icon_state == "ushankadown")
-		src.icon_state = "ushankaup"
-		src.item_state = "ushanka_avaup"
-		user << "You raise the ear flaps on the ushanka."
-	else
-		src.icon_state = "ushankadown"
-		src.item_state = "ushanka_avadown"
-		user << "You lower the ear flaps on the ushanka."
+	attack_self(mob/user as mob)
+		if(src.icon_state == "ushankadown")
+			src.icon_state = "ushankaup"
+			src.item_state = "ushanka_avaup"
+			user << "You raise the ear flaps on the ushanka."
+		else
+			src.icon_state = "ushankadown"
+			src.item_state = "ushanka_avadown"
+			user << "You lower the ear flaps on the ushanka."
 
 /obj/item/clothing/tie/fluff/hamil_badge // Internal Investigations Badge - Muhammad Hamil - Jackboot - DONE
 	name = "Internal Investigations Badge"
@@ -875,13 +738,13 @@
 	icon = 'icons/obj/custom_items.dmi'
 	item_state = "hamil_badge"
 
-/obj/item/clothing/tie/fluff/hamil_badge/attack_self(mob/user as mob)
-	if(isliving(user))
-		user.visible_message("\red [user] flashes their [src].\nIt reads: Muhammad Hamil, Internal Investigations, Persepolis..","\red You display the [src].\nIt reads: Muhammad Hamil, Internal Investigations, Persepolis.")
+	attack_self(mob/user as mob)
+		if(isliving(user))
+			user.visible_message("\red [user] flashes their [src].\nIt reads: Muhammad Hamil, Internal Investigations, Persepolis..","\red You display the [src].\nIt reads: Muhammad Hamil, Internal Investigations, Persepolis.")
 
-/obj/item/clothing/tie/fluff/hamil_badge/attack(mob/living/carbon/human/M, mob/living/user)
-	if(isliving(user))
-		user.visible_message("\red [user] invades [M]'s personal space, thrusting [src] into their face insistently.","\red You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.")
+	attack(mob/living/carbon/human/M, mob/living/user)
+		if(isliving(user))
+			user.visible_message("\red [user] invades [M]'s personal space, thrusting [src] into their face insistently.","\red You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.")
 
 /obj/item/clothing/mask/gas/fluff/stefan_mask // Modified Gas Mask - Oliver Stefan - Nbielinski - DONE
 	desc = "This odd looking gas mask is quite clearly not of NanoTrasen origin as it sports a black metal polish, as well as a reflective face plate that mirrors the view of the mask itself. This particular mask appears to breathe with the user, hissing when they exhale, and whining softly as they inhale."
@@ -902,43 +765,43 @@
 	force = 2
 	var/on = 0
 
-/obj/item/weapon/melee/fluff/balisong/attack_self(mob/user as mob)
-	on = !on
-	if(on)
-		user.visible_message("\red With but a flashy twirl of their fingers, [user] flicks open the balisong.",\
-		"\red You with a bit a flair, open the balisong. The metallic shine of the blade touching your gaze.",\
-		"You hear an ominous click.")
-		icon_state = "balisong_1"
-		item_state = "balisong_m"
-		w_class = 3
-		force = 2
-		attack_verb = list("prodded")
-	else
-		user.visible_message("\blue Without even looking, [user] casually flicks the balisong closed.",\
-		"\blue You skilfully close the balisong.",\
-		"You hear a click.")
-		icon_state = "balisong_0"
-		w_class = 2
-		force = 2
-		attack_verb = list("thumped")
+	attack_self(mob/user as mob)
+		on = !on
+		if(on)
+			user.visible_message("\red With but a flashy twirl of their fingers, [user] flicks open the balisong.",\
+			"\red You with a bit a flair, open the balisong. The metallic shine of the blade touching your gaze.",\
+			"You hear an ominous click.")
+			icon_state = "balisong_1"
+			item_state = "balisong_m"
+			w_class = 3
+			force = 2
+			attack_verb = list("prodded")
+		else
+			user.visible_message("\blue Without even looking, [user] casually flicks the balisong closed.",\
+			"\blue You skilfully close the balisong.",\
+			"You hear a click.")
+			icon_state = "balisong_0"
+			w_class = 2
+			force = 2
+			attack_verb = list("thumped")
 
-	if(istype(user,/mob/living/carbon/human))
-		var/mob/living/carbon/human/H = user
-		H.update_inv_l_hand()
-		H.update_inv_r_hand()
+		if(istype(user,/mob/living/carbon/human))
+			var/mob/living/carbon/human/H = user
+			H.update_inv_l_hand()
+			H.update_inv_r_hand()
 
-	playsound(src.loc, 'sound/weapons/empty.ogg', 50, 1)
-	add_fingerprint(user)
+		playsound(src.loc, 'sound/weapons/empty.ogg', 50, 1)
+		add_fingerprint(user)
 
-	if(blood_overlay && blood_DNA && (blood_DNA.len >= 1))
-		var/icon/I = new /icon(src.icon, src.icon_state)
-		I.Blend(new /icon('icons/effects/blood.dmi', rgb(255,255,255)),ICON_ADD)
-		I.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY)
-		blood_overlay = I
+		if(blood_overlay && blood_DNA && (blood_DNA.len >= 1))
+			var/icon/I = new /icon(src.icon, src.icon_state)
+			I.Blend(new /icon('icons/effects/blood.dmi', rgb(255,255,255)),ICON_ADD)
+			I.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY)
+			blood_overlay = I
 
-		overlays += blood_overlay
+			overlays += blood_overlay
 
-	return
+		return
 
 /obj/structure/stool/bed/chair/wheelchair/fluff/kit // Kit's Wheelchair - Cassidy Kit - Meowykins - DONE
 	name = "Kit's Wheelchair"
@@ -948,12 +811,12 @@
 	anchored = 0
 	movable = 1
 
-obj/structure/stool/bed/chair/wheelchair/fluff/kit/handle_rotation()
-	overlays = null
-	var/image/O = image(icon = 'icons/obj/custom_items.dmi', icon_state = "kit_w_overlay", layer = FLY_LAYER, dir = src.dir)
-	overlays += O
-	if(buckled_mob)
-		buckled_mob.dir = dir
+	handle_rotation()
+		overlays = null
+		var/image/O = image(icon = 'icons/obj/custom_items.dmi', icon_state = "kit_w_overlay", layer = FLY_LAYER, dir = src.dir)
+		overlays += O
+		if(buckled_mob)
+			buckled_mob.dir = dir
 
 /obj/item/weapon/storage/fluff/binder // Black Binder - Cassidy Kit - Meowykins - DONE
 	name = "Black Binder"
@@ -966,13 +829,13 @@ obj/structure/stool/bed/chair/wheelchair/fluff/kit/handle_rotation()
 		"/obj/item/weapon/pen"
 	)
 
-/obj/item/weapon/storage/fluff/binder/New()
-	..()
-	new /obj/item/weapon/folder/blue(src)
-	new /obj/item/weapon/folder/red(src)
-	new /obj/item/weapon/folder/white(src)
-	new /obj/item/weapon/folder/yellow(src)
-	new /obj/item/weapon/pen/fluff/kit_pen(src)
+	New()
+		..()
+		new /obj/item/weapon/folder/blue(src)
+		new /obj/item/weapon/folder/red(src)
+		new /obj/item/weapon/folder/white(src)
+		new /obj/item/weapon/folder/yellow(src)
+		new /obj/item/weapon/pen/fluff/kit_pen(src)
 
 /obj/item/weapon/pen/fluff/kit_pen // Fountain Pen - Cassidy Kit - Meowykins - DONE
 	desc = "A small fountain pen. It has several spots to change the cartridge inside for another color, as well as a selector switch for ease of use."
@@ -982,20 +845,20 @@ obj/structure/stool/bed/chair/wheelchair/fluff/kit/handle_rotation()
 	item_state = "pen"
 	var/ink = 1
 
-/obj/item/weapon/pen/fluff/kit_pen/attack_self(mob/user)
-	switch(ink)
-		if(1)
-			ink = 2
-			colour = "blue"
-			user << "<span class='notice'>You cycle the pen to use the blue ink cartridge.</span>"
-		if(2)
-			ink = 3
-			colour = "red"
-			user << "<span class='notice'>You cycle the pen to use the red ink cartridge.</span>"
-		if(3)
-			ink = 1
-			colour = "black"
-			user << "<span class='notice'>You cycle the pen to use the black ink cartridge.</span>"
+	attack_self(mob/user)
+		switch(ink)
+			if(1)
+				ink = 2
+				colour = "blue"
+				user << "<span class='notice'>You cycle the pen to use the blue ink cartridge.</span>"
+			if(2)
+				ink = 3
+				colour = "red"
+				user << "<span class='notice'>You cycle the pen to use the red ink cartridge.</span>"
+			if(3)
+				ink = 1
+				colour = "black"
+				user << "<span class='notice'>You cycle the pen to use the black ink cartridge.</span>"
 
 /obj/structure/sign/shaw_degree //Xenonuerology Doctorate - Alexis Shaw - Tenenza
 	name = "\improper Xenonuerology degree"//Description trimmed down, summarized.
@@ -1019,3 +882,38 @@ obj/structure/stool/bed/chair/wheelchair/fluff/kit/handle_rotation()
 	blood_overlay_type = "armor"
 	allowed = list(/obj/item/stack/medical, /obj/item/weapon/reagent_containers/dropper, /obj/item/weapon/reagent_containers/hypospray, /obj/item/weapon/reagent_containers/syringe, \
 	/obj/item/device/healthanalyzer, /obj/item/device/flashlight, /obj/item/device/radio, /obj/item/weapon/tank/emergency_oxygen)
+
+
+/obj/item/device/taperecorder/fluff/language_processor //Advanced Language Processing Board - Android - TheCritsyBear
+	name = "Advanced Language Processing Board"
+	desc = "A slightly advanced, but not uncommon upgrade module considered to be the cheapest of its kind. It has the markings of an independent retailer- not standard NanoTrasen hardware."
+	icon_state = "paragon_datachip"
+	item_state = "dermal"
+	slot_flags = SLOT_HEAD
+
+/obj/item/fluff/paragon_datachip //Data Chip - PARAGON - MasterZipZero
+	name = "data chip"
+	desc = "A small bluespace data chip, marked with a tiny heart."
+	icon_state = "paragon_datachip"
+	item_state = "dermal"
+	slot_flags = SLOT_HEAD
+	w_class = 1
+
+/obj/item/clothing/tie/fluff/karima_datadrive //Data Drive Pendant -  Karima Mo'Taki - NebulaFlare
+	name = "Data drive"
+	desc = "A small necklace, the pendant flips open to reveal a data drive."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "motaki_datadrive"
+	item_state = "holobadge-cord"
+	item_color = "holobadge-cord"
+	slot_flags = SLOT_MASK
+
+
+/obj/item/clothing/tie/fluff/dove_necklace //Diamond Necklace -  Charlie Dove - Thundy
+	name = "Diamond necklace"
+	desc = "Small, gold chain with a diamond pendant. Looks expensive."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "dove_necklace"
+	item_state = "dove_necklace"
+	item_color = "dove_necklace"
+	slot_flags = SLOT_MASK

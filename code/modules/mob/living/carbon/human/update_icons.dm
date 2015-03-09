@@ -592,6 +592,11 @@ proc/get_damage_icon_part(damage_state, body_part)
 			if(!tie_color) tie_color = w_uniform:hastie.icon_state
 			standing.overlays	+= image("icon" = 'icons/mob/ties.dmi', "icon_state" = "[tie_color]")
 
+		if(w_uniform:aband)	//SAME THING AS ABOVE, WHY AM I TYPING LIKE THIS, BECAUSE ABOVE
+			var/aband_color = w_uniform:aband.item_color
+			if(!aband_color) aband_color = w_uniform:aband.icon_state
+			standing.overlays	+= image("icon" = 'icons/mob/ties.dmi', "icon_state" = "[aband_color]")
+
 		overlays_standing[UNIFORM_LAYER]	= standing
 	else
 		overlays_standing[UNIFORM_LAYER]	= null
