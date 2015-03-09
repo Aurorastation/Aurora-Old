@@ -80,7 +80,7 @@ var/list/medical_positions = list(
 	"Geneticist",
 	"Psychiatrist",
 	"Chemist",
-	"Emergency Medical Technician",
+	"Emergency Medical Tech",
 	"Nursing Intern"
 )
 

@@ -193,7 +193,8 @@
 /datum/game_mode/proc/remove_cultist(datum/mind/cult_mind, show_message = 1)
 	if(cult_mind in cult)
 		cult -= cult_mind
-		cult_mind.current << "\red <FONT size = 3><B>An unfamiliar white light flashes through your mind, cleansing the taint of the dark-one and the memories of your time as his servant with it.</B></FONT>"
+		cult_mind.current << "\red <B>An unfamiliar white light flashes through your mind, cleansing the taint of the dark-one and the memories of your time as his servant with it.</B>"
+		cult_mind.current << "\blue <b>OOC information:</b> Being removed from the clutches of Nar'sie would rip most memories of your service to him. <b>At most</b> you would remember one individual who assisted in converting you. Maybe not even that."
 		cult_mind.memory = ""
 		update_cult_icons_removed(cult_mind)
 		if(show_message)
