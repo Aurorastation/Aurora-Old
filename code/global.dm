@@ -37,6 +37,7 @@ var/list/paper_tag_whitelist = list("center","p","div","span","h1","h2","h3","h4
 var/list/paper_blacklist = list("java","onblur","onchange","onclick","ondblclick","onfocus","onkeydown",	\
 	"onkeypress","onkeyup","onload","onmousedown","onmousemove","onmouseout","onmouseover",	\
 	"onmouseup","onreset","onselect","onsubmit","onunload")
+var/list/signature_tag_whitelist = list("i","u","b","small","big")
 
 var/BLINDBLOCK = 0
 var/DEAFBLOCK = 0
