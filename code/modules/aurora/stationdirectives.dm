@@ -11,6 +11,7 @@
 
 /client/proc/directiveslookup(var/screen = 1, var/queryid="")
 	var/dat = "<div align='center'><b>Station Directives<br>NanoTrasen<br>NSS Aurora</b></div><br>"
+	dat += "<div align='center'><b>OOC Information:</b><br>These directives mock the Standard Operating Procedure which would otherwise be in place aboard the station. They are not enforced out of character wise, however, you may find your character penalized in-game for not following them.</div><br>"
 
 	establish_db_connection()
 	if(!dbcon.IsConnected())

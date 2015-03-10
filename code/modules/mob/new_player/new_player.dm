@@ -39,7 +39,8 @@
 		output += "<p><a href='byond://?src=\ref[src];observe=1'>Observe</A></p>"
 
 		//Station Directives
-		output += "<p><a href='byond://?src=\ref[src];showdirectives=1'>IC Station Directives</a></p>"
+		if(config.invasive_directives)
+			output += "<p><a href='byond://?src=\ref[src];showdirectives=1'>Station Directives</a></p>"
 
 		if(!IsGuestKey(src.key))
 			establish_db_connection()
