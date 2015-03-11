@@ -732,19 +732,15 @@
 			src.item_state = "ushanka_avadown"
 			user << "You lower the ear flaps on the ushanka."
 
-/obj/item/clothing/tie/fluff/hamil_badge // Internal Investigations Badge - Muhammad Hamil - Jackboot - DONE
+/obj/item/clothing/tie/holobadge/fluff/hamil_badge // Internal Investigations Badge - Muhammad Hamil - Jackboot - DONE
 	name = "Internal Investigations Badge"
 	desc = "An Internal Investigation badge. Used by a special branch of the Elyran police force."
 	icon = 'icons/obj/custom_items.dmi'
-	item_state = "hamil_badge"
+	icon_state = "hamil_badge"
 
 	attack_self(mob/user as mob)
 		if(isliving(user))
 			user.visible_message("\red [user] flashes their [src].\nIt reads: Muhammad Hamil, Internal Investigations, Persepolis..","\red You display the [src].\nIt reads: Muhammad Hamil, Internal Investigations, Persepolis.")
-
-	attack(mob/living/carbon/human/M, mob/living/user)
-		if(isliving(user))
-			user.visible_message("\red [user] invades [M]'s personal space, thrusting [src] into their face insistently.","\red You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.")
 
 /obj/item/clothing/mask/gas/fluff/stefan_mask // Modified Gas Mask - Oliver Stefan - Nbielinski - DONE
 	desc = "This odd looking gas mask is quite clearly not of NanoTrasen origin as it sports a black metal polish, as well as a reflective face plate that mirrors the view of the mask itself. This particular mask appears to breathe with the user, hissing when they exhale, and whining softly as they inhale."
@@ -917,3 +913,106 @@
 	item_state = "dove_necklace"
 	item_color = "dove_necklace"
 	slot_flags = SLOT_MASK
+
+/obj/item/weapon/nullrod/fluff/hartam_rod // Faol's resolve - Hartam Bartam
+	name = "Faol's resolve"
+	desc = "A symbol forged of steel, tempered in holy water, it has several gold-colored rings on it. Judging by the numerous dents and scratches on this thing, it has seen a lot of years..."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "hartam_rod"
+
+/obj/item/device/radio/headset/fluff/sam_implant // Cochlear Implant - Samantha Mason - Bakagaijin
+	name = "Cochlear Implant"
+	desc = "A specialized earpiece and headset combination. It appears to help those who are deaf hear."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "sam_implant"
+
+/obj/item/weapon/melee/fluff/tina_knife // Consecrated Athame - Tina Kaekel - Tainevva
+	name = "Consecrated Athame"
+	desc = "An athame used in occult rituals. The double-edged dagger is dull. The handle is black with a pink/white occult design strewn about it, and 'Tina' is inscribed into it in decorated letters."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "tina_knife"
+	flags = FPRINT | TABLEPASS
+	slot_flags = SLOT_BELT
+	w_class = 1
+	force = 2
+
+/obj/item/clothing/tie/holobadge/fluff/peter_badge // Peter Stone's badge - Peter Stone - Jakers457
+	name = "Peter Stone's badge"
+	desc = "An old looking badge that has seen as many ordeals as its owner. It has the name 'Peter Stone' inscribed on it."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "peter_badge"
+
+/obj/item/clothing/tie/armband/iac_armband // Interstellar Aid Corps armband - Grey Ryan - Jackboot
+	name = "Interstellar Aid Corps armband"
+	desc = "An armband denoting its wearer as a medical worker of the Interstellar Aid Corps."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "iac_armband"
+	item_color = "iac"
+
+/obj/item/clothing/gloves/fluff/imraj_kara // kara - Imraj Brar - Canon35
+	name = "Kara"
+	desc = "A bracelet made of what looks like steel."
+	icon_state = "Kara"
+	item_color = "Kara_m"
+
+/obj/item/fluff/kirpan_imraj // kirban - Imraj Brar - Canon35
+	name = "kirpan"
+	desc = "A knife with a metal grip and blade, has strange characters written on the sides."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "Kara"
+	item_color = "Kara_m"
+	w_class = 2.0
+	throwforce = 0
+	throw_speed = 4
+	throw_range = 20
+
+/obj/item/clothing/head/fluff/turbin_imraj // turban - Imraj Brar - Canon35
+	name = "turban"
+	desc = "A piece of soft headgear."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "turban"
+	item_color = "turban_m"
+	armor = list(melee = 20, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
+
+/obj/item/weapon/fluff/kangha_imraj // kangha - Imraj Brar - Canon35
+	name = "kangha"
+	desc = "A small wooden comb."
+	w_class = 1.0
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "kangha"
+
+	attack_self(mob/user)
+		if(user.r_hand == src || user.l_hand == src)
+			var/mobgender
+			if(user.gender == "male")
+				mobgender = "guy"
+			else
+				mobgender = "gal"
+			for(var/mob/O in viewers(user, null))
+				O.show_message(text("\red [] uses [] to comb their hair with incredible style and sophistication. What a [mobgender].", user, src), 1)
+		return
+
+/obj/item/clothing/suit/armor/vest/fluff/apop_coat // Thick Jacket - Apophis Quihtzin - Kingmatt9
+	name = "Thick Jacket"
+	desc = "A brown leather trenchcoat-like jacket, it smells of snow."
+	icon = 'icons/obj/custom_items.dmi'
+	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
+	icon_state = "thick_jacket"
+	item_state = "thick_jacket"
+
+/obj/item/clothing/suit/armor/vest/fluff/stab_vest_sam // Stab Vest - Sam Macnaughton - Sgtsammac
+	name = "Stab Vest"
+	desc = "It's a red vest, with high visibility strips. You can see the emblem of the NanoTrasen security division on the right breast."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "stab_vest"
+	item_state = "stab_vest"
+
+//////////////////////////////////////////
+////////////REDO THIS/////////////
+//////////////////////////////////////////
+/obj/item/device/radio/fluff/smile_bara // Dr. Smile - Daniela Baranova - Rechkalov
+	name = "Dr. Smile"
+	desc = "A black suitcase with a simple yet soothing/supportive smiley-face on them."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "smilemotherfucker"
+	item_state = "smilemotherfucker_m"
