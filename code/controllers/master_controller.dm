@@ -57,6 +57,7 @@ datum/controller/game_controller/New()
 	if(!emergency_shuttle)			emergency_shuttle = new /datum/emergency_shuttle_controller()
 	if(!shuttle_controller)			shuttle_controller = new /datum/shuttle_controller()
 	if(!delta_level)				delta_level = new /datum/delta_level()
+	if(!sqlnews_controller)			sqlnews_controller = new /datum/sqlnews()
 
 datum/controller/game_controller/proc/setup()
 	world.tick_lag = config.Ticklag
@@ -149,6 +150,7 @@ datum/controller/game_controller/proc/process()
 				transfer_controller.process()
 				shuttle_controller.process()
 				process_newscaster()
+				sqlnews_controller.process()
 
 				//AIR
 
@@ -234,6 +236,9 @@ datum/controller/game_controller/proc/process()
 				process_events()
 				events_cost = (world.timeofday - timer) / 10
 
+				//SQL NEWS
+
+
 				//TICKER
 				timer = world.timeofday
 				last_thing_processed = ticker.type
@@ -246,6 +251,7 @@ datum/controller/game_controller/proc/process()
 				var/end_time = world.timeofday
 				if(end_time < start_time)
 					start_time -= 864000    //deciseconds in a day
+
 				sleep( round(minimum_ticks - (end_time - start_time),1) )
 			else
 				sleep(10)

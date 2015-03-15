@@ -69,6 +69,7 @@ Used In File(s): \code\game\objects\items\devices\PDA\PDA.dm
                 {{:helper.link('Notekeeper', 'note', {'choice' : "1"}, null, 'fixedLeftWide')}}
                 {{:helper.link('Messenger', data.newMessage ? 'mail-closed' : 'mail-open', {'choice' : "2"}, null, 'fixedLeftWide')}}
                 {{:helper.link('Crew Manifest', 'contact', {'choice' : "41"}, null, 'fixedLeftWide')}}
+				{{:helper.link('Station Directives', 'folder-collapsed', {'choice' : "6"}, null, 'fixedLeftWide')}}
             </div>
         </div>
         <br>
@@ -944,7 +945,38 @@ Used In File(s): \code\game\objects\items\devices\PDA\PDA.dm
                     {{/if}}
                 {{/for}}
             </div>
+
+	{{else data.mode == 6}} <!-- Station Directives -->
+		<div class="item">
+			{{if data.sqlcon==1}}
+				<span class="bad">Unable to access Station Directives</span>
+			{{else}}
+				<center><table class="pmon"><tbody>
+					{{for data.directives}}
+						<tr><td>Directive #{{:value.DirNo}}</td><td>{{:value.DirName}}</td><td>{{:helper.link('Review', null, {'choice' : "View Directive", 'queryid' : value.DirNo}, null, 'fixedLeft')}}</td></tr>
+					{{/for}}
+				</tbody></table></center>
+			{{/if}}
+		</div>
+
+	{{else data.mode == 61}}
+		<div class="item">
+			<div class="itemLabelNarrow">
+				<b>Directive #{{:data.DirNo}}</b>:
+			</div>
+			<div class="itemContent">
+				<span class="average">'{{:data.DirName}}'</span>
+			</div>
+		</div>
+		<div class ="statusDisplayRecords">
+			<div class ="item">
+				<div class="itemContent" style="width: 100%;">
+					<span class="average">{{:data.DirData}}</span>
+				</div>
+			</div>
+		</div>
     {{/if}}
+
 {{else}}
     <div class="wholeScreen">
         <br><br><br><br><br><br><br>No Owner information found, please swipe ID
