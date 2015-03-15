@@ -242,7 +242,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				dat += "<tr><td colspan='3' bgcolor='white' align='center'><a href='?src=\ref[src];setScreen=14'>Regarding Station Directives</a><br></td></tr>"
 
 				while(query.NextRow())
-					var/id = query.item[1]
+					var/id = text2num(query.item[1])
 					var/name = query.item[2]
 
 					var/bgcolor = "#e3e3e3"
@@ -272,10 +272,10 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 
 			if(14)	//directive description
 				dat += "<div align='center'><b>Regarding Station Directives</b></div><hr>"
-				dat += "<div align='justify'>The Station Directives are a set of specific orders and directives issued and enforced aboard a specific NanoTrasen Corporation installation. This terminal provides access to orders and directives enforced aboard the <i>NSS Aurora.</i> Note that these are only enforced upon NanoTrasen Employees, and not civilian orotherwise visitors, unless ruled otherwise by sector specific Central Command.<br><br>"
+				dat += "<div align='justify'>The Station Directives are a set of specific orders and directives issued and enforced aboard a specific NanoTrasen Corporation installation. This terminal provides access to orders and directives enforced aboard the <i>NSS Aurora.</i> Note that these are only enforced upon NanoTrasen Employees, and not civilians or visitors, unless ruled otherwise by sector specific Central Command.<br><br>"
 				dat += "Overwriting power of general NanoTrasen Corporate Regulation is given to the Station Directives. Should a conflict emerge, the Station Directives active aboard the specific installation are to be adhered to, over Corporate Regulation.<br><br>"
 				dat += "Punishment for a violation of Station Directives should be escalated in the following fashion:<br><ul><li>Verbal warning, and citation. Ensure that the Employee is familiar with the Station Directives.</li><li>Charge of violating article i111 - Failure to Execute an Order - of NanoTrasen Corporate Regulation</li><li>Subsequent charge of violating article i206 - Neglect of Duty - of NanoTrasen Corporate Regulation, and review of Employee by the Employee's Head of Staff.</li><li>Subsequent failure to follow Station Directives should result in suspension of contract, if not imprisonment until transfer to Central Command station.</li></ul>"
-				dat += "Obviously, dependant on the violation and actual crimes concerned, punishment may be escalated faster, with intent to ensure in the safety of station, equipment and crew.</div>"
+				dat += "Dependant on the violation and actual crimes concerned, punishment may be escalated faster, with intent to ensure in the safety of station, equipment and crew.</div>"
 				dat += "<br><div align='center'><a href='?src=\ref[src];setScreen=12'>Return to Index</a></div>"
 				dat += "<div align='center'><a href='?src=\ref[src];setScreen=0'>Return to Main Menu</a></div>"
 
