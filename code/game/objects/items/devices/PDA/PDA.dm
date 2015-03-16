@@ -46,13 +46,15 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/newmessage = 0			//To remove hackish overlay check
 
 	var/list/cartmodes = list(40, 42, 43, 433, 44, 441, 45, 451, 46, 48, 47, 49) // If you add more cartridge modes add them to this list as well.
-	var/list/no_auto_update = list(1, 40, 43, 44, 441, 45, 451)		     // These modes we turn off autoupdate
+	var/list/no_auto_update = list(1, 40, 43, 44, 441, 45, 451, 6, 61)		     // These modes we turn off autoupdate
 	var/list/update_every_five = list(3, 41, 433, 46, 47, 48, 49)			     // These we update every 5 ticks
 
 	var/obj/item/weapon/card/id/id = null //Making it possible to slot an ID card into the PDA so it can function as both.
 	var/ownjob = null //related to above
 
 	var/obj/item/device/paicard/pai = null	// A slot for a personal AI device
+
+	var/queryid	//For general SQL queries ran from the PDA's interface.
 
 /obj/item/device/pda/medical
 	default_cartridge = /obj/item/weapon/cartridge/medical
@@ -466,6 +468,35 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		if(isnull(data["aircontents"]))
 			data["aircontents"] = list("reading" = 0)
 
+	if(mode==6)	//Station Directives
+		var/directives[0]
+
+		establish_db_connection()
+		if(!dbcon.IsConnected())
+			data["sqlcon"] = 1
+			error("SQL database connection failed. Attempted to fetch form information.")
+
+		var/DBQuery/query = dbcon.NewQuery("SELECT id, name FROM aurora_directives")
+		query.Execute()
+
+		while(query.NextRow())
+			var/id = query.item[1]
+			var/name = query.item[2]
+
+			directives.Add(list(list("DirNo" = "[id]", "DirName" = "[name]")))
+
+		data["directives"] = directives
+
+	if(mode==61)
+		var/DBQuery/searchquery = dbcon.NewQuery("SELECT id, name, data FROM aurora_directives WHERE id=[queryid]")
+		searchquery.Execute()
+
+		while(searchquery.NextRow())
+			data["DirNo"] = searchquery.item[1]
+			data["DirName"] = searchquery.item[2]
+			data["DirData"] = searchquery.item[3]
+
+
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
@@ -571,6 +602,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			mode = 5
 		if("41") //Manifest
 			mode = 41
+		if("6")
+			mode = 6
 
 
 //MAIN FUNCTIONS===================================
@@ -697,6 +730,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				ui.close()
 				return 0
 
+//SQL/AURORA FUNCTIONS==================================
+
+		if("View Directive")
+			queryid = sanitizeSQL(href_list["queryid"])
+			mode = 61
 
 //SYNDICATE FUNCTIONS===================================
 
