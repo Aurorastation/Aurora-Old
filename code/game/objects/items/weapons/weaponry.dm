@@ -37,7 +37,7 @@
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
 
-	msg_admin_attack("[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+	msg_admin_attack("[key_name_admin(user)] attacked [key_name_admin(M)] with [src.name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
 	if (!(istype(user, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
 		user << "\red You don't have the dexterity to do this!"
@@ -49,37 +49,40 @@
 		user.Paralyse(20)
 		return
 
-	if (M.stat !=2)
-		if((M.mind in ticker.mode.cult) && prob(33))
-			M << "\red The power of [src] clears your mind of the cult's influence!"
-			user << "\red You wave [src] over [M]'s head and see their eyes become clear, their mind returning to normal."
-			ticker.mode.remove_cultist(M.mind)
-			for(var/mob/O in viewers(M, null))
-				O.show_message(text("\red [] waves [] over []'s head.", user, src, M), 1)
-/*		else if(prob(10)) //Fail chance is kind of dumb for something so rarely used.
-			user << "\red The rod slips in your hand."
-			..()*/
-		else if(M.mind)
-			if(M.mind.vampire)
-				if(ishuman(M))
-					if(!(VAMP_FULL in M.mind.vampire.powers))
-						user << "\red The rod burns cold in your hand, filling you with grim determination.  You feel the creature's power weaken."
-						M << "<span class='warning'>The nullrod's power interferes with your own!  They are on to you!</span>"
-						M.mind.vampire.nullified = max(8, M.mind.vampire.nullified + 8)
+	if(M.stat !=2 && ishuman(M))
+		var/mob/living/K = M
+		if(K.mind in ticker.mode.cult)
+			if(K == user)	//Because apparently Doomberg deconverted himself. Wtf.
+				return
+			user.visible_message("\blue [user] starts trying to captivate [K]'s attention with the [src].", "\blue You begin trying to shed light into [K]'s mind.")
+			K.take_overall_damage(0, 10)
+			if(do_after(user, 15))
+				K.visible_message("\red [user] waves the [src] over [K]'s head, [K]'s look captivated by it.", "\red [user] wave's the [src] over your head. <b>You see a foreign light, asking you to follow it. Its presence burns and blinds.</b>")
+				var/choice = alert(K,"Do you want to give up your goal?","Become cleansed","Resist","Give in")
+				switch(choice)
+					if("Resist")
+						K.visible_message("\red The gaze in [K]'s eyes remains determined.", "\blue You turn away from the light, remaining true to your dark lord. The light burns you due to rejection!")
+						K.say("*scream")
+						K.take_overall_damage(5, 15)
+					if("Give in")
+						K.visible_message("\blue [K]'s eyes become clearer, the evil gone, but not without leaving scars.")
+						K.take_overall_damage(15, 30) //Nur'sie ain't a kind host to turn away from. Suffer.
+						ticker.mode.remove_cultist(K.mind, 0)
+			else
+				user.visible_message("\red [user]'s concentration is broken!", "\red Your concentration is broken! You and your target need to stay uninterrupted for longer!")
+				return
+		else if(M.mind && M.mind.vampire)
+			if(!(VAMP_FULL in M.mind.vampire.powers))
+				user << "\red The rod burns cold in your hand, filling you with grim determination.  You feel the creature's power weaken."
+				M << "<span class='warning'>The nullrod's power interferes with your own!  They are on to you!</span>"
+				M.mind.vampire.nullified = max(8, M.mind.vampire.nullified + 8)
 		//..() Ported from readapted vamp null code.  Original seen down there.  This doesn't need to be here since it's in the loops now.
 		else
 			user << "\red The rod appears to do nothing."
 			for(var/mob/O in viewers(M, null))
 				O.show_message(text("\red [] waves [] over []'s head.", user, src, M), 1)
 			return
-/*	if(M.mind)
-		if(M.mind.vampire)
-			if(ishuman(M))
-				if(!(VAMP_FULL in M.mind.vampire.powers))
-					M << "<span class='warning'>The nullrod's power interferes with your own!</span>"
-					M.mind.vampire.nullified = max(5, M.mind.vampire.nullified + 2)
-	..()
-*/
+
 /obj/item/weapon/nullrod/afterattack(atom/A, mob/user as mob)
 	if (istype(A, /turf/simulated/floor))
 		user << "\blue You hit the floor with the [src]."
@@ -118,7 +121,7 @@
 	throwforce = 10
 	sharp = 1
 	edge = 1
-	w_class = 3
+	w_class = 4
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
 	IsShield()
@@ -143,7 +146,7 @@
 	throwforce = 10
 	sharp = 1
 	edge = 1
-	w_class = 3
+	w_class = 4
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
 	suicide_act(mob/user)
@@ -178,8 +181,63 @@
 	item_state = "canesword"
 	force = 20
 	throwforce = 10
-	w_class = 4 //there ain't no way in fuck you're shuving this inside your rucksack. No way.
+	w_class = 4 //there ain't no way in fuck you're shoving this inside your rucksack. No way.
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
+
+	suicide_act(mob/user)
+		viewers(user) << "\red <b>[user] brings the blade up to \his throat, and in one rapid motion slits \his throat open!</b>"
+		return(BRUTELOSS)
+
+//Using a modified cane, with a storage var, instead of a box. Because the box idea is meh, in terms of the interface.
+/obj/item/weapon/cane/syndie
+	var/sword		//For holding the blade
+	var/locked	//A small lock, so that you can't accidentally unsheathe it
+
+	New()
+		sword = new /obj/item/weapon/canesword()
+		locked = 1
+		..()
+
+	proc/unsheathe(mob/user as mob)
+		if(sword)
+			user.put_in_hands(sword)
+			user.visible_message("[user] takes the handle and draws a sword from inside the [src].", "You take the [src] by the handle and draw out a sharp blade from it.")
+			sword = null
+			icon_state = "cane_empty"
+			update_icon()
+
+	proc/toggle_lock(mob/user as mob)
+		if(sword)
+			switch(locked)
+				if(1)
+					locked = 0
+					user << "You twist and unlock the sword handle from the [src]."
+				if(0)
+					locked = 1
+					user << "You twist and lock the sword handle to the [src]."
+
+	attack_self(mob/user as mob)
+		if(iscarbon(user))
+			toggle_lock(user)
+
+	attack_hand(mob/user as mob)
+		if(!locked)
+			unsheathe(user)
+		else
+			..()
+
+	attackby(obj/item/weapon/W as obj, mob/user as mob)
+		if(istype(W, /obj/item/weapon/canesword) && !sword)
+			user.u_equip(W)
+			W.loc = src
+			sword = W
+			W.dropped(user)
+			W.add_fingerprint(user)
+			add_fingerprint(user)
+			icon_state = "cane"
+			user << "You sheathe the sword, and lock its handle to the [src]."
+			locked = 1
+			update_icon()
 
 /obj/item/weapon/metal_bat
 	desc = "The quality is a swing and a miss."

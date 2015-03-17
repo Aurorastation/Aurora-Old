@@ -146,6 +146,14 @@
 	key = "4"
 	flags = SIGNLANG
 
+/datum/language/vaurcese
+	name = "Vaurcese"
+	desc = "Vaurca native language made of clicks and sputters, \"It's a bugs life.\""
+	speech_verb = "clicks"
+	colour = "vaurca"
+	key = "p"
+	flags = WHITELISTED
+
 ////////////////////////////////////
 //Not sure if stuff but yeah
 ////////////////////////////////////

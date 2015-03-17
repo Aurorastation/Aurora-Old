@@ -34,7 +34,7 @@ datum/controller/game_controller
 	var/rebuild_active_areas = 0
 
 	var/list/shuttle_list	                    // For debugging and VV
-//	var/datum/ore_distribution/asteroid_ore_map // For debugging and VV.
+	var/datum/ore_distribution/asteroid_ore_map // For debugging and VV.
 
 
 datum/controller/game_controller/New()
@@ -57,12 +57,10 @@ datum/controller/game_controller/New()
 	if(!emergency_shuttle)			emergency_shuttle = new /datum/emergency_shuttle_controller()
 	if(!shuttle_controller)			shuttle_controller = new /datum/shuttle_controller()
 	if(!delta_level)				delta_level = new /datum/delta_level()
+	if(!sqlnews_controller)			sqlnews_controller = new /datum/sqlnews()
 
 datum/controller/game_controller/proc/setup()
 	world.tick_lag = config.Ticklag
-
-	spawn(20)
-		createRandomZlevel()
 
 	if(!air_master)
 		air_master = new /datum/controller/air_system()
@@ -111,8 +109,8 @@ datum/controller/game_controller/proc/setup_objects()
 			T.broadcast_status()
 
 	//Create the mining ore distribution map.
-//	asteroid_ore_map = new /datum/ore_distribution()
-//	asteroid_ore_map.populate_distribution_map()
+	asteroid_ore_map = new /datum/ore_distribution()
+	asteroid_ore_map.populate_distribution_map()
 
 	//Shitty hack to fix mining turf overlays, for some reason New() is not being called.
 	for(var/turf/simulated/floor/plating/airless/asteroid/T in world)
@@ -152,6 +150,7 @@ datum/controller/game_controller/proc/process()
 				transfer_controller.process()
 				shuttle_controller.process()
 				process_newscaster()
+				sqlnews_controller.process()
 
 				//AIR
 
@@ -237,6 +236,9 @@ datum/controller/game_controller/proc/process()
 				process_events()
 				events_cost = (world.timeofday - timer) / 10
 
+				//SQL NEWS
+
+
 				//TICKER
 				timer = world.timeofday
 				last_thing_processed = ticker.type
@@ -249,6 +251,7 @@ datum/controller/game_controller/proc/process()
 				var/end_time = world.timeofday
 				if(end_time < start_time)
 					start_time -= 864000    //deciseconds in a day
+
 				sleep( round(minimum_ticks - (end_time - start_time),1) )
 			else
 				sleep(10)

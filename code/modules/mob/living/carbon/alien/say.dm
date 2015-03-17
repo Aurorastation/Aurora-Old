@@ -15,8 +15,27 @@
 	if(copytext(message,1,2) == "*")
 		return emote(copytext(message,2))
 
-	var/datum/language/speaking = null
+	var/datum/language/speaking = parse_language(message)
+	if(speaking)
+		message = copytext(message,3)
+	else
+		speaking = all_languages[language]
 
+	var/ending = copytext(message, length(message))
+	if (speaking)
+		// This is broadcast to all mobs with the language,
+		// irrespective of distance or anything else.
+		if(speaking.flags & HIVEMIND)
+			speaking.broadcast(src,trim(message))
+			return
+		//If we've gotten this far, keep going!
+		verb = speaking.get_spoken_verb(ending)
+	else
+		if(ending=="!")
+			verb=pick("roars","screeches","growls")
+		if(ending=="?")
+			verb="asks"
+/*
 	if(length(message) >= 2)
 		var/channel_prefix = copytext(message, 1 ,3)
 		if(languages.len)
@@ -28,8 +47,8 @@
 
 	if(speaking)
 		message = trim(copytext(message,3))
-
-	message = capitalize(trim_left(message))
+*/
+	message = capitalize(trim(message))
 
 	if(!message || stat)
 		return

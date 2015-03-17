@@ -6,7 +6,7 @@
 		usr << "\red Speech is currently admin-disabled."
 		return
 
-	log_whisper("[src.name]/[src.key] : [message]")
+//	log_whisper("[src.name]/[src.key] : [message]")
 
 	if (src.client)
 		if (src.client.prefs.muted & MUTE_IC)
@@ -63,6 +63,8 @@
 	if (istype(src.wear_mask, /obj/item/clothing/mask/muzzle))
 		return
 
+	log_whisper("[src.name]/[src.key] : [message]")
+
 	//looks like this only appears in whisper. Should it be elsewhere as well? Maybe handle_speech_problems?
 	if(istype(src.wear_mask, /obj/item/clothing/mask/gas/voice/space_ninja)&&src.wear_mask:voice=="Unknown")
 		if(copytext(message, 1, 2) != "*")
@@ -97,7 +99,7 @@
 		if (!(M.client))
 			continue
 		if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTEARS))
-			//listening |= M
+//			listening |= M //I want to see if this does anything for ghosts
 			M.hear_say(message, verb, speaking, alt_name, italics, src)
 
 	//Pass whispers on to anything inside the immediate listeners.

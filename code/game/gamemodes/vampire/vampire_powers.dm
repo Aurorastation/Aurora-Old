@@ -41,7 +41,7 @@
 	//Chaplains are resistant to vampire powers
 	if(mind && mind.assigned_role == "Chaplain")
 		return 0
-	if(mind && mind.current.isipc())//Not sure if this should be here but we can easily override.
+	if(get_species() == "Machine")
 		return 0
 	//Vampires who have reached their full potential can affect nearly everything
 	if(M && M.vampire && (VAMP_FULL in M.vampire.powers))
@@ -110,6 +110,10 @@
 		M.current << "\red You can't do that to yourself"
 		return
 
+	if(!M.current.has_eyes())
+		M.current << "\red You don't have eyes"
+		return
+
 	var/vampgender
 	if(M.current.gender == "male")
 		vampgender = "he"
@@ -150,7 +154,7 @@
 	if(C==usr)
 		M.current << "\red You can't do that to yourself"
 		return
-	if(C.isipc())
+	if(C.get_species() == "Machine")
 		M.current << "\red You can't to that to a machine"
 		return
 	if(!M.current.vampire_can_reach(C, 1))
@@ -182,7 +186,7 @@
 	shutdown.speed = 1
 	shutdown.stage = 2
 	shutdown.clicks = 185
-	msg_admin_attack("[usr.name] ([usr.ckey]) gave [C.name] ([C.ckey]) the shutdown disease - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[C.x];Y=[C.y];Z=[C.z]'>JMP</a>")
+	msg_admin_attack("[key_name_admin(usr)] gave [key_name_admin(C)] the shutdown disease - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[C.x];Y=[C.y];Z=[C.z]'>JMP</a>")
 	usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Gave [C.name] ([C.ckey]) the shutdown disease</font>")
 	C.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been given the shutdown disease by [usr.name] ([usr.ckey])</font>")
 	infect_virus2(C,shutdown,0)
@@ -196,6 +200,11 @@
 	set desc= "A scary glare that incapacitates people for a short while around you."
 	var/datum/mind/M = usr.mind
 	if(!M) return
+
+	if(!M.current.has_eyes())
+		M.current << "\red You don't have eyes"
+		return
+
 	if(M.current.vampire_power(0, 1))
 		M.current.visible_message("\red <b>[M.current]'s eyes emit a blinding flash!")
 		//M.vampire.bloodusable -= 10
@@ -207,7 +216,7 @@
 			return
 		for(var/mob/living/carbon/C in view(1))
 			if(!C.vampire_affected(M))
-				if(!C.isipc())
+				if(!C.get_species() == "Machine")
 					continue
 			if(!M.current.vampire_can_reach(C, 1)) continue
 //			C.Stun(8)
@@ -242,7 +251,7 @@
 			if(C == M.current) continue
 			if(ishuman(C) && (C:l_ear || C:r_ear) && istype((C:l_ear || C:r_ear), /obj/item/clothing/ears/earmuffs)) continue
 			if(!C.vampire_affected(M))
-				if(!C.isipc())
+				if(!C.get_species() == "Machine")
 					continue
 			C << "<span class='warning'><font size='3'><b>You hear a ear piercing shriek and your senses dull!</font></b></span>"
 			C.Weaken(5)
@@ -268,7 +277,7 @@
 	if(C==usr)
 		M.current << "\red You can't do that to yourself"
 		return
-	if(C.isipc())
+	if(C.get_species() == "Machine")
 		M.current << "\red You can only enthrall humans"
 		return
 	M.current.visible_message("\red [M.current.name] bites [C.name]'s neck!", "\red You bite [C.name]'s neck and begin the flow of power.")
@@ -361,7 +370,7 @@
 	src << "\red You have successfully Enthralled [H.name]. <i>If they refuse to do as you say just adminhelp.</i>"
 	ticker.mode.update_vampire_icons_added(H.mind)
 	ticker.mode.update_vampire_icons_added(src.mind)
-	msg_admin_attack("[name]([ckey]) has mind-slaved [H.name]([H.ckey]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[H.x];Y=[H.y];Z=[H.z]'>JMP</a>.")
+	msg_admin_attack("[key_name_admin(src)] has mind-slaved [key_name_admin(H)] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[H.x];Y=[H.y];Z=[H.z]'>JMP</a>.")
 
 /client/vampire/proc/vampire_bats()
 	set category = "Abilities"

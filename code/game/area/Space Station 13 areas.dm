@@ -378,6 +378,9 @@ var/list/ghostteleportlocs = list()
 /area/centcom/holding
 	name = "\improper Holding Facility"
 
+/area/centcom/prison
+	name = "\improper Prison Facility"
+
 //SYNDICATES
 
 /area/syndicate_mothership
@@ -835,6 +838,14 @@ var/list/ghostteleportlocs = list()
 
 /area/crew_quarters/sleep/cryo
 	name = "\improper Cryogenic Storage"
+	icon_state = "Sleep"
+
+/area/crew_quarters/sleep/dorm_one
+	name = "\improper Dorm One"
+	icon_state = "Sleep"
+
+/area/crew_quarters/sleep/dorm_two
+	name = "\improper Dorm Two"
 	icon_state = "Sleep"
 
 /area/crew_quarters/sleep_male

@@ -773,7 +773,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			W.icon_state = "centcom"
 			W.item_state = "id_inv"
 			W.access = get_all_accesses()
-			W.access += list("VIP Guest","Custodian","Thunderdome Overseer","Intel Officer","Medical Officer","Death Commando","Research Officer")
+			W.access += get_all_centcom_access()
 			W.assignment = "NanoTrasen Navy Representative"
 			W.registered_name = M.real_name
 			M.equip_if_possible(W, slot_wear_id)

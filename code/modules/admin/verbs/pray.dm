@@ -20,7 +20,7 @@
 	msg = "\blue \icon[cross] <b><font color=purple>PRAY: </font>[key_name(src, 1)] (<A HREF='?_src_=holder;adminmoreinfo=\ref[src]'>?</A>) (<A HREF='?_src_=holder;adminplayeropts=\ref[src]'>PP</A>) (<A HREF='?_src_=vars;Vars=\ref[src]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[src]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[src]'>JMP</A>) (<A HREF='?_src_=holder;secretsadmin=check_antagonist'>CA</A>) (<A HREF='?_src_=holder;adminspawncookie=\ref[src]'>SC</a>):</b> [msg]"
 
 	for(var/client/C in admins)
-		if(((R_ADMIN & C.holder.rights) || (R_MOD & C.holder.rights)) || (R_FUN & C.holder.rights) && (C.prefs.toggles & CHAT_PRAYER))
+		if(C.holder.rights & (R_ADMIN|R_MOD|R_FUN) && (C.prefs.toggles & CHAT_PRAYER))
 			C << msg
 	usr << "Your prayers have been received by the gods."
 
@@ -30,17 +30,32 @@
 //Stealing the second var because why not)
 /proc/Centcomm_announce(var/text , var/mob/Sender , var/silicon = 0 , var/iamessage)
 	var/msg = copytext(sanitize(text), 1, MAX_MESSAGE_LEN)
+	var/modmin = " (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;secretsadmin=check_antagonist'>CA</A>) (<A HREF='?_src_=holder;BlueSpaceArtillery=\ref[Sender]'>BSA</A>)"
+	var/msg_start = "\blue <b><font color=orange>CENTCOMM"
+	var/msg_end = ""
+
 	if(silicon)
-		msg = "\blue <b><font color=orange>CENTCOMM(A.L.I.C.E.):</font>[key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;secretsadmin=check_antagonist'>CA</A>) (<A HREF='?_src_=holder;BlueSpaceArtillery=\ref[Sender]'>BSA</A>) (<A HREF='?_src_=holder;CentcommAIReply=\ref[Sender]'>RPLY</A>):</b> [msg]"
+		msg_start += "(A.L.I.C.E.):</font>"
+		msg_end = "(<A HREF='?_src_=holder;CentcommAIReply=\ref[Sender]'>RPLY</A>):</b> [msg]"
 	else
-		msg = "\blue <b><font color=orange>CENTCOMM[iamessage ? " IA" : ""]:</font>[key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;secretsadmin=check_antagonist'>CA</A>) (<A HREF='?_src_=holder;BlueSpaceArtillery=\ref[Sender]'>BSA</A>) (<A HREF='?_src_=holder;CentcommReply=\ref[Sender]'>RPLY</A>):</b> [msg]"
+		msg_start += "[iamessage ? " IA" : ""]:</font>"
+		msg_end = "(<A HREF='?_src_=holder;CentcommReply=\ref[Sender]'>RPLY</A>):</b> [msg]"
+
 	for(var/client/C in admins)
-		if((R_ADMIN & C.holder.rights) || (R_MOD & C.holder.rights) || (R_FUN & C.holder.rights))
-			C << msg
+		if(C.holder.rights & (R_ADMIN|R_MOD|R_FUN))
+			if(C.holder.rights & R_MOD && !C.holder.rights & R_DUTYOFF)
+				continue
+			C << "[msg_start][key_name(Sender, 1)][modmin][msg_end]"
+			continue
+		if(C.holder.rights & (R_DUTYOFF))
+			if(C.holder.rights & R_MOD)
+				C << "[msg_start][key_name(Sender, 1)][msg_end]"
+			else
+				C << "[msg_start][key_name(Sender, 0, 1, 0)][msg_end]"
 
 /proc/Syndicate_announce(var/text , var/mob/Sender)
 	var/msg = copytext(sanitize(text), 1, MAX_MESSAGE_LEN)
 	msg = "\blue <b><font color=crimson>SYNDICATE:</font>[key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;secretsadmin=check_antagonist'>CA</A>) (<A HREF='?_src_=holder;BlueSpaceArtillery=\ref[Sender]'>BSA</A>) (<A HREF='?_src_=holder;SyndicateReply=\ref[Sender]'>RPLY</A>):</b> [msg]"
 	for(var/client/C in admins)
-		if((R_ADMIN & C.holder.rights) || (R_MOD & C.holder.rights) || (R_FUN & C.holder.rights))
+		if(C.holder.rights & (R_ADMIN|R_MOD|R_FUN))
 			C << msg

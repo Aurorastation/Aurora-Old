@@ -30,7 +30,7 @@
 		stafftype = "EVENT"
 
 	msg = copytext(sanitize(msg), 1, MAX_MESSAGE_LEN)
-	log_admin("[key_name(src)] : [msg]")
+	log_admin("DSAY: [key_name(src)] : [msg]")
 
 	if (!msg)
 		return
@@ -41,7 +41,12 @@
 		if (istype(M, /mob/new_player))
 			continue
 
+		if(!M.client)
+			continue
+
 		if(M.client && M.client.holder && (M.client.prefs.toggles & CHAT_DEAD)) // show the message to admins who have deadchat toggled on
+			if((M.client.holder.rights & R_DUTYOFF) && !(M.client.holder.rights & (R_ADMIN|R_MOD|R_DEV|R_FUN)))
+				continue
 			M.show_message(rendered, 2)
 
 		else if(M.stat == DEAD && (M.client.prefs.toggles & CHAT_DEAD)) // show the message to regular ghosts who have deadchat toggled on

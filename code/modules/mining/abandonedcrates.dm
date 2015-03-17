@@ -10,7 +10,6 @@
 	locked = 1
 	var/min = 1
 	var/max = 10
-//	var/tampered = 0
 
 /obj/structure/closet/crate/secure/loot/New()
 	..()
@@ -202,6 +201,7 @@
 	//				tampered = 1
 			if (attempts < 0)
 				user << "<span class='notice'>The crate's anti-tamper system is activated, and the crate is locked down.</span>"
+
 		else
 			user << "<span class='notice'>You attempt to interact with the device using a hand gesture, but it appears this crate is from before the DECANECT came out.</span>"
 			return

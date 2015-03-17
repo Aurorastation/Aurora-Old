@@ -34,6 +34,7 @@ datum/mind
 	var/name				//replaces mob/var/original_name
 	var/mob/living/current
 	var/mob/living/original	//TODO: remove.not used in any meaningful way ~Carn. First I'll need to tweak the way silicon-mobs handle minds.
+	var/mob/living/admin_mob_placeholder = null //Used to return to your body without varedit -Sounds-
 	var/active = 0
 
 	var/memory
@@ -60,6 +61,10 @@ datum/mind
 
 	// the world.time since the mob has been brigged, or -1 if not at all
 	var/brigged_since = -1
+
+	// The custom signature holder
+	var/signature
+	var/signature_font
 
 	New(var/key)
 		src.key = key
@@ -1287,6 +1292,8 @@ datum/mind
 		else
 			world.log << "## DEBUG: mind_initialize(): No ticker ready yet! Please inform Carn"
 	if(!mind.name)	mind.name = real_name
+	if(client.prefs.signature) mind.signature = client.prefs.signature
+	if(client.prefs.signature_font) mind.signature_font = client.prefs.signature_font
 	mind.current = src
 
 //HUMAN

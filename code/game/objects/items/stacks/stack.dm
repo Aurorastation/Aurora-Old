@@ -27,6 +27,9 @@
 		usr << browse(null, "window=stack")
 	..()
 
+/obj/item/stack/proc/get_amount()
+	return amount
+
 /obj/item/stack/examine()
 	set src in view(1)
 	..()

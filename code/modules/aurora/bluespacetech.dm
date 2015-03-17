@@ -27,6 +27,10 @@
 		src << "\red The game hasn't started yet!"
 		return
 
+	if(istype(mob, /mob/living))
+		if(!holder.original_mob)
+			holder.original_mob = mob
+
 	//I couldn't get the normal way to work so this works.
 	//This whole section looks like a hack, I don't like it.
 	var/T = get_turf(usr)
@@ -60,6 +64,13 @@
 		bst.equip_to_slot_or_del(new /obj/item/device/t_scanner(bst.back), slot_in_backpack)
 		bst.equip_to_slot_or_del(new /obj/item/device/signaltool(bst.back), slot_in_backpack)
 		bst.equip_to_slot_or_del(new /obj/item/device/pda/captain/bst(bst.back), slot_in_backpack)
+		bst.equip_to_slot_or_del(new /obj/item/device/multitool(bst.back), slot_in_backpack)
+
+		var/obj/item/weapon/storage/box/pills = new /obj/item/weapon/storage/box
+		pills.name = "adminordrazine"
+		for(var/i = 1, i < 12, i++)
+			new /obj/item/weapon/reagent_containers/pill/adminordrazine(pills)
+		bst.equip_to_slot_or_del(pills, slot_in_backpack)
 
 	//Implant because access
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(bst)
@@ -98,11 +109,10 @@
 	bst.add_language("Robot Talk")
 	bst.add_language("Drone Talk")
 
-/*	bst.bluespace_trail.set_up(src)
-	bst.bluespace_trail.start()
-	spawn(100)
-		bst.bluepsace_trail.stop()
-*/
+	var/datum/organ/internal/xenos/hivenode/hivelisten = new /datum/organ/internal/xenos/hivenode(src)
+	hivelisten.owner = bst
+	bst.internal_organs += hivelisten
+
 	spawn(5)
 		s.start()
 		bst.anchored = 0
@@ -116,12 +126,14 @@
 /mob/living/carbon/human/bst
 	universal_understand = 1
 	status_flags = GODMODE
-	var/bluespace_trail = new /datum/effect/effect/system/ion_trail_follow
 
 	can_inject(var/mob/user, var/error_msg, var/target_zone)
 		user << "<span class='alert'>The [src] disarms you before you can inject them.</span>"
 		user.drop_item()
 		return 0
+
+	binarycheck()
+		return 1
 
 	suicide()
 		if(key && species.name != "Human")
@@ -146,13 +158,15 @@
 			spawn(5)
 				del(s)
 			if(key)
-				var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
-				ghost.key = key
-				ghost.mind.name = "[ghost.key] BSTech"
-				ghost.name = "[ghost.key] BSTech"
-				ghost.real_name = "[ghost.key] BSTech"
-				ghost.voice_name = "[ghost.key] BSTech"
-
+				if(client.holder && client.holder.original_mob)
+					client.holder.original_mob.key = key
+				else
+					var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
+					ghost.key = key
+					ghost.mind.name = "[ghost.key] BSTech"
+					ghost.name = "[ghost.key] BSTech"
+					ghost.real_name = "[ghost.key] BSTech"
+					ghost.voice_name = "[ghost.key] BSTech"
 			del(src)
 		return
 
@@ -269,6 +283,33 @@
 			src.incorporeal_move = 0
 			src << "\blue You will no-longer phase through solid matter."
 		return
+
+	verb/bstrecover()
+		set name = "Rejuv"
+		set desc = "Use the bluespace within you to restore your health"
+		set category = "BST"
+		set popup_menu = 0
+
+		src.revive()
+
+	verb/bstawake()
+		set name = "Wake up"
+		set desc = "This is a quick fix to the reloging sleep bug"
+		set category = "BST"
+		set popup_menu = 0
+
+		src.sleeping = 0
+
+	verb/bstquit()
+		set name = "Teleport out"
+		set desc = "Activate bluespace to leave (and return to your original mob(if you have one))"
+		set category = "BST"
+
+		var/client/C = src.client
+		if(C.holder && C.holder.original_mob)
+			C.holder.original_mob.key = key
+			C.holder.original_mob = null
+		suicide()
 
 //Equipment. All should have canremove set to 0
 //All items with a /bst need the attack_hand() proc overrided to stop people getting overpowered items.
@@ -421,3 +462,4 @@
 
 /mob/living/carbon/human/bst/restrained()
 	return 0
+

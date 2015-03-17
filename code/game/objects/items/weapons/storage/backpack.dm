@@ -102,6 +102,12 @@
 	icon_state = "clownpack"
 	item_state = "clownpack"
 
+/obj/item/weapon/storage/backpack/emt
+	name = "emergency medical backpack"
+	desc = "It's a tough backpack used by first responders."
+	icon_state = "emtpack"
+	item_state = "emtpack"
+
 /obj/item/weapon/storage/backpack/medic
 	name = "medical backpack"
 	desc = "It's a backpack especially designed for use in a sterile environment."
@@ -134,6 +140,12 @@
 	name = "leather satchel"
 	desc = "It's a very fancy satchel made with fine leather."
 	icon_state = "satchel"
+
+/obj/item/weapon/storage/backpack/satchel/emt
+	name = "emergency medical satchel"
+	desc = "It's a tough satchel used by first responders."
+	icon_state = "satchel-emt"
+	item_state = "satchel-emt"
 
 /obj/item/weapon/storage/backpack/satchel/withwallet
 	New()

@@ -3,7 +3,7 @@
 /var/const/access_security = 1 // Security equipment
 /var/const/access_brig = 2 // Brig timers and permabrig
 /var/const/access_armory = 3
-/var/const/access_forensics_lockers= 4
+/var/const/access_forensics = 4 //Forensic tech access
 /var/const/access_medical = 5
 /var/const/access_morgue = 6
 /var/const/access_tox = 7
@@ -65,6 +65,7 @@
 /var/const/access_sec_doors = 63 // Security front doors
 /var/const/access_psychiatrist = 64 // Psychiatrist's office
 /var/const/access_xenoarch = 65
+/var/const/access_detective = 66 //Detective access
 
 	//BEGIN CENTCOM ACCESS
 	/*Should leave plenty of room if we need to add more access levels.
@@ -183,6 +184,8 @@
 			return list(access_cent_general, access_cent_living)
 		if("Medical Officer")
 			return list(access_cent_general, access_cent_living, access_cent_medical)
+		if("Duty Officer")
+			return list(access_cent_general, access_cent_living, access_cent_medical, access_cent_captain)
 		if("Death Commando")
 			return list(access_cent_general, access_cent_specops, access_cent_living, access_cent_storage)
 		if("Research Officer")
@@ -193,7 +196,7 @@
 			return get_all_centcom_access()
 
 /proc/get_all_accesses()
-	return list(access_security, access_sec_doors, access_brig, access_armory, access_forensics_lockers, access_court,
+	return list(access_security, access_sec_doors, access_brig, access_armory, access_forensics, access_court,
 	            access_medical, access_genetics, access_morgue, access_rd,
 	            access_tox, access_tox_storage, access_chemistry, access_engine, access_engine_equip, access_maint_tunnels,
 	            access_external_airlocks, access_change_ids, access_ai_upload,
@@ -203,7 +206,7 @@
 	            access_hydroponics, access_library, access_lawyer, access_virology, access_psychiatrist, access_cmo, access_qm, access_clown, access_mime, access_surgery,
 	            access_theatre, access_research, access_mining, access_mailsorting,
 	            access_heads_vault, access_mining_station, access_xenobiology, access_ce, access_hop, access_hos, access_RC_announce,
-	            access_keycard_auth, access_tcomsat, access_gateway, access_xenoarch)
+	            access_keycard_auth, access_tcomsat, access_gateway, access_xenoarch, access_detective)
 
 /proc/get_all_centcom_access()
 	return list(access_cent_general, access_cent_thunder, access_cent_specops, access_cent_medical, access_cent_living, access_cent_storage, access_cent_teleporter, access_cent_creed, access_cent_captain)
@@ -219,7 +222,7 @@
 		if(0)
 			return get_all_accesses()
 		if(1) //security
-			return list(access_sec_doors, access_security, access_brig, access_armory, access_forensics_lockers, access_court, access_hos)
+			return list(access_sec_doors, access_security, access_brig, access_armory, access_forensics, access_court, access_hos)
 		if(2) //medbay
 			return list(access_medical, access_genetics, access_morgue, access_chemistry, access_psychiatrist, access_virology, access_surgery, access_cmo)
 		if(3) //research
@@ -265,7 +268,7 @@
 			return "Holding Cells"
 		if(access_court)
 			return "Courtroom"
-		if(access_forensics_lockers)
+		if(access_forensics)
 			return "Forensics"
 		if(access_medical)
 			return "Medical"
@@ -385,6 +388,8 @@
 			return "Gateway"
 		if(access_sec_doors)
 			return "Brig"
+		if(access_detective)
+			return "Detective"
 
 /proc/get_centcom_access_desc(A)
 	switch(A)

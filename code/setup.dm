@@ -1,5 +1,4 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
-
 #define DEBUG
 
 #define PI 3.1415
@@ -629,8 +628,8 @@ var/list/liftable_structures = list(\
 #define R_SPAWN			4096
 #define R_MOD			8192
 #define R_DEV			16384
-
-#define R_MAXPERMISSION 16384 //This holds the maximum value for a permission. It is used in iteration, so keep it updated.
+#define R_DUTYOFF		32768
+#define R_MAXPERMISSION 32768 //This holds the maximum value for a permission. It is used in iteration, so keep it updated.
 
 #define R_HOST			65535
 
@@ -654,6 +653,13 @@ var/list/liftable_structures = list(\
 
 #define TOGGLES_DEFAULT (SOUND_ADMINHELP|SOUND_MIDI|SOUND_AMBIENCE|SOUND_LOBBY|CHAT_OOC|CHAT_DEAD|CHAT_GHOSTEARS|CHAT_GHOSTSIGHT|CHAT_PRAYER|CHAT_RADIO|CHAT_ATTACKLOGS|CHAT_LOOC)
 
+//Status Menu toggles
+#define STAT_MENU_MC = 1
+#define STAT_MENU_PC = 2
+
+
+#define STAT_MENU_DEFAULT = (STAT_MENU_MC|STAT_MENU_PC)
+
 #define BE_TRAITOR		1
 #define BE_OPERATIVE	2
 #define BE_CHANGELING	4
@@ -668,6 +674,7 @@ var/list/liftable_structures = list(\
 #define BE_RAIDER		2048
 #define BE_PLANT		4096
 #define BE_VAMPIRE		8192
+#define BE_MUTINEER		16384
 
 var/list/be_special_flags = list(
 	"Traitor" = BE_TRAITOR,
@@ -683,7 +690,8 @@ var/list/be_special_flags = list(
 	"Ninja" = BE_NINJA,
 	"Raider" = BE_RAIDER,
 	"Diona" = BE_PLANT,
-	"Vampire" = BE_VAMPIRE
+	"Vampire" = BE_VAMPIRE,
+	"Mutineer" = BE_MUTINEER
 	)
 
 #define AGE_MIN 17			//youngest a character can be

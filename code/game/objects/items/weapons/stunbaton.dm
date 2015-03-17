@@ -114,7 +114,7 @@
 
 		user.attack_log += "\[[time_stamp()]\]<font color='red'> Beat [M.name] ([M.ckey]) with [src.name]</font>"
 		M.attack_log += "\[[time_stamp()]\]<font color='orange'> Beaten by [user.name] ([user.ckey]) with [src.name]</font>"
-		msg_admin_attack("[user.name] ([user.ckey]) beat [M.name] ([M.ckey]) with [src.name] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+		msg_admin_attack("[key_name_admin(user)] beat [key_name_admin(M)] with [src.name] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
 		playsound(loc, "swing_hit", 50, 1, -1)
 	else if(!status)
@@ -137,7 +137,7 @@
 
 		user.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [M.name] ([M.ckey]) with [src.name]</font>"
 		M.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by [user.name] ([user.ckey]) with [src.name]</font>"
-		msg_admin_attack("[key_name(user)] stunned [key_name(M)] with [src.name] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
+		msg_admin_attack("[key_name_admin(user)] stunned [key_name_admin(M)] with [src.name] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
 
 		playsound(src.loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
 		if(bcell && bcell.charge < hitcost)
@@ -164,7 +164,7 @@
 				H.visible_message("<span class='danger'>[src], thrown by [foundmob.name], strikes [H] and stuns them!</span>")
 
 				H.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by thrown [src.name] last touched by ([src.fingerprintslast])</font>"
-				msg_admin_attack("Flying [src.name], last touched by ([src.fingerprintslast]) stunned [key_name(H)] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[H.x];Y=[H.y];Z=[H.z]'>JMP</a>" )
+				msg_admin_attack("Flying [src.name], last touched by ([src.fingerprintslast]) stunned [key_name_admin(H)] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[H.x];Y=[H.y];Z=[H.z]'>JMP</a>" )
 
 /obj/item/weapon/melee/baton/emp_act(severity)
 	if(bcell)

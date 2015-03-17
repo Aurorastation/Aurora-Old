@@ -103,7 +103,7 @@ obj/machinery/cooker/foodgrill/putIn(obj/item/In, mob/chef)
 					del(G)
 					usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Has placed [GM.name] ([GM.ckey]) in in the grill.</font>")
 					GM.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been fried by [usr.name] ([usr.ckey])</font>")
-					msg_admin_attack("[usr] ([usr.ckey]) placed [GM] ([GM.ckey])'s [body_part] in a grill. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[usr.x];Y=[usr.y];Z=[usr.z]'>JMP</a>)")
+					msg_admin_attack("[key_name_admin(usr)] placed [key_name_admin(GM)]'s [body_part] in a grill. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[usr.x];Y=[usr.y];Z=[usr.z]'>JMP</a>)")
 				else
 					GM.visible_message("[GM.name] breaks free.", "You broke free from [user]'s grip", "You stop hearing a struggle.")
 			return

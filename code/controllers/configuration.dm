@@ -86,6 +86,7 @@
 	var/wikiurl
 	var/forumurl
 	var/aurorawikiurl
+	var/githuburl
 
 	//Alert level description
 	var/alert_desc_green = "All threats to the station have passed. Security may not have weapons visible, privacy laws are once again fully enforced."
@@ -149,6 +150,7 @@
 	var/python_path = "" //Path to the python executable.  Defaults to "python" on windows and "/usr/bin/env python2" on unix
 	var/use_lib_nudge = 0 //Use the C library nudge instead of the python nudge.
 	var/use_overmap = 0
+	var/invasive_directives = 0
 
 /datum/configuration/New()
 	var/list/L = typesof(/datum/game_mode) - /datum/game_mode
@@ -339,6 +341,9 @@
 				if ("aurorawikiurl")
 					config.aurorawikiurl = value
 
+				if ("githuburl")
+					config.githuburl = value
+
 				if ("guest_jobban")
 					config.guest_jobban = 1
 
@@ -437,6 +442,9 @@
 				if("tor_ban")
 					ToRban = 1
 
+				if("ip_blacklist_enabled")
+					ip_blacklist_enabled = 1
+
 				if("automute_on")
 					automute_on = 1
 
@@ -506,6 +514,9 @@
 
 				if("use_overmap")
 					config.use_overmap = 1
+
+				if("invasive_directives")
+					config.invasive_directives = 1
 
 				else
 					log_misc("Unknown setting in configuration: '[name]'")

@@ -1268,4 +1268,14 @@ I said no!
 	reagents = list("sugar" = 5, "frostoil" = 5)
 	result = /obj/item/weapon/reagent_containers/food/snacks/mint
 
+//////////////////////////////////////////
+// End of BS12 food port
+//////////////////////////////////////////
 
+/datum/recipe/chocolatebox
+	reagents = list("cream" = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/chocolatebox

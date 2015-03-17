@@ -84,7 +84,7 @@
 
 				M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been fed [src.name] by [user.name] ([user.ckey]) Reagents: [reagentlist(src)]</font>")
 				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Fed [src.name] by [M.name] ([M.ckey]) Reagents: [reagentlist(src)]</font>")
-				msg_admin_attack("[user.name] ([user.ckey]) fed [M.name] ([M.ckey]) with [src.name] Reagents: [reagentlist(src)] (INTENT: [uppertext(user.a_intent)])")
+				msg_admin_attack("[key_name_admin(user)] fed [key_name_admin(M)] with [src.name] Reagents: [reagentlist(src)] (INTENT: [uppertext(user.a_intent)])")
 				if(!iscarbon(user))
 					M.LAssailant = null
 				else
@@ -1045,6 +1045,18 @@
 	name = "Tofu-pie"
 	icon_state = "meatpie"
 	desc = "A delicious tofu pie."
+	trash = /obj/item/trash/plate
+	filling_color = "#FFFEE0"
+
+	New()
+		..()
+		reagents.add_reagent("nutriment", 10)
+		bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/pudding
+	name = "Figgy pudding"
+	icon_state = "pudding"
+	desc = "Bring it to me."
 	trash = /obj/item/trash/plate
 	filling_color = "#FFFEE0"
 
@@ -3297,3 +3309,31 @@
 		..()
 		reagents.add_reagent("nutriment", 3)
 
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebox
+	name = "box of chocolates"
+	desc = "A heart-shaped box of sweet, sweet chocolate-y goodness."
+	icon_state = "chocolatebox-closed"
+	wrapped = 1
+	bitesize = 1
+	trash = /obj/item/trash/chocolatebox
+
+	New()
+		..()
+		reagents.add_reagent("nutriment", 6)
+
+	attack_self(mob/user as mob)
+		if(wrapped)
+			open(user)
+
+	proc/open(mob/user as mob)
+		wrapped = 0
+		user << "You open the [src]."
+		icon_state = "chocolatebox-open"
+		update_icon()
+
+	attack(mob/M as mob, mob/user as mob, def_zone)
+		if(wrapped)
+			user << "You should open the box, first."
+			return
+		else
+			..()

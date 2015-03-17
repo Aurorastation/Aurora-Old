@@ -1177,8 +1177,40 @@ datum
 			required_container = /obj/item/slime_extract/silver
 			required_other = 1
 			on_reaction(var/datum/reagents/holder)
+				var/blocked = list(/obj/item/weapon/reagent_containers/food/snacks/customizable,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/burger,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/candy,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/bar,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/candycane,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/cash,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/cookie,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/cotton,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/donut,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/gum,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/gummybear,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/gummyworm,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/jawbreaker,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/jellybean,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/sucker,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/cook,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/bread,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/cake,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/donkpocket,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/jelly,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/kebab,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/pie,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/salad,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/waffles,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/pasta,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/pizza,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich,
+				/obj/item/weapon/reagent_containers/food/snacks/customizable/soup,
+				/obj/item/weapon/reagent_containers/food/snacks/cereal,
+				/obj/item/weapon/reagent_containers/food/snacks/slimesoup)
 
-				var/list/borks = typesof(/obj/item/weapon/reagent_containers/food/snacks) - /obj/item/weapon/reagent_containers/food/snacks
+				var/list/borks = typesof(/obj/item/weapon/reagent_containers/food/snacks) - blocked
 				// BORK BORK BORK
 
 				playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)

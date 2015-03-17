@@ -1,3 +1,5 @@
+var/global/list/blacklist = list()
+
 //Blocks an attempt to connect before even creating our client datum thing.
 world/IsBanned(key,address,computer_id)
 	if(ckey(key) in admin_datums)
@@ -18,26 +20,39 @@ world/IsBanned(key,address,computer_id)
 		return list("reason"="Using ToR", "desc"="\nReason: The network you are using to connect has been banned.\nIf you believe this is a mistake, please request help at [config.banappeals]")
 
 	if(config && config.ip_blacklist_enabled)
-		testing("Loading Blacklist")
-		var/text = file2text("data/ip_blacklist.txt")
-		if (!text)
-			error("Failed to load data/ip_blacklist.txt")
+		var/banhe = 0
+		msg_scopes("Checking [key]'s IP for blacklist.")
+		if(!establish_db_connection())
+			//No database. Make do!
+			error("Database connection failed while checking blacklist. Reverted to old system.")
+
+			msg_scopes("Executing old blacklisting.")
+			if(!blacklist)
+				loadBlacklist()
+			if(blacklist)
+				if(address in blacklist)
+					banhe = 1
+			else
+				msg_scopes("Where is the blacklist!")
 		else
-			var/list/lines = text2list(text, "\n")
-			for(var/line in lines)
-				if (!line)
-					continue
+			//Have data, will base.
+			var/DBQuery/query = dbcon.NewQuery("SELECT ip FROM aurora_ipblacklist WHERE ip = '[address]'")
+			query.Execute()
 
-				if (copytext(line, 1, 2) == ";")
-					continue
+			while(query.NextRow())
+				var/bip = query.item[1]
 
-				var/banned_address = copytext(line, 1, length(line)+1)
-				testing("Blacklist: address:[address] - banned_address:[banned_address]")
-				if(banned_address == address)
-					log_access("Failed Login: [src] - Blacklisted IP")
-					message_admins("\blue Failed Login: [src] - Blacklisted IP")
-					AddBan(ckey(key), computer_id, "Bad IP", "Automated Ban", 0, 0)
-					return list("reason"="IP Blacklisted", "desc"="\nReason: This IP has been blacklisted from the server.\nIf you believe this is a mistake, please request help at [config.banappeals]")
+				if(bip == address)
+					banhe = 1
+
+		if(banhe == 1)
+			log_access("Failed Login: [key] - Blacklisted IP")
+			message_admins("\blue Failed Login: [key] - Blacklisted IP")
+			message_mods("\blue Failed Login: [key] - Blacklisted IP")
+			AddBan(ckey(key), computer_id, "Bad IP", "Automated Ban", 0, 0)
+			return list("reason"="IP Blacklisted", "desc"="\nReason: This IP has been blacklisted from the server.\nIf you believe this is a mistake, please request help at [config.banappeals]")
+
+		msg_scopes("[key]'s blacklist check completed.")
 
 	if(config.ban_legacy_system)
 
@@ -92,6 +107,9 @@ world/IsBanned(key,address,computer_id)
 				expires = " The ban is for [duration] minutes and expires on [expiration] (server time)."
 
 			var/desc = "\nReason: You, or another user of this computer or connection ([pckey]) is banned from playing here. The ban reason is:\n[reason]\nThis ban was applied by [ackey] on [bantime], [expires]"
+
+			log_access("Failed Login: [key] [computer_id] [address] - Banned [reason]")
+			message_admins("\blue Failed Login: [key] id:[computer_id] ip:[address] - Banned [reason]")
 
 			return list("reason"="[bantype]", "desc"="[desc]")
 

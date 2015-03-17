@@ -73,6 +73,15 @@ a.white:hover {
     display: none;
 }
 
+.linkDanger, a.linkDanger:link, a.linkDanger:visited, a.linkDanger:active {
+    color: #ffffff;
+    background-color: #ff0000;
+    border-color: #aa0000;
+}
+.linkDanger:hover {
+    background-color: #ff6666;
+}
+
 .linkOn, a.linkOn:link, a.linkOn:visited, a.linkOn:active, a.linkOn:hover, .selected, a.selected:link, a.selected:visited, a.selected:active, a.selected:hover {
     color: #ffffff;
     background: #2f943c;

@@ -27,7 +27,7 @@
 					M.attack_log += text("\[[time_stamp()]\] <font color='red'>Stungloved [src.name] ([src.ckey])</font>")
 					src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been stungloved by [M.name] ([M.ckey])</font>")
 
-					msg_admin_attack("[M.name] ([M.ckey]) stungloved [src.name] ([src.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>)")
+					msg_admin_attack("[key_name_admin(M)] stungloved [src.name] ([src.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>)")
 
 					var/armorblock = run_armor_check(M.zone_sel.selecting, "energy")
 					apply_effects(5,5,0,0,5,0,0,armorblock)
@@ -130,14 +130,14 @@
 					if(mind && mind.vampire && (mind in ticker.mode.vampires))
 						M << "\red Your fangs fail to pierce [src.name]'s cold flesh"
 						return 0
-					if(isipc())
+					if(get_species() == "Machine")
 						M << "\red They have no blood"
 						return 0
 					//we're good to suck the blood, blaah
 					//and leave an attack log
 					M.attack_log += text("\[[time_stamp()]\] <font color='red'>Bit [src.name] ([src.ckey]) in the neck and draining their blood</font>")
 					src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bit in the neck by [M.name] ([M.ckey])</font>")
-					msg_admin_attack("[M.name] ([M.ckey]) bit [src.name] ([src.ckey]) in the neck - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
+					msg_admin_attack("[key_name_admin(M)] bit [key_name_admin(src)] in the neck - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
 					M.handle_bloodsucking(src)
 //					var/datum/organ/external/affecting = get_organ(src.zone_sel.selecting)
 //					affecting.take_damage(10,0,1,0,"dual puncture marks") //this does not work and causes runtimes.
@@ -145,7 +145,7 @@
 			//end vampire codes
 			M.attack_log += text("\[[time_stamp()]\] <font color='red'>[pick(attack.attack_verb)]ed [src.name] ([src.ckey])</font>")
 			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [pick(attack.attack_verb)]ed by [M.name] ([M.ckey])</font>")
-			msg_admin_attack("[key_name(M)] [pick(attack.attack_verb)]ed [key_name(src)] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
+			msg_admin_attack("[key_name_admin(M)] [pick(attack.attack_verb)]ed [key_name_admin(src)] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
 
 			var/damage = rand(0, 5)//BS12 EDIT
 			if(!damage)
@@ -176,7 +176,7 @@
 			M.attack_log += text("\[[time_stamp()]\] <font color='red'>Disarmed [src.name] ([src.ckey])</font>")
 			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been disarmed by [M.name] ([M.ckey])</font>")
 
-			msg_admin_attack("[key_name(M)] disarmed [src.name] ([src.ckey]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
+			msg_admin_attack("[key_name_admin(M)] disarmed [key_name_admin(src)] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
 
 			if(w_uniform)
 				w_uniform.add_fingerprint(M)

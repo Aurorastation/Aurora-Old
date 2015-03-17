@@ -28,7 +28,28 @@
 		update_icon()
 		return
 
+//////////
+//Wielding
+//////////
+	icon_action_button = "action_blank"
+	action_button_name = "Wield the rifle"
+	can_wield()
+		return 1
 
+/obj/item/weapon/gun/projectile/laser/ui_action_click()
+	if( src in usr )
+		toggle_wield(usr)
+	return
+
+/obj/item/weapon/gun/projectile/laser/verb/wield()
+	set name = "Wield"
+	set category = "Object"
+	set src in usr
+
+	toggle_wield(usr)
+//////////////
+//End Wielding
+//////////////
 
 
 /obj/item/ammo_magazine/laser/empty

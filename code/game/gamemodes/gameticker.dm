@@ -318,6 +318,8 @@ var/global/datum/controller/gameticker/ticker
 
 		emergency_shuttle.process()
 
+		delta_level.process()
+
 		var/game_finished = 0
 		var/mode_finished = 0
 		if (config.continous_rounds)

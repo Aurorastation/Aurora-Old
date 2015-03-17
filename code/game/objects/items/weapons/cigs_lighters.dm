@@ -92,7 +92,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	else if(istype(W, /obj/item/weapon/lighter/zippo))
 		var/obj/item/weapon/lighter/zippo/Z = W
 		if(Z.lit)
-			light("<span class='rose'>With a flick of their wrist, [user] lights their [name] with their [W].</span>")
+			light("<span class='rose'>With a flick of their wrist, [user] lights  [name] with [W].</span>")
 
 	else if(istype(W, /obj/item/weapon/lighter))
 		var/obj/item/weapon/lighter/L = W
@@ -102,7 +102,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	else if(istype(W, /obj/item/weapon/match))
 		var/obj/item/weapon/match/M = W
 		if(M.lit)
-			light("<span class='notice'>[user] lights their [name] with their [W].</span>")
+			light("<span class='notice'>[user] lights their [name] with [W].</span>")
 
 	else if(istype(W, /obj/item/weapon/melee/energy/sword))
 		var/obj/item/weapon/melee/energy/sword/S = W
@@ -196,7 +196,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 
 			M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been burnt with [src.name] by [user.name] ([user.ckey])</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to burn [M.name] ([M.ckey])</font>")
-			msg_admin_attack("[key_name(user)] burnt [key_name(user)] with [src.name] (INTENT: [uppertext(user.a_intent)]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>")
+			msg_admin_attack("[key_name_admin(user)] burnt [key_name_admin(user)] with [src.name] (INTENT: [uppertext(user.a_intent)]) - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>")
 
 
 /obj/item/clothing/mask/cigarette/afterattack(obj/item/weapon/reagent_containers/glass/glass, mob/user as mob, proximity)

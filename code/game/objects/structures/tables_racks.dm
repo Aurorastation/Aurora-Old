@@ -368,7 +368,7 @@
 					if (prob(15))	M.Weaken(5)
 					M.apply_damage(8,def_zone = "head")
 					visible_message("\red [G.assailant] slams [G.affecting]'s face against \the [src]!")
-					msg_admin_attack("[user.name]([user.ckey]) slams [M.name]'s([M.ckey]) face against \the [src]! - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
+					msg_admin_attack("[key_name_admin(user)] slams [key_name_admin(M)]'s face against \the [src]! - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
 					playsound(src.loc, 'sound/weapons/tablehit1.ogg', 50, 1)
 				else
 					user << "\red You need a better grip to do that!"

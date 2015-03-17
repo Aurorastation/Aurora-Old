@@ -56,7 +56,6 @@
 		return
 
 
-
 	//Logs all hrefs
 	if(config && config.log_hrefs && href_logfile)
 		href_logfile << "<small>[time2text(world.timeofday,"hh:mm")] [src] (usr:[usr])</small> || [hsrc ? "[hsrc] " : ""][href]<br>"
@@ -66,6 +65,19 @@
 		if("usr")		hsrc = mob
 		if("prefs")		return prefs.process_link(usr,href_list)
 		if("vars")		return view_var_Topic(href,href_list,hsrc)
+
+	//Station Directives screen switch
+	switch(text2num(href_list["directivescreen"]))
+		if(null)
+		if(1)
+			directiveslookup(1)
+		if(3)
+			directiveslookup(3)
+		//2 should not be reachable through here.
+
+	if(href_list["directiveview"])
+		var/queryid = sanitizeSQL(href_list["directiveview"])
+		directiveslookup(2, queryid)
 
 	..()	//redirect to hsrc.Topic()
 
