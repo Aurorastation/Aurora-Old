@@ -92,6 +92,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	var/c_locked=0;        //Will our new channel be locked to public submissions?
 	var/hitstaken = 0      //Death at 3 hits from an item with force>=15
 	var/datum/feed_channel/viewing_channel = null
+	var/queryid
 	luminosity = 0
 	anchored = 1
 
@@ -190,6 +191,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				dat+= "<BR><A href='?src=\ref[src];view=1'>View Feed Channels</A>"
 				dat+= "<BR><A href='?src=\ref[src];create_feed_story=1'>Submit new Feed story</A>"
 				dat+= "<BR><A href='?src=\ref[src];menu_paper=1'>Print newspaper</A>"
+				dat+= "<BR><A href='?src=\ref[src];setScreen=[22]'>NanoTrasen Station Directives</A>"
 				dat+= "<BR><A href='?src=\ref[src];refresh=1'>Re-scan User</A>"
 				dat+= "<BR><BR><A href='?src=\ref[human_or_robot_user];mach_close=newscaster_main'>Exit</A>"
 				if(src.securityCaster)
@@ -413,6 +415,55 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			if(21)
 				dat+="<FONT COLOR='maroon'>Unable to print newspaper. Insufficient paper. Please notify maintenance personnel to refill machine storage.</FONT><BR><BR>"
 				dat+="<A href='?src=\ref[src];setScreen=[0]'>Return</A>"
+			if(22)
+				dat += "<div align='center'><b>Station Directives<br>NanoTrasen<br>NSS Aurora</b></div><br>"
+
+				establish_db_connection()
+				if(!dbcon.IsConnected())
+					dat += text("<div align='center'><font color=red><b>ERROR</b>: Unable to contact external database.</div></font>")
+					error("SQL database connection failed. Attempted to fetch form information.")
+
+				var/DBQuery/query = dbcon.NewQuery("SELECT id, name FROM aurora_directives")
+				query.Execute()
+				dat += "<div align='center'><table width='90%' cellpadding='2' cellspacing='0'>"
+				dat += "<tr><td colspan='3' bgcolor='white' align='center'><a href='?src=\ref[src];setScreen=[24]'>Regarding Station Directives</a><br></td></tr>"
+
+				while(query.NextRow())
+					var/id = text2num(query.item[1])
+					var/name = query.item[2]
+
+					var/bgcolor = "#e3e3e3"
+					if(id%2 == 0)
+						bgcolor = "white"
+					dat += "<tr bgcolor='[bgcolor]'><td>Directive #[id]</td><td>[name]</td><td><a href='?src=\ref[src];directivesview=[id]'>Review</a></td></tr>"
+				dat += "</table></div>"
+				dat += "<br><div align='center'><a href='?src=\ref[src];setScreen=[0]'>Return to Main Menu</a></div>"
+			if(23)
+				if(!queryid)
+					return //this should never happen
+
+				var/DBQuery/searchquery = dbcon.NewQuery("SELECT id, name, data FROM aurora_directives WHERE id=[queryid]")
+				searchquery.Execute()
+
+				while(searchquery.NextRow())
+					var/id = searchquery.item[1]
+					var/name = searchquery.item[2]
+					var/data = searchquery.item[3]
+
+					dat += "<div align='center'><b>Directive #[id]<br>'[name]'</b></div><hr>"
+					dat += "<div align='justify'>[data]</div>"
+
+				dat += "<br><div align='center'><a href='?src=\ref[src];setScreen=[22]'>Return to Index</a></div>"
+				dat += "<div align='center'><a href='?src=\ref[src];setScreen=[0]'>Return to Main Menu</a></div>"
+			if(24)
+				dat += "<div align='center'><b>Regarding Station Directives</b></div><hr>"
+				dat += "<div align='justify'>The Station Directives are a set of specific orders and directives issued and enforced aboard a specific NanoTrasen Corporation installation. This terminal provides access to orders and directives enforced aboard the <i>NSS Aurora.</i> Note that these are only enforced upon NanoTrasen Employees, and not civilians or visitors, unless ruled otherwise by sector specific Central Command.<br><br>"
+				dat += "Overwriting power of general NanoTrasen Corporate Regulation is given to the Station Directives. Should a conflict emerge, the Station Directives active aboard the specific installation are to be adhered to, over Corporate Regulation.<br><br>"
+				dat += "Punishment for a violation of Station Directives should be escalated in the following fashion:<br><ul><li>Verbal warning, and citation. Ensure that the Employee is familiar with the Station Directives.</li><li>Charge of violating article i111 - Failure to Execute an Order - of NanoTrasen Corporate Regulation</li><li>Subsequent charge of violating article i206 - Neglect of Duty - of NanoTrasen Corporate Regulation, and review of Employee by the Employee's Head of Staff.</li><li>Subsequent failure to follow Station Directives should result in suspension of contract, if not imprisonment until transfer to Central Command station.</li></ul>"
+				dat += "Dependant on the violation and actual crimes concerned, punishment may be escalated faster, with intent to ensure in the safety of station, equipment and crew.<br>"
+				dat += "During non-standard operation, and highly abnormal circumstances, Station Directives may be overlooked, for the sake of a less costly solution to the given emergency. Note that should a follow-on review find this solution to have been more detrimental, and the breach of Directives and Regulation be unwarranted, then such an act will be punished.</div>"
+				dat += "<br><div align='center'><a href='?src=\ref[src];setScreen=[22]'>Return to Index</a></div>"
+				dat += "<div align='center'><a href='?src=\ref[src];setScreen=[0]'>Return to Main Menu</a></div>"
 			else
 				dat+="I'm sorry to break your immersion. This shit's bugged. Report this bug to Agouri, polyxenitopalidou@gmail.com"
 
@@ -692,6 +743,11 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			src.viewing_channel = FC
 			src.screen = 12
 			src.updateUsrDialog()
+
+		else if(href_list["directivesview"])
+			queryid = sanitizeSQL(href_list["directivesview"])
+			screen = 23
+			updateUsrDialog()
 
 		else if(href_list["refresh"])
 			src.updateUsrDialog()
