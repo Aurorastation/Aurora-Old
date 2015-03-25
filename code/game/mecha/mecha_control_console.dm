@@ -92,7 +92,7 @@
 
 		return answer
 
-	emp_act()
+	emp_act_console()
 		del src
 		return
 
@@ -108,7 +108,8 @@
 	proc/shock()
 		var/obj/mecha/M = in_mecha()
 		if(M)
-			M.emp_act(2)
+			M.emp_act_console(5)
+			empulse(src.loc, 0, 1, 1)
 		del(src)
 
 	proc/get_mecha_log()

@@ -33,7 +33,7 @@ proc/empulse(turf/epicenter, heavy_range, light_range, log=0)
 			if(prob(50))
 				T.emp_act(1)
 			else
-				T.emp_act(2)
+				T.emp_act(0.5)
 		else if(distance <= light_range)
-			T.emp_act(2)
+			T.emp_act(0.5)
 	return 1

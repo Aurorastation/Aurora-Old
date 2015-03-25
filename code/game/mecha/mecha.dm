@@ -610,10 +610,18 @@
 /obj/mecha/meteorhit()
 	return ex_act(rand(1,3))//should do for now
 
-/obj/mecha/emp_act(severity)
+/obj/mecha/emp_act(severity) // Severity is generally best left at 1; damage = (50 x severity), cell drain = ((current charge / 2) x severity)
 	if(get_charge())
-		use_power((cell.charge/2)/severity)
-		take_damage(50 / severity,"energy")
+		use_power((cell.charge/2)*severity)
+		take_damage(50*severity,"energy")
+	src.log_message("EMP detected",1)
+	check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
+	return
+
+/obj/mecha/emp_act_console(severity) // So that mechs actually drain their damn energy
+	if(get_charge())
+		use_power(cell.charge/2)
+		take_damage(50*severity,"energy")
 	src.log_message("EMP detected",1)
 	check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
 	return
