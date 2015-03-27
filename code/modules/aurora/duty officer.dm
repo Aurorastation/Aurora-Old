@@ -126,7 +126,10 @@
 
 			var /obj/item/weapon/storage/lockbox/lockbox = new(M)
 			lockbox.req_access = list(access_cent_captain)
+			lockbox.name = "A Duty Officer briefcase"
+			lockbox.desc = "A smart looking briefcase with a NT logo on the side"
 			lockbox.storage_slots = 8
+			lockbox.max_combined_w_class = 16
 			M.equip_if_possible(lockbox, slot_l_hand)
 
 			var/obj/item/device/pda/central/pda = new(M)
