@@ -533,18 +533,42 @@
 	item_state = "amy_gloves"
 	clipped = 1
 
-/obj/item/clothing/tie/storage/fluff/cecillia_locket //Old locket - Cecillia Lambert - casperf1 - DONE
+/obj/item/clothing/tie/fluff/cecillia_locket //Old locket - Cecillia Lambert - casperf1 - DONE
 	name = "old locket"
 	desc = "A dark metal locket, it seems at least sixty years old. The photo that was once inside is gone."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "cecillia_locket1" //Keep as one, to indicate glass.
 	item_state = "cecillia_locket1"
 	item_color = "cecillia_locket1"
-	slots = 1
+	slot_flags = SLOT_MASK
+
+	var/pill
+
+	attack_self(mob/user as mob)
+		if(pill)
+			user.put_in_hands(pill)
+			user << "\blue You take out the pill that was housed in the [src]."
+			pill = null
+			icon_state = "cecillia_locket0"
+			item_state = icon_state
+			update_icon()
+
+	attackby(obj/item/I, mob/usr)
+		if(istype(I, /obj/item/weapon/reagent_containers/pill/) && !pill)
+			usr.u_equip(I)
+			I.loc = src
+			pill = I
+			I.dropped(usr)
+			I.add_fingerprint(usr)
+			add_fingerprint(usr)
+			icon_state = "cecillia_locket1"
+			item_state = icon_state
+			usr << "\blue You securely fit the [I] into the [src]."
+			update_icon()
 
 	New()
 		..()
-		new /obj/item/weapon/reagent_containers/pill/cecillia_pill(hold)
+		pill = new /obj/item/weapon/reagent_containers/pill/cecillia_pill()
 		return
 
 /obj/item/weapon/reagent_containers/pill/cecillia_pill
@@ -941,6 +965,7 @@
 	desc = "An old looking badge that has seen as many ordeals as its owner. It has the name 'Peter Stone' inscribed on it."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "peter_badge"
+	stored_name = "Peter Stone"
 
 /obj/item/clothing/tie/armband/iac_armband // Interstellar Aid Corps armband - Grey Ryan - Jackboot
 	name = "Interstellar Aid Corps armband"
@@ -950,36 +975,37 @@
 	item_color = "iac"
 
 /obj/item/clothing/gloves/fluff/imraj_kara // kara - Imraj Brar - Canon35
-	name = "Kara"
+	name = "kara"
 	desc = "A bracelet made of what looks like steel."
-	icon_state = "Kara"
-	item_color = "Kara_m"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "imraj_kara"
+	item_color = "imraj_kara"
 
-/obj/item/fluff/kirpan_imraj // kirban - Imraj Brar - Canon35
+/obj/item/weapon/melee/fluff/imraj_kirpan // kirban - Imraj Brar - Canon35
 	name = "kirpan"
 	desc = "A knife with a metal grip and blade, has strange characters written on the sides."
 	icon = 'icons/obj/custom_items.dmi'
-	icon_state = "Kara"
-	item_color = "Kara_m"
+	icon_state = "imraj_kirpan"
+	item_state = "imraj_kirpan"
 	w_class = 2.0
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
 
-/obj/item/clothing/head/fluff/turbin_imraj // turban - Imraj Brar - Canon35
+/obj/item/clothing/head/fluff/imraj_turban // turban - Imraj Brar - Canon35
 	name = "turban"
 	desc = "A piece of soft headgear."
 	icon = 'icons/obj/custom_items.dmi'
-	icon_state = "turban"
-	item_color = "turban_m"
+	icon_state = "imraj_turban"
+	item_state = "imraj_turban"
 	armor = list(melee = 20, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
-/obj/item/weapon/fluff/kangha_imraj // kangha - Imraj Brar - Canon35
+/obj/item/weapon/fluff/imraj_kangha // kangha - Imraj Brar - Canon35
 	name = "kangha"
 	desc = "A small wooden comb."
 	w_class = 1.0
 	icon = 'icons/obj/custom_items.dmi'
-	icon_state = "kangha"
+	icon_state = "imraj_kangha"
 
 	attack_self(mob/user)
 		if(user.r_hand == src || user.l_hand == src)
@@ -992,20 +1018,19 @@
 				O.show_message(text("\red [] uses [] to comb their hair with incredible style and sophistication. What a [mobgender].", user, src), 1)
 		return
 
-/obj/item/clothing/suit/armor/vest/fluff/apop_coat // Thick Jacket - Apophis Quihtzin - Kingmatt9
-	name = "Thick Jacket"
+/obj/item/clothing/suit/fluff/apophis_coat // Thick Jacket - Apophis Quihtzin - Kingmatt9
+	name = "thick jacket"
 	desc = "A brown leather trenchcoat-like jacket, it smells of snow."
 	icon = 'icons/obj/custom_items.dmi'
-	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
-	icon_state = "thick_jacket"
-	item_state = "thick_jacket"
+	icon_state = "apophis_jacket"
+	item_state = "apophis_jacket"
 
-/obj/item/clothing/suit/armor/vest/fluff/stab_vest_sam // Stab Vest - Sam Macnaughton - Sgtsammac
-	name = "Stab Vest"
+/obj/item/clothing/suit/armor/vest/fluff/sam_armour // Stabproof Vest - Sam Macnaughton - Sgtsammac
+	name = "stab proof vest"
 	desc = "It's a red vest, with high visibility strips. You can see the emblem of the NanoTrasen security division on the right breast."
 	icon = 'icons/obj/custom_items.dmi'
-	icon_state = "stab_vest"
-	item_state = "stab_vest"
+	icon_state = "sam_armour"
+	item_state = "sam_armour"
 
 //////////////////////////////////////////
 ////////////REDO THIS/////////////
