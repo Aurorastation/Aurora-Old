@@ -347,7 +347,7 @@
 			if(prob(50))
 				emp_act(1)
 			else
-				emp_act(0.5)
+				emp_act(2)
 		if(prob(5)) //smoke only
 			var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
 			smoke.set_up(3, 0, src.loc)

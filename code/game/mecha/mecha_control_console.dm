@@ -92,7 +92,7 @@
 
 		return answer
 
-	emp_act_console()
+	emp_act()
 		del src
 		return
 
@@ -108,7 +108,10 @@
 	proc/shock()
 		var/obj/mecha/M = in_mecha()
 		if(M)
-			M.emp_act_console(5)
+			M.emp_act(0.8)
+			M.emp_act(0.8)
+			M.emp_act(0.8)
+			M.emp_act(0.8) //we call this four times to get the necessary damage + add a much higher chance of subsystem failures
 			empulse(src.loc, 0, 1, 1)
 		del(src)
 
