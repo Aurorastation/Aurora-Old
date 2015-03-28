@@ -111,6 +111,9 @@
 
 	if (user)
 		if (istype(M, /mob/living/carbon/human))
+			var/mob/living/carbon/human/C = M
+			if (C.species.flags & (IS_SYNTHETIC | NO_SCAN))
+				return
 			if(!inuse)
 				var/obj/effect/equip_e/human/O = new /obj/effect/equip_e/human(  )
 				O.source = user
