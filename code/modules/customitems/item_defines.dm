@@ -907,7 +907,8 @@
 /obj/item/device/taperecorder/fluff/language_processor //Advanced Language Processing Board - Android - TheCritsyBear
 	name = "Advanced Language Processing Board"
 	desc = "A slightly advanced, but not uncommon upgrade module considered to be the cheapest of its kind. It has the markings of an independent retailer- not standard NanoTrasen hardware."
-	icon_state = "paragon_datachip"
+	icon = 'icons/obj/module.dmi'
+	icon_state = "cyborg_upgrade3"
 	item_state = "dermal"
 	slot_flags = SLOT_HEAD
 
@@ -1145,7 +1146,6 @@
 	cold_protection = HANDS
 	min_cold_protection_temperature = GLOVES_MIN_COLD_PROTECTION_TEMPERATURE
 
-
 /obj/item/fluff/red_gemstone //Red Gemstone - Mister Dosh - Somekindofpony
 	name = "red gemstone"
 	desc = "A small red piece of glass, cut into the shape of a gemstone."
@@ -1163,7 +1163,6 @@
 	attack(mob/living/carbon/human/M, mob/living/user)
 		if(isliving(user))
 			user.visible_message("\red [user] brushes up against [M], driving [src] into their face intrusively.","\red You brush up against [M], intrusively thrusting [src] into their face.")
-
 
 /obj/item/clothing/tie/fluff/epsilon_badge // EPSILON PI Badge - EPSiLON - Prospekt1559
 	name = "EPSiLON private investigator badge"
@@ -1185,7 +1184,7 @@
 /obj/item/clothing/tie/ert_dogtags // D O G T A G Z B O Y Z
 	name = "ERT dogtags"
 	desc = "Tpr Doe - Funsquad"
-	icon_state = "holobadge-cord"
+	icon_state = "ert_tags"
 	item_color = "holobadge-cord"
 	slot_flags = SLOT_MASK
 	slot_flags = SLOT_BELT
