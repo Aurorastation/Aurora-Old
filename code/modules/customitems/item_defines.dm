@@ -1080,12 +1080,17 @@
 
 		usr.update_inv_wear_suit()
 
+/obj/item/clothing/under/rank/fluff/faust_uniform //Eridani Federal Army uniform - Bryce Faust - Hackie Mhan
+	name = "Eridani Federal Army uniform"
 	desc = "This uniform is old, with multiple stitches. Certain parts of the uniform are missing and yet it is still of a distinctly high quality"
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "faust_uniform"
 	item_color = "faust_uniform"
 	item_state = "faust_uniform"
 
+/obj/item/clothing/head/beret/fluff/faust_beret //military beret - Bryce Faust - Hackie Mhan
+	name = "military beret"
+	desc = "This beret has the Eridani Federal Army symbol, it's old but still in good shape."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "faust_beret"
 	item_state = "faust_beret"
