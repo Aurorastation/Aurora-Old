@@ -1041,3 +1041,153 @@
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "smilemotherfucker"
 	item_state = "smilemotherfucker_m"
+
+/obj/item/weapon/coin/fluff/luna_coin //Purple Coin - Luna Tsuki - Wer6
+	name = "purple coin"
+	desc = "An anodized purple titanium coin in a sealed transparent case. The stamped portrait of a woman adorns one side, with the name 'Luna Tsuki' beneath. A hawk symbol rests on the opposing side, with the words 'We will miss you!' stamped beneath."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "luna_coin"
+
+	attack_self(mob/user as mob)
+		user << "\blue You find it unwise to flip the encased coin."
+		return
+
+	attackby(obj/item/weapon/W as obj, mob/user as mob)
+		return
+
+/obj/item/clothing/suit/storage/fluff/varick_coat //Frontier Duffle Coat - Talia Varick - OneOneThreeEight
+	name = "Frontier duffle coat"
+	desc = "A lightweight, navy duffle coat. This frontier coat is fashioned with horn-toggles, a golden leopard pin, cuff tassles and even intentional decorative tears in the fabric itself."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "varick_coat_open"
+	item_state = "varick_coat_open"
+
+	verb/toggle()
+		set name = "Toggle horn toggles"
+		set category = "Object"
+		set src in usr
+
+		if(!usr.canmove || usr.stat || usr.restrained())
+			return 0
+
+		switch(icon_state)
+			if("varick_coat_open")
+				src.icon_state = "varick_coat_closed"
+				usr << "You fasten the coat's horn-toggles."
+			if("varick_coat_closed")
+				src.icon_state = "varick_coat_open"
+				usr << "You unfasten the coat's horn-toggles"
+
+		usr.update_inv_wear_suit()
+
+	desc = "This uniform is old, with multiple stitches. Certain parts of the uniform are missing and yet it is still of a distinctly high quality"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "faust_uniform"
+	item_color = "faust_uniform"
+	item_state = "faust_uniform"
+
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "faust_beret"
+	item_state = "faust_beret"
+
+/obj/item/clothing/head/ushanka/fluff/kuznetsov_ushanka	// Ushanka - Dominika Kuznetsov - Kerbal22
+	name = "ushanka"
+	desc = "A comfortable fur ushanka with a small red star embroidered on the front."
+
+/obj/item/clothing/mask/cigarette/pipe/fluff/hazeri_pipe //Hazeri's Pipe - Hazeri Saakhat - BlueSp34r
+	name = "Hazeri's Pipe"
+	desc = "A worn smoking pipe. It is made out of rare wood only found in Moghes, with little leaves sticking out of it."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "hazeri_pipe_off"
+	item_state = "hazeri_pipe_off"
+	icon_on = "hazeri_pipe_on"
+	icon_off = "hazeri_pipe_off"
+	smoketime = 200
+	can_hurt_mob = 0
+
+/obj/item/weapon/cane/fluff/hazeri_cane //Hazeri's Cane - Hazeri Saakhat - BlueSp34r
+	name = "Hazeri's Cane"
+	desc = "An old warped cane with a flat bottom. It appears leafy; crafted from Moghian wood."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "hazeri_cane"
+	item_state = "hazeri_cane"
+
+/obj/item/clothing/tie/fluff/kane_badge // Detective's Badge - Kane DeWitt - Joe Kane
+	name = "Detective's Badge"
+	desc = "A shiny brass detective's badge, backed by brown leather. Inscribed on the front is 'Kane DeWitt, DeWitt Detective Agency'."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "kane_badge"
+	item_color = "kane_badge"
+
+	slot_flags = SLOT_BELT
+
+	attack_self(mob/user as mob)
+		if(isliving(user))
+			user.visible_message("\red [user] flashes their [src].\nIt reads: Kane DeWitt, DeWitt Detective Agency.","\red You display the [src].\nIt reads: Kane DeWitt, DeWitt Detective Agency.")
+
+	attack(mob/living/carbon/human/M, mob/living/user)
+		if(isliving(user))
+			user.visible_message("\red [user] invades [M]'s personal space, thrusting your [src] into their face insistently.","\red You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.")
+
+/obj/item/clothing/gloves/fluff/odanu_gloves //Old Unathi Handwraps - Odanu Adanutha - Prospekt1559
+	name = "old Unathi handwraps"
+	desc = "Old, stained hand wraps made of cloth. Holds in a miniscule amount of warmth and offers slight protection to one's knuckles."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "odanu_gloves"
+	item_state = "odanu_gloves"
+	species_restricted = list("Unathi")
+	clipped = 1
+	cold_protection = HANDS
+	min_cold_protection_temperature = GLOVES_MIN_COLD_PROTECTION_TEMPERATURE
+
+
+/obj/item/fluff/red_gemstone //Red Gemstone - Mister Dosh - Somekindofpony
+	name = "red gemstone"
+	desc = "A small red piece of glass, cut into the shape of a gemstone."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "red_gemstone"
+	item_state = ""
+	w_class = 2.0
+	force = 1
+	throwforce = 2
+
+	attack_self(mob/user as mob)
+		if(isliving(user))
+			user.visible_message("\blue [user] appears to be fondling [src] obsessively.","\blue You obsess over [src], rolling it from hand to hand.")
+
+	attack(mob/living/carbon/human/M, mob/living/user)
+		if(isliving(user))
+			user.visible_message("\red [user] brushes up against [M], driving [src] into their face intrusively.","\red You brush up against [M], intrusively thrusting [src] into their face.")
+
+
+/obj/item/clothing/tie/fluff/epsilon_badge // EPSILON PI Badge - EPSiLON - Prospekt1559
+	name = "EPSiLON private investigator badge"
+	desc = "A leather badge with gold plating on the front. When looked at closely it can be seen to be engraved with an eyeglass, with the letters 'E' and 'I' underneath."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "epsilon_badge"
+	item_color = "kane_badge"
+
+	slot_flags = SLOT_BELT
+
+	attack_self(mob/user as mob)
+		if(isliving(user))
+			user.visible_message("\red [user] flashes [src].\nIt reads: EPSilLON, Private Investigator.","\red You display [src].\nIt reads: EPSiLON, Private Investigator.")
+
+	attack(mob/living/carbon/human/M, mob/living/user)
+		if(isliving(user))
+			user.visible_message("\red [user] invades [M]'s personal space, thrusting [src] into their face insistently.","\red You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.")
+
+/obj/item/clothing/tie/ert_dogtags // D O G T A G Z B O Y Z
+	name = "ERT dogtags"
+	desc = "Tpr Doe - Funsquad"
+	icon_state = "holobadge-cord"
+	item_color = "holobadge-cord"
+	slot_flags = SLOT_MASK
+	slot_flags = SLOT_BELT
+	var/rank = "Tpr"
+	var/surname = "Doe"
+	var/spec = "Security"
+
+	attack_self(mob/user as mob)
+		if(isliving(user))
+			user.visible_message("\red [user] raises [src].\nThey read: [rank] [surname] - [spec], Emergency Response Team.","\red You raise [src].\nThey read: [rank] [surname] - [spec], Emergency Response Team.")
