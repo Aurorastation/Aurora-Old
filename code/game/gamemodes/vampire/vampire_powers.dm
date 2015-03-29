@@ -215,9 +215,9 @@
 			M.current << "<span class='warning'>You're blindfolded!</span>"
 			return
 		for(var/mob/living/carbon/C in view(1))
-			if(!C.vampire_affected(M))
-				if(!C.get_species() == "Machine")
-					continue
+			if(C == M.current) continue //Don't stunn yourself
+			if(!C.vampire_affected(M) && !C.get_species() == "Machine") //Or machines
+				continue
 			if(!M.current.vampire_can_reach(C, 1)) continue
 //			C.Stun(8)
 			C.Weaken(8)
