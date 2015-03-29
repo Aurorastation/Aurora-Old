@@ -423,6 +423,9 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 		screen = 11
 
 	if(href_list["print"])
+		if(paperstock == 0)
+			alert("Error! No paper to print on! Aborting!")
+			return
 		var/printid = sanitizeSQL(href_list["print"])
 		establish_db_connection()
 
