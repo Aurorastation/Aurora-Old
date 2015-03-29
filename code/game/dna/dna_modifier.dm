@@ -408,10 +408,8 @@
 		if (NOCLONE in connected.occupant.mutations || !src.connected.occupant.dna)
 			occupantData["isViableSubject"] = 0
 		if(ishuman(connected.occupant))
-			msg_scopes("Is human.")
 			var/mob/living/carbon/human/C = connected.occupant
 			if (C.species.flags & (NO_SCAN))
-				msg_scopes("No scan present.")
 				occupantData["isViableSubject"] = 0
 		occupantData["health"] = connected.occupant.health
 		occupantData["maxHealth"] = connected.occupant.maxHealth
