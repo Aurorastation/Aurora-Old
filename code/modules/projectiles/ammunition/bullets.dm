@@ -53,6 +53,21 @@
 	caliber = ".45"
 	projectile_type = "/obj/item/projectile/bullet/weakbullet/rubber"
 
+/obj/item/ammo_casing/c45s
+	desc = "A .45 LTL round casing."
+	caliber = ".45"
+	projectile_type = "/obj/item/projectile/bullet/weakbullet/rubber"
+
+/obj/item/ammo_casing/c45s/flash
+	desc = "A .45 FLSH round casing."
+	caliber = ".45"
+	projectile_type = "/obj/item/projectile/bullet/weakbullet/flash"
+
+/obj/item/ammo_casing/c45s/lethal
+	desc = "A .45 LTHL round casing."
+	caliber = ".45"
+	projectile_type = "/obj/item/projectile/bullet/midbullet2"
+
 /obj/item/ammo_casing/a12mm
 	desc = "A 12mm bullet casing."
 	caliber = "12mm"
