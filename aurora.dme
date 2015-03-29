@@ -839,6 +839,8 @@
 #include "code\modules\aurora\duty officer.dm"
 #include "code\modules\aurora\intern.dm"
 #include "code\modules\aurora\recycler.dm"
+#include "code\modules\aurora\sqlnews_controller.dm"
+#include "code\modules\aurora\stationdirectives.dm"
 #include "code\modules\aurora\weldbackpack.dm"
 #include "code\modules\aurora\bridge_overhaul\chairs.dm"
 #include "code\modules\aurora\bridge_overhaul\desk_consoles.dm"
