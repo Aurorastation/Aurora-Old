@@ -564,7 +564,8 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		"central command duty officer",
 		"nanotrasen officer",
 		"nanotrasen captain",
-		"shadowling"
+		"shadowling",
+		"iac_medic"
 		)
 	var/dresscode = input("Select dress for [M]", "Robust quick dress shop") as null|anything in dresspacks
 	if (isnull(dresscode))
@@ -1093,6 +1094,44 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			W.access = get_all_accesses()//They get full station access because obviously the syndicate has HAAAX, and can make special IDs for their most elite members.
 			W.access += list(access_cent_general, access_cent_specops, access_cent_living, access_cent_storage, access_syndicate)//Let's add their forged CentCom access and syndicate access.
 			W.assignment = "Field Operator"
+			W.registered_name = M.real_name
+			M.equip_to_slot_or_del(W, slot_wear_id)
+
+		if("iac_medic")
+
+			var/obj/item/clothing/under/rank/medical/iac = new(M)
+			iac.hastie = new /obj/item/clothing/tie/armband/iac(iac)
+			M.equip_to_slot_or_del(iac, slot_w_uniform)
+
+			M.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/labcoat/iac(M), slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/white(M), slot_shoes)
+			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/latex(M), slot_gloves)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/headset_med(M), slot_l_ear)
+			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/hud/health(M), slot_glasses)
+			M.equip_to_slot_or_del(new /obj/item/clothing/mask/surgical(M), slot_wear_mask)
+
+			var/obj/item/weapon/storage/belt/medical/medical = new(M)
+			medical.contents += new /obj/item/weapon/reagent_containers/hypospray
+			medical.contents += new /obj/item/weapon/reagent_containers/glass/bottle/antitoxin
+			medical.contents += new /obj/item/weapon/reagent_containers/glass/bottle/inaprovaline
+			medical.contents += new /obj/item/weapon/reagent_containers/glass/bottle/bicaridine
+			medical.contents += new /obj/item/weapon/reagent_containers/glass/bottle/dex_plus
+			medical.contents += new /obj/item/weapon/reagent_containers/glass/bottle/dermaline
+			medical.contents += new /obj/item/stack/medical/advanced/bruise_pack
+			medical.contents += new /obj/item/stack/medical/advanced/ointment
+			M.equip_to_slot_or_del(medical, slot_belt)
+
+			M.equip_to_slot_or_del(new /obj/item/device/healthanalyzer(M), slot_l_store)
+			M.equip_to_slot_or_del(new /obj/item/device/flash(M), slot_r_store)
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/emt(M), slot_back)
+			M.equip_to_slot_or_del(new /obj/item/device/flashlight/pen(M), slot_s_store)
+
+			var/obj/item/weapon/card/id/silver/W = new(src)
+			W.name = "[M.real_name]'s ID Card"
+			W.icon_state = "id"
+			W.access = get_all_accesses()//Full station access because, DOCTOR HAAAAAAAALP MEEEEEE
+			W.access += list(access_cent_general, access_cent_specops, access_cent_storage)//CC access to the ERT area(s) so they can gear up and get to the station.
+			W.assignment = "IAC Worker"
 			W.registered_name = M.real_name
 			M.equip_to_slot_or_del(W, slot_wear_id)
 
