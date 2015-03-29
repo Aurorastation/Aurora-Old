@@ -556,6 +556,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		"red wizard",
 		"marisa wizard",
 		"emergency response team",
+		"protection detail",
 		"ert trooper",
 		"ert leading trooper",
 		"ert sub officer",
@@ -564,8 +565,8 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		"central command duty officer",
 		"nanotrasen officer",
 		"nanotrasen captain",
-		"shadowling",
-		"iac_medic"
+		"shadowling"
+//		"iac_medic"
 		)
 	var/dresscode = input("Select dress for [M]", "Robust quick dress shop") as null|anything in dresspacks
 	if (isnull(dresscode))
@@ -855,6 +856,32 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			W.registered_name = M.real_name
 			M.equip_if_possible(W, slot_wear_id)
 
+		if("protection detail")
+
+			var/obj/item/clothing/tie/holster/hold = new(M)
+			hold.contents += new /obj/item/weapon/gun/energy/gun/pistol
+
+			var/obj/item/clothing/under/rank/ert/under = new(M)
+			under.hastie = hold
+
+			M.equip_to_slot_or_del(under, slot_w_uniform)
+			M.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/ert(M), slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/swat(M), slot_shoes)
+			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/swat(M), slot_gloves)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(M), slot_l_ear)
+			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun(M), slot_belt)
+			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(M), slot_glasses)
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/ert(M), slot_back)
+
+			var/obj/item/weapon/card/id/W = new(M)
+			W.name = "[M.real_name]'s ID Card"
+			W.icon_state = "centcom"
+			W.access = get_all_accesses()
+			W.access += get_ert_access()
+			W.assignment = "ERT Protection Detail"
+			W.registered_name = M.real_name
+			M.equip_to_slot_or_del(W, slot_wear_id)
+
 		if("emergency response team")
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/ert(M), slot_w_uniform)
 			M.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/ert(M), slot_wear_suit)
@@ -869,7 +896,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			W.name = "[M.real_name]'s ID Card"
 			W.icon_state = "centcom"
 			W.access = get_all_accesses()
-			W.access += get_all_centcom_access()
+			W.access += get_ert_access()
 			W.assignment = "Emergency Response Team"
 			W.registered_name = M.real_name
 			M.equip_to_slot_or_del(W, slot_wear_id)
@@ -1096,7 +1123,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			W.assignment = "Field Operator"
 			W.registered_name = M.real_name
 			M.equip_to_slot_or_del(W, slot_wear_id)
-
+/* REMOVED BECAUSE STUCK
 		if("iac_medic")
 
 			var/obj/item/clothing/under/rank/medical/iac = new(M)
@@ -1134,7 +1161,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			W.assignment = "IAC Worker"
 			W.registered_name = M.real_name
 			M.equip_to_slot_or_del(W, slot_wear_id)
-
+*/
 	M.regenerate_icons()
 
 	log_admin("[key_name(usr)] changed the equipment of [key_name(M)] to [dresscode].")
