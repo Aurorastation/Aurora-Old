@@ -870,3 +870,72 @@ var/list/datum/dna/hivemind_bank = list()
 
 	feedback_add_details("changeling_powers","ED")
 	return 1
+
+/mob/proc/armblades()
+	set category = "Changeling"
+	set name = "Form Blades"
+	set desc="Rupture the flesh and mend the bone of your hand into a deadly blade."
+
+	if(!src.get_active_hand())
+		var/obj/item/weapon/melee/changeling/armblade/W = new()
+		src.put_in_hands(W)
+		src.visible_message("<span class='warning'>A grotesque blade forms around [src]\'s arm!</span>", "<span class='warning'>Our arm twists and mutates, transforming it into a deadly blade.</span>", "<span class='warning'>You hear organic matter ripping and tearing!</span>")
+	else if(!src.get_inactive_hand())
+		var/obj/item/weapon/melee/changeling/armblade/W = new()
+		src.put_in_hands(W)
+		src.visible_message("<span class='warning'>A grotesque blade forms around [src]\'s arm!</span>", "<span class='warning'>Our arm twists and mutates, transforming it into a deadly blade.</span>", "<span class='warning'>You hear organic matter ripping and tearing!</span>")
+	else
+		src << "\red Try dropping an item first."
+	return 1
+
+/obj/item/weapon/melee/changeling/armblade
+	name = "arm blade"
+	desc = "A grotesque blade made out of bone and flesh that cleaves through people as a hot knife through butter"
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "arm_blade"
+	item_state = "arm_blade"
+	w_class = 5.0
+	force = 30
+	throwforce = 0 //Just to be on the safe side
+	throw_range = 0
+	throw_speed = 0
+
+/obj/item/weapon/melee/changeling/armblade/dropped()
+	del(src)
+	return
+
+/obj/item/weapon/melee/changeling/armblade/proc/throw()
+	del(src)
+	return
+
+/mob/proc/changeling_shield()
+	set category = "Changeling"
+	set name = "Form Shield"
+	set desc="Bend the flesh and bone of your hand into a grotesque shield."
+
+	if(!src.get_active_hand())
+		var/obj/item/weapon/shield/riot/changelingshield/W = new()
+		src.put_in_hands(W)
+		src.visible_message("<span class='warning'>The end of [src]\'s hand inflates rapidly, forming a huge shield-like mass!</span>", "<span class='warning'>We inflate our hand into a robust shield.</span>", "<span class='warning'>You hear organic matter ripping and tearing!</span>")
+
+	else if(!src.get_inactive_hand())
+		var/obj/item/weapon/shield/riot/changelingshield/W = new()
+		src.put_in_hands(W)
+		src.visible_message("<span class='warning'>The end of [src]\'s hand inflates rapidly, forming a huge shield-like mass!</span>", "<span class='warning'>We inflate our hand into a robust shield.</span>", "<span class='warning'>You hear organic matter ripping and tearing!</span>")
+	else
+		src << "\red Try dropping an item first."
+	return 1
+
+/obj/item/weapon/shield/riot/changelingshield
+	name = "shield-like mass"
+	desc = "A mass of tough, boney tissue. You can still see the fingers as a twisted pattern in the shield."
+	icon_state = "ling_shield"
+	item_state = "ling_shield"
+
+/obj/item/weapon/shield/riot/changelingshield/dropped()
+	del(src)
+	return
+
+/obj/item/weapon/shield/riot/changelingshield/proc/throw()
+	del(src)
+	return

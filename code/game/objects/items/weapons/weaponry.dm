@@ -173,7 +173,7 @@
 	attack_verb = list("jabbed","stabbed","ripped")
 
 /obj/item/weapon/canesword
-	name = "cane sword"
+	name = "thin sword"
 	sharp = 1
 	edge = 1
 	desc = "A thin, sharp blade with an elegant handle."
@@ -190,7 +190,7 @@
 
 //Using a modified cane, with a storage var, instead of a box. Because the box idea is meh, in terms of the interface.
 /obj/item/weapon/cane/syndie
-	var/sword		//For holding the blade
+	var/obj/item/weapon/canesword/sword	//For holding the blade
 	var/locked	//A small lock, so that you can't accidentally unsheathe it
 
 	New()
@@ -201,7 +201,9 @@
 	proc/unsheathe(mob/user as mob)
 		if(sword)
 			user.put_in_hands(sword)
-			user.visible_message("[user] takes the handle and draws a sword from inside the [src].", "You take the [src] by the handle and draw out a sharp blade from it.")
+			user.visible_message("\blue [user] takes the handle and draws a sword from inside the [src].", "\blue You take the [src] by the handle and draw out a sharp blade from it.")
+			sword.add_fingerprint(user)
+			add_fingerprint(user)
 			sword = null
 			icon_state = "cane_empty"
 			update_icon()
@@ -211,10 +213,10 @@
 			switch(locked)
 				if(1)
 					locked = 0
-					user << "You twist and unlock the sword handle from the [src]."
+					user << "\blue You twist and unlock the sword handle from the [src]."
 				if(0)
 					locked = 1
-					user << "You twist and lock the sword handle to the [src]."
+					user << "\blue You twist and lock the sword handle to the [src]."
 
 	attack_self(mob/user as mob)
 		if(iscarbon(user))
@@ -235,7 +237,7 @@
 			W.add_fingerprint(user)
 			add_fingerprint(user)
 			icon_state = "cane"
-			user << "You sheathe the sword, and lock its handle to the [src]."
+			user << "\blue You sheathe the sword, and lock its handle to the [src]."
 			locked = 1
 			update_icon()
 
