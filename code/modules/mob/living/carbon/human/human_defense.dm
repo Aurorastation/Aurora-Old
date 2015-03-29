@@ -193,6 +193,17 @@ emp_act
 		visible_message("\red <B>[user] misses [src] with \the [I]!")
 		return 0
 
+	//hulk and forceglove stuff
+	var/power = I.force
+	if(HULK in user.mutations)
+		power *= 2
+
+	if(istype(user, /mob/living/carbon/human))
+		var/mob/living/carbon/human/X = user
+		if(X.gloves && istype(X.gloves,/obj/item/clothing/gloves/force))
+			var/obj/item/clothing/gloves/force/G = X.gloves
+			power *= G.amplification
+
 	var/datum/organ/external/affecting = get_organ(target_zone)
 	if (!affecting)
 		return 0
@@ -201,7 +212,7 @@ emp_act
 		return 0
 	var/hit_area = affecting.display_name
 
-	if((user != src) && check_shields(I.force, "the [I.name]"))
+	if((user != src) && check_shields(power, "the [I.name]"))
 		return 0
 
 	if(istype(I,/obj/item/weapon/card/emag))
@@ -230,13 +241,13 @@ emp_act
 		weapon_edge = 0
 
 	if(armor >= 2)	return 0
-	if(!I.force)	return 0
+	if(!power)	return 0
 //	var/Iforce = I.force //to avoid runtimes on the forcesay checks at the bottom. Some items might delete themselves if you drop them. (stunning yourself, ninja swords)
 
-	apply_damage(I.force, I.damtype, affecting, armor, sharp=weapon_sharp, edge=weapon_edge, used_weapon=I)
+	apply_damage(power, I.damtype, affecting, armor, sharp=weapon_sharp, edge=weapon_edge, used_weapon=I)
 
 	var/bloody = 0
-	if(((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && prob(25 + (I.force * 2)))
+	if(((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && prob(25 + (power * 2)))
 		I.add_blood(src)	//Make the weapon bloody, not the person.
 //		if(user.hand)	user.update_inv_l_hand()	//updates the attacker's overlay for the (now bloodied) weapon
 //		else			user.update_inv_r_hand()	//removed because weapons don't have on-mob blood overlays
@@ -253,7 +264,7 @@ emp_act
 
 		switch(hit_area)
 			if("head")//Harder to score a stun but if you do it lasts a bit longer
-				if(prob(I.force))
+				if(prob(power))
 					apply_effect(20, PARALYZE, armor)
 					visible_message("\red <B>[src] has been knocked unconscious!</B>")
 					if(src != user && I.damtype == BRUTE)
@@ -271,7 +282,7 @@ emp_act
 						update_inv_glasses(0)
 
 			if("chest")//Easier to score a stun but lasts less time
-				if(prob((I.force + 10)))
+				if(prob((power + 10)))
 					apply_effect(6, WEAKEN, armor)
 					visible_message("\red <B>[src] has been knocked down!</B>")
 
@@ -283,7 +294,7 @@ emp_act
 
 	//Melee weapon embedded object code.
 	if (I.damtype == BRUTE && !I.is_robot_module())
-		var/damage = I.force
+		var/damage = power
 		if (armor)
 			damage /= armor+1
 

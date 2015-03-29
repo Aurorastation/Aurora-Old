@@ -140,3 +140,79 @@
 		if(prob(50/severity))
 			wired = 0
 		..()
+
+	/*
+	Forcegloves.  They amplify force from melee hits as well as muck up disarm and stuff a little.
+	Has bits of code in item_attack.dm, stungloves.dm, human_attackhand, human_defense
+	*/
+
+
+
+
+
+/obj/item/clothing/gloves/force // this pair should be put in r&d if you choose to do so.  and also the hos office locker.  do it okay
+
+	desc = "These gloves bend gravity and bluespace, dampening inertia and augmenting the wearer's melee capabilities."
+	name = "force gloves"
+	icon_state = "black"
+	item_state = "swat_gl"
+	siemens_coefficient = 0.6
+	permeability_coefficient = 0.05
+
+	cold_protection = HANDS
+	min_cold_protection_temperature = GLOVES_MIN_COLD_PROTECTION_TEMPERATURE
+	heat_protection = HANDS
+	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
+
+	var/active = 1 //i am actually too lazy to code an on/off switch so if you want it off, take them off for now.  yes.
+	var/amplification = 2
+
+/obj/item/clothing/gloves/force/basic //dooo iiiitttttt
+	desc = "These gloves bend gravity and bluespace, providing a cheap boost to the effectiveness of your average security staff."
+	name = "basic force gloves" //do it skull do it give it to all sec the forums agree go
+	amplification = 1 //just do it
+
+/obj/item/clothing/gloves/force/syndicate  //for syndies.  pda, *maybe* nuke team or ert.  up to you.  maybe just use the amp 2 variant.
+	desc = "These gloves bend gravity and bluespace, dampening inertia and augmenting the wearer's melee capabilities."
+	name = "enhanced force gloves"
+	icon_state = "black"
+	item_state = "swat_gl"
+	amplification = 2.5 //because *2.5 is kind of scary okay.  sometimes you want the scary effect.  sometimes not.
+
+
+/* this is too cluttered.  i'd rather keep it simple.
+
+	verb/toggleGloves() //also this doesn't actually do anything yet.  if you want to code in on/off, it needs interactions with the human attackhand file.
+		set category = "Object"
+		set name = "Toggle Forceglove Activity"
+		set src in usr
+
+		if (active == 0)
+			active = 1
+			amplification = 1.5
+			usr << "You squeeze twice, activating the gloves and amplifying the force of your blows.  Your hands tingle pleasantly."
+
+		else if (active == 1)
+			active = 0
+			amplification = 1
+			usr << "You deactivate the forcegloves.  Your hands feel heavy."
+
+	verb/toggleForceAmp()
+		set category = "Object"
+		set name = "Toggle Force-Amplification Level"
+		set src in usr
+
+		if (active == 0)
+			usr << "You wiggle your fingers, but the gloves aren't active.  You activate them, setting the gloves to their lowest setting: Lethal.  You will now hit 1.5x as hard."
+			amplification = 1.5
+		else if (amplification < 1.5 || amplification == 2.5 )
+			amplification = 1.5
+			usr << "You wiggle your fingers, setting the gloves to their lowest setting: Lethal.  You will now hit 1.5x as hard."
+		else if (amplification == 1.5)
+			amplification = 2
+			usr << "You wiggle your fingers, setting the gloves to the medium setting: Very Lethal.  You will now hit twice as hard."
+		else if (amplification == 2)
+			amplification = 2.5
+			usr << "You wiggle your fingers, setting the gloves to the highest setting: Extremely Lethal.  You will now hit 2.5x as hard."
+
+*/

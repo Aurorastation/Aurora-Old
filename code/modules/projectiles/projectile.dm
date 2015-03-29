@@ -95,6 +95,10 @@
 					miss_modifier += -30
 				def_zone = get_zone_with_miss_chance(def_zone, M, miss_modifier + 15*distance + daddy.accuracy + daddy.rangedrop) // add +daddy.missmod vars to gun and this. snowflake accuracy
 //moving def_zone to be a child of the daddyblock because i need the daddy.  all projectiles should be fired from guns anyway
+
+			if (istype(shot_from,/obj/item/mecha_parts/mecha_equipment/weapon))	//If you shoot with a mecha weapon instead, check accuracy without a steady variable
+				def_zone = get_zone_with_miss_chance(def_zone, M, miss_modifier + 10*distance)
+
 			if(!def_zone)
 				visible_message("\blue \The [src] misses [M] narrowly!")
 				forcedodge = -1
