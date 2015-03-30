@@ -216,7 +216,7 @@
 	colour = "vaurca"
 	key = "p"
 	flags = WHITELISTED
-	syllables = list("kic","klic","\'tic","kit","lit","xic","vil","xrit","tshh","qix","qlit","zix","*","!")
+	syllables = list("kic","klic","\'tic","kit","lit","xic","vil","xrit","tshh","qix","qlit","zix","\'","!")
 
 
 /datum/language/vox
