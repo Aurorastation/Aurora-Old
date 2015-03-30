@@ -710,6 +710,9 @@ var/list/be_special_flags = list(
 #define LEFT 1
 #define RIGHT 2
 
+
+
+
 // for secHUDs and medHUDs and variants. The number is the location of the image on the list hud_list of humans.
 #define HEALTH_HUD		1 // a simple line rounding the mob's number health
 #define STATUS_HUD		2 // alive, dead, diseased, etc.
@@ -773,6 +776,10 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define NONVERBAL 4    		// Language has a significant non-verbal component. Speech is garbled without line-of-sight
 #define SIGNLANG 8     		// Language is completely non-verbal. Speech is displayed through emotes for those who can understand.
 #define HIVEMIND 16         // Broadcast to all mobs with this language.
+#define NONGLOBAL 32	// Do not add to general languages list
+#define INNATE 64	// All mobs can be assumed to speak and understand this language (audible emotes)
+#define NO_TALK_MSG 128	// Do not show the "\The [speaker] talks into \the [radio]" message
+#define NO_STUTTER 256	// No stuttering, slurring, or other speech problems
 
 //Flags for zone sleeping
 #define ZONE_ACTIVE 1

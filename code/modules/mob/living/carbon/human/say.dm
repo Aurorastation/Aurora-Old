@@ -1,4 +1,6 @@
-/mob/living/carbon/human/say(var/message, var/verb = "says")
+/mob/living/carbon/human/say(var/message)
+
+	var/verb = "says"
 	var/alt_name = ""
 	var/message_range = world.view
 	var/italics = 0
@@ -8,16 +10,19 @@
 			src << "\red You cannot speak in IC (Muted)."
 			return
 
-	message =  trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
+	message = trim_strip_html_properly(message)
 
-	if(stat == 2)
-		return say_dead(message)
+	if(stat)
+		if(stat == 2)
+			return say_dead(message)
+		return
+
+	if (istype(src.wear_mask, /obj/item/clothing/mask/muzzle))
+		src << "<span class='danger'>You're muzzled and cannot speak!</span>"
+		return
 
 	var/message_mode = parse_message_mode(message, "headset")
 
-//	if (istype(wear_mask, /obj/item/clothing/mask/muzzle) && message_mode != "changeling")  //Todo:  Add this to speech_problem_flag checks.
-//		return
-//
 	if(copytext(message,1,2) == "*")
 		return emote(copytext(message,2))
 
@@ -30,6 +35,8 @@
 			message = copytext(message,2)	//it would be really nice if the parse procs could do this for us.
 		else
 			message = copytext(message,3)
+
+	message = trim_left(message)
 
 	//parse the language code and consume it
 	var/datum/language/speaking = parse_language(message)
@@ -66,7 +73,6 @@
 
 	if(!message || stat)
 		return
-
 	if(speaking && speaking.flags & SIGNLANG)
 		message_mode = null
 		..(message, speaking, verb, alt_name, italics, message_range)
@@ -123,27 +129,14 @@
 		if("whisper")
 			whisper_say(message, speaking, alt_name)
 			return
-/*		if("binary")
-			if(robot_talk_understand || binarycheck())
-				robot_talk(message)
-			return
-		if("changeling")
-			if(mind && mind.changeling)
-				for(var/mob/Changeling in mob_list)
-					if((Changeling.mind && Changeling.mind.changeling) || istype(Changeling, /mob/dead/observer))
-						Changeling << "<i><font color=#800080><b>[mind.changeling.changelingID]:</b> [message]</font></i>"
-			return
-*/
 		else
-			if(!(stunned >= 4))
-				if(message_mode)
-					if(message_mode in (radiochannels | "department" | "special"))
-						if(l_ear && istype(l_ear,/obj/item/device/radio))
-							l_ear.talk_into(src,message, message_mode, verb, speaking)
-							used_radios += l_ear
-						else if(r_ear && istype(r_ear,/obj/item/device/radio))
-							r_ear.talk_into(src,message, message_mode, verb, speaking)
-							used_radios += r_ear
+			if(message_mode)
+				if(l_ear && istype(l_ear,/obj/item/device/radio))
+					l_ear.talk_into(src,message, message_mode, verb, speaking)
+					used_radios += l_ear
+				else if(r_ear && istype(r_ear,/obj/item/device/radio))
+					r_ear.talk_into(src,message, message_mode, verb, speaking)
+					used_radios += r_ear
 
 	var/sound/speech_sound
 	var/sound_vol
@@ -155,10 +148,14 @@
 	if(used_radios.len)
 		italics = 1
 		message_range = 1
-
+		if(speaking)
+			message_range = speaking.get_talkinto_msg_range(message)
+		var/msg
+		if(!speaking || !(speaking.flags & NO_TALK_MSG))
+			msg = "<span class='notice'>\The [src] talks into \the [used_radios[1]]</span>"
 		for(var/mob/living/M in hearers(5, src))
-			if(M != src)
-				M.show_message("<span class='notice'>[src] talks into [used_radios.len ? used_radios[1] : "the radio."]</span>")
+			if((M != src) && msg)
+				M.show_message(msg)
 			if (speech_sound)
 				sound_vol *= 0.5
 
@@ -237,6 +234,7 @@
 		return GetSpecialVoice()
 	return real_name
 
+
 /mob/living/carbon/human/proc/SetSpecialVoice(var/new_voice)
 	if(new_voice)
 		special_voice = new_voice
@@ -274,45 +272,46 @@
 	return verb
 
 /mob/living/carbon/human/proc/handle_speech_problems(var/message)
+
 	var/list/returns[3]
 	var/verb = "says"
 	var/handled = 0
-	if(silent)
+	if(silent || (sdisabilities & MUTE))
 		message = ""
 		handled = 1
-	if(sdisabilities & MUTE)
-		message = ""
-		handled = 1
-	if(wear_mask)
-		if(istype(wear_mask, /obj/item/clothing/mask/horsehead))
-			var/obj/item/clothing/mask/horsehead/hoers = wear_mask
-			if(hoers.voicechange)
-				if(mind && mind.changeling && department_radio_keys[copytext(message, 1, 3)] != "changeling")
-					message = pick("NEEIIGGGHHHH!", "NEEEIIIIGHH!", "NEIIIGGHH!", "HAAWWWWW!", "HAAAWWW!")
-					verb = pick("whinnies","neighs", "says")
-					handled = 1
+	if(istype(wear_mask, /obj/item/clothing/mask/horsehead))
+		var/obj/item/clothing/mask/horsehead/hoers = wear_mask
+		if(hoers.voicechange)
+			if(mind && mind.changeling && department_radio_keys[copytext(message, 1, 3)] != "changeling")
+				message = pick("NEEIIGGGHHHH!", "NEEEIIIIGHH!", "NEIIIGGHH!", "HAAWWWWW!", "HAAAWWW!")
+				verb = pick("whinnies","neighs", "says")
+				handled = 1
 
-	if((HULK in mutations) && health >= 25 && length(message))
-//		message = "[uppertext(message)]!!!" //No!
-		verb = pick("yells","roars","hollers")
-		handled = 1
-	if(slurring)
-		message = slur(message)
-		verb = pick("stammers","stutters")
-		handled = 1
-
-	var/braindam = getBrainLoss()
-	if(braindam >= 60)
-		handled = 1
-		if(prob(braindam/4))
+	if(message != "")
+		if((HULK in mutations) && health >= 25 && length(message))
+			message = "[uppertext(message)]!!!"
+			verb = pick("yells","roars","hollers")
+			handled = 1
+		if(slurring)
+			message = slur(message)
+			verb = pick("slobbers","slurs")
+			handled = 1
+		if(stuttering)
 			message = stutter(message)
-			verb = pick("stammers", "stutters")
-		if(prob(braindam))
-			message = uppertext(message)
-			verb = pick("yells like an idiot","says rather loudly")
+			verb = pick("stammers","stutters")
+			handled = 1
+
+		var/braindam = getBrainLoss()
+		if(braindam >= 60)
+			handled = 1
+			if(prob(braindam/4))
+				message = stutter(message)
+				verb = pick("stammers", "stutters")
+			if(prob(braindam))
+				message = uppertext(message)
+				verb = "yells loudly"
 
 	returns[1] = message
 	returns[2] = verb
 	returns[3] = handled
-
 	return returns

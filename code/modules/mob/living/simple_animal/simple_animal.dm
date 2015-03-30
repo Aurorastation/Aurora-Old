@@ -243,6 +243,12 @@
 					if ((O.client && !( O.blinded )))
 						O.show_message("\blue [M] [response_help] [src]")
 
+		if("disarm")
+			if (health > 0)
+				for(var/mob/O in viewers(src, null))
+					if ((O.client && !( O.blinded )))
+						O.show_message("\blue [M] [response_disarm] [src]")
+
 		if("grab")
 			if (M == src)
 				return
@@ -262,7 +268,7 @@
 				if ((O.client && !( O.blinded )))
 					O.show_message(text("\red [] has grabbed [] passively!", M, src), 1)
 
-		if("hurt", "disarm")
+		if("hurt")
 			adjustBruteLoss(harm_intent_damage)
 			for(var/mob/O in viewers(src, null))
 				if ((O.client && !( O.blinded )))
