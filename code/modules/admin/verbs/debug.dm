@@ -859,10 +859,14 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		if("protection detail")
 
 			var/obj/item/clothing/tie/holster/hold = new(M)
-			hold.contents += new /obj/item/weapon/gun/energy/gun/pistol
+			var/obj/item/weapon/gun/energy/gun/pistol/weapon = new(M)
+			hold.contents += weapon
+			hold.holstered = weapon
 
 			var/obj/item/clothing/under/rank/ert/under = new(M)
 			under.hastie = hold
+			hold.has_suit = under
+			hold.has_suit.overlays += hold.inv_overlay
 
 			M.equip_to_slot_or_del(under, slot_w_uniform)
 			M.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/ert(M), slot_wear_suit)
