@@ -142,6 +142,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		randomItems.Add("/obj/item/weapon/gun/energy/crossbow") //Energy Crossbow
 		randomItems.Add("/obj/item/device/powersink") //Powersink
 		randomItems.Add("/obj/item/weapon/cane/syndie")
+		randomItems.Add("/obj/item/clothing/gloves/force/syndicate")
 
 	if(uses > 3)
 		randomItems.Add("/obj/item/weapon/melee/energy/sword") //Energy Sword
@@ -198,7 +199,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 				uses -= 6
 			if("/obj/item/weapon/gun/energy/crossbow" , "/obj/item/device/powersink" , "/obj/item/weapon/cane/syndie")
 				uses -= 5
-			if("/obj/item/weapon/melee/energy/sword" , "/obj/item/clothing/mask/gas/voice" , "/obj/item/device/chameleon" , "/obj/item/weapon/melee/baton/stunrod/loaded")
+			if("/obj/item/weapon/melee/energy/sword" , "/obj/item/clothing/mask/gas/voice" , "/obj/item/device/chameleon" , "/obj/item/weapon/melee/baton/stunrod/loaded", "/obj/item/clothing/gloves/force/syndicate")
 				uses -= 4
 			if("/obj/item/weapon/storage/box/emps" , "/obj/item/weapon/pen/paralysis" , "/obj/item/weapon/cartridge/syndicate" , "/obj/item/clothing/under/chameleon" , \
 			"/obj/item/weapon/card/emag" , "/obj/item/weapon/storage/box/syndie_kit/space" , "/obj/item/device/encryptionkey/binary" , \
@@ -278,6 +279,8 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 			feedback_add_details("traitor_uplink_items_bought","MM")
 		if("/obj/item/weapon/melee/baton/stunrod/loaded")
 			feedback_add_details("traitor_uplink_items_bought","SR")
+		if("/obj/item/clothing/gloves/force/syndicate")
+			feedback_add_details("traitor_uplink_items_bought","FG")
 
 
 
