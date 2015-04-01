@@ -20,9 +20,14 @@ datum/sqlnews
 	var/time		//publishtime, time in gametime
 	var/id			//id, primary-key, of the news article that's destined for pulling.
 	var/running = 1	//whenever no results are found, this ticks over to a 0, and thus, no more updates.
+	var/fails = 0
 
 datum/sqlnews/proc/process()
 	if(!running == 1)	//No more news, immediate kill and return.
+		return
+
+	if(fails >= 5)		//If it sucks at running, we'll off it.
+		kill()
 		return
 
 	if(!id && !time)	//No entry loaded, update and load one.
@@ -37,6 +42,7 @@ datum/sqlnews/proc/update()		//Updates the stored variables and preppes it for a
 	establish_db_connection()
 	if(!dbcon.IsConnected())
 		error("SQL database connection failed. Attempted to fetch news information.")
+		fails++
 		return
 
 	var/DBQuery/query = dbcon.NewQuery("SELECT id, publishtime FROM aurora_news WHERE isnull(notpublishing) ORDER BY publishtime ASC LIMIT [count],1")
@@ -59,6 +65,7 @@ datum/sqlnews/proc/publish()	//Uses data stored from the update() proc and: pull
 	establish_db_connection()
 	if(!dbcon.IsConnected())
 		error("SQL database connection failed. Attempted to fetch news information.")
+		fails++
 		return
 
 	var/DBQuery/fetchquery = dbcon.NewQuery("SELECT channel, author, body FROM aurora_news WHERE id=[id]")
@@ -94,3 +101,7 @@ datum/sqlnews/proc/publish()	//Uses data stored from the update() proc and: pull
 
 	id = null
 	time = null
+
+datum/sqlnews/proc/kill()
+	running = 0
+	return

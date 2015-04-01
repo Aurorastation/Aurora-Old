@@ -190,6 +190,12 @@
 			return
 		if(mob.client)
 			if(mob.client.view != world.view)
+				for(var/obj/item/item in mob.contents)
+					if(item.zoom)
+						item.zoom()
+						break
+
+			/*
 				if(locate(/obj/item/weapon/gun/energy/rifle/sniperrifle, mob.contents))		// If mob moves while zoomed in with sniper rifle, unzoom them.
 					var/obj/item/weapon/gun/energy/rifle/sniperrifle/s = locate() in mob
 					if(s.zoom)
@@ -198,6 +204,7 @@
 					var/obj/item/weapon/gun/energy/laser/modular/s = locate() in mob
 					if(s.zoom)
 						s.zoom()
+			*/
 
 	if(Process_Grab())	return
 
