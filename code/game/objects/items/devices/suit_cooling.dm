@@ -12,6 +12,7 @@
 	throwforce = 10.0
 	throw_speed = 1
 	throw_range = 4
+	matter = list("metal" = 7500)
 
 	origin_tech = "magnets=2;materials=2"
 

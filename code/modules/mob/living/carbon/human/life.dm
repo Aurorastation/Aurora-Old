@@ -1373,12 +1373,12 @@
 				if((VAMP_FULL in mind.vampire.powers))
 					sight |= SEE_TURFS|SEE_MOBS|SEE_OBJS
 					see_in_dark = 8
-					see_invisible = SEE_INVISIBLE_LEVEL_TWO
+					see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
 
 			if(XRAY in mutations)
 				sight |= SEE_TURFS|SEE_MOBS|SEE_OBJS
 				see_in_dark = 8
-				if(!druggy)		see_invisible = SEE_INVISIBLE_LEVEL_TWO
+				if(!druggy)		see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
 
 			if(seer==1)
 				var/obj/effect/rune/R = locate() in loc

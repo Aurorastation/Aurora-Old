@@ -330,13 +330,13 @@
 	category = "General"
 
 /datum/autolathe/recipe/incendiaryshotgunmag
-	name = "incendiary shotgun ammunition - Magazine"
+	name = "incendiary shotgun ammunition - Box"
 	path = /obj/item/ammo_magazine/shotgun/incendiary
 	hidden = 1
 	category = "Arms and Ammunition"
 
 /datum/autolathe/recipe/incendiaryshotgunammo
-	name = "incendiary shotgun ammunation - Ammo"
+	name = "incendiary shotgun ammunition - Ammo"
 	path = /obj/item/ammo_casing/shotgun/incendiary
 	hidden = 1
 	category = "Arms and Ammunition"
@@ -346,3 +346,8 @@
 	path = /obj/item/device/transfer_valve
 	hidden = 1
 	category = "General"
+
+/datum/autolathe/recipe/suitcoolingunit
+	name = "suit cooling unit"
+	path = /obj/item/device/suit_cooling_unit
+	category = "Engineering"
