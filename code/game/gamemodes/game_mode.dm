@@ -39,6 +39,7 @@
 /obj/item/weapon/storage/box/syndicate:10:Syndicate Bundle;
 /obj/item/weapon/storage/box/emps:3:5 EMP Grenades;
 /obj/item/weapon/melee/baton/stunrod/loaded:4:Stunrod;
+/obj/item/clothing/gloves/force/syndicate:4:Force Gloves;
 Whitespace:Seperator;
 Stealthy and Inconspicuous Weapons;
 /obj/item/weapon/cane/syndie:5:Disguised Sword;

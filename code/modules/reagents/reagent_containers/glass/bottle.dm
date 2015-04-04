@@ -314,3 +314,35 @@
 	New()
 		..()
 		reagents.add_reagent("frostoil", 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/bicaridine
+	name = "Bicaridine bottle"
+	desc = "A small bottle. Contains bicaridine for treating brute trauma."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle2"
+	New()
+		..()
+		reagents.add_reagent("bicaridine", 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/dex_plus
+	name = "Dexalin plus bottle"
+	desc = "A small bottle. Contains dexalin plus for treating oxygen deprivation."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle20"
+	New()
+		..()
+		reagents.add_reagent("dexalinp", 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/dermaline
+	name = "Dermaline bottle"
+	desc = "A small bottle. Contains dermaline for treating severe burns."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle6"
+	New()
+		..()
+		reagents.add_reagent("dermaline", 30)
+
+
+
+
+

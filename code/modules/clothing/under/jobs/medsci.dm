@@ -105,11 +105,13 @@
 	item_color = "orderly"
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
+
 /obj/item/clothing/under/rank/medical/emt
 	name = "emergency medical technician's jumpsuit"
 	icon_state = "emt"
 	item_state = "emt"
 	item_color = "emt"
+
 /obj/item/clothing/under/rank/medical
 	desc = "It's made of a special fiber that provides minor protection against biohazards. It has a cross on the chest denoting that the wearer is trained medical personnel."
 	name = "medical doctor's jumpsuit"
@@ -141,7 +143,11 @@
 	item_color = "scrubspurple"
 	flags = FPRINT | TABLEPASS
 
-
+/obj/item/clothing/under/rank/medical/iac
+	name = "iac scrubs"
+	desc = "A change of sterile medical scrubs worn by IAC workers. Has minor protection against biohazards."
+	icon_state = "scrubsblue"
+	item_state = "scrubsblue"
 
 
 /*

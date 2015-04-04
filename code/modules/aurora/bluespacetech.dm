@@ -307,6 +307,10 @@
 
 		var/client/C = src.client
 		if(C.holder && C.holder.original_mob)
+			if(C.holder.original_mob.key)//Thanks for kicking Tish off the Server Meow, wouldn't have spotted this otherwise.
+				suicide()
+				return
+
 			C.holder.original_mob.key = key
 			C.holder.original_mob = null
 		suicide()
