@@ -34,6 +34,27 @@
 /obj/item/ammo_magazine/c45r/empty
 	max_ammo = 0
 
+/obj/item/ammo_magazine/c45s
+	name = "magazine (.45)"
+	icon_state = "45"
+	ammo_type = "/obj/item/ammo_casing/c45s"
+	max_ammo = 7
+	multiple_sprites = 1
+
+/obj/item/ammo_magazine/c45s/nonlethal
+	name = "magazine (.45)"
+	icon_state = "45"
+	ammo_type = "/obj/item/ammo_casing/c45s/nonlethal"
+	max_ammo = 7
+	multiple_sprites = 1
+
+/obj/item/ammo_magazine/c45s/flash
+	name = "magazine (.45) FLSH"
+	icon_state = "45"
+	ammo_type = "/obj/item/ammo_casing/c45s/flash"
+	max_ammo = 7
+	multiple_sprites = 1
+
 /obj/item/ammo_magazine/a418
 	name = "ammo box (.418)"
 	icon_state = "418"
