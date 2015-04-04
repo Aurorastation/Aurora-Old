@@ -88,3 +88,39 @@
 /obj/item/projectile/bullet/chameleon
 	damage = 1 // stop trying to murderbone with a fake gun dumbass!!!
 	embed = 0 // nope
+
+/obj/item/projectile/bullet/weakbullet/flash
+	name = "flash round"
+	damage = 5
+	agony = 0
+/obj/item/projectile/bullet/weakbullet/flash/on_hit(var/atom/target, var/blocked = 0)
+	playsound(src.loc, 'sound/weapons/flash.ogg', 100, 1)
+
+	if(ishuman(target))
+		var/mob/living/carbon/human/H = target
+		if(!H.eyecheck() > 0)
+			if(!H.blinded)
+				flick("e_flash", H:flash)
+				H << "\red The flash round blinds you!"
+				sleep (10)
+				flick("e_flash", H:flash)
+				sleep (10)
+				flick("e_flash", H:flash)
+				H << "\red nooooooo"
+
+	for(var/mob/living/carbon/human/M in oviewers(2, target))
+		if(!M.eyecheck() > 0)
+			if(!M.blinded)
+				flick("flash", M:flash)
+				M << "\red The flash round blinds you!"
+/*				sleep (5)
+				flick("e_flash", M:flash)
+				sleep (8)
+				flick("e_flash", M:flash)
+				sleep (10)
+				flick("e_flash", M:flash)
+				sleep (15)
+				flick("e_flash", M:flash)
+				sleep (20)
+				flick("e_flash", M:flash)
+				M << "\red nooooooo!"*/

@@ -166,6 +166,21 @@
 
 	var/mob/M = mob
 	var/area/A = get_area(M)
+
+	if(M.stat == DEAD)
+		if(holder.original_mob)
+			if(holder.original_mob.client)
+				if(alert(src, "There is someone else in your old body.\nWould you like to ghost instead?", "There is someone else in your old body, you will be ghosted", "Yes", "No") == "Yes")
+					mob.ghostize(1)
+					return
+				else
+					return
+			holder.original_mob.key = key
+			holder.original_mob = null
+			return
+		mob.ghostize(1)
+		return
+
 	if(!is_type_in_list(A,centcom_areas))
 		src << "\red You need to be back at central to do this"
 		return
@@ -174,12 +189,26 @@
 		if(holder.original_mob == M)
 			verbs -= /client/proc/returntobody
 			return
-		holder.original_mob.key = key
+
+		if(holder.original_mob.client)
+			if(alert(src, "There is someone else in your old body.\nWould you like to ghost instead?", "There is someone else in your old body, you will be ghosted", "Yes", "No") == "Yes")
+				mob.ghostize(0)
+			else
+				return
+		else
+			holder.original_mob.key = key
+
 		holder.original_mob = null
 	else
 		if(mob.mind.admin_mob_placeholder)
-			mob.mind.admin_mob_placeholder.key = key
-			mob.mind.admin_mob_placeholder = null
+			if(mob.mind.admin_mob_placeholder.client)
+				if(alert(src, "There is someone else in your old body.\nWould you like to ghost instead?", "There is someone else in your old body, you will be ghosted", "Yes", "No") == "Yes")
+					mob.ghostize(0)
+				else
+					return
+			else
+				mob.mind.admin_mob_placeholder.key = key
+			M.mind.admin_mob_placeholder = null
 		else
 			mob.ghostize(0)
 	verbs -= /client/proc/returntobody

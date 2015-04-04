@@ -216,7 +216,7 @@
 	colour = "vaurca"
 	key = "p"
 	flags = WHITELISTED
-	syllables = list("kic","klic","\'tic","kit","lit","xic","vil","xrit","tshh","qix","qlit","zix","*","!")
+	syllables = list("kic","klic","\'tic","kit","lit","xic","vil","xrit","tshh","qix","qlit","zix","\'","!")
 
 
 /datum/language/vox
@@ -251,7 +251,7 @@
 	return new_name
 
 /datum/language/common
-	name = "Galactic Common"
+	name = "Ceti Basic"
 	desc = "The common galactic tongue."
 	speech_verb = "says"
 	whisper_verb = "whispers"
@@ -305,7 +305,7 @@
 
 /datum/language/gutter
 	name = "Gutter"
-	desc = "Much like Standard, this crude pidgin tongue descended from numerous languages and serves as Tradeband for criminal elements."
+	desc = "Much like Ceti Basic, this crude pidgin tongue descended from numerous languages and serves as Tradeband for criminal elements."
 	speech_verb = "growls"
 	colour = "rough"
 	key = "3"
