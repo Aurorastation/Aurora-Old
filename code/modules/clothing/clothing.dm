@@ -394,6 +394,8 @@ BLIND     // can't see anything
 		*/
 	var/obj/item/clothing/tie/hastie = null
 	var/obj/item/clothing/tie/armband/aband = null
+	var/obj/item/clothing/tie/holster/holster = null
+	var/obj/item/clothing/tie/storage/webbing = null
 	var/displays_id = 1
 	var/rolled_down = 0
 	var/rolled_sleeves = 0
@@ -406,28 +408,58 @@ BLIND     // can't see anything
 		M.update_inv_w_uniform()
 
 /obj/item/clothing/under/attackby(obj/item/I, mob/user)
+	var/bandType = 0 //Tracking for hastie becuase I don't want to recode the lot yet
 	if(istype(I, /obj/item/clothing/tie))
 		if(istype(I, /obj/item/clothing/tie/armband))
 			if(!aband)
 				user.drop_item()
 				aband = I
 				aband.on_attached(src, user)
-
 				if(istype(loc, /mob/living/carbon/human))
 					var/mob/living/carbon/human/H = loc
 					H.update_inv_w_uniform()
 				return
-		if(!hastie)
+			bandType = 1
+
+		if(istype(I, /obj/item/clothing/tie/holster))
+			if(!holster && !webbing)
+				user.drop_item()
+				holster = I
+				holster.on_attached(src, user)
+				if(istype(loc, /mob/living/carbon/human))
+					var/mob/living/carbon/human/H = loc
+					H.update_inv_w_uniform()
+				return
+			bandType = 2
+
+		if(istype(I, /obj/item/clothing/tie/storage))
+			if(!holster && !webbing)
+				user.drop_item()
+				webbing = I
+				webbing.on_attached(src, user)
+				if(istype(loc, /mob/living/carbon/human))
+					var/mob/living/carbon/human/H = loc
+					H.update_inv_w_uniform()
+				return
+			bandType = 3
+
+		if(!hastie && !bandType)
 			user.drop_item()
 			hastie = I
 			hastie.on_attached(src, user)
-
 			if(istype(loc, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = loc
 				H.update_inv_w_uniform()
-
 			return
 
+
+	if(istype(I, /obj/item/weapon/gun))
+		if(holster)
+			holster.attackby(I, user)
+			return
+	if(webbing && bandType != 3)
+		webbing.attackby(I, user)
+		return
 	if(hastie)
 		hastie.attackby(I, user)
 		return
@@ -436,6 +468,13 @@ BLIND     // can't see anything
 
 /obj/item/clothing/under/attack_hand(mob/user as mob)
 	//only forward to the attached accessory if the clothing is equipped (not in a storage)
+
+	if(webbing && src.loc == user)
+		webbing.attack_hand(user)
+		return
+	if(holster && src.loc == user)
+		holster.attack_hand(user)
+		return
 	if(hastie && src.loc == user)
 		hastie.attack_hand(user)
 		return
@@ -480,6 +519,10 @@ BLIND     // can't see anything
 		usr << "\A [hastie] is clipped to it."
 	if(aband)
 		usr << "\A [aband] is wrapped around the sleeve."
+	if(webbing)
+		usr << "\A [webbing] is attached to it."
+	if(holster)
+		usr << "\A [holster] is  attached to it."
 
 /obj/item/clothing/under/proc/set_sensors(mob/usr as mob)
 	var/mob/M = usr
@@ -579,11 +622,37 @@ BLIND     // can't see anything
 				rolled_sleeves = 1
 
 /obj/item/clothing/under/proc/remove_accessory(mob/user as mob)
-	if(!hastie)
+	var/list/attachedItems = list()
+	if(aband)
+		attachedItems += "armband"
+	if(holster)
+		attachedItems += "holster"
+	if(webbing)
+		attachedItems += "webbing"
+	if(hastie)
+		attachedItems += "other"
+
+	if(!attachedItems)
 		return
 
-	hastie.on_removed(user)
-	hastie = null
+	var/selection = input("Select what Accessory to remove","",null) as null|anything in attachedItems
+
+	if(!selection)
+		return
+
+	switch(selection)
+		if("armband")
+			aband.on_removed(user)
+			aband = null
+		if("holster")
+			holster.on_removed(user)
+			holster = null
+		if("webbing")
+			webbing.on_removed(user)
+			webbing = null
+		if("other")
+			hastie.on_removed(user)
+			hastie = null
 	update_clothing_icon()
 
 /obj/item/clothing/under/verb/removetie()
@@ -595,6 +664,7 @@ BLIND     // can't see anything
 
 	src.remove_accessory(usr)
 
+/*
 /obj/item/clothing/under/proc/remove_armband(mob/user as mob)
 	if(!aband)
 		return
@@ -611,6 +681,7 @@ BLIND     // can't see anything
 	if(usr.stat) return
 
 	src.remove_armband(usr)
+*/
 
 /obj/item/clothing/under/rank/New()
 	sensor_mode = pick(0,1,2,3)
@@ -619,5 +690,9 @@ BLIND     // can't see anything
 /obj/item/clothing/under/emp_act(severity)
 	if (hastie)
 		hastie.emp_act(severity)
+	if (webbing)
+		webbing.emp_act(severity)
+	if (holster)
+		holster.emp_act(severity)
 	..()
 

@@ -597,6 +597,16 @@ proc/get_damage_icon_part(damage_state, body_part)
 			if(!aband_color) aband_color = w_uniform:aband.icon_state
 			standing.overlays	+= image("icon" = 'icons/mob/ties.dmi', "icon_state" = "[aband_color]")
 
+		if(w_uniform:webbing)	//SAME THING AS ABOVE, LETS ADD TWO MORE FOR LOLS
+			var/webbing_color = w_uniform:webbing.item_color
+			if(!webbing_color) webbing_color = w_uniform:webbing.icon_state
+			standing.overlays	+= image("icon" = 'icons/mob/ties.dmi', "icon_state" = "[webbing_color]")
+
+		if(w_uniform:holster)	//SAME THING AS ABOVE, THIS IS FUN
+			var/holster_color = w_uniform:holster.item_color
+			if(!holster_color) holster_color = w_uniform:holster.icon_state
+			standing.overlays	+= image("icon" = 'icons/mob/ties.dmi', "icon_state" = "[holster_color]")
+
 		overlays_standing[UNIFORM_LAYER]	= standing
 	else
 		overlays_standing[UNIFORM_LAYER]	= null

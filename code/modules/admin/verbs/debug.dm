@@ -864,7 +864,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			hold.holstered = weapon
 
 			var/obj/item/clothing/under/rank/ert/under = new(M)
-			under.hastie = hold
+			under.holster = hold
 			hold.has_suit = under
 			hold.has_suit.overlays += hold.inv_overlay
 
@@ -1092,7 +1092,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		if("syndicate operator")
 
 			var/obj/item/clothing/under/syndicate/combat/tac_uniform = new(M)
-			tac_uniform.hastie = new /obj/item/clothing/tie/storage/black_vest(tac_uniform)
+			tac_uniform.webbing = new /obj/item/clothing/tie/storage/black_vest(tac_uniform)
 			M.equip_to_slot_or_del(tac_uniform, slot_w_uniform)
 
 			M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/syndi(M), slot_wear_suit)
@@ -1131,7 +1131,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		if("iac_medic")
 
 			var/obj/item/clothing/under/rank/medical/iac = new(M)
-			iac.hastie = new /obj/item/clothing/tie/armband/iac(iac)
+			iac.aband = new /obj/item/clothing/tie/armband/iac(iac)
 			M.equip_to_slot_or_del(iac, slot_w_uniform)
 
 			M.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/labcoat/iac(M), slot_wear_suit)
