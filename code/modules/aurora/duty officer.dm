@@ -112,6 +112,7 @@
 			M.key = key
 
 			if(wasLiving)
+				clearDutyJob(holder.original_mob)
 				spawn(1)
 					holder.original_mob.key = "@[key]"
 
@@ -213,3 +214,10 @@
 			mob.ghostize(0)
 	verbs -= /client/proc/returntobody
 	del(M)
+
+/proc/clearDutyJob(var/mob/living/carbon/human/M)
+	spawn(9000)
+		if(!M.client)
+			var/oldjob = M.mind.assigned_role
+			job_master.FreeRole(oldjob)
+	return
