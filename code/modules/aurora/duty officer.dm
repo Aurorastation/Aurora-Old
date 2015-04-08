@@ -18,6 +18,7 @@
 
 	if(mob.mind && mob.mind.special_role == "Duty Officer")
 		src << "\red You are already a Duty Officer"
+		verbs += /client/proc/returntobody
 		return
 
 	var/wasLiving = 0
@@ -172,6 +173,7 @@
 		if(holder.original_mob)
 			if(holder.original_mob.client)
 				if(alert(src, "There is someone else in your old body.\nWould you like to ghost instead?", "There is someone else in your old body, you will be ghosted", "Yes", "No") == "Yes")
+					M.mind.special_role = null
 					mob.ghostize(1)
 					return
 				else
@@ -179,6 +181,7 @@
 			holder.original_mob.key = key
 			holder.original_mob = null
 			return
+		M.mind.special_role = null
 		mob.ghostize(1)
 		return
 
@@ -193,6 +196,7 @@
 
 		if(holder.original_mob.client)
 			if(alert(src, "There is someone else in your old body.\nWould you like to ghost instead?", "There is someone else in your old body, you will be ghosted", "Yes", "No") == "Yes")
+				M.mind.special_role = null
 				mob.ghostize(0)
 			else
 				return
@@ -204,6 +208,7 @@
 		if(mob.mind.admin_mob_placeholder)
 			if(mob.mind.admin_mob_placeholder.client)
 				if(alert(src, "There is someone else in your old body.\nWould you like to ghost instead?", "There is someone else in your old body, you will be ghosted", "Yes", "No") == "Yes")
+					M.mind.special_role = null
 					mob.ghostize(0)
 				else
 					return
@@ -211,6 +216,7 @@
 				mob.mind.admin_mob_placeholder.key = key
 			M.mind.admin_mob_placeholder = null
 		else
+			M.mind.special_role = null
 			mob.ghostize(0)
 	verbs -= /client/proc/returntobody
 	del(M)
