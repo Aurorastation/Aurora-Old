@@ -124,7 +124,12 @@
 			M.equip_if_possible(new /obj/item/clothing/glasses/sunglasses/sechud(M), slot_glasses)
 			M.equip_if_possible(new /obj/item/clothing/head/beret/centcom/officer(M), slot_head)
 			M.equip_if_possible(new /obj/item/weapon/melee/telebaton(M), slot_l_store)
-			M.equip_if_possible(new /obj/item/device/taperecorder(M), slot_r_store)
+			M.equip_if_possible(new /obj/item/device/taperecorder/duty_officer(M), slot_r_store)
+
+			var/obj/item/weapon/storage/backpack/satchel/bag = new(M)
+			bag.name = "officer's leather satchel"
+			bag.desc = "A well cared for leather satchel for Nanotrasen officers."
+			M.equip_if_possible(bag, slot_back)
 
 			var /obj/item/weapon/storage/lockbox/lockbox = new(M)
 			lockbox.req_access = list(access_cent_captain)
