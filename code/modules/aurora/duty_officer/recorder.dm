@@ -120,7 +120,7 @@
 
 	var/date_string = time2text(world.realtime, "YYYY_MM_DD")
 	var/fileLoc = "data/dutylogs/[usr.ckey]/[date_string]-[case]-[interviewee].log"
-	var/fileName = "[date_string]-[case].log"
+	var/fileName = "[date_string]-[case]-[interviewee].log"
 	if(fexists(fileLoc))
 		var/safe = 0
 		var/i = 1
