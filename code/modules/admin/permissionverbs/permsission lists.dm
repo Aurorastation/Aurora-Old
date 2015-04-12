@@ -197,6 +197,8 @@ var/list/admin_verbs_server = list(
 	/client/proc/check_customitem_activity,
 	/client/proc/cmd_admin_delete,		/*delete an instance/object/mob/etc*/
 	/client/proc/cmd_debug_del_all,
+//	/client/proc/eventHost_grant,
+//	/client/proc/eventHost_revoke,
 	/client/proc/everyone_random,
 	/client/proc/nanomapgen_DumpImage,
 	/client/proc/SDQL_query,
@@ -224,6 +226,8 @@ var/list/admin_verbs_debug = list(
 	/client/proc/debug_controller,
 	/client/proc/debug_variables,
 	/client/proc/enable_debug_verbs,
+//	/client/proc/eventHost_grant,
+//	/client/proc/eventHost_revoke,
 	/client/proc/fillspace,
 	/client/proc/getruntimelog,
 	/client/proc/hide_activity,
@@ -396,7 +400,8 @@ var/list/admin_verbs_duty = list(
 	/client/proc/spawn_duty_officer,
 	/client/proc/cmd_admin_create_centcom_report,
 	/client/proc/cmd_duty_say,
-	/client/proc/returntobody
+	/client/proc/returntobody,
+	/client/proc/view_duty_log
 )
 
 /client/proc/add_admin_verbs()

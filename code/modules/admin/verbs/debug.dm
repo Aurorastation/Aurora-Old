@@ -864,7 +864,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			hold.holstered = weapon
 
 			var/obj/item/clothing/under/rank/ert/under = new(M)
-			under.hastie = hold
+			under.holster = hold
 			hold.has_suit = under
 			hold.has_suit.overlays += hold.inv_overlay
 
@@ -873,9 +873,9 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/swat(M), slot_shoes)
 			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/swat(M), slot_gloves)
 			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(M), slot_l_ear)
-			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun(M), slot_belt)
-			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(M), slot_glasses)
+			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses/sechud(M), slot_glasses)
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(M), slot_back)
+			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun(M.back), slot_in_backpack)
 
 			var/obj/item/weapon/card/id/W = new(M)
 			W.name = "[M.real_name]'s ID Card"
@@ -1092,7 +1092,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		if("syndicate operator")
 
 			var/obj/item/clothing/under/syndicate/combat/tac_uniform = new(M)
-			tac_uniform.hastie = new /obj/item/clothing/tie/storage/black_vest(tac_uniform)
+			tac_uniform.webbing = new /obj/item/clothing/tie/storage/black_vest(tac_uniform)
 			M.equip_to_slot_or_del(tac_uniform, slot_w_uniform)
 
 			M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/syndi(M), slot_wear_suit)
@@ -1131,7 +1131,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		if("iac_medic")
 
 			var/obj/item/clothing/under/rank/medical/iac = new(M)
-			iac.hastie = new /obj/item/clothing/tie/armband/iac(iac)
+			iac.aband = new /obj/item/clothing/tie/armband/iac(iac)
 			M.equip_to_slot_or_del(iac, slot_w_uniform)
 
 			M.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/labcoat/iac(M), slot_wear_suit)

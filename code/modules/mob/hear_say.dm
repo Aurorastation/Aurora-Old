@@ -52,7 +52,8 @@
 	var/track = null
 	if(istype(src, /mob/dead/observer))
 		if(italics && client.prefs.toggles & CHAT_GHOSTRADIO)
-			return
+			if(!verb == ("whispers" || " quietly" || " softly"))
+				return
 		if(speaker_name != speaker.real_name && speaker.real_name)
 			speaker_name = "[speaker.real_name] ([speaker_name])"
 		track = "(<a href='byond://?src=\ref[src];track=\ref[speaker]'>follow</a>) "

@@ -532,6 +532,24 @@
 					return
 				else
 					message = "\red <B>[source] is trying to take off \a [suit.hastie] from [target]'s suit!</B>"
+			if("webbing")
+				var/obj/item/clothing/under/suit = target.w_uniform
+				target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had their webbing ([suit.webbing]) removed by [source.name] ([source.ckey])</font>")
+				source.attack_log += text("\[[time_stamp()]\] <font color='red'>Attempted to remove [target.name]'s ([target.ckey]) webbing ([suit.webbing])</font>")
+				message = "\red <B>[source] is trying to take off \a [suit.webbing] from [target]'s suit!</B>"
+			if("holster")
+				var/obj/item/clothing/under/suit = target.w_uniform
+				target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had their holster ([suit.holster]) removed by [source.name] ([source.ckey])</font>")
+				source.attack_log += text("\[[time_stamp()]\] <font color='red'>Attempted to remove [target.name]'s ([target.ckey]) holster ([suit.holster])</font>")
+				message = "\red <B>[source] is trying to take off \a [suit.hastie] from [target]'s suit!</B>"
+			if("aband")
+				var/obj/item/clothing/under/suit = target.w_uniform
+				target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had their armand ([suit.aband]) removed by [source.name] ([source.ckey])</font>")
+				source.attack_log += text("\[[time_stamp()]\] <font color='red'>Attempted to remove [target.name]'s ([target.ckey]) armband ([suit.aband])</font>")
+				for(var/mob/M in viewers(target, null))
+					M.show_message("\red <B>[source] tears off \the [suit.aband] from [target]'s suit!</B>" , 1)
+				done()
+				return
 			if("s_store")
 				target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had their suit storage item ([target.s_store]) removed by [source.name] ([source.ckey])</font>")
 				source.attack_log += text("\[[time_stamp()]\] <font color='red'>Attempted to remove [target.name]'s ([target.ckey]) suit storage item ([target.s_store])</font>")
@@ -668,6 +686,21 @@ It can still be worn/put on as normal.
 				suit.hastie = null*/
 			suit.hastie.on_removed(usr)
 			suit.hastie = null
+			target.update_inv_w_uniform()
+		if("aband")
+			var/obj/item/clothing/under/suit = target.w_uniform
+			suit.aband.on_removed(usr)
+			suit.aband = null
+			target.update_inv_w_uniform()
+		if("holster")
+			var/obj/item/clothing/under/suit = target.w_uniform
+			suit.holster.on_removed(usr)
+			suit.holster = null
+			target.update_inv_w_uniform()
+		if("webbing")
+			var/obj/item/clothing/under/suit = target.w_uniform
+			suit.webbing.on_removed(usr)
+			suit.webbing = null
 			target.update_inv_w_uniform()
 		if("id")
 			slot_to_process = slot_wear_id

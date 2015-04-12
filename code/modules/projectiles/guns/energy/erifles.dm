@@ -145,6 +145,15 @@ Commenting out right now, due to a lack of sprites existing. I hate on-mob weapo
 
 	zoom()
 
+/obj/item/weapon/gun/energy/rifle/sniperrifle/ready_to_fire()
+	if(!zoom)
+		return 0
+	if(world.time >= last_fired + fire_delay)
+		last_fired = world.time
+		return 1
+	else
+		return 0
+
 ///////////LASER CANNON//////////////
 
 /obj/item/weapon/gun/energy/rifle/lasercannon
