@@ -206,8 +206,32 @@
 	icon_state = "satchel-cap"
 	item_state = "captainpack"
 
-/obj/item/weapon/storage/backpack/ert
+/obj/item/weapon/storage/backpack/ert //General use ruck
 	name = "combat ruck"
 	desc = "A large rucksack with supports and webbing, specifically designed for combat operations and equipment carrying."
 	icon_state = "ert_ruck"
 	item_state = "ert_ruck"
+
+/obj/item/weapon/storage/backpack/ert/leader
+	name = "commander's combat ruck"
+	desc = "A large rucksack with supports and webbing, specifically designed for combat operations and equipment carrying. This one has blue highlights, denoting a squad leader."
+	icon_state = "ert_commander"
+	item_state = "ert_commander"
+
+/obj/item/weapon/storage/backpack/ert/sapper
+	name = "engineer's combat ruck"
+	desc = "A large rucksack with supports and webbing, specifically designed for combat operations and equipment carrying. This one has bright yellow highlights, denoting a sapper."
+	icon_state = "ert_engineering"
+	item_state = "ert_engineering"
+
+/obj/item/weapon/storage/backpack/ert/medic
+	name = "medic's combat ruck"
+	desc = "A large rucksack with supports and webbing, specifically designed for combat operations and equipment carrying. This one has white highlights, denoting a squad medic."
+	icon_state = "ert_medical"
+	item_state = "ert_medical"
+
+/obj/item/weapon/storage/backpack/ert/security
+	name = "combat ruck"
+	desc = "A large rucksack with supports and webbing, specifically designed for combat operations and equipment carrying. This one has bright red highlights, denoting a squad combat trooper."
+	icon_state = "ert_security"
+	item_state = "ert_security"

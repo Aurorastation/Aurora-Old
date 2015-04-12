@@ -103,8 +103,8 @@ var/global/list/uneatable = list(
 	last_warning = world.time
 	var/count = locate(/obj/machinery/containment_field) in orange(30, src)
 	if(!count)
-		message_mods("A singulo has been created without containment fields active ([x],[y],[z])")
-		message_admins("A singulo has been created without containment fields active ([x],[y],[z])",1)
+		message_mods("A singulo has been created without containment fields active ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>))")
+		message_admins("A singulo has been created without containment fields active ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>))",1)
 	investigate_log("was created. [count?"":"<font color='red'>No containment fields were active</font>"]","singulo")
 
 /obj/machinery/singularity/proc/dissipate()

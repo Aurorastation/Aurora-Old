@@ -39,6 +39,7 @@
 /obj/item/weapon/storage/box/syndicate:10:Syndicate Bundle;
 /obj/item/weapon/storage/box/emps:3:5 EMP Grenades;
 /obj/item/weapon/melee/baton/stunrod/loaded:4:Stunrod;
+/obj/item/clothing/gloves/force/syndicate:4:Force Gloves;
 Whitespace:Seperator;
 Stealthy and Inconspicuous Weapons;
 /obj/item/weapon/cane/syndie:5:Disguised Sword;
@@ -93,16 +94,16 @@ Implants;
 		if((player.client)&&(player.ready))
 			playerC++
 
-	msg_scopes("playerC: [playerC]")
+	msg_scopes("[src] playerC: [playerC]")
 	if(master_mode=="secret")
-		msg_scopes("req [required_players_secret]")
+		msg_scopes("[src] req [required_players_secret]")
 		if(playerC >= required_players_secret)
 			return 1
 	else
-		msg_scopes("req [required_players]")
+		msg_scopes("[src] req [required_players]")
 		if(playerC >= required_players)
 			return 1
-	msg_scopes("Nope, players not here or something")
+	msg_scopes("[src] Nope, players not here or something")
 	return 0
 
 
@@ -323,6 +324,7 @@ Implants;
 		for(var/datum/mind/player in candidates)
 			for(var/job in restricted_jobs)
 				if(player.assigned_role == job)
+					msg_scopes("[player.key] has a Restricted Job [job]")
 					candidates -= player
 
 	/*if(candidates.len < recommended_enemies)

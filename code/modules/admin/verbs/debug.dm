@@ -555,6 +555,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		"blue wizard",
 		"red wizard",
 		"marisa wizard",
+		"protection detail",
 		"emergency response team",
 		"ert trooper",
 		"ert leading trooper",
@@ -565,6 +566,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		"nanotrasen officer",
 		"nanotrasen captain",
 		"shadowling"
+//		"iac_medic"
 		)
 	var/dresscode = input("Select dress for [M]", "Robust quick dress shop") as null|anything in dresspacks
 	if (isnull(dresscode))
@@ -854,6 +856,36 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			W.registered_name = M.real_name
 			M.equip_if_possible(W, slot_wear_id)
 
+		if("protection detail")
+
+			var/obj/item/clothing/tie/holster/hold = new(M)
+			var/obj/item/weapon/gun/energy/gun/pistol/weapon = new(M)
+			hold.contents += weapon
+			hold.holstered = weapon
+
+			var/obj/item/clothing/under/rank/ert/under = new(M)
+			under.holster = hold
+			hold.has_suit = under
+			hold.has_suit.overlays += hold.inv_overlay
+
+			M.equip_to_slot_or_del(under, slot_w_uniform)
+			M.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/ert(M), slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/swat(M), slot_shoes)
+			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/swat(M), slot_gloves)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(M), slot_l_ear)
+			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses/sechud(M), slot_glasses)
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(M), slot_back)
+			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun(M.back), slot_in_backpack)
+
+			var/obj/item/weapon/card/id/W = new(M)
+			W.name = "[M.real_name]'s ID Card"
+			W.icon_state = "centcom"
+			W.access = get_all_accesses()
+			W.access += get_ert_access()
+			W.assignment = "ERT Protection Detail"
+			W.registered_name = M.real_name
+			M.equip_to_slot_or_del(W, slot_wear_id)
+
 		if("emergency response team")
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/ert(M), slot_w_uniform)
 			M.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/ert(M), slot_wear_suit)
@@ -868,7 +900,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			W.name = "[M.real_name]'s ID Card"
 			W.icon_state = "centcom"
 			W.access = get_all_accesses()
-			W.access += get_all_centcom_access()
+			W.access += get_ert_access()
 			W.assignment = "Emergency Response Team"
 			W.registered_name = M.real_name
 			M.equip_to_slot_or_del(W, slot_wear_id)
@@ -1060,7 +1092,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		if("syndicate operator")
 
 			var/obj/item/clothing/under/syndicate/combat/tac_uniform = new(M)
-			tac_uniform.hastie = new /obj/item/clothing/tie/storage/black_vest(tac_uniform)
+			tac_uniform.webbing = new /obj/item/clothing/tie/storage/black_vest(tac_uniform)
 			M.equip_to_slot_or_del(tac_uniform, slot_w_uniform)
 
 			M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/syndi(M), slot_wear_suit)
@@ -1095,7 +1127,45 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			W.assignment = "Field Operator"
 			W.registered_name = M.real_name
 			M.equip_to_slot_or_del(W, slot_wear_id)
+/* REMOVED BECAUSE STUCK
+		if("iac_medic")
 
+			var/obj/item/clothing/under/rank/medical/iac = new(M)
+			iac.aband = new /obj/item/clothing/tie/armband/iac(iac)
+			M.equip_to_slot_or_del(iac, slot_w_uniform)
+
+			M.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/labcoat/iac(M), slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/white(M), slot_shoes)
+			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/latex(M), slot_gloves)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/headset_med(M), slot_l_ear)
+			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/hud/health(M), slot_glasses)
+			M.equip_to_slot_or_del(new /obj/item/clothing/mask/surgical(M), slot_wear_mask)
+
+			var/obj/item/weapon/storage/belt/medical/medical = new(M)
+			medical.contents += new /obj/item/weapon/reagent_containers/hypospray
+			medical.contents += new /obj/item/weapon/reagent_containers/glass/bottle/antitoxin
+			medical.contents += new /obj/item/weapon/reagent_containers/glass/bottle/inaprovaline
+			medical.contents += new /obj/item/weapon/reagent_containers/glass/bottle/bicaridine
+			medical.contents += new /obj/item/weapon/reagent_containers/glass/bottle/dex_plus
+			medical.contents += new /obj/item/weapon/reagent_containers/glass/bottle/dermaline
+			medical.contents += new /obj/item/stack/medical/advanced/bruise_pack
+			medical.contents += new /obj/item/stack/medical/advanced/ointment
+			M.equip_to_slot_or_del(medical, slot_belt)
+
+			M.equip_to_slot_or_del(new /obj/item/device/healthanalyzer(M), slot_l_store)
+			M.equip_to_slot_or_del(new /obj/item/device/flash(M), slot_r_store)
+			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/emt(M), slot_back)
+			M.equip_to_slot_or_del(new /obj/item/device/flashlight/pen(M), slot_s_store)
+
+			var/obj/item/weapon/card/id/silver/W = new(src)
+			W.name = "[M.real_name]'s ID Card"
+			W.icon_state = "id"
+			W.access = get_all_accesses()//Full station access because, DOCTOR HAAAAAAAALP MEEEEEE
+			W.access += list(access_cent_general, access_cent_specops, access_cent_storage)//CC access to the ERT area(s) so they can gear up and get to the station.
+			W.assignment = "IAC Worker"
+			W.registered_name = M.real_name
+			M.equip_to_slot_or_del(W, slot_wear_id)
+*/
 	M.regenerate_icons()
 
 	log_admin("[key_name(usr)] changed the equipment of [key_name(M)] to [dresscode].")

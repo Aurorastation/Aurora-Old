@@ -533,18 +533,42 @@
 	item_state = "amy_gloves"
 	clipped = 1
 
-/obj/item/clothing/tie/storage/fluff/cecillia_locket //Old locket - Cecillia Lambert - casperf1 - DONE
+/obj/item/clothing/tie/fluff/cecillia_locket //Old locket - Cecillia Lambert - casperf1 - DONE
 	name = "old locket"
 	desc = "A dark metal locket, it seems at least sixty years old. The photo that was once inside is gone."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "cecillia_locket1" //Keep as one, to indicate glass.
 	item_state = "cecillia_locket1"
 	item_color = "cecillia_locket1"
-	slots = 1
+	slot_flags = SLOT_MASK
+
+	var/pill
+
+	attack_self(mob/user as mob)
+		if(pill)
+			user.put_in_hands(pill)
+			user << "\blue You take out the pill that was housed in the [src]."
+			pill = null
+			icon_state = "cecillia_locket0"
+			item_state = icon_state
+			update_icon()
+
+	attackby(obj/item/I, mob/usr)
+		if(istype(I, /obj/item/weapon/reagent_containers/pill/) && !pill)
+			usr.u_equip(I)
+			I.loc = src
+			pill = I
+			I.dropped(usr)
+			I.add_fingerprint(usr)
+			add_fingerprint(usr)
+			icon_state = "cecillia_locket1"
+			item_state = icon_state
+			usr << "\blue You securely fit the [I] into the [src]."
+			update_icon()
 
 	New()
 		..()
-		new /obj/item/weapon/reagent_containers/pill/cecillia_pill(hold)
+		pill = new /obj/item/weapon/reagent_containers/pill/cecillia_pill()
 		return
 
 /obj/item/weapon/reagent_containers/pill/cecillia_pill
@@ -732,19 +756,15 @@
 			src.item_state = "ushanka_avadown"
 			user << "You lower the ear flaps on the ushanka."
 
-/obj/item/clothing/tie/fluff/hamil_badge // Internal Investigations Badge - Muhammad Hamil - Jackboot - DONE
+/obj/item/clothing/tie/holobadge/fluff/hamil_badge // Internal Investigations Badge - Muhammad Hamil - Jackboot - DONE
 	name = "Internal Investigations Badge"
 	desc = "An Internal Investigation badge. Used by a special branch of the Elyran police force."
 	icon = 'icons/obj/custom_items.dmi'
-	item_state = "hamil_badge"
+	icon_state = "hamil_badge"
 
 	attack_self(mob/user as mob)
 		if(isliving(user))
 			user.visible_message("\red [user] flashes their [src].\nIt reads: Muhammad Hamil, Internal Investigations, Persepolis..","\red You display the [src].\nIt reads: Muhammad Hamil, Internal Investigations, Persepolis.")
-
-	attack(mob/living/carbon/human/M, mob/living/user)
-		if(isliving(user))
-			user.visible_message("\red [user] invades [M]'s personal space, thrusting [src] into their face insistently.","\red You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.")
 
 /obj/item/clothing/mask/gas/fluff/stefan_mask // Modified Gas Mask - Oliver Stefan - Nbielinski - DONE
 	desc = "This odd looking gas mask is quite clearly not of NanoTrasen origin as it sports a black metal polish, as well as a reflective face plate that mirrors the view of the mask itself. This particular mask appears to breathe with the user, hissing when they exhale, and whining softly as they inhale."
@@ -887,7 +907,8 @@
 /obj/item/device/taperecorder/fluff/language_processor //Advanced Language Processing Board - Android - TheCritsyBear
 	name = "Advanced Language Processing Board"
 	desc = "A slightly advanced, but not uncommon upgrade module considered to be the cheapest of its kind. It has the markings of an independent retailer- not standard NanoTrasen hardware."
-	icon_state = "paragon_datachip"
+	icon = 'icons/obj/module.dmi'
+	icon_state = "cyborg_upgrade3"
 	item_state = "dermal"
 	slot_flags = SLOT_HEAD
 
@@ -917,3 +938,300 @@
 	item_state = "dove_necklace"
 	item_color = "dove_necklace"
 	slot_flags = SLOT_MASK
+
+/obj/item/weapon/nullrod/fluff/hartam_rod // Faol's resolve - Hartam Bartam
+	name = "Faol's resolve"
+	desc = "A symbol forged of steel, tempered in holy water, it has several gold-colored rings on it. Judging by the numerous dents and scratches on this thing, it has seen a lot of years..."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "hartam_rod"
+
+/obj/item/device/radio/headset/fluff/sam_implant // Cochlear Implant - Samantha Mason - Bakagaijin
+	name = "Cochlear Implant"
+	desc = "A specialized earpiece and headset combination. It appears to help those who are deaf hear."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "sam_implant"
+
+/obj/item/weapon/melee/fluff/tina_knife // Consecrated Athame - Tina Kaekel - Tainevva
+	name = "Consecrated Athame"
+	desc = "An athame used in occult rituals. The double-edged dagger is dull. The handle is black with a pink/white occult design strewn about it, and 'Tina' is inscribed into it in decorated letters."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "tina_knife"
+	flags = FPRINT | TABLEPASS
+	slot_flags = SLOT_BELT
+	w_class = 1
+	force = 2
+
+/obj/item/clothing/tie/holobadge/fluff/peter_badge // Peter Stone's badge - Peter Stone - Jakers457
+	name = "Peter Stone's badge"
+	desc = "An old looking badge that has seen as many ordeals as its owner. It has the name 'Peter Stone' inscribed on it."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "peter_badge"
+	stored_name = "Peter Stone"
+
+/obj/item/clothing/tie/armband/iac_armband // Interstellar Aid Corps armband - Grey Ryan - Jackboot
+	name = "Interstellar Aid Corps armband"
+	desc = "An armband denoting its wearer as a medical worker of the Interstellar Aid Corps."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "iac_armband"
+	item_color = "iac"
+
+/obj/item/clothing/gloves/fluff/imraj_kara // kara - Imraj Brar - Canon35
+	name = "kara"
+	desc = "A bracelet made of what looks like steel."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "imraj_kara"
+	item_color = "imraj_kara"
+
+/obj/item/weapon/melee/fluff/imraj_kirpan // kirban - Imraj Brar - Canon35
+	name = "kirpan"
+	desc = "A knife with a metal grip and blade, has strange characters written on the sides."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "imraj_kirpan"
+	item_state = "imraj_kirpan"
+	w_class = 2.0
+	throwforce = 0
+	throw_speed = 4
+	throw_range = 20
+
+/obj/item/clothing/head/fluff/imraj_turban // turban - Imraj Brar - Canon35
+	name = "turban"
+	desc = "A piece of soft headgear."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "imraj_turban"
+	item_state = "imraj_turban"
+	armor = list(melee = 20, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
+
+/obj/item/weapon/fluff/imraj_kangha // kangha - Imraj Brar - Canon35
+	name = "kangha"
+	desc = "A small wooden comb."
+	w_class = 1.0
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "imraj_kangha"
+
+	attack_self(mob/user)
+		if(user.r_hand == src || user.l_hand == src)
+			var/mobgender
+			if(user.gender == "male")
+				mobgender = "guy"
+			else
+				mobgender = "gal"
+			for(var/mob/O in viewers(user, null))
+				O.show_message(text("\red [] uses [] to comb their hair with incredible style and sophistication. What a [mobgender].", user, src), 1)
+		return
+
+/obj/item/clothing/suit/fluff/apophis_coat // Thick Jacket - Apophis Quihtzin - Kingmatt9
+	name = "thick jacket"
+	desc = "A brown leather trenchcoat-like jacket, it smells of snow."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "apophis_jacket"
+	item_state = "apophis_jacket"
+
+/obj/item/clothing/suit/armor/vest/fluff/sam_armour // Stabproof Vest - Sam Macnaughton - Sgtsammac
+	name = "stab proof vest"
+	desc = "It's a red vest, with high visibility strips. You can see the emblem of the NanoTrasen security division on the right breast."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "sam_armour"
+	item_state = "sam_armour"
+
+//////////////////////////////////////////
+////////////REDO THIS/////////////
+//////////////////////////////////////////
+/obj/item/device/radio/fluff/smile_bara // Dr. Smile - Daniela Baranova - Rechkalov
+	name = "Dr. Smile"
+	desc = "A black suitcase with a simple yet soothing/supportive smiley-face on them."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "smilemotherfucker"
+	item_state = "smilemotherfucker_m"
+
+/obj/item/weapon/coin/fluff/luna_coin //Purple Coin - Luna Tsuki - Wer6
+	name = "purple coin"
+	desc = "An anodized purple titanium coin in a sealed transparent case. The stamped portrait of a woman adorns one side, with the name 'Luna Tsuki' beneath. A hawk symbol rests on the opposing side, with the words 'We will miss you!' stamped beneath."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "luna_coin"
+
+	attack_self(mob/user as mob)
+		user << "\blue You find it unwise to flip the encased coin."
+		return
+
+	attackby(obj/item/weapon/W as obj, mob/user as mob)
+		return
+
+/obj/item/clothing/suit/storage/fluff/varick_coat //Frontier Duffle Coat - Talia Varick - OneOneThreeEight
+	name = "Frontier duffle coat"
+	desc = "A lightweight, navy duffle coat. This frontier coat is fashioned with horn-toggles, a golden leopard pin, cuff tassles and even intentional decorative tears in the fabric itself."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "varick_coat_open"
+	item_state = "varick_coat_open"
+
+	verb/toggle()
+		set name = "Toggle horn toggles"
+		set category = "Object"
+		set src in usr
+
+		if(!usr.canmove || usr.stat || usr.restrained())
+			return 0
+
+		switch(icon_state)
+			if("varick_coat_open")
+				src.icon_state = "varick_coat_closed"
+				usr << "You fasten the coat's horn-toggles."
+			if("varick_coat_closed")
+				src.icon_state = "varick_coat_open"
+				usr << "You unfasten the coat's horn-toggles"
+
+		usr.update_inv_wear_suit()
+
+/obj/item/clothing/under/rank/fluff/faust_uniform //Eridani Federal Army uniform - Bryce Faust - Hackie Mhan
+	name = "Eridani Federal Army uniform"
+	desc = "This uniform is old, with multiple stitches. Certain parts of the uniform are missing and yet it is still of a distinctly high quality"
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "faust_uniform"
+	item_color = "faust_uniform"
+	item_state = "faust_uniform"
+
+/obj/item/clothing/head/beret/fluff/faust_beret //military beret - Bryce Faust - Hackie Mhan
+	name = "military beret"
+	desc = "This beret has the Eridani Federal Army symbol, it's old but still in good shape."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "faust_beret"
+	item_state = "faust_beret"
+
+/obj/item/clothing/head/ushanka/fluff/kuznetsov_ushanka	// Ushanka - Dominika Kuznetsov - Kerbal22
+	name = "ushanka"
+	desc = "A comfortable fur ushanka with a small red star embroidered on the front."
+
+/obj/item/clothing/mask/cigarette/pipe/fluff/hazeri_pipe //Hazeri's Pipe - Hazeri Saakhat - BlueSp34r
+	name = "Hazeri's Pipe"
+	desc = "A worn smoking pipe. It is made out of rare wood only found in Moghes, with little leaves sticking out of it."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "hazeri_pipe_off"
+	item_state = "hazeri_pipe_off"
+	icon_on = "hazeri_pipe_on"
+	icon_off = "hazeri_pipe_off"
+	smoketime = 200
+	can_hurt_mob = 0
+
+/obj/item/weapon/cane/fluff/hazeri_cane //Hazeri's Cane - Hazeri Saakhat - BlueSp34r
+	name = "Hazeri's Cane"
+	desc = "An old warped cane with a flat bottom. It appears leafy; crafted from Moghian wood."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "hazeri_cane"
+	item_state = "hazeri_cane"
+
+/obj/item/clothing/tie/fluff/kane_badge // Detective's Badge - Kane DeWitt - Joe Kane
+	name = "Detective's Badge"
+	desc = "A shiny brass detective's badge, backed by brown leather. Inscribed on the front is 'Kane DeWitt, DeWitt Detective Agency'."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "kane_badge"
+	item_color = "kane_badge"
+
+	slot_flags = SLOT_BELT
+
+	attack_self(mob/user as mob)
+		if(isliving(user))
+			user.visible_message("\red [user] flashes their [src].\nIt reads: Kane DeWitt, DeWitt Detective Agency.","\red You display the [src].\nIt reads: Kane DeWitt, DeWitt Detective Agency.")
+
+	attack(mob/living/carbon/human/M, mob/living/user)
+		if(isliving(user))
+			user.visible_message("\red [user] invades [M]'s personal space, thrusting your [src] into their face insistently.","\red You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.")
+
+/obj/item/clothing/gloves/fluff/odanu_gloves //Old Unathi Handwraps - Odanu Adanutha - Prospekt1559
+	name = "old Unathi handwraps"
+	desc = "Old, stained hand wraps made of cloth. Holds in a miniscule amount of warmth and offers slight protection to one's knuckles."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "odanu_gloves"
+	item_state = "odanu_gloves"
+	species_restricted = list("Unathi")
+	clipped = 1
+	cold_protection = HANDS
+	min_cold_protection_temperature = GLOVES_MIN_COLD_PROTECTION_TEMPERATURE
+
+/obj/item/fluff/red_gemstone //Red Gemstone - Mister Dosh - Somekindofpony
+	name = "red gemstone"
+	desc = "A small red piece of glass, cut into the shape of a gemstone."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "red_gemstone"
+	item_state = ""
+	w_class = 2.0
+	force = 1
+	throwforce = 2
+
+	attack_self(mob/user as mob)
+		if(isliving(user))
+			user.visible_message("\blue [user] appears to be fondling [src] obsessively.","\blue You obsess over [src], rolling it from hand to hand.")
+
+	attack(mob/living/carbon/human/M, mob/living/user)
+		if(isliving(user))
+			user.visible_message("\red [user] brushes up against [M], driving [src] into their face intrusively.","\red You brush up against [M], intrusively thrusting [src] into their face.")
+
+/obj/item/clothing/tie/fluff/epsilon_badge // EPSILON PI Badge - EPSiLON - Prospekt1559
+	name = "EPSiLON private investigator badge"
+	desc = "A leather badge with gold plating on the front. When looked at closely it can be seen to be engraved with an eyeglass, with the letters 'E' and 'I' underneath."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "epsilon_badge"
+	item_color = "kane_badge"
+
+	slot_flags = SLOT_BELT
+
+	attack_self(mob/user as mob)
+		if(isliving(user))
+			user.visible_message("\red [user] flashes [src].\nIt reads: EPSilLON, Private Investigator.","\red You display [src].\nIt reads: EPSiLON, Private Investigator.")
+
+	attack(mob/living/carbon/human/M, mob/living/user)
+		if(isliving(user))
+			user.visible_message("\red [user] invades [M]'s personal space, thrusting [src] into their face insistently.","\red You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.")
+
+/obj/item/clothing/tie/ert_dogtags // D O G T A G Z B O Y Z
+	name = "ERT dogtags"
+	desc = "Tpr Doe - Funsquad"
+	icon_state = "ert_tags"
+	item_color = "holobadge-cord"
+	slot_flags = SLOT_MASK
+	slot_flags = SLOT_BELT
+	var/rank = "Tpr"
+	var/surname = "Doe"
+	var/spec = "Security"
+
+	attack_self(mob/user as mob)
+		if(isliving(user))
+			user.visible_message("\red [user] raises [src].\nThey read: [rank] [surname] - [spec], Emergency Response Team.","\red You raise [src].\nThey read: [rank] [surname] - [spec], Emergency Response Team.")
+
+/obj/item/clothing/tie/fluff/scofield_watch //Hunter Scofield - Smifboy78
+	name = "gold pocket-watch"
+	desc = "A small pocket watch. It appears to be gold plated, with the initials D.M.S on the back."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "watch"
+	w_class = 1
+	var wired = 1
+
+	verb/checktime()
+		set category = "Object"
+		set name = "Check Time"
+		set src in usr
+
+		if(wired)
+			usr.visible_message ("<span class='notice'>[usr] clicks open their [src], and glances at the time for a moment.</span>", "<span class='notice'>You click open the face of your [src], reading the analog display of the time: '[worldtime2text()]' </span>")
+		else
+			usr << "You check your watch as it dawns on you that it's broken"
+
+/obj/item/clothing/head/fluff/ziva_bandana //Ziva's Bandana - Ziva Mo'taki - SierraKomodo
+	name = "Ziva's bandana"
+	desc = "An old orange-ish-yellow bandana. It has a few stains from engine grease, and the color has been dulled."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "motaki_bandana"
+	item_state = "taryn_kifer_1"
+	flags = FPRINT|TABLEPASS
+	flags_inv = 0
+
+/obj/item/clothing/tie/fluff/straughan_necklace //Rejection Syndrome Necklace - Nick Straughan - Nanotoxin
+	name = "rejection syndrome necklace"
+	desc = "A small silver necklace with the words, 'prosthetic rejection syndrome; body rejects mechanical eyes, shaded eyewear needed.' engraved into it."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "straughan_necklace"
+	item_state = "straughan_necklace"
+	item_color = "straughan_necklace"
+	slot_flags = SLOT_MASK
+
+/obj/item/clothing/tie/fluff/straughan_necklace/attack_self(mob/user as mob)
+	if(isliving(user))
+		user.visible_message("\red [user] holds up their [src].\nIt reads: Prosthetic rejection syndrome. Patient's body rejects mechanical eyes. Shaded eyewear required.","\red You display the [src], showing the room your medical condition.")

@@ -316,3 +316,34 @@ proc/TextPreview(var/string,var/len=40)
 			return string
 	else
 		return "[copytext(string, 1, 37)]..."
+
+
+//This proc strips html properly, but it's not lazy like the other procs.
+//This means that it doesn't just remove < and > and call it a day.
+//Also limit the size of the input, if specified.
+/proc/strip_html_properly(var/input, var/max_length = MAX_MESSAGE_LEN)
+	if(!input)
+		return
+	var/opentag = 1 //These store the position of < and > respectively.
+	var/closetag = 1
+	while(1)
+		opentag = findtext(input, "<")
+		closetag = findtext(input, ">")
+		if(closetag && opentag)
+			if(closetag < opentag)
+				input = copytext(input, (closetag + 1))
+			else
+				input = copytext(input, 1, opentag) + copytext(input, (closetag + 1))
+		else if(closetag || opentag)
+			if(opentag)
+				input = copytext(input, 1, opentag)
+			else
+				input = copytext(input, (closetag + 1))
+		else
+			break
+	if(max_length)
+		input = copytext(input,1,max_length)
+	return sanitize(input)
+
+/proc/trim_strip_html_properly(var/input, var/max_length = MAX_MESSAGE_LEN)
+    return trim(strip_html_properly(input, max_length))

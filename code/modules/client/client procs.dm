@@ -164,6 +164,7 @@
 		host = key
 		world.update_status()
 
+	admin_memo_player_show()
 	if(holder)
 		add_admin_verbs()
 		admin_memo_show()

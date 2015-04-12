@@ -2,6 +2,7 @@ var/datum/controller/vote/vote = new()
 
 var/global/list/round_voters = list() //Keeps track of the individuals voting for a given round, for use in forcedrafting.
 var/global/last_vote_time = 0
+var/global/last_vote_time_game = 0
 
 datum/controller/vote
 	var/initiator = null
@@ -200,6 +201,7 @@ datum/controller/vote
 			world.Reboot()
 
 		last_vote_time = time_stamp()
+		last_vote_time_game = "[round(world.time / 36000)]:[(world.time / 600 % 60) < 10 ? add_zero(world.time / 600 % 60, 1) : world.time / 600 % 60]"
 		return .
 
 	proc/submit_vote(var/ckey, var/vote)
