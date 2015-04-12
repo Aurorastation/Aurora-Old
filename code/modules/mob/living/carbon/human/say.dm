@@ -69,12 +69,11 @@
 	if(speaking && !speaking.name == "Noise")
 		message = capitalize(trim(message))
 
-	if(!speaking || (speaking && !speaking.name == "Noise"))
-		if(speech_problem_flag)
-			var/list/handle_r = handle_speech_problems(message)
-			message = handle_r[1]
-			verb = handle_r[2]
-			speech_problem_flag = handle_r[3]
+	if(speech_problem_flag)
+		var/list/handle_r = handle_speech_problems(message)
+		message = handle_r[1]
+		verb = handle_r[2]
+		speech_problem_flag = handle_r[3]
 
 	if(!message || stat)
 		return
