@@ -1200,7 +1200,7 @@
 	name = "gold pocket-watch"
 	desc = "A small pocket watch. It appears to be gold plated, with the initials D.M.S on the back."
 	icon = 'icons/obj/custom_items.dmi'
-	icon_state = "watch"
+	icon_state = "scofield_watch"
 	w_class = 1
 	var wired = 1
 
