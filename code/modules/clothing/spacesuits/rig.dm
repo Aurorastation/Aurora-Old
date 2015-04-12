@@ -359,7 +359,32 @@
 						src.helmet = null
 					return
 
-				if("l_leg" || "r_leg" || "l_foot" || "r_foot")
+				//Fricking boots and Switches
+				if("l_leg")
+					if(!boots)
+						user << "\The [src] does not have any boots installed."
+					else
+						user << "You detatch \the [boots] from \the [src]'s boot mounts."
+						boots.loc = get_turf(src)
+						boots = null
+					return
+				if("r_leg")
+					if(!boots)
+						user << "\The [src] does not have any boots installed."
+					else
+						user << "You detatch \the [boots] from \the [src]'s boot mounts."
+						boots.loc = get_turf(src)
+						boots = null
+					return
+				if("l_foot")
+					if(!boots)
+						user << "\The [src] does not have any boots installed."
+					else
+						user << "You detatch \the [boots] from \the [src]'s boot mounts."
+						boots.loc = get_turf(src)
+						boots = null
+					return
+				if("r_foot")
 					if(!boots)
 						user << "\The [src] does not have any boots installed."
 					else
