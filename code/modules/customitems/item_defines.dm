@@ -1195,3 +1195,43 @@
 	attack_self(mob/user as mob)
 		if(isliving(user))
 			user.visible_message("\red [user] raises [src].\nThey read: [rank] [surname] - [spec], Emergency Response Team.","\red You raise [src].\nThey read: [rank] [surname] - [spec], Emergency Response Team.")
+
+/obj/item/clothing/tie/fluff/scofield_watch //Hunter Scofield - Smifboy78
+	name = "gold pocket-watch"
+	desc = "A small pocket watch. It appears to be gold plated, with the initials D.M.S on the back."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "watch"
+	w_class = 1
+	var wired = 1
+
+	verb/checktime()
+		set category = "Object"
+		set name = "Check Time"
+		set src in usr
+
+		if(wired)
+			usr.visible_message ("<span class='notice'>[usr] clicks open their [src], and glances at the time for a moment.</span>", "<span class='notice'>You click open the face of your [src], reading the analog display of the time: '[worldtime2text()]' </span>")
+		else
+			usr << "You check your watch as it dawns on you that it's broken"
+
+/obj/item/clothing/head/fluff/ziva_bandana //Ziva's Bandana - Ziva Mo'taki - SierraKomodo
+	name = "Ziva's bandana"
+	desc = "An old orange-ish-yellow bandana. It has a few stains from engine grease, and the color has been dulled."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "motaki_bandana"
+	item_state = "taryn_kifer_1"
+	flags = FPRINT|TABLEPASS
+	flags_inv = 0
+
+/obj/item/clothing/tie/fluff/straughan_necklace //Rejection Syndrome Necklace - Nick Straughan - Nanotoxin
+	name = "rejection syndrome necklace"
+	desc = "A small silver necklace with the words, 'prosthetic rejection syndrome; body rejects mechanical eyes, shaded eyewear needed.' engraved into it."
+	icon = 'icons/obj/custom_items.dmi'
+	icon_state = "straughan_necklace"
+	item_state = "straughan_necklace"
+	item_color = "straughan_necklace"
+	slot_flags = SLOT_MASK
+
+/obj/item/clothing/tie/fluff/straughan_necklace/attack_self(mob/user as mob)
+	if(isliving(user))
+		user.visible_message("\red [user] holds up their [src].\nIt reads: Prosthetic rejection syndrome. Patient's body rejects mechanical eyes. Shaded eyewear required.","\red You display the [src], showing the room your medical condition.")

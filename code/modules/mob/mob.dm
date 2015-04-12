@@ -749,10 +749,13 @@ note dizziness decrements automatically in the mob's Life() proc.
 					if(istype(C.mob, /mob/new_player))
 						lobby++
 					total++
-				stat(null, "Players: [total]\t Moderation Staff: [staff]")
+				stat(null, "Players: [total]")
+				stat(null, "Moderation Staff: [staff]")
 				stat(null, "Living: [players]\tGhosts: [ghosts]\tLobby: [lobby]")
 		if(client)
 			stat(null, "Round Time: [round(world.time / 36000)]:[(world.time / 600 % 60) < 10 ? add_zero(world.time / 600 % 60, 1) : world.time / 600 % 60]")
+			if(round(world.time / 36000) > 2)
+				stat(null, "Last Vote: [last_vote_time_game]")
 
 	if(listed_turf && client)
 		if(!TurfAdjacent(listed_turf))

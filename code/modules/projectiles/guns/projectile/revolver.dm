@@ -97,6 +97,15 @@
 		user << "<span class='notice'>The Magazine falls out and clatters on the floor!</span>"
 	return
 
+/obj/item/weapon/gun/projectile/detective/secgun
+	desc = "a sec gun that shoots big sec bullets for taking down big sec criminals. more like taking dead"
+	name = "\improper sec gun"
+	caliber = ".45"
+	icon_state = "secgun"
+	max_shells = 7
+	ammo_type = "/obj/item/ammo_casing/c45s"
+	load_method = 2
+
 
 /obj/item/weapon/gun/projectile/mateba
 	name = "mateba"
