@@ -1200,7 +1200,7 @@
 	name = "gold pocket-watch"
 	desc = "A small pocket watch. It appears to be gold plated, with the initials D.M.S on the back."
 	icon = 'icons/obj/custom_items.dmi'
-	icon_state = "watch"
+	icon_state = "scofield_watch"
 	w_class = 1
 	var wired = 1
 
@@ -1215,11 +1215,11 @@
 			usr << "You check your watch as it dawns on you that it's broken"
 
 /obj/item/clothing/head/fluff/ziva_bandana //Ziva's Bandana - Ziva Mo'taki - SierraKomodo
-	name = "Ziva's bandana"
+	name = "old bandana"
 	desc = "An old orange-ish-yellow bandana. It has a few stains from engine grease, and the color has been dulled."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "motaki_bandana"
-	item_state = "taryn_kifer_1"
+	item_state = "motaki_bandana"
 	flags = FPRINT|TABLEPASS
 	flags_inv = 0
 

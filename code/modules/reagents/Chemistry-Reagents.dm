@@ -4016,9 +4016,9 @@ datum
 			color = "#664300" // rgb: 102, 67, 0
 			boozepwr = 1
 
-		ethanol/puosseecafe
-			name = "Puossee-Cafe"
-			id = "puosseecafe"
+		ethanol/poussecafe
+			name = "Pousse-Cafe"
+			id = "poussecafe"
 			description = "Smells of the French and liquore."
 			color = "#664300" // rgb: 102, 67, 0
 			boozepwr = 2

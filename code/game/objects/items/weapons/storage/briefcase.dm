@@ -43,7 +43,8 @@
 		for(var/mob/O in viewers(M, null))
 			O.show_message(text("\red <B>[] has been knocked unconscious!</B>", M), 1, "\red You hear someone fall.", 2)
 	else
-		M << text("\red [] tried to knock you unconcious!",user)
+		user.visible_message("[M]'s swung for [user] with [src]", "\red You swing for [M] with [src]", null)
+		M << "\red [user] tried to knock you unconcious!"
 		M.eye_blurry += 3
 
 	return

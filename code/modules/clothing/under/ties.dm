@@ -243,8 +243,8 @@
 		H = src
 	else if (istype(src, /obj/item/clothing/under))
 		var/obj/item/clothing/under/S = src
-		if (S.hastie)
-			H = S.hastie
+		if (S.holster)
+			H = S.holster
 
 	if (!H)
 		usr << "/red Something is very wrong."

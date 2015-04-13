@@ -491,9 +491,9 @@
 					icon_state = "icepick"
 					name = "Glass of Ice Pick"
 					desc = "Big. And red. Hmm..."
-				if("puosseecafe")
+				if("poussecafe")
 					icon_state = "pousseecafe"
-					name = "Glass of Puossee-Cafe"
+					name = "Glass of Pousse-Cafe"
 					desc = "Smells of French and liquore."
 				if("mintjulep")
 					icon_state = "mintjulep"

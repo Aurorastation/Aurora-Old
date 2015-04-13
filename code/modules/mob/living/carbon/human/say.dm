@@ -41,7 +41,10 @@
 	//parse the language code and consume it
 	var/datum/language/speaking = parse_language(message)
 	if(speaking)
-		message = copytext(message,3)
+		if(speaking.flags & INNATE)
+			message = copytext(message,2)
+		else
+			message = copytext(message,3)
 	else if(species.default_language)
 		speaking = all_languages[species.default_language]
 
@@ -63,7 +66,8 @@
 	if (istype(wear_mask, /obj/item/clothing/mask/muzzle))
 		return
 
-	message = capitalize(trim(message))
+	if(speaking && !speaking.name == "Noise")
+		message = capitalize(trim(message))
 
 	if(speech_problem_flag)
 		var/list/handle_r = handle_speech_problems(message)
@@ -131,12 +135,13 @@
 			return
 		else
 			if(message_mode)
-				if(l_ear && istype(l_ear,/obj/item/device/radio))
-					l_ear.talk_into(src,message, message_mode, verb, speaking)
-					used_radios += l_ear
-				else if(r_ear && istype(r_ear,/obj/item/device/radio))
-					r_ear.talk_into(src,message, message_mode, verb, speaking)
-					used_radios += r_ear
+				if(!(stunned >= 4))
+					if(l_ear && istype(l_ear,/obj/item/device/radio))
+						l_ear.talk_into(src,message, message_mode, verb, speaking)
+						used_radios += l_ear
+					else if(r_ear && istype(r_ear,/obj/item/device/radio))
+						r_ear.talk_into(src,message, message_mode, verb, speaking)
+						used_radios += r_ear
 
 	var/sound/speech_sound
 	var/sound_vol

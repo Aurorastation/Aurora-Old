@@ -2019,10 +2019,10 @@ datum
 			required_reagents = list("icetea" = 1, "vodka" = 1)
 			result_amount = 2
 
-		puosseecafe
-			name = "Puossee-Cafe"
-			id = "puosseecafe"
-			result = "puosseecafe"
+		poussecafe
+			name = "Pousse-Cafe"
+			id = "poussecafe"
+			result = "poussecafe"
 			required_reagents = list("brandy" = 1, "chartreusegreen" = 1, "chartreuseyellow" = 1, "cremewhite" = 1, "grenadine" = 1)
 			result_amount = 5
 
@@ -2037,7 +2037,7 @@ datum
 			name = "John Collins"
 			id = "johncollins"
 			result = "johncollins"
-			required_reagents = list("whiskeysoda" = 2, "orangejuice" = 1, "grenadine" = 1, "ice" = 1)
+			required_reagents = list("whiskeysoda" = 2, "lemonjuice" = 1, "grenadine" = 1, "ice" = 1)
 			result_amount = 5
 
 		gimlet
@@ -2095,22 +2095,22 @@ datum
 			name = "Rusty Nail"
 			id = "rustynail"
 			result = "rustynail"
-			required_reagents = list("whiskey" = 1, "gin" = 1, "drambuie" = 1)
+			required_reagents = list("whiskey" = 1, "drambuie" = 1)
 			result_amount = 2
 
 		oldfashioned
 			name = "Old Fashioned"
 			id = "oldfashioned"
 			result = "oldfashioned"
-			required_reagents = list("bluecuracao" = 1, "gin" = 1, "grenadine" = 1, "ice" = 1)
-			result_amount = 4
+			required_reagents = list("bluecuracao" = 1, "gin" = 1, "ice" = 1)
+			result_amount = 3
 
 		blindrussian
 			name = "Blind Russian"
 			id = "blindrussian"
 			result = "blindrussian"
 			required_reagents = list("kahlua" = 1, "irishcream" = 1, "cream" = 1)
-			result_amount = 2
+			result_amount = 3
 
 		tallrussian
 			name = "Tall Black Russian"
@@ -2118,7 +2118,7 @@ datum
 			result = "tallrussian"
 			required_reagents = list("blackrussian" = 1, "cola" = 1)
 
-			result_amount = 3
+			result_amount = 2
 
 
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
