@@ -960,7 +960,6 @@ proc/get_damage_icon_part(damage_state, body_part)
 			overlays_standing[R_HAND_LAYER] = image("icon" = r_hand.icon, "icon_state" = "[t_state]")
 		else
 			overlays_standing[R_HAND_LAYER] = image("icon" = 'icons/mob/items_righthand.dmi', "icon_state" = "[t_state]")
-		msg_scopes("[t_state]")
 
 		if (handcuffed) drop_r_hand()
 	else
