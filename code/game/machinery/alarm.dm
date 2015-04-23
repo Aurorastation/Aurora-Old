@@ -594,6 +594,8 @@
 
 /obj/machinery/alarm/attack_hand(mob/user)
 	. = ..()
+	if(wiresexposed && !istype(user, /mob/living/silicon/ai))
+		openWires(user)
 	if (.)
 		return
 	return interact(user)
@@ -604,10 +606,9 @@
 	if(buildstage!=2)
 		return
 
-	if ( (get_dist(src, user) > 1 ))
+	if(get_dist(src, user) > 1)
 		if (!istype(user, /mob/living/silicon))
 			user.machine = null
-			user << browse(null, "window=air_alarm")
 			user << browse(null, "window=AAlarmwires")
 			return
 
@@ -617,7 +618,24 @@
 			user << browse(null, "window=air_alarm")
 			return
 
-	if(wiresexposed && (!istype(user, /mob/living/silicon)))
+	if(!shorted)
+		user << browse(return_text(user),"window=air_alarm")
+		onclose(user, "air_alarm")
+
+	return
+
+/obj/machinery/alarm/proc/openWires(mob/user)
+	user.set_machine(src)
+
+	if(buildstage!=2)
+		return
+
+	if(get_dist(src, user) > 1)
+		user.machine = null
+		user << browse(null, "window=AAlarmwires")
+		return
+
+	if(wiresexposed && (!istype(user, /mob/living/silicon/ai))) //Why double check, because I don't know cheese?
 		var/t1 = text("<html><head><title>[alarm_area.name] Air Alarm Wires</title></head><body><B>Access Panel</B><br>\n")
 		var/list/wirecolors = list(
 			"Orange" = 1,
@@ -641,11 +659,6 @@
 		t1 += text("<p><a href='?src=\ref[src];close2=1'>Close</a></p></body></html>")
 		user << browse(t1, "window=AAlarmwires")
 		onclose(user, "AAlarmwires")
-
-	if(!shorted)
-		user << browse(return_text(user),"window=air_alarm")
-		onclose(user, "air_alarm")
-
 	return
 
 /obj/machinery/alarm/proc/return_text(mob/user)
