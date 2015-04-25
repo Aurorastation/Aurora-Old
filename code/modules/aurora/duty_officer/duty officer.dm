@@ -146,6 +146,14 @@
 
 			M.equip_if_possible(pda, slot_belt)
 
+			//Implant because access
+			var/obj/item/weapon/implant/loyalty/imp = new/obj/item/weapon/implant/loyalty(M)
+			imp.imp_in = M
+			imp.implanted = 1
+			var/datum/organ/external/affected = M.organs_by_name["head"]
+			affected.implants += imp
+			imp.part = affected
+
 			var/obj/item/weapon/card/id/W = new(M)
 			W.name = "[M.real_name]'s ID Card"
 			W.icon_state = "centcom"

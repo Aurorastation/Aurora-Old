@@ -38,6 +38,7 @@
 			user.drop_item()
 			W.loc = src
 			cell = W
+			w_class = 3.0
 			user << "<span class='notice'>You attach the [cell] to the [src].</span>"
 			update_icon()
 		else
@@ -52,6 +53,7 @@
 			user << "<span class='notice'>You cut the [cell] away from the [src].</span>"
 			cell.loc = get_turf(src.loc)
 			cell = null
+			w_class = 2.0
 			update_icon()
 			return
 		if(wired) //wires disappear into the void because fuck that shit
