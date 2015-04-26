@@ -283,17 +283,45 @@ datum/controller/game_controller/proc/process_diseases()
 		active_diseases.Cut(i,i+1)
 
 datum/controller/game_controller/proc/process_machines()
-	for (var/obj/machinery/Machinery in machines)
-		if (Machinery && Machinery.loc)
-			last_thing_processed = Machinery.type
-			if(Machinery.process() != PROCESS_KILL)
-				if (Machinery) // Why another check?
-					if (Machinery.use_power)
-						Machinery.auto_use_power()
-					continue
-		if(Machinery) Machinery.removeAtProcessing()
+	process_machines_process()
+	process_machines_power()
 	process_machines_rebuild()
+datum/controller/game_controller/proc/process_machines_process()
+	var/i = 1
+	while(i<=machines.len)
+		var/obj/machinery/Machine = machines[i]
+		if(Machine)
+			last_thing_processed = Machine.type
+			if(Machine.process() != PROCESS_KILL)
+				if(Machine)
+					i++
+					continue
+		machines.Cut(i,i+1)
 
+datum/controller/game_controller/proc/process_machines_power()
+	var/i=1
+	while(i<=active_areas.len)
+		var/area/A = active_areas[i]
+		if(A.powerupdate && A.master == A)
+			A.powerupdate -= 1
+			A.clear_usage()
+			for(var/j = 1; j <= A.related.len; j++)
+				var/area/SubArea = A.related[j]
+				for(var/obj/machinery/M in SubArea)
+					if(M)
+						//check if the area has power for M's channel
+						//this will keep stat updated in case the machine is moved from one area to another.
+						M.power_change(A)	//we've already made sure A is a master area, above.
+
+						if(!(M.stat & NOPOWER) && M.use_power)
+							M.auto_use_power()
+
+		if(A.apc.len && A.master == A)
+			i++
+			continue
+
+		A.powerupdate = 0
+		active_areas.Cut(i,i+1)
 
 datum/controller/game_controller/proc/process_machines_rebuild()
 	if(controller_iteration % 150 == 0 || rebuild_active_areas)	//Every 300 seconds we retest every area/machine
