@@ -75,6 +75,7 @@ var/list/ai_verbs_default = list(
 
 	var/mob/living/silicon/ai/parent = null
 
+	var/apc_override = 0 //hack for letting the AI use its APC even when visionless
 	var/camera_light_on = 0	//Defines if the AI toggled the light on the camera it's looking through.
 	var/datum/trackable/track = null
 	var/last_announcement = ""
@@ -820,5 +821,8 @@ var/list/ai_verbs_default = list(
 		return 1
 	return 0
 
+/mob/living/silicon/ai/proc/is_in_chassis()
+	return istype(loc, /turf)	
+	
 #undef AI_CHECK_WIRELESS
 #undef AI_CHECK_RADIO

@@ -29,8 +29,9 @@ hr {
     background-color: #40628a;
     height: 1px;
 }
-.link, .linkOn, .linkOff, .selected, .disabled {
-	float: left;
+
+.link, .linkOn, .linkOff, .selected, .disabled, .yellowButton, .redButton {
+    float: left;
     min-width: 15px;
     height: 16px;
 	text-align: center;
@@ -217,6 +218,14 @@ h4 {
     font-weight: bold;
 }
 
+.redButton {
+    background: #ea0000;
+}
+
+.yellowButton {
+    background: #cacc00;
+}
+
 .redBackground {
 	background: #ea0000;
 }
@@ -284,17 +293,34 @@ div.notice {
     float: left;
     width: 69%;
 }
-.itemLabelNarrow {
+
+.itemLabelNarrow, .itemLabel, .itemLabelWide, .itemLabelWider, .itemLabelWidest {
     float: left;
     width: 20%;
     color: #e9c183;
 }
+
+.itemLabelNarrow {
+    width: 20%;
+}
+
+.itemLabel {
+    width: 30%;
+}
+
 .itemLabelWide {
     float: left;
     width: 45%;
     color: #e9c183;
 }
 
+.itemLabelWider {
+    width: 69%;
+}
+
+.itemLabelWidest {
+    width: 100%;
+}
 
 .itemContentWide {
     float: left;

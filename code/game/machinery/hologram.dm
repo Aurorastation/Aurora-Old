@@ -142,6 +142,27 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 	return 1
 
+	
+// Simple helper to face what you clicked on, in case it should be needed in more than one place
+/obj/machinery/hologram/holopad/proc/face_atom(var/atom/A)
+	if( !hologram || !A || !hologram.x || !hologram.y || !A.x || !A.y ) return
+	var/dx = A.x - hologram.x
+	var/dy = A.y - hologram.y
+	if(!dx && !dy) // Wall items are graphically shifted but on the floor
+		if(A.pixel_y > 16)		hologram.dir = NORTH
+		else if(A.pixel_y < -16)hologram.dir = SOUTH
+		else if(A.pixel_x > 16)	hologram.dir = EAST
+		else if(A.pixel_x < -16)hologram.dir = WEST
+		return
+
+	if(abs(dx) < abs(dy))
+		if(dy > 0)	hologram.dir = NORTH
+		else		hologram.dir = SOUTH
+	else
+		if(dx > 0)	hologram.dir = EAST
+		else		hologram.dir = WEST
+		
+	
 /*
  * Hologram
  */
