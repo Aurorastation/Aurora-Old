@@ -66,7 +66,7 @@
 		return
 
 	face_atom(A)
-
+	
 	if(next_move > world.time) // in the year 2000...
 		return
 
@@ -89,6 +89,7 @@
 
 	if(W == A)
 		W.attack_self(src)
+		changeNext_move(CLICK_CD_MELEE)
 		if(hand)
 			update_inv_l_hand(0)
 		else
@@ -101,6 +102,7 @@
 		// No adjacency needed
 		if(W)
 			var/resolved = A.attackby(W,src)
+			changeNext_move(CLICK_CD_MELEE)
 			if(!resolved && A && W)
 				W.afterattack(A,src,1,params) // 1 indicates adjacency
 		else
@@ -120,6 +122,7 @@
 			if(W)
 				// Return 1 in attackby() to prevent afterattack() effects (when safely moving items for example, params)
 				var/resolved = A.attackby(W,src,params)
+				changeNext_move(CLICK_CD_MELEE)
 				if(!resolved && A && W)
 					W.afterattack(A,src,1,params) // 1: clicking something Adjacent
 			else
