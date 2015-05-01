@@ -83,13 +83,20 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 	popup.open()
 
 /datum/wires/proc/GetInteractWindow()
-	var/html = "<div class='block'>"
-	html += "<h3>Exposed Wires</h3>"
-	html += "<table[table_options]>"
+	var/html = \
+	{"	<style>
+			.colour_display {	float: left;
+								width: 10px;
+								height: 10px;
+								margin: 5px;}
+		</style>
+		<div class='block'>
+		<h3>Exposed Wires</h3>
+		<table[table_options]>"}
 
 	for(var/colour in wires)
 		html += "<tr>"
-		html += "<td[row_options1]><font color='[colour]'>[capitalize(colour)]</font></td>"
+		html += "<td[row_options1]><span class='colour_display' style='background-color:[colour]'></span>[capitalize(colour)]</td>"
 		html += "<td[row_options2]>"
 		html += "<A href='?src=\ref[src];action=1;cut=[colour]'>[IsColourCut(colour) ? "Mend" :  "Cut"]</A>"
 		html += " <A href='?src=\ref[src];action=1;pulse=[colour]'>Pulse</A>"
