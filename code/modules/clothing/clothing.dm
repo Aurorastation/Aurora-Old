@@ -280,6 +280,7 @@ BLIND     // can't see anything
 	slowdown = SHOES_SLOWDOWN
 	species_restricted = list("exclude","Unathi","Tajaran")
 	sprite_sheets = list("Vox" = 'icons/mob/species/vox/shoes.dmi')
+	var/silent = 0
 
 /obj/item/clothing/shoes/update_clothing_icon()
 	if (ismob(src.loc))

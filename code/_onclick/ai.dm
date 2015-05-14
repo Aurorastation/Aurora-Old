@@ -36,6 +36,12 @@
 		return
 
 	var/list/modifiers = params2list(params)
+	if(modifiers["shift"] && modifiers["ctrl"])
+		CtrlShiftClickOn(A)
+		return
+	if(modifiers["shift"] && modifiers["alt"])
+		AltShiftClickOn(A)
+		return
 	if(modifiers["middle"])
 		MiddleClickOn(A)
 		return
@@ -86,7 +92,10 @@
 	than anything else in the game, atoms have separate procs
 	for AI shift, ctrl, and alt clicking.
 */
-
+/mob/living/silicon/ai/CtrlShiftClickOn(var/atom/A)
+	A.AICtrlShiftClick(src)
+/mob/living/silicon/ai/AltShiftClickOn(var/atom/A)
+	A.AIAltShiftClick(src)
 /mob/living/silicon/ai/ShiftClickOn(var/atom/A)
 	A.AIShiftClick(src)
 /mob/living/silicon/ai/CtrlClickOn(var/atom/A)
@@ -101,14 +110,29 @@
 	I have no idea why it was in atoms.dm instead of respective files.
 */
 
+/atom/proc/AICtrlShiftClick(var/mob/user)  // Examines
+	if(user.client)
+		examine()
+	return
+
+/atom/proc/AIAltShiftClick()
+	return
+
+/obj/machinery/door/airlock/AIAltShiftClick()  // Sets/Unsets Emergency Access Override
+	if(density)
+		Topic(src, list("src"= "\ref[src]", "command"="emergency", "activate" = "1"), 1) // 1 meaning no window (consistency!)
+	else
+		Topic(src, list("src"= "\ref[src]", "command"="emergency", "activate" = "0"), 1)
+	return
+
 /atom/proc/AIShiftClick()
 	return
 
 /obj/machinery/door/airlock/AIShiftClick()  // Opens and closes doors!
 	if(density)
-		Topic("aiEnable=7", list("aiEnable"="7"), 1) // 1 meaning no window (consistency!)
+		Topic(src, list("src"= "\ref[src]", "command"="open", "activate" = "1"), 1)  // 1 meaning no window (consistency!)
 	else
-		Topic("aiDisable=7", list("aiDisable"="7"), 1)
+		Topic(src, list("src"= "\ref[src]", "command"="open", "activate" = "0"), 1)
 	return
 
 /atom/proc/AICtrlClick()
@@ -116,41 +140,39 @@
 
 /obj/machinery/door/airlock/AICtrlClick() // Bolts doors
 	if(locked)
-		Topic("aiEnable=4", list("aiEnable"="4"), 1)// 1 meaning no window (consistency!)
+		Topic(src, list("src"= "\ref[src]", "command"="bolts", "activate" = "0"), 1)// 1 meaning no window (consistency!)
 	else
-		Topic("aiDisable=4", list("aiDisable"="4"), 1)
+		Topic(src, list("src"= "\ref[src]", "command"="bolts", "activate" = "1"), 1)
 
 /obj/machinery/power/apc/AICtrlClick() // turns off/on APCs.
 	Topic("breaker=1", list("breaker"="1"), 0) // 0 meaning no window (consistency! wait...)
 
 /obj/machinery/turretid/AICtrlClick() //turns off/on Turrets
-	src.enabled = !src.enabled
-	src.updateTurrets()
+	Topic(src, list("src"= "\ref[src]", "command"="enable", "value"="[!enabled]"), 1)
 
 /atom/proc/AIAltClick(var/atom/A)
 	AltClick(A)
 
 /obj/machinery/door/airlock/AIAltClick() // Electrifies doors.
-	if(!secondsElectrified)
+	if(!electrified_until)
 		// permanent shock
-		Topic("aiEnable=6", list("aiEnable"="6"), 1) // 1 meaning no window (consistency!)
+		Topic(src, list("src"= "\ref[src]", "command"="electrify_permanently", "activate" = "1"), 1) // 1 meaning no window (consistency!)
 	else
 		// disable/6 is not in Topic; disable/5 disables both temporary and permanent shock
-		Topic("aiDisable=5", list("aiDisable"="5"), 1)
+		Topic(src, list("src"= "\ref[src]", "command"="electrify_permanently", "activate" = "0"), 1)
 	return
 
 /obj/machinery/turretid/AIAltClick() //toggles lethal on turrets
-	src.lethal = !src.lethal
-	src.updateTurrets()
+	Topic(src, list("src"= "\ref[src]", "command"="lethal", "value"="[!lethal]"), 1)
 
 /atom/proc/AIMiddleClick()
 	return
 
 /obj/machinery/door/airlock/AIMiddleClick() // Toggles door bolt lights.
 	if(!src.lights)
-		Topic("aiEnable=10", list("aiEnable"="10"), 1) // 1 meaning no window (consistency!)
+		Topic(src, list("src"= "\ref[src]", "command"="lights", "activate" = "1"), 1) // 1 meaning no window (consistency!)
 	else
-		Topic("aiDisable=10", list("aiDisable"="10"), 1)
+		Topic(src, list("src"= "\ref[src]", "command"="lights", "activate" = "0"), 1)
 	return
 
 //

@@ -636,7 +636,7 @@ var/list/liftable_structures = list(\
 //Preference toggles
 #define SOUND_ADMINHELP	1
 #define SOUND_MIDI		2
-#define SOUND_AMBIENCE	4
+//#define SOUND_AMBIENCE	4 //This can get redefined
 #define SOUND_LOBBY		8
 #define CHAT_OOC		16
 #define CHAT_DEAD		32
@@ -650,8 +650,15 @@ var/list/liftable_structures = list(\
 #define CHAT_GHOSTRADIO 8192
 #define CHAT_SCOPES_DEBUG 16384
 
+#define TOGGLES_DEFAULT (SOUND_ADMINHELP|SOUND_MIDI|SOUND_LOBBY|CHAT_OOC|CHAT_DEAD|CHAT_GHOSTEARS|CHAT_GHOSTSIGHT|CHAT_PRAYER|CHAT_RADIO|CHAT_ATTACKLOGS|CHAT_LOOC)
 
-#define TOGGLES_DEFAULT (SOUND_ADMINHELP|SOUND_MIDI|SOUND_AMBIENCE|SOUND_LOBBY|CHAT_OOC|CHAT_DEAD|CHAT_GHOSTEARS|CHAT_GHOSTSIGHT|CHAT_PRAYER|CHAT_RADIO|CHAT_ATTACKLOGS|CHAT_LOOC)
+//Sound effects toggles
+#define ASFX_AMBIENCE	1
+#define ASFX_FOOTSTEPS	2
+#define ASFX_VOTE		4
+
+#define ASFX_DEFAULT (ASFX_AMBIENCE|ASFX_FOOTSTEPS|ASFX_VOTE)
+
 
 //Status Menu toggles
 #define STAT_MENU_MC = 1
@@ -887,3 +894,26 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 // Reagent metabolism defines.
 #define FOOD_METABOLISM 0.4
 #define ALCOHOL_METABOLISM 0.1
+
+//Click cooldowns, in tenths of a second
+#define CLICK_CD_MELEE 8
+#define CLICK_CD_RANGE 4
+#define CLICK_CD_BREAKOUT 100
+#define CLICK_CD_HANDCUFFED 10
+#define CLICK_CD_TKSTRANGLE 10
+#define CLICK_CD_POINT 10
+#define CLICK_CD_RESIST 20
+
+// NanoUI flags
+#define STATUS_INTERACTIVE 2 // GREEN Visability
+#define STATUS_UPDATE 1 // ORANGE Visability
+#define STATUS_DISABLED 0 // RED Visability
+#define STATUS_CLOSE -1 // Close the interface
+
+#define NANO_IGNORE_DISTANCE 1 //Why is this? I don't
+
+// Suit sensor levels
+#define SUIT_SENSOR_OFF      0
+#define SUIT_SENSOR_BINARY   1
+#define SUIT_SENSOR_VITAL    2
+#define SUIT_SENSOR_TRACKING 3

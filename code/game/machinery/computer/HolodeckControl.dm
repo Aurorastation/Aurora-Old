@@ -386,6 +386,7 @@
 	name = "Lush Grass"
 	icon_state = "grass1"
 	floor_tile = new/obj/item/stack/tile/grass
+	footstep_sound = "grassstep"
 
 	New()
 		floor_tile.New() //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
@@ -406,6 +407,7 @@
 	name = "desert sand"
 	desc = "Uncomfortably gritty for a hologram."
 	icon_state = "asteroid"
+	footstep_sound = "gravelstep"
 
 /turf/simulated/floor/holofloor/desert/New()
 	..()
