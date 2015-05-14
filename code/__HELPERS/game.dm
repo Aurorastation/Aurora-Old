@@ -9,6 +9,12 @@
 	src:Topic(href, href_list)
 	return null
 
+/proc/get_area_master(const/O)
+	var/area/A = get_area(O)
+
+	if (isarea(A))
+		return A.master
+	
 /proc/get_area(O)
 	var/atom/location = O
 	var/i
@@ -475,3 +481,11 @@ datum/projectile_data
 	sleep(duration)
 	for(var/client/C in show_to)
 		C.images -= I
+	
+	
+/proc/MinutesToTicks(var/minutes as num)
+	return minutes * 60 * 10
+	
+	
+/proc/SecondsToTicks(var/seconds)
+	return seconds * 10

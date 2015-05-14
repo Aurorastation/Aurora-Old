@@ -406,6 +406,22 @@ var/MAX_EXPLOSION_RANGE = 14
 #define SHOCK	8
 #define SAFE	16
 
+// NanoUI flags
+#define STATUS_INTERACTIVE 2 // GREEN Visability
+#define STATUS_UPDATE 1 // ORANGE Visability
+#define STATUS_DISABLED 0 // RED Visability
+#define STATUS_CLOSE -1 // Close the interface
+#define NANO_IGNORE_DISTANCE 1
+
+//Click cooldowns, in tenths of a second
+#define CLICK_CD_MELEE 8
+#define CLICK_CD_RANGE 4
+#define CLICK_CD_BREAKOUT 100
+#define CLICK_CD_HANDCUFFED 10
+#define CLICK_CD_TKSTRANGLE 10
+#define CLICK_CD_POINT 10
+#define CLICK_CD_RESIST 20
+
 #define ENGINE_EJECT_Z	3
 
 //metal, glass, rod stacks
