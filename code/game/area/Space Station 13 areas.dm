@@ -973,6 +973,12 @@ var/list/ghostteleportlocs = list()
 /area/holodeck/source_space
 	name = "\improper Holodeck - Space"
 
+/area/holodeck/source_engineeringtest
+	name = "\improper Holodeck - Engineering Test"
+
+/area/holodeck/source_firingrange
+	name = "\improper Holodeck - Firing Range"
+
 /area/holodeck/source_sauna
 	name = "\improper Holodeck - Sauna"
 

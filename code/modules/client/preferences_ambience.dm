@@ -1,6 +1,6 @@
 /var/global/asfx_togs = list(
-	/client/proc/Toggle_asfx,
-	/client/proc/Toggle_footsteps,
+//	/client/proc/Toggle_asfx,
+//	/client/proc/Toggle_footsteps,
 	/client/proc/Toggle_asfx_vote
 )
 
@@ -12,9 +12,10 @@
 	verbs ^= asfx_togs
 	return
 
-/client/proc/Toggle_asfx() //Allgnew ambience should be added here so it works with this verb until someone better at things comes up with a fix that isn't awful
+/client/verb/Toggle_asfx() //Allgnew ambience should be added here so it works with this verb until someone better at things comes up with a fix that isn't awful
 	set name = "Hear/Silence Ambience"
-	set category = "SoundFx Prefs"
+//	set category = "SoundFx Prefs"
+	set category = "Preferences"
 	set desc = "Toggles hearing ambient sound effects"
 	prefs.asfx_togs ^= ASFX_AMBIENCE
 	prefs.save_preferences()
