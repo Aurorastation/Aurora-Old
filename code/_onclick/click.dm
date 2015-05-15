@@ -18,6 +18,7 @@
 /atom/Click(location,control,params)
 	if(src)
 		usr.ClickOn(src, params)
+
 /atom/DblClick(location,control,params)
 	if(src)
 		usr.DblClickOn(src,params)
@@ -45,6 +46,12 @@
 		return
 
 	var/list/modifiers = params2list(params)
+	if(modifiers["shift"] && modifiers["ctrl"])
+		CtrlShiftClickOn(A)
+		return
+	if(modifiers["shift"] && modifiers["alt"])
+		AltShiftClickOn(A)
+		return
 	if(modifiers["middle"])
 		MiddleClickOn(A)
 		return
@@ -73,6 +80,7 @@
 		return M.click_action(A,src)
 
 	if(restrained())
+		changeNext_move(CLICK_CD_HANDCUFFED)
 		RestrainedClickOn(A)
 		return
 
@@ -80,16 +88,11 @@
 		throw_item(A)
 		return
 
-	if(!istype(A,/obj/item/weapon/gun) && !isturf(A) && !istype(A,/obj/screen))
-		last_target_click = world.time
-
 	var/obj/item/W = get_active_hand()
 
 	if(W == A)
-		next_move = world.time + 6
-		if(W.flags&USEDELAY)
-			next_move += 5
 		W.attack_self(src)
+		changeNext_move(CLICK_CD_MELEE)
 		if(hand)
 			update_inv_l_hand(0)
 		else
@@ -125,18 +128,16 @@
 	// Allows you to click on a box's contents, if that box is on the ground, but no deeper than that
 	sdepth = A.storage_depth_turf()
 	if(isturf(A) || isturf(A.loc) || (sdepth != -1 && sdepth <= 1))
-		next_move = world.time + 10
-
 		if(A.Adjacent(src)) // see adjacent.dm
 			if(W)
-				if(W.flags&USEDELAY)
-					next_move += 5
-
-				// Return 1 in attackby() to prevent afterattack() effects (when safely moving items for example)
-				var/resolved = A.attackby(W,src)
+				// Return 1 in attackby() to prevent afterattack() effects (when safely moving items for example, params)
+				var/resolved = A.attackby(W,src,params)
+				changeNext_move(CLICK_CD_MELEE)
 				if(!resolved && A && W)
 					W.afterattack(A,src,1,params) // 1: clicking something Adjacent
 			else
+				if(ismob(A))
+					changeNext_move(CLICK_CD_MELEE)
 				UnarmedAttack(A, 1)
 			return
 		else // non-adjacent click
@@ -147,9 +148,12 @@
 
 	return
 
+/mob/proc/changeNext_move(num)
+	next_move = world.time + num
+
 // Default behavior: ignore double clicks, consider them normal clicks instead
 /mob/proc/DblClickOn(var/atom/A, var/params)
-	ClickOn(A,params)
+	return
 
 
 /*
@@ -163,6 +167,8 @@
 	in human click code to allow glove touches only at melee range.
 */
 /mob/proc/UnarmedAttack(var/atom/A, var/proximity_flag)
+	if(ismob(A))
+		changeNext_move(CLICK_CD_MELEE)
 	return
 
 /*
@@ -190,6 +196,11 @@
 			else
 				return
 		A.attack_tk(src)
+		return
+	else
+		if(TK in mutations)
+			A.attack_tk(src)
+
 /*
 	Restrained ClickOn
 
@@ -264,6 +275,24 @@
 	return T.AdjacentQuick(src)
 
 /*
+	Control+Shift/Alt+Shift click
++	Unused except for AI
++*/
+/mob/proc/CtrlShiftClickOn(var/atom/A)
+	A.CtrlShiftClick(src)
+	return
+
+/atom/proc/CtrlShiftClick(var/mob/user)
+	return
+
+/mob/proc/AltShiftClickOn(var/atom/A)
+	A.AltShiftClick(src)
+	return
+
+/atom/proc/AltShiftClick(var/mob/user)
+	return
+
+/*
 	Misc helpers
 
 	Laser Eyes: as the name implies, handles this since nothing else does currently
@@ -273,7 +302,7 @@
 	return
 
 /mob/living/LaserEyes(atom/A)
-	next_move = world.time + 6
+	changeNext_move(CLICK_CD_RANGE)
 	var/turf/T = get_turf(src)
 	var/turf/U = get_turf(A)
 

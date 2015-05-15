@@ -16,6 +16,12 @@
 		return
 
 	var/list/modifiers = params2list(params)
+	if(modifiers["shift"] && modifiers["ctrl"])
+		CtrlShiftClickOn(A)
+		return
+	if(modifiers["shift"] && modifiers["alt"])
+		AltShiftClickOn(A)
+		return
 	if(modifiers["middle"])
 		MiddleClickOn(A)
 		return
@@ -104,11 +110,6 @@
 			return
 	return
 
-//Middle click cycles through selected modules.
-/mob/living/silicon/robot/MiddleClickOn(var/atom/A)
-	cycle_modules()
-	return
-
 /*
 	As with AI, these are not used in click code,
 	because the code for robots is specific, not generic.
@@ -125,3 +126,17 @@
 /atom/proc/attack_robot(mob/user as mob)
 	attack_ai(user)
 	return
+
+/mob/living/silicon/robot/MiddleClickOn(var/atom/A)
+	cycle_modules()
+
+/mob/living/silicon/robot/CtrlShiftClickOn(var/atom/A)
+	A.AICtrlShiftClick(src)
+/mob/living/silicon/robot/AltShiftClickOn(var/atom/A)
+	A.AIAltShiftClick(src)
+/mob/living/silicon/robot/ShiftClickOn(var/atom/A)
+	A.AIShiftClick(src)
+/mob/living/silicon/robot/CtrlClickOn(var/atom/A)
+	A.AICtrlClick(src)
+/mob/living/silicon/robot/AltClickOn(var/atom/A)
+	A.AIAltClick(src)

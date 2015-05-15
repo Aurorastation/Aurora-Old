@@ -143,6 +143,7 @@ Stealth and Camouflage Items;
 /obj/item/device/chameleon:4:Chameleon-Projector;
 Whitespace:Seperator;
 Devices and Tools;
+/obj/item/shoe_cover:1:Silent Step Fabric;
 /obj/item/weapon/card/emag:3:Cryptographic Sequencer;
 /obj/item/weapon/storage/toolbox/syndicate:1:Fully Loaded Toolbox;
 /obj/item/weapon/storage/box/syndie_kit/space:3:Space Suit;

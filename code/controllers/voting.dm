@@ -277,13 +277,9 @@ datum/controller/vote
 
 			log_vote(text)
 			world << "<font color='purple'><b>[text]</b>\nType vote to place your votes.\nYou have [config.vote_period/10] seconds to vote.</font>"
-			switch(vote_type)
-				if("crew_transfer")
-					world << sound('sound/ambience/alarm4.ogg')
-				if("gamemode")
-					world << sound('sound/ambience/alarm4.ogg')
-				if("custom")
-					world << sound('sound/ambience/alarm4.ogg')
+			for(var/client/C in clients)
+				if(C.prefs.asfx_togs & ASFX_VOTE) //Personal mute
+					C << sound('sound/effects/vote.ogg')
 			if(mode == "gamemode" && going)
 				going = 0
 				world << "<font color='red'><b>Round start has been delayed.</b></font>"

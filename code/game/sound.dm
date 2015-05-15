@@ -7,6 +7,19 @@ var/list/clown_sound = list('sound/effects/clownstep1.ogg','sound/effects/clowns
 var/list/swing_hit_sound = list('sound/weapons/genhit1.ogg', 'sound/weapons/genhit2.ogg', 'sound/weapons/genhit3.ogg')
 var/list/hiss_sound = list('sound/voice/hiss1.ogg','sound/voice/hiss2.ogg','sound/voice/hiss3.ogg','sound/voice/hiss4.ogg')
 var/list/page_sound = list('sound/effects/pageturn1.ogg', 'sound/effects/pageturn2.ogg','sound/effects/pageturn3.ogg')
+
+//FOOTSTEPS
+var/list/defaultfootsteps = list('sound/effects/footsteps/tile1.wav','sound/effects/footsteps/tile2.wav','sound/effects/footsteps/tile3.wav','sound/effects/footsteps/tile4.wav')
+var/list/concretefootsteps = list('sound/effects/footsteps/concrete1.wav','sound/effects/footsteps/concrete2.wav','sound/effects/footsteps/concrete3.wav','sound/effects/footsteps/concrete4.wav')
+var/list/grassfootsteps = list('sound/effects/footsteps/grass1.wav','sound/effects/footsteps/grass2.wav','sound/effects/footsteps/grass3.wav','sound/effects/footsteps/grass4.wav')
+var/list/dirtfootsteps = list('sound/effects/footsteps/dirt1.wav','sound/effects/footsteps/dirt2.wav','sound/effects/footsteps/dirt3.wav','sound/effects/footsteps/dirt4.wav')
+var/list/waterfootsteps = list('sound/effects/footsteps/slosh1.wav','sound/effects/footsteps/slosh2.wav','sound/effects/footsteps/slosh3.wav','sound/effects/footsteps/slosh4.wav')
+var/list/sandfootsteps = list('sound/effects/footsteps/sand1.wav','sound/effects/footsteps/sand2.wav','sound/effects/footsteps/sand3.wav','sound/effects/footsteps/sand4.wav')
+var/list/gravelstep = list('sound/effects/footsteps/gravel1.wav','sound/effects/footsteps/gravel2.wav','sound/effects/footsteps/gravel3.wav','sound/effects/footsteps/gravel4.wav')
+
+var/list/footstepfx = list("defaultstep","concretestep","grassstep","dirtstep","waterstep","sandstep")
+
+
 //var/list/gun_sound = list('sound/weapons/Gunshot.ogg', 'sound/weapons/Gunshot2.ogg','sound/weapons/Gunshot3.ogg','sound/weapons/Gunshot4.ogg')
 
 /proc/playsound(var/atom/source, soundin, vol as num, vary, extrarange as num, falloff, var/is_global)
@@ -37,6 +50,11 @@ var/const/FALLOFF_SOUNDS = 0.5
 
 /mob/proc/playsound_local(var/turf/turf_source, soundin, vol as num, vary, frequency, falloff, is_global)
 	if(!src.client || ear_deaf > 0)	return
+
+	if(soundin in footstepfx)
+		if(!(src.client.prefs.asfx_togs & ASFX_FOOTSTEPS))
+			return
+
 	soundin = get_sfx(soundin)
 
 	var/sound/S = sound(soundin)
@@ -53,34 +71,34 @@ var/const/FALLOFF_SOUNDS = 0.5
 	if(isturf(turf_source))
 		// 3D sounds, the technology is here!
 		var/turf/T = get_turf(src)
-		
+
 		//sound volume falloff with distance
 		var/distance = get_dist(T, turf_source)
-		
+
 		S.volume -= max(distance - world.view, 0) * 2 //multiplicative falloff to add on top of natural audio falloff.
-		
+
 		//sound volume falloff with pressure
 		var/pressure_factor = 1.0
-		
+
 		var/datum/gas_mixture/hearer_env = T.return_air()
 		var/datum/gas_mixture/source_env = turf_source.return_air()
-		
+
 		if (hearer_env && source_env)
 			var/pressure = min(hearer_env.return_pressure(), source_env.return_pressure())
-			
+
 			if (pressure < ONE_ATMOSPHERE)
 				pressure_factor = max((pressure - SOUND_MINIMUM_PRESSURE)/(ONE_ATMOSPHERE - SOUND_MINIMUM_PRESSURE), 0)
 		else //in space
 			pressure_factor = 0
-		
+
 		if (distance <= 1)
 			pressure_factor = max(pressure_factor, 0.15)	//hearing through contact
-		
+
 		S.volume *= pressure_factor
-		
+
 		if (S.volume <= 0)
 			return	//no volume means no sound
-		
+
 		var/dx = turf_source.x - T.x // Hearing from the right/left
 		S.x = dx
 		var/dz = turf_source.y - T.y // Hearing from infront/behind
@@ -113,4 +131,10 @@ var/const/FALLOFF_SOUNDS = 0.5
 			if ("hiss") soundin = pick(hiss_sound)
 			if ("pageturn") soundin = pick(page_sound)
 			//if ("gunshot") soundin = pick(gun_sound)
+			if ("defaultstep") soundin = pick(defaultfootsteps)
+			if ("concretestep") soundin = pick(concretefootsteps)
+			if ("grassstep") soundin = pick(grassfootsteps)
+			if ("dirtstep") soundin = pick(dirtfootsteps)
+			if ("waterstep") soundin = pick(waterfootsteps)
+			if ("sandstep") soundin = pick(sandfootsteps)
 	return soundin
