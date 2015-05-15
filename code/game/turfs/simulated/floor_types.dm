@@ -140,11 +140,13 @@
 /turf/simulated/shuttle/floor
 	name = "floor"
 	icon_state = "floor"
+	footstep_sound = "concretefootsteps"
 
 /turf/simulated/shuttle/plating
 	name = "plating"
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "plating"
+	footstep_sound = "concretefootsteps"
 
 /turf/simulated/shuttle/plating/vox	//Vox skipjack plating
 	oxygen = 0
@@ -162,19 +164,23 @@
 /turf/simulated/floor/beach
 	name = "Beach"
 	icon = 'icons/misc/beach.dmi'
+	footstep_sound = "sandstep"
 
 /turf/simulated/floor/beach/sand
 	name = "Sand"
 	icon_state = "sand"
+	footstep_sound = "sandstep"
 
 /turf/simulated/floor/beach/coastline
 	name = "Coastline"
 	icon = 'icons/misc/beach2.dmi'
 	icon_state = "sandwater"
+	footstep_sound = "sandstep"
 
 /turf/simulated/floor/beach/water
 	name = "Water"
 	icon_state = "water"
+	footstep_sound = "waterstep"
 
 /turf/simulated/floor/beach/water/New()
 	..()
@@ -184,6 +190,7 @@
 	name = "Grass patch"
 	icon_state = "grass1"
 	floor_tile = new/obj/item/stack/tile/grass
+	footstep_sound = "grassstep"
 
 	New()
 		floor_tile.New() //I guess New() isn't ran on objects spawned without the definition of a turf to house them, ah well.
@@ -201,6 +208,8 @@
 	name = "Carpet"
 	icon_state = "carpet"
 	floor_tile = new/obj/item/stack/tile/carpet
+	footstep_sound = null
+
 
 	New()
 		floor_tile.New() //I guess New() isn't ran on objects spawned without the definition of a turf to house them, ah well.
@@ -226,6 +235,7 @@
 	name = "snow"
 	icon = 'icons/turf/snow.dmi'
 	icon_state = "snow"
+	footstep_sound = "grassstep"
 
 /turf/simulated/floor/plating/snow/ex_act(severity)
 	return

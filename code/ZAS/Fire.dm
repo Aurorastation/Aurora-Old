@@ -128,6 +128,13 @@ turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh)
 	for(var/atom/A in loc)
 		A.fire_act(air_contents, air_contents.temperature, air_contents.volume)
 
+	//Recheck for turf as it could change since the last check
+	if(!istype(my_tile) || !my_tile.zone)
+		if(my_tile.fire == src)
+			my_tile.fire = null
+		RemoveFire()
+		return 1
+
 	//spread
 	for(var/direction in cardinal)
 		var/turf/simulated/enemy_tile = get_step(my_tile, direction)
