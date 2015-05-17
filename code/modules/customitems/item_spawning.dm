@@ -1,8 +1,85 @@
-//switch this out to use a database at some point
-//list of ckey/ real_name and item paths
-//gives item to specific people when they join if it can
-//for multiple items just add mutliple entries, unless i change it to be a listlistlist
-//yes, it has to be an item, you can't pick up nonitems
+/*
+ *
+ *New proc, SQL based, for custom item spawning starts here.
+ *
+ */
+
+/proc/EquipCustomItems(mob/living/carbon/human/M)
+	establish_db_connection()
+	if(!dbcon.IsConnected())
+		error("Custom item check failed: unable to connect to database.")
+		return
+
+	var/ckeyl = sanitizeSQL(M.ckey)
+	var/DBQuery/query = dbcon.NewQuery("SELECT item, job, real_name FROM aurora_customitems WHERE ckey='[ckeyl]'")
+	query.Execute()
+
+	while(query.NextRow())
+		var/path = query.item[1]
+		var/jobs = query.item[2]
+		var/char = query.item[3]
+
+		if(char == M.real_name)
+			path = trim(path)
+			path = text2path(path)
+			var/obj/item/Item = new path()
+			var/ok = 0
+
+			//ERT fluff items are speshul, K? K.
+			//Because they use the jobs var for data carrying, they get to be made before a job check
+			if(istype(Item,/obj/item/clothing/tie/ert_dogtags))
+				var/obj/item/clothing/tie/ert_dogtags/I = Item
+				var/datas = text2list(jobs, ",")
+				I.rank = datas[1]
+				I.surname = datas[2]
+				I.spec = datas[3]
+				I.desc = "[datas[1]] [datas[2]] - [datas[3]]"
+				jobs = null
+			if(istype(Item,/obj/item/clothing/suit/storage/ert))
+				var/obj/item/clothing/suit/storage/ert/I = Item
+				var/datas = text2list(jobs, ",")
+				I.desc = "A militaristic duty jacket worn by members of the NanoTrasen Emergency Response Teams. The nameplate reads: [datas[1]] [datas[2]]."
+				jobs = null
+
+			//Job restriction check.
+			if(jobs)
+				jobs = text2list(jobs, ",")
+				if(!M.mind.role_alt_title in jobs)
+					del(Item)
+					ok = 1
+					continue
+
+			//A place, where we have things that control item replacement and so on.
+			if(istype(Item,/obj/item/device/radio/headset/))
+				var/obj/item/device/radio/headset/I = Item
+				for(var/obj/item/device/radio/headset/A in M)
+					I.keyslot1 = A.keyslot1
+					I.keyslot2 = A.keyslot2
+					del(A)
+					ok = M.equip_if_possible(I, slot_l_ear, 0)
+					break
+				I.recalculateChannels()
+			else if(istype(Item,/obj/item/clothing/glasses/))
+				var/obj/item/clothing/glasses/I = Item
+				for(var/obj/item/clothing/glasses/A in M)
+					del(A)
+					M.glasses = null
+					break
+				ok = M.equip_if_possible(I, slot_glasses, 0)
+
+			if(ok == 0)
+				if(istype(M.back,/obj/item/weapon/storage) && M.back:contents.len < M.back:storage_slots) // Try to place it in something on the mob's back
+					Item.loc = M.back
+					ok = 1
+					continue
+				else if(ok == 0)
+					for(var/obj/item/weapon/storage/S in M.contents) // Try to place it in any item that can store stuff, on the mob.
+						if (S.contents.len < S.storage_slots)
+							Item.loc = S
+							ok = 1
+							continue
+				else if(ok == 0)// Finally, since everything else failed, place it on the ground
+					Item.loc = get_turf(M.loc)
 
 /*
  *Old procs for custom items start here
@@ -124,62 +201,4 @@ proc/EquipCustomItems(mob/living/carbon/human/M)
 
 				skip:
 				if (ok == 0) // Finally, since everything else failed, place it on the ground
-					Item.loc = get_turf(M.loc)
- *
- *
- *New proc, SQL based, for custom item spawning starts here.
- *
- */
-
-/proc/EquipCustomItems(mob/living/carbon/human/M)
-	establish_db_connection()
-	if(!dbcon.IsConnected())
-		error("Custom item check failed: unable to connect to database.")
-		return
-
-	var/ckeyl = sanitizeSQL(M.ckey)
-	var/DBQuery/query = dbcon.NewQuery("SELECT item, job, real_name FROM aurora_customitems WHERE ckey='[ckeyl]'")
-	query.Execute()
-
-	while(query.NextRow())
-		var/path = query.item[1]
-		var/jobs = query.item[2]
-		var/char = query.item[3]
-		//Okay, so we have a query. It will only fill the var/path if the character actually has an item.
-		//I guess recursive spawn code is a thing to do, creating a list, and running a for() on that list seems excessive
-
-		//Getting lazy, alternative would be to use two variables, but this is just self-updating, really
-		if(char == M.real_name)
-			path = trim(path)
-			path = text2path(path)
-			var/obj/item/Item = new path()
-
-			var/ok = 0
-
-			if(!jobs)
-				goto skip
-
-			if(jobs)
-				jobs = text2list(jobs, ",")
-				if(M.mind.role_alt_title in jobs)
-					goto skip
-				else
-					del(Item)
-					ok = 1
-					continue
-
-
-			skip:
-			if(ok == 0)
-				if(istype(M.back,/obj/item/weapon/storage) && M.back:contents.len < M.back:storage_slots) // Try to place it in something on the mob's back
-					Item.loc = M.back
-					ok = 1
-					continue
-				else if(ok == 0)
-					for(var/obj/item/weapon/storage/S in M.contents) // Try to place it in any item that can store stuff, on the mob.
-						if (S.contents.len < S.storage_slots)
-							Item.loc = S
-							ok = 1
-							continue
-				else if(ok == 0)// Finally, since everything else failed, place it on the ground
-					Item.loc = get_turf(M.loc)
+					Item.loc = get_turf(M.loc)*/

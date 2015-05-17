@@ -119,6 +119,7 @@
 	icon = 'icons/misc/beach.dmi'
 	icon_state = "water"
 	icon_spawn_state = "water"
+	footstep_sound = "waterstep"
 
 /turf/unsimulated/jungle/water/New()
 	..()

@@ -87,7 +87,7 @@
 				return 0// nope.avi
 
 			var/distance = get_dist(starting,loc)
-			var/miss_modifier = -60
+			var/miss_modifier = -75
 
 			if (istype(shot_from,/obj/item/weapon/gun))	//If you aim at someone beforehead, it'll hit more often.
 				var/obj/item/weapon/gun/daddy = shot_from //Kinda balanced by fact you need like 2 seconds to aim
@@ -95,6 +95,10 @@
 					miss_modifier += -30
 				def_zone = get_zone_with_miss_chance(def_zone, M, miss_modifier + 15*distance + daddy.accuracy + daddy.rangedrop) // add +daddy.missmod vars to gun and this. snowflake accuracy
 //moving def_zone to be a child of the daddyblock because i need the daddy.  all projectiles should be fired from guns anyway
+
+			if (istype(shot_from,/obj/item/mecha_parts/mecha_equipment/weapon))	//If you shoot with a mecha weapon instead, check accuracy without a steady variable
+				def_zone = get_zone_with_miss_chance(def_zone, M, miss_modifier + 10*distance)
+
 			if(!def_zone)
 				visible_message("\blue \The [src] misses [M] narrowly!")
 				forcedodge = -1

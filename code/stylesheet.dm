@@ -67,6 +67,8 @@ h1.alert, h2.alert		{color: #000000;}
 .skrell					{color: #00CED1;}
 .vaurca					{color: #9e9e39;}
 .soghun					{color: #228B22;}
+.solcom					{color: #22228B;}
+.changeling				{color: #800080;}
 .vox					{color: #AA00AA;}
 .rough					{font-family: "Trebuchet MS", cursive, sans-serif;}
 .say_quote				{font-family: Georgia, Verdana, sans-serif;}

@@ -346,7 +346,8 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 							var/sqlauthor = sanitizeSQL(scanner.cache.author)
 							var/sqlcontent = sanitizeSQL(scanner.cache.dat)
 							var/sqlcategory = sanitizeSQL(upload_category)
-							var/DBQuery/query = dbcon_old.NewQuery("INSERT INTO library (author, title, content, category) VALUES ('[sqlauthor]', '[sqltitle]', '[sqlcontent]', '[sqlcategory]')")
+							var/sqluploader = sanitizeSQL(usr.key)
+							var/DBQuery/query = dbcon_old.NewQuery("INSERT INTO library (author, title, content, category, uploadtime, uploader) VALUES ('[sqlauthor]', '[sqltitle]', '[sqlcontent]', '[sqlcategory]', Now(), '[sqluploader]')")
 							if(!query.Execute())
 								usr << query.ErrorMsg()
 							else

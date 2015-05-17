@@ -67,13 +67,15 @@ obj/machinery/atmospherics/binary
 
 		for(var/obj/machinery/atmospherics/target in get_step(src,node1_connect))
 			if(target.initialize_directions & get_dir(target,src))
-				node1 = target
-				break
+				if (check_connect_types(target,src))
+					node1 = target
+					break
 
 		for(var/obj/machinery/atmospherics/target in get_step(src,node2_connect))
 			if(target.initialize_directions & get_dir(target,src))
-				node2 = target
-				break
+				if (check_connect_types(target,src))
+					node2 = target
+					break
 
 		update_icon()
 		update_underlays()

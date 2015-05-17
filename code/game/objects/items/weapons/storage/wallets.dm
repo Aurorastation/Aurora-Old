@@ -23,7 +23,8 @@
 		"/obj/item/weapon/photo",
 		"/obj/item/weapon/reagent_containers/dropper",
 		"/obj/item/weapon/screwdriver",
-		"/obj/item/weapon/stamp")
+		"/obj/item/weapon/stamp",
+		"/obj/item/clothing/tie/fluff/kane_badge")
 	slot_flags = SLOT_ID
 
 	var/obj/item/weapon/card/id/front_id = null

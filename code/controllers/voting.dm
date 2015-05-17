@@ -2,6 +2,7 @@ var/datum/controller/vote/vote = new()
 
 var/global/list/round_voters = list() //Keeps track of the individuals voting for a given round, for use in forcedrafting.
 var/global/last_vote_time = 0
+var/global/last_vote_time_game = 0
 
 datum/controller/vote
 	var/initiator = null
@@ -200,6 +201,7 @@ datum/controller/vote
 			world.Reboot()
 
 		last_vote_time = time_stamp()
+		last_vote_time_game = "[round(world.time / 36000)]:[(world.time / 600 % 60) < 10 ? add_zero(world.time / 600 % 60, 1) : world.time / 600 % 60]"
 		return .
 
 	proc/submit_vote(var/ckey, var/vote)
@@ -275,13 +277,9 @@ datum/controller/vote
 
 			log_vote(text)
 			world << "<font color='purple'><b>[text]</b>\nType vote to place your votes.\nYou have [config.vote_period/10] seconds to vote.</font>"
-			switch(vote_type)
-				if("crew_transfer")
-					world << sound('sound/ambience/alarm4.ogg')
-				if("gamemode")
-					world << sound('sound/ambience/alarm4.ogg')
-				if("custom")
-					world << sound('sound/ambience/alarm4.ogg')
+			for(var/client/C in clients)
+				if(C.prefs.asfx_togs & ASFX_VOTE) //Personal mute
+					C << sound('sound/effects/vote.ogg')
 			if(mode == "gamemode" && going)
 				going = 0
 				world << "<font color='red'><b>Round start has been delayed.</b></font>"

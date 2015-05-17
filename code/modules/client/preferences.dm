@@ -46,6 +46,7 @@ datum/preferences
 	var/be_special = 0					//Special role selection
 	var/UI_style = "Midnight"
 	var/toggles = TOGGLES_DEFAULT
+	var/asfx_togs = ASFX_DEFAULT
 	var/UI_style_color = "#ffffff"
 	var/UI_style_alpha = 255
 
@@ -496,7 +497,10 @@ datum/preferences
 		HTML += "<tr bgcolor='[job.selection_color]'><td width='60%' align='right'>"
 		var/rank = job.title
 		lastJob = job
-		if(jobban_isbanned(user, rank))
+		if(jobban_isbanned(user, rank) == "Whitelisted Job")
+			HTML += "<del>[rank]</del></td><td><b> \[WHITELISTED]</b></td></tr>"
+			continue
+		else if(jobban_isbanned(user, rank))
 			HTML += "<del>[rank]</del></td><td><b> \[BANNED]</b></td></tr>"
 			continue
 		if(!job.player_old_enough(user.client))

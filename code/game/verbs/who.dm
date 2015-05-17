@@ -158,7 +158,7 @@
 		eventwho += "\n<b> Current Event Hosts([num_event_online]):</b>\n" + eventmsg
 
 	if(num_duty_online)
-		dutymsg = "\n<b> Current Duty Officers([num_event_online]):</b>\n" + dutymsg
+		dutymsg = "\n<b> Current Duty Officers([num_duty_online]):</b>\n" + dutymsg
 
 	msg = "<b>Current Admins ([num_admins_online]):</b>\n" + msg + "\n<b> Current Moderators([num_mods_online]):</b>\n" + modmsg + eventwho + "\n<b> Current Developers([num_devs_online]):</b>\n" + devmsg + dutymsg
 	src << msg

@@ -33,9 +33,11 @@ var/list/wood_icons = list("wood","wood-broken")
 	var/lava = 0
 	var/broken = 0
 	var/burnt = 0
+	var/fire_damage = 0
 	var/mineral = "metal"
 	var/obj/item/stack/tile/floor_tile = new/obj/item/stack/tile/plasteel
 
+	footstep_sound = "defaultstep"
 
 /turf/simulated/floor/New()
 	..()
@@ -76,11 +78,31 @@ var/list/wood_icons = list("wood","wood-broken")
 	return
 
 /turf/simulated/floor/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(!burnt && prob(5))
+	if(exposed_temperature > 500+T0C && !(fire_damage >= heat_capacity))
+		fire_damage += round((exposed_temperature * thermal_conductivity)*10)
+	if(!burnt && fire_damage >= round(heat_capacity / 3))
 		burn_tile()
-	else if(prob(1) && !is_plating())
+	else if(!is_plating() && fire_damage > round(heat_capacity / 1.5)) //What are these numbers, I have no idea, I pulled them out of a hat. No really I did.
 		make_plating()
 		burn_tile()
+		for(var/turf/simulated/floor/RT in AdjacentTurfs())
+			if(!RT.burnt)
+				RT.burn_tile()
+	else if(fire_damage > heat_capacity && prob(1))
+		for(var/turf/simulated/floor/RT in AdjacentTurfs())
+			if(istype(RT) && (RT.x == src.x || RT.y == src.y) && prob(20))
+				RT.burnPipes()
+				RT.ReplaceWithLattice()
+		burnPipes()
+		ReplaceWithLattice()
+	return
+
+/turf/simulated/floor/proc/burnPipes()
+	for(var/obj/machinery/M in src)
+		if(istype(M, /obj/machinery))
+			M.blob_act()
+	for(var/obj/structure/disposalpipe/DP in src)
+		blob_act()
 	return
 
 /turf/simulated/floor/adjacent_fire_act(turf/simulated/floor/adj_turf, datum/gas_mixture/adj_air, adj_temp, adj_volume)
@@ -558,5 +580,6 @@ turf/simulated/floor/proc/update_icon()
 					icon_state = "plating"
 					burnt = 0
 					broken = 0
+					fire_damage = 0
 				else
 					user << "\blue You need more welding fuel to complete this task."

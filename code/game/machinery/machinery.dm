@@ -110,17 +110,42 @@ Class Procs:
 	var/uid
 	var/manual = 0
 	var/global/gl_uid = 1
+	var/area/myArea
+	var/interact_offline = 0 // Can the machine be interacted with while de-powered.
 
 /obj/machinery/New()
-	..()
-	machines += src
+	addAtProcessing()
+	return ..()
 
 /obj/machinery/Del()
-	machines -= src
+	if (src in machines)
+		removeAtProcessing()
 	..()
+
+/obj/machinery/proc/addAtProcessing()
+	if (use_power)
+		myArea = get_area_master(src)
+	machines += src
+
+/obj/machinery/proc/removeAtProcessing()
+	if (myArea)
+		myArea = null
+	machines -= src
 
 /obj/machinery/process()//If you dont use process or power why are you here
 	return PROCESS_KILL
+
+/obj/machinery/CanUseTopic(var/mob/user, var/be_close)
+	if(!interact_offline && (stat & (NOPOWER|BROKEN)))
+		return STATUS_CLOSE
+	return ..()
+
+/obj/machinery/CouldUseTopic(var/mob/user)
+	..()
+	user.set_machine(src)
+
+/obj/machinery/CouldNotUseTopic(var/mob/user)
+	usr.unset_machine()
 
 /obj/machinery/emp_act(severity)
 	if(use_power && stat == 0)
@@ -187,37 +212,6 @@ Class Procs:
 /obj/machinery/proc/inoperable(var/additional_flags = 0)
 	return (stat & (NOPOWER|BROKEN|additional_flags))
 
-/obj/machinery/Topic(href, href_list)
-	..()
-	if(inoperable())
-		return 1
-	if(usr.restrained() || usr.lying || usr.stat)
-		return 1
-	if ( ! (istype(usr, /mob/living/carbon/human) || \
-			istype(usr, /mob/living/silicon) || \
-			istype(usr, /mob/living/carbon/monkey)) )
-		usr << "\red You don't have the dexterity to do this!"
-		return 1
-
-	var/norange = 0
-	if(istype(usr, /mob/living/carbon/human))
-		var/mob/living/carbon/human/H = usr
-		if(istype(H.l_hand, /obj/item/tk_grab))
-			norange = 1
-		else if(istype(H.r_hand, /obj/item/tk_grab))
-			norange = 1
-
-	if(!norange)
-		if ((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
-			return 1
-
-	src.add_fingerprint(usr)
-
-	var/area/A = get_area(src)
-	A.master.powerupdate = 1
-
-	return 0
-
 /obj/machinery/attack_ai(mob/user as mob)
 	if(isrobot(user))
 		// For some reason attack_robot doesn't work
@@ -231,7 +225,7 @@ Class Procs:
 	return src.attack_hand(user)
 
 /obj/machinery/attack_hand(mob/user as mob)
-	if(inoperable(MAINT))
+	if(!interact_offline && stat & (NOPOWER|BROKEN|MAINT))
 		return 1
 	if(user.lying || user.stat)
 		return 1

@@ -142,6 +142,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		randomItems.Add("/obj/item/weapon/gun/energy/crossbow") //Energy Crossbow
 		randomItems.Add("/obj/item/device/powersink") //Powersink
 		randomItems.Add("/obj/item/weapon/cane/syndie")
+		randomItems.Add("/obj/item/clothing/gloves/force/syndicate")
 
 	if(uses > 3)
 		randomItems.Add("/obj/item/weapon/melee/energy/sword") //Energy Sword
@@ -175,6 +176,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		randomItems.Add("/obj/item/clothing/shoes/syndigaloshes") //No-Slip Syndicate Shoes
 		randomItems.Add("/obj/item/weapon/plastique") //C4
 		randomItems.Add("/obj/item/weapon/storage/box/syndie_kit/masks_gas")
+		randomItems.Add("/obj/item/shoe_cover")
 
 	if(uses > 0)
 		randomItems.Add("/obj/item/weapon/soap/syndie") //Syndicate Soap
@@ -198,7 +200,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 				uses -= 6
 			if("/obj/item/weapon/gun/energy/crossbow" , "/obj/item/device/powersink" , "/obj/item/weapon/cane/syndie")
 				uses -= 5
-			if("/obj/item/weapon/melee/energy/sword" , "/obj/item/clothing/mask/gas/voice" , "/obj/item/device/chameleon" , "/obj/item/weapon/melee/baton/stunrod/loaded")
+			if("/obj/item/weapon/melee/energy/sword" , "/obj/item/clothing/mask/gas/voice" , "/obj/item/device/chameleon" , "/obj/item/weapon/melee/baton/stunrod/loaded", "/obj/item/clothing/gloves/force/syndicate")
 				uses -= 4
 			if("/obj/item/weapon/storage/box/emps" , "/obj/item/weapon/pen/paralysis" , "/obj/item/weapon/cartridge/syndicate" , "/obj/item/clothing/under/chameleon" , \
 			"/obj/item/weapon/card/emag" , "/obj/item/weapon/storage/box/syndie_kit/space" , "/obj/item/device/encryptionkey/binary" , \
@@ -206,7 +208,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 				uses -= 3
 			if("/obj/item/ammo_magazine/a357" , "/obj/item/clothing/shoes/syndigaloshes" , "/obj/item/weapon/plastique", "/obj/item/weapon/card/id/syndicate" , "/obj/item/weapon/storage/box/syndie_kit/masks_gas")
 				uses -= 2
-			if("/obj/item/weapon/soap/syndie" , "/obj/item/weapon/storage/toolbox/syndicate" , "/obj/item/weapon/storage/box/syndie_kit/masks")
+			if("/obj/item/weapon/soap/syndie" , "/obj/item/weapon/storage/toolbox/syndicate" , "/obj/item/weapon/storage/box/syndie_kit/masks", "/obj/item/shoe_cover")
 				uses -= 1
 		del(randomItems)
 		return buyItem
@@ -278,7 +280,11 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 			feedback_add_details("traitor_uplink_items_bought","MM")
 		if("/obj/item/weapon/melee/baton/stunrod/loaded")
 			feedback_add_details("traitor_uplink_items_bought","SR")
-
+		if("/obj/item/clothing/gloves/force/syndicate")
+			feedback_add_details("traitor_uplink_items_bought","FG")
+		if("/obj/item/shoe_cover")
+			feedback_add_details("traitor_uplink_items_bought","SFS")
+/obj/item/shoe_cover
 
 
 /obj/item/device/uplink/Topic(href, href_list)

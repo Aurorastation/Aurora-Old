@@ -49,7 +49,7 @@
 	msg_scopes("Admin [key_name_admin(usr)] has restarted the [controller] controller.")
 	return
 
-/client/proc/debug_controller(controller in list("Master","Failsafe","Ticker","Lighting","Air","Jobs","Sun","Radio","Supply","Shuttles","Emergency Shuttle","Configuration","pAI", "Cameras", "Transfer Controller", "Gas Data", "Delta Level", "NanoUI"))
+/client/proc/debug_controller(controller in list("Master","Failsafe","Ticker","Lighting","Air","Jobs","Sun","Radio","Supply","Shuttles","Emergency Shuttle","Configuration","pAI", "Cameras", "Transfer Controller", "Gas Data", "Delta Level", "NanoUI", "SQL News"))
 	set category = "Debug"
 	set name = "Debug Controller"
 	set desc = "Debug the various periodic loop controllers for the game (be careful!)"
@@ -110,6 +110,9 @@
 		if("NanoUI")
 			debug_variables(nanomanager)
 			feedback_add_details("admin_verv","DNanoUI")
+		if("SQL News")
+			debug_variables(sqlnews_controller)
+			feedback_add_details("admin_verb","DSQLNews")
 
 	message_admins("Admin [key_name_admin(usr)] is debugging the [controller] controller.")
 	return

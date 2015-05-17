@@ -574,6 +574,8 @@ proc/get_damage_icon_part(damage_state, body_part)
 			standing.icon = w_uniform.icon_override
 		else if(w_uniform.sprite_sheets && w_uniform.sprite_sheets[species.name])
 			standing.icon = w_uniform.sprite_sheets[species.name]
+		else if(w_uniform.contained_sprite)
+			standing = image("icon" = w_uniform.icon, "icon_state" = "[w_uniform.icon_state]_w")
 		else
 			standing.icon = 'icons/mob/uniform.dmi'
 
@@ -597,6 +599,16 @@ proc/get_damage_icon_part(damage_state, body_part)
 			if(!aband_color) aband_color = w_uniform:aband.icon_state
 			standing.overlays	+= image("icon" = 'icons/mob/ties.dmi', "icon_state" = "[aband_color]")
 
+		if(w_uniform:webbing)	//SAME THING AS ABOVE, LETS ADD TWO MORE FOR LOLS
+			var/webbing_color = w_uniform:webbing.item_color
+			if(!webbing_color) webbing_color = w_uniform:webbing.icon_state
+			standing.overlays	+= image("icon" = 'icons/mob/ties.dmi', "icon_state" = "[webbing_color]")
+
+		if(w_uniform:holster)	//SAME THING AS ABOVE, THIS IS FUN
+			var/holster_color = w_uniform:holster.item_color
+			if(!holster_color) holster_color = w_uniform:holster.icon_state
+			standing.overlays	+= image("icon" = 'icons/mob/ties.dmi', "icon_state" = "[holster_color]")
+
 		overlays_standing[UNIFORM_LAYER]	= standing
 	else
 		overlays_standing[UNIFORM_LAYER]	= null
@@ -619,6 +631,8 @@ proc/get_damage_icon_part(damage_state, body_part)
 		wear_id.screen_loc = ui_id	//TODO
 		if(w_uniform && w_uniform:displays_id)
 			overlays_standing[ID_LAYER]	= image("icon" = 'icons/mob/mob.dmi', "icon_state" = "id")
+		else if(wear_id.contained_sprite)
+			overlays_standing[ID_LAYER] = image("icon" = wear_id.icon, "icon_state" = "[wear_id.icon_state]_w")
 		else
 			overlays_standing[ID_LAYER]	= null
 	else
@@ -639,6 +653,8 @@ proc/get_damage_icon_part(damage_state, body_part)
 			standing = image("icon" = gloves.icon_override, "icon_state" = "[t_state]")
 		else if(gloves.sprite_sheets && gloves.sprite_sheets[species.name])
 			standing = image("icon" = gloves.sprite_sheets[species.name], "icon_state" = "[t_state]")
+		else if(gloves.contained_sprite)
+			standing = image("icon" = gloves.icon, "icon_state" = "[gloves.icon_state]_w")
 		else
 			standing = image("icon" = 'icons/mob/hands.dmi', "icon_state" = "[t_state]")
 
@@ -669,6 +685,8 @@ proc/get_damage_icon_part(damage_state, body_part)
 			overlays_standing[GLASSES_LAYER] = image("icon" = glasses.icon_override, "icon_state" = "[glasses.icon_state]")
 		else if(glasses.sprite_sheets && glasses.sprite_sheets[species.name])
 			overlays_standing[GLASSES_LAYER]= image("icon" = glasses.sprite_sheets[species.name], "icon_state" = "[glasses.icon_state]")
+		else if(glasses.contained_sprite)
+			overlays_standing[GLASSES_LAYER] = image("icon" = glasses.icon, "icon_state" = "[glasses.icon_state]_w")
 		else
 			overlays_standing[GLASSES_LAYER]= image("icon" = 'icons/mob/eyes.dmi', "icon_state" = "[glasses.icon_state]")
 
@@ -719,6 +737,8 @@ proc/get_damage_icon_part(damage_state, body_part)
 			standing = image("icon" = shoes.icon_override, "icon_state" = "[shoes.icon_state]")
 		else if(shoes.sprite_sheets && shoes.sprite_sheets[species.name])
 			standing = image("icon" = shoes.sprite_sheets[species.name], "icon_state" = "[shoes.icon_state]")
+		else if(shoes.contained_sprite)
+			standing = image("icon" = shoes.icon, "icon_state" = "[shoes.icon_state]_w")
 		else
 			standing = image("icon" = 'icons/mob/feet.dmi', "icon_state" = "[shoes.icon_state]")
 
@@ -762,6 +782,8 @@ proc/get_damage_icon_part(damage_state, body_part)
 				standing = image("icon" = head.icon_override, "icon_state" = "[head.icon_state]")
 			else if(head.sprite_sheets && head.sprite_sheets[species.name])
 				standing = image("icon" = head.sprite_sheets[species.name], "icon_state" = "[head.icon_state]")
+			else if(head.contained_sprite)
+				standing = image("icon" = head.icon, "icon_state" = "[head.icon_state]_w")
 			else
 				standing = image("icon" = 'icons/mob/head.dmi', "icon_state" = "[head.icon_state]")
 
@@ -791,6 +813,8 @@ proc/get_damage_icon_part(damage_state, body_part)
 			overlays_standing[BELT_LAYER] = image("icon" = belt.icon_override, "icon_state" = "[t_state]")
 		else if(belt.sprite_sheets && belt.sprite_sheets[species.name])
 			overlays_standing[BELT_LAYER] = image("icon" = belt.sprite_sheets[species.name], "icon_state" = "[t_state]")
+		else if(belt.contained_sprite)
+			overlays_standing[BELT_LAYER] = image("icon" = belt.icon, "icon_state" = "[belt.icon_state]_w")
 		else
 			overlays_standing[BELT_LAYER] = image("icon" = 'icons/mob/belt.dmi', "icon_state" = "[t_state]")
 	else
@@ -807,6 +831,8 @@ proc/get_damage_icon_part(damage_state, body_part)
 			standing = image("icon" = wear_suit.icon_override, "icon_state" = "[wear_suit.icon_state]")
 		else if(wear_suit.sprite_sheets && wear_suit.sprite_sheets[species.name])
 			standing = image("icon" = wear_suit.sprite_sheets[species.name], "icon_state" = "[wear_suit.icon_state]")
+		else if(wear_suit.contained_sprite)
+			standing = image("icon" = wear_suit.icon, "icon_state" = "[wear_suit.icon_state]_w")
 		else
 			standing = image("icon" = 'icons/mob/suit.dmi', "icon_state" = "[wear_suit.icon_state]")
 
@@ -855,6 +881,8 @@ proc/get_damage_icon_part(damage_state, body_part)
 			standing = image("icon" = wear_mask.icon_override, "icon_state" = "[wear_mask.icon_state]")
 		else if(wear_mask.sprite_sheets && wear_mask.sprite_sheets[species.name])
 			standing = image("icon" = wear_mask.sprite_sheets[species.name], "icon_state" = "[wear_mask.icon_state]")
+		else if(wear_mask.contained_sprite)
+			standing = image("icon" = wear_mask.icon, "icon_state" = "[wear_mask.icon_state]_w")
 		else
 			standing = image("icon" = 'icons/mob/mask.dmi', "icon_state" = "[wear_mask.icon_state]")
 
@@ -879,6 +907,8 @@ proc/get_damage_icon_part(damage_state, body_part)
 			overlays_standing[BACK_LAYER] = image("icon" = back.icon_override, "icon_state" = "[back.icon_state]")
 		else if(back.sprite_sheets && back.sprite_sheets[species.name])
 			overlays_standing[BACK_LAYER] = image("icon" = back.sprite_sheets[species.name], "icon_state" = "[back.icon_state]")
+		else if(back.contained_sprite)
+			overlays_standing[BACK_LAYER] = image("icon" = back.icon, "icon_state" = "[back.icon_state]_w")
 		else
 			overlays_standing[BACK_LAYER] = image("icon" = 'icons/mob/back.dmi', "icon_state" = "[back.icon_state]")
 	else
@@ -925,6 +955,9 @@ proc/get_damage_icon_part(damage_state, body_part)
 		if(r_hand.icon_override)
 			t_state = "[t_state]_r"
 			overlays_standing[R_HAND_LAYER] = image("icon" = r_hand.icon_override, "icon_state" = "[t_state]")
+		else if(r_hand.contained_sprite)
+			t_state = "[t_state]_r"
+			overlays_standing[R_HAND_LAYER] = image("icon" = r_hand.icon, "icon_state" = "[t_state]")
 		else
 			overlays_standing[R_HAND_LAYER] = image("icon" = 'icons/mob/items_righthand.dmi', "icon_state" = "[t_state]")
 
@@ -943,6 +976,9 @@ proc/get_damage_icon_part(damage_state, body_part)
 		if(l_hand.icon_override)
 			t_state = "[t_state]_l"
 			overlays_standing[L_HAND_LAYER] = image("icon" = l_hand.icon_override, "icon_state" = "[t_state]")
+		else if(l_hand.contained_sprite)
+			t_state = "[t_state]_l"
+			overlays_standing[L_HAND_LAYER] = image("icon" = l_hand.icon, "icon_state" = "[t_state]")
 		else
 			overlays_standing[L_HAND_LAYER] = image("icon" = 'icons/mob/items_lefthand.dmi', "icon_state" = "[t_state]")
 

@@ -28,6 +28,8 @@
 		dat += "<HR>Current Loaded Programs:<BR>"
 
 		dat += "<A href='?src=\ref[src];emptycourt=1'>((Empty Court)</font>)</A><BR>"
+//		dat += "<A href='?src=\ref[src];engineeringtest=1'>((Engineer Test)</font>)</A><BR>"
+//		dat += "<A href='?src=\ref[src];firingrange=1'>((Firing Range)</font>)</A><BR>"
 		dat += "<A href='?src=\ref[src];boxingcourt=1'>((Boxing Court)</font>)</A><BR>"
 		dat += "<A href='?src=\ref[src];basketball=1'>((Basketball Court)</font>)</A><BR>"
 		dat += "<A href='?src=\ref[src];thunderdomecourt=1'>((Thunderdome Court)</font>)</A><BR>"
@@ -76,7 +78,17 @@
 				target = locate(/area/holodeck/source_emptycourt)
 				if(target)
 					loadProgram(target)
+/*
+			if(href_list["engineeringtest"])
+				target = locate(/area/holodeck/source_engineeringtest)
+				if(target)
+					loadProgram(target)
 
+			if(href_list["firingrange"])
+				target = locate(/area/holodeck/source_firingrange)
+				if(target)
+					loadProgram(target)
+*/
 			else if(href_list["boxingcourt"])
 				target = locate(/area/holodeck/source_boxingcourt)
 				if(target)
@@ -386,6 +398,7 @@
 	name = "Lush Grass"
 	icon_state = "grass1"
 	floor_tile = new/obj/item/stack/tile/grass
+	footstep_sound = "grassstep"
 
 	New()
 		floor_tile.New() //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
@@ -406,6 +419,7 @@
 	name = "desert sand"
 	desc = "Uncomfortably gritty for a hologram."
 	icon_state = "asteroid"
+	footstep_sound = "gravelstep"
 
 /turf/simulated/floor/holofloor/desert/New()
 	..()
