@@ -133,22 +133,25 @@
 		Topic(src, list("src"= "\ref[src]", "command"="open", "activate" = "1"), 1)  // 1 meaning no window (consistency!)
 	else
 		Topic(src, list("src"= "\ref[src]", "command"="open", "activate" = "0"), 1)
-	return
+	return 1
 
 /atom/proc/AICtrlClick()
-	return
+	return 0
 
 /obj/machinery/door/airlock/AICtrlClick() // Bolts doors
 	if(locked)
 		Topic(src, list("src"= "\ref[src]", "command"="bolts", "activate" = "0"), 1)// 1 meaning no window (consistency!)
 	else
 		Topic(src, list("src"= "\ref[src]", "command"="bolts", "activate" = "1"), 1)
+	return 1
 
 /obj/machinery/power/apc/AICtrlClick() // turns off/on APCs.
 	Topic("breaker=1", list("breaker"="1"), 0) // 0 meaning no window (consistency! wait...)
+	return 1
 
 /obj/machinery/turretid/AICtrlClick() //turns off/on Turrets
 	Topic(src, list("src"= "\ref[src]", "command"="enable", "value"="[!enabled]"), 1)
+	return 1
 
 /atom/proc/AIAltClick(var/atom/A)
 	AltClick(A)
