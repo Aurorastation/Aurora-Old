@@ -370,10 +370,12 @@
 			usr.drop_item_v()
 
 		if("module")
-			if(issilicon(usr))
-				if(usr:module)
+			if(isrobot(usr))
+				var/mob/living/silicon/robot/R = usr
+				if(R.module)
+					R.hud_used.toggle_show_robot_modules()
 					return 1
-				usr:pick_module()
+				R.pick_module()
 
 		if("radio")
 			if(issilicon(usr))
@@ -386,6 +388,11 @@
 			if(issilicon(usr))
 				usr:uneq_active()
 
+		if("Toggle Sensor Augmentation")
+			if(isrobot(usr))
+				var/mob/living/silicon/robot/R = usr
+				R.sensor_mode()			
+				
 		if("module1")
 			if(istype(usr, /mob/living/silicon/robot))
 				usr:toggle_module(1)
@@ -455,7 +462,85 @@
 
 		if("Toggle Gun Mode")
 			usr.client.ToggleGunMode()
+			
 
+		if("AI Core")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.view_core()
+
+		if("Show Camera List")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				var/camera = input(AI) in AI.get_camera_list()
+				AI.ai_camera_list(camera)
+
+		if("Track With Camera")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				var/target_name = input(AI) in AI.trackable_mobs()
+				AI.ai_camera_track(target_name)
+
+		if("Toggle Camera Light")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.toggle_camera_light()
+
+		if("Crew Monitoring")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.nano_crew_monitor()
+
+		if("Show Crew Manifest")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.ai_roster()
+
+		if("Show Alerts")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.ai_alerts()
+
+		if("Announcement")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.ai_announcement()
+
+		if("Call Emergency Shuttle")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.ai_call_shuttle()
+
+		if("State Laws")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.checklaws()
+
+		if("PDA - Send Message")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.aiPDA.cmd_send_pdamesg(usr)
+
+		if("PDA - Show Message Log")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.aiPDA.cmd_show_message_log(usr)
+
+		if("Take Image")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.aiCamera.toggle_camera_mode()
+
+		if("View Images")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.aiCamera.viewpictures()
+				
+		if("Set Sensor Augmentation")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.sensor_mode()
+			
 		else
 			return 0
 	return 1
