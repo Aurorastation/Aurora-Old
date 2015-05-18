@@ -724,7 +724,11 @@ var/list/ai_verbs_default = list(
 	else
 		lightNearbyCamera()
 
-
+/mob/living/silicon/ai/proc/sensor_mode()
+	set name = "Set Sensor Augmentation"
+	set desc = "Augment visual feed with internal sensor overlays."
+	set category = "AI Commands"
+	toggle_sensor_mode()
 
 // Handled camera lighting, when toggled.
 // It will get the nearest camera from the eyeobj, lighting it.
