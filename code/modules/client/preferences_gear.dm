@@ -411,7 +411,7 @@ proc/populate_gear_list()
 	cost = 3
 
 /datum/gear/uniform_captain
-	display_name = "captain's dress uniform"
+	display_name = "captain dress uniform"
 	path = /obj/item/clothing/under/dress/dress_cap
 //	slot = slot_w_uniform
 	cost = 3
