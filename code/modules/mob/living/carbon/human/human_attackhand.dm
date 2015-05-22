@@ -37,7 +37,7 @@
 					visible_message("\red <B>[src] has been touched with the stun gloves by [M]!</B>")
 				return
 
-		if(istype(M.gloves , /obj/item/clothing/gloves/boxing/hologlove))
+		else if(istype(M.gloves , /obj/item/clothing/gloves/boxing/hologlove))
 
 			var/damage = rand(0, 9)
 			if(!damage)
@@ -57,7 +57,6 @@
 			if(damage >= 9)
 				visible_message("\red <B>[M] has weakened [src]!</B>")
 				apply_effect(4, WEAKEN, armor_block)
-
 			return
 	else
 		if(istype(M,/mob/living/carbon))
@@ -104,9 +103,15 @@
 			M.put_in_active_hand(G)
 			grabbed_by += G
 			G.synch()
+
 			LAssailant = M
 
 			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			if(M.gloves && istype(M.gloves,/obj/item/clothing/gloves/force))
+				G.state = GRAB_AGGRESSIVE
+				G.icon_state = "grabbed1"
+				visible_message("<span class='warning'>[M] gets a strong grip on [src]!</span>")
+				return 1
 			visible_message("<span class='warning'>[M] has grabbed [src] passively!</span>")
 			return 1
 
@@ -158,8 +163,9 @@
 			var/armor_block = run_armor_check(affecting, "melee")
 
 			if(HULK in M.mutations)			damage += 5
-
-
+			if(M.gloves && istype(M.gloves,/obj/item/clothing/gloves/force))
+				var/obj/item/clothing/gloves/force/X = M.gloves
+				damage *= X.amplification
 			playsound(loc, attack.attack_sound, 25, 1, -1)
 
 			visible_message("\red <B>[M] [pick(attack.attack_verb)]ed [src]!</B>")
@@ -204,14 +210,37 @@
 
 			var/randn = rand(1, 100)
 			if (randn <= 25)
-				apply_effect(3, WEAKEN, run_armor_check(affecting, "melee"))
-				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-				visible_message("\red <B>[M] has pushed [src]!</B>")
-				return
+				if(M.gloves && istype(M.gloves,/obj/item/clothing/gloves/force))
+					apply_effect(6, WEAKEN, run_armor_check(affecting, "melee"))
+					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+					visible_message("\red <B>[M] hurls [src] to the floor!</B>")
+					step_away(src,M,15)
+					sleep(3)
+					step_away(src,M,15)
+					return
+
+				else
+					apply_effect(3, WEAKEN, run_armor_check(affecting, "melee"))
+					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+					visible_message("\red <B>[M] has pushed [src]!</B>")
+					return
 
 			var/talked = 0	// BubbleWrap
 
 			if(randn <= 60)
+				if(M.gloves && istype(M.gloves,/obj/item/clothing/gloves/force))
+					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+					visible_message("\red <B>[M] shoves, sending [src] flying!</B>")
+					step_away(src,M,15)
+					sleep(1)
+					step_away(src,M,15)
+					sleep(1)
+					step_away(src,M,15)
+					sleep(1)
+					step_away(src,M,15)
+					sleep(1)
+					apply_effect(1, WEAKEN, run_armor_check(affecting, "melee"))
+					return
 				//BubbleWrap: Disarming breaks a pull
 				if(pulling)
 					visible_message("\red <b>[M] has broken [src]'s grip on [pulling]!</B>")

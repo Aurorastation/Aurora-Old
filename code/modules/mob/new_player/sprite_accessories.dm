@@ -711,6 +711,29 @@
 		icon_state = "hair_messy"
 		species_allowed = list("Tajaran")
 
+	taj_ears_wife
+		name = "Tajara Housewife"
+		icon_state = "hair_wife"
+		gender = FEMALE
+		species_allowed = list("Tajaran")
+
+	taj_ears_victory
+		name = "Tajara Victory Curls"
+		icon_state = "hair_victory"
+		gender = FEMALE
+		species_allowed = list("Tajaran")
+
+	taj_ears_bob
+		name = "Tajara Bob"
+		icon_state = "hair_tbob"
+		species_allowed = list("Tajaran")
+
+	taj_ears_fingercurl
+		name = "Tajara Finger Curls"
+		icon_state = "hair_fingerwave"
+		gender = FEMALE
+		species_allowed = list("Tajaran")
+
 	vox_quills_short
 		name = "Short Vox Quills"
 		icon_state = "vox_shortquills"

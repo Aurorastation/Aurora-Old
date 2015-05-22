@@ -9,7 +9,8 @@
 	var/volume = 0
 	var/destroyed = 0
 
-	var/maximum_pressure = 90*ONE_ATMOSPHERE
+	var/start_pressure = ONE_ATMOSPHERE
+	var/maximum_pressure = 90 * ONE_ATMOSPHERE
 
 /obj/machinery/portable_atmospherics/New()
 	..()
@@ -38,6 +39,14 @@
 	del(air_contents)
 
 	..()
+
+/obj/machinery/portable_atmospherics/proc/StandardAirMix()
+	return list(
+		"oxygen" = O2STANDARD * MolesForPressure(),
+		"nitrogen" = N2STANDARD *  MolesForPressure())
+
+/obj/machinery/portable_atmospherics/proc/MolesForPressure(var/target_pressure = start_pressure)
+	return (target_pressure * air_contents.volume) / (R_IDEAL_GAS_EQUATION * air_contents.temperature)
 
 /obj/machinery/portable_atmospherics/update_icon()
 	return null
@@ -83,7 +92,7 @@
 /obj/machinery/portable_atmospherics/proc/update_connected_network()
 	if(!connected_port)
 		return
-	
+
 	var/datum/pipe_network/network = connected_port.return_network(src)
 	if (network)
 		network.update = 1
@@ -120,7 +129,7 @@
 				user << "\blue Nothing happens."
 				return
 
-	else if ((istype(W, /obj/item/device/analyzer)) && get_dist(user, src) <= 1)
+	else if ((istype(W, /obj/item/device/analyzer)) && Adjacent(user))
 		visible_message("\red [user] has used [W] on \icon[icon]")
 		if(air_contents)
 			var/pressure = air_contents.return_pressure()
@@ -153,25 +162,39 @@
 		if(cell)
 			user << "There is already a power cell installed."
 			return
-		
+
 		var/obj/item/weapon/cell/C = I
-		
+
 		user.drop_item()
 		C.add_fingerprint(user)
 		cell = C
 		C.loc = src
 		user.visible_message("\blue [user] opens the panel on [src] and inserts [C].", "\blue You open the panel on [src] and insert [C].")
 		return
-	
+
 	if(istype(I, /obj/item/weapon/screwdriver))
 		if(!cell)
 			user << "\red There is no power cell installed."
 			return
-		
+
 		user.visible_message("\blue [user] opens the panel on [src] and removes [cell].", "\blue You open the panel on [src] and remove [cell].")
 		cell.add_fingerprint(user)
 		cell.loc = src.loc
 		cell = null
 		return
-	
+
 	..()
+
+/obj/machinery/portable_atmospherics/proc/log_open()
+	if(air_contents.gas.len == 0)
+		return
+
+	var/gases = ""
+	for(var/gas in air_contents.gas)
+		if(gases)
+			gases += ", [gas]"
+		else
+			gases = gas
+	log_admin("[usr] ([usr.ckey]) opened '[src.name]' containing [gases].")
+	message_admins("[usr] ([usr.ckey]) opened '[src.name]' containing [gases].")
+	message_mods("[usr] ([usr.ckey]) opened '[src.name]' containing [gases].")

@@ -309,9 +309,9 @@
 			if (radiation > 50)
 				damage = 1
 				radiation -= 1 * RADIATION_SPEED_COEFFICIENT
-				if(prob(5) && prob(100 * RADIATION_SPEED_COEFFICIENT))
-					radiation -= 5 * RADIATION_SPEED_COEFFICIENT
-					src << "<span class='warning'>You feel weak.</span>"
+				if(prob(5)) //&& prob(100 * RADIATION_SPEED_COEFFICIENT)) //who did this double percentage thing
+					radiation -= 5 * RADIATION_SPEED_COEFFICIENT //do you understand
+					src << "<span class='warning'>You feel weak.</span>" //5% *10% is never happens ever %. it is worthless.
 					Weaken(3)
 					if(!lying)
 						emote("collapse")
@@ -325,12 +325,17 @@
 			if (radiation > 75)
 				radiation -= 1 * RADIATION_SPEED_COEFFICIENT
 				damage = 3
-				if(prob(5))
-					take_overall_damage(0, 5 * RADIATION_SPEED_COEFFICIENT, used_weapon = "Radiation Burns")
-				if(prob(1))
+				if(prob(3)) //originally 5% chance to take .5 burn.  now 3% chance to take 5 burn.
+					take_overall_damage(0, 5, used_weapon = "Radiation Burns") // formerly 5 * RADIATION_SPEED_COEFFICIENT
+				if(prob(2)) //originally 1% chance to take .5 cloneloss.  now 2% chance to take 5 cloneloss.
 					src << "<span class='warning'>You feel strange!</span>"
-					adjustCloneLoss(5 * RADIATION_SPEED_COEFFICIENT)
+					adjustCloneLoss(5) // * RADIATION_SPEED_COEFFICIENT //a 1% chance to take 5 cloneloss * .1 for .5 really. no thanks
 					emote("gasp")
+
+			if (radiation > 98 && paralysis < 2) //clamp value + spamprotect
+				Paralyse(10) //it used to be *collapse spam.  this is quiet and spamless.
+				src << "\red You black out!"
+				make_jittery(250)
 
 			if(damage)
 				adjustToxLoss(damage * RADIATION_SPEED_COEFFICIENT)
@@ -339,10 +344,13 @@
 					var/datum/organ/external/O = pick(organs)
 					if(istype(O)) O.add_autopsy_data("Radiation Poisoning", damage)
 
+
+
 	proc/breathe()
 		if(reagents.has_reagent("lexorin")) return
 		if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell)) return
 		if(species && (species.flags & NO_BREATHE || species.flags & IS_SYNTHETIC)) return
+		if(mind && mind.vampire) return
 
 		var/datum/gas_mixture/environment = loc.return_air()
 		var/datum/gas_mixture/breath
@@ -1336,7 +1344,14 @@
 			if(!druggy)		see_invisible = SEE_INVISIBLE_LEVEL_TWO
 			if(healths)		healths.icon_state = "health7"	//DEAD healthmeter
 			if(client)
-				if(client.view != world.view)if(client.view != world.view) // If mob moves while zoomed in with device, unzoom them.
+				if(client.view != world.view) // If mob moves while zoomed in with device, unzoom them.
+					for(var/obj/item/item in contents)
+						if(item.zoom)
+							item.zoom()
+							break
+
+
+				/*
 					if(locate(/obj/item/weapon/gun/energy/rifle/sniperrifle, contents))
 						var/obj/item/weapon/gun/energy/rifle/sniperrifle/s = locate() in src
 						if(s.zoom)
@@ -1345,7 +1360,7 @@
 						var/obj/item/weapon/gun/energy/laser/modular/s = locate() in src
 						if(s.zoom)
 							s.zoom()
-
+				*/
 		else
 			sight &= ~(SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			see_in_dark = species.darksight
@@ -1365,12 +1380,12 @@
 				if((VAMP_FULL in mind.vampire.powers))
 					sight |= SEE_TURFS|SEE_MOBS|SEE_OBJS
 					see_in_dark = 8
-					see_invisible = SEE_INVISIBLE_LEVEL_TWO
+					see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
 
 			if(XRAY in mutations)
 				sight |= SEE_TURFS|SEE_MOBS|SEE_OBJS
 				see_in_dark = 8
-				if(!druggy)		see_invisible = SEE_INVISIBLE_LEVEL_TWO
+				if(!druggy)		see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
 
 			if(seer==1)
 				var/obj/effect/rune/R = locate() in loc

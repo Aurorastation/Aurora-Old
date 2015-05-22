@@ -68,12 +68,18 @@
 		var/aband_msg
 		if(istype(w_uniform,/obj/item/clothing/under))
 			var/obj/item/clothing/under/U = w_uniform
-			if(U.hastie)
-				tie_msg += " with \icon[U.hastie] \a [U.hastie]"
-			else if(U.hastie && U.aband)
+			if(U.hastie && U.aband)
 				tie_msg += " with \icon[U.hastie] \a [U.hastie] and \icon[U.aband] \a [U.aband]"
-			if(U.aband)
+			else if(U.hastie)
+				tie_msg += " with \icon[U.hastie] \a [U.hastie]"
+			else if(U.aband)
 				aband_msg+= " with \icon[U.aband] \a [U.aband]"
+
+			if(U.webbing || U.holster)
+				if(U.holster)
+					aband_msg += " with \icon[U.holster] \a [U.holster]"
+				else
+					aband_msg += " with \icon[U.webbing] \a [U.webbing]"
 
 		if(w_uniform.blood_DNA)
 			msg += "<span class='warning'>[t_He] [t_is] wearing \icon[w_uniform] [w_uniform.gender==PLURAL?"some":"a"] blood-stained [w_uniform.name][tie_msg][aband_msg]!</span>\n"
