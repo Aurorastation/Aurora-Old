@@ -18,7 +18,8 @@ maps/tgstation2_medbayrework_final.dmm
 Outpost.dmm
 data/investigate/gravity.html
 data/investigate/gravity.html
-config/*.*
+config/admins.txt
+config/admin_ranks.txt
 data/investigate/gravity.html
 data/investigate/gravity.html
 data/investigate/gravity.html
