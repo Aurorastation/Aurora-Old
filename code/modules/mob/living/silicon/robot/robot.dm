@@ -175,103 +175,44 @@
 		modules+="Combat"
 	modtype = input("Please, select a module!", "Robot", null, null) in modules
 
-	var/module_sprites[0] //Used to store the associations between sprite names and sprite index.
-
 	if(module)
 		return
 
 	switch(modtype)
 		if("Standard")
 			module = new /obj/item/weapon/robot_module/standard(src)
-			module_sprites["Basic"] = "robot_old"
-			module_sprites["Android"] = "droid"
-			module_sprites["Default"] = "robot"
-
 		if("Service")
 			module = new /obj/item/weapon/robot_module/butler(src)
-			module_sprites["Waitress"] = "Service"
-			module_sprites["Kent"] = "toiletbot"
-			module_sprites["Bro"] = "Brobot"
-			module_sprites["Rich"] = "maximillion"
-			module_sprites["Default"] = "Service2"
-
 		if("Clerical")
 			module = new /obj/item/weapon/robot_module/clerical(src)
-			module_sprites["Waitress"] = "Service"
-			module_sprites["Kent"] = "toiletbot"
-			module_sprites["Bro"] = "Brobot"
-			module_sprites["Rich"] = "maximillion"
-			module_sprites["Default"] = "Service2"
-
 		if("Miner")
 			module = new /obj/item/weapon/robot_module/miner(src)
-			module.channels = list("Supply" = 1)
-			if(camera && "Robots" in camera.network)
-				camera.network.Add("MINE")
-			module_sprites["Basic"] = "Miner_old"
-			module_sprites["Advanced Droid"] = "droid-miner"
-			module_sprites["Treadhead"] = "Miner"
-
 		if("Crisis")
 			module = new /obj/item/weapon/robot_module/crisis(src)
-			module.channels = list("Medical" = 1)
-			if(camera && "Robots" in camera.network)
-				camera.network.Add("Medical")
-			module_sprites["Basic"] = "Medbot"
-			module_sprites["Standard"] = "surgeon"
-			module_sprites["Advanced Droid"] = "droid-medical"
-			module_sprites["Needles"] = "medicalrobot"
-
 		if("Surgeon")
 			module = new /obj/item/weapon/robot_module/surgeon(src)
-			module.channels = list("Medical" = 1)
-			if(camera && "Robots" in camera.network)
-				camera.network.Add("Medical")
-
-			module_sprites["Basic"] = "Medbot"
-			module_sprites["Standard"] = "surgeon"
-			module_sprites["Advanced Droid"] = "droid-medical"
-			module_sprites["Needles"] = "medicalrobot"
-
 		if("Security")
 			module = new /obj/item/weapon/robot_module/security(src)
-			module.channels = list("Security" = 1)
-			module_sprites["Basic"] = "secborg"
-			module_sprites["Red Knight"] = "Security"
-			module_sprites["Black Knight"] = "securityrobot"
-			module_sprites["Bloodhound"] = "bloodhound"
-
 		if("Engineering")
 			module = new /obj/item/weapon/robot_module/engineering(src)
-			module.channels = list("Engineering" = 1)
-			if(camera && "Robots" in camera.network)
-				camera.network.Add("Engineering")
-			module_sprites["Basic"] = "Engineering"
-			module_sprites["Antique"] = "engineerrobot"
-			module_sprites["Landmate"] = "landmate"
-
 		if("Construction")
 			module = new /obj/item/weapon/robot_module/construction(src)
-			module.channels = list("Engineering" = 1)
-			if(camera && "Robots" in camera.network)
-				camera.network.Add("Engineering")
-			module_sprites["Basic"] = "Engineering"
-			module_sprites["Antique"] = "engineerrobot"
-			module_sprites["Landmate"] = "landmate"
-
 		if("Janitor")
 			module = new /obj/item/weapon/robot_module/janitor(src)
-			module_sprites["Basic"] = "JanBot2"
-			module_sprites["Mopbot"]  = "janitorrobot"
-			module_sprites["Mop Gear Rex"] = "mopgearrex"
-
 		if("Combat")
 			module = new /obj/item/weapon/robot_module/combat(src)
-			module_sprites["Combat Android"] = "droid-combat"
-			module.channels = list("Security" = 1)
 
-	//languages
+	// languages
 	module.add_languages(src)
+	
+	// cameras 
+	module.add_to_camera_network(src)
+	
+	// sensors
+	module.add_sensor_modification(src)
+	
+	// create sprite list
+	var/list/module_sprites = module.sprites.Copy()
 
 	//Custom_sprite check and entry
 	if (custom_sprite == 1)
