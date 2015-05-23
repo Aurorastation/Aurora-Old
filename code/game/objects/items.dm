@@ -180,13 +180,15 @@
 	user.put_in_active_hand(src)
 	return
 
-/obj/item/attack_ai(mob/user as mob)
+	
+/obj/item/equip_robot(mob/user as mob)
 	if (istype(src.loc, /obj/item/weapon/robot_module))
 		//If the item is part of a cyborg module, equip it
 		if(!isrobot(user)) return
 		var/mob/living/silicon/robot/R = user
 		R.activate_module(src)
 		R.hud_used.update_robot_modules_display()
+		return TRUE
 	
 // Due to storage type consolidation this should get used more now.
 // I have cleaned it up a little, but it could probably use more.  -Sayu

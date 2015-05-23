@@ -57,7 +57,10 @@
 		RestrainedClickOn(A)
 		return
 	*/
-
+	// handle equipping modules
+	if (A.equip_robot(src))
+		return 
+		
 	var/obj/item/W = get_active_hand()
 
 	// Cyborgs have no range-checking unless there is item use
@@ -126,6 +129,9 @@
 /atom/proc/attack_robot(mob/user as mob)
 	attack_ai(user)
 	return
+	
+/atom/proc/equip_robot(mob/user as mob)
+	return
 
 /mob/living/silicon/robot/MiddleClickOn(var/atom/A)
 	cycle_modules()
@@ -142,6 +148,6 @@
 	var/locked_door=A.AICtrlClick(src)
 	if (!locked_door)
 		..(A)
-		
+
 /mob/living/silicon/robot/AltClickOn(var/atom/A)
 	A.AIAltClick(src)

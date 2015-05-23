@@ -37,14 +37,21 @@
 	else if(module_state_3 == O)
 		module_state_3 = null
 		inv3.icon_state = "inv3"
+		
+	hud_used.update_robot_modules_display() // update the display
+	
 	return 1
-
+	
+	
 /mob/living/silicon/robot/proc/activate_module(var/obj/item/O)
 	if(!(locate(O) in src.module.modules) && O != src.module.emag)
 		return
 	if(activated(O))
 		src << "Already activated"
 		return
+	var/selected=get_selected_module() // this makes you swap your selected module if you've got one selected
+	if (selected)
+		uneq_active()
 	if(!module_state_1)
 		module_state_1 = O
 		O.layer = 20
@@ -68,6 +75,8 @@
 			sight_mode |= module_state_3:sight_mode
 	else
 		src << "You need to disable a module first!"
+	if (selected) // replaces your selection if you're swapping
+		select_module(selected)
 
 /mob/living/silicon/robot/proc/uneq_active()
 	uneq_module(module_active)
@@ -174,6 +183,11 @@
 				return
 	return
 
+	
+/mob/living/silicon/robot/proc/deselect_current_module() //deselect current module
+	deselect_module(get_selected_module())
+
+	
 //toggle_module(module) - Toggles the selection of the module slot specified by "module".
 /mob/living/silicon/robot/proc/toggle_module(var/module) //Module is 1-3
 	if(module < 1 || module > 3) return
@@ -187,23 +201,51 @@
 			deselect_module(get_selected_module()) //If we can't do select anything, at least deselect the current module.
 	return
 
+/mob/living/silicon/robot/proc/first_active_module()
+	for (var/slot=0,slot<=3,slot++)
+		if (module_active(slot))
+			return slot
+	return 0
+
+/mob/living/silicon/robot/proc/next_slot(var/slot)
+	if (slot >= 3)
+		return 1
+	return slot+1
+	
 //cycle_modules() - Cycles through the list of selected modules.
 /mob/living/silicon/robot/proc/cycle_modules()
 	var/slot_start = get_selected_module()
-	if(slot_start) deselect_module(slot_start) //Only deselect if we have a selected slot.
-
-	var/slot_num
-	if(slot_start == 0)
-		slot_num = 1
-		slot_start = 2
+	if(slot_start)
+		deselect_module(slot_start) //Only deselect if we have a selected slot.
+	if(!slot_start) // we did not find a module
+		select_module(first_active_module()) // try to select the first active module
 	else
-		slot_num = slot_start + 1
+		var/slot_num = next_slot(slot_start)
+		while(slot_start != slot_num) //If we wrap around without finding any free slots, just give up.
+			if(module_active(slot_num))
+				select_module(slot_num)
+				return
+			slot_num=next_slot(slot_num)
+	return
 
-	while(slot_start != slot_num) //If we wrap around without finding any free slots, just give up.
-		if(module_active(slot_num))
-			select_module(slot_num)
-			return
-		slot_num++
-		if(slot_num > 3) slot_num = 1 //Wrap around.
+	
+/mob/living/silicon/robot/key_pressed_v()
+	uneq_active()
+	
+/mob/living/silicon/robot/key_pressed_c()
+	deselect_current_module()
 
+/mob/living/silicon/robot/key_pressed_q()
+	hud_used.toggle_show_robot_modules()
+	
+/mob/living/silicon/robot/key_pressed_1()
+	return select_module(1)
+	
+/mob/living/silicon/robot/key_pressed_2()
+	return select_module(2)	
+	
+/mob/living/silicon/robot/key_pressed_3()
+	return select_module(3)
+	
+/mob/living/silicon/robot/key_pressed_4()
 	return
