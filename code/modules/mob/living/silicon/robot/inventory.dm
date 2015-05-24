@@ -8,7 +8,7 @@
 
 
 /*-------TODOOOOOOOOOO--------*/
-/mob/living/silicon/robot/proc/uneq_module(obj/item/O)
+/mob/living/silicon/robot/proc/uneq_module(obj/item/O,var/display_tool_transfer=TRUE)
 	if(!O)
 		return 0
 
@@ -25,7 +25,16 @@
 	contents -= O
 	if(module)
 		O.loc = module	//Return item to module so it appears in its contents, so it can be taken out again.
-
+		
+	if (!display_tool_transfer)
+		for(var/mob/M in viewers(src, null)) // show when cyborgs change their modules
+			if (M == src)
+				usr << "<span class='notice'>You retract \icon[O] [O] into your internal tool storage.</span>"
+			else if (M in range(1)) //If someone is standing close enough, they can tell what it is...
+				M.show_message("<span class='notice'>[src] retracts \icon[O] [O] into their internal tool storage.</span>")
+			else //Otherwise they can only see that you've put something back.
+				M.show_message("<span class='notice'>[src] retracts a tool into their internal tool storage.</span>")
+			
 	if(module_active == O)
 		module_active = null
 	if(module_state_1 == O)
@@ -42,6 +51,7 @@
 	
 	return 1
 	
+
 	
 /mob/living/silicon/robot/proc/activate_module(var/obj/item/O)
 	if(!(locate(O) in src.module.modules) && O != src.module.emag)
@@ -51,35 +61,49 @@
 		return
 	var/selected=get_selected_module() // this makes you swap your selected module if you've got one selected
 	if (selected)
-		uneq_active()
-	if(!module_state_1)
-		module_state_1 = O
-		O.layer = 20
-		O.screen_loc = inv1.screen_loc
-		contents += O
-		if(istype(module_state_1,/obj/item/borg/sight))
-			sight_mode |= module_state_1:sight_mode
-	else if(!module_state_2)
-		module_state_2 = O
-		O.layer = 20
-		O.screen_loc = inv2.screen_loc
-		contents += O
-		if(istype(module_state_2,/obj/item/borg/sight))
-			sight_mode |= module_state_2:sight_mode
-	else if(!module_state_3)
-		module_state_3 = O
-		O.layer = 20
-		O.screen_loc = inv3.screen_loc
-		contents += O
-		if(istype(module_state_3,/obj/item/borg/sight))
-			sight_mode |= module_state_3:sight_mode
-	else
+		for(var/mob/M in viewers(src, null)) // show when cyborgs change their modules
+			if (M == src)
+				usr << "<span class='notice'>You swap \icon[module_active] [module_active] for \icon[O] [O].</span>"
+			else if (M in range(1)) //If someone is standing close enough, they can tell what it is...
+				M.show_message("<span class='notice'>[src] swaps \icon[module_active] [module_active] for \icon[O] [O].</span>")
+			else //Otherwise they can only see that you've swapped something.
+				M.show_message("<span class='notice'>[src] swaps some of their tools.</span>")
+		uneq_active(TRUE)
+	
+	var/target=(selected) ? selected : first_free_module() // find where we're putting this 
+	if (!target) // if there's nowhere to put it just warn them and kick out
 		src << "You need to disable a module first!"
+		return
+	
+	switch (target)
+		if(1)
+			module_state_1=O
+			O.screen_loc = inv1.screen_loc
+		if(2)
+			module_state_2=O
+			O.screen_loc = inv2.screen_loc
+		if(3)
+			module_state_3=O
+			O.screen_loc = inv3.screen_loc
+	
+	O.layer = 20 // this bit moves the target object into the robot, and moves it's location on screen
+	contents += O
+	if(istype(O,/obj/item/borg/sight))
+		sight_mode |= module_state_1:sight_mode
+	
 	if (selected) // replaces your selection if you're swapping
 		select_module(selected)
+	else // only do this if we activated a module but weren't swapping
+		for(var/mob/M in viewers(src, null)) // show when cyborgs change their modules
+			if (M == src)
+				usr << "<span class='notice'>You retrieve \icon[O] [O] from your internal tool storage.</span>"
+			else if (M in range(1)) //If someone is standing close enough, they can tell what it is...
+				M.show_message("<span class='notice'>[src] extends \icon[O] [O] from their internal tool storage.</span>")
+			else //Otherwise they can only see that you've swapped something.
+				M.show_message("<span class='notice'>[src] extends a tool.</span>")
 
-/mob/living/silicon/robot/proc/uneq_active()
-	uneq_module(module_active)
+/mob/living/silicon/robot/proc/uneq_active(var/display_tool_transfer=FALSE)
+	uneq_module(module_active,display_tool_transfer)
 
 /mob/living/silicon/robot/proc/uneq_all()
 	uneq_module(module_state_1)
@@ -206,6 +230,12 @@
 		if (module_active(slot))
 			return slot
 	return 0
+	
+/mob/living/silicon/robot/proc/first_free_module()
+	for (var/slot=1,slot<=3,slot++)
+		if (!module_active(slot))
+			return slot
+	return 0
 
 /mob/living/silicon/robot/proc/next_slot(var/slot)
 	if (slot >= 3)
@@ -249,3 +279,21 @@
 	
 /mob/living/silicon/robot/key_pressed_4()
 	return
+
+
+/mob/living/silicon/robot/proc/describe_module(var/slot)
+	var/list/index_module=list(module_state_1,module_state_2,module_state_3)
+	var/result = "   Hardpoint [slot] holds "
+	result += (index_module[slot]) ? "\icon[index_module[slot]] [index_module[slot]]." : "nothing."
+	result += "\n"
+	return result
+	
+	
+/mob/living/silicon/robot/proc/describe_all_modules()
+	var/result="It has three tool hardpoints.\n"
+	for (var/x = 1; x <=3; x++)
+		result+=describe_module(x)
+	var/selected=get_selected_module()
+	if (selected)
+		result+="\nThe activity light on hardpoint [selected] is on.\n"
+	return result
