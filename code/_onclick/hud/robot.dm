@@ -171,10 +171,11 @@
 	update_robot_modules_display()
 
 /datum/hud/proc/update_robot_modules_display()
-	if(!isrobot(mymob)) return
-
+	if(!isrobot(mymob)) 
+		return
 	var/mob/living/silicon/robot/r = mymob
-
+	if (!r.client) // no client? No problem!
+		return
 	if(r.shown_robot_modules)
 		//Modules display is shown
 		r.client.screen += r.throw_icon	//"store" icon
