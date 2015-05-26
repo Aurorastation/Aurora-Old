@@ -295,9 +295,12 @@
 			if(H.species.flags & IS_SYNTHETIC)
 				return
 
+			if(M.buckled && istype(M.buckled, /obj/structure/stool/bed/chair/wheelchair))
+				return ..()
+
 			if( !H.shoes && ( !H.wear_suit || !(H.wear_suit.body_parts_covered & FEET) ) )
 				var/datum/organ/external/affecting = H.get_organ(pick("l_foot", "r_foot"))
-				if(affecting.status & ORGAN_ROBOT)
+				if(affecting.status & (ORGAN_ROBOT|ORGAN_DESTROYED))
 					return
 				H.Weaken(3)
 				if(affecting.take_damage(5, 0))
