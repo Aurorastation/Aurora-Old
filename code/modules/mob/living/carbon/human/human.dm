@@ -482,39 +482,52 @@
 		var/obj/vehicle/V = AM
 		V.RunOver(src)
 
+// Get rank from ID, ID inside PDA, PDA, ID in wallet, etc.
+/mob/living/carbon/human/proc/get_authentification_rank(var/if_no_id = "No id", var/if_no_job = "No job")
+	var/obj/item/device/pda/pda = wear_id
+	if (istype(pda))
+		if (pda.id)
+			return pda.id.rank
+		else
+			return pda.ownrank
+	else
+		var/obj/item/weapon/card/id/id = get_idcard()
+		if(id)
+			return id.rank ? id.rank : if_no_job
+		else
+			return if_no_id
+
 //gets assignment from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers
 /mob/living/carbon/human/proc/get_assignment(var/if_no_id = "No id", var/if_no_job = "No job")
 	var/obj/item/device/pda/pda = wear_id
-	var/obj/item/weapon/card/id/id = wear_id
 	if (istype(pda))
-		if (pda.id && istype(pda.id, /obj/item/weapon/card/id))
-			. = pda.id.assignment
+		if (pda.id)
+			return pda.id.assignment
 		else
-			. = pda.ownjob
-	else if (istype(id))
-		. = id.assignment
+			return pda.ownjob
 	else
-		return if_no_id
-	if (!.)
-		. = if_no_job
-	return
+		var/obj/item/weapon/card/id/id = get_idcard()
+		if(id)
+			return id.assignment ? id.assignment : if_no_job
+		else
+			return if_no_id
 
 //gets name from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers
 /mob/living/carbon/human/proc/get_authentification_name(var/if_no_id = "Unknown")
 	var/obj/item/device/pda/pda = wear_id
-	var/obj/item/weapon/card/id/id = wear_id
 	if (istype(pda))
 		if (pda.id)
-			. = pda.id.registered_name
+			return pda.id.registered_name
 		else
-			. = pda.owner
-	else if (istype(id))
-		. = id.registered_name
+			return pda.owner
 	else
-		return if_no_id
-	return
+		var/obj/item/weapon/card/id/id = get_idcard()
+		if(id)
+			return id.registered_name
+		else
+			return if_no_id
 
 //repurposed proc. Now it combines get_id_name() and get_face_name() to determine a mob's name variable. Made into a seperate proc as it'll be useful elsewhere
 /mob/living/carbon/human/proc/get_visible_name()
@@ -955,13 +968,13 @@
 
 	if(!lastpuke)
 		lastpuke = 1
-		src << "<spawn class='warning'>You feel nauseous...</spawn>"
+		src << "<span class='warning'>You feel nauseous...</span>"
 		spawn(150)	//15 seconds until second warning
-			src << "<spawn class='warning'>You feel like you are about to throw up!</spawn>"
+			src << "<span class='warning'>You feel like you are about to throw up!</span>"
 			spawn(100)	//and you have 10 more for mad dash to the bucket
 				Stun(5)
 
-				src.visible_message("<spawn class='warning'>[src] throws up!","<spawn class='warning'>You throw up!</spawn>")
+				src.visible_message("<span class='warning'>[src] throws up!</span>","<span class='warning'>You throw up!</span>")
 				playsound(loc, 'sound/effects/splat.ogg', 50, 1)
 
 				var/turf/location = loc
@@ -1077,6 +1090,7 @@
 	else
 		target.show_message("\blue You hear a voice that seems to echo around the room: [say]")
 	usr.show_message("\blue You project your mind into [target.real_name]: [say]")
+	log_say("[key_name(usr)] sent a telepathic message to [key_name(target)]: [say]")
 	for(var/mob/dead/observer/G in world)
 		G.show_message("<i>Telepathic message from <b>[src]</b> to <b>[target]</b>: [say]</i>")
 

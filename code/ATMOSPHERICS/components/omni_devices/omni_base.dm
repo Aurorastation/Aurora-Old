@@ -9,7 +9,6 @@
 	initialize_directions = 0
 	level = 1
 
-	var/on = 0
 	var/configuring = 0
 	//var/target_pressure = ONE_ATMOSPHERE	//a base type as abstract as this should NOT be making these kinds of assumptions
 
@@ -53,7 +52,7 @@
 	else if(error_check())
 		overlays = overlays_error
 	else
-		overlays = on ? (overlays_on) : (overlays_off)
+		overlays = use_power ? (overlays_on) : (overlays_off)
 
 	underlays = underlays_current
 
@@ -63,12 +62,13 @@
 	return
 
 /obj/machinery/atmospherics/omni/process()
-	if(error_check())
-		on = 0
+	last_power_draw = 0
+	last_flow_rate = 0
 
-	if((stat & (NOPOWER|BROKEN)) || !on)
-		update_use_power(0)	//usually we get here because a player turned a pump off - definitely want to update.
-		last_flow_rate = 0
+	if(error_check())
+		use_power = 0
+
+	if((stat & (NOPOWER|BROKEN)) || !use_power)
 		return 0
 	return 1
 
@@ -190,9 +190,11 @@
 		if(!istype(T))
 			return
 		if(T.intact && istype(P.node, /obj/machinery/atmospherics/pipe) && P.node.level == 1 )
-			pipe_state = icon_manager.get_atmos_icon("underlay_down", P.dir, color_cache_name(P.node))
+			//pipe_state = icon_manager.get_atmos_icon("underlay_down", P.dir, color_cache_name(P.node))
+			pipe_state = icon_manager.get_atmos_icon("underlay", P.dir, color_cache_name(P.node), "down")
 		else
-			pipe_state = icon_manager.get_atmos_icon("underlay_intact", P.dir, color_cache_name(P.node))
+			//pipe_state = icon_manager.get_atmos_icon("underlay_intact", P.dir, color_cache_name(P.node))
+			pipe_state = icon_manager.get_atmos_icon("underlay", P.dir, color_cache_name(P.node), "intact")
 
 		return list("on_icon" = ic_on, "off_icon" = ic_off, "pipe_icon" = pipe_state)
 
@@ -246,8 +248,9 @@
 			continue
 		for(var/obj/machinery/atmospherics/target in get_step(src, P.dir))
 			if(target.initialize_directions & get_dir(target,src))
-				P.node = target
-				break
+				if (check_connect_types(target,src))
+					P.node = target
+					break
 
 	for(var/datum/omni_port/P in ports)
 		P.update = 1

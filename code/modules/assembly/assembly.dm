@@ -16,6 +16,7 @@
 	var/obj/item/device/assembly_holder/holder = null
 	var/cooldown = 0//To prevent spam
 	var/wires = WIRE_RECEIVE | WIRE_PULSE
+	var/datum/wires/connected = null // currently only used by timer/signaler
 
 	var/const/WIRE_RECEIVE = 1			//Allows Pulsed(0) to call Activate()
 	var/const/WIRE_PULSE = 2				//Allows Pulse(0) to act on the holder

@@ -87,7 +87,7 @@
 	return src.attack_hand(user)
 
 /obj/machinery/door_control/proc/handle_door()
-	for(var/obj/machinery/door/airlock/D in range(range))
+	for(var/obj/machinery/door/airlock/D in range(src, range))
 		if(D.id_tag == src.id)
 			if(specialfunctions & OPEN)
 				if (D.density)
@@ -117,6 +117,7 @@
 					D.secondsElectrified = 0
 				if(specialfunctions & SAFE)
 					D.safe = 1
+	return
 
 /obj/machinery/door_control/proc/handle_pod()
 	for(var/obj/machinery/door/poddoor/M in world)
