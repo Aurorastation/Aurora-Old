@@ -898,6 +898,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 
 //Click cooldowns, in tenths of a second
 #define CLICK_CD_MELEE 8
+#define CLICK_CD_THROW 12
 #define CLICK_CD_RANGE 4
 #define CLICK_CD_BREAKOUT 100
 #define CLICK_CD_HANDCUFFED 10
