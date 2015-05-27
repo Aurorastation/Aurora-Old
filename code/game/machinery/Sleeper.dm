@@ -10,10 +10,10 @@
 	anchored = 1 //About time someone fixed this.
 	density = 0
 	var/orient = "LEFT" // "RIGHT" changes the dir suffix to "-r"
-	
+
 	use_power = 1
 	idle_power_usage = 40
-
+	interact_offline = 1
 
 /obj/machinery/sleep_console/process()
 	if(stat & (NOPOWER|BROKEN))
@@ -166,7 +166,7 @@
 	var/amounts = list(5, 10)
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 	var/filtering = 0
-	
+
 	use_power = 1
 	idle_power_usage = 15
 	active_power_usage = 200 //builtin health analyzer, dialysis machine, injectors.
@@ -188,7 +188,7 @@
 	process()
 		if (stat & (NOPOWER|BROKEN))
 			return
-	
+
 		if(filtering > 0)
 			if(beaker)
 				if(beaker.reagents.total_volume < beaker.reagents.maximum_volume)

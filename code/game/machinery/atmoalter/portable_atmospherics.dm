@@ -12,6 +12,8 @@
 	var/start_pressure = ONE_ATMOSPHERE
 	var/maximum_pressure = 90 * ONE_ATMOSPHERE
 
+	interact_offline = 1
+
 /obj/machinery/portable_atmospherics/New()
 	..()
 
