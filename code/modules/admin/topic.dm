@@ -1527,6 +1527,9 @@
 
 		var/customname = input(src.owner, "Pick a title for the report", "Title") as text|null
 
+		//so that we alert people with certain cartidges with a PDA message.
+		alertFaxes()
+
 		for(var/obj/machinery/faxmachine/F in machines)
 			if(! (F.stat & (BROKEN|NOPOWER) ) )
 
