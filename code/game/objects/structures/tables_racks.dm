@@ -23,7 +23,7 @@
 
 	var/parts = /obj/item/weapon/table_parts
 	var/flipped = 0
-	var/health = 100
+	var/health = 200
 
 /obj/structure/table/proc/update_adjacent()
 	for(var/direction in list(1,2,4,8,5,6,9,10))
@@ -314,14 +314,14 @@
 	if (get_dist(P.starting, loc) <= 1) //Tables won't help you if people are THIS close
 		return 1
 	if (get_turf(P.original) == cover)
-		var/chance = 20
+		var/chance = 30
 		if (ismob(P.original))
 			var/mob/M = P.original
 			if (M.lying)
-				chance += 20				//Lying down lets you catch less bullets
+				chance += 50				//Lying down lets you catch less bullets
 		if(flipped)
 			if(get_dir(loc, from) == dir)	//Flipped tables catch mroe bullets
-				chance += 20
+				chance += 50
 			else
 				return 1					//But only from one side
 		if(prob(chance))
@@ -370,6 +370,7 @@
 					visible_message("\red [G.assailant] slams [G.affecting]'s face against \the [src]!")
 					msg_admin_attack("[key_name_admin(user)] slams [key_name_admin(M)]'s face against \the [src]! - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>")
 					playsound(src.loc, 'sound/weapons/tablehit1.ogg', 50, 1)
+					return
 				else
 					user << "\red You need a better grip to do that!"
 					return
@@ -377,7 +378,7 @@
 				G.affecting.loc = src.loc
 				G.affecting.Weaken(5)
 				visible_message("\red [G.assailant] puts [G.affecting] on \the [src].")
-			del(W)
+				del(W)
 			return
 
 	if (istype(W, /obj/item/weapon/wrench))
@@ -398,6 +399,11 @@
 		playsound(src.loc, "sparks", 50, 1)
 		for(var/mob/O in viewers(user, 4))
 			O.show_message("\blue The [src] was sliced apart by [user]!", 1, "\red You hear [src] coming apart.", 2)
+		destroy()
+
+	if(istype(W, /obj/item/weapon/melee/changeling/armblade))
+		for(var/mob/O in viewers(user, 4))
+			O.show_message("\blue The [src] was sliced apart by [user]'s grotesque armblade!", 1, "\red You hear [src] coming apart.", 2)
 		destroy()
 
 	user.drop_item(src)
@@ -520,7 +526,7 @@
 	desc = "Do not apply fire to this. Rumour says it burns easily."
 	icon_state = "wood_table"
 	parts = /obj/item/weapon/table_parts/wood
-	health = 50
+	health = 100
 /*
  * Reinforced tables
  */
@@ -528,7 +534,7 @@
 	name = "reinforced table"
 	desc = "A version of the four legged table. It is stronger."
 	icon_state = "reinf_table"
-	health = 200
+	health = 400
 	var/status = 2
 	parts = /obj/item/weapon/table_parts/reinforced
 

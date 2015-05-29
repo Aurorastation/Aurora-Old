@@ -100,6 +100,13 @@
 	master = C
 	master.active_dummy = src
 
+/obj/effect/dummy/chameleon/Bumped(atom/A)
+	if(A && istype(A, /mob))
+		density = 0
+		spawn(4)
+			density = 1
+	..()
+
 /obj/effect/dummy/chameleon/attackby()
 	for(var/mob/M in src)
 		M << "\red Your chameleon-projector deactivates."

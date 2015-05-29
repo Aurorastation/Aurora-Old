@@ -52,10 +52,10 @@
 
 		//** Handle the effects of infections
 		var/antibiotics = owner.reagents.get_reagent_amount("spaceacillin")
-		
+
 		if (germ_level > 0 && germ_level < INFECTION_LEVEL_ONE/2 && prob(30))
 			germ_level--
-		
+
 		if (germ_level >= INFECTION_LEVEL_ONE/2)
 			//aiming for germ level to go from ambient to INFECTION_LEVEL_TWO in an average of 15 minutes
 			if(antibiotics < 5 && prob(round(germ_level/6)))
@@ -66,7 +66,7 @@
 			//spread germs
 			if (antibiotics < 5 && parent.germ_level < germ_level && ( parent.germ_level < INFECTION_LEVEL_ONE*2 || prob(30) ))
 				parent.germ_level++
-			
+
 			if (prob(3))	//about once every 30 seconds
 				take_damage(1,silent=prob(30))
 
@@ -149,13 +149,15 @@
 	name = "lungs"
 	parent_organ = "chest"
 	removed_type = /obj/item/organ/lungs
+	min_bruised_damage = 15
+	min_broken_damage = 20
 
 	process()
 		..()
 		if (germ_level > INFECTION_LEVEL_ONE)
 			if(prob(5))
 				owner.emote("cough")		//respitory tract infection
-		
+
 		if(is_bruised())
 			if(prob(2))
 				spawn owner.emote("me", 1, "coughs up blood!")

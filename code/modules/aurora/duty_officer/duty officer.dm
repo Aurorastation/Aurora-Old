@@ -18,6 +18,7 @@
 
 	if(mob.mind && mob.mind.special_role == "Duty Officer")
 		src << "\red You are already a Duty Officer"
+		verbs += /client/proc/returntobody
 		return
 
 	var/wasLiving = 0
@@ -112,6 +113,7 @@
 			M.key = key
 
 			if(wasLiving)
+				clearDutyJob(holder.original_mob)
 				spawn(1)
 					holder.original_mob.key = "@[key]"
 
@@ -121,8 +123,21 @@
 			M.equip_if_possible(new /obj/item/device/radio/headset/ert(M), slot_l_ear)
 			M.equip_if_possible(new /obj/item/clothing/glasses/sunglasses/sechud(M), slot_glasses)
 			M.equip_if_possible(new /obj/item/clothing/head/beret/centcom/officer(M), slot_head)
-			M.equip_if_possible(new /obj/item/weapon/melee/telebaton(M), slot_l_store)
-			M.equip_if_possible(new /obj/item/device/taperecorder(M), slot_r_store)
+			M.equip_if_possible(new /obj/item/weapon/reagent_containers/spray/pepper(M), slot_l_store)
+			M.equip_if_possible(new /obj/item/device/taperecorder/duty_officer(M), slot_r_store)
+
+			var/obj/item/weapon/storage/backpack/satchel/bag = new(M)
+			bag.name = "officer's leather satchel"
+			bag.desc = "A well cared for leather satchel for Nanotrasen officers."
+			M.equip_if_possible(bag, slot_back)
+
+			var /obj/item/weapon/storage/lockbox/lockbox = new(M)
+			lockbox.req_access = list(access_cent_captain)
+			lockbox.name = "A Duty Officer briefcase"
+			lockbox.desc = "A smart looking briefcase with a NT logo on the side"
+			lockbox.storage_slots = 8
+			lockbox.max_combined_w_class = 16
+			M.equip_if_possible(lockbox, slot_l_hand)
 
 			var/obj/item/device/pda/central/pda = new(M)
 			pda.owner = M.real_name
@@ -130,6 +145,14 @@
 			pda.name = "PDA-[M.real_name] ([pda.ownjob])"
 
 			M.equip_if_possible(pda, slot_belt)
+
+			//Implant because access
+			var/obj/item/weapon/implant/loyalty/imp = new/obj/item/weapon/implant/loyalty(M)
+			imp.imp_in = M
+			imp.implanted = 1
+			var/datum/organ/external/affected = M.organs_by_name["head"]
+			affected.implants += imp
+			imp.part = affected
 
 			var/obj/item/weapon/card/id/W = new(M)
 			W.name = "[M.real_name]'s ID Card"
@@ -158,6 +181,23 @@
 
 	var/mob/M = mob
 	var/area/A = get_area(M)
+
+	if(M.stat == DEAD)
+		if(holder.original_mob)
+			if(holder.original_mob.client)
+				if(alert(src, "There is someone else in your old body.\nWould you like to ghost instead?", "There is someone else in your old body, you will be ghosted", "Yes", "No") == "Yes")
+					M.mind.special_role = null
+					mob.ghostize(1)
+					return
+				else
+					return
+			holder.original_mob.key = key
+			holder.original_mob = null
+			return
+		M.mind.special_role = null
+		mob.ghostize(1)
+		return
+
 	if(!is_type_in_list(A,centcom_areas))
 		src << "\red You need to be back at central to do this"
 		return
@@ -166,13 +206,37 @@
 		if(holder.original_mob == M)
 			verbs -= /client/proc/returntobody
 			return
-		holder.original_mob.key = key
+
+		if(holder.original_mob.client)
+			if(alert(src, "There is someone else in your old body.\nWould you like to ghost instead?", "There is someone else in your old body, you will be ghosted", "Yes", "No") == "Yes")
+				M.mind.special_role = null
+				mob.ghostize(0)
+			else
+				return
+		else
+			holder.original_mob.key = key
+
 		holder.original_mob = null
 	else
 		if(mob.mind.admin_mob_placeholder)
-			mob.mind.admin_mob_placeholder.key = key
-			mob.mind.admin_mob_placeholder = null
+			if(mob.mind.admin_mob_placeholder.client)
+				if(alert(src, "There is someone else in your old body.\nWould you like to ghost instead?", "There is someone else in your old body, you will be ghosted", "Yes", "No") == "Yes")
+					M.mind.special_role = null
+					mob.ghostize(0)
+				else
+					return
+			else
+				mob.mind.admin_mob_placeholder.key = key
+			M.mind.admin_mob_placeholder = null
 		else
+			M.mind.special_role = null
 			mob.ghostize(0)
 	verbs -= /client/proc/returntobody
 	del(M)
+
+/proc/clearDutyJob(var/mob/living/carbon/human/M)
+	spawn(9000)
+		if(!M.client)
+			var/oldjob = M.mind.assigned_role
+			job_master.FreeRole(oldjob)
+	return

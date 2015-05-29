@@ -110,7 +110,7 @@
 				if(C.prefs.toggles & CHAT_SCOPES_DEBUG)
 					C << msg
 
-/proc/msg_scopes_list(var/thing, var/name = "")
+/proc/msg_scopes_list(var/thing, var/name = "No name set")
 	if(!thing)
 		return
 

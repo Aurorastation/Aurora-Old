@@ -108,7 +108,11 @@
 	proc/shock()
 		var/obj/mecha/M = in_mecha()
 		if(M)
-			M.emp_act(2)
+			M.emp_act(0.8)
+			M.emp_act(0.8)
+			M.emp_act(0.8)
+			M.emp_act(0.8) //we call this four times to get the necessary damage + add a much higher chance of subsystem failures
+			empulse(src.loc, 0, 1, 1)
 		del(src)
 
 	proc/get_mecha_log()

@@ -26,7 +26,7 @@
 
 		var/mob/M = usr
 		if(!M.mind)	return 0
-		if(!M.mind.assigned_role == "Detective")
+		if(M.mind.assigned_role != "Detective")
 			M << "<span class='notice'>You don't feel cool enough to name this gun, chump.</span>"
 			return 0
 		if(istype(src, /obj/item/weapon/gun/projectile/detective/semiauto/fluff/leo_gun))
@@ -96,6 +96,15 @@
 		empty_mag = null
 		user << "<span class='notice'>The Magazine falls out and clatters on the floor!</span>"
 	return
+
+/obj/item/weapon/gun/projectile/detective/secgun
+	desc = "a sec gun that shoots big sec bullets for taking down big sec criminals. more like taking dead"
+	name = "\improper sec gun"
+	caliber = ".45"
+	icon_state = "secgun"
+	max_shells = 7
+	ammo_type = "/obj/item/ammo_casing/c45s"
+	load_method = 2
 
 
 /obj/item/weapon/gun/projectile/mateba

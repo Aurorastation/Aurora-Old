@@ -4,7 +4,8 @@
 	w_class = 4
 	icon = 'icons/obj/device.dmi'
 	icon_state = "suitcooler0"
-	slot_flags = SLOT_BACK	//you can carry it on your back if you want, but it won't do anything unless attached to suit storage
+	item_state = "suitcooler0"	//hacky, but yeah, works for now.
+	slot_flags = SLOT_BACK	//will now work while on back - Skull132
 
 	//copied from tank.dm
 	flags = FPRINT | TABLEPASS | CONDUCT
@@ -12,6 +13,7 @@
 	throwforce = 10.0
 	throw_speed = 1
 	throw_range = 4
+	matter = list("metal" = 7500)
 
 	origin_tech = "magnets=2;materials=2"
 
@@ -83,10 +85,10 @@
 
 	var/mob/living/carbon/human/H = M
 
-	if (!H.wear_suit || H.s_store != src)
-		return 0
+	if (H.wear_suit && (H.back == src || H.s_store == src))
+		return 1
 
-	return 1
+	return 0
 
 /obj/item/device/suit_cooling_unit/proc/turn_on()
 	if(!cell)

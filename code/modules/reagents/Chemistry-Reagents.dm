@@ -1662,9 +1662,10 @@ datum
 			color = "#13BC5E" // rgb: 19, 188, 94
 			toxpwr = 0
 
-			reaction_mob(var/mob/living/carbon/M, var/method=TOUCH, var/volume)
+			reaction_mob(var/mob/living/carbon/M, var/method=TOUCH, var/volume, var/alien)
 				if(!..())	return
 				if(!istype(M) || !M.dna)	return  //No robots, AIs, aliens, Ians or other mobs should be affected by this.
+				if(alien && alien == IS_SYNTHETIC)	return
 				src = null
 				if((method==TOUCH && prob(33)) || method==INGEST)
 					randmuti(M)
@@ -2065,7 +2066,7 @@ datum
 			description = "A very corrosive mineral acid with the molecular formula H2SO4."
 			reagent_state = LIQUID
 			color = "#DB5008" // rgb: 219, 80, 8
-			toxpwr = 1
+			toxpwr = 2
 			var/meltprob = 10
 
 			on_mob_life(var/mob/living/M as mob)
@@ -2150,7 +2151,7 @@ datum
 			description = "Polytrinic acid is a an extremely corrosive chemical substance."
 			reagent_state = LIQUID
 			color = "#8E18A9" // rgb: 142, 24, 169
-			toxpwr = 2
+			toxpwr = 3
 			meltprob = 30
 
 		toxin/philodexphid
@@ -4015,9 +4016,9 @@ datum
 			color = "#664300" // rgb: 102, 67, 0
 			boozepwr = 1
 
-		ethanol/puosseecafe
-			name = "Puossee-Cafe"
-			id = "puosseecafe"
+		ethanol/poussecafe
+			name = "Pousse-Cafe"
+			id = "poussecafe"
 			description = "Smells of the French and liquore."
 			color = "#664300" // rgb: 102, 67, 0
 			boozepwr = 2

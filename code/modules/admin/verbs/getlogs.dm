@@ -109,3 +109,20 @@
 	usr << run( file(path) )
 	feedback_add_details("admin_verb","SSAL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
+
+/client/proc/view_duty_log()
+	set category = "Special Verbs"
+	set name = "Get Duty Log"
+	set desc = "Download a log or file from an investigation"
+
+	var/path = browse_files("data/dutylogs/")
+	if(!path)
+		return
+
+	if(file_spam_check())
+		return
+
+	message_admins("[key_name_admin(src)] accessed file: [path]")
+	usr << run( file(path) )
+	feedback_add_details("admin_verb","DOGL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	return

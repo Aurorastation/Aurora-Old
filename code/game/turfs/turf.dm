@@ -26,6 +26,8 @@
 	var/has_resources
 	var/list/resources
 
+	var/footstep_sound = null
+
 /turf/New()
 	..()
 	for(var/atom/movable/AM as mob|obj in src)
@@ -97,6 +99,7 @@
 	if(movement_disabled)
 		usr << "\red Movement is admin-disabled." //This is to identify lag problems
 		return
+
 	..()
 //vvvvv Infared beam stuff vvvvv
 
@@ -120,6 +123,19 @@
 			M:lastarea = get_area(M.loc)
 		if(M:lastarea.has_gravity == 0)
 			inertial_drift(M)
+
+		var/mob/living/carbon/human/MOB = M
+		if(istype(MOB) && !MOB.lying && footstep_sound)
+			if(istype(MOB.shoes, /obj/item/clothing/shoes) && !MOB.shoes:silent)
+				if(MOB.m_intent == "run")
+					if(MOB.footstep >= 2)
+						MOB.footstep = 0
+					else
+						MOB.footstep++
+					if(MOB.footstep == 0)
+						playsound(MOB, footstep_sound, 50, 1) // this will get annoying very fast. - Tell them to mute it then -_-
+				else
+					playsound(MOB, footstep_sound, 40, 1)
 
 	/*
 		if(M.flags & NOGRAV)
