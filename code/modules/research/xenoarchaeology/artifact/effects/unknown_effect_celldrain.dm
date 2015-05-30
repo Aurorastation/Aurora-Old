@@ -11,8 +11,11 @@
 			for (var/obj/item/weapon/cell/D in R.contents)
 				D.charge = max(D.charge - rand() * 100, 0)
 				R << "\blue SYSTEM ALERT: Energy drain detected!"
-			return 1
-
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			if(H.species.flags & IS_SYNTHETIC)
+				H.nutrition += rand() * 100 + 50
+				H << "\red You feel your batteries draining."
 		return 1
 
 /datum/artifact_effect/celldrain/DoEffectAura()
@@ -26,6 +29,10 @@
 			for (var/obj/item/weapon/cell/D in M.contents)
 				D.charge = max(D.charge - 50,0)
 				M << "\red SYSTEM ALERT: Energy drain detected!"
+		for (var/mob/living/carbon/human/H in range(effectrange,holder))
+			if(H.species.flags & IS_SYNTHETIC)
+				H.nutrition -= 25
+				H << "\red You feel your batteries draining."
 	return 1
 
 /datum/artifact_effect/celldrain/DoEffectPulse()
@@ -39,4 +46,8 @@
 			for (var/obj/item/weapon/cell/D in M.contents)
 				D.charge = max(D.charge - rand() * 150,0)
 				M << "\red SYSTEM ALERT: Energy drain detected!"
+		for (var/mob/living/carbon/human/H in range(effectrange,holder))
+			if(H.species.flags & IS_SYNTHETIC)
+				H.nutrition -= rand() * 100
+				H << "\red You feel your batteries draining."
 	return 1
