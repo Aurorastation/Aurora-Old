@@ -34,8 +34,9 @@
 		diary << "\[[time_stamp()]]DEBUG: [text][log_end]"
 
 	for(var/client/C in admins)
-		if(C.prefs.toggles & CHAT_DEBUGLOGS)
-			C << "DEBUG: [text]"
+		if(C.holder.rights & (R_DEV|R_DEBUG|R_MOD))
+			if(C.prefs.toggles & CHAT_DEBUGLOGS)
+				C << "DEBUG: [text]"
 
 
 /proc/log_game(text)
