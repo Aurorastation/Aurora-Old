@@ -150,7 +150,7 @@
 	else
 		if(isliving(src.loc))
 			return
-		user.next_move = max(user.next_move+2,world.time + 2)
+		user.AllowedToClickAgainAfter(CLICK_CD_ACTIVATE_OBJECT)
 	src.pickup(user)
 	add_fingerprint(user)
 	user.put_in_active_hand(src)
@@ -175,8 +175,7 @@
 		if(istype(src.loc, /mob/living))
 			return
 		src.pickup(user)
-		user.next_move = max(user.next_move+2,world.time + 2)
-
+		user.AllowedToClickAgainAfter(CLICK_CD_ACTIVATE_OBJECT)
 	user.put_in_active_hand(src)
 	return
 

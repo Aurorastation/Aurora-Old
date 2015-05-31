@@ -108,7 +108,7 @@
 		return
 	if(state == GRAB_UPGRADING)
 		return
-	if(assailant.next_move > world.time)
+	if(!assailant.AllowedToMoveAgain())
 		return
 	if(world.time < (last_upgrade + UPGRADE_COOLDOWN))
 		return
@@ -160,7 +160,7 @@
 					assailant.attack_log += "\[[time_stamp()]\] <font color='red'>Strangled (kill intent) [affecting.name] ([affecting.ckey])</font>"
 					msg_admin_attack("[key_name_admin(assailant)] strangled (kill intent) [key_name_admin(affecting)] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[affecting.x];Y=[affecting.y];Z=[affecting.z]'>JMP</a>")
 
-					assailant.next_move = world.time + 10
+					assailant.AllowedToClickAgainAfter(CLICK_CD_STRANGLE)
 					affecting.losebreath += 1
 				else
 					assailant.visible_message("<span class='warning'>[assailant] was unable to tighten \his grip on [affecting]'s neck!</span>")

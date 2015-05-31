@@ -45,9 +45,9 @@
 /obj/screen/item_action/Click()
 	if(!usr || !owner)
 		return 1
-	if(usr.next_move >= world.time)
+	if(!usr.AllowedToMoveAgain())
 		return
-	usr.next_move = world.time + 6
+	usr.AllowedToClickAgainAfter(CLICK_CD_CLICK_ICON)
 
 	if(usr.stat || usr.restrained() || usr.stunned || usr.lying)
 		return 1
@@ -82,7 +82,7 @@
 	name = "storage"
 
 /obj/screen/storage/Click()
-	if(world.time <= usr.next_move)
+	if(!usr.AllowedToMoveAgain())
 		return 1
 	if(usr.stat || usr.paralysis || usr.stunned || usr.weakened)
 		return 1
@@ -92,7 +92,7 @@
 		var/obj/item/I = usr.get_active_hand()
 		if(I)
 			usr.ClickOn(master)
-			usr.next_move = world.time+2
+			usr.AllowedToClickAgainAfter(CLICK_CD_ACTIVATE_OBJECT)
 	return 1
 
 /obj/screen/gun
@@ -463,7 +463,7 @@
 /obj/screen/inventory/Click()
 	// At this point in client Click() code we have passed the 1/10 sec check and little else
 	// We don't even know if it's a middle click
-	if(world.time <= usr.next_move)
+	if(!usr.AllowedToMoveAgain())
 		return 1
 	if(usr.stat || usr.paralysis || usr.stunned || usr.weakened)
 		return 1
@@ -474,12 +474,12 @@
 			if(iscarbon(usr))
 				var/mob/living/carbon/C = usr
 				C.activate_hand("r")
-				usr.next_move = world.time+2
+				usr.AllowedToClickAgainAfter(CLICK_CD_ACTIVATE_OBJECT)
 		if("l_hand")
 			if(iscarbon(usr))
 				var/mob/living/carbon/C = usr
 				C.activate_hand("l")
-				usr.next_move = world.time+2
+				usr.AllowedToClickAgainAfter(CLICK_CD_ACTIVATE_OBJECT)
 		if("swap")
 			usr:swap_hand()
 		if("hand")
@@ -488,5 +488,5 @@
 			if(usr.attack_ui(slot_id))
 				usr.update_inv_l_hand(0)
 				usr.update_inv_r_hand(0)
-				usr.next_move = world.time+6
+				usr.AllowedToClickAgainAfter(CLICK_CD_CLICK_ICON)
 	return 1
