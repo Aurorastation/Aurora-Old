@@ -7,6 +7,10 @@
 		return
 
 	var/msg = "<span class='info'>*---------*\nThis is \icon[src] \a <EM>[src]</EM>[custom_name ? ", [modtype] [braintype]" : ""]!\n"
+	
+	msg += "\n"
+	msg += describe_all_modules() // describe modules
+	msg += "\n"
 	msg += "<span class='warning'>"
 	if (src.getBruteLoss())
 		if (src.getBruteLoss() < 75)

@@ -37,14 +37,13 @@
 	* mob/RangedAttack(atom,params) - used only ranged, only used for tk and laser eyes but could be changed
 */
 /mob/proc/ClickOn( var/atom/A, var/params )
-	if(world.time <= next_click)
+	if(!AllowedToMoveAgain())
 		return
-	next_click = world.time + 1
 
 	if(client.buildmode)
 		build_click(src, client.buildmode, params, A)
 		return
-
+	
 	var/list/modifiers = params2list(params)
 	if(modifiers["shift"] && modifiers["ctrl"])
 		CtrlShiftClickOn(A)
@@ -64,35 +63,38 @@
 	if(modifiers["ctrl"])
 		CtrlClickOn(A)
 		return
-
+		
 	if(stat || paralysis || stunned || weakened)
 		return
-
+		
 	face_atom(A) // change direction to face what you clicked on
 
-	if(next_move > world.time) // in the year 2000...
+	if(!AllowedToMoveAgain())
 		return
-
+	
+	AllowedToClickAgainAfter(1) // prevent very speedy click spam
+	
 	if(istype(loc,/obj/mecha))
 		if(!locate(/turf) in list(A,A.loc)) // Prevents inventory from being drilled
 			return
 		var/obj/mecha/M = loc
 		return M.click_action(A,src)
-
+		
 	if(restrained())
-		changeNext_move(CLICK_CD_HANDCUFFED)
+		AllowedToClickAgainAfter(CLICK_CD_HANDCUFFED)
 		RestrainedClickOn(A)
 		return
-
+		
 	if(in_throw_mode)
+		AllowedToClickAgainAfter(CLICK_CD_THROW)
 		throw_item(A)
 		return
-
+		
 	var/obj/item/W = get_active_hand()
 
 	if(W == A)
 		W.attack_self(src)
-		changeNext_move(CLICK_CD_MELEE)
+		AllowedToClickAgainAfter(CLICK_CD_MELEE)
 		if(hand)
 			update_inv_l_hand(0)
 		else
@@ -106,22 +108,21 @@
 
 		// faster access to objects already on you
 		if(A in contents)
-			next_move = world.time + 6 // on your person
+			AllowedToClickAgainAfter(CLICK_CD_ACCESS_OBJECT_ON_PERSON) // on your person
 		else
-			next_move = world.time + 8 // in a box/bag or in your square
+			AllowedToClickAgainAfter(CLICK_CD_ACCESS_OBJECT_IN_BAG)
 
 		// No adjacency needed
 		if(W)
-			if(W.flags&USEDELAY)
-				next_move += 5
-
+			DelayClickByWeaponFlag(W)
 			var/resolved = A.attackby(W,src)
 			if(!resolved && A && W)
 				W.afterattack(A,src,1,params) // 1 indicates adjacency
 		else
+			AllowedToClickAgainAfter(CLICK_CD_MELEE)
 			UnarmedAttack(A)
 		return
-
+		
 	if(!isturf(loc)) // This is going to stop you from telekinesing from inside a closet, but I don't shed many tears for that
 		return
 
@@ -132,12 +133,11 @@
 			if(W)
 				// Return 1 in attackby() to prevent afterattack() effects (when safely moving items for example, params)
 				var/resolved = A.attackby(W,src,params)
-				changeNext_move(CLICK_CD_MELEE)
+				AllowedToClickAgainAfter(CLICK_CD_MELEE)
 				if(!resolved && A && W)
 					W.afterattack(A,src,1,params) // 1: clicking something Adjacent
 			else
-				if(ismob(A))
-					changeNext_move(CLICK_CD_MELEE)
+				AllowedToClickAgainAfter(CLICK_CD_MELEE)
 				UnarmedAttack(A, 1)
 			return
 		else // non-adjacent click
@@ -145,11 +145,17 @@
 				W.afterattack(A,src,0,params) // 0: not Adjacent
 			else
 				RangedAttack(A, params)
-
 	return
 
-/mob/proc/changeNext_move(num)
+/mob/proc/AllowedToMoveAgain()
+	return next_move <= world.time
+	
+/mob/proc/AllowedToClickAgainAfter(num)
 	next_move = world.time + num
+	
+/mob/proc/DelayClickByWeaponFlag(var/obj/item/W) // if the weapon has the USEDELAY flag, increase the next_move by five
+	if(W.flags&USEDELAY)
+		next_move += 5
 
 // Default behavior: ignore double clicks, consider them normal clicks instead
 /mob/proc/DblClickOn(var/atom/A, var/params)
@@ -167,8 +173,6 @@
 	in human click code to allow glove touches only at melee range.
 */
 /mob/proc/UnarmedAttack(var/atom/A, var/proximity_flag)
-	if(ismob(A))
-		changeNext_move(CLICK_CD_MELEE)
 	return
 
 /*
@@ -302,7 +306,7 @@
 	return
 
 /mob/living/LaserEyes(atom/A)
-	changeNext_move(CLICK_CD_RANGE)
+	AllowedToClickAgainAfter(CLICK_CD_RANGE)
 	var/turf/T = get_turf(src)
 	var/turf/U = get_turf(A)
 

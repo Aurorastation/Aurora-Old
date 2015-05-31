@@ -15,7 +15,7 @@
 		return
 
 	if(control_disabled || stat) return
-	next_move = world.time + 9
+	AllowedToClickAgainAfter(CLICK_CD_AI)
 
 	if(ismob(A))
 		ai_actual_track(A)
@@ -24,9 +24,8 @@
 
 
 /mob/living/silicon/ai/ClickOn(var/atom/A, params)
-	if(world.time <= next_click)
+	if(!AllowedToMoveAgain())
 		return
-	next_click = world.time + 1
 
 	if(client.buildmode) // comes after object.Click to allow buildmode gui objects to be clicked
 		build_click(src, client.buildmode, params, A)
@@ -55,9 +54,10 @@
 		CtrlClickOn(A)
 		return
 
-	if(world.time <= next_move)
+	if(!AllowedToMoveAgain())
 		return
-	next_move = world.time + 9
+		
+	AllowedToClickAgainAfter(CLICK_CD_AI)
 
 	if(aiCamera.in_camera_mode)
 		aiCamera.camera_mode_off()
