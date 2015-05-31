@@ -15,6 +15,12 @@
 	icon_state = "policehelm"
 	flags_inv = 0
 
+/obj/item/clothing/head/helmet/warden/commissar
+	name = "commissar's cap"
+	desc = "A security commissar's cap."
+	icon_state = "commissarcap"
+	flags_inv = 0
+
 /obj/item/clothing/head/helmet/secfcap
 	name = "officer's cap"
 	desc = "A security officer's cap."
