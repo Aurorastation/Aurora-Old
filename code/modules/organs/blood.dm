@@ -330,11 +330,7 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 		else
 			B.blood_DNA[source.data["blood_DNA"]] = "O+"
 
-	// Update virus information. //Looks like this is out of date.
-	//for(var/datum/disease/D in source.data["viruses"])
-	//	var/datum/disease/new_virus = D.Copy(1)
-	//	source.viruses += new_virus
-	//	new_virus.holder = B
+	// Update virus information.
 	if(source.data["virus2"])
 		B.virus2 = virus_copylist(source.data["virus2"])
 
