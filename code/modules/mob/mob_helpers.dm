@@ -394,6 +394,65 @@ var/list/intents = list("help","disarm","grab","hurt")
 			if(2)			return "grab"
 			else			return "hurt"
 
+/mob/proc/key_pressed_c()
+	return
+/mob/proc/key_pressed_q()
+	return
+/mob/proc/key_pressed_v()
+	return
+
+/client/verb/key_pressed_c()
+	set hidden = 1
+	set name = "key-pressed-c"
+	if (mob)
+		mob:key_pressed_c()
+	
+/client/verb/key_pressed_q()
+	set hidden = 1
+	set name = "key-pressed-q"
+	if (mob)
+		mob:key_pressed_q()
+	
+/client/verb/key_pressed_v()
+	set hidden = 1
+	set name = "key-pressed-v"
+	if (mob)
+		mob:key_pressed_v()
+			
+/mob/proc/key_pressed_1()
+	return a_intent_change("help")
+/mob/proc/key_pressed_2()
+	return a_intent_change("disarm")	
+/mob/proc/key_pressed_3()
+	return a_intent_change("grab")
+/mob/proc/key_pressed_4()
+	return a_intent_change("hurt")
+	
+/client/verb/key_pressed_1()
+	set hidden = 1
+	set name = "key-pressed-1"
+	if (mob)
+		mob:key_pressed_1()
+		
+/client/verb/key_pressed_2()
+	set hidden = 1
+	set name = "key-pressed-2"
+	if (mob)
+		mob:key_pressed_2()
+		
+/client/verb/key_pressed_3()
+	set hidden = 1
+	set name = "key-pressed-3"
+	if (mob)
+		mob:key_pressed_3()
+			
+/client/verb/key_pressed_4()
+	set hidden = 1
+	set name = "key-pressed-4"
+	if (mob)
+		mob:key_pressed_4()
+		
+			
 //change a mob's act-intent. Input the intent as a string such as "help" or use "right"/"left
 /mob/verb/a_intent_change(input as text)
 	set name = "a-intent"

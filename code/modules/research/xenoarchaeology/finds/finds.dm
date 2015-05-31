@@ -70,6 +70,11 @@
 		S.sample_item(src, user)
 		return
 
+	else if(istype(W,/obj/item/weapon/hand_labeler/))
+		var/obj/item/weapon/hand_labeler/HL = W
+		HL.afterattack(src, user)
+		return
+
 	..()
 	if(prob(33))
 		src.visible_message("<span class='warning'>[src] crumbles away, leaving some dust and gravel behind.</span>")

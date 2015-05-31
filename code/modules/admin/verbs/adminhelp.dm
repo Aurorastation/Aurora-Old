@@ -18,7 +18,13 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 	if(src.handle_spam_prevention(msg,MUTE_ADMINHELP))
 		return
 
-	adminhelped = 1 //Determines if they get the message to reply by clicking the name.
+	adminhelped = 2 //Determines if they get the message to reply by clicking the name.
+
+	/*A wee bit of an update here: we're using the following table for adminhelped values:
+	2 - Adminhelp has not been claimed by anyone.
+	1 - Adminhelp has been claimed, initial message has not been sent.
+	0 - Adminhelp has been claimed, initial message has been sent.
+	*/
 
 	/**src.verbs -= /client/verb/adminhelp
 
@@ -91,7 +97,7 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 	if(!mob)	return						//this doesn't happen
 
 	var/ref_mob = "\ref[mob]"
-	msg = "\blue <b><font color=red>HELP: </font>[get_options_bar(mob, 2, 1, 1)][ai_found ? " (<A HREF='?_src_=holder;adminchecklaws=[ref_mob]'>CL</A>)" : ""]:</b> [msg]"
+	msg = "\blue <b><font color=red>HELP: </font>[get_options_bar(mob, 3, 1, 1)][ai_found ? " (<A HREF='?_src_=holder;adminchecklaws=[ref_mob]'>CL</A>)" : ""]:</b> [msg]"
 
 	//send this msg to all admins
 	var/admin_number_present = 0

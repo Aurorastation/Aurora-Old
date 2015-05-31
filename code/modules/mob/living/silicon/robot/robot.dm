@@ -18,6 +18,9 @@
 	var/obj/screen/inv1 = null
 	var/obj/screen/inv2 = null
 	var/obj/screen/inv3 = null
+	
+	var/shown_robot_modules = 0	//Used to determine whether they have the module menu shown or not
+	var/obj/screen/robot_modules_background
 
 //3 Modules can be activated at any one time.
 	var/obj/item/weapon/robot_module/module = null
@@ -73,6 +76,10 @@
 
 	add_language("Robot Talk", 1)
 
+	robot_modules_background = new()
+	robot_modules_background.icon_state = "block"
+	robot_modules_background.layer = 19	//Objects that appear on screen are on layer 20, UI should be just below it.
+	
 	ident = rand(1, 999)
 	updatename("Default")
 	updateicon()
@@ -168,103 +175,44 @@
 		modules+="Combat"
 	modtype = input("Please, select a module!", "Robot", null, null) in modules
 
-	var/module_sprites[0] //Used to store the associations between sprite names and sprite index.
-
 	if(module)
 		return
 
 	switch(modtype)
 		if("Standard")
 			module = new /obj/item/weapon/robot_module/standard(src)
-			module_sprites["Basic"] = "robot_old"
-			module_sprites["Android"] = "droid"
-			module_sprites["Default"] = "robot"
-
 		if("Service")
 			module = new /obj/item/weapon/robot_module/butler(src)
-			module_sprites["Waitress"] = "Service"
-			module_sprites["Kent"] = "toiletbot"
-			module_sprites["Bro"] = "Brobot"
-			module_sprites["Rich"] = "maximillion"
-			module_sprites["Default"] = "Service2"
-
 		if("Clerical")
 			module = new /obj/item/weapon/robot_module/clerical(src)
-			module_sprites["Waitress"] = "Service"
-			module_sprites["Kent"] = "toiletbot"
-			module_sprites["Bro"] = "Brobot"
-			module_sprites["Rich"] = "maximillion"
-			module_sprites["Default"] = "Service2"
-
 		if("Miner")
 			module = new /obj/item/weapon/robot_module/miner(src)
-			module.channels = list("Supply" = 1)
-			if(camera && "Robots" in camera.network)
-				camera.network.Add("MINE")
-			module_sprites["Basic"] = "Miner_old"
-			module_sprites["Advanced Droid"] = "droid-miner"
-			module_sprites["Treadhead"] = "Miner"
-
 		if("Crisis")
 			module = new /obj/item/weapon/robot_module/crisis(src)
-			module.channels = list("Medical" = 1)
-			if(camera && "Robots" in camera.network)
-				camera.network.Add("Medical")
-			module_sprites["Basic"] = "Medbot"
-			module_sprites["Standard"] = "surgeon"
-			module_sprites["Advanced Droid"] = "droid-medical"
-			module_sprites["Needles"] = "medicalrobot"
-
 		if("Surgeon")
 			module = new /obj/item/weapon/robot_module/surgeon(src)
-			module.channels = list("Medical" = 1)
-			if(camera && "Robots" in camera.network)
-				camera.network.Add("Medical")
-
-			module_sprites["Basic"] = "Medbot"
-			module_sprites["Standard"] = "surgeon"
-			module_sprites["Advanced Droid"] = "droid-medical"
-			module_sprites["Needles"] = "medicalrobot"
-
 		if("Security")
 			module = new /obj/item/weapon/robot_module/security(src)
-			module.channels = list("Security" = 1)
-			module_sprites["Basic"] = "secborg"
-			module_sprites["Red Knight"] = "Security"
-			module_sprites["Black Knight"] = "securityrobot"
-			module_sprites["Bloodhound"] = "bloodhound"
-
 		if("Engineering")
 			module = new /obj/item/weapon/robot_module/engineering(src)
-			module.channels = list("Engineering" = 1)
-			if(camera && "Robots" in camera.network)
-				camera.network.Add("Engineering")
-			module_sprites["Basic"] = "Engineering"
-			module_sprites["Antique"] = "engineerrobot"
-			module_sprites["Landmate"] = "landmate"
-
 		if("Construction")
 			module = new /obj/item/weapon/robot_module/construction(src)
-			module.channels = list("Engineering" = 1)
-			if(camera && "Robots" in camera.network)
-				camera.network.Add("Engineering")
-			module_sprites["Basic"] = "Engineering"
-			module_sprites["Antique"] = "engineerrobot"
-			module_sprites["Landmate"] = "landmate"
-
 		if("Janitor")
 			module = new /obj/item/weapon/robot_module/janitor(src)
-			module_sprites["Basic"] = "JanBot2"
-			module_sprites["Mopbot"]  = "janitorrobot"
-			module_sprites["Mop Gear Rex"] = "mopgearrex"
-
 		if("Combat")
 			module = new /obj/item/weapon/robot_module/combat(src)
-			module_sprites["Combat Android"] = "droid-combat"
-			module.channels = list("Security" = 1)
 
-	//languages
+	// languages
 	module.add_languages(src)
+	
+	// cameras 
+	module.add_to_camera_network(src)
+	
+	// sensors
+	module.add_sensor_modification(src)
+	
+	// create sprite list
+	var/list/module_sprites = module.sprites.Copy()
 
 	//Custom_sprite check and entry
 	if (custom_sprite == 1)
@@ -425,6 +373,12 @@
 		updatehealth()
 		return 1
 	return 0
+	
+/mob/living/silicon/robot/proc/sensor_mode()
+	set name = "Set Sensor Augmentation"
+	set desc = "Augment visual feed with internal sensor overlays."
+	set category = "Robot Commands"
+	toggle_sensor_mode()
 
 // this function shows information about the malf_ai gameplay type in the status screen
 /mob/living/silicon/robot/show_malf_ai()

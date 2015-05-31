@@ -6,6 +6,9 @@
 	item_state = "electronic"
 	flags = FPRINT|TABLEPASS | CONDUCT
 	var/channels = list()
+	var/camera_network = null
+	var/sensor_mode = 0
+	var/list/sprites = list("Basic"="robot_old")
 	var/list/modules = list()
 	var/obj/item/emag = null
 	var/obj/item/borg/upgrade/jetpack = null
@@ -26,11 +29,9 @@
 		src.modules += new /obj/item/device/flash(src)
 		src.emag = new /obj/item/toy/sword(src)
 		src.emag.name = "Placeholder Emag Item"
-//		src.jetpack = new /obj/item/toy/sword(src)
-//		src.jetpack.name = "Placeholder Upgrade Item"
 		return
-
-
+		
+		
 /obj/item/weapon/robot_module/proc/respawn_consumable(var/mob/living/silicon/robot/R)
 
 	if(!stacktypes || !stacktypes.len) return
@@ -66,9 +67,19 @@
 	R.add_language("Rootspeak", 0)
 
 
+/obj/item/weapon/robot_module/proc/add_to_camera_network(var/mob/living/silicon/robot/R)
+	if (camera_network)
+		if(R.camera && "Robots" in R.camera.network)
+			R.camera.network.Add(camera_network)
+	
+
+/obj/item/weapon/robot_module/proc/add_sensor_modification(var/mob/living/silicon/robot/R)
+	R.sensor_mode=sensor_mode
+	
+
 /obj/item/weapon/robot_module/standard
 	name = "standard robot module"
-
+	sprites=list("Basic" = "robot_old","Android" = "droid", "Default" = "robot")
 	New()
 		src.modules += new /obj/item/device/flashlight(src)
 		src.modules += new /obj/item/device/flash(src)
@@ -82,6 +93,13 @@
 
 /obj/item/weapon/robot_module/surgeon
 	name = "surgeon robot module"
+	sensor_mode=MED_HUD
+	channels=list("Medical" = 1)
+	camera_network="Medical"
+	sprites=list(   "Basic" = "Medbot",
+					"Standard "= "surgeon",
+					"Advanced Droid" = "droid-medical",
+					"Needles" = "medicalrobot")
 	stacktypes = list(
 		/obj/item/stack/medical/advanced/bruise_pack = 5,
 		/obj/item/stack/nanopaste = 5
@@ -119,6 +137,13 @@
 
 /obj/item/weapon/robot_module/crisis
 	name = "crisis robot module"
+	sensor_mode=MED_HUD
+	channels=list("Medical" = 1)
+	camera_network="Medical"
+	sprites=list(   "Basic" = "Medbot",
+					"Standard "= "surgeon",
+					"Advanced Droid" = "droid-medical",
+					"Needles" = "medicalrobot")
 	stacktypes = list(
 		/obj/item/stack/medical/ointment = 5,
 		/obj/item/stack/medical/bruise_pack = 5,
@@ -128,7 +153,6 @@
 	New()
 		src.modules += new /obj/item/device/flashlight(src)
 		src.modules += new /obj/item/device/flash(src)
-		src.modules += new /obj/item/borg/sight/hud/med(src)
 		src.modules += new /obj/item/device/healthanalyzer(src)
 		src.modules += new /obj/item/device/reagent_scanner/adv(src)
 		src.modules += new /obj/item/roller_holder(src)
@@ -164,7 +188,11 @@
 
 /obj/item/weapon/robot_module/construction
 	name = "construction robot module"
-
+	channels = list("Engineering" = 1)
+	camera_network="Engineering"
+	sprites=list(	"Basic" = "Engineering",
+					"Antique" = "engineerrobot",
+					"Landmate" = "landmate")
 	stacktypes = list(
 		/obj/item/stack/sheet/metal = 50,
 		/obj/item/stack/sheet/plasteel = 10,
@@ -185,7 +213,11 @@
 
 /obj/item/weapon/robot_module/engineering
 	name = "engineering robot module"
-
+	channels = list("Engineering" = 1)
+	camera_network="Engineering"
+	sprites=list(	"Basic" = "Engineering",
+					"Antique" = "engineerrobot",
+					"Landmate" = "landmate")
 	stacktypes = list(
 		/obj/item/stack/sheet/metal = 50,
 		/obj/item/stack/sheet/glass = 50,
@@ -233,11 +265,15 @@
 
 /obj/item/weapon/robot_module/security
 	name = "security robot module"
-
+	sensor_mode=SEC_HUD
+	channels=list("Security" = 1)
+	sprites = list(	"Basic" = "secborg",
+					"Red Knight" = "Security",
+					"Black Knight" = "securityrobot",
+					"Bloodhound" = "bloodhound")
 	New()
 		src.modules += new /obj/item/device/flashlight(src)
 		src.modules += new /obj/item/device/flash(src)
-		src.modules += new /obj/item/borg/sight/hud/sec(src)
 		src.modules += new /obj/item/weapon/handcuffs/cyborg(src)
 		src.modules += new /obj/item/weapon/melee/baton/loaded(src)
 		src.modules += new /obj/item/weapon/gun/energy/taser/cyborg(src)
@@ -262,7 +298,9 @@
 
 /obj/item/weapon/robot_module/janitor
 	name = "janitorial robot module"
-
+	sprites=list(	"Basic" = "JanBot2",
+					"Mopbot" = "janitorrobot",
+					"Mop Gear Rex" = "mopgearrex"	)
 	New()
 		src.modules += new /obj/item/device/flashlight(src)
 		src.modules += new /obj/item/device/flash(src)
@@ -285,7 +323,11 @@
 
 /obj/item/weapon/robot_module/butler
 	name = "service robot module"
-
+	sprites = list( "Waitress" = "Service", 
+					"Kent" = "toiletbot", 
+					"Bro" = "Brobot",
+					"Rich" = "maximillion",
+					"Default" = "Service2")
 	New()
 		src.modules += new /obj/item/device/flashlight(src)
 		src.modules += new /obj/item/device/flash(src)
@@ -326,7 +368,11 @@
 
 /obj/item/weapon/robot_module/clerical
 	name = "clerical robot module"
-
+	sprites = list( "Waitress" = "Service", 
+					"Kent" = "toiletbot", 
+					"Bro" = "Brobot",
+					"Rich" = "maximillion",
+					"Default" = "Service2")
 	New()
 		src.modules += new /obj/item/device/flashlight(src)
 		src.modules += new /obj/item/device/flash(src)
@@ -354,7 +400,10 @@
 
 /obj/item/weapon/robot_module/miner
 	name = "miner robot module"
-
+	channels=list("Supply" = 1)
+	sprites = list( "Basic" = "Miner_old",
+					"Advanced Droid" = "droid-miner",
+					"Treadhead" = "Miner")
 	New()
 		src.modules += new /obj/item/device/flashlight(src)
 		src.modules += new /obj/item/device/flash(src)
@@ -380,7 +429,8 @@
 
 /obj/item/weapon/robot_module/combat
 	name = "combat robot module"
-
+	channels=list("Security" = 1)
+	sprites = list("Combat Android" = "droid-combat")
 	New()
 		src.modules += new /obj/item/device/flashlight(src)
 		src.modules += new /obj/item/device/flash(src)

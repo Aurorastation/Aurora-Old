@@ -7,9 +7,8 @@
 */
 
 /mob/living/silicon/robot/ClickOn(var/atom/A, var/params)
-	if(world.time <= next_click)
+	if(!AllowedToMoveAgain())
 		return
-	next_click = world.time + 1
 
 	if(client.buildmode) // comes after object.Click to allow buildmode gui objects to be clicked
 		build_click(src, client.buildmode, params, A)
@@ -38,8 +37,9 @@
 	if(stat || lockcharge || weakened || stunned || paralysis)
 		return
 
-	if(next_move >= world.time)
+	if(!AllowedToMoveAgain())
 		return
+	AllowedToClickAgainAfter(1) // prevent very speedy click spam
 
 	face_atom(A) // change direction to face what you clicked on
 
@@ -57,7 +57,10 @@
 		RestrainedClickOn(A)
 		return
 	*/
-
+	// handle equipping modules
+	if (A.equip_robot(src))
+		return 
+		
 	var/obj/item/W = get_active_hand()
 
 	// Cyborgs have no range-checking unless there is item use
@@ -71,20 +74,14 @@
 		return
 
 	if(W == A)
-		next_move = world.time + 8
-		if(W.flags&USEDELAY)
-			next_move += 5
-
+		DelayClick_Weapon(W)
 		W.attack_self(src)
 		return
 
 	// cyborgs are prohibited from using storage items so we can I think safely remove (A.loc in contents)
 	if(A == loc || (A in loc) || (A in contents))
 		// No adjacency checks
-		next_move = world.time + 8
-		if(W.flags&USEDELAY)
-			next_move += 5
-
+		DelayClick_Weapon(W)
 		var/resolved = A.attackby(W,src)
 		if(!resolved && A && W)
 			W.afterattack(A,src,1,params)
@@ -96,16 +93,13 @@
 	// cyborgs are prohibited from using storage items so we can I think safely remove (A.loc && isturf(A.loc.loc))
 	if(isturf(A) || isturf(A.loc))
 		if(A.Adjacent(src)) // see adjacent.dm
-			next_move = world.time + 10
-			if(W.flags&USEDELAY)
-				next_move += 5
-
+			DelayClick_Weapon(W)
 			var/resolved = A.attackby(W, src)
 			if(!resolved && A && W)
 				W.afterattack(A, src, 1, params)
 			return
 		else
-			next_move = world.time + 10
+			AllowedToClickAgainAfter(CLICK_CD_POINT)
 			W.afterattack(A, src, 0, params)
 			return
 	return
@@ -120,11 +114,15 @@
 */
 /mob/living/silicon/robot/UnarmedAttack(atom/A)
 	A.attack_robot(src)
+	
 /mob/living/silicon/robot/RangedAttack(atom/A)
 	A.attack_robot(src)
 
 /atom/proc/attack_robot(mob/user as mob)
 	attack_ai(user)
+	return
+	
+/atom/proc/equip_robot(mob/user as mob)
 	return
 
 /mob/living/silicon/robot/MiddleClickOn(var/atom/A)
@@ -132,16 +130,23 @@
 
 /mob/living/silicon/robot/CtrlShiftClickOn(var/atom/A)
 	A.AICtrlShiftClick(src)
+	
 /mob/living/silicon/robot/AltShiftClickOn(var/atom/A)
 	A.AIAltShiftClick(src)
+	
 /mob/living/silicon/robot/ShiftClickOn(var/atom/A)
 	var/opened_door=A.AIShiftClick(src)
 	if (!opened_door)
 		..(A)
+		
 /mob/living/silicon/robot/CtrlClickOn(var/atom/A)
 	var/locked_door=A.AICtrlClick(src)
 	if (!locked_door)
 		..(A)
-		
+
 /mob/living/silicon/robot/AltClickOn(var/atom/A)
 	A.AIAltClick(src)
+	
+/mob/living/silicon/robot/proc/DelayClick_Weapon(var/obj/item/W)
+	AllowedToClickAgainAfter(CLICK_CD_MELEE)
+	DelayClickByWeaponFlag(W)

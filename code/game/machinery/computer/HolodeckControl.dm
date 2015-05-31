@@ -48,10 +48,9 @@
 			dat += "<A href='?src=\ref[src];wildlifecarp=1'>(<font color=red>Begin Wildlife Simulation</font>)</A><BR>"
 			dat += "Ensure the holodeck is empty before testing.<BR>"
 			dat += "<BR>"
-			if(emagged == 2)
-				dat += "<A href='?src=\ref[src];burntest=1'>(<font color=red>Begin Atmospheric Burn Simulation</font>)</A><BR>"
-				dat += "Ensure the holodeck is empty before testing.<BR>"
-				dat += "<BR>"
+			dat += "<A href='?src=\ref[src];burntest=1'>(<font color=red>Begin Atmospheric Burn Simulation</font>)</A><BR>"
+			dat += "Ensure the holodeck is empty before testing.<BR>"
+			dat += "<BR>"
 			if(issilicon(user))
 				dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=green>Re-Enable Safety Protocols?</font>)</A><BR>"
 			dat += "Safety Protocols are <font color=red> DISABLED </font><BR>"
@@ -151,7 +150,6 @@
 					loadProgram(target)
 
 			else if(href_list["burntest"])
-				if(emagged == 2)	return
 				target = locate(/area/holodeck/source_burntest)
 				if(target)
 					loadProgram(target)
