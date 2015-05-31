@@ -243,31 +243,43 @@ macro "hotkeymode"
 		is-disabled = false
 	elem 
 		name = "1"
-		command = "a-intent help"
+		command = "key-pressed-1"
 		is-disabled = false
 	elem 
 		name = "CTRL+1"
 		command = "a-intent help"
 		is-disabled = false
 	elem 
+		name = "SHIFT+1"
+		command = "shift-1-key-pressed"
+		is-disabled = false
+	elem 
 		name = "2"
-		command = "a-intent disarm"
+		command = "key-pressed-2"
 		is-disabled = false
 	elem 
 		name = "CTRL+2"
 		command = "a-intent disarm"
 		is-disabled = false
 	elem 
+		name = "SHIFT+2"
+		command = "shift-2-key-pressed"
+		is-disabled = false
+	elem 
 		name = "3"
-		command = "a-intent grab"
+		command = "key-pressed-3"
 		is-disabled = false
 	elem 
 		name = "CTRL+3"
 		command = "a-intent grab"
 		is-disabled = false
 	elem 
+		name = "SHIFT+3"
+		command = "shift-3-key-pressed"
+		is-disabled = false
+	elem 
 		name = "4"
-		command = "a-intent hurt"
+		command = "key-pressed-4"
 		is-disabled = false
 	elem 
 		name = "CTRL+4"
@@ -280,6 +292,10 @@ macro "hotkeymode"
 	elem 
 		name = "CTRL+A+REP"
 		command = ".west"
+		is-disabled = false
+	elem 
+		name = "C"
+		command = "key-pressed-c"
 		is-disabled = false
 	elem 
 		name = "D+REP"
@@ -323,11 +339,11 @@ macro "hotkeymode"
 		is-disabled = false
 	elem 
 		name = "Q"
-		command = ".northwest"
+		command = "key-pressed-q"
 		is-disabled = false
 	elem 
 		name = "CTRL+Q"
-		command = ".northwest"
+		command = "key-pressed-q"
 		is-disabled = false
 	elem 
 		name = "R"
@@ -348,6 +364,10 @@ macro "hotkeymode"
 	elem 
 		name = "T"
 		command = "say"
+		is-disabled = false
+	elem "Toggle Module"
+		name = "V"
+		command = "key-pressed-v"
 		is-disabled = false
 	elem "w_key"
 		name = "W+REP"
