@@ -29,6 +29,12 @@
 			user << "\red <b>Unable to establish a connection</b>: \black You're too far away from the station!"
 			return
 		if(istype(O, /obj/item/weapon/aiModule))
+			if(stat & NOPOWER)
+				usr << "The upload computer has no power!"
+				return
+			if(stat & BROKEN)
+				usr << "The upload computer is broken!"
+				return
 			var/obj/item/weapon/aiModule/M = O
 			M.install(src)
 		else
@@ -63,6 +69,12 @@
 
 	attackby(obj/item/weapon/aiModule/module as obj, mob/user as mob)
 		if(istype(module, /obj/item/weapon/aiModule))
+			if(stat & NOPOWER)
+				usr << "The upload computer has no power!"
+				return
+			if(stat & BROKEN)
+				usr << "The upload computer is broken!"
+				return
 			module.install(src)
 		else
 			return ..()
