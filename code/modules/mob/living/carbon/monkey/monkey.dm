@@ -532,3 +532,9 @@
         message = capitalize(trim_left(message))
 
         ..(message, speaking, verb, alt_name, italics, message_range, used_radios)
+
+/mob/living/carbon/monkey/can_use_vents()
+	if(mind.changeling)
+		return
+	else
+		return "You can't fit into that vent."
