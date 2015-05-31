@@ -484,36 +484,51 @@
 
 // Get rank from ID, ID inside PDA, PDA, ID in wallet, etc.
 /mob/living/carbon/human/proc/get_authentification_rank(var/if_no_id = "No id", var/if_no_job = "No job")
-	if(istype(wear_id, /obj/item/device/pda))
-		var/obj/item/device/pda/PDA = wear_id
-		return PDA.ownrank
-	var/obj/item/weapon/card/id/id = wear_id.GetID()
-	if(id)
-		return id.rank ? id.rank : if_no_job
+	if(wear_id)
+		var/obj/item/weapon/card/id/ID
+		if(istype(wear_id, /obj/item/device/pda))
+			var/obj/item/device/pda/PDA = wear_id
+			ID = PDA.GetID()
+		if(istype(wear_id, /obj/item/weapon/storage/wallet))
+			var/obj/item/weapon/storage/wallet/Wallet = wear_id
+			ID = Wallet.GetID()
+		if(!ID)
+			return if_no_id
+		return ID.rank ? ID.rank : if_no_job
 	else
 		return if_no_id
 
 //gets assignment from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers
 /mob/living/carbon/human/proc/get_assignment(var/if_no_id = "No id", var/if_no_job = "No job")
-	if(istype(wear_id, /obj/item/device/pda))
-		var/obj/item/device/pda/PDA = wear_id
-		return PDA.ownjob
-	var/obj/item/weapon/card/id/id = wear_id.GetID()
-	if(id)
-		return id.assignment ? id.assignment : if_no_job
+	if(wear_id)
+		var/obj/item/weapon/card/id/ID
+		if(istype(wear_id, /obj/item/device/pda))
+			var/obj/item/device/pda/PDA = wear_id
+			ID = PDA.GetID()
+		if(istype(wear_id, /obj/item/weapon/storage/wallet))
+			var/obj/item/weapon/storage/wallet/Wallet = wear_id
+			ID = Wallet.GetID()
+		if(!ID)
+			return if_no_id
+		return ID.assignment ? ID.assignment : if_no_job
 	else
 		return if_no_id
 
 //gets name from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers
 /mob/living/carbon/human/proc/get_authentification_name(var/if_no_id = "Unknown")
-	if(istype(wear_id, /obj/item/device/pda))
-		var/obj/item/device/pda/PDA = wear_id
-		return PDA.owner
-	var/obj/item/weapon/card/id/id = wear_id.GetID()
-	if(id)
-		return id.registered_name
+	if(wear_id)
+		var/obj/item/weapon/card/id/ID
+		if(istype(wear_id, /obj/item/device/pda))
+			var/obj/item/device/pda/PDA = wear_id
+			ID = PDA.GetID()
+		if(istype(wear_id, /obj/item/weapon/storage/wallet))
+			var/obj/item/weapon/storage/wallet/Wallet = wear_id
+			ID = Wallet.GetID()
+		if(!ID)
+			return if_no_id
+		return ID.registered_name
 	else
 		return if_no_id
 
