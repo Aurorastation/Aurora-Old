@@ -484,9 +484,10 @@
 
 // Get rank from ID, ID inside PDA, PDA, ID in wallet, etc.
 /mob/living/carbon/human/proc/get_authentification_rank(var/if_no_id = "No id", var/if_no_job = "No job")
-	if(wear_id istype obj/item/device/pda)
-		return pda.ownrank
-	var/obj/item/weapon/card/id/id = GetID()
+	if(istype(wear_id, /obj/item/device/pda))
+		var/obj/item/device/pda/PDA = wear_id
+		return PDA.ownrank
+	var/obj/item/weapon/card/id/id = wear_id.GetID()
 	if(id)
 		return id.rank ? id.rank : if_no_job
 	else
@@ -495,9 +496,10 @@
 //gets assignment from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers
 /mob/living/carbon/human/proc/get_assignment(var/if_no_id = "No id", var/if_no_job = "No job")
-	if(wear_id istype obj/item/device/pda)
-		return pda.ownjob
-	var/obj/item/weapon/card/id/id = GetID()
+	if(istype(wear_id, /obj/item/device/pda))
+		var/obj/item/device/pda/PDA = wear_id
+		return PDA.ownjob
+	var/obj/item/weapon/card/id/id = wear_id.GetID()
 	if(id)
 		return id.assignment ? id.assignment : if_no_job
 	else
@@ -506,9 +508,10 @@
 //gets name from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers
 /mob/living/carbon/human/proc/get_authentification_name(var/if_no_id = "Unknown")
-	if(wear_id istype obj/item/device/pda)
-		return pda.owner
-	var/obj/item/weapon/card/id/id = GetID()
+	if(istype(wear_id, /obj/item/device/pda))
+		var/obj/item/device/pda/PDA = wear_id
+		return PDA.owner
+	var/obj/item/weapon/card/id/id = wear_id.GetID()
 	if(id)
 		return id.registered_name
 	else
