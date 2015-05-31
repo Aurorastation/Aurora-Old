@@ -1527,6 +1527,9 @@
 
 		var/customname = input(src.owner, "Pick a title for the report", "Title") as text|null
 
+		//so that we alert people with certain cartidges with a PDA message.
+		alertFaxes()
+
 		for(var/obj/machinery/faxmachine/F in machines)
 			if(! (F.stat & (BROKEN|NOPOWER) ) )
 
@@ -2816,4 +2819,21 @@
 		var/playerckey = href_list["warnsearchckey"]
 
 		warning_panel(adminckey, playerckey)
+		return
+
+	else if(href_list["admindibs"])
+		if(!check_rights(R_ADMIN|R_MOD))	return
+		var/mob/M = locate(href_list["admindibs"])
+
+		if(M.client.adminhelped == 2)
+			log_admin("[key_name(usr)] called dibs on [key_name(M)]'s adminhelp!")
+			message_admins("[key_name_admin(usr)] has called dibs on [key_name_admin(M)]'s adminhelp!")
+			message_mods("[key_name_admin(usr)] has called dibs on [key_name_admin(M)]'s adminhelp!")
+			usr << "<font color=blue><b>You have taken over [key_name_admin(M)]'s adminhelp.</b></font>"
+			usr << "[get_options_bar(M, 2, 1, 1)]"
+
+			M << "<font color=red><b>Your adminhelp will be tended to [usr.client.holder.fakekey ? "shortly" : "by [key_name(usr, 0, 0)]"]. Please allow the staff member a minute or two to type up a response.</b></font>"
+			M.client.adminhelped = 1
+		else
+			usr << "<font color=red><b>The adminhelp has already been claimed.</b></font>"
 		return
