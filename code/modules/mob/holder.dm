@@ -41,6 +41,9 @@
 /mob/living/proc/get_scooped(var/mob/living/carbon/grabber)
 	if(!holder_type)
 		return
+	if(buckled)
+		grabber << "Perhaps you should unbuckle [src] first?"
+		return
 	var/obj/item/weapon/holder/H = new holder_type(loc)
 	src.loc = H
 	H.name = loc.name

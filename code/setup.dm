@@ -897,13 +897,22 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define ALCOHOL_METABOLISM 0.1
 
 //Click cooldowns, in tenths of a second
+
 #define CLICK_CD_MELEE 8
+#define CLICK_CD_THROW 12
 #define CLICK_CD_RANGE 4
 #define CLICK_CD_BREAKOUT 100
 #define CLICK_CD_HANDCUFFED 10
+#define CLICK_CD_STRANGLE 10
 #define CLICK_CD_TKSTRANGLE 10
 #define CLICK_CD_POINT 10
 #define CLICK_CD_RESIST 20
+#define CLICK_CD_ACCESS_OBJECT_ON_PERSON 6
+#define CLICK_CD_ACCESS_OBJECT_IN_BAG 8
+#define CLICK_CD_AI 9
+#define CLICK_CD_ACTIVATE_OBJECT 2
+#define CLICK_CD_GHOST 8
+#define CLICK_CD_CLICK_ICON 6
 
 // NanoUI flags
 #define STATUS_INTERACTIVE 2 // GREEN Visability

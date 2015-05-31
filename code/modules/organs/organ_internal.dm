@@ -149,8 +149,6 @@
 	name = "lungs"
 	parent_organ = "chest"
 	removed_type = /obj/item/organ/lungs
-	min_bruised_damage = 15
-	min_broken_damage = 20
 
 	process()
 		..()
@@ -164,7 +162,9 @@
 				owner.drip(10)
 			if(prob(4))
 				spawn owner.emote("me", 1, "gasps for air!")
-				owner.losebreath += 15
+				owner.losebreath += 6
+				if(is_broken())
+					owner.losebreath +=5
 
 /datum/organ/internal/liver
 	name = "liver"

@@ -207,3 +207,46 @@ proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt)
 					P.update_icon()
 
 					playsound(F.loc, "sound/items/polaroid1.ogg", 50, 1)
+
+//A proc for alerting people with certain PDA cartridges of a fax arrival.
+/proc/alertFaxes()
+
+	var/obj/machinery/message_server/useMS
+	for(var/obj/machinery/message_server/MS in message_servers)
+		if(MS.active)
+			useMS = MS
+			break
+
+	if(!useMS)
+		return
+
+	//List of cartridges that accept the beep.
+	var/targetcarts = list("P.R.O.V.E. Cartridge",
+		"Easy-Record DELUXE",
+		"HumanResources9001",
+		"R.O.B.U.S.T. DELUXE",
+		"Power-On DELUXE",
+		"Med-U DELUXE",
+		"Signal Ace DELUXE",
+		"Value-PAK Cartridge"
+	)
+	var/sender = "system"
+	var/message = "This is an automated message. A new fax has been transmitted to the [station_name]."
+
+	if(useMS)
+		for(var/obj/item/device/pda/PDA in world)
+			if(PDA.cartridge)
+				if(PDA.cartridge.name in targetcarts)
+					useMS.send_pda_message("[PDA.owner]", "[sender]", "[message]")
+					if (!PDA.silent)
+						playsound(PDA.loc, 'sound/machines/twobeep.ogg', 50, 1)
+					for (var/mob/O in hearers(3, PDA.loc))
+						if(!PDA.silent) O.show_message(text("\icon[PDA] *[PDA.ttone]*"))
+					var/mob/living/L = null
+					if(PDA.loc && isliving(PDA.loc))
+						L = PDA.loc
+					else
+						L = get(PDA, /mob/living/silicon)
+
+					if(L)
+						L << "\icon[PDA] <b>Message from [sender], </b>\"[message]\" (Unable to Reply)"

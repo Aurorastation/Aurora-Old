@@ -442,9 +442,9 @@
 	set name = "Resist"
 	set category = "IC"
 
-	if(!isliving(usr) || usr.next_move > world.time)
+	if(!isliving(usr) || !usr.AllowedToMoveAgain())
 		return
-	usr.next_move = world.time + 20
+	usr.AllowedToClickAgainAfter(CLICK_CD_RESIST)
 
 	var/mob/living/L = usr
 
@@ -527,7 +527,7 @@
 		if(iscarbon(L))
 			var/mob/living/carbon/C = L
 			if( C.handcuffed )
-				C.next_move = world.time + 100
+				C.AllowedToClickAgainAfter(CLICK_CD_BREAKOUT)
 				C.last_special = world.time + 100
 				C << "\red You attempt to unbuckle yourself. (This will take around 2 minutes and you need to stand still)"
 				for(var/mob/O in viewers(L))
@@ -561,7 +561,7 @@
 		//		breakout_time++ //Harder to get out of welded lockers than locked lockers
 
 		//okay, so the closet is either welded or locked... resist!!!
-		usr.next_move = world.time + 100
+		usr.AllowedToClickAgainAfter(CLICK_CD_BREAKOUT)
 		L.last_special = world.time + 100
 		L << "\red You lean on the back of \the [C] and start pushing the door open. (this will take about [breakout_time] minutes)"
 		for(var/mob/O in viewers(usr.loc))
@@ -626,7 +626,7 @@
 				ExtinguishMob()
 			return
 		if(CM.handcuffed && CM.canmove && (CM.last_special <= world.time))
-			CM.next_move = world.time + 100
+			CM.AllowedToClickAgainAfter(CLICK_CD_BREAKOUT)
 			CM.last_special = world.time + 100
 
 			var/can_break_cuffs
@@ -672,7 +672,7 @@
 						CM.drop_from_inventory(CM.handcuffed)
 
 		else if(CM.legcuffed && CM.canmove && (CM.last_special <= world.time))
-			CM.next_move = world.time + 100
+			CM.AllowedToClickAgainAfter(CLICK_CD_BREAKOUT)
 			CM.last_special = world.time + 100
 
 			var/can_break_cuffs
