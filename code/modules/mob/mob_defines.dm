@@ -222,3 +222,5 @@
 	var/list/active_genes=list()
 
 	var/floating = 0 //living
+
+	var/stance_damage = 0

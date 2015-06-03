@@ -492,6 +492,8 @@
 		if(istype(wear_id, /obj/item/weapon/storage/wallet))
 			var/obj/item/weapon/storage/wallet/Wallet = wear_id
 			ID = Wallet.GetID()
+		if(istype(wear_id, /obj/item/weapon/card/id))
+			ID = wear_id
 		if(!ID)
 			return if_no_id
 		return ID.rank ? ID.rank : if_no_job
@@ -509,6 +511,8 @@
 		if(istype(wear_id, /obj/item/weapon/storage/wallet))
 			var/obj/item/weapon/storage/wallet/Wallet = wear_id
 			ID = Wallet.GetID()
+		if(istype(wear_id, /obj/item/weapon/card/id))
+			ID = wear_id
 		if(!ID)
 			return if_no_id
 		return ID.assignment ? ID.assignment : if_no_job
@@ -526,6 +530,8 @@
 		if(istype(wear_id, /obj/item/weapon/storage/wallet))
 			var/obj/item/weapon/storage/wallet/Wallet = wear_id
 			ID = Wallet.GetID()
+		if(istype(wear_id, /obj/item/weapon/card/id))
+			ID = wear_id
 		if(!ID)
 			return if_no_id
 		return ID.registered_name
