@@ -59,8 +59,6 @@
 		affected.createwound(CUT, 1)
 		affected.clamp()
 		spread_germs_to_organ(affected, user)
-//		if (target_zone == "head")
-//			target.brain_op_stage = 1
 
 	fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -101,8 +99,6 @@
 		affected.createwound(CUT, 1)
 		affected.clamp()
 		affected.open = 2
-//		if (target_zone == "head")
-//			target.brain_op_stage = 1
 
 	fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -143,8 +139,6 @@
 			affected.status |= ORGAN_BLEEDING
 
 		affected.createwound(CUT, 1)
-//		if (target_zone == "head")
-//			target.brain_op_stage = 1
 
 	fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -311,7 +305,7 @@
 		var/datum/organ/external/affected = target.get_organ(target_zone)
 		user.visible_message("\blue [user] cuts off [target]'s [affected.display_name] with \the [tool].", \
 		"\blue You cut off [target]'s [affected.display_name] with \the [tool].")
-		affected.droplimb(1,0)
+		affected.droplimb(1,1,1)
 
 	fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
