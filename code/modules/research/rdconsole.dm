@@ -46,6 +46,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	var/screen = 1.0	//Which screen is currently showing.
 	var/id = 0			//ID of the computer (for server restrictions).
 	var/sync = 1		//If sync = 0, it doesn't show up on Server Control Console
+	var/show_category = "All" //Category code
 
 	req_access = list(access_research)	//Data and setting manipulation requires scientist access.
 
@@ -132,7 +133,15 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		for(var/obj/machinery/r_n_d/server/centcom/S in machines)
 			S.initialize()
 			break
-
+	//Create global protolathe category list if it hasn't been made already.
+	//Category CODE: WIP
+	if(isnull(protolathe_categories))
+		protolathe_categories = list()
+		for(var/R in typesof(/datum/design)-/datum/design)
+			var/datum/design/design = new R
+			if(design.build_type == PROTOLATHE)
+				protolathe_categories |= design.category
+	//Category CODE: WIP
 /obj/machinery/computer/rdconsole/initialize()
 	SyncRDevices()
 
@@ -159,7 +168,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	else if(istype(D, /obj/item/weapon/card/emag) && !emagged)
 		playsound(src.loc, 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
-		user << "\blue You you disable the security protocols"
+		user << "\blue You disable the security protocols"
 	else
 		//The construction/deconstruction of the console code.
 		..()
@@ -237,7 +246,13 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				linked_destroy.loaded_item = null
 				linked_destroy.icon_state = "d_analyzer"
 				screen = 2.1
+	//Category code
+	else if(href_list["change_category"])
 
+		var/choice = input("Which category do you wish to display?") as null|anything in protolathe_categories+"All"
+		if(!choice) return
+		show_category = choice
+	//Category code
 	else if(href_list["deconstruct"]) //Deconstruct the item in the destructive analyzer and update the research holder.
 		if(linked_destroy)
 			if(linked_destroy.busy)
@@ -700,9 +715,16 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += "Protolathe Menu:<BR><BR>"
 			dat += "<B>Material Amount:</B> [linked_lathe.TotalMaterials()] cm<sup>3</sup> (MAX: [linked_lathe.max_material_storage])<BR>"
 			dat += "<B>Chemical Volume:</B> [linked_lathe.reagents.total_volume] (MAX: [linked_lathe.reagents.maximum_volume])<HR>"
+			//START CATEGORY CODE. THIS IS WIP
+			dat += "<h2>Printable Designs</h2><h3>Showing: <a href='?src=\ref[src];change_category=1'>[show_category]</a>.</h3></center><table width = '100%'>"
+			//END CATEGORY CODE
 			for(var/datum/design/D in files.known_designs)
 				if(!(D.build_type & PROTOLATHE))
 					continue
+				//CATEGORY CODE START
+				if(!(show_category == "All" || show_category == D.category))
+					continue
+				//CATEGORY CODE END
 				var/temp_dat = "[D.name]"
 				var/check_materials = 1
 				for(var/M in D.materials)
