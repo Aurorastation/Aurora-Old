@@ -9,6 +9,8 @@
 	idle_power_usage = 0
 	active_power_usage = 0
 
+	interact_offline = 1
+
 /obj/machinery/power/Del()
 	disconnect_from_network()
 	..()
@@ -72,16 +74,17 @@
 /obj/machinery/proc/power_change(var/area/master_area = null)		// called whenever the power settings of the containing area change
 										// by default, check equipment channel & set flag
 										// can override if needed
-	var/has_power
-	if (master_area)
-		has_power = master_area.powered(power_channel)
-	else
-		has_power = powered(power_channel)
-	
-	if(has_power)
+//	var/has_power
+//	if (master_area)
+//		has_power = master_area.powered(power_channel)
+//	else
+//		has_power = powered(power_channel)
+//
+	if(powered(power_channel))
 		stat &= ~NOPOWER
 	else
 		stat |= NOPOWER
+	return
 
 // the powernet datum
 // each contiguous network of cables & nodes
@@ -270,8 +273,8 @@
 //No animations will be performed by this proc.
 /proc/electrocute_mob(mob/living/carbon/M as mob, var/power_source, var/obj/source, var/siemens_coeff = 1.0)
 	if(istype(M.loc,/obj/mecha))	return 0	//feckin mechs are dumb
-	
-	//This is for performance optimization only. 
+
+	//This is for performance optimization only.
 	//DO NOT modify siemens_coeff here. That is checked in human/electrocute_act()
 	if(istype(M,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M

@@ -282,6 +282,12 @@
 	if(src.throw_icon)
 		src.throw_icon.icon_state = "act_throw_on"
 
+/mob/living/carbon/key_pressed_q()
+	if(!get_active_hand())
+		usr << "\red You have nothing to drop in your hand."
+		return
+	return drop_item()
+		
 /mob/proc/throw_item(atom/target)
 	return
 

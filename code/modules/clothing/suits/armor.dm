@@ -38,6 +38,12 @@
 	icon_state = "formal_warden"
 	item_state = "formal_warden"
 
+/obj/item/clothing/suit/armor/vest/warden/commissar
+	name = "Commissar's jacket"
+	desc = "An tasteful dark blue jacket with silver and white highlights. Has hard-plate inserts for armor."
+	icon_state = "commissar_warden"
+	item_state = "commissar_warden"
+
 /obj/item/clothing/suit/armor/riot
 	name = "Riot Suit"
 	desc = "A suit of armor with heavy padding to protect against melee attacks. Looks like it might impair movement."

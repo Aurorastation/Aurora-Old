@@ -18,6 +18,7 @@ var/global/list/frozen_items = list()
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "cellconsole"
 	circuit = "/obj/item/weapon/circuitboard/cryopodcontrol"
+	interact_offline = 1
 	var/mode = null
 
 /obj/machinery/computer/cryopod/attack_paw()

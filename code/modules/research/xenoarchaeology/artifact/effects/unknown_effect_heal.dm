@@ -13,6 +13,8 @@
 
 			if(ishuman(toucher))
 				var/mob/living/carbon/human/H = toucher
+				if(H.species.flags & IS_SYNTHETIC)
+					return 1
 				for(var/datum/organ/external/affecting in H.organs)
 					if(affecting && istype(affecting))
 						affecting.heal_damage(25 * weakness, 25 * weakness)

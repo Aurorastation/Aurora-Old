@@ -16,6 +16,7 @@
 	var/rejecting            // Is this organ already being rejected?
 	var/obj/item/organ/organ_holder // If not in a body, held in this item.
 	var/list/transplant_data
+
 /datum/organ/internal/proc/rejuvenate()
 	damage=0
 
@@ -40,8 +41,8 @@
 			E.internal_organs |= src
 
 /datum/organ/internal/process()
-	//Process infections
 
+	//Process infections
 	if (robotic >= 2 || (owner.species && owner.species.flags & IS_PLANT))	//TODO make robotic internal and external organs separate types of organ instead of a flag
 		germ_level = 0
 		return
@@ -149,8 +150,6 @@
 	name = "lungs"
 	parent_organ = "chest"
 	removed_type = /obj/item/organ/lungs
-	min_bruised_damage = 15
-	min_broken_damage = 20
 
 	process()
 		..()
@@ -164,7 +163,9 @@
 				owner.drip(10)
 			if(prob(4))
 				spawn owner.emote("me", 1, "gasps for air!")
-				owner.losebreath += 15
+				owner.losebreath += 6
+				if(is_broken())
+					owner.losebreath +=5
 
 /datum/organ/internal/liver
 	name = "liver"
@@ -172,7 +173,9 @@
 	removed_type = /obj/item/organ/liver
 
 	process()
+
 		..()
+
 		if (germ_level > INFECTION_LEVEL_ONE)
 			if(prob(1))
 				owner << "\red Your skin itches."
@@ -271,7 +274,13 @@
 
 	if(!removed_type) return 0
 
-	var/obj/item/organ/removed_organ = new removed_type(get_turf(user))
+	var/turf/target_loc
+	if(user)
+		target_loc = get_turf(user)
+	else
+		target_loc = get_turf(owner)
+
+	var/obj/item/organ/removed_organ = new removed_type(target_loc)
 
 	if(istype(removed_organ))
 		removed_organ.organ_data = src
