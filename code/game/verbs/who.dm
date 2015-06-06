@@ -7,7 +7,7 @@
 
 	var/list/Lines = list()
 
-	if(holder && (R_ADMIN & holder.rights || R_MOD & holder.rights))
+	if(holder && (holder.rights & (R_ADMIN|R_MOD)))
 		for(var/client/C in clients)
 			var/entry = "\t[C.key]"
 			if(C.holder && C.holder.fakekey)
@@ -58,11 +58,9 @@
 	var/num_admins_online = 0
 	if(holder)
 		for(var/client/C in admins)
-			if(R_ADMIN & C.holder.rights || (!R_MOD & C.holder.rights))	//Used to determine who shows up in admin rows
-
-				if(C.holder.fakekey && (!R_ADMIN & holder.rights && !R_MOD & holder.rights))		//Mentors can't see stealthmins
-					continue
-
+			if(C.holder.fakekey && !(holder.rights & (R_ADMIN|R_MOD)))
+				continue
+			if(C.holder.rights & R_ADMIN)
 				msg += "\t[C] is a [C.holder.rank]"
 
 				if(C.holder.fakekey)
@@ -80,9 +78,10 @@
 				msg += "\n"
 
 				num_admins_online++
-			else if((R_MOD & C.holder.rights) && !(R_FUN & C.holder.rights))
-				modmsg += "\t[C] is a [C.holder.rank]"
+				continue
 
+			else if((C.holder.rights & R_MOD) && !(C.holder.rights & R_FUN))
+				modmsg += "\t[C] is a [C.holder.rank]"
 				if(isobserver(C.mob))
 					modmsg += " - Observing"
 				else if(istype(C.mob,/mob/new_player))
@@ -94,9 +93,10 @@
 					modmsg += " (AFK)"
 				modmsg += "\n"
 				num_mods_online++
-			else if ((R_FUN & C.holder.rights) && !(R_ADMIN & C.holder.rights))
-				eventmsg += "\t[C] is a [C.holder.rank]"
+				continue
 
+			else if (C.holder.rights & R_FUN)
+				eventmsg += "\t[C] is a [C.holder.rank]"
 				if(isobserver(C.mob))
 					eventmsg += " - Observing"
 				else if(istype(C.mob,/mob/new_player))
@@ -108,9 +108,10 @@
 					eventmsg += " (AFK)"
 				eventmsg += "\n"
 				num_event_online++
-			else if(R_DEV & C.holder.rights)
-				devmsg += "\t[C] is a [C.holder.rank]"
+				continue
 
+			else if(C.holder.rights & R_DEV)
+				devmsg += "\t[C] is a [C.holder.rank]"
 				if(isobserver(C.mob))
 					devmsg += " - Observing"
 				else if(istype(C.mob,/mob/new_player))
@@ -122,9 +123,10 @@
 					devmsg += " (AFK)"
 				devmsg += "\n"
 				num_devs_online++
-			else if(R_DUTYOFF & C.holder.rights && !(C.holder.rights & (R_ADMIN|R_MOD)))
-				dutymsg += "\t[C]"
+				continue
 
+			else if(C.holder.rights & R_DUTYOFF)
+				dutymsg += "\t[C]"
 				if(isobserver(C.mob))
 					dutymsg += " - Observing"
 				else if(istype(C.mob,/mob/new_player))
@@ -136,22 +138,27 @@
 					dutymsg += " (AFK)"
 				dutymsg += "\n"
 				num_duty_online++
+				continue
 
 	else
 		for(var/client/C in admins)
-			if(R_ADMIN & C.holder.rights || (!R_MOD & C.holder.rights))
-				if(!C.holder.fakekey)
-					msg += "\t[C] is a [C.holder.rank]\n"
-					num_admins_online++
-			else if (R_MOD & C.holder.rights)
+			if(C.holder.fakekey) //If anyone is given stealth you want to hide them. There is no point in +STEALTH otherwise, just add it to +ADMIN
+				continue
+			if(C.holder.rights & R_ADMIN)
+				msg += "\t[C] is a [C.holder.rank]\n"
+				num_admins_online++
+			else if (C.holder.rights & R_MOD && !(C.holder.rights & R_FUN))
 				modmsg += "\t[C] is a [C.holder.rank]\n"
 				num_mods_online++
-			else if ((R_FUN & C.holder.rights) && !(R_MOD & C.holder.rights))
+				continue
+			else if (C.holder.rights & R_FUN)
 				eventmsg += "\t[C] is a [C.holder.rank]\n"
 				num_event_online++
-			else if(R_DEV & C.holder.rights)
+				continue
+			else if(C.holder.rights & R_DEV)
 				devmsg += "\t[C] is a [C.holder.rank]\n"
 				num_devs_online++
+				continue
 
 	var/eventwho = ""
 	if(num_event_online)
