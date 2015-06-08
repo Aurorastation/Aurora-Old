@@ -75,3 +75,22 @@ CREATE TABLE `aurora_news` (
     `notpublishing` TINYINT(1) DEFAULT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
+
+-- ------------------------------
+-- SQL based player notes table
+-- tgstation.aurora_notes
+-- ------------------------------
+CREATE TABLE `aurora_notes` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `adddate` DATETIME NOT NULL,
+  `ckey` VARCHAR(32) NOT NULL,
+  `ip` VARCHAR(18) NULL DEFAULT NULL,
+  `computerid` VARCHAR(32) NULL DEFAULT NULL,
+  `a_ckey` VARCHAR(32) NOT NULL,
+  `content` TEXT(65535) NOT NULL,
+  `visible` TINYINT(1) NOT NULL DEFAULT 1,
+  `edited` TINYINT(1) NOT NULL DEFAULT 0,
+  `lasteditor` VARCHAR(32) NULL DEFAULT NULL,
+  `lasteditdate` DATETIME NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
