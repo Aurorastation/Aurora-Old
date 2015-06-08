@@ -6,7 +6,7 @@ world/IsBanned(key,address,computer_id)
 		return ..()
 
 	//Making the adminbot for automated bans.
-	var/datum/admins/Adminbot = new /datum/admins(initial_rank = "Friendly Robot", initial_rights = 8196, "Adminbot")
+	var/datum/admins/Adminbot = new /datum/admins("Friendly Robot", 8196, "Adminbot")
 
 	//Guest Checking
 	if(!guests_allowed && IsGuestKey(key))
@@ -53,7 +53,7 @@ world/IsBanned(key,address,computer_id)
 			message_mods("\blue Failed Login: [key] - Blacklisted IP. User banned.")
 
 			var/reason = "This IP has been blacklisted from the server."
-			Adminbot.DB_ban_record(BANTYPE_PERMA, null, null, reason, null, null, ckey(key), 1, address, computer_id)
+			Adminbot.DB_ban_record(1, null, null, reason, null, null, ckey(key), 1, address, computer_id)
 			notes_add_sql(key, reason, null, address, computer_id)
 
 			del Adminbot
@@ -128,7 +128,7 @@ world/IsBanned(key,address,computer_id)
 			if(multikey)
 				desc = "\nReason: You, or another user of this computer or connection ([pckey]) is banned from playing here. The ban reason is:\nThis is an automatic ban for attempted bandodging. The original ban reason is this: [reason]\nThis ban was applied by [ackey] on [bantime], [expires]"
 				var/newreason = "This is an automatic ban for attempted bandodging. The original ban reason: [reason]."
-				Adminbot.DB_ban_record(BANTYPE_PERMA, null, null, reason, null, null, ckey(key), 1, address, computer_id)
+				Adminbot.DB_ban_record(1, null, null, reason, null, null, ckey(key), 1, address, computer_id)
 				notes_add_sql(key, newreason, null, address, computer_id)
 
 			del Adminbot

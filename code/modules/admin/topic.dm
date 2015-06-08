@@ -2774,10 +2774,12 @@
 		else
 			var/IP
 			var/CID
-			var/client/C = directory[key]
-			if(C)
-				IP = C.address
-				CID = C.computer_id
+			if(directory[key])
+				var/client/C = directory[key]
+				if(C)
+					IP = C.address
+					CID = C.computer_id
+
 			notes_add_sql(key, add, usr, IP, CID)
 
 		show_player_info(key)
