@@ -111,13 +111,13 @@
 	var/options = ""
 
 	if(C.holder && C.holder.rights & (R_ADMIN|R_MOD|R_FUN|R_DEV))
-		options = "[get_options_bar(src, 1, 1, 1)]"
+		options = "[get_options_bar(src, 1, 1, 1)]" //Gib the information om nom nom
 	else
-		options = "[get_options_bar(src, 0, 0, 1)]"
+		options = "[get_options_bar(src, 0, 0, 1)]" //Hide it, just gib name
 
 	recieve_message = "<font color='[recieve_color]'>[recieve_pm_type] PM from-<b>[options]</b>: [msg]</font>"
 	C << recieve_message
-	src << "<font color='blue'>[send_pm_type]PM to-<b>[options]</b>: [msg]</font>"
+	src << "<font color='blue'>[send_pm_type]PM to-<b>[get_options_bar(C, 0, 0, 1)]</b>: [msg]</font>"
 
 	//play the recieving admin the adminhelp sound (if they have them enabled)
 	//non-admins shouldn't be able to disable this
