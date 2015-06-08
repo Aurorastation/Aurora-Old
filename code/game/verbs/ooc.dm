@@ -201,7 +201,8 @@ var/global/normal_ooc_colour = "#002eb8"
 			if(C.prefs.toggles & CHAT_LOOC)
 				var/stealth = ""
 				if(C.holder && C.holder.rights & (R_ADMIN|R_MOD))
-					stealth = "(stealth)"
+					if(C.holder.fakekey)
+						stealth = "(stealth)"
 				var/prefix = "(R)LOOC"
 				if (C.mob in heard)
 					prefix = "LOOC"

@@ -1,7 +1,7 @@
 //System will now support SQL pulls for fetching player notes.
 //Yay!
 
-/proc/notes_add_sql(var/key, var/note, var/usr, var/IP, var/CID)
+/proc/notes_add_sql(var/key, var/note, var/mob/usr, var/IP, var/CID)
 	if(!key || !note)
 		return
 
@@ -10,7 +10,7 @@
 
 	var/a_ckey
 	if(usr)
-		a_ckey = sanitizeSQL(usr)
+		a_ckey = sanitizeSQL(usr.key)
 	else
 		a_ckey = "Adminbot"
 
@@ -21,8 +21,10 @@
 
 	if(!IP || !CID)
 		var/DBQuery/initquery = dbcon.NewQuery("SELECT ip, computerid FROM erro_player WHERE ckey = '[ckey]'")
-		IP = initquery.item[1]
-		CID = initquery.item[2]
+		initquery.Execute()
+		if(initquery.NextRow())
+			IP = initquery.item[1]
+			CID = initquery.item[2]
 
 	var/querycontents
 	if(IP && CID)
@@ -161,7 +163,7 @@
 			if(adminckey && ckey(a_ckey) != ckey(adminckey))
 				continue
 			else
-				dat += "<tr bgcolor='#ffeeee'><td><b>[p_ckey]</b></td><td><b>[a_ckey]</b></td><td>[date]</td><td><center>[content]</center></td></tr>"
+				dat += "<tr bgcolor='#ffeeee'><td align='center'><b>[p_ckey]</b></td><td align='center'><b>[a_ckey]</b></td><td align='center'>[date]</td><td align='center'>[content]</td></tr>"
 				if(edited)
 					var/lasteditor = query.item[7]
 					var/editdate = query.item[8]
@@ -183,7 +185,7 @@
 			var/content = adminquery.item[4]
 			var/edited = text2num(adminquery.item[5])
 
-			dat += "<tr bgcolor='#ffeeee'><td><b>[p_ckey]</b></td><td><b>[adminckey]</b></td><td>[date]</td><td><center>[content]</center></td></tr>"
+			dat += "<tr bgcolor='#ffeeee'><td align='center'><b>[p_ckey]</b></td><td align='center'><b>[adminckey]</b></td><td align='center'>[date]</td><td align='center'>[content]</td></tr>"
 			if(edited)
 				var/lasteditor = adminquery.item[6]
 				var/editdate = adminquery.item[7]
@@ -194,7 +196,7 @@
 	dat += "</table>"
 	usr << browse(dat,"window=lookupnotes;size=900x500")
 
-/proc/notes_transfer()
+/*/proc/notes_transfer()
 	msg_scopes("Locating master list.")
 	var/savefile/note_list = new("data/player_notes.sav")
 	var/list/note_keys
@@ -270,4 +272,4 @@
 			if(insertquery.ErrorMsg())
 				msg_scopes(insertquery.ErrorMsg())
 			else
-				msg_scopes("Transfer successful.")
+				msg_scopes("Transfer successful.")*/
