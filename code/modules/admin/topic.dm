@@ -909,7 +909,7 @@
 				message_admins("\blue[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.")
 
 				if(!config.ban_legacy_system)
-					notes_add_sql(M.ckey, "Banned for: [reason]. Duration: [mins] minutes.", usr.client.ckey, M.lastKnownIP, M.computer_id)
+					notes_add_sql(M.ckey, "Banned for: [reason]. Duration: [mins] minutes.", usr, M.lastKnownIP, M.computer_id)
 
 				del(M.client)
 				//del(M)	// See no reason why to delete mob. Important stuff can be lost. And ban can be lifted before round ends.
@@ -937,7 +937,7 @@
 				DB_ban_record(BANTYPE_PERMA, M, -1, reason)
 
 				if(!config.ban_legacy_system)
-					notes_add_sql(M.ckey, "Banned for: [reason]. The ban is permanent.", usr.client.ckey, M.lastKnownIP, M.computer_id)
+					notes_add_sql(M.ckey, "Banned for: [reason]. The ban is permanent.", usr, M.lastKnownIP, M.computer_id)
 
 				del(M.client)
 				//del(M)
@@ -2778,7 +2778,7 @@
 			if(C)
 				IP = C.address
 				CID = C.computer_id
-			notes_add_sql(key, add, src.owner:ckey, IP, CID)
+			notes_add_sql(key, add, usr, IP, CID)
 
 		show_player_info(key)
 
