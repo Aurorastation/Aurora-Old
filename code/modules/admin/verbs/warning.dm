@@ -114,7 +114,7 @@
 	if(config.ban_legacy_system)
 		notes_add(warned_ckey, "Warning added by [a_ckey], for: [reason]. || Notes regarding the warning: [notes].")
 	else
-		notes_add_sql(warned_ckey, "Warning added by [a_ckey], for: [reason]. || Notes regarding the warning: [notes].", a_ckey, ip, computerid)
+		notes_add_sql(warned_ckey, "Warning added by [a_ckey], for: [reason]. || Notes regarding the warning: [notes].", src, ip, computerid)
 
 	feedback_add_details("admin_verb","WARN-DB")
 	if(C)
