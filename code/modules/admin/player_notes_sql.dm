@@ -21,8 +21,10 @@
 
 	if(!IP || !CID)
 		var/DBQuery/initquery = dbcon.NewQuery("SELECT ip, computerid FROM erro_player WHERE ckey = '[ckey]'")
-		IP = initquery.item[1]
-		CID = initquery.item[2]
+		initquery.Execute()
+		if(initquery.NextRow())
+			IP = initquery.item[1]
+			CID = initquery.item[2]
 
 	var/querycontents
 	if(IP && CID)
