@@ -128,7 +128,7 @@ world/IsBanned(key,address,computer_id)
 			if(multikey)
 				desc = "\nReason: You, or another user of this computer or connection ([pckey]) is banned from playing here. The ban reason is:\nThis is an automatic ban for attempted bandodging. The original ban reason is this: [reason]\nThis ban was applied by [ackey] on [bantime], [expires]"
 				var/newreason = "This is an automatic ban for attempted bandodging. The original ban reason: [reason]."
-				Adminbot.DB_ban_record(1, null, null, reason, null, null, ckey(key), 1, address, computer_id)
+				Adminbot.DB_ban_record(1, null, null, newreason, null, null, ckey(key), 1, address, computer_id)
 				notes_add_sql(key, newreason, null, address, computer_id)
 
 			del Adminbot

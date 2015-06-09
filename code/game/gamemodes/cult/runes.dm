@@ -107,7 +107,7 @@ var/list/sacrificed = list()
 				M.visible_message("\red [M] writhes in pain as the markings below him glow a bloody red.", \
 				"\red AAAAAAHHHH!.", \
 				"\red You hear an anguished scream.")
-				if(is_convertable_to_cult(M.mind) && !jobban_isbanned(M, "cultist"))//putting jobban check here because is_convertable uses mind as argument
+				if(is_convertable_to_cult(M.mind) && !jobban_isbanned(M, "cultist") && !jobban_isbanned(M, "Syndicate")) //putting jobban check here because is_convertable uses mind as argument -Check for Syndicate too because yeah
 
 					// Mostly for the benefit of those who resist, but it makes sense for even those who join to have some.. effect.
 					M.take_overall_damage(0, 10)
@@ -379,7 +379,7 @@ var/list/sacrificed = list()
 				break
 			if(!ghost)
 				return this_rune.fizzle()
-			if(jobban_isbanned(ghost, "cultist"))
+			if(jobban_isbanned(ghost, "cultist") || jobban_isbanned(ghost, "Syndicate"))
 				return this_rune.fizzle()
 
 			usr.say("Gal'h'rfikk harfrandid mud[pick("'","`")]gib!")
