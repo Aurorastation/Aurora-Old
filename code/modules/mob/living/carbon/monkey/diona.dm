@@ -265,3 +265,6 @@
 		return
 
 	..(message, speaking, verb, null, null, message_range, null)
+
+/mob/living/carbon/monkey/diona/can_use_vents()
+	return

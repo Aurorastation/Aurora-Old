@@ -135,7 +135,7 @@
 				wander = 0
 
 			else // My target's gone! But I might still be pissed! You there. You look like a good stinging target!
-				for(var/mob/living/carbon/G in view(src,7))
+				for(var/mob/living/carbon/human/G in view(src,7))
 					target_mob = G
 					break
 

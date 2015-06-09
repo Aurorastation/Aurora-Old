@@ -297,7 +297,7 @@
 			if("queen")				M.change_mob_type( /mob/living/carbon/alien/humanoid/queen , null, null, delmob )
 			if("sentinel")			M.change_mob_type( /mob/living/carbon/alien/humanoid/sentinel , null, null, delmob )
 			if("larva")				M.change_mob_type( /mob/living/carbon/alien/larva , null, null, delmob )
-			if("nymph")				M.change_mob_type( /mob/living/carbon/alien/diona , null, null, delmob )
+			if("nymph")				M.change_mob_type( /mob/living/carbon/monkey/diona , null, null, delmob )
 			if("human")				M.change_mob_type( /mob/living/carbon/human , null, null, delmob )
 			if("slime")				M.change_mob_type( /mob/living/carbon/slime , null, null, delmob )
 			if("monkey")			M.change_mob_type( /mob/living/carbon/monkey , null, null, delmob )
@@ -2842,6 +2842,10 @@
 	else if(href_list["admindibs"])
 		if(!check_rights(R_ADMIN|R_MOD))	return
 		var/mob/M = locate(href_list["admindibs"])
+
+		if(!M || !M.client)
+			usr << "<font color=red><b>The client has lost connection.</b></font>"
+			return
 
 		if(M.client.adminhelped == 2)
 			log_admin("[key_name(usr)] called dibs on [key_name(M)]'s adminhelp!")
