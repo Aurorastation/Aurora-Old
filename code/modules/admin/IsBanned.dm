@@ -5,10 +5,14 @@ world/IsBanned(key,address,computer_id)
 	if(ckey(key) in admin_datums)
 		return ..()
 
+	//Making the adminbot for automated bans.
+	var/datum/admins/Adminbot = new /datum/admins("Friendly Robot", 8196, "Adminbot")
+
 	//Guest Checking
 	if(!guests_allowed && IsGuestKey(key))
 		log_access("Failed Login: [key] - Guests not allowed")
 		message_admins("\blue Failed Login: [key] - Guests not allowed")
+		del Adminbot
 		return list("reason"="guest", "desc"="\nReason: Guests not allowed. Please sign in with a byond account.")
 
 	//check if the IP address is a known TOR node
@@ -17,6 +21,7 @@ world/IsBanned(key,address,computer_id)
 		message_admins("\blue Failed Login: [src] - Banned: ToR")
 		//ban their computer_id and ckey for posterity
 		AddBan(ckey(key), computer_id, "Use of ToR", "Automated Ban", 0, 0)
+		del Adminbot
 		return list("reason"="Using ToR", "desc"="\nReason: The network you are using to connect has been banned.\nIf you believe this is a mistake, please request help at [config.banappeals]")
 
 	if(config && config.ip_blacklist_enabled)
@@ -39,18 +44,20 @@ world/IsBanned(key,address,computer_id)
 			var/DBQuery/query = dbcon.NewQuery("SELECT ip FROM aurora_ipblacklist WHERE ip = '[address]'")
 			query.Execute()
 
-			while(query.NextRow())
-				var/bip = query.item[1]
+			if(query.NextRow())
+				banhe = 1
 
-				if(bip == address)
-					banhe = 1
+		if(banhe)
+			log_access("Failed Login: [key] - Blacklisted IP. User banned.")
+			message_admins("\blue Failed Login: [key] - Blacklisted IP. User banned.")
+			message_mods("\blue Failed Login: [key] - Blacklisted IP. User banned.")
 
-		if(banhe == 1)
-			log_access("Failed Login: [key] - Blacklisted IP")
-			message_admins("\blue Failed Login: [key] - Blacklisted IP")
-			message_mods("\blue Failed Login: [key] - Blacklisted IP")
-			AddBan(ckey(key), computer_id, "Bad IP", "Automated Ban", 0, 0)
-			return list("reason"="IP Blacklisted", "desc"="\nReason: This IP has been blacklisted from the server.\nIf you believe this is a mistake, please request help at [config.banappeals]")
+			var/reason = "This IP has been blacklisted from the server."
+			Adminbot.DB_ban_record(1, null, null, reason, null, null, ckey(key), 1, address, computer_id)
+			notes_add_sql(key, reason, null, address, computer_id)
+
+			del Adminbot
+			return list("reason"="IP Blacklisted", "desc"="\nReason: [reason]\nIf you believe this is a mistake, please request help at [config.banappeals]")
 
 		msg_scopes("[key]'s blacklist check completed.")
 
@@ -61,8 +68,10 @@ world/IsBanned(key,address,computer_id)
 		if(.)
 			log_access("Failed Login: [key] [computer_id] [address] - Banned [.["reason"]]")
 			message_admins("\blue Failed Login: [key] id:[computer_id] ip:[address] - Banned [.["reason"]]")
+			del Adminbot
 			return .
 
+		del Adminbot
 		return ..()	//default pager ban stuff
 
 	else
@@ -72,10 +81,12 @@ world/IsBanned(key,address,computer_id)
 		if(!establish_db_connection())
 			error("Ban database connection failure. Key [ckeytext] not checked")
 			log_misc("Ban database connection failure. Key [ckeytext] not checked")
+			del Adminbot
 			return
 
 		var/failedcid = 1
 		var/failedip = 1
+		var/multikey = 0
 
 		var/ipquery = ""
 		var/cidquery = ""
@@ -93,8 +104,8 @@ world/IsBanned(key,address,computer_id)
 
 		while(query.NextRow())
 			var/pckey = query.item[1]
-			//var/pip = query.item[2]
-			//var/pcid = query.item[3]
+			var/pip = query.item[2]
+			var/pcid = query.item[3]
 			var/ackey = query.item[4]
 			var/reason = query.item[5]
 			var/expiration = query.item[6]
@@ -111,10 +122,21 @@ world/IsBanned(key,address,computer_id)
 			log_access("Failed Login: [key] [computer_id] [address] - Banned [reason]")
 			message_admins("\blue Failed Login: [key] id:[computer_id] ip:[address] - Banned [reason]")
 
+			if(ckey(key) != ckey(pckey) || computer_id != pcid || address != pip)
+				multikey = 1
+
+			if(multikey)
+				desc = "\nReason: You, or another user of this computer or connection ([pckey]) is banned from playing here. The ban reason is:\nThis is an automatic ban for attempted bandodging. The original ban reason is this: [reason]\nThis ban was applied by [ackey] on [bantime], [expires]"
+				var/newreason = "This is an automatic ban for attempted bandodging. The original ban reason: [reason]."
+				Adminbot.DB_ban_record(1, null, null, reason, null, null, ckey(key), 1, address, computer_id)
+				notes_add_sql(key, newreason, null, address, computer_id)
+
+			del Adminbot
 			return list("reason"="[bantype]", "desc"="[desc]")
 
 		if (failedcid)
 			message_admins("[key] has logged in with a blank computer id in the ban check.")
 		if (failedip)
 			message_admins("[key] has logged in with a blank ip in the ban check.")
+		del Adminbot
 		return ..()	//default pager ban stuff

@@ -39,6 +39,7 @@
 
 /obj/item/organ/diona/removed(var/mob/living/target,var/mob/living/user)
 
+	..()
 	var/mob/living/carbon/human/H = target
 	if(!istype(target))
 		del(src)
@@ -51,10 +52,10 @@
 	if(!diona)
 		del(src)
 
-	var/mob/living/carbon/alien/diona/D = new(get_turf(src))
-	diona.request_player(D)
-
-	del(src)
+	spawn(1) // So it has time to be thrown about by the gib() proc.
+		var/mob/living/carbon/alien/diona/D = new(get_turf(src))
+		diona.request_player(D)
+		del(src)
 
 // These are different to the standard diona organs as they have a purpose in other
 // species (absorbing radiation and light respectively)

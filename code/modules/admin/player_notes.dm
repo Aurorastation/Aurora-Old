@@ -89,6 +89,11 @@ datum/admins/proc/notes_gethtml(var/ckey)
 	if (!key || !note)
 		return
 
+	//Master safety and override for SQL based noting:
+	if(!config.ban_legacy_system)
+		notes_add_sql(key, note, usr)
+		return
+
 	//Loading list of notes for this key
 	var/savefile/info = new("data/player_saves/[copytext(key, 1, 2)]/[key]/info.sav")
 	var/list/infos
