@@ -2843,6 +2843,10 @@
 		if(!check_rights(R_ADMIN|R_MOD))	return
 		var/mob/M = locate(href_list["admindibs"])
 
+		if(!M || !M.client)
+			usr << "<font color=red><b>The client has lost connection.</b></font>"
+			return
+
 		if(M.client.adminhelped == 2)
 			log_admin("[key_name(usr)] called dibs on [key_name(M)]'s adminhelp!")
 			message_admins("[key_name_admin(usr)] has called dibs on [key_name_admin(M)]'s adminhelp!")
