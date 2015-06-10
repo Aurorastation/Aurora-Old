@@ -89,7 +89,8 @@
 	O.layer = 20 // this bit moves the target object into the robot, and moves it's location on screen
 	contents += O
 	if(istype(O,/obj/item/borg/sight))
-		sight_mode |= module_state_1:sight_mode
+		var/obj/item/borg/sight/S = O
+		sight_mode |= S.sight_mode
 	
 	if (selected) // replaces your selection if you're swapping
 		select_module(selected)

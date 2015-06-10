@@ -1,3 +1,10 @@
+#define IPBAN		1
+#define IPBANPASS	2
+#define IDBAN		4
+#define IDBANPASS	8
+#define KEYBAN		16
+#define KEYBANPASS	32
+
 var/global/list/blacklist = list()
 
 //Blocks an attempt to connect before even creating our client datum thing.
@@ -86,7 +93,13 @@ world/IsBanned(key,address,computer_id)
 
 		var/failedcid = 1
 		var/failedip = 1
-		var/multikey = 0
+		var/toban = 0
+		var/banFlag = 0
+		var/desc = null
+		var/tobantype = null
+
+		var/multireason = null
+		var/newreason = null
 
 		var/ipquery = ""
 		var/cidquery = ""
@@ -117,22 +130,49 @@ world/IsBanned(key,address,computer_id)
 			if(text2num(duration) > 0)
 				expires = " The ban is for [duration] minutes and expires on [expiration] (server time)."
 
-			var/desc = "\nReason: You, or another user of this computer or connection ([pckey]) is banned from playing here. The ban reason is:\n[reason]\nThis ban was applied by [ackey] on [bantime], [expires]"
+			if(!desc) //No desc then none of the others are set
+				desc = "\nReason: You, or another user of this computer or connection ([pckey]) is banned from playing here. The ban reason is:\n[reason]\nThis ban was applied by [ackey] on [bantime], [expires]"
+				multireason = reason
+				tobantype = bantype
 
-			log_access("Failed Login: [key] [computer_id] [address] - Banned [reason]")
-			message_admins("\blue Failed Login: [key] id:[computer_id] ip:[address] - Banned [reason]")
+			if(bantype == "PERMABAN")
+				if(!(banFlag & KEYBANPASS) && ckey(key) != ckey(pckey))
+					banFlag |= KEYBAN
 
-			if(ckey(key) != ckey(pckey) || computer_id != pcid || address != pip)
-				multikey = 1
+				if(!(banFlag & IDBANPASS) && computer_id != pcid)
+					banFlag |= IDBAN
 
-			if(multikey)
-				desc = "\nReason: You, or another user of this computer or connection ([pckey]) is banned from playing here. The ban reason is:\nThis is an automatic ban for attempted bandodging. The original ban reason is this: [reason]\nThis ban was applied by [ackey] on [bantime], [expires]"
-				var/newreason = "This is an automatic ban for attempted bandodging. The original ban reason: [reason]."
-				Adminbot.DB_ban_record(1, null, null, newreason, null, null, ckey(key), 1, address, computer_id)
-				notes_add_sql(key, newreason, null, address, computer_id)
+				if(!(banFlag & IPBANPASS) && address != pip)
+					banFlag |= IPBAN
 
+				if(banFlag & (KEYBAN|IDBAN|IPBAN))
+					if(banFlag & KEYBAN && ckey(key) == ckey(pckey))
+						banFlag &= ~KEYBAN
+						banFlag |= KEYBANPASS
+
+					if(banFlag & IDBAN && computer_id == pcid)
+						banFlag &= ~IDBAN
+						banFlag |= IDBANPASS
+
+					if(banFlag & IPBAN && address == pip)
+						banFlag &= ~IPBAN
+						banFlag |= IPBANPASS
+
+					if(banFlag && !newreason)
+						newreason = "This is an automatic ban for attempted bandodging. The original ban reason: [multireason]."
+
+			if(!toban)
+				toban = 1
+
+		if(banFlag)
+			Adminbot.DB_ban_record(1, null, null, multireason, null, null, ckey(key), 1, address, computer_id)
+			notes_add_sql(key, newreason, null, address, computer_id)
+
+		if(toban)
+			log_access("Failed Login: [key] [computer_id] [address] - Banned [multireason]")
+			message_admins("\blue Failed Login: [key] id:[computer_id] ip:[address] - Banned [multireason]")
 			del Adminbot
-			return list("reason"="[bantype]", "desc"="[desc]")
+			return list("reason"="[tobantype]", "desc"="[desc]")
 
 		if (failedcid)
 			message_admins("[key] has logged in with a blank computer id in the ban check.")
