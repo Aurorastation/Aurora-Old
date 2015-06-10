@@ -50,6 +50,10 @@
 			if(C.id == src.id)
 				targets += C
 
+		for(var/obj/machinery/door/airlock/glass/E in world)
+			if(E.id_tag == id)
+				targets += E
+
 		for(var/obj/item/clothing/under/color/orange/D in world)
 			if(D.id == id)
 				uniforms += D
@@ -162,6 +166,7 @@
 
 // Alert the uniform wearers that their timer is about to end up
 /obj/machinery/door_timer/proc/alertuniforms()
+	if(stat & (NOPOWER|BROKEN))	return
 	if(!uniforms.len)
 		alerted = 1
 		return
@@ -176,6 +181,7 @@
 
 // Alert the uniform wearers that they are needed at their cell
 /obj/machinery/door_timer/proc/summonuniforms()
+	if(stat & (NOPOWER|BROKEN))	return
 	if(spamcheck)	return
 	if(!uniforms.len)	return
 	for(var/obj/item/clothing/under/color/orange/D in uniforms)
@@ -185,6 +191,19 @@
 	spamcheck = 1
 	spawn(30)
 		spamcheck = 0
+
+	return
+
+// Toggle the bolts to the communal area doors
+/obj/machinery/door_timer/proc/togglebolts()
+	if(stat & (NOPOWER|BROKEN))	return
+	for(var/obj/machinery/door/airlock/glass/E in targets)
+		if(!E.density)	continue
+		switch(E.locked)
+			if(1)
+				E.unlock()
+			if(0)
+				E.lock()
 
 	return
 
@@ -249,7 +268,13 @@
 		else
 			dat +="<br><font color=red>Anti-spam measure activated. Please wait.</font>"
 	else
-		dat +="<br>No unfiroms linked"
+		dat +="<br>No prisoner wear linked"
+
+	for(var/obj/machinery/door/airlock/glass/E in targets)
+		if(E.locked)
+			dat += "<br><a href='?src=\ref[src];doors=1'>Unlock door to Communal Area</a>"
+		else
+			dat += "<br><a href='?src=\ref[src];doors=1'>Lock door to Communal Area</a>"
 
 	dat += "<br/><br/><a href='?src=\ref[user];mach_close=computer'>Close</a>"
 	dat += "</TT></BODY></HTML>"
@@ -299,6 +324,8 @@
 			src.timer_start()
 		if(href_list["summon"])
 			summonuniforms()
+		if(href_list["doors"])
+			togglebolts()
 
 	src.add_fingerprint(usr)
 	src.updateUsrDialog()
