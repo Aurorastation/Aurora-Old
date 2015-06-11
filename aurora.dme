@@ -6,8 +6,6 @@
 // BEGIN_FILE_DIR
 #define FILE_DIR .
 #define FILE_DIR "code"
-#define FILE_DIR "code/modules"
-#define FILE_DIR "code/modules/disguises"
 #define FILE_DIR "code/TriDimension"
 #define FILE_DIR "code/WorkInProgress"
 #define FILE_DIR "code/WorkInProgress/Cael_Aislinn"
