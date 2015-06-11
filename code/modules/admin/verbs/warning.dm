@@ -110,7 +110,12 @@
 
 	var/DBQuery/query_insert = dbcon.NewQuery("INSERT INTO aurora_warnings (id, time, severity, reason, notes, ckey, computerid, ip, a_ckey) VALUES (null, Now(), '[severity]', '[reason]', '[notes]', '[sqlkey]', '[computerid]', '[ip]', '[a_ckey]')")
 	query_insert.Execute()
-	notes_add(warned_ckey, "Warning added by [a_ckey], for: [reason]. || Notes regarding the warning: [notes].")
+
+	if(config.ban_legacy_system)
+		notes_add(warned_ckey, "Warning added by [a_ckey], for: [reason]. || Notes regarding the warning: [notes].")
+	else
+		notes_add_sql(warned_ckey, "Warning added by [a_ckey], for: [reason]. || Notes regarding the warning: [notes].", src, ip, computerid)
+
 	feedback_add_details("admin_verb","WARN-DB")
 	if(C)
 		C << "<font color='red'><BIG><B>You have been formally warned by an administrator.</B></BIG><br>You can look up your warnings through the OOC panel, with the 'My Warnings' button.</font>"

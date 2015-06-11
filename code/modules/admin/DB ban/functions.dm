@@ -1,7 +1,7 @@
 
-datum/admins/proc/DB_ban_record(var/bantype, var/mob/banned_mob, var/duration = -1, var/reason, var/job = "", var/rounds = 0, var/banckey = null)
+datum/admins/proc/DB_ban_record(var/bantype, var/mob/banned_mob, var/duration = -1, var/reason, var/job = "", var/rounds = 0, var/banckey = null, var/autobanner = 0, var/autoip = null, var/autocid = null)
 
-	if(!check_rights(R_MOD,0) && !check_rights(R_BAN))	return
+	if(!check_rights(R_MOD,0) && !check_rights(R_BAN) && !autobanner)	return
 
 	establish_db_connection()
 	if(!dbcon.IsConnected())
@@ -41,15 +41,16 @@ datum/admins/proc/DB_ban_record(var/bantype, var/mob/banned_mob, var/duration = 
 	else if(banckey)
 		ckey = ckey(banckey)
 
-	var/DBQuery/query = dbcon.NewQuery("SELECT id FROM erro_player WHERE ckey = '[ckey]'")
-	query.Execute()
-	var/validckey = 0
-	if(query.NextRow())
-		validckey = 1
-	if(!validckey)
-		if(!banned_mob || (banned_mob && !IsGuestKey(banned_mob.key)))
-			message_admins("<font color='red'>[key_name_admin(usr)] attempted to ban [ckey], but [ckey] has not been seen yet. Please only ban actual players.</font>",1)
-			return
+	if(!autobanner)
+		var/DBQuery/query = dbcon.NewQuery("SELECT id FROM erro_player WHERE ckey = '[ckey]'")
+		query.Execute()
+		var/validckey = 0
+		if(query.NextRow())
+			validckey = 1
+		if(!validckey)
+			if(!banned_mob || (banned_mob && !IsGuestKey(banned_mob.key)))
+				message_admins("<font color='red'>[key_name_admin(usr)] attempted to ban [ckey], but [ckey] has not been seen yet. Please only ban actual players.</font>",1)
+				return
 
 	var/a_ckey
 	var/a_computerid
@@ -59,6 +60,13 @@ datum/admins/proc/DB_ban_record(var/bantype, var/mob/banned_mob, var/duration = 
 		a_ckey = src.owner:ckey
 		a_computerid = src.owner:computer_id
 		a_ip = src.owner:address
+
+	if(autobanner)
+		a_ckey = "Adminbot"
+		a_computerid = ""
+		a_ip = "[world.internet_address]"
+		computerid = autocid
+		ip = autoip
 
 	var/who
 	for(var/client/C in clients)
@@ -80,7 +88,7 @@ datum/admins/proc/DB_ban_record(var/bantype, var/mob/banned_mob, var/duration = 
 	var/DBQuery/query_insert = dbcon.NewQuery(sql)
 	query_insert.Execute()
 	usr << "\blue Ban saved to database."
-	message_admins("[key_name_admin(usr)] has added a [bantype_str] for [ckey] [(job)?"([job])":""] [(duration > 0)?"([duration] minutes)":""] with the reason: \"[reason]\" to the ban database.",1)
+	message_admins("[autobanner ? "Adminbot" : key_name_admin(usr)] has added a [bantype_str] for [ckey] [(job)?"([job])":""] [(duration > 0)?"([duration] minutes)":""] with the reason: \"[reason]\" to the ban database.",1)
 
 
 

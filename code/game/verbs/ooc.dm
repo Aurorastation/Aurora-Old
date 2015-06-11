@@ -199,7 +199,11 @@ var/global/normal_ooc_colour = "#002eb8"
 	for(var/client/C in admins)
 		if(C.holder.rights & (R_ADMIN|R_MOD|R_DEV))
 			if(C.prefs.toggles & CHAT_LOOC)
+				var/stealth = ""
+				if(C.holder && C.holder.rights & (R_ADMIN|R_MOD))
+					if(C.holder.fakekey)
+						stealth = "(stealth)"
 				var/prefix = "(R)LOOC"
 				if (C.mob in heard)
 					prefix = "LOOC"
-				C << "<font color='#6699CC'><span class='ooc'><span class='prefix'>[prefix]:</span> <EM>[src.key]:</EM> <span class='message'>[msg]</span></span></font>"
+				C << "<font color='#6699CC'><span class='ooc'><span class='prefix'>[stealth][prefix]:</span> <EM>[src.key]:</EM> <span class='message'>[msg]</span></span></font>"

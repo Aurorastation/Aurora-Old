@@ -78,7 +78,7 @@
 			else
 				recieve_color = "maroon"
 			send_pm_type = holder.rank + " "
-			if(!C.holder && holder && holder.fakekey) 
+			if(!C.holder && holder && holder.fakekey)
 				recieve_pm_type = "Admin"
 			else
 				recieve_pm_type = holder.rank
@@ -108,9 +108,16 @@
 						adminhelp(reply)													//sender has left, adminhelp instead
 				return
 
-	recieve_message = "<font color='[recieve_color]'>[recieve_pm_type] PM from-<b>[get_options_bar(src, C.holder ? 1 : 0, C.holder ? 1 : 0, 1)]</b>: [msg]</font>"
+	var/options = ""
+
+	if(C.holder && C.holder.rights & (R_ADMIN|R_MOD|R_FUN|R_DEV))
+		options = "[get_options_bar(src, 1, 1, 1)]" //Gib the information om nom nom
+	else
+		options = "[get_options_bar(src, 0, 0, 1)]" //Hide it, just gib name
+
+	recieve_message = "<font color='[recieve_color]'>[recieve_pm_type] PM from-<b>[options]</b>: [msg]</font>"
 	C << recieve_message
-	src << "<font color='blue'>[send_pm_type]PM to-<b>[get_options_bar(C, holder ? 1 : 0, holder ? 1 : 0, 1)]</b>: [msg]</font>"
+	src << "<font color='blue'>[send_pm_type]PM to-<b>[get_options_bar(C, 0, 0, 1)]</b>: [msg]</font>"
 
 	//play the recieving admin the adminhelp sound (if they have them enabled)
 	//non-admins shouldn't be able to disable this
@@ -124,7 +131,7 @@
 		//check client/X is an admin and isn't the sender or recipient
 		if(X == C || X == src)
 			continue
-		if(X.key!=key && X.key!=C.key && (X.holder.rights & R_ADMIN) || (X.holder.rights & R_MOD) )
+		if(X.key != key && X.key != C.key && (X.holder.rights & (R_ADMIN|R_MOD)))
 			X << "<B><font color='blue'>PM: [key_name(src, X, 0)]-&gt;[key_name(C, X, 0)]:</B> \blue [msg]</font>" //inform X
 
 /client/proc/cmd_admin_irc_pm()
@@ -152,6 +159,6 @@
 	for(var/client/X in admins)
 		if(X == src)
 			continue
-		if((X.holder.rights & R_ADMIN) || (X.holder.rights & R_MOD))
+		if(X.holder.rights & (R_ADMIN|R_MOD))
 			X << "<B><font color='blue'>PM: [key_name(src, X, 0)]-&gt;IRC-Admins:</B> \blue [msg]</font>"
 
