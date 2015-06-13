@@ -26,7 +26,10 @@
 	var/timing = 1    		// boolean, true/1 timer is on, false/0 means it's not timing
 	var/picture_state		// icon_state of alert picture, if not displaying text/numbers
 	var/list/obj/machinery/targets = list()
+	var/list/obj/item/clothing/under/color/orange/uniforms = list()
 	var/timetoset = 0		// Used to set releasetime upon starting the timer
+	var/spamcheck = 0
+	var/alerted = 0
 
 	maptext_height = 26
 	maptext_width = 32
@@ -46,6 +49,14 @@
 		for(var/obj/structure/closet/secure_closet/brig/C in world)
 			if(C.id == src.id)
 				targets += C
+
+		for(var/obj/machinery/door/airlock/glass/E in world)
+			if(E.id_tag == id)
+				targets += E
+
+		for(var/obj/item/clothing/under/color/orange/D in world)
+			if(D.id == id)
+				uniforms += D
 
 		if(targets.len==0)
 			stat |= BROKEN
@@ -68,6 +79,8 @@
 		if(timeleft > 1e5)
 			src.releasetime = 0
 
+		if(timeleft < 30 && !alerted)
+			alertuniforms()
 
 		if(world.timeofday > src.releasetime)
 			src.timer_end() // open doors, reset timer, clear status screen
@@ -109,6 +122,9 @@
 		if(C.opened && !C.close())	continue
 		C.locked = 1
 		C.icon_state = C.icon_locked
+
+	alerted = 0
+
 	return 1
 
 
@@ -145,6 +161,49 @@
 
 	if(timetoset <= 0)
 		timetoset = 0
+
+	return
+
+// Alert the uniform wearers that their timer is about to end up
+/obj/machinery/door_timer/proc/alertuniforms()
+	if(stat & (NOPOWER|BROKEN))	return
+	if(!uniforms.len)
+		alerted = 1
+		return
+
+	for(var/obj/item/clothing/under/color/orange/D in uniforms)
+		if(!ishuman(D.loc))	continue
+		D.loc << "A speaker in the collar of your suit pings:\n\blue Your cell timer will expire in 30 seconds or less. Please go to your cell to speed up processing."
+
+	alerted = 1
+
+	return
+
+// Alert the uniform wearers that they are needed at their cell
+/obj/machinery/door_timer/proc/summonuniforms()
+	if(stat & (NOPOWER|BROKEN))	return
+	if(spamcheck)	return
+	if(!uniforms.len)	return
+	for(var/obj/item/clothing/under/color/orange/D in uniforms)
+		if(!ishuman(D.loc))	continue
+		D.loc << "A speaker in the collar of your suit pings:\n\red You have been summoned to your cell!"
+
+	spamcheck = 1
+	spawn(30)
+		spamcheck = 0
+
+	return
+
+// Toggle the bolts to the communal area doors
+/obj/machinery/door_timer/proc/togglebolts()
+	if(stat & (NOPOWER|BROKEN))	return
+	for(var/obj/machinery/door/airlock/glass/E in targets)
+		if(!E.density)	continue
+		switch(E.locked)
+			if(1)
+				E.unlock()
+			if(0)
+				E.lock()
 
 	return
 
@@ -203,6 +262,20 @@
 		else
 			dat += "<br/><A href='?src=\ref[src];fc=1'>Activate Flash</A>"
 
+	if(uniforms.len)
+		if(!spamcheck)
+			dat +="<br><a href='?src=\ref[src];summon=1'>Summon prisoner</a>"
+		else
+			dat +="<br><font color=red>Anti-spam measure activated. Please wait.</font>"
+	else
+		dat +="<br>No prisoner wear linked"
+
+	for(var/obj/machinery/door/airlock/glass/E in targets)
+		if(E.locked)
+			dat += "<br><a href='?src=\ref[src];doors=1'>Unlock door to Communal Area</a>"
+		else
+			dat += "<br><a href='?src=\ref[src];doors=1'>Lock door to Communal Area</a>"
+
 	dat += "<br/><br/><a href='?src=\ref[user];mach_close=computer'>Close</a>"
 	dat += "</TT></BODY></HTML>"
 
@@ -249,6 +322,10 @@
 
 		if(href_list["change"])
 			src.timer_start()
+		if(href_list["summon"])
+			summonuniforms()
+		if(href_list["doors"])
+			togglebolts()
 
 	src.add_fingerprint(usr)
 	src.updateUsrDialog()
