@@ -24,7 +24,7 @@
 
 /datum/event/prison_break/start()
 	for(var/area/A in world)
-		if(istype(A, /area/security/prison) || istype(A, /area/security/brig) || istype(A, /area/security/lobby) || istype(A, /area/security/main))
+		if(istype(A, /area/security/prison) || istype(A, /area/security/brig) || istype(A, /area/security/lobby))
 			prisonAreas += A
 
 	if(prisonAreas && prisonAreas.len > 0)
@@ -35,6 +35,7 @@
 /datum/event/prison_break/tick()
 	if(activeFor == releaseWhen)
 		if(prisonAreas && prisonAreas.len > 0)
+			msg_scopes_list(prisonAreas, "Area's")
 			for(var/area/A in prisonAreas)
 				for(var/obj/machinery/power/apc/temp_apc in A)
 					temp_apc.overload_lighting()
