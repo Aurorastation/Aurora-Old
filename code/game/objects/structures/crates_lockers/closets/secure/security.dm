@@ -322,8 +322,23 @@
 
 	New()
 		..()
-		new /obj/item/clothing/under/color/orange( src )
-		new /obj/item/clothing/shoes/orange( src )
+		switch(id)
+			if("Cell 1")
+				new /obj/item/clothing/under/color/orange/cell1(src)
+				new /obj/item/clothing/shoes/orange(src)
+			if("Cell 2")
+				new /obj/item/clothing/under/color/orange/cell2(src)
+				new /obj/item/clothing/shoes/orange(src)
+			if("Cell 3")
+				new /obj/item/clothing/under/color/orange/cell3(src)
+				new /obj/item/clothing/shoes/orange(src)
+			if("Cell 4")
+				new /obj/item/clothing/under/color/orange/cell4(src)
+				new /obj/item/clothing/shoes/orange(src)
+			else
+				new /obj/item/clothing/under/color/orange(src)
+				new /obj/item/clothing/shoes/orange(src)
+
 		return
 
 
