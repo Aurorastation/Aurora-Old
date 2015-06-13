@@ -397,3 +397,11 @@
 			usr << "You attempt to button-up the velcro on your [src], before promptly realising how retarded you are."
 			return
 	usr.update_inv_wear_suit()*/	//so our overlays update
+
+/obj/item/clothing/suit/storage/iac_vest
+	name = "IAC responce vest"
+	desc = "An high durability vest worn by medical workers of the Interstellar Aid Corps"
+	icon_state = "iac_bib"
+	item_state = "iac_bib"
+	icon = 'icons/obj/clothing/iac_uniform.dmi'
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 30, rad = 20)

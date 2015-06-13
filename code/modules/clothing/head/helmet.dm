@@ -76,3 +76,12 @@
 	armor = list(melee = 62, bullet = 50, laser = 50,energy = 35, bomb = 10, bio = 2, rad = 0)
 	flags_inv = HIDEEARS
 	siemens_coefficient = 0.7
+
+/obj/item/clothing/head/helmet/iac
+	name = "IAC helmet"
+	desc = "A helmet worn by medical workers of the Interstellar Aid Corps."
+	icon = 'icons/obj/clothing/iac_uniform.dmi'
+	item_state = "iac_helmet"
+	icon_state = "iac_helmet"
+	armor = list(melee = 50, bullet = 30, laser = 30,energy = 15, bomb = 10, bio = 20, rad = 0)
+	flags_inv = HIDEEARS|HIDEEYES

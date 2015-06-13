@@ -146,8 +146,11 @@
 /obj/item/clothing/under/rank/medical/iac
 	name = "iac scrubs"
 	desc = "A change of sterile medical scrubs worn by IAC workers. Has minor protection against biohazards."
-	icon_state = "scrubsblue"
-	item_state = "scrubsblue"
+	icon_state = "iac_s"
+	icon = 'icons/obj/clothing/iac_uniform.dmi'
+	item_state = "iac"
+	item_color = "iac"
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
 
 
 /*

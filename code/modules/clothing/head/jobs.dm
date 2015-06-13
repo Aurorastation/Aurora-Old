@@ -83,3 +83,9 @@
 /obj/item/clothing/head/surgery/green
 	desc = "A cap surgeons wear during operations. Keeps their hair from tickling your internal organs. This one is dark green."
 	icon_state = "surgcap_green"
+
+/obj/item/clothing/head/beret/iac
+	name = "IAC beret"
+	desc = "A beret worn by medical workers of the Interstellar Aid Corps."
+	icon = 'icons/obj/clothing/iac_uniform.dmi'
+	icon_state = "iac_beret"

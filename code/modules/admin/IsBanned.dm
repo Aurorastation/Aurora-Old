@@ -164,7 +164,7 @@ world/IsBanned(key,address,computer_id)
 			if(!toban)
 				toban = 1
 
-		if(banFlag)
+		if(banFlag & (KEYBAN|IDBAN|IPBAN))
 			Adminbot.DB_ban_record(1, null, null, multireason, null, null, ckey(key), 1, address, computer_id)
 			notes_add_sql(key, newreason, null, address, computer_id)
 
