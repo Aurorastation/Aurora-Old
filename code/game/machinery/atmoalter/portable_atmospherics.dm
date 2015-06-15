@@ -197,6 +197,6 @@
 			gases += ", [gas]"
 		else
 			gases = gas
-	log_admin("[usr] ([usr.ckey]) opened '[src.name]' containing [gases].")
-	message_admins("[usr] ([usr.ckey]) opened '[src.name]' containing [gases].")
-	message_mods("[usr] ([usr.ckey]) opened '[src.name]' containing [gases].")
+	log_admin("[usr.ckey]([usr]) opened '[src.name]' containing [gases] at ([x],[y],[z]).")
+	message_admins("[key_name(usr, usr.client)] (<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) opened '[src.name]' containing [gases]. ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)")
+	message_mods("[key_name(usr, usr.client)] (<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) opened '[src.name]' containing [gases]. ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)")
