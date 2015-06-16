@@ -78,6 +78,18 @@
 	if(!message || stat)
 		return
 	if(speaking && speaking.flags & SIGNLANG)
+		var/datum/organ/external/ORGAN
+		var/signOK = 2
+		ORGAN = organs_by_name["l_hand"]
+		if(!ORGAN || ORGAN.status == ORGAN_DESTROYED)
+			signOK -= 1
+		ORGAN = organs_by_name["r_hand"]
+		if(!ORGAN || ORGAN.status == ORGAN_DESTROYED)
+			signOK -= 1
+		if(!signOK)
+			src << "You look at where your hands used to be and a glimmer of sadness strikes you as you relise you can't do sign language anymore"
+			return
+
 		message_mode = null
 		..(message, speaking, verb, alt_name, italics, message_range)
 		return
