@@ -79,6 +79,13 @@
 		var/queryid = sanitizeSQL(href_list["directiveview"])
 		directiveslookup(2, queryid)
 
+	if(href_list["warnacknowledge"])
+		var/queryid = text2num(href_list["warnacknowledge"])
+		warnings_acknowledge(queryid)
+
+	if(href_list["warnview"])
+		warnings_check()
+
 	..()	//redirect to hsrc.Topic()
 
 /client/proc/handle_spam_prevention(var/message, var/mute_type)
@@ -174,6 +181,8 @@
 			src << "<span class='alert'>LOOC is Disabled</span>"
 		if(!dsay_allowed)
 			src << "<span class='alert'>Deadchat is Disabled</span>"
+
+	warnings_alert()
 
 	log_client_to_db()
 

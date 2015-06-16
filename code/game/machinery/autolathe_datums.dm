@@ -199,9 +199,14 @@
 	path = /obj/item/ammo_casing/shotgun/beanbag
 	category = "Arms and Ammunition"
 
+/datum/autolathe/recipe/magazine_revolver
+	name = "ammunition (.38 special)"
+	path = /obj/item/ammo_magazine/c38
+	category = "Arms and Ammunition"
+
 /datum/autolathe/recipe/magazine_rubber
-	name = "ammunition (rubber)"
-	path = /obj/item/ammo_magazine/c45r
+	name = "ammunition (.38 rubber)"
+	path = /obj/item/ammo_magazine/c38r
 	category = "Arms and Ammunition"
 
 /datum/autolathe/recipe/consolescreen
