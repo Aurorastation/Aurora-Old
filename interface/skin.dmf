@@ -583,8 +583,8 @@ menu "menu"
 window "Telecomms IDE"
 	elem "Telecomms IDE"
 		type = MAIN
-		pos = 281,0
-		size = 569x582
+		pos = 979,49
+		size = 571x582
 		anchor1 = none
 		anchor2 = none
 		font-family = ""
@@ -622,7 +622,7 @@ window "Telecomms IDE"
 		on-close = "exittcs"
 	elem "button5"
 		type = BUTTON
-		pos = 209,464
+		pos = 386,462
 		size = 70x20
 		anchor1 = 37,80
 		anchor2 = 49,83
@@ -650,8 +650,8 @@ window "Telecomms IDE"
 		button-type = pushbutton
 	elem "button4"
 		type = BUTTON
-		pos = 157,464
-		size = 52x20
+		pos = 322,462
+		size = 53x20
 		anchor1 = 28,80
 		anchor2 = 37,83
 		font-family = ""
@@ -678,7 +678,7 @@ window "Telecomms IDE"
 		button-type = pushbutton
 	elem "button3"
 		type = BUTTON
-		pos = 105,464
+		pos = 258,462
 		size = 52x20
 		anchor1 = 18,80
 		anchor2 = 28,83
@@ -707,19 +707,19 @@ window "Telecomms IDE"
 	elem "tcserror"
 		type = OUTPUT
 		pos = 0,488
-		size = 566x94
+		size = 570x94
 		anchor1 = 0,84
 		anchor2 = 99,100
 		font-family = "sans-serif"
 		font-size = 9
 		font-style = ""
 		text-color = #000000
-		background-color = #ffffff
+		background-color = none
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
 		is-default = false
-		border = none
+		border = sunken
 		drop-zone = false
 		right-click = false
 		saved-params = "max-lines"
@@ -732,7 +732,7 @@ window "Telecomms IDE"
 		image = ""
 	elem "button2"
 		type = BUTTON
-		pos = 53,464
+		pos = 194,462
 		size = 52x20
 		anchor1 = 9,80
 		anchor2 = 18,83
@@ -760,7 +760,7 @@ window "Telecomms IDE"
 		button-type = pushbutton
 	elem "button1"
 		type = BUTTON
-		pos = 0,464
+		pos = 125,462
 		size = 53x20
 		anchor1 = 0,80
 		anchor2 = 9,83
@@ -789,19 +789,19 @@ window "Telecomms IDE"
 	elem "tcscode"
 		type = INPUT
 		pos = 0,0
-		size = 569x464
+		size = 571x456
 		anchor1 = 0,0
 		anchor2 = 100,80
 		font-family = "Courier"
 		font-size = 10
 		font-style = ""
 		text-color = #000000
-		background-color = #ffffff
+		background-color = none
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
 		is-default = false
-		border = none
+		border = line
 		drop-zone = false
 		right-click = false
 		saved-params = ""
@@ -877,6 +877,8 @@ window "chemdispenser"
 		keep-aspect = false
 		align = center
 		text-wrap = false
+		allow-html = false
+		letterbox = true
 	elem "eject"
 		type = BUTTON
 		pos = 264,4
@@ -1043,6 +1045,8 @@ window "chemdispenser"
 		keep-aspect = false
 		align = center
 		text-wrap = false
+		allow-html = false
+		letterbox = true
 	elem "child1"
 		type = CHILD
 		pos = 0,40
@@ -1164,6 +1168,8 @@ window "chemdispenser_reagents"
 		keep-aspect = false
 		align = center
 		text-wrap = false
+		allow-html = false
+		letterbox = true
 
 window "mainwindow"
 	elem "mainwindow"
