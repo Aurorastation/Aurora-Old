@@ -338,6 +338,7 @@
 	O.make_changeling(1)
 	O.verbs += /mob/proc/changeling_lesser_transform
 	O.changeling_update_languages(changeling.absorbed_languages)
+	O.add_language("Changeling")
 
 	feedback_add_details("changeling_powers","LF")
 	del(C)
@@ -904,7 +905,7 @@ var/list/datum/dna/hivemind_bank = list()
 	del(src)
 	return
 
-/obj/item/weapon/melee/changeling/armblade/proc/throw()
+/obj/item/weapon/melee/changeling/armblade/proc/weaponThrow() //This isn't even used what? ~Scopes
 	del(src)
 	return
 
@@ -936,6 +937,6 @@ var/list/datum/dna/hivemind_bank = list()
 	del(src)
 	return
 
-/obj/item/weapon/shield/riot/changelingshield/proc/throw()
+/obj/item/weapon/shield/riot/changelingshield/proc/weaponThrow() //This isn't even used what? ~Scopes
 	del(src)
 	return

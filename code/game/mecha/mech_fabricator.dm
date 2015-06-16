@@ -133,7 +133,7 @@
 
 
 
-	"Misc"=list(/obj/item/mecha_parts/mecha_tracking)
+	"Engineering Equipment"=list(/obj/item/mecha_parts/mecha_tracking)
 	)
 
 
@@ -464,7 +464,7 @@
 				if(add_part_to_set(D.category, text2path(D.build_path)))//Adds it to said category
 					i++
 			else
-				if(add_part_to_set("Misc", text2path(D.build_path)))//If in doubt, chunk it into the Misc
+				if(add_part_to_set("Engineering Equipment", text2path(D.build_path)))//If in doubt, chunk it into the Engineering Equipment
 					i++
 	return i
 

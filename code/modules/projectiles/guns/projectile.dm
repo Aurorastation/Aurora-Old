@@ -22,8 +22,9 @@
 
 /obj/item/weapon/gun/projectile/New()
 	..()
-	for(var/i = 1, i <= max_shells, i++)
-		loaded += new ammo_type(src)
+	if(ammo_type)	//So that we can have weapons spawn empty.
+		for(var/i = 1, i <= max_shells, i++)
+			loaded += new ammo_type(src)
 	update_icon()
 	return
 

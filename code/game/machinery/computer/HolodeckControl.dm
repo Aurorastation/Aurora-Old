@@ -1,7 +1,8 @@
 /obj/machinery/computer/HolodeckControl
 	name = "Holodeck Control Computer"
 	desc = "A computer used to control a nearby holodeck."
-	icon_state = "holocontrol"
+	icon = 'icons/obj/terminals.dmi'
+	icon_state = "dorm_available"
 	var/area/linkedholodeck = null
 	var/area/target = null
 	var/active = 0
@@ -150,6 +151,7 @@
 					loadProgram(target)
 
 			else if(href_list["burntest"])
+				if(!emagged)	return
 				target = locate(/area/holodeck/source_burntest)
 				if(target)
 					loadProgram(target)
@@ -337,6 +339,9 @@
 
 	last_change = world.time
 	active = 1
+	icon_state = "dorm_inside"
+	spawn(100)
+		icon_state = "dorm_available"
 
 	for(var/item in holographic_items)
 		derez(item)
@@ -380,11 +385,6 @@
 	var/area/targetsource = locate(/area/holodeck/source_plating)
 	targetsource.copy_contents_to(linkedholodeck , 1)
 	active = 0
-
-
-
-
-
 
 
 // Holographic Items!

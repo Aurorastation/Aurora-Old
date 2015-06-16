@@ -217,7 +217,7 @@
 	del(src)
 	return
 
-/obj/item/weapon/melee/energy/blade/proc/throw()
+/obj/item/weapon/melee/energy/blade/proc/weaponThrow() //This isn't even used what? ~Scopes
 	del(src)
 	return
 
