@@ -299,9 +299,9 @@ var/savefile/Banlist
 		message_admins("Query data: [serverip], [bantype_str], [duration], [key], [id], [ip], [reason], [banckey]")
 		message_admins("Executing query")
 
-		var/DBQuery/insert_query = dbcon.NewQuery("INSERT INTO `erro_ban` (`id`,`bantime`,`serverip`,`bantype`,`reason`,`job`,`duration`,`rounds`,`expiration_time`,`ckey`,`computerid`,`ip`,`a_ckey`,`a_computerid`,`a_ip`,`who`,`adminwho`,`edits`,`unbanned`,`unbanned_datetime`,`unbanned_ckey`,`unbanned_computerid`,`unbanned_ip`) VALUES (null, Now(), '[serverip]', '[bantype_str]', '[reason]', '[job]', '[minutes]', '[rounds]', Now() + INTERVAL [(duration>0) ? duration : 0] MINUTE, '[key]', '[id]', '[ip]', '[banckey]', '', '', '', '', null, null, null, null, null, null);")
+		var/DBQuery/insert_query = dbcon.NewQuery("INSERT INTO `ss13_ban` (`id`,`bantime`,`serverip`,`bantype`,`reason`,`job`,`duration`,`rounds`,`expiration_time`,`ckey`,`computerid`,`ip`,`a_ckey`,`a_computerid`,`a_ip`,`who`,`adminwho`,`edits`,`unbanned`,`unbanned_datetime`,`unbanned_ckey`,`unbanned_computerid`,`unbanned_ip`) VALUES (null, Now(), '[serverip]', '[bantype_str]', '[reason]', '[job]', '[minutes]', '[rounds]', Now() + INTERVAL [(duration>0) ? duration : 0] MINUTE, '[key]', '[id]', '[ip]', '[banckey]', '', '', '', '', null, null, null, null, null, null);")
 		insert_query.Execute()
-		var/DBQuery/log_query = dbcon.NewQuery("INSERT INTO `erro_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , '[usr.ckey]', '[usr.client.address]', 'Attempted to transfer the ban of [key].');")
+		var/DBQuery/log_query = dbcon.NewQuery("INSERT INTO `ss13_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , '[usr.ckey]', '[usr.client.address]', 'Attempted to transfer the ban of [key].');")
 		log_query.Execute()
 
 		message_admins("Salvo complete, stand by.")

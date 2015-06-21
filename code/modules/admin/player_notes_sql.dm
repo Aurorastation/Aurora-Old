@@ -20,7 +20,7 @@
 		return
 
 	if(!IP || !CID)
-		var/DBQuery/initquery = dbcon.NewQuery("SELECT ip, computerid FROM erro_player WHERE ckey = '[ckey]'")
+		var/DBQuery/initquery = dbcon.NewQuery("SELECT ip, computerid FROM ss13_player WHERE ckey = '[ckey]'")
 		initquery.Execute()
 		if(initquery.NextRow())
 			IP = initquery.item[1]
@@ -28,9 +28,9 @@
 
 	var/querycontents
 	if(IP && CID)
-		querycontents = "INSERT INTO aurora_notes (id, adddate, ckey, ip, computerid, a_ckey, content) VALUES (null, Now(), '[ckey]', '[IP]', '[CID]', '[a_ckey]', '[content]')"
+		querycontents = "INSERT INTO ss13_notes (id, adddate, ckey, ip, computerid, a_ckey, content) VALUES (null, Now(), '[ckey]', '[IP]', '[CID]', '[a_ckey]', '[content]')"
 	else
-		querycontents = "INSERT INTO aurora_notes (id, adddate, ckey, ip, computerid, a_ckey, content) VALUES (null, Now(), '[ckey]', null, null, '[a_ckey]', '[content]')"
+		querycontents = "INSERT INTO ss13_notes (id, adddate, ckey, ip, computerid, a_ckey, content) VALUES (null, Now(), '[ckey]', null, null, '[a_ckey]', '[content]')"
 
 	//We aren't suppose to end up here, but just in case.
 	if(!querycontents)
@@ -58,7 +58,7 @@
 	var/ckey
 	var/content
 
-	var/DBQuery/initquery = dbcon.NewQuery("SELECT ckey, content FROM aurora_notes WHERE id = '[noteid]'")
+	var/DBQuery/initquery = dbcon.NewQuery("SELECT ckey, content FROM ss13_notes WHERE id = '[noteid]'")
 	initquery.Execute()
 	while(initquery.NextRow())
 		ckey = initquery.item[1]
@@ -78,7 +78,7 @@
 	switch(noteedit)
 		if("delete")
 			if(alert("Delete this note?", "Delete?", "Yes", "No") == "Yes")
-				var/DBQuery/deletequery = dbcon.NewQuery("UPDATE aurora_notes SET visible = 0 WHERE id = '[noteid]'")
+				var/DBQuery/deletequery = dbcon.NewQuery("UPDATE ss13_notes SET visible = 0 WHERE id = '[noteid]'")
 				deletequery.Execute()
 
 				message_admins("\blue [key_name_admin(usr)] deleted one of [ckey]'s notes.")
@@ -92,7 +92,7 @@
 			if(!newcontent)
 				usr << "Cancelled"
 				return
-			var/DBQuery/editquery = dbcon.NewQuery("UPDATE aurora_notes SET content = '[newcontent]', lasteditor = '[ackey]', lasteditdate = Now(), edited = 1 WHERE id = [noteid]")
+			var/DBQuery/editquery = dbcon.NewQuery("UPDATE ss13_notes SET content = '[newcontent]', lasteditor = '[ackey]', lasteditdate = Now(), edited = 1 WHERE id = [noteid]")
 			editquery.Execute()
 
 /datum/admins/proc/show_notes_sql(var/playerckey = null, var/adminckey = null)
@@ -135,13 +135,13 @@
 		var/ckey = sanitizeSQL(playerckey)
 		var/IP
 		var/CID
-		var/DBQuery/initquery = dbcon.NewQuery("SELECT ip, computerid FROM erro_player WHERE ckey = '[ckey]'")
+		var/DBQuery/initquery = dbcon.NewQuery("SELECT ip, computerid FROM ss13_player WHERE ckey = '[ckey]'")
 		initquery.Execute()
 		if(initquery.NextRow())
 			IP = initquery.item[1]
 			CID = initquery.item[2]
 
-		var/querycontent = "SELECT id, adddate, ckey, a_ckey, content, edited, lasteditor, lasteditdate FROM aurora_notes WHERE ckey = '[ckey]' AND visible = '1'"
+		var/querycontent = "SELECT id, adddate, ckey, a_ckey, content, edited, lasteditor, lasteditdate FROM ss13_notes WHERE ckey = '[ckey]' AND visible = '1'"
 
 		if(IP)
 			querycontent += " OR ip = '[IP]' AND visible = '1'"
@@ -174,7 +174,7 @@
 	else if(adminckey && !playerckey)
 		var/adminkey = sanitizeSQL(adminckey)
 
-		var/aquerycontent = "SELECT id, adddate, ckey, content, edited, lasteditor, lasteditdate FROM aurora_notes WHERE a_ckey = '[ckey(adminkey)]' AND visible = '1' ORDER BY adddate ASC"
+		var/aquerycontent = "SELECT id, adddate, ckey, content, edited, lasteditor, lasteditdate FROM ss13_notes WHERE a_ckey = '[ckey(adminkey)]' AND visible = '1' ORDER BY adddate ASC"
 		var/DBQuery/adminquery = dbcon.NewQuery(aquerycontent)
 		adminquery.Execute()
 
@@ -211,7 +211,7 @@
 	for(var/t in note_keys)
 		var/IP = null
 		var/CID = null
-		var/DBQuery/query = dbcon.NewQuery("SELECT ip, computerid FROM erro_player WHERE ckey = '[t]'")
+		var/DBQuery/query = dbcon.NewQuery("SELECT ip, computerid FROM ss13_player WHERE ckey = '[t]'")
 		query.Execute()
 		if(query.NextRow())
 			IP = query.item[1]
@@ -264,9 +264,9 @@
 //			msg_scopes("Full DTG: [DTG]")
 			var/insertionstuff
 			if(IP && CID)
-				insertionstuff = "INSERT INTO aurora_notes (id, adddate, ckey, ip, computerid, a_ckey, content) VALUES (null, '[DTG]', '[t]', '[IP]', '[CID]', '[a_ckey]', '[I.content]')"
+				insertionstuff = "INSERT INTO ss13_notes (id, adddate, ckey, ip, computerid, a_ckey, content) VALUES (null, '[DTG]', '[t]', '[IP]', '[CID]', '[a_ckey]', '[I.content]')"
 			else
-				insertionstuff = "INSERT INTO aurora_notes (id, adddate, ckey, ip, computerid, a_ckey, content) VALUES (null, '[DTG]', '[t]', null, null, '[a_ckey]', '[I.content]')"
+				insertionstuff = "INSERT INTO ss13_notes (id, adddate, ckey, ip, computerid, a_ckey, content) VALUES (null, '[DTG]', '[t]', null, null, '[a_ckey]', '[I.content]')"
 			var/DBQuery/insertquery = dbcon.NewQuery(insertionstuff)
 			insertquery.Execute()
 			if(insertquery.ErrorMsg())

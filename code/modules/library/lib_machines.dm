@@ -94,7 +94,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 			author = null
 		author = sanitizeSQL(author)
 	if(href_list["search"])
-		SQLquery = "SELECT author, title, category, id FROM library WHERE "
+		SQLquery = "SELECT author, title, category, id FROM ss13_library WHERE "
 		if(category == "Any")
 			SQLquery += "author LIKE '%[author]%' AND title LIKE '%[title]%'"
 		else
@@ -347,7 +347,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 							var/sqlcontent = sanitizeSQL(scanner.cache.dat)
 							var/sqlcategory = sanitizeSQL(upload_category)
 							var/sqluploader = sanitizeSQL(usr.key)
-							var/DBQuery/query = dbcon.NewQuery("INSERT INTO library (author, title, content, category, uploadtime, uploader) VALUES ('[sqlauthor]', '[sqltitle]', '[sqlcontent]', '[sqlcategory]', Now(), '[sqluploader]')")
+							var/DBQuery/query = dbcon.NewQuery("INSERT INTO ss13_library (author, title, content, category, uploadtime, uploader) VALUES ('[sqlauthor]', '[sqltitle]', '[sqlcontent]', '[sqlcategory]', Now(), '[sqluploader]')")
 							if(!query.Execute())
 								usr << query.ErrorMsg()
 							else
@@ -366,7 +366,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 			bibledelay = 1
 			spawn(60)
 				bibledelay = 0
-			var/DBQuery/query = dbcon.NewQuery("SELECT * FROM library WHERE id=[sqlid]")
+			var/DBQuery/query = dbcon.NewQuery("SELECT * FROM ss13_library WHERE id=[sqlid]")
 			query.Execute()
 
 			while(query.NextRow())

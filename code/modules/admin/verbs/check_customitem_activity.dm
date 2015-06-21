@@ -36,7 +36,7 @@ var/inactive_keys = "None<br>"
 	//grab all ckeys associated with custom items
 	var/list/ckeys_with_customitems = list()
 
-	var/DBQuery/query_ckeys = dbcon.NewQuery("SELECT ckey FROM aurora_customitems")
+	var/DBQuery/query_ckeys = dbcon.NewQuery("SELECT ckey FROM ss13_customitems")
 	query_ckeys.Execute()
 	while(query_ckeys.NextRow())
 		var/cur_key = query_ckeys.item[1]
@@ -46,7 +46,7 @@ var/inactive_keys = "None<br>"
 	//run a query to get all ckeys inactive for over 2 months
 	var/list/inactive_ckeys = list()
 	if(ckeys_with_customitems.len)
-		var/DBQuery/query_inactive = dbcon.NewQuery("SELECT ckey, lastseen FROM erro_player WHERE datediff(Now(), lastseen) > 60")
+		var/DBQuery/query_inactive = dbcon.NewQuery("SELECT ckey, lastseen FROM ss13_player WHERE datediff(Now(), lastseen) > 60")
 		query_inactive.Execute()
 		while(query_inactive.NextRow())
 			var/cur_ckey = query_inactive.item[1]
@@ -58,7 +58,7 @@ var/inactive_keys = "None<br>"
 	//if there are ckeys left over, check whether they have a database entry at all
 	if(ckeys_with_customitems.len)
 		for(var/cur_ckey in ckeys_with_customitems)
-			var/DBQuery/query_inactive = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE ckey = '[cur_ckey]'")
+			var/DBQuery/query_inactive = dbcon.NewQuery("SELECT ckey FROM ss13_player WHERE ckey = '[cur_ckey]'")
 			query_inactive.Execute()
 			if(!query_inactive.RowCount())
 				inactive_ckeys += cur_ckey
