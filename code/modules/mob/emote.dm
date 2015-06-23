@@ -107,6 +107,7 @@
 
 				if(M.client.holder && M.client.holder.rights & (R_ADMIN|R_MOD)) // Show the emote to admins/mods
 					M << message
-
+					continue
+7
 				if(M.stat == DEAD) // Show the emote to regular ghosts
 					M.show_message(message, 2)
