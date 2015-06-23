@@ -100,8 +100,13 @@
 			if(istype(M, /mob/new_player))
 				continue
 
-			if(M.client && M.client.holder && (M.client.holder.rights & R_ADMIN|R_MOD) && (M.client.prefs.toggles & CHAT_DEAD)) // Show the emote to admins/mods
-				M << message
+			if(!M.client)
+				continue
 
-			else if(M.stat == DEAD && (M.client.prefs.toggles & CHAT_DEAD)) // Show the emote to regular ghosts with deadchat toggled on
-				M.show_message(message, 2)
+			if(M.client.prefs.toggles & CHAT_DEAD)
+
+				if(M.client.holder && M.client.holder.rights & (R_ADMIN|R_MOD)) // Show the emote to admins/mods
+					M << message
+
+				if(M.stat == DEAD) // Show the emote to regular ghosts
+					M.show_message(message, 2)
