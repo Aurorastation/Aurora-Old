@@ -14,42 +14,23 @@
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-
 		var/userloc = H.loc
-
-		//see code/modules/mob/new_player/preferences.dm at approx line 545 for comments!
-		//this is largely copypasted from there.
-
-		//handle facial hair (if necessary)
-		if(H.gender == MALE)
-			var/list/species_facial_hair = list()
-			if(H.species)
-				for(var/i in facial_hair_styles_list)
-					var/datum/sprite_accessory/facial_hair/tmp_facial = facial_hair_styles_list[i]
-					if(H.species.name in tmp_facial.species_allowed)
-						species_facial_hair += i
-			else
-				species_facial_hair = facial_hair_styles_list
-
-			var/new_style = input(user, "Select a facial hair style", "Grooming")  as null|anything in species_facial_hair
+		
+		var/list/hair_styles = H.valid_hairstyles_for_this_mob()
+		var/list/facial_styles = H.valid_facialhairstyles_for_this_mob()
+		
+		if (facial_styles.len > 1) //handle facial hair (if necessary)
+			var/new_style = input(user, "Select a facial hair style", "Grooming")  as null|anything in facial_styles
 			if(userloc != H.loc) return	//no tele-grooming
 			if(new_style)
 				H.f_style = new_style
 
 		//handle normal hair
-		var/list/species_hair = list()
-		if(H.species)
-			for(var/i in hair_styles_list)
-				var/datum/sprite_accessory/hair/tmp_hair = hair_styles_list[i]
-				if(H.species.name in tmp_hair.species_allowed)
-					species_hair += i
-		else
-			species_hair = hair_styles_list
-
-		var/new_style = input(user, "Select a hair style", "Grooming")  as null|anything in species_hair
-		if(userloc != H.loc) return	//no tele-grooming
-		if(new_style)
-			H.h_style = new_style
+		if (hair_styles.len)
+			var/new_style = input(user, "Select a hair style", "Grooming")  as null|anything in hair_styles
+			if(userloc != H.loc) return	//no tele-grooming
+			if(new_style)
+				H.h_style = new_style
 
 		H.update_hair()
 

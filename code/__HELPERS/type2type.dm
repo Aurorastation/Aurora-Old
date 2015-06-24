@@ -82,6 +82,9 @@
 		hex = text("0[]", hex)
 	return hex
 
+/proc/colour_to_html(r,g,b)
+	return "'#[num2hex(r)][num2hex(g)][num2hex(b)]'"
+	
 
 // Concatenates a list of strings into a single string.  A seperator may optionally be provided.
 /proc/list2text(list/ls, sep)

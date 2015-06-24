@@ -78,6 +78,8 @@ datum/preferences
 	var/species = "Human"               //Species datum to use.
 	var/language = "None"				//Secondary language
 	var/list/gear						//Custom/fluff item loadout.
+	var/covering_type = null 			 //synth covering type
+	var/machine_brain_type = "Posibrain" //synth brain type
 
 		//Some faction information.
 	var/home_system = "Unset"           //System of birth.
@@ -315,43 +317,21 @@ datum/preferences
 	dat += "Skin Tone: <a href='?_src_=prefs;preference=s_tone;task=input'>[-s_tone + 35]/220<br></a>"
 	//dat += "Skin pattern: <a href='byond://?src=\ref[user];preference=skin_style;task=input'>Adjust</a><br>"
 	dat += "Needs Glasses: <a href='?_src_=prefs;preference=disabilities'><b>[disabilities == 0 ? "No" : "Yes"]</b></a><br>"
+	if (species=="Machine") // brain and covering type for shells
+		dat += "Brain Type: <a href='byond://?src=\ref[user];preference=set_machine_brain;task=input'><b>[machine_brain_type]</b></a><br>"
+		dat += "Exterior Coating: <a href='byond://?src=\ref[user];preference=set_machine_covering;task=input'><b>[isnull(covering_type) ? "None" : covering_type]</b></a><br>"
 	dat += "Limbs: <a href='byond://?src=\ref[user];preference=limbs;task=input'>Adjust</a><br>"
 	dat += "Internal Organs: <a href='byond://?src=\ref[user];preference=organs;task=input'>Adjust</a><br>"
 
 	//display limbs below
 	var/ind = 0
+	var/list/organ_names = get_limb_name_to_descriptive_name()
+	var/mechanical_organ_string = (species!="Machine" ? "Mechanical" : "Custom")
 	for(var/name in organ_data)
 		//world << "[ind] \ [organ_data.len]"
 		var/status = organ_data[name]
-		var/organ_name = null
-		switch(name)
-			if("l_arm")
-				organ_name = "left arm"
-			if("r_arm")
-				organ_name = "right arm"
-			if("l_leg")
-				organ_name = "left leg"
-			if("r_leg")
-				organ_name = "right leg"
-			if("l_foot")
-				organ_name = "left foot"
-			if("r_foot")
-				organ_name = "right foot"
-			if("l_hand")
-				organ_name = "left hand"
-			if("r_hand")
-				organ_name = "right hand"
-			if("heart")
-				organ_name = "heart"
-			if("eyes")
-				organ_name = "eyes"
-
-		if(status == "cyborg")
-			++ind
-			if(ind > 1)
-				dat += ", "
-			dat += "\tMechanical [organ_name] prothesis"
-		else if(status == "amputated")
+		var/organ_name = organ_names[name]
+		if(status == "amputated")
 			++ind
 			if(ind > 1)
 				dat += ", "
@@ -374,10 +354,20 @@ datum/preferences
 					dat += "\tRetinal overlayed [organ_name]"
 				else
 					dat += "\tMechanically assisted [organ_name]"
+		var/list/status_as_list=status
+		if (istype(status_as_list)) // we got a robot here
+			++ind
+			if(ind > 1)
+				dat += ", "
+			
+			var/color_string=colour_to_html(status_as_list[2],status_as_list[3],status_as_list[4])
+			dat += "\t[mechanical_organ_string] [organ_name] covered in <span style='color:[color_string]'>[lowertext(status_as_list[1])]</span>"
+			
+		
 	if(!ind)
 		dat += "\[...\]<br><br>"
 	else
-		dat += "<br><br>"
+		dat += ".<br><br>"
 
 	if(gender == MALE)
 		dat += "Underwear: <a href ='?_src_=prefs;preference=underwear;task=input'><b>[underwear_m[underwear]]</b></a><br>"
@@ -1112,6 +1102,7 @@ datum/preferences
 					if(new_age)
 						age = max(min( round(text2num(new_age)), AGE_MAX),AGE_MIN)
 				if("species")
+					config.usealienwhitelist=0 // REMOVE ME
 
 					var/list/new_species = list("Human")
 					var/prev_species = species
@@ -1131,42 +1122,9 @@ datum/preferences
 
 					if(prev_species != species)
 						//grab one of the valid hair styles for the newly chosen species
-						var/list/valid_hairstyles = list()
-						for(var/hairstyle in hair_styles_list)
-							var/datum/sprite_accessory/S = hair_styles_list[hairstyle]
-							if(gender == MALE && S.gender == FEMALE)
-								continue
-							if(gender == FEMALE && S.gender == MALE)
-								continue
-							if( !(species in S.species_allowed))
-								continue
-							valid_hairstyles[hairstyle] = hair_styles_list[hairstyle]
-
-						if(valid_hairstyles.len)
-							h_style = pick(valid_hairstyles)
-						else
-							//this shouldn't happen
-							h_style = hair_styles_list["Bald"]
-
-						//grab one of the valid facial hair styles for the newly chosen species
-						var/list/valid_facialhairstyles = list()
-						for(var/facialhairstyle in facial_hair_styles_list)
-							var/datum/sprite_accessory/S = facial_hair_styles_list[facialhairstyle]
-							if(gender == MALE && S.gender == FEMALE)
-								continue
-							if(gender == FEMALE && S.gender == MALE)
-								continue
-							if( !(species in S.species_allowed))
-								continue
-
-							valid_facialhairstyles[facialhairstyle] = facial_hair_styles_list[facialhairstyle]
-
-						if(valid_facialhairstyles.len)
-							f_style = pick(valid_facialhairstyles)
-						else
-							//this shouldn't happen
-							f_style = facial_hair_styles_list["Shaved"]
-
+						h_style = random_hair_style(gender,species)
+						f_style = random_facial_hair_style(gender,species)
+						
 						//reset hair colour and skin colour
 						r_hair = 0//hex2num(copytext(new_hair, 2, 4))
 						g_hair = 0//hex2num(copytext(new_hair, 4, 6))
@@ -1208,24 +1166,15 @@ datum/preferences
 						b_type = new_b_type
 
 				if("hair")
-					if(species == "Human" || species == "Unathi" || species == "Tajaran" || species == "Skrell")
-						var/new_hair = input(user, "Choose your character's hair colour:", "Character Preference") as color|null
-						if(new_hair)
-							r_hair = hex2num(copytext(new_hair, 2, 4))
-							g_hair = hex2num(copytext(new_hair, 4, 6))
-							b_hair = hex2num(copytext(new_hair, 6, 8))
-					else if (species == "Machine")
-						alert("Please select the Body Color instead.")
+					var/new_hair = input(user, "Choose your character's hair colour:", "Character Preference") as color|null
+					if(new_hair)
+						r_hair = hex2num(copytext(new_hair, 2, 4))
+						g_hair = hex2num(copytext(new_hair, 4, 6))
+						b_hair = hex2num(copytext(new_hair, 6, 8))
 
 				if("h_style")
-					var/list/valid_hairstyles = list()
-					for(var/hairstyle in hair_styles_list)
-						var/datum/sprite_accessory/S = hair_styles_list[hairstyle]
-						if( !(species in S.species_allowed))
-							continue
-
-						valid_hairstyles[hairstyle] = hair_styles_list[hairstyle]
-
+					world << "Hair species [get_hair_species()]"
+					var/list/valid_hairstyles = get_valid_hairstyles(gender,get_hair_species())
 					var/new_h_style = input(user, "Choose your character's hair style:", "Character Preference")  as null|anything in valid_hairstyles
 					if(new_h_style)
 						h_style = new_h_style
@@ -1238,18 +1187,7 @@ datum/preferences
 						b_facial = hex2num(copytext(new_facial, 6, 8))
 
 				if("f_style")
-					var/list/valid_facialhairstyles = list()
-					for(var/facialhairstyle in facial_hair_styles_list)
-						var/datum/sprite_accessory/S = facial_hair_styles_list[facialhairstyle]
-						if(gender == MALE && S.gender == FEMALE)
-							continue
-						if(gender == FEMALE && S.gender == MALE)
-							continue
-						if( !(species in S.species_allowed))
-							continue
-
-						valid_facialhairstyles[facialhairstyle] = facial_hair_styles_list[facialhairstyle]
-
+					var/list/valid_facialhairstyles = get_valid_facialhairstyles(gender,get_hair_species())
 					var/new_f_style = input(user, "Choose your character's facial-hair style:", "Character Preference")  as null|anything in valid_facialhairstyles
 					if(new_f_style)
 						f_style = new_f_style
@@ -1296,10 +1234,6 @@ datum/preferences
 							r_skin = hex2num(copytext(new_skin, 2, 4))
 							g_skin = hex2num(copytext(new_skin, 4, 6))
 							b_skin = hex2num(copytext(new_skin, 6, 8))
-							if(species == "Machine")
-								r_hair = r_skin
-								g_hair = g_skin
-								b_hair = b_skin
 
 				if("ooccolor")
 					var/new_ooccolor = input(user, "Choose your OOC colour:", "Game Preference") as color|null
@@ -1324,58 +1258,20 @@ datum/preferences
 						return
 					else
 						user << browse(null, "window=disabil")
-
+						
+				if("set_machine_brain") // shell customization junk
+					var/new_brain = input(user, "Choose your brain.", "Character Preference")  as null|anything in list("MMI", "Posibrain") // not differentiating brain species at the moment
+					if(new_brain)
+						machine_brain_type=new_brain
+						
+				if("set_machine_covering")
+					var/new_coating = input(user, "Choose your exterior coating.", "Character Preference")  as null|anything in get_limb_covering_names()
+					if(new_coating)
+						covering_type=(new_coating!="None" ? new_coating : null)
+						
 				if("limbs")
-					var/limb_name = input(user, "Which limb do you want to change?") as null|anything in list("Left Leg","Right Leg","Left Arm","Right Arm","Left Foot","Right Foot","Left Hand","Right Hand")
-					if(!limb_name) return
-
-					var/limb = null
-					var/second_limb = null // if you try to change the arm, the hand should also change
-					var/third_limb = null  // if you try to unchange the hand, the arm should also change
-					switch(limb_name)
-						if("Left Leg")
-							limb = "l_leg"
-							second_limb = "l_foot"
-						if("Right Leg")
-							limb = "r_leg"
-							second_limb = "r_foot"
-						if("Left Arm")
-							limb = "l_arm"
-							second_limb = "l_hand"
-						if("Right Arm")
-							limb = "r_arm"
-							second_limb = "r_hand"
-						if("Left Foot")
-							limb = "l_foot"
-							third_limb = "l_leg"
-						if("Right Foot")
-							limb = "r_foot"
-							third_limb = "r_leg"
-						if("Left Hand")
-							limb = "l_hand"
-							third_limb = "l_arm"
-						if("Right Hand")
-							limb = "r_hand"
-							third_limb = "r_arm"
-
-					var/new_state = input(user, "What state do you wish the limb to be in?") as null|anything in list("Normal","Amputated","Prothesis")
-					if(!new_state) return
-
-					switch(new_state)
-						if("Normal")
-							organ_data[limb] = null
-							if(third_limb)
-								organ_data[third_limb] = null
-						if("Amputated")
-							organ_data[limb] = "amputated"
-							if(second_limb)
-								organ_data[second_limb] = "amputated"
-						if("Prothesis")
-							organ_data[limb] = "cyborg"
-							if(second_limb)
-								organ_data[second_limb] = "cyborg"
-							if(third_limb && organ_data[third_limb] == "amputated")
-								organ_data[third_limb] = null
+					customize_limbs(user,species!="Machine")
+					
 				if("organs")
 					var/organ_name = input(user, "Which internal function do you want to change?") as null|anything in list("Heart", "Eyes")
 					if(!organ_name) return
@@ -1597,26 +1493,42 @@ datum/preferences
 
 	character.skills = skills
 	character.used_skillpoints = used_skillpoints
+	
+	var/list/covering_name_to_type = get_limb_covering_list()
 
+	// provide default covering for shells
+	if (species=="Machine") // provide default covering for shells
+		for (var/datum/organ/external/organ in character.organs)
+			if (organ) // gotta make sure we're getting an actual organ here
+				if (covering_type)
+					var/covering_path = covering_name_to_type[covering_type]
+					world << "Skin [r_skin],[g_skin],b_skin]"
+					organ.covering = new covering_path(organ,r_skin,g_skin,b_skin)
+					organ.covering.limb_datum=organ
+		
+	
 	// Destroy/cyborgize organs
-
 	for(var/name in organ_data)
 		var/datum/organ/external/O = character.organs_by_name[name]
 		var/datum/organ/internal/I = character.internal_organs_by_name[name]
 		var/status = organ_data[name]
-
 		if(status == "amputated")
 			O.amputated = 1
 			O.status |= ORGAN_DESTROYED
 			O.destspawn = 1
-		if(status == "cyborg")
-			O.status |= ORGAN_ROBOT
 		if(status == "assisted")
 			I.mechassist()
-		else if(status == "mechanical")
+		if(status == "mechanical")
 			I.mechanize()
-
-		else continue
+		var/list/status_as_list=status
+		if (istype(status_as_list)) // we got a robot here
+			world << "We setting this junk"
+			O.status |= ORGAN_ROBOT
+			O.covering = null // wipe any old covering we might have
+			if (status_as_list[1]!="None")
+				var/covering_path = covering_name_to_type[status_as_list[1]]
+				O.covering = new covering_path(O,status_as_list[2],status_as_list[3],status_as_list[4])
+				O.covering.limb_datum=O
 
 	if(underwear > underwear_m.len || underwear < 1)
 		underwear = 0 //I'm sure this is 100% unnecessary, but I'm paranoid... sue me. //HAH NOW NO MORE MAGIC CLONING UNDIES
@@ -1659,3 +1571,104 @@ datum/preferences
 
 /datum/preferences/proc/close_load_dialog(mob/user)
 	user << browse(null, "window=saves")
+
+
+/datum/preferences/proc/get_hair_species()
+	// this is incredibly snowflakey but I don't see an alternative
+	if (!species=="Machine")
+		return species
+	var/head_coat=covering_type // we get the base coating
+	if (organ_data["Head"]) // if we're customizing the head we should get their coating
+		head_coat=organ_data["Head"][0]
+	if (!head_coat)
+		return
+	var/list/refs=get_limb_covering_references()
+	for(var/skin_type in refs)
+		var/datum/synthetic_limb_cover/temp=refs[skin_type]
+		if (temp.icon_key_type==head_coat)
+			return temp.hair_species
+			
+			
+/datum/preferences/proc/custom_robot_limb(mob/user,)
+	var/covering_name = input(user, "What kind of covering do you want?") as null|anything in get_limb_covering_names()
+	if (!covering_name)
+		return
+	if (covering_name=="None") // don't want no colour
+		return list(covering_name,128,128,128)
+	var/new_colour = input(user, "Pick the colour for your limb:", "Character Preference") as color|null
+	if(!new_colour)
+		return
+	return list(covering_name,hex2num(copytext(new_colour, 2, 4)),hex2num(copytext(new_colour, 4, 6)),hex2num(copytext(new_colour, 6, 8)))
+
+	
+var/list/limb_name_to_descriptive_names
+/datum/preferences/proc/get_limb_name_to_descriptive_name()
+	if (isnull(limb_name_to_descriptive_names))
+		limb_name_to_descriptive_names=list()
+		for(var/organ_type in typesof(/datum/organ/external)-/datum/organ/external)
+			var/datum/organ/external/temp = new organ_type()
+			limb_name_to_descriptive_names[temp.name]=temp.display_name
+			del(temp)
+	return limb_name_to_descriptive_names
+	
+
+var/list/limb_connection_data
+/datum/preferences/proc/get_limb_connection_data()
+	if (isnull(limb_connection_data))
+		limb_connection_data = list()
+		limb_connection_data["Left Leg"]=list("l_leg","l_foot",null)
+		limb_connection_data["Right Leg"]=list("r_leg","r_foot",null)
+		limb_connection_data["Left Arm"]=list("l_arm","l_hand",null)
+		limb_connection_data["Right Arm"]=list("r_arm","r_hand",null)
+		limb_connection_data["Left Foot"]=list("l_foot",null,"l_leg")
+		limb_connection_data["Right Foot"]=list("r_foot",null,"r_leg")
+		limb_connection_data["Left Hand"]=list("l_hand",null,"l_arm")
+		limb_connection_data["Right Hand"]=list("r_hand",null,"r_arm")
+		limb_connection_data["Chest"]=list("chest",null,null)
+		limb_connection_data["Groin"]=list("groin",null,null)
+		limb_connection_data["Head"]=list("head",null,null)
+	return limb_connection_data
+	
+	
+/datum/preferences/proc/pick_organ_to_customize(mob/user,var/is_organic_species)
+	var/list/valid_targets = list("Left Leg","Right Leg","Left Arm","Right Arm","Left Foot","Right Foot","Left Hand","Right Hand")
+	if (!is_organic_species)
+		valid_targets.Add(list("Head","Chest","Groin"))
+	var/limb_name = input(user, "Which limb do you want to change?") as null|anything in valid_targets
+	if(!limb_name) // you have picked nothing
+		return
+	var/list/limb_info=get_limb_connection_data()
+	return limb_info[limb_name]
+	
+	
+/datum/preferences/proc/customize_limbs(mob/user,var/is_organic_species)
+	var/list/limb_info = pick_organ_to_customize(user,is_organic_species)
+	world << "We done picked! [limb_info]"
+	if (!limb_info)
+		return
+	var/limb=limb_info[1]
+	var/limb_child=limb_info[2]
+	var/limb_parent=limb_info[3]
+	world << "LIMB STUFF [limb] [limb_child] [limb_parent]"
+	var/new_state = input(user, "What state do you wish the limb to be in?") as null|anything in (is_organic_species ? list("Normal","Amputated","Prosthesis") : list("Normal","Custom"))
+	if(!new_state) 
+		return // cancel
+	switch(new_state)
+		if("Normal")
+			organ_data[limb] = null
+			if(limb_parent)
+				organ_data[limb_parent] = null
+		if("Amputated")
+			organ_data[limb] = "amputated"
+			if(limb_child)
+				organ_data[limb_child] = "amputated"
+		if("Prosthesis")
+			var/list/custom = custom_robot_limb(user)
+			organ_data[limb] = custom
+			world << "[organ_data[limb][1]] [organ_data[limb][2]] [organ_data[limb][3]][organ_data[limb][4]]"
+			if(limb_child)
+				organ_data[limb_child] = custom
+			if(limb_parent && organ_data[limb_parent] == "amputated")
+				organ_data[limb_parent] = null
+		if("Custom")
+			organ_data[limb] = custom_robot_limb(user) // robots have no dependencies

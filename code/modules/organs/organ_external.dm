@@ -43,6 +43,10 @@
 
 	// how often wounds should be updated, a higher number means less often
 	var/wound_update_accuracy = 1
+	
+	var/datum/synthetic_limb_cover/covering = null // paint or synth skin
+	
+	var/gendered = FALSE
 
 
 /datum/organ/external/New(var/datum/organ/external/P)
@@ -804,14 +808,52 @@ Note that amputating the affected organ does in fact remove the infection from t
 			return 1
 	return 0
 
-/datum/organ/external/get_icon(var/icon/race_icon, var/icon/deform_icon,gender="")
-	if (status & ORGAN_ROBOT && !(owner.species && owner.species.flags & IS_SYNTHETIC))
-		return new /icon('icons/mob/human_races/robotic.dmi', "[icon_name][gender ? "_[gender]" : ""]")
+	
+/datum/organ/external/proc/get_icon_key()
+	if (status & ORGAN_DESTROYED)
+		return "L" // l for lost
+	if (status & ORGAN_DEAD)
+		return "D" // d for dead
+	if (status & ORGAN_ROBOT)
+		return get_synthetic_icon_key()
+	return "G" // regular old limb
 
-	if (status & ORGAN_MUTATED)
-		return new /icon(deform_icon, "[icon_name][gender ? "_[gender]" : ""]")
 
-	return new /icon(race_icon, "[icon_name][gender ? "_[gender]" : ""]")
+/datum/organ/external/proc/valid_covering()
+	if (status & ORGAN_ROBOT)
+		if (covering) 
+			return (covering.coverage) // is our covering working?
+		return FALSE // if we have no covering at all 
+	return TRUE // squishies always have skin
+	
+
+/datum/organ/external/proc/get_synthetic_icon_key()
+	if (!covering) // no covering at all, this should not happen
+		return "R" // regular old robot
+	return covering.get_icon_key()
+	
+		
+/datum/organ/external/proc/get_synthetic_icon()
+	if (!covering) // no covering at all, this should not happen
+		return new /icon('icons/mob/human_races/robotic.dmi', "[icon_name][get_gender_string()]")
+	return covering.get_icon()
+	
+	
+/datum/organ/external/proc/get_gender_string()
+	if (!gendered) // most organs aren't gender specific
+		return ""
+	if (owner) // if we're a gender specific organ with an owner
+		return (owner.gender == FEMALE ? "_f" : "_m")
+	return "_f"
+	
+		
+/datum/organ/external/get_icon(var/icon/race_icon, var/icon/deform_icon, var/list/skin_info)
+	if (status & ORGAN_ROBOT)
+		return get_synthetic_icon()
+	var/icon/result = new /icon((status & ORGAN_MUTATED) ? deform_icon : race_icon, "[icon_name][get_gender_string()]")
+	if (skin_info["blend"])
+		result.Blend(skin_info["rgb"],skin_info["mode"])
+	return result
 
 
 /datum/organ/external/proc/is_usable()
@@ -867,6 +909,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	body_part = UPPER_TORSO
 	vital = 1
 	encased = "ribcage"
+	gendered = TRUE
 
 /datum/organ/external/groin
 	name = "groin"
@@ -876,6 +919,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	min_broken_damage = 30
 	body_part = LOWER_TORSO
 	vital = 1
+	gendered = TRUE
 
 /datum/organ/external/l_arm
 	name = "l_arm"
@@ -971,16 +1015,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/disfigured = 0
 	vital = 1
 	encased = "skull"
-
-/datum/organ/external/head/get_icon(var/icon/race_icon, var/icon/deform_icon)
-	if (!owner)
-	 return ..()
-	var/g = "m"
-	if(owner.gender == FEMALE)	g = "f"
-	if (status & ORGAN_MUTATED)
-		. = new /icon(deform_icon, "[icon_name]_[g]")
-	else
-		. = new /icon(race_icon, "[icon_name]_[g]")
+	gendered = TRUE
 
 /datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
 	..(brute, burn, sharp, edge, used_weapon, forbidden_limbs)
@@ -1012,6 +1047,7 @@ obj/item/weapon/organ
 	icon = 'icons/mob/human_races/r_human.dmi'
 	var/op_stage = 0
 	var/list/organs_internal = list()
+	
 
 obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 	..(loc)
@@ -1039,24 +1075,13 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 		base = icon(H.species.icobase)
 	else
 		base = icon('icons/mob/human_races/r_human.dmi')
-
-	if(base)
-		//Changing limb's skin tone to match owner
-		if(!H.species || H.species.flags & HAS_SKIN_TONE)
-			if (H.s_tone >= 0)
-				base.Blend(rgb(H.s_tone, H.s_tone, H.s_tone), ICON_ADD)
-			else
-				base.Blend(rgb(-H.s_tone,  -H.s_tone,  -H.s_tone), ICON_SUBTRACT)
-
-	if(base)
-		//Changing limb's skin color to match owner
-		if(!H.species || H.species.flags & HAS_SKIN_COLOR)
-			base.Blend(rgb(H.r_skin, H.g_skin, H.b_skin), ICON_ADD)
-
+	if(base) // handle skin colours
+		var/list/skin_info = H.skin_colour_info() // get the skin tone info
+		base.Blend(skin_info["rgb"],skin_info["mode"])		
 	icon = base
 	set_dir(SOUTH)
 	src.transform = turn(src.transform, rand(70,130))
-
+	
 
 /****************************************************
 			   EXTERNAL ORGAN ITEMS DEFINES
