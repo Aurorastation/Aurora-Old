@@ -345,9 +345,9 @@ var/failed_db_connections = 0
 
 /hook/startup/proc/connectDB()
 	if(!setup_database_connection())
-		world.log << "Your server failed to establish a connection with the feedback database."
+		world.log << "Your server failed to establish a connection with the main database."
 	else
-		world.log << "Feedback database connection established."
+		world.log << "Main database connection established."
 	return 1
 
 proc/setup_database_connection()
@@ -374,7 +374,7 @@ proc/setup_database_connection()
 
 	return .
 
-//This proc ensures that the connection to the feedback database (global variable dbcon) is established
+//This proc ensures that the connection to the main database (global variable dbcon) is established
 proc/establish_db_connection()
 	if(failed_db_connections > FAILED_DB_CONNECTION_CUTOFF)
 		return 0
