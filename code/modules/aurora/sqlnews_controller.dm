@@ -45,7 +45,7 @@ datum/sqlnews/proc/update()		//Updates the stored variables and preppes it for a
 		fails++
 		return
 
-	var/DBQuery/query = dbcon.NewQuery("SELECT id, publishtime FROM aurora_news WHERE isnull(notpublishing) ORDER BY publishtime ASC LIMIT [count],1")
+	var/DBQuery/query = dbcon.NewQuery("SELECT id, publishtime FROM ss13_news WHERE isnull(notpublishing) ORDER BY publishtime ASC LIMIT [count],1")
 	query.Execute()
 
 	if(!query.RowCount())
@@ -68,7 +68,7 @@ datum/sqlnews/proc/publish()	//Uses data stored from the update() proc and: pull
 		fails++
 		return
 
-	var/DBQuery/fetchquery = dbcon.NewQuery("SELECT channel, author, body FROM aurora_news WHERE id=[id]")
+	var/DBQuery/fetchquery = dbcon.NewQuery("SELECT channel, author, body FROM ss13_news WHERE id=[id]")
 	fetchquery.Execute()
 
 	while(fetchquery.NextRow())

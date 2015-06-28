@@ -22,7 +22,7 @@
 		if(G.cell)
 			if(M.a_intent == "hurt")//Stungloves. Any contact will stun the alien.
 				if(G.cell.charge >= 2500)
-					G.cell.use(2500)
+					G.cell.use(G.cell.charge)	//So it drains the cell.
 					visible_message("\red <B>[src] has been touched with the stun gloves by [M]!</B>")
 					M.attack_log += text("\[[time_stamp()]\] <font color='red'>Stungloved [src.name] ([src.ckey])</font>")
 					src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been stungloved by [M.name] ([M.ckey])</font>")
@@ -31,6 +31,21 @@
 
 					var/armorblock = run_armor_check(M.zone_sel.selecting, "energy")
 					apply_effects(5,5,0,0,5,0,0,armorblock)
+					apply_damage(rand(5,25), BURN, M.zone_sel.selecting,armorblock)
+
+					if(prob(15))
+						playsound(src.loc, 'sound/weapons/flash.ogg', 100, 1)
+						M.visible_message("\red The power source on [M]'s stun gloves overloads in a terrific fashion!", "\red Your jury rigged stun gloves malfunction!", "\red You hear a loud sparking.")
+
+						if(prob(50))
+							M.apply_damage(rand(1,5), BURN)
+
+						for(M in viewers(3, null))
+							var/safety = M:eyecheck()
+							if(!safety)
+								if(!M.blinded)
+									flick("flash", M.flash)
+
 					return 1
 				else
 					M << "\red Not enough charge! "

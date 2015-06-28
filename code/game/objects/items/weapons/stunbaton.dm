@@ -183,11 +183,7 @@
 	return
 
 /*
- *
- *
- *Stun Rod, WALL OF TEXT!
- *
- *
+ *Stun Rod
  */
 
 /obj/item/weapon/melee/baton/stunrod
@@ -207,3 +203,18 @@
 	bcell = new/obj/item/weapon/cell/high(src)
 	update_icon()
 	return
+
+/*
+ *Cattleprod
+ */
+
+/obj/item/weapon/melee/baton/cattleprod
+	name = "stunprod"
+	desc = "An improvised stun baton."
+	icon_state = "stunprod_nocell"
+	item_state = "prod"
+	force = 3
+	throwforce = 5
+	hitcost = 2500
+	attack_verb = list("poked")
+	slot_flags = null

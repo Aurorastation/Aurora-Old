@@ -108,7 +108,7 @@
 		ip = C.address
 	var/a_ckey = sanitizeSQL(ckey)
 
-	var/DBQuery/query_insert = dbcon.NewQuery("INSERT INTO aurora_warnings (id, time, severity, reason, notes, ckey, computerid, ip, a_ckey) VALUES (null, Now(), '[severity]', '[reason]', '[notes]', '[sqlkey]', '[computerid]', '[ip]', '[a_ckey]')")
+	var/DBQuery/query_insert = dbcon.NewQuery("INSERT INTO ss13_warnings (id, time, severity, reason, notes, ckey, computerid, ip, a_ckey) VALUES (null, Now(), '[severity]', '[reason]', '[notes]', '[sqlkey]', '[computerid]', '[ip]', '[a_ckey]')")
 	query_insert.Execute()
 
 	if(config.ban_legacy_system)
@@ -151,7 +151,7 @@
 
 	var/sqlkey = sanitizeSQL(ckey)
 
-	var/DBQuery/search_query = dbcon.NewQuery("SELECT id, time, severity, reason, a_ckey, acknowledged FROM aurora_warnings WHERE visible = '1' AND (ckey='[sqlkey]' OR computerid='[computer_id]' OR ip='[address]') ORDER BY time DESC")
+	var/DBQuery/search_query = dbcon.NewQuery("SELECT id, time, severity, reason, a_ckey, acknowledged FROM ss13_warnings WHERE visible = '1' AND (ckey='[sqlkey]' OR computerid='[computer_id]' OR ip='[address]') ORDER BY time DESC")
 	search_query.Execute()
 
 	while(search_query.NextRow())
@@ -198,7 +198,7 @@
 		error("Connection to SQL database failed while attempting to update a player's warnings.")
 		return
 
-	var/DBQuery/query = dbcon.NewQuery("UPDATE aurora_warnings SET acknowledged = 1 WHERE id = '[id]'")
+	var/DBQuery/query = dbcon.NewQuery("UPDATE ss13_warnings SET acknowledged = 1 WHERE id = '[id]'")
 	query.Execute()
 
 	warnings_check()
@@ -217,7 +217,7 @@
 		error("Connection to SQL database failed while attempting to alert a player of their warnings.")
 		return
 
-	var/DBQuery/query = dbcon.NewQuery("SELECT id FROM aurora_warnings WHERE (visible = '1' AND acknowledged = '0') AND (ckey='[sqlkey]' OR computerid='[computer_id]' OR ip='[address]')")
+	var/DBQuery/query = dbcon.NewQuery("SELECT id FROM ss13_warnings WHERE (visible = '1' AND acknowledged = '0') AND (ckey='[sqlkey]' OR computerid='[computer_id]' OR ip='[address]')")
 	query.Execute()
 	while(query.NextRow())
 		count++
@@ -282,7 +282,7 @@
 		if(playerckey)
 			paramtwo = "AND ckey = '[playerckey]' "
 
-		var/DBQuery/search_query = dbcon.NewQuery("SELECT time, severity, reason, notes, ckey, a_ckey FROM aurora_warnings WHERE 1 [paramone] [paramtwo] ORDER BY time DESC")
+		var/DBQuery/search_query = dbcon.NewQuery("SELECT time, severity, reason, notes, ckey, a_ckey FROM ss13_warnings WHERE 1 [paramone] [paramtwo] ORDER BY time DESC")
 		search_query.Execute()
 
 		while(search_query.NextRow())

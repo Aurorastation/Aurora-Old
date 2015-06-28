@@ -98,7 +98,7 @@
 	As the <b>2nd</b> step, you need to simply activate the machine, and pick which organ you wish to create.<br>
 	The <b>final</b> step is simply waiting: the HP 4000 series model prosthetics fabricator will produce a fully functioning, mechanical substitution for the organ selected
 	within seconds of receiving input. The substitute organs are ready for transplantation right after the printing is completed!</p>
-	<4>Restocking</h4>
+	<h4>Restocking</h4>
 	<p>Each printjob requires a set of materials. Should you ever run out of materials, then the HP 4000 series model prosthetics fabricator can be easily restocked by simply
 	feeding metal sheets into its receptor port.</p>
 	<font size=1>This technology produced under license from Thinktronic Systems, LTD.<br>
