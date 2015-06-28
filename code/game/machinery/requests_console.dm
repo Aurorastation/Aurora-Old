@@ -236,7 +236,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 					dat += text("<div align='center'><font color=red><b>ERROR</b>: Unable to contact external database.</div></font>")
 					error("SQL database connection failed. Attempted to fetch form information.")
 
-				var/DBQuery/query = dbcon.NewQuery("SELECT id, name FROM aurora_directives")
+				var/DBQuery/query = dbcon.NewQuery("SELECT id, name FROM ss13_directives")
 				query.Execute()
 				dat += "<div align='center'><table width='90%' cellpadding='2' cellspacing='0'>"
 				dat += "<tr><td colspan='3' bgcolor='white' align='center'><a href='?src=\ref[src];setScreen=14'>Regarding Station Directives</a><br></td></tr>"
@@ -256,7 +256,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				if(!queryid)
 					return //this should never happen
 
-				var/DBQuery/searchquery = dbcon.NewQuery("SELECT id, name, data FROM aurora_directives WHERE id=[queryid]")
+				var/DBQuery/searchquery = dbcon.NewQuery("SELECT id, name, data FROM ss13_directives WHERE id=[queryid]")
 				searchquery.Execute()
 
 				while(searchquery.NextRow())
@@ -433,7 +433,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			alert("Connection to the database lost. Aborting.")
 		if(!printid)
 			alert("Invalid query. Try again.")
-		var/DBQuery/query = dbcon.NewQuery("SELECT id, name, data FROM aurora_forms WHERE id=[printid]")
+		var/DBQuery/query = dbcon.NewQuery("SELECT id, name, data FROM ss13_forms WHERE id=[printid]")
 		query.Execute()
 
 		while(query.NextRow())
@@ -461,7 +461,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			alert("Connection to the database lost. Aborting.")
 		if(!whatisid)
 			alert("Invalid query. Try again.")
-		var/DBQuery/query = dbcon.NewQuery("SELECT id, name, department, info FROM aurora_forms WHERE id=[whatisid]")
+		var/DBQuery/query = dbcon.NewQuery("SELECT id, name, department, info FROM ss13_forms WHERE id=[whatisid]")
 		query.Execute()
 
 		var/dat = "<center><b>NanoTrasen Corporate Form</b><br>"
@@ -509,7 +509,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			if(!announcementConsole)	return
 			screen = 10
 		if(11)		//form database
-			SQLquery = "SELECT id, name, department FROM aurora_forms"
+			SQLquery = "SELECT id, name, department FROM ss13_forms"
 			screen = 11
 		if(12)		//directive index
 			screen = 12

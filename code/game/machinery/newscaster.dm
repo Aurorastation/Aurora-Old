@@ -423,7 +423,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					dat += text("<div align='center'><font color=red><b>ERROR</b>: Unable to contact external database.</div></font>")
 					error("SQL database connection failed. Attempted to fetch form information.")
 
-				var/DBQuery/query = dbcon.NewQuery("SELECT id, name FROM aurora_directives")
+				var/DBQuery/query = dbcon.NewQuery("SELECT id, name FROM ss13_directives")
 				query.Execute()
 				dat += "<div align='center'><table width='90%' cellpadding='2' cellspacing='0'>"
 				dat += "<tr><td colspan='3' bgcolor='white' align='center'><a href='?src=\ref[src];setScreen=[24]'>Regarding Station Directives</a><br></td></tr>"
@@ -442,7 +442,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				if(!queryid)
 					return //this should never happen
 
-				var/DBQuery/searchquery = dbcon.NewQuery("SELECT id, name, data FROM aurora_directives WHERE id=[queryid]")
+				var/DBQuery/searchquery = dbcon.NewQuery("SELECT id, name, data FROM ss13_directives WHERE id=[queryid]")
 				searchquery.Execute()
 
 				while(searchquery.NextRow())

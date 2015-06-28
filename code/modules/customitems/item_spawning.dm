@@ -11,7 +11,7 @@
 		return
 
 	var/ckeyl = sanitizeSQL(M.ckey)
-	var/DBQuery/query = dbcon.NewQuery("SELECT item, job, real_name FROM aurora_customitems WHERE ckey='[ckeyl]'")
+	var/DBQuery/query = dbcon.NewQuery("SELECT item, job, real_name FROM ss13_customitems WHERE ckey='[ckeyl]'")
 	query.Execute()
 
 	while(query.NextRow())

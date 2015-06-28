@@ -234,12 +234,6 @@ var/sqldb = "tgstation"
 var/sqllogin = "root"
 var/sqlpass = ""
 
-	// Feedback gathering sql connection
-
-var/sqlfdbkdb = "test"
-var/sqlfdbklogin = "root"
-var/sqlfdbkpass = ""
-
 var/sqllogging = 0 // Should we log deaths, population stats, etc?
 
 
@@ -263,8 +257,7 @@ var/custom_event_msg = null
 
 //Database connections
 //A connection is established on world creation. Ideally, the connection dies when the server restarts (After feedback logging.).
-var/DBConnection/dbcon = new()	//Feedback database (New database)
-var/DBConnection/dbcon_old = new()	//Tgstation database (Old database) - See the files in the SQL folder for information what goes where.
+var/DBConnection/dbcon = new()	//Main database
 
 // Reference list for disposal sort junctions. Filled up by sorting junction's New()
 /var/list/tagger_locations = list()
