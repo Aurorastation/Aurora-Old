@@ -2849,8 +2849,8 @@
 
 		if(M.client.adminhelped == 2)
 			log_admin("[key_name(usr)] called dibs on [key_name(M)]'s adminhelp!")
-			message_admins("[key_name_admin(usr)] has called dibs on [key_name_admin(M)]'s adminhelp!")
-			message_mods("[key_name_admin(usr)] has called dibs on [key_name_admin(M)]'s adminhelp!")
+			message_admins("[key_name_admin(usr)] has called <font color=red>dibs</font> on [key_name_admin(M)]'s adminhelp!")
+			message_mods("[key_name_admin(usr)] has called <font color=red>dibs</font> on [key_name_admin(M)]'s adminhelp!")
 			usr << "<font color=blue><b>You have taken over [key_name_admin(M)]'s adminhelp.</b></font>"
 			usr << "[get_options_bar(M, 2, 1, 1)]"
 
