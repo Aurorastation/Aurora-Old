@@ -31,6 +31,10 @@
 	caliber = "38"
 	projectile_type = "/obj/item/projectile/bullet/midbullet2"
 
+/obj/item/ammo_casing/c38r
+	desc = "A .38 rubber bullet casing."
+	caliber = "38"
+	projectile_type = "/obj/item/projectile/bullet/weakbullet/rubber"
 
 /obj/item/ammo_casing/c9mm
 	desc = "A 9mm bullet casing."

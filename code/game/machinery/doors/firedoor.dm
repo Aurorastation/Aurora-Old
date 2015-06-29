@@ -298,6 +298,8 @@
 	return
 
 /obj/machinery/door/firedoor/close()
+	if(blocked)
+		return
 	latetoggle()
 	return ..()
 

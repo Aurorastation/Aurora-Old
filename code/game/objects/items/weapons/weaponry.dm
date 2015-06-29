@@ -241,41 +241,35 @@
 			locked = 1
 			update_icon()
 
-/obj/item/weapon/metal_bat
-	desc = "The quality is a swing and a miss."
-	name = "Metal Bat"
-	icon_state = "metalbat"
-	item_state = "bat_l"
-	force = 15.0
-	throwforce = 5.0
-	throw_speed = 5
-	throw_range = 10
-	w_class = 4.0
-	flags = FPRINT | TABLEPASS
-	attack_verb = list("struck out", "beat", "bludgeoned", "homerunned")
+obj/item/weapon/wirerod
+	name = "wired rod"
+	desc = "A rod with some wire wrapped around the top. It'd be easy to attach something to the top bit."
+	icon_state = "wiredrod"
+	item_state = "rods"
+	flags = CONDUCT
+	force = 8
+	throwforce = 10
+	w_class = 3
+	attack_verb = list("hit", "bludgeoned", "whacked", "bonked")
 
-/obj/item/weapon/pla_bat
-	desc = "The quality is a swing and a miss."
-	name = "Plasteel Bat"
-	icon_state = "plabat"
-	item_state = "bat_l"
-	force = 20.0
-	throwforce = 5.0
-	throw_speed = 5
-	throw_range = 10
-	w_class = 4.0
-	flags = FPRINT | TABLEPASS
-	attack_verb = list("struck out", "beat", "bludgeoned", "homerunned")
 
-/obj/item/weapon/wood_bat
-	desc = "The quality is a swing and a miss."
-	name = "Wooden Bat"
-	icon_state = "woodbat"
-	item_state = "bat_l"
-	force = 10.0
-	throwforce = 5.0
-	throw_speed = 5
-	throw_range = 10
-	w_class = 4.0
-	flags = FPRINT | TABLEPASS
-	attack_verb = list("struck out", "beat", "bludgeoned", "homerunned")
+obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
+	..()
+	if(istype(I, /obj/item/weapon/shard))
+		var/obj/item/weapon/twohanded/spear/S = new /obj/item/weapon/twohanded/spear
+
+		user.put_in_hands(S)
+		user << "<span class='notice'>You fasten the glass shard to the top of the rod with the cable.</span>"
+		del(I)
+		del(src)
+		update_icon(user)
+
+	else if(istype(I, /obj/item/weapon/wirecutters))
+		var/obj/item/weapon/melee/baton/cattleprod/P = new /obj/item/weapon/melee/baton/cattleprod
+
+		user.put_in_hands(P)
+		user << "<span class='notice'>You fasten the wirecutters to the top of the rod with the cable, prongs outward.</span>"
+		del(I)
+		del(src)
+		update_icon(user)
+	update_icon(user)

@@ -108,7 +108,7 @@
 		ip = C.address
 	var/a_ckey = sanitizeSQL(ckey)
 
-	var/DBQuery/query_insert = dbcon.NewQuery("INSERT INTO aurora_warnings (id, time, severity, reason, notes, ckey, computerid, ip, a_ckey) VALUES (null, Now(), '[severity]', '[reason]', '[notes]', '[sqlkey]', '[computerid]', '[ip]', '[a_ckey]')")
+	var/DBQuery/query_insert = dbcon.NewQuery("INSERT INTO ss13_warnings (id, time, severity, reason, notes, ckey, computerid, ip, a_ckey) VALUES (null, Now(), '[severity]', '[reason]', '[notes]', '[sqlkey]', '[computerid]', '[ip]', '[a_ckey]')")
 	query_insert.Execute()
 
 	if(config.ban_legacy_system)
@@ -118,7 +118,7 @@
 
 	feedback_add_details("admin_verb","WARN-DB")
 	if(C)
-		C << "<font color='red'><BIG><B>You have been formally warned by an administrator.</B></BIG><br>You can look up your warnings through the OOC panel, with the 'My Warnings' button.</font>"
+		C << "<font color='red'><BIG><B>You have been formally warned by an administrator.</B></BIG><br>Click <a href='byond://?src=\ref[src];warnview=1'>here</a> to review and acknowledge them!</font>"
 	message_admins("[key_name_admin(src)] has warned [warned_ckey] for: [reason].")
 	message_mods("[key_name_admin(src)] has warned [warned_ckey].")
 
@@ -126,7 +126,7 @@
  * A proc for a player to check their own warnings
  */
 
-/client/verb/check_warns()
+/client/verb/warnings_check()
 	set name = "My warnings"
 	set category = "OOC"
 	set desc = "Display warnings issued to you."
@@ -151,18 +151,20 @@
 
 	var/sqlkey = sanitizeSQL(ckey)
 
-	var/DBQuery/search_query = dbcon.NewQuery("SELECT time, severity, reason, a_ckey FROM aurora_warnings WHERE ckey='[sqlkey]' ORDER BY time DESC")
+	var/DBQuery/search_query = dbcon.NewQuery("SELECT id, time, severity, reason, a_ckey, acknowledged FROM ss13_warnings WHERE visible = '1' AND (ckey='[sqlkey]' OR computerid='[computer_id]' OR ip='[address]') ORDER BY time DESC")
 	search_query.Execute()
 
 	while(search_query.NextRow())
-		var/time = search_query.item[1]
-		var/severity = search_query.item[2]
-		var/reason = search_query.item[3]
-		var/a_ckey = search_query.item[4]
+		var/id = text2num(search_query.item[1])
+		var/time = search_query.item[2]
+		var/severity = text2num(search_query.item[3])
+		var/reason = search_query.item[4]
+		var/a_ckey = search_query.item[5]
+		var/ackn = text2num(search_query.item[6])
 
 		var/bgcolor = lcolor
 
-		if(severity == "1")
+		if(severity)
 			bgcolor = dcolor
 
 		dat += "<tr bgcolor='[bgcolor]' align='center'>"
@@ -171,12 +173,58 @@
 		dat += "<td>[reason]</td>"
 		dat += "</tr>"
 
+		if(!ackn)
+			dat += "<tr><td align='center' colspan='3'><b>(<a href='byond://?src=\ref[src];warnacknowledge=[id]'>Acknowledge Warning</a>)</b></td></tr>"
+		else
+			dat += "<tr><td align='center' colspan='3'><b>Warning Acknowledged!</b></td></tr>"
+
 		dat += "<tr>"
 		dat += "<td colspan='5' bgcolor='white'>&nbsp</td>"
 		dat += "</tr>"
 
 	dat += "</table>"
 	usr << browse(dat, "window=mywarnings;size=900x500")
+
+/*
+ * A proc for acknowledging a warning, so you don't get pestered about it anymore.
+ */
+
+/client/proc/warnings_acknowledge(id)
+	if(!id)
+		return
+
+	establish_db_connection()
+	if(!dbcon.IsConnected())
+		error("Connection to SQL database failed while attempting to update a player's warnings.")
+		return
+
+	var/DBQuery/query = dbcon.NewQuery("UPDATE ss13_warnings SET acknowledged = 1 WHERE id = '[id]'")
+	query.Execute()
+
+	warnings_check()
+
+/*
+ * A proc to alert you if you have unacknowledged warnings.
+ * Called in /client/New (client procs.dm)
+ */
+
+/client/proc/warnings_alert()
+	var/sqlkey = sanitizeSQL(ckey)
+	var/count = 0
+
+	establish_db_connection()
+	if(!dbcon.IsConnected())
+		error("Connection to SQL database failed while attempting to alert a player of their warnings.")
+		return
+
+	var/DBQuery/query = dbcon.NewQuery("SELECT id FROM ss13_warnings WHERE (visible = '1' AND acknowledged = '0') AND (ckey='[sqlkey]' OR computerid='[computer_id]' OR ip='[address]')")
+	query.Execute()
+	while(query.NextRow())
+		count++
+
+	if(count)
+		src << "<br>"
+		src << "<font color=red><b>You have [count] unread [count > 1 ? "warnings" : "warning"]! Click <a href='byond://?src=\ref[src];warnview=1'>here</a> to review and acknowledge them!</b></font>"
 
 /*
  * A proc for an admin/moderator to look up a member's warnings.
@@ -234,7 +282,7 @@
 		if(playerckey)
 			paramtwo = "AND ckey = '[playerckey]' "
 
-		var/DBQuery/search_query = dbcon.NewQuery("SELECT time, severity, reason, notes, ckey, a_ckey FROM aurora_warnings WHERE 1 [paramone] [paramtwo] ORDER BY time DESC")
+		var/DBQuery/search_query = dbcon.NewQuery("SELECT time, severity, reason, notes, ckey, a_ckey FROM ss13_warnings WHERE 1 [paramone] [paramtwo] ORDER BY time DESC")
 		search_query.Execute()
 
 		while(search_query.NextRow())

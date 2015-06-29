@@ -172,6 +172,7 @@
 	selection_color = "#ffeef0"
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_research)
 	minimal_access = list(access_medical, access_morgue, access_genetics, access_research)
+	alt_titles = list("Biologist", "Bioengineer")
 
 
 	equip(var/mob/living/carbon/human/H)
