@@ -31,7 +31,18 @@
 			if(userloc != H.loc) return	//no tele-grooming
 			if(new_style)
 				H.h_style = new_style
-
+		
+		//machines can change their eye colours in the mirror
+		if (istype(H.species,/datum/species/machine))
+			var/new_eyes = input(user, "Choose your new eye colour.", "Robotic Eyes") as color|null
+			if(new_eyes)
+				var/list/new_eyes_as_values = htmlcolour_to_values(new_eyes)
+				H.r_eyes=new_eyes_as_values[1]
+				H.g_eyes=new_eyes_as_values[2]
+				H.b_eyes=new_eyes_as_values[3]
+				H.update_hair() // need to do a full rebuild here
+				H.update_body()
+				return 
 		H.update_hair()
 
 

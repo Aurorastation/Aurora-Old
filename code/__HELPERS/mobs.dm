@@ -11,27 +11,29 @@ proc/valid_sprite_accessories(gender,species,test_list)
 	return valid
 	
 
-proc/get_valid_hairstyles(gender, species = "Human")
+proc/get_valid_hairstyles(gender, species)
 	return valid_sprite_accessories(gender,species,hair_styles_list)
 	
 	
-proc/get_valid_facialhairstyles(gender, species = "Human")
+proc/get_valid_facialhairstyles(gender, species)
 	return valid_sprite_accessories(gender,species,facial_hair_styles_list)
 
 
-proc/random_hair_style(gender, species = "Human")
+proc/random_hair_style(gender, species)
 	var/h_style = "Bald"
-	var/list/valid_hairstyles = get_valid_hairstyles(gender,species)
-	if(valid_hairstyles.len)
-		h_style = pick(valid_hairstyles)
+	if (species)
+		var/list/valid_hairstyles = get_valid_hairstyles(gender,species)
+		if(valid_hairstyles.len)
+			h_style = pick(valid_hairstyles)
 	return h_style
 	
 
-proc/random_facial_hair_style(gender, species = "Human")
+proc/random_facial_hair_style(gender, species)
 	var/f_style = "Shaved"
-	var/list/valid_facialhairstyles = get_valid_facialhairstyles(gender,species)
-	if(valid_facialhairstyles.len)
-		f_style = pick(valid_facialhairstyles)
+	if (species)
+		var/list/valid_facialhairstyles = get_valid_facialhairstyles(gender,species)
+		if(valid_facialhairstyles.len)
+			f_style = pick(valid_facialhairstyles)
 	return f_style
 	
 

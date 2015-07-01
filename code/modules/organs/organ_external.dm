@@ -517,17 +517,36 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	if (open && !clamped && (H && !(H.species.flags & NO_BLOOD)))	//things tend to bleed if they are CUT OPEN
 		status |= ORGAN_BLEEDING
-
-
+			
+			
+/datum/organ/external/proc/can_take_covering() // is this organ functional enough to take a covering
+	if (status&(ORGAN_DESTROYED|ORGAN_BROKEN|ORGAN_DEAD))
+		return
+	return (burn_dam + brute_dam) <= (max_damage * 0.1) // you get hurt you're going to lose your covering
+			
+			
 // new damage icon system
 // adjusted to set damage_state to brute/burn code only (without r_name0 as before)
 /datum/organ/external/proc/update_icon()
 	var/n_is = damage_state_text()
 	if (n_is != damage_state)
 		damage_state = n_is
-		return 1
-	return 0
-
+		return TRUE
+	if (covering) // check to see if we lose the covering
+		if (covering.coverage==SYNTHETIC_COVERING_WORKING)
+			if (!can_take_covering()) // if your limbs get badly damaged you lose the covering
+				covering.coverage = SYNTHETIC_COVERING_DAMAGED
+				owner.update_body(TRUE)
+				return TRUE
+	return FALSE
+	
+/datum/organ/external/head/update_icon()
+	var/result = ..()
+	if (result)
+		owner.update_hair()
+	return result
+	
+	
 // new damage icon system
 // returns just the brute/burn damage code
 /datum/organ/external/proc/damage_state_text()
@@ -554,6 +573,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		tbrute = 2
 	else
 		tbrute = 3
+		
+		
 	return "[tbrute][tburn]"
 
 /****************************************************
@@ -1016,6 +1037,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	vital = 1
 	encased = "skull"
 	gendered = TRUE
+	
 
 /datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
 	..(brute, burn, sharp, edge, used_weapon, forbidden_limbs)
@@ -1062,12 +1084,13 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 	for(var/datum/organ/internal/I in H.internal_organs)
 		if(I.parent_organ != name)
 			continue
-		var/obj/item/organ/current_organ = I.remove()
-		current_organ.removed(H)
-		current_organ.loc = src
-		if(current_organ.organ_data)
-			organs_internal |= current_organ.organ_data
-
+		var/obj/item/removed = I.remove() // we can also remove non-organs because robots
+		removed.loc = src // put the organ inside the severed external organ
+		var/obj/item/organ/new_organ_object = removed
+		if(new_organ_object && istype(new_organ_object))
+			new_organ_object.removed(H)
+			if(new_organ_object.organ_data)
+				organs_internal |= new_organ_object.organ_data
 	// Forming icon for the limb
 	// Setting base icon for this mob's race
 	var/icon/base
@@ -1115,8 +1138,7 @@ obj/item/weapon/organ/head
 	name = "head"
 	icon_state = "head_m"
 	var/mob/living/carbon/brain/brainmob
-	var/brain_op_stage = 0
-
+	
 /obj/item/weapon/organ/head/posi
 	name = "robotic head"
 
@@ -1168,6 +1190,12 @@ obj/item/weapon/organ/attackby(obj/item/weapon/W as obj, mob/user as mob)
 					if(istype(removing,/obj/item/organ))
 						var/obj/item/organ/removed_organ = removing
 						organs_internal -= removed_organ.organ_data
+						if(istype(removing,/obj/item/organ/brain)) // handling weird brain garbage
+							var/datum/organ/internal/brain/robot/removed_brain = removed_organ.organ_data
+							if (istype(removed_brain))
+								var/mmi=removed_brain.create_robot_brain_replacement(TRUE,removed_organ.loc)
+								if(!(user.l_hand && user.r_hand))
+									user.put_in_hands(mmi)
 					user.visible_message("<span class='danger'><b>[user]</b> extracts [removing] from [src] with [W]!")
 				else
 					user.visible_message("<span class='danger'><b>[user]</b> fishes around fruitlessly in [src] with [W].")
