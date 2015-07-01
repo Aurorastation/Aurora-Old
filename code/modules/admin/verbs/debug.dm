@@ -565,8 +565,8 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		"central command duty officer",
 		"nanotrasen officer",
 		"nanotrasen captain",
-		"shadowling"
-//		"iac_medic"
+		"shadowling",
+		"iac_medic"
 		)
 	var/dresscode = input("Select dress for [M]", "Robust quick dress shop") as null|anything in dresspacks
 	if (isnull(dresscode))
@@ -1127,14 +1127,15 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			W.assignment = "Field Operator"
 			W.registered_name = M.real_name
 			M.equip_to_slot_or_del(W, slot_wear_id)
-/* REMOVED BECAUSE STUCK
+
 		if("iac_medic")
 
 			var/obj/item/clothing/under/rank/medical/iac = new(M)
-			iac.aband = new /obj/item/clothing/tie/armband/iac(iac)
+			iac.aband = new /obj/item/clothing/tie/armband/iac_armband(iac)
 			M.equip_to_slot_or_del(iac, slot_w_uniform)
 
-			M.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/labcoat/iac(M), slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/iac_vest(M), slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/head/beret/iac(M), slot_head)
 			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/white(M), slot_shoes)
 			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/latex(M), slot_gloves)
 			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/headset_med(M), slot_l_ear)
@@ -1156,6 +1157,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			M.equip_to_slot_or_del(new /obj/item/device/flash(M), slot_r_store)
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/emt(M), slot_back)
 			M.equip_to_slot_or_del(new /obj/item/device/flashlight/pen(M), slot_s_store)
+			M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/iac(M.back), slot_in_backpack)
 
 			var/obj/item/weapon/card/id/silver/W = new(src)
 			W.name = "[M.real_name]'s ID Card"
@@ -1165,7 +1167,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			W.assignment = "IAC Worker"
 			W.registered_name = M.real_name
 			M.equip_to_slot_or_del(W, slot_wear_id)
-*/
+
 	M.regenerate_icons()
 
 	log_admin("[key_name(usr)] changed the equipment of [key_name(M)] to [dresscode].")

@@ -127,13 +127,13 @@
 						/obj/item/borg/upgrade/tasercooler,
 						/obj/item/borg/upgrade/jetpack),
 						
-	"Misc"=list(/obj/item/mecha_parts/mecha_tracking,
-				/obj/item/weapon/synth_skin_spray,
-				/obj/item/weapon/synth_skin_cartridge/paint,
-				/obj/item/weapon/synth_skin_cartridge/skin,
-				/obj/item/weapon/synth_skin_cartridge/fur,
-				/obj/item/weapon/synth_skin_cartridge/scales)
-	)
+	"Synthetic Coverings" = list(	/obj/item/weapon/synth_skin_spray,
+									/obj/item/weapon/synth_skin_cartridge/paint,
+									/obj/item/weapon/synth_skin_cartridge/skin,
+									/obj/item/weapon/synth_skin_cartridge/fur,
+									/obj/item/weapon/synth_skin_cartridge/scales),
+	
+	"Engineering Equipment"=list(/obj/item/mecha_parts/mecha_tracking))
 
 
 
@@ -463,7 +463,7 @@
 				if(add_part_to_set(D.category, text2path(D.build_path)))//Adds it to said category
 					i++
 			else
-				if(add_part_to_set("Misc", text2path(D.build_path)))//If in doubt, chunk it into the Misc
+				if(add_part_to_set("Engineering Equipment", text2path(D.build_path)))//If in doubt, chunk it into the Engineering Equipment
 					i++
 	return i
 

@@ -503,7 +503,7 @@ See code\modules\mob\new_player\preferences_setup.dm for where it's used.
 	deform = 'icons/mob/human_races/r_def_plant.dmi'
 	language = "Rootspeak"
 	unarmed_type = /datum/unarmed_attack/diona
-	primitive = /mob/living/carbon/alien/diona
+	primitive = /mob/living/carbon/monkey/diona
 	slowdown = 7
 	rarity_value = 3
 
@@ -537,7 +537,7 @@ See code\modules\mob\new_player\preferences_setup.dm for where it's used.
 	reagent_tag = IS_DIONA
 
 /datum/species/diona/can_understand(var/mob/other)
-	var/mob/living/carbon/alien/diona/D = other
+	var/mob/living/carbon/monkey/diona/D = other
 	if(istype(D))
 		return 1
 	return 0
@@ -548,12 +548,12 @@ See code\modules\mob\new_player\preferences_setup.dm for where it's used.
 
 /datum/species/diona/handle_death(var/mob/living/carbon/human/H)
 
-	var/mob/living/carbon/alien/diona/S = new(get_turf(H))
+	var/mob/living/carbon/monkey/diona/S = new(get_turf(H))
 
 	if(H.mind)
 		H.mind.transfer_to(S)
 
-	for(var/mob/living/carbon/alien/diona/D in H.contents)
+	for(var/mob/living/carbon/monkey/diona/D in H.contents)
 		if(D.client)
 			D.loc = H.loc
 		else

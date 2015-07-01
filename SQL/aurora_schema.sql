@@ -1,8 +1,8 @@
 -- ------------------------------
 -- Custom Items Table
--- tgstation.aurora_customitems
+-- tgstation.ss13_customitems
 -- ------------------------------
-CREATE TABLE `aurora_customitems` (
+CREATE TABLE `ss13_customitems` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
 	`ckey` VARCHAR(32) NOT NULL,
     `real_name` VARCHAR(32) NOT NULL,
@@ -13,9 +13,9 @@ CREATE TABLE `aurora_customitems` (
 
 -- ------------------------------
 -- Blacklisted IP table
--- tgstation.aurora_ipblacklist
+-- tgstation.ss13_ipblacklist
 -- ------------------------------
-CREATE TABLE `aurora_ipblacklist` (
+CREATE TABLE `ss13_ipblacklist` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,	-- Auto-incremented, had issues with a missing ID field, so here
     `ip` VARCHAR(32) NOT NULL,
     PRIMARY KEY (`id`)
@@ -23,9 +23,9 @@ CREATE TABLE `aurora_ipblacklist` (
 
 -- ------------------------------
 -- Forms table
--- tgstation.aurora_forms
+-- tgstation.ss13_forms
 -- ------------------------------
-CREATE TABLE `aurora_forms` (
+CREATE TABLE `ss13_forms` (
 	`id` VARCHAR(4) NOT NULL,
     `name` VARCHAR(32) NOT NULL,	-- Name for the paper
     `department` VARCHAR(32) NOT NULL, -- What department, one word, usually
@@ -36,9 +36,9 @@ CREATE TABLE `aurora_forms` (
 
 -- ------------------------------
 -- Warnings table
--- tgstation.aurora_warnings
+-- tgstation.ss13_warnings
 -- ------------------------------
-CREATE TABLE `aurora_warnings` (
+CREATE TABLE `ss13_warnings` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
 	`time` DATETIME NOT NULL,
     `severity` TINYINT(1) NOT NULL,
@@ -53,9 +53,9 @@ CREATE TABLE `aurora_warnings` (
 
 -- ------------------------------
 -- Station Directives table
--- tgstation.aurora_directives
+-- tgstation.ss13_directives
 -- ------------------------------
-CREATE TABLE `aurora_directives` (
+CREATE TABLE `ss13_directives` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(64) NOT NULL,
     `data` TEXT NOT NULL,
@@ -64,9 +64,9 @@ CREATE TABLE `aurora_directives` (
 
 -- ------------------------------
 -- SQL based Newsfeed table
--- tgstation.aurora_news
+-- tgstation.ss13_news
 -- ------------------------------
-CREATE TABLE `aurora_news` (
+CREATE TABLE `ss13_news` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
     `publishtime` INT(11) NOT NULL,
     `channel` VARCHAR(64) NOT NULL,
@@ -74,4 +74,23 @@ CREATE TABLE `aurora_news` (
     `body` TEXT NOT NULL,
     `notpublishing` TINYINT(1) DEFAULT NULL,
 	PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
+
+-- ------------------------------
+-- SQL based player notes table
+-- tgstation.ss13_notes
+-- ------------------------------
+CREATE TABLE `ss13_notes` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `adddate` DATETIME NOT NULL,
+  `ckey` VARCHAR(32) NOT NULL,
+  `ip` VARCHAR(18) NULL DEFAULT NULL,
+  `computerid` VARCHAR(32) NULL DEFAULT NULL,
+  `a_ckey` VARCHAR(32) NOT NULL,
+  `content` TEXT(65535) NOT NULL,
+  `visible` TINYINT(1) NOT NULL DEFAULT 1,
+  `edited` TINYINT(1) NOT NULL DEFAULT 0,
+  `lasteditor` VARCHAR(32) NULL DEFAULT NULL,
+  `lasteditdate` DATETIME NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=LATIN1;

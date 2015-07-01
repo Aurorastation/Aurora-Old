@@ -66,6 +66,7 @@
 		//Ties
 		var/tie_msg
 		var/aband_msg
+		var/cell_msg
 		if(istype(w_uniform,/obj/item/clothing/under))
 			var/obj/item/clothing/under/U = w_uniform
 			if(U.hastie && U.aband)
@@ -81,12 +82,17 @@
 				else
 					aband_msg += " with \icon[U.webbing] \a [U.webbing]"
 
+			if(istype(w_uniform,/obj/item/clothing/under/color/orange))
+				var/obj/item/clothing/under/color/orange/V = w_uniform
+				if(V.id)
+					cell_msg = " It has a marker for \"[V.id]\" painted on the front and back."
+
 		if(w_uniform.blood_DNA)
-			msg += "<span class='warning'>[t_He] [t_is] wearing \icon[w_uniform] [w_uniform.gender==PLURAL?"some":"a"] blood-stained [w_uniform.name][tie_msg][aband_msg]!</span>\n"
+			msg += "<span class='warning'>[t_He] [t_is] wearing \icon[w_uniform] [w_uniform.gender==PLURAL?"some":"a"] blood-stained [w_uniform.name][tie_msg][aband_msg]![cell_msg]</span>\n"
 		else if(w_uniform.wasbloody == 2)
-			msg += "<span class='warning'>[t_He] [t_is] wearing \icon[w_uniform] [w_uniform.gender==PLURAL?"some":"a"] luminol-covered [w_uniform.name][tie_msg][aband_msg]!</span>\n"
+			msg += "<span class='warning'>[t_He] [t_is] wearing \icon[w_uniform] [w_uniform.gender==PLURAL?"some":"a"] luminol-covered [w_uniform.name][tie_msg][aband_msg]![cell_msg]</span>\n"
 		else
-			msg += "[t_He] [t_is] wearing \icon[w_uniform] \a [w_uniform][tie_msg][aband_msg].\n"
+			msg += "[t_He] [t_is] wearing \icon[w_uniform] \a [w_uniform][tie_msg][aband_msg].[cell_msg]\n"
 
 	//head
 	if(head)

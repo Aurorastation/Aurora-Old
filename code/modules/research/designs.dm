@@ -38,6 +38,7 @@ other types of metals and chemistry for reagents).
 #define CRAFTLATHE	8	//Uses fuck if I know. For use eventually.
 #define MECHFAB		16 //Remember, objects utilising this flag should have construction_time and construction_cost vars.
 //Note: More then one of these can be added to a design but imprinter and lathe designs are incompatable.
+/var/global/list/protolathe_categories
 
 datum/design						//Datum for object designs, used in construction
 	var/name = "Name"					//Name of the created object.
@@ -51,7 +52,7 @@ datum/design						//Datum for object designs, used in construction
 	var/list/materials = list()			//List of materials. Format: "id" = amount.
 	var/build_path = ""					//The file path of the object that gets created
 	var/locked = 0						//If true it will spawn inside a lockbox with currently sec access
-	var/category = null //Primarily used for Mech Fabricators, but can be used for anything
+	var/category = "General" 			//Used for sorting designs. Currently by mech fabbers and the protolathe
 
 
 //A proc to calculate the reliability of a design based on tech levels and innate modifiers.
@@ -586,6 +587,7 @@ datum/design/intellicard
 	build_type = PROTOLATHE
 	materials = list("$glass" = 1000, "$gold" = 200)
 	build_path = "/obj/item/device/aicard"
+	category = "Information Technology"
 
 datum/design/paicard
 	name = "Personal Artificial Intelligence Card"
@@ -595,6 +597,7 @@ datum/design/paicard
 	build_type = PROTOLATHE
 	materials = list("$glass" = 500, "$metal" = 500)
 	build_path = "/obj/item/device/paicard"
+	category = "Information Technology"
 
 datum/design/posibrain
 	name = "Positronic Brain"
@@ -605,6 +608,7 @@ datum/design/posibrain
 	build_type = PROTOLATHE
 	materials = list("$metal" = 2000, "$glass" = 1000, "$silver" = 1000, "$gold" = 500, "$plasma" = 500, "$diamond" = 100)
 	build_path = "/obj/item/device/mmi/posibrain"
+	category = "Information Technology"
 
 ///////////////////////////////////
 //////////Mecha Module Disks///////
@@ -905,6 +909,7 @@ datum/design/design_disk
 	build_type = PROTOLATHE | AUTOLATHE
 	materials = list("$metal" = 30, "$glass" = 10)
 	build_path = "/obj/item/weapon/disk/design_disk"
+	category = "Information Technology"
 
 datum/design/tech_disk
 	name = "Technology Data Storage Disk"
@@ -914,6 +919,16 @@ datum/design/tech_disk
 	build_type = PROTOLATHE | AUTOLATHE
 	materials = list("$metal" = 30, "$glass" = 10)
 	build_path = "/obj/item/weapon/disk/tech_disk"
+	category = "Information Technology"
+datum/design/clone_disk
+	name = "Cloning Data Storage Disk"
+	desc = "Produce additional disks for storing genetic data."
+	id = "clone_disk"
+	req_tech = list("programming" = 1)
+	build_type = PROTOLATHE | AUTOLATHE
+	materials = list("$metal" = 30, "$glass" = 10)
+	build_path = "/obj/item/weapon/disk/data"
+	category = "Information Technology"
 
 ////////////////////////////////////////
 /////////////Stock Parts////////////////
@@ -927,6 +942,7 @@ datum/design/basic_capacitor
 	build_type = PROTOLATHE | AUTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/stock_parts/capacitor"
+	category = "Components"
 
 datum/design/basic_sensor
 	name = "Basic Sensor Module"
@@ -936,6 +952,7 @@ datum/design/basic_sensor
 	build_type = PROTOLATHE | AUTOLATHE
 	materials = list("$metal" = 50, "$glass" = 20)
 	build_path = "/obj/item/weapon/stock_parts/scanning_module"
+	category = "Components"
 
 datum/design/micro_mani
 	name = "Micro Manipulator"
@@ -945,6 +962,7 @@ datum/design/micro_mani
 	build_type = PROTOLATHE | AUTOLATHE
 	materials = list("$metal" = 30)
 	build_path = "/obj/item/weapon/stock_parts/manipulator"
+	category = "Components"
 
 datum/design/basic_micro_laser
 	name = "Basic Micro-Laser"
@@ -954,6 +972,7 @@ datum/design/basic_micro_laser
 	build_type = PROTOLATHE | AUTOLATHE
 	materials = list("$metal" = 10, "$glass" = 20)
 	build_path = "/obj/item/weapon/stock_parts/micro_laser"
+	category = "Components"
 
 datum/design/basic_matter_bin
 	name = "Basic Matter Bin"
@@ -963,6 +982,7 @@ datum/design/basic_matter_bin
 	build_type = PROTOLATHE | AUTOLATHE
 	materials = list("$metal" = 80)
 	build_path = "/obj/item/weapon/stock_parts/matter_bin"
+	category = "Components"
 
 datum/design/adv_capacitor
 	name = "Advanced Capacitor"
@@ -972,6 +992,7 @@ datum/design/adv_capacitor
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/stock_parts/capacitor/adv"
+	category = "Components"
 
 datum/design/adv_sensor
 	name = "Advanced Sensor Module"
@@ -981,6 +1002,7 @@ datum/design/adv_sensor
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 20)
 	build_path = "/obj/item/weapon/stock_parts/scanning_module/adv"
+	category = "Components"
 
 datum/design/nano_mani
 	name = "Nano Manipulator"
@@ -990,6 +1012,7 @@ datum/design/nano_mani
 	build_type = PROTOLATHE
 	materials = list("$metal" = 30)
 	build_path = "/obj/item/weapon/stock_parts/manipulator/nano"
+	category = "Components"
 
 datum/design/high_micro_laser
 	name = "High-Power Micro-Laser"
@@ -999,6 +1022,7 @@ datum/design/high_micro_laser
 	build_type = PROTOLATHE
 	materials = list("$metal" = 10, "$glass" = 20)
 	build_path = "/obj/item/weapon/stock_parts/micro_laser/high"
+	category = "Components"
 
 datum/design/adv_matter_bin
 	name = "Advanced Matter Bin"
@@ -1008,6 +1032,7 @@ datum/design/adv_matter_bin
 	build_type = PROTOLATHE
 	materials = list("$metal" = 80)
 	build_path = "/obj/item/weapon/stock_parts/matter_bin/adv"
+	category = "Components"
 
 datum/design/super_capacitor
 	name = "Super Capacitor"
@@ -1018,6 +1043,7 @@ datum/design/super_capacitor
 	reliability_base = 71
 	materials = list("$metal" = 50, "$glass" = 50, "$gold" = 20)
 	build_path = "/obj/item/weapon/stock_parts/capacitor/super"
+	category = "Components"
 
 datum/design/phasic_sensor
 	name = "Phasic Sensor Module"
@@ -1028,6 +1054,7 @@ datum/design/phasic_sensor
 	materials = list("$metal" = 50, "$glass" = 20, "$silver" = 10)
 	reliability_base = 72
 	build_path = "/obj/item/weapon/stock_parts/scanning_module/phasic"
+	category = "Components"
 
 datum/design/pico_mani
 	name = "Pico Manipulator"
@@ -1038,6 +1065,7 @@ datum/design/pico_mani
 	materials = list("$metal" = 30)
 	reliability_base = 73
 	build_path = "/obj/item/weapon/stock_parts/manipulator/pico"
+	category = "Components"
 
 datum/design/ultra_micro_laser
 	name = "Ultra-High-Power Micro-Laser"
@@ -1048,6 +1076,7 @@ datum/design/ultra_micro_laser
 	materials = list("$metal" = 10, "$glass" = 20, "$uranium" = 10)
 	reliability_base = 70
 	build_path = "/obj/item/weapon/stock_parts/micro_laser/ultra"
+	category = "Components"
 
 datum/design/super_matter_bin
 	name = "Super Matter Bin"
@@ -1058,6 +1087,7 @@ datum/design/super_matter_bin
 	materials = list("$metal" = 80)
 	reliability_base = 75
 	build_path = "/obj/item/weapon/stock_parts/matter_bin/super"
+	category = "Components"
 
 
 
@@ -1069,6 +1099,7 @@ datum/design/subspace_ansible
 	build_type = PROTOLATHE
 	materials = list("$metal" = 80, "$silver" = 20)
 	build_path = "/obj/item/weapon/stock_parts/subspace/ansible"
+	category = "Bluespace Technology"
 
 datum/design/hyperwave_filter
 	name = "Hyperwave Filter"
@@ -1078,6 +1109,7 @@ datum/design/hyperwave_filter
 	build_type = PROTOLATHE
 	materials = list("$metal" = 40, "$silver" = 10)
 	build_path = "/obj/item/weapon/stock_parts/subspace/filter"
+	category = "Bluespace Technology"
 
 datum/design/subspace_amplifier
 	name = "Subspace Amplifier"
@@ -1087,6 +1119,7 @@ datum/design/subspace_amplifier
 	build_type = PROTOLATHE
 	materials = list("$metal" = 10, "$gold" = 30, "$uranium" = 15)
 	build_path = "/obj/item/weapon/stock_parts/subspace/amplifier"
+	category = "Bluespace Technology"
 
 datum/design/subspace_treatment
 	name = "Subspace Treatment Disk"
@@ -1096,6 +1129,7 @@ datum/design/subspace_treatment
 	build_type = PROTOLATHE
 	materials = list("$metal" = 10, "$silver" = 20)
 	build_path = "/obj/item/weapon/stock_parts/subspace/treatment"
+	category = "Bluespace Technology"
 
 datum/design/subspace_analyzer
 	name = "Subspace Analyzer"
@@ -1105,6 +1139,7 @@ datum/design/subspace_analyzer
 	build_type = PROTOLATHE
 	materials = list("$metal" = 10, "$gold" = 15)
 	build_path = "/obj/item/weapon/stock_parts/subspace/analyzer"
+	category = "Bluespace Technology"
 
 datum/design/subspace_crystal
 	name = "Ansible Crystal"
@@ -1114,6 +1149,7 @@ datum/design/subspace_crystal
 	build_type = PROTOLATHE
 	materials = list("$glass" = 1000, "$silver" = 20, "$gold" = 20)
 	build_path = "/obj/item/weapon/stock_parts/subspace/crystal"
+	category = "Bluespace Technology"
 
 datum/design/subspace_transmitter
 	name = "Subspace Transmitter"
@@ -1123,6 +1159,7 @@ datum/design/subspace_transmitter
 	build_type = PROTOLATHE
 	materials = list("$glass" = 100, "$silver" = 10, "$uranium" = 15)
 	build_path = "/obj/item/weapon/stock_parts/subspace/transmitter"
+	category = "Bluespace Technology"
 
 ////////////////////////////////////////
 //////////////////Power/////////////////
@@ -1136,7 +1173,7 @@ datum/design/basic_cell
 	build_type = PROTOLATHE | AUTOLATHE |MECHFAB
 	materials = list("$metal" = 700, "$glass" = 50)
 	build_path = "/obj/item/weapon/cell"
-	category = "Misc"
+	category = "Engineering Equipment"
 
 datum/design/high_cell
 	name = "High-Capacity Power Cell"
@@ -1146,7 +1183,7 @@ datum/design/high_cell
 	build_type = PROTOLATHE | AUTOLATHE | MECHFAB
 	materials = list("$metal" = 700, "$glass" = 60)
 	build_path = "/obj/item/weapon/cell/high"
-	category = "Misc"
+	category = "Engineering Equipment"
 
 datum/design/super_cell
 	name = "Super-Capacity Power Cell"
@@ -1157,7 +1194,7 @@ datum/design/super_cell
 	build_type = PROTOLATHE | MECHFAB
 	materials = list("$metal" = 700, "$glass" = 70)
 	build_path = "/obj/item/weapon/cell/super"
-	category = "Misc"
+	category = "Engineering Equipment"
 
 datum/design/hyper_cell
 	name = "Hyper-Capacity Power Cell"
@@ -1168,7 +1205,7 @@ datum/design/hyper_cell
 	build_type = PROTOLATHE | MECHFAB
 	materials = list("$metal" = 400, "$gold" = 150, "$silver" = 150, "$glass" = 70)
 	build_path = "/obj/item/weapon/cell/hyper"
-	category = "Misc"
+	category = "Engineering Equipment"
 
 datum/design/light_replacer
 	name = "Light Replacer"
@@ -1178,6 +1215,8 @@ datum/design/light_replacer
 	build_type = PROTOLATHE
 	materials = list("$metal" = 1500, "$silver" = 150, "$glass" = 3000)
 	build_path = "/obj/item/device/lightreplacer"
+	category = "Engineering Equipment"
+
 
 datum/design/heavy_flashlight
 	name = "heavy duty flashlight"
@@ -1187,6 +1226,7 @@ datum/design/heavy_flashlight
 	build_type = PROTOLATHE
 	materials = list("$metal" = 2000, "$glass" = 4000)
 	build_path = "/obj/item/device/flashlight/heavy"
+	category = "Engineering Equipment"
 
 ////////////////////////////////////////
 //////////////MISC Boards///////////////
@@ -1313,6 +1353,7 @@ datum/design/mass_spectrometer
 	materials = list("$metal" = 30, "$glass" = 20)
 	reliability_base = 76
 	build_path = "/obj/item/device/mass_spectrometer"
+	category = "Medical Equipment"
 
 datum/design/adv_mass_spectrometer
 	name = "Advanced Mass-Spectrometer"
@@ -1323,6 +1364,7 @@ datum/design/adv_mass_spectrometer
 	materials = list("$metal" = 30, "$glass" = 20)
 	reliability_base = 74
 	build_path = "/obj/item/device/mass_spectrometer/adv"
+	category = "Medical Equipment"
 
 datum/design/reagent_scanner
 	name = "Reagent Scanner"
@@ -1333,6 +1375,7 @@ datum/design/reagent_scanner
 	materials = list("$metal" = 30, "$glass" = 20)
 	reliability_base = 76
 	build_path = "/obj/item/device/reagent_scanner"
+	category = "Medical Equipment"
 
 datum/design/adv_reagent_scanner
 	name = "Advanced Reagent Scanner"
@@ -1343,6 +1386,7 @@ datum/design/adv_reagent_scanner
 	materials = list("$metal" = 30, "$glass" = 20)
 	reliability_base = 74
 	build_path = "/obj/item/device/reagent_scanner/adv"
+	category = "Medical Equipment"
 
 datum/design/mmi
 	name = "Man-Machine Interface"
@@ -1353,7 +1397,7 @@ datum/design/mmi
 	materials = list("$metal" = 1000, "$glass" = 500)
 	reliability_base = 76
 	build_path = "/obj/item/device/mmi"
-	category = "Misc"
+	category = "Engineering Equipment"
 
 datum/design/mmi_radio
 	name = "Radio-enabled Man-Machine Interface"
@@ -1364,7 +1408,7 @@ datum/design/mmi_radio
 	materials = list("$metal" = 1200, "$glass" = 500)
 	reliability_base = 74
 	build_path = "/obj/item/device/mmi/radio_enabled"
-	category = "Misc"
+	category = "Engineering Equipment"
 
 datum/design/synthetic_flash
 	name = "Synthetic Flash"
@@ -1375,7 +1419,7 @@ datum/design/synthetic_flash
 	materials = list("$metal" = 750, "$glass" = 750)
 	reliability_base = 76
 	build_path = "/obj/item/device/flash/synthetic"
-	category = "Misc"
+	category = "Engineering Equipment"
 
 datum/design/nanopaste
 	name = "nanopaste"
@@ -1385,6 +1429,7 @@ datum/design/nanopaste
 	build_type = PROTOLATHE
 	materials = list("$metal" = 7000, "$glass" = 7000)
 	build_path = "/obj/item/stack/nanopaste"
+	category = "Medical Equipment"
 
 datum/design/laserpointer
 	name = "laser pointer"
@@ -1394,6 +1439,7 @@ datum/design/laserpointer
 	build_type = PROTOLATHE
 	materials = list("$metal" = 100, "$glass" = 50)
 	build_path = "/obj/item/device/laser_pointer"
+	category = "General"
 
 datum/design/implant_loyal
 	name = "loyalty implant"
@@ -1403,6 +1449,7 @@ datum/design/implant_loyal
 	build_type = PROTOLATHE
 	materials = list("$metal" = 7000, "$glass" = 7000)
 	build_path = "/obj/item/weapon/implantcase/loyalty"
+	category = "Medical Equipment"
 
 datum/design/implant_chem
 	name = "chemical implant"
@@ -1412,6 +1459,7 @@ datum/design/implant_chem
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/implantcase/chem"
+	category = "Medical Equipment"
 
 datum/design/implant_free
 	name = "freedom implant"
@@ -1421,6 +1469,7 @@ datum/design/implant_free
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/implantcase/freedom"
+	category = "High-Risk Items"
 
 datum/design/energy_shield
 	name = "energy shield"
@@ -1430,6 +1479,7 @@ datum/design/energy_shield
 	build_type = PROTOLATHE
 	materials = list("$metal" = 1000, "$glass" = 3000, "$plasma" = 1000)
 	build_path = "/obj/item/weapon/shield/energy"
+	category = "Weapons"
 
 datum/design/implant_death_alarm
 	name = "death alarm implant"
@@ -1439,6 +1489,7 @@ datum/design/implant_death_alarm
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/implantcase/death_alarm"
+	category = "Medical Equipment"
 
 datum/design/chameleon
 	name = "Chameleon Jumpsuit"
@@ -1448,7 +1499,7 @@ datum/design/chameleon
 	build_type = PROTOLATHE
 	materials = list("$metal" = 500)
 	build_path = "/obj/item/clothing/under/chameleon"
-
+	category = "High-Risk Items"
 
 datum/design/bluespacebeaker
 	name = "bluespace beaker"
@@ -1459,6 +1510,7 @@ datum/design/bluespacebeaker
 	materials = list("$metal" = 3000, "$plasma" = 3000, "$diamond" = 500)
 	reliability_base = 76
 	build_path = "/obj/item/weapon/reagent_containers/glass/beaker/bluespace"
+	category = "Medical Equipment"
 
 datum/design/noreactbeaker
 	name = "cryostasis beaker"
@@ -1469,7 +1521,7 @@ datum/design/noreactbeaker
 	materials = list("$metal" = 3000)
 	reliability_base = 76
 	build_path = "/obj/item/weapon/reagent_containers/glass/beaker/noreact"
-	category = "Misc"
+	category = "Medical Equipment"
 
 datum/design/scalpel_laser1
 	name = "Basic Laser Scalpel"
@@ -1479,6 +1531,7 @@ datum/design/scalpel_laser1
 	build_type = PROTOLATHE
 	materials = list("$metal" = 12500, "$glass" = 7500)
 	build_path = "/obj/item/weapon/scalpel/laser1"
+	category = "Medical Equipment"
 
 datum/design/scalpel_laser2
 	name = "Improved Laser Scalpel"
@@ -1488,6 +1541,7 @@ datum/design/scalpel_laser2
 	build_type = PROTOLATHE
 	materials = list("$metal" = 12500, "$glass" = 7500, "$silver" = 2500)
 	build_path = "/obj/item/weapon/scalpel/laser2"
+	category = "Medical Equipment"
 
 datum/design/scalpel_laser3
 	name = "Advanced Laser Scalpel"
@@ -1497,6 +1551,7 @@ datum/design/scalpel_laser3
 	build_type = PROTOLATHE
 	materials = list("$metal" = 12500, "$glass" = 7500, "$silver" = 2000, "$gold" = 1500)
 	build_path = "/obj/item/weapon/scalpel/laser3"
+	category = "Medical Equipment"
 
 datum/design/scalpel_manager
 	name = "Incision Management System"
@@ -1506,6 +1561,7 @@ datum/design/scalpel_manager
 	build_type = PROTOLATHE
 	materials = list ("$metal" = 12500, "$glass" = 7500, "$silver" = 1500, "$gold" = 1500, "$diamond" = 750)
 	build_path = "/obj/item/weapon/scalpel/manager"
+	category = "Medical Equipment"
 
 /////////////////////////////////////////
 /////////////////Weapons/////////////////
@@ -1521,6 +1577,7 @@ datum/design/nuclear_gun
 	reliability_base = 76
 	build_path = "/obj/item/weapon/gun/energy/rifle/gun/nuclear"
 	locked = 1
+	category = "Weapons"
 
 datum/design/stunrevolver
 	name = "Stun Revolver"
@@ -1531,6 +1588,7 @@ datum/design/stunrevolver
 	materials = list("$metal" = 4000)
 	build_path = "/obj/item/weapon/gun/energy/stunrevolver"
 	locked = 1
+	category = "Weapons"
 
 datum/design/lasercannon
 	name = "Laser Cannon"
@@ -1541,6 +1599,7 @@ datum/design/lasercannon
 	materials = list("$metal" = 10000, "$glass" = 1000, "$diamond" = 2000)
 	build_path = "/obj/item/weapon/gun/energy/rifle/lasercannon"
 	locked = 1
+	category = "Weapons"
 
 datum/design/decloner
 	name = "Decloner"
@@ -1551,6 +1610,7 @@ datum/design/decloner
 	materials = list("$gold" = 5000,"$uranium" = 5000, "$plasma" = 1500) //"mutagen" = 40 Don't think protolathe can hold chems anymore.  Not sure.  It's redundant anyway.  Mutagen is easy.
 	build_path = "/obj/item/weapon/gun/energy/decloner"
 	locked = 1
+	category = "Weapons"
 
 datum/design/chemsprayer
 	name = "Chem Sprayer"
@@ -1561,6 +1621,7 @@ datum/design/chemsprayer
 	materials = list("$metal" = 5000, "$glass" = 1000, "$plasma" = 3000)
 	reliability_base = 100
 	build_path = "/obj/item/weapon/reagent_containers/spray/chemsprayer"
+	category = "Weapons"
 
 datum/design/rapidsyringe
 	name = "Rapid Syringe Gun"
@@ -1570,6 +1631,7 @@ datum/design/rapidsyringe
 	build_type = PROTOLATHE
 	materials = list("$metal" = 5000, "$glass" = 1000)
 	build_path = "/obj/item/weapon/gun/syringe/rapidsyringe"
+	category = "Medical Equipment"
 
 datum/design/largecrossbow
 	name = "Energy Crossbow"
@@ -1579,6 +1641,7 @@ datum/design/largecrossbow
 	build_type = PROTOLATHE
 	materials = list("$metal" = 5000, "$glass" = 1000, "$uranium" = 1000, "$silver" = 1000)
 	build_path = "/obj/item/weapon/gun/energy/crossbow/largecrossbow"
+	category = "High-Risk Items"
 
 datum/design/temp_gun
 	name = "Freeze Ray"
@@ -1589,6 +1652,7 @@ datum/design/temp_gun
 	materials = list("$metal" = 5000, "$glass" = 500, "$silver" = 3000)
 	build_path = "/obj/item/weapon/gun/energy/temperature"
 	locked = 1
+	category = "General"
 
 datum/design/flora_gun
 	name = "Floral Somatoray"
@@ -1598,6 +1662,7 @@ datum/design/flora_gun
 	build_type = PROTOLATHE
 	materials = list("$metal" = 2000, "$glass" = 500, "$uranium" = 500)
 	build_path = "/obj/item/weapon/gun/energy/floragun"
+	category = "General"
 
 datum/design/large_grenade
 	name = "Large Grenade"
@@ -1608,6 +1673,7 @@ datum/design/large_grenade
 	materials = list("$metal" = 3000)
 	reliability_base = 79
 	build_path = "/obj/item/weapon/grenade/chem_grenade/large"
+	category = "General"
 
 datum/design/smg
 	name = "Submachine Gun"
@@ -1618,6 +1684,7 @@ datum/design/smg
 	materials = list("$metal" = 8000, "$silver" = 2000, "$diamond" = 1000)
 	build_path = "/obj/item/weapon/gun/projectile/automatic"
 	locked = 1
+	category = "Weapons"
 
 datum/design/rapidlaser
 	name = "Rapid-fire Laser"
@@ -1628,6 +1695,7 @@ datum/design/rapidlaser
 	materials = list("$metal" = 5000, "$uranium" = 1000)
 	build_path = "/obj/item/weapon/gun/energy/automatic/rapidlaser"
 	locked = 1
+	category = "Weapons"
 
 datum/design/ammo_9mm
 	name = "Ammunition Box (9mm)"
@@ -1637,6 +1705,7 @@ datum/design/ammo_9mm
 	build_type = PROTOLATHE
 	materials = list("$metal" = 3750, "$silver" = 100)
 	build_path = "/obj/item/ammo_magazine/c9mm"
+	category = "Weapons"
 
 datum/design/stunshell
 	name = "Stun Shell"
@@ -1646,6 +1715,7 @@ datum/design/stunshell
 	build_type = PROTOLATHE
 	materials = list("$metal" = 4000)
 	build_path = "/obj/item/ammo_casing/shotgun/stunshell"
+	category = "Weapons"
 
 datum/design/stunshellbox
 	name = "Stun Shell box"
@@ -1655,6 +1725,7 @@ datum/design/stunshellbox
 	build_type = PROTOLATHE
 	materials = list("$metal" = 20000)
 	build_path = "/obj/item/ammo_magazine/shotgun/stun"
+	category = "Weapons"
 
 datum/design/plasmapistol
 	name = "plasma pistol"
@@ -1664,6 +1735,7 @@ datum/design/plasmapistol
 	build_type = PROTOLATHE
 	materials = list("$metal" = 5000, "$glass" = 1000, "$plasma" = 3000)
 	build_path = "/obj/item/weapon/gun/energy/toxgun"
+	category = "Weapons"
 
 datum/design/lawgiver
 	name = "Lawgiver Mk II"
@@ -1673,6 +1745,7 @@ datum/design/lawgiver
 	build_type = PROTOLATHE
 	materials = list("$metal" = 6000, "$glass" = 1000, "$uranium" = 1000, "$plasma" = 1000, "$diamond" = 3000)
 	build_path = "/obj/item/weapon/gun/energy/lawgiver"
+	category = "Weapons"
 
 datum/design/bprotopistol
 	name = "Basic Protopistol"
@@ -1683,6 +1756,7 @@ datum/design/bprotopistol
 	materials = list("$metal" = 4000, "$glass" = 1000)
 	build_path = "/obj/item/weapon/gun/energy/laser/modular/pistol/crap"
 	locked = 1
+	category = "Weapons"
 
 datum/design/protopistol
 	name = "Protopistol"
@@ -1693,6 +1767,7 @@ datum/design/protopistol
 	materials = list("$metal" = 8000, "$glass" = 3000, "$uranium" = 1000, "$plasma" = 1000)
 	build_path = "/obj/item/weapon/gun/energy/laser/modular/pistol"
 	locked = 1
+	category = "Weapons"
 
 datum/design/aprotopistol
 	name = "Advanced Protopistol"
@@ -1703,7 +1778,19 @@ datum/design/aprotopistol
 	materials = list("$metal" = 8000, "$glass" = 4000, "$uranium" = 2000, "$plasma" = 2000, "$diamond" = 1000)
 	build_path = "/obj/item/weapon/gun/energy/laser/modular/pistol/advanced"
 	locked = 1
-
+	category = "Weapons"
+/*This is all the station gets for producable force gloves. It's a high-risk item and thus considered contraband
+outside of RnD without paperwork with the RD's stamp on it. */
+datum/design/forcegloves
+ 	name = "Force Gloves"
+ 	desc = "These gloves bend gravity and bluespace, dampening inertia and augmenting the wearer's melee capabilities."
+ 	id = "forcegloves"
+ 	req_tech = list("combat" = 3,"bluespace" = 3, "engineering" = 3, "magnets" = 3)
+ 	build_type = PROTOLATHE
+ 	materials = list("$metal" = 4000)
+ 	build_path = "/obj/item/clothing/gloves/force/basic"
+ 	locked = 1
+ 	category = "Weapons"
 
 /////////////////////////////////////////
 /////////////////Mining//////////////////
@@ -1717,6 +1804,7 @@ datum/design/jackhammer
 	build_type = PROTOLATHE
 	materials = list("$metal" = 2000, "$glass" = 500, "$silver" = 500)
 	build_path = "/obj/item/weapon/pickaxe/jackhammer"
+	category = "Engineering Equipment"
 
 datum/design/drill
 	name = "Mining Drill"
@@ -1726,6 +1814,7 @@ datum/design/drill
 	build_type = PROTOLATHE
 	materials = list("$metal" = 6000, "$glass" = 1000) //expensive, but no need for miners.
 	build_path = "/obj/item/weapon/pickaxe/drill"
+	category = "Engineering Equipment"
 
 datum/design/plasmacutter
 	name = "Plasma Cutter"
@@ -1736,6 +1825,8 @@ datum/design/plasmacutter
 	materials = list("$metal" = 1500, "$glass" = 500, "$gold" = 500, "$plasma" = 500)
 	reliability_base = 79
 	build_path = "/obj/item/weapon/pickaxe/plasmacutter"
+	category = "Engineering Equipment"
+
 /* I'm sorry, but the diamond drill is pretty much redundant.  And it messes with my immersions.
 datum/design/pick_diamond
 	name = "Diamond Pickaxe"
@@ -1755,6 +1846,7 @@ datum/design/drill_diamond
 	materials = list("$metal" = 3000, "$glass" = 1000, "$diamond" = 3750) //Yes, a whole diamond is needed.
 	reliability_base = 79
 	build_path = "/obj/item/weapon/pickaxe/diamonddrill"
+	category = "Engineering Equipment"
 
 datum/design/mesons
 	name = "Optical Meson Scanners"
@@ -1764,6 +1856,47 @@ datum/design/mesons
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/clothing/glasses/meson"
+	category = "Engineering Equipment"
+
+datum/design/materialscan
+	name = "Optical Material Scanner"
+	desc = "Used for seeing objects through walls."
+	id = "optical_scanner"
+	build_type = PROTOLATHE
+	req_tech = list("magnets" = 3, "engineering" = 3)
+	materials = list("$metal" = 50, "$glass" = 50, "$silver" = 50)
+	build_path = "/obj/item/clothing/glasses/material"
+	category = "General"
+
+datum/design/nightvisiongoggles
+	name = "Night Vision Goggles"
+	desc = "Used to see in the dark"
+	id = "night_vision_goggles"
+	build_type = PROTOLATHE
+	req_tech = list("magnets" = 4, "engineering" = 2, "combat" = 2)
+	materials = list("$metal" = 50, "$glass" = 50, "$gold" = 50)
+	build_path = "/obj/item/clothing/glasses/night"
+	category = "High-Risk Items"
+
+datum/design/sciencegoggles
+	name = "Science Goggles"
+	desc = "They still do nothing."
+	id = "science_goggles"
+	build_type = PROTOLATHE
+	req_tech = list("magnets" = 1)
+	materials = list("$metal" = 50, "$glass" = 50)
+	build_path = "/obj/item/clothing/glasses/science"
+	category = "General"
+
+datum/design/superiorweldgoggles
+	name = "Superior Welding Goggles"
+	desc = "Welding Goggles made of slightly better materials."
+	id = "s_weld_goggles"
+	build_type = PROTOLATHE
+	req_tech = list("materials" = 3)
+	materials = list("$metal" = 50, "$glass" = 50, "$plasma" = 50, "$uranium" = 50)
+	build_path = "/obj/item/clothing/glasses/welding/superior"
+	category = "Engineering Equipment"
 
 /////////////////////////////////////////
 //////////////Blue Space/////////////////
@@ -1777,6 +1910,7 @@ datum/design/beacon
 	build_type = PROTOLATHE
 	materials = list ("$metal" = 20, "$glass" = 10)
 	build_path = "/obj/item/device/radio/beacon"
+	category = "Bluespace Technology"
 
 datum/design/bag_holding
 	name = "Bag of Holding"
@@ -1787,6 +1921,7 @@ datum/design/bag_holding
 	materials = list("$gold" = 3000, "$diamond" = 1500, "$uranium" = 250)
 	reliability_base = 80
 	build_path = "/obj/item/weapon/storage/backpack/holding"
+	category = "Bluespace Technology"
 
 datum/design/bluespace_crystal
 	name = "Artificial Bluespace Crystal"
@@ -1797,6 +1932,7 @@ datum/design/bluespace_crystal
 	materials = list("$gold" = 1500, "$diamond" = 3000, "$plasma" = 1500)
 	reliability_base = 100
 	build_path = "/obj/item/bluespace_crystal/artificial"
+	category = "Bluespace Technology"
 
 /////////////////////////////////////////
 /////////////////HUDs////////////////////
@@ -1810,6 +1946,7 @@ datum/design/health_hud
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/clothing/glasses/hud/health"
+	category = "Information Technology"
 
 datum/design/security_hud
 	name = "Security HUD"
@@ -1820,6 +1957,16 @@ datum/design/security_hud
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/clothing/glasses/hud/security"
 	locked = 1
+	category = "Information Technology"
+
+datum/design/security_glasses //added to list 6/4/15
+	name = "Security HUD Sunglasses"
+	desc = "A combination security HUD and sunglasses commonly worn by high-ranking security officers."
+	id = "hudglasses"
+	req_tech = list("magnets" = 5, "combat" = 2)
+	build_type = PROTOLATHE
+	materials = list("$metal" = 50, "$glass" = 50, "$gold" = 50, "$silver" = 50)
+	category = "Information Technology"
 
 /////////////////////////////////////////
 //////////////////Test///////////////////
@@ -1876,6 +2023,8 @@ datum/design/binaryencrypt
 	build_type = PROTOLATHE
 	materials = list("$metal" = 300, "$glass" = 300)
 	build_path = "/obj/item/device/encryptionkey/binary"
+	category = "High-Risk Items"
+
 datum/design/pda
 	name = "PDA"
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. Functionality determined by a preprogrammed ROM cartridge."
@@ -1884,6 +2033,8 @@ datum/design/pda
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/device/pda"
+	category = "PDA Cartridges"
+
 datum/design/cart_basic
 	name = "Generic Cartridge"
 	desc = "A data cartridge for portable microcomputers."
@@ -1892,6 +2043,8 @@ datum/design/cart_basic
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/cartridge"
+	category = "PDA Cartridges"
+
 datum/design/cart_engineering
 	name = "Power-ON Cartridge"
 	desc = "A data cartridge for portable microcomputers."
@@ -1900,6 +2053,8 @@ datum/design/cart_engineering
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/cartridge/engineering"
+	category = "PDA Cartridges"
+
 datum/design/cart_atmos
 	name = "BreatheDeep Cartridge"
 	desc = "A data cartridge for portable microcomputers."
@@ -1908,6 +2063,8 @@ datum/design/cart_atmos
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/cartridge/atmos"
+	category = "PDA Cartridges"
+
 datum/design/cart_medical
 	name = "Med-U Cartridge"
 	desc = "A data cartridge for portable microcomputers."
@@ -1916,6 +2073,8 @@ datum/design/cart_medical
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/cartridge/medical"
+	category = "PDA Cartridges"
+
 datum/design/cart_chemistry
 	name = "ChemWhiz Cartridge"
 	desc = "A data cartridge for portable microcomputers."
@@ -1924,6 +2083,8 @@ datum/design/cart_chemistry
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/cartridge/chemistry"
+	category = "PDA Cartridges"
+
 datum/design/cart_security
 	name = "R.O.B.U.S.T. Cartridge"
 	desc = "A data cartridge for portable microcomputers."
@@ -1933,6 +2094,8 @@ datum/design/cart_security
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/cartridge/security"
 	locked = 1
+	category = "PDA Cartridges"
+
 datum/design/cart_janitor
 	name = "CustodiPRO Cartridge"
 	desc = "A data cartridge for portable microcomputers."
@@ -1941,6 +2104,7 @@ datum/design/cart_janitor
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/cartridge/janitor"
+	category = "PDA Cartridges"
 
 /*
 datum/design/cart_clown
@@ -1969,6 +2133,8 @@ datum/design/cart_toxins
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/cartridge/signal/science"
+	category = "PDA Cartridges"
+
 datum/design/cart_quartermaster
 	name = "Space Parts & Space Vendors Cartridge"
 	desc = "A data cartridge for portable microcomputers."
@@ -1978,6 +2144,8 @@ datum/design/cart_quartermaster
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/cartridge/quartermaster"
 	locked = 1
+	category = "PDA Cartridges"
+
 datum/design/cart_hop
 	name = "Human Resources 9001 Cartridge"
 	desc = "A data cartridge for portable microcomputers."
@@ -1987,6 +2155,8 @@ datum/design/cart_hop
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/cartridge/hop"
 	locked = 1
+	category = "PDA Cartridges"
+
 datum/design/cart_hos
 	name = "R.O.B.U.S.T. DELUXE Cartridge"
 	desc = "A data cartridge for portable microcomputers."
@@ -1996,6 +2166,8 @@ datum/design/cart_hos
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/cartridge/hos"
 	locked = 1
+	category = "PDA Cartridges"
+
 datum/design/cart_ce
 	name = "Power-On DELUXE Cartridge"
 	desc = "A data cartridge for portable microcomputers."
@@ -2005,6 +2177,8 @@ datum/design/cart_ce
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/cartridge/ce"
 	locked = 1
+	category = "PDA Cartridges"
+
 datum/design/cart_cmo
 	name = "Med-U DELUXE Cartridge"
 	desc = "A data cartridge for portable microcomputers."
@@ -2014,6 +2188,8 @@ datum/design/cart_cmo
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/cartridge/cmo"
 	locked = 1
+	category = "PDA Cartridges"
+
 datum/design/cart_rd
 	name = "Signal Ace DELUXE Cartridge"
 	desc = "A data cartridge for portable microcomputers."
@@ -2023,6 +2199,8 @@ datum/design/cart_rd
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/cartridge/rd"
 	locked = 1
+	category = "PDA Cartridges"
+
 datum/design/cart_captain
 	name = "Value-PAK Cartridge"
 	desc = "A data cartridge for portable microcomputers."
@@ -2032,3 +2210,4 @@ datum/design/cart_captain
 	materials = list("$metal" = 50, "$glass" = 50)
 	build_path = "/obj/item/weapon/cartridge/captain"
 	locked = 1
+	category = "PDA Cartridges"

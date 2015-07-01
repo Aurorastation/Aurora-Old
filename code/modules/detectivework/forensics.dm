@@ -552,6 +552,7 @@
 		"scanning" = scanning,
 		"bloodsamp" = (bloodsamp ? bloodsamp.name : ""),
 		"bloodsamp_desc" = (bloodsamp ? (bloodsamp.desc ? bloodsamp.desc : "No information on record.") : ""),
+		"lidstate" = closed
 	)
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
@@ -591,6 +592,9 @@
 		if(bloodsamp)
 			bloodsamp.loc = src.loc
 			bloodsamp = null
+
+	if(href_list["toggleLid"])
+		toggle_lid()
 
 	return 1
 
@@ -650,11 +654,8 @@
 	set category = "Object"
 	set name = "Toggle Lid"
 	set src in oview(1)
-	if(usr.stat || !(istype(usr,/mob/living/carbon/human)))
+	if(usr.stat || !isliving(usr))
 		usr << "No."
-		return
-
-	if(issilicon(usr))
 		return
 
 	if(scanning)

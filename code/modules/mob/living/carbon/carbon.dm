@@ -287,7 +287,7 @@
 		usr << "\red You have nothing to drop in your hand."
 		return
 	return drop_item()
-		
+
 /mob/proc/throw_item(atom/target)
 	return
 
@@ -303,7 +303,7 @@
 
 	if (istype(item, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = item
-		item = G.throw() //throw the person instead of the grab
+		item = G.grabThrow() //throw the person instead of the grab
 		if(ismob(item))
 			var/turf/start_T = get_turf(loc) //Get the start and target tile for the descriptors
 			var/turf/end_T = get_turf(target)
@@ -322,6 +322,8 @@
 	u_equip(item)
 	update_icons()
 
+	if(!item) return //Some items have a chance of being deleted when dropped
+
 	if (istype(usr, /mob/living/carbon)) //Check if a carbon mob is throwing. Modify/remove this line as required.
 		item.loc = src.loc
 		if(src.client)
@@ -339,13 +341,11 @@
 			src.inertia_dir = get_dir(target, src)
 			step(src, inertia_dir)
 
-
 /*
 		if(istype(src.loc, /turf/space) || (src.flags & NOGRAV)) //they're in space, move em one space in the opposite direction
 			src.inertia_dir = get_dir(target, src)
 			step(src, inertia_dir)
 */
-
 
 		item.throw_at(target, item.throw_range, item.throw_speed, src)
 

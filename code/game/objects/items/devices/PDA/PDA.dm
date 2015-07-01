@@ -481,7 +481,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			data["sqlcon"] = 1
 			error("SQL database connection failed. Attempted to fetch form information.")
 
-		var/DBQuery/query = dbcon.NewQuery("SELECT id, name FROM aurora_directives")
+		var/DBQuery/query = dbcon.NewQuery("SELECT id, name FROM ss13_directives")
 		query.Execute()
 
 		while(query.NextRow())
@@ -493,7 +493,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		data["directives"] = directives
 
 	if(mode==61)
-		var/DBQuery/searchquery = dbcon.NewQuery("SELECT id, name, data FROM aurora_directives WHERE id=[queryid]")
+		var/DBQuery/searchquery = dbcon.NewQuery("SELECT id, name, data FROM ss13_directives WHERE id=[queryid]")
 		searchquery.Execute()
 
 		while(searchquery.NextRow())
