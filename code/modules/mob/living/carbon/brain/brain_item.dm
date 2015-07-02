@@ -39,7 +39,6 @@
 	brainmob.timeofhostdeath = H.timeofdeath
 	if(H.mind)
 		H.mind.transfer_to(brainmob)
-
 	brainmob << "\blue You feel slightly disoriented. That's normal when you're just a brain."
 	callHook("debrain", list(brainmob))
 
@@ -65,6 +64,12 @@
 	if(istype(B) && istype(H))
 		B.transfer_identity(target)
 		
+/obj/item/organ/brain/exposed_to_the_world()
+	var/datum/organ/internal/brain/robot/robotic_brain=organ_data
+	if (istype(robotic_brain))
+		var/new_mmi=robotic_brain.create_robot_brain_replacement(brainmob,src.loc)
+		del(src)
+		return new_mmi
 
 /obj/item/organ/brain/replaced(var/mob/living/target)
 

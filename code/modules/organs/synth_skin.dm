@@ -238,7 +238,7 @@ proc/create_tinted_icon(icon_name, icon_state_name, target_colour)
 		human_target.gender = (gender_string=="Male") ? MALE : FEMALE
 	human_target.update_body(TRUE)
 	cartridge.current_charges--
-	user.visible_message("<span class='notice'>[user] has covered [M]'s [datum_target.display_name] with [cartridge.icon_state]</span>")
+	user.visible_message("<span class='notice'>[user] has covered [M]'s [datum_target.display_name] with [cartridge.covering_description].</span>")
 	update_icon()
 	
 	
@@ -280,6 +280,7 @@ proc/create_tinted_icon(icon_name, icon_state_name, target_colour)
 	var/construction_time = 20
 	var/paint_colour = null
 	var/hair_colour = null
+	var/covering_description = "paint"
 	var/list/construction_cost = list("metal"=200,"glass"=50)
 	var/covering_path = "/datum/synthetic_limb_cover/paint"
 	origin_tech = "materials=1;engineering=1"
@@ -338,6 +339,7 @@ proc/create_tinted_icon(icon_name, icon_state_name, target_colour)
 	installed_icon = "installed_skin"
 	covering_path = "/datum/synthetic_limb_cover/skin"
 	origin_tech = "materials=1;engineering=1;biotech=2"
+	covering_description = "synthetic skin"
 	
 	
 /obj/item/weapon/synth_skin_cartridge/fur
@@ -347,6 +349,7 @@ proc/create_tinted_icon(icon_name, icon_state_name, target_colour)
 	installed_icon = "installed_fur"
 	covering_path = "/datum/synthetic_limb_cover/fur"
 	origin_tech = "materials=1;engineering=1;biotech=3"
+	covering_description = "synthetic fur"
 	
 	
 /obj/item/weapon/synth_skin_cartridge/scales
@@ -356,3 +359,4 @@ proc/create_tinted_icon(icon_name, icon_state_name, target_colour)
 	installed_icon = "installed_scales"
 	covering_path = "/datum/synthetic_limb_cover/scales"
 	origin_tech = "materials=1;engineering=1;biotech=3"
+	covering_description = "synthetic scales"

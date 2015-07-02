@@ -1726,15 +1726,15 @@
 /mob/living/carbon/human/proc/tail_icon_state()
 	var/datum/organ/external/groin/groin_organ = get_organ("groin")
 	if (groin_organ.covering)
-		return groin_organ.covering.tail
+		return list(groin_organ.covering.tail,groin_organ.covering.colour)
 	if (species.tail)
-		return species.tail
+		return list(species.tail,rgb(r_skin, g_skin, b_skin))
 		
 	
 /mob/living/carbon/human/proc/tail_icon()
-	var/tail_name = tail_icon_state()
-	if (tail_name)
+	var/list/tail_info = tail_icon_state()
+	if(!isnull(tail_info))
 		if(!wear_suit || !(wear_suit.flags_inv & HIDETAIL) && !istype(wear_suit, /obj/item/clothing/suit/space))
-			var/icon/tail_s = new/icon("icon" = 'icons/effects/species.dmi', "icon_state" = "[tail_name]_s")
-			tail_s.Blend(rgb(r_skin, g_skin, b_skin), ICON_ADD)
+			var/icon/tail_s = new/icon("icon" = 'icons/effects/species.dmi', "icon_state" = "[tail_info[1]]_s")
+			tail_s.Blend(tail_info[2], ICON_ADD)
 			return tail_s

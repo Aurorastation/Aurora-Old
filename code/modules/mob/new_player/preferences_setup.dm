@@ -191,6 +191,7 @@ datum/preferences
 			job_index="[job_medsci_high]"
 		if (!job_type)
 			job_type="DEFAULT"
+			job_index=1
 		return list(job_type,job_index)
 		
 	proc/update_preview_icon() //this is a little better - jf
@@ -211,6 +212,7 @@ datum/preferences
 				preview_icon.Blend(new/icon("icon" = 'icons/mob/human.dmi', "icon_state" = "undershirt[undershirt]_s"),ICON_OVERLAY)
 		var/list/job_types=job_type_info()
 		var/datum/preview/job/current_job=get_job_preview_for_index(job_types[1],job_types[2])
-		preview_icon.Blend(current_job.create_clothes_icon(backbag), ICON_OVERLAY)
+		if(istype(current_job))
+			preview_icon.Blend(current_job.create_clothes_icon(backbag), ICON_OVERLAY)
 		preview_icon_front = new(preview_icon, dir = SOUTH)
 		preview_icon_side = new(preview_icon, dir = WEST)

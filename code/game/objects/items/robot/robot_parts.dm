@@ -108,7 +108,6 @@
 	attach_to_robot(mob/user as mob, obj/item/robot_parts/robot_suit/assembly as obj)
 		if(assembly.head)
 			return
-		world << "src.camera - [src.camera], camera - [camera]"
 		if(!src.camera)
 			user << "\blue You need to attach a camera to it first!"
 			return
@@ -162,7 +161,7 @@
 /obj/item/robot_parts/robot_suit/proc/allowed_to_build(mob/user as mob, obj/item/device/mmi/brain as obj)
 	if(!check_completion()) // not complete? not allowed
 		return 
-	if(!check_allowed_to_install_brain(brain)) // not allowed to put the brain in there
+	if(!check_allowed_to_install_brain(user,brain)) // not allowed to put the brain in there
 		return
 	return TRUE
 		
@@ -258,18 +257,22 @@
 	
 	
 /obj/item/robot_parts/robot_suit/proc/create_shell(obj/item/device/mmi/brain as obj)
-	var/mob/living/carbon/human/new_shell = new(src.loc,all_species["Machine"])
+	var/mob/living/carbon/human/machine/new_shell = new(src.loc)
+	var/key=brain.brainmob.mind.key
 	brain.brainmob.mind.transfer_to(new_shell) // transfer brain
-	var/datum/organ/internal/brain/robot/brain_datum=new_shell.get_organ("brain") // put the brain in the head
+	var/datum/organ/internal/brain/robot/brain_datum=new_shell.internal_organs_by_name["brain"] // put the brain in the head
 	brain_datum.machine_brain_type=brain.machine_brain_type
-	var/custom_name=created_name
-	if(!custom_name)
-		spawn(0)
-			var/newname = input(new_shell,"You are a newly created humanoid robot. Enter a name.", "Name change","") as text
-			custom_name = (newname != "") ? newname : brain.brainmob.real_name
-	new_shell.real_name = custom_name
+	new_shell.real_name=brain.brainmob.real_name
+	give_option_to_rename(new_shell)
 	del(brain)
 	del(src)
+	
+proc/give_option_to_rename(var/mob/living/carbon/human/new_shell)
+	spawn(0)
+		var/newname
+		newname = input(new_shell,"You are a newly created humanoid robot. Enter a name.", "Name change","") as text
+		if (newname != "")
+			new_shell.fully_replace_character_name(new_shell.real_name,newname)
 
 
 /obj/item/robot_parts/chest/attackby(obj/item/W as obj, mob/user as mob)

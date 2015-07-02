@@ -179,6 +179,10 @@
 	S["citizenship"] 		>> citizenship
 	S["faction"] 			>> faction
 	S["religion"] 			>> religion
+	
+	//Robot
+	S["machine_brain_type"] >> machine_brain_type
+	S["covering_type"]		>> covering_type
 
 	S["nanotrasen_relation"] >> nanotrasen_relation
 	//S["skin_style"]			>> skin_style

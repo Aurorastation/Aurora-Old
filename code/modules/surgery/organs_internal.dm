@@ -306,10 +306,10 @@
 		if(target.op_stage.current_organ)
 			var/datum/organ/internal/I = target.internal_organs_by_name[target.op_stage.current_organ]
 			if(I && istype(I))
-				var/obj/item/removed = I.remove(user) // we can also remove non-organs because robots
-				var/obj/item/organ/new_organ_object = removed
+				var/obj/item/organ/new_organ_object = I.remove(user)
 				if(new_organ_object && istype(new_organ_object))
 					new_organ_object.removed(target,user)
+					new_organ_object.exposed_to_the_world() // useless except for replacements
 			target.op_stage.current_organ = null
 
 	fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

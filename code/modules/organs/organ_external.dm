@@ -1084,13 +1084,12 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 	for(var/datum/organ/internal/I in H.internal_organs)
 		if(I.parent_organ != name)
 			continue
-		var/obj/item/removed = I.remove() // we can also remove non-organs because robots
-		removed.loc = src // put the organ inside the severed external organ
-		var/obj/item/organ/new_organ_object = removed
+		var/obj/item/organ/new_organ_object = I.remove()
 		if(new_organ_object && istype(new_organ_object))
 			new_organ_object.removed(H)
 			if(new_organ_object.organ_data)
 				organs_internal |= new_organ_object.organ_data
+		new_organ_object.loc = src // put the organ inside the severed external organ
 	// Forming icon for the limb
 	// Setting base icon for this mob's race
 	var/icon/base
@@ -1183,19 +1182,15 @@ obj/item/weapon/organ/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		if(2)
 			if(istype(W,/obj/item/weapon/hemostat))
 				if(contents.len)
-					var/obj/item/removing = pick(contents)
+					var/obj/item/organ/removing = pick(contents)
+					var/exposed_result
 					removing.loc = get_turf(user.loc)
-					if(!(user.l_hand && user.r_hand))
-						user.put_in_hands(removing)
-					if(istype(removing,/obj/item/organ))
+					if(istype(removing))
 						var/obj/item/organ/removed_organ = removing
 						organs_internal -= removed_organ.organ_data
-						if(istype(removing,/obj/item/organ/brain)) // handling weird brain garbage
-							var/datum/organ/internal/brain/robot/removed_brain = removed_organ.organ_data
-							if (istype(removed_brain))
-								var/mmi=removed_brain.create_robot_brain_replacement(TRUE,removed_organ.loc)
-								if(!(user.l_hand && user.r_hand))
-									user.put_in_hands(mmi)
+						exposed_result = removing.exposed_to_the_world()
+					if(!(user.l_hand && user.r_hand))
+						user.put_in_hands((isnull(exposed_result)) ? removing : exposed_result)
 					user.visible_message("<span class='danger'><b>[user]</b> extracts [removing] from [src] with [W]!")
 				else
 					user.visible_message("<span class='danger'><b>[user]</b> fishes around fruitlessly in [src] with [W].")

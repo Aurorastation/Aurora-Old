@@ -249,7 +249,7 @@
 			return organ_robotic_info
 	if (preferences.species=="Machine")
 		if (preferences.covering_type)
-			return list(preferences.covering_type,preferences.r_skin,preferences.g_skin,preferences.b_skin)
+			return list(preferences.covering_type,rgb(preferences.r_skin,preferences.g_skin,preferences.b_skin))
 			
 			
 /datum/species/proc/get_tail_preview_icon(var/list/preview_coverings,var/datum/preferences/preferences)
@@ -599,9 +599,10 @@ See code\modules\mob\new_player\preferences_setup.dm for where it's used.
 		)
 /datum/species/machine/create_organs(var/mob/living/carbon/human/H)
 	..()
-	var/datum/organ/internal/brain/robot/brain_datum = H.get_organ("brain") // handle weird robot brains
-	if (isnull(brain_datum.machine_brain_type))
-		brain_datum.machine_brain_type="Posibrain"
+	var/datum/organ/internal/brain/robot/brain_datum = H.internal_organs_by_name["brain"] // handle weird robot brains
+	if (istype(brain_datum))
+		if (isnull(brain_datum.machine_brain_type))
+			brain_datum.machine_brain_type="Posibrain"
 	
 	
 /datum/species/bug
