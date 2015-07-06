@@ -72,7 +72,10 @@
 	var/datum/language/speaking = parse_language(message)
 	if (speaking)
 		verb = speaking.speech_verb
-		message = copytext(message,3)
+		if(speaking.flags & INNATE)
+			message = copytext(message,2)
+		else
+			message = copytext(message,3)
 
 		if(speaking.flags & HIVEMIND)
 			speaking.broadcast(src,trim(message))
