@@ -523,6 +523,9 @@
 				if("invasive_directives")
 					config.invasive_directives = 1
 
+				if("topic_safe_address")
+					topic_safe_address = value
+
 				else
 					log_misc("Unknown setting in configuration: '[name]'")
 
