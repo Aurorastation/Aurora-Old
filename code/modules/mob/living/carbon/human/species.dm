@@ -225,7 +225,11 @@
 /datum/species/proc/get_organ_preview_icon(var/name, var/robot, var/gendered, var/gender_string, var/datum/preferences/preferences, var/datum/synthetic_limb_cover/covering, var/paint_colour)
 	var/icon_name = icobase
 	if (robot)
-		icon_name = (istype(covering)) ? covering.main_icon : 'icons/mob/human_races/robotic.dmi'
+		if(istype(covering))
+			icon_name = covering.main_icon
+		else
+			icon_name = 'icons/mob/human_races/robotic.dmi'
+			paint_colour = null // no paint for bare robots
 	var/state_name = name
 	if (gendered)
 		state_name+="_[gender_string]"
@@ -256,13 +260,15 @@
 	var/tail_state=null
 	if (!(isnull(preview_coverings["groin"])))
 		var/datum/synthetic_limb_cover/covering=preview_coverings["groin"]
-		tail_state=covering.tail
+		if(covering.tail)
+			tail_state="[covering.tail]_s"
 	if(tail)
 		tail_state="[tail]_s"
 	if(tail_state)
 		var/icon/result = new/icon("icon" = 'icons/effects/species.dmi', "icon_state" = tail_state)
 		result.Blend(rgb(preferences.r_hair,preferences.g_hair,preferences.b_hair),ICON_ADD)
 		return result
+		
 		
 /datum/species/proc/get_eyes_preview_icon(var/list/preview_coverings,var/datum/preferences/preferences)
 	var/eye_state=null
