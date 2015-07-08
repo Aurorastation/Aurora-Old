@@ -24,7 +24,7 @@
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
 	var/recentpump = 0 // to prevent spammage
 	var/pumped = 0
-	var/obj/item/ammo_casing/current_shell = null
+	var/obj/item/ammo_casing/shotgun/current_shell = null
 
 	accuracy = -40 //-60 full accuracy up to 3 tiles unaimed. aimed 5 tiles accurate.  40% misschance at 7.
 	rangedrop = 5 //loses 20 accuracy per distance tile. unaimed 70% chance to miss at 7 tiles.
@@ -48,6 +48,9 @@
 		if(!wielded)
 			user << "<span class='warning'>You need to use two hands to fire this.</span>"
 			return 0
+		if(current_shell)
+			current_shell.icon_state = current_shell.spent_state
+			current_shell.desc += " This one is spent."
 		..()
 
 	attack_self(mob/living/user as mob)
@@ -119,9 +122,10 @@
 		if(!loaded.len)
 			return 0
 
-		var/obj/item/ammo_casing/AC = loaded[1] //load next casing.
+		var/obj/item/ammo_casing/shotgun/AC = loaded[1] //load next casing.
 		loaded -= AC //Remove casing from loaded list.
 		AC.desc += " This one is spent."
+		AC.icon_state = AC.spent_state
 
 		if(AC.BB)
 			in_chamber = AC.BB //Load projectile into chamber.
