@@ -249,6 +249,25 @@
 	parent_organ = "head"
 	removed_type = /obj/item/organ/brain
 	vital = 1
+	
+	
+/datum/organ/internal/brain/robot // brains for shells
+	var/machine_brain_type=null 
+	
+	
+/datum/organ/internal/brain/robot/proc/create_robot_brain_replacement(var/target,var/new_location)
+	var/obj/item/device/mmi/new_mmi
+	if (machine_brain_type=="Posibrain")
+		new_mmi = new/obj/item/device/mmi/posibrain()
+		new_mmi.name = "positronic brain ([owner])"
+		new_mmi.brainmob.name = owner.real_name
+		new_mmi.brainmob.real_name = owner.real_name
+	else
+		new_mmi = new/obj/item/device/mmi()
+	new_mmi.transfer_identity(target)
+	new_mmi.loc = new_location
+	return new_mmi
+	
 
 /datum/organ/internal/brain/xeno
 	removed_type = /obj/item/organ/brain/xeno

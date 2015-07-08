@@ -30,5 +30,5 @@
 	..(new_loc, "Diona")
 
 /mob/living/carbon/human/machine/New(var/new_loc)
-	h_style = "blue IPC screen"
+	h_style = "Bald"
 	..(new_loc, "Machine")

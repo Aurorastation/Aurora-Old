@@ -1,41 +1,41 @@
-proc/random_hair_style(gender, species = "Human")
+proc/valid_sprite_accessories(gender,species,test_list)
+	var/list/valid = list()
+	for(var/style in test_list)
+		var/datum/sprite_accessory/S = test_list[style]
+		if( !(species in S.species_allowed))
+			continue
+		if (S.gender!=NEUTER)
+			if (S.gender!=gender)
+				continue
+		valid[style] = S
+	return valid
+	
+
+proc/get_valid_hairstyles(gender, species)
+	return valid_sprite_accessories(gender,species,hair_styles_list)
+	
+	
+proc/get_valid_facialhairstyles(gender, species)
+	return valid_sprite_accessories(gender,species,facial_hair_styles_list)
+
+
+proc/random_hair_style(gender, species)
 	var/h_style = "Bald"
-
-	var/list/valid_hairstyles = list()
-	for(var/hairstyle in hair_styles_list)
-		var/datum/sprite_accessory/S = hair_styles_list[hairstyle]
-		if(gender == MALE && S.gender == FEMALE)
-			continue
-		if(gender == FEMALE && S.gender == MALE)
-			continue
-		if( !(species in S.species_allowed))
-			continue
-		valid_hairstyles[hairstyle] = hair_styles_list[hairstyle]
-
-	if(valid_hairstyles.len)
-		h_style = pick(valid_hairstyles)
-
+	if (species)
+		var/list/valid_hairstyles = get_valid_hairstyles(gender,species)
+		if(valid_hairstyles.len)
+			h_style = pick(valid_hairstyles)
 	return h_style
+	
 
-proc/random_facial_hair_style(gender, species = "Human")
+proc/random_facial_hair_style(gender, species)
 	var/f_style = "Shaved"
-
-	var/list/valid_facialhairstyles = list()
-	for(var/facialhairstyle in facial_hair_styles_list)
-		var/datum/sprite_accessory/S = facial_hair_styles_list[facialhairstyle]
-		if(gender == MALE && S.gender == FEMALE)
-			continue
-		if(gender == FEMALE && S.gender == MALE)
-			continue
-		if( !(species in S.species_allowed))
-			continue
-
-		valid_facialhairstyles[facialhairstyle] = facial_hair_styles_list[facialhairstyle]
-
-	if(valid_facialhairstyles.len)
-		f_style = pick(valid_facialhairstyles)
-
-		return f_style
+	if (species)
+		var/list/valid_facialhairstyles = get_valid_facialhairstyles(gender,species)
+		if(valid_facialhairstyles.len)
+			f_style = pick(valid_facialhairstyles)
+	return f_style
+	
 
 proc/random_name(gender, species = "Human")
 	if(gender==FEMALE)	return capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
