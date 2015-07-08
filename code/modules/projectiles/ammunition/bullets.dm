@@ -81,7 +81,8 @@
 /obj/item/ammo_casing/shotgun
 	name = "shotgun shell"
 	desc = "A 12 gauge shell."
-	icon_state = "gshell"
+	icon_state = "gshell-live"
+	var/spent_state = "gshell"
 	caliber = "shotgun"
 	projectile_type = "/obj/item/projectile/bullet"
 	matter = list("metal" = 12500)
@@ -89,14 +90,16 @@
 /obj/item/ammo_casing/shotgun/incendiary
 	name = "shotgun shell"
 	desc = "A 12 gauge shell."
-	icon_state = "ishell"
+	icon_state = "ishell-live"
+	spent_state = "ishell"
 	projectile_type = "/obj/item/projectile/bullet/incendiary/shell"
 
 
 /obj/item/ammo_casing/shotgun/blank
 	name = "shotgun shell"
 	desc = "A blank shell."
-	icon_state = "blshell"
+	icon_state = "blshell-live"
+	spent_state = "blshell"
 	projectile_type = ""
 	matter = list("metal" = 250)
 
@@ -104,7 +107,8 @@
 /obj/item/ammo_casing/shotgun/beanbag
 	name = "beanbag shell"
 	desc = "A weak beanbag shell."
-	icon_state = "bshell"
+	icon_state = "bshell-live"
+	spent_state = "bshell"
 	projectile_type = "/obj/item/projectile/bullet/weakbullet/beanbag"
 	matter = list("metal" = 500)
 
@@ -112,7 +116,8 @@
 /obj/item/ammo_casing/shotgun/stunshell
 	name = "stun shell"
 	desc = "A stunning shell."
-	icon_state = "stunshell"
+	icon_state = "stunshell-live"
+	spent_state = "stunshell"
 	projectile_type = "/obj/item/projectile/bullet/stunshot"
 	matter = list("metal" = 2500)
 
@@ -121,6 +126,7 @@
 	name = "shotgun darts"
 	desc = "A dart for use in shotguns."
 	icon_state = "dart"
+	spent_state = "dart" //I'm not sure if this has a sprite (can't find one in ammo.dmi) but this will stop it from turning into a red shell magically.
 	projectile_type = "/obj/item/projectile/energy/dart"
 	matter = list("metal" = 12500)
 
