@@ -1101,8 +1101,6 @@ datum/preferences
 					if(new_age)
 						age = max(min( round(text2num(new_age)), AGE_MAX),AGE_MIN)
 				if("species")
-					config.usealienwhitelist=0 // REMOVE ME
-
 					var/list/new_species = list("Human")
 					var/prev_species = species
 					var/whitelisted = 0
