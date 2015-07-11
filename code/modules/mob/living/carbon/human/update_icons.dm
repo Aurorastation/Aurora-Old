@@ -234,21 +234,58 @@ proc/get_damage_icon_part(damage_state, body_part)
 	overlays_standing[DAMAGE_LAYER]	= standing_image
 
 	if(update_icons)   update_icons()
+	
+
+/mob/living/carbon/human/proc/get_skin_tone_key()
+	if (species.flags & HAS_SKIN_COLOR)
+		return "[r_skin],[g_skin],[b_skin]"
+	if(species.flags & HAS_SKIN_TONE)
+		return "[s_tone]"
+	return ""
+	
+
+/mob/living/carbon/human/proc/get_icon_key(var/list/mutations=list())
+	if (!mutations)
+		mutations=get_visible_mutations()
+	var/icon_key = "[species.race_key][(gender == FEMALE ? "f" : "m")][get_skin_tone_key()]"
+	for(var/datum/organ/external/part in organs) // get the part icon keys
+		icon_key = "[icon_key][part.get_icon_key()]"
+	return "[icon_key][mutations["husk"]][mutations["fat"]][mutations["hulk"]][mutations["skeleton"]]"
+
+
+/mob/living/carbon/human/proc/get_visible_mutations()
+	return list("husk"=(HUSK in src.mutations),
+				"hulk"=(HULK in src.mutations),
+				"skeleton"=(SKELETON in src.mutations),
+				"fat"=(FAT in src.mutations))
+
+
+/mob/living/carbon/human/proc/skin_colour_info(var/list/mutations=list())
+	if (!mutations)
+		mutations=get_visible_mutations()
+	var/icon_blend=ICON_ADD
+	var/colour=rgb(127,127,127)
+	var/good=FALSE
+	if (species.flags & HAS_SKIN_COLOR)
+		colour=rgb(r_skin,g_skin,b_skin)
+		good=TRUE
+	if(!mutations["husk"] && !mutations["hulk"]) // if we have regular skin
+		if(species.flags & HAS_SKIN_TONE)
+			icon_blend=(s_tone >= 0 ? ICON_ADD : ICON_SUBTRACT)
+			var/res=(s_tone >= 0 ? s_tone : -s_tone)
+			colour=rgb(res,res,res)
+			good=TRUE
+	return list("rgb"=colour,"mode"=icon_blend,"blend"=good)
+
 
 //BASE MOB SPRITE
 /mob/living/carbon/human/proc/update_body(var/update_icons=1)
-
 	var/husk_color_mod = rgb(96,88,80)
 	var/hulk_color_mod = rgb(48,224,40)
 	var/necrosis_color_mod = rgb(10,50,0)
 
-	var/husk = (HUSK in src.mutations)
-	var/fat = (FAT in src.mutations)
-	var/hulk = (HULK in src.mutations)
-	var/skeleton = (SKELETON in src.mutations)
-
+	var/list/mutations = get_visible_mutations()
 	var/g = (gender == FEMALE ? "f" : "m")
-	var/has_head = 0
 
 	//CACHING: Generate an index key from visible bodyparts.
 	//0 = destroyed, 1 = normal, 2 = robotic, 3 = necrotic.
@@ -259,22 +296,9 @@ proc/get_damage_icon_part(damage_state, body_part)
 
 	stand_icon = new(species.icon_template ? species.icon_template : 'icons/mob/human.dmi',"blank")
 
-	var/icon_key = "[species.race_key][g][s_tone]"
-	for(var/datum/organ/external/part in organs)
 
-		if(istype(part,/datum/organ/external/head) && !(part.status & ORGAN_DESTROYED))
-			has_head = 1
-
-		if(part.status & ORGAN_DESTROYED)
-			icon_key = "[icon_key]0"
-		else if(part.status & ORGAN_ROBOT)
-			icon_key = "[icon_key]2"
-		else if(part.status & ORGAN_DEAD)
-			icon_key = "[icon_key]3"
-		else
-			icon_key = "[icon_key]1"
-
-	icon_key = "[icon_key][husk ? 1 : 0][fat ? 1 : 0][hulk ? 1 : 0][skeleton ? 1 : 0][s_tone]"
+	// GENERATE THE ICON KEY
+	var/icon_key = get_icon_key(mutations)
 
 	var/icon/base_icon
 	if(human_icon_cache[icon_key])
@@ -287,14 +311,18 @@ proc/get_damage_icon_part(damage_state, body_part)
 
 	//BEGIN CACHED ICON GENERATION.
 
-		// Why don't we just make skeletons/shadows/golems a species? ~Z
-		var/race_icon =   (skeleton ? 'icons/mob/human_races/r_skeleton.dmi' : species.icobase)
-		var/deform_icon = (skeleton ? 'icons/mob/human_races/r_skeleton.dmi' : species.icobase)
+		// Why don't we just make mutations["skeleton"]s/shadows/golems a species? ~Z
+		var/race_icon =   (mutations["skeleton"] ? 'icons/mob/human_races/r_skeleton.dmi' : species.icobase)
+		var/deform_icon = (mutations["skeleton"] ? 'icons/mob/human_races/r_skeleton.dmi' : species.icobase)
 
+		var/list/skin_info = skin_colour_info(mutations) // get the skin tone info
+		
 		//Robotic limbs are handled in get_icon() so all we worry about are missing or dead limbs.
 		//No icon stored, so we need to start with a basic one.
 		var/datum/organ/external/chest = get_organ("chest")
-		base_icon = chest.get_icon(race_icon,deform_icon,g)
+		base_icon = chest.get_icon(race_icon,deform_icon,skin_info)
+		
+		
 
 		if(chest.status & ORGAN_DEAD)
 			base_icon.ColorTone(necrosis_color_mod)
@@ -307,10 +335,7 @@ proc/get_damage_icon_part(damage_state, body_part)
 			if(part.status & ORGAN_DESTROYED)
 				continue
 
-			if (istype(part, /datum/organ/external/groin) || istype(part, /datum/organ/external/head))
-				temp = part.get_icon(race_icon,deform_icon,g)
-			else
-				temp = part.get_icon(race_icon,deform_icon)
+			temp = part.get_icon(race_icon,deform_icon,skin_info) // synthetics are handled here
 
 			if(part.status & ORGAN_DEAD)
 				temp.ColorTone(necrosis_color_mod)
@@ -345,48 +370,33 @@ proc/get_damage_icon_part(damage_state, body_part)
 
 				base_icon.Blend(temp, ICON_OVERLAY)
 
-		if(!skeleton)
-			if(husk)
+		if(!mutations["skeleton"])
+			if(mutations["husk"])
 				base_icon.ColorTone(husk_color_mod)
-			else if(hulk)
+			else if(mutations["hulk"])
 				var/list/tone = ReadRGB(hulk_color_mod)
 				base_icon.MapColors(rgb(tone[1],0,0),rgb(0,tone[2],0),rgb(0,0,tone[3]))
 
-		//Handle husk overlay.
-		if(husk)
+		//Handle mutations["husk"] overlay.
+		if(mutations["husk"])
 			var/icon/mask = new(base_icon)
 			var/icon/husk_over = new(race_icon,"overlay_husk")
 			mask.MapColors(0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,0)
 			husk_over.Blend(mask, ICON_ADD)
 			base_icon.Blend(husk_over, ICON_OVERLAY)
 
-
-		//Skin tone.
-		if(!husk && !hulk)
-			if(species.flags & HAS_SKIN_TONE)
-				if(s_tone >= 0)
-					base_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)
-				else
-					base_icon.Blend(rgb(-s_tone,  -s_tone,  -s_tone), ICON_SUBTRACT)
-
 		human_icon_cache[icon_key] = base_icon
 
 		//log_debug("Generated new cached mob icon ([icon_key] \icon[human_icon_cache[icon_key]]) for [src]. [human_icon_cache.len] cached mob icons.")
 
 	//END CACHED ICON GENERATION.
-
 	stand_icon.Blend(base_icon,ICON_OVERLAY)
 
-	//Skin colour. Not in cache because highly variable (and relatively benign).
-	if (species.flags & HAS_SKIN_COLOR)
-		stand_icon.Blend(rgb(r_skin, g_skin, b_skin), ICON_ADD)
-
-	if(has_head)
+	var/datum/organ/external/head = get_organ("head") // check if we have a head
+	if(head ? (head.status & ORGAN_DESTROYED ? 0 : 1) : 0) // we need a head and that head needs to not be destroyed
 		//Eyes
-		if(!skeleton)
-			var/icon/eyes = new/icon('icons/mob/human_face.dmi', species.eyes)
-			eyes.Blend(rgb(r_eyes, g_eyes, b_eyes), ICON_ADD)
-			stand_icon.Blend(eyes, ICON_OVERLAY)
+		if(!mutations["skeleton"])
+			stand_icon.Blend(eye_icon(), ICON_OVERLAY)
 
 		//Mouth	(lipstick!)
 		if(lip_style && (species && species.flags & HAS_LIPS))	//skeletons are allowed to wear lipstick no matter what you think, agouri.
@@ -394,7 +404,7 @@ proc/get_damage_icon_part(damage_state, body_part)
 
 	//Underwear
 	if(underwear >0 && underwear < 12 && species.flags & HAS_UNDERWEAR)
-		if(!fat && !skeleton)
+		if(!mutations["fat"] && !mutations["skeleton"])
 			stand_icon.Blend(new /icon('icons/mob/human.dmi', "underwear[underwear]_[g]_s"), ICON_OVERLAY)
 
 	if(undershirt>0 && undershirt <= undershirt_t.len && species.flags & HAS_UNDERWEAR)
@@ -407,47 +417,27 @@ proc/get_damage_icon_part(damage_state, body_part)
 	update_tail_showing(0)
 
 
+/mob/living/carbon/human/proc/create_hair_icon()
+	if(!should_we_show_hair()) // if we're missing our head or we're wearing a mask, no hair
+		return 
+	validate_hair() // make sure our hair is valid
+	var/icon/face_standing	= new /icon('icons/mob/human_face.dmi',"bald_s") //base icons
+	var/icon/facial_s = facial_hair_icon()
+	if (facial_s)
+		face_standing.Blend(facial_s, ICON_OVERLAY)
+	var/icon/hair_s = hair_icon()
+	if (hair_s)
+		face_standing.Blend(hair_s, ICON_OVERLAY)
+	overlays_standing[HAIR_LAYER]	= image(face_standing)
 
 
 //HAIR OVERLAY
 /mob/living/carbon/human/proc/update_hair(var/update_icons=1)
-	//Reset our hair
-	overlays_standing[HAIR_LAYER]	= null
-
-	var/datum/organ/external/head/head_organ = get_organ("head")
-	if( !head_organ || (head_organ.status & ORGAN_DESTROYED) )
-		if(update_icons)   update_icons()
-		return
-
-	//masks and helmets can obscure our hair.
-	if( (head && (head.flags & BLOCKHAIR)) || (wear_mask && (wear_mask.flags & BLOCKHAIR)))
-		if(update_icons)   update_icons()
-		return
-
-	//base icons
-	var/icon/face_standing	= new /icon('icons/mob/human_face.dmi',"bald_s")
-
-	if(f_style)
-		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[f_style]
-		if(facial_hair_style && facial_hair_style.species_allowed && src.species.name in facial_hair_style.species_allowed)
-			var/icon/facial_s = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
-			if(facial_hair_style.do_colouration)
-				facial_s.Blend(rgb(r_facial, g_facial, b_facial), ICON_ADD)
-
-			face_standing.Blend(facial_s, ICON_OVERLAY)
-
-	if(h_style && !(head && (head.flags & BLOCKHEADHAIR)))
-		var/datum/sprite_accessory/hair_style = hair_styles_list[h_style]
-		if(hair_style && src.species.name in hair_style.species_allowed)
-			var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
-			if(hair_style.do_colouration)
-				hair_s.Blend(rgb(r_hair, g_hair, b_hair), ICON_ADD)
-
-			face_standing.Blend(hair_s, ICON_OVERLAY)
-
-	overlays_standing[HAIR_LAYER]	= image(face_standing)
-
-	if(update_icons)   update_icons()
+	overlays_standing[HAIR_LAYER]	= null //Reset our hair
+	create_hair_icon() // do the hair blending
+	if(update_icons)
+		update_icons()
+		
 
 /mob/living/carbon/human/update_mutations(var/update_icons=1)
 	var/fat
@@ -988,16 +978,12 @@ proc/get_damage_icon_part(damage_state, body_part)
 		overlays_standing[L_HAND_LAYER] = null
 	if(update_icons)   update_icons()
 
+
 /mob/living/carbon/human/proc/update_tail_showing(var/update_icons=1)
 	overlays_standing[TAIL_LAYER] = null
-
-	if(species.tail)
-		if(!wear_suit || !(wear_suit.flags_inv & HIDETAIL) && !istype(wear_suit, /obj/item/clothing/suit/space))
-			var/icon/tail_s = new/icon("icon" = 'icons/effects/species.dmi', "icon_state" = "[species.tail]_s")
-			tail_s.Blend(rgb(r_skin, g_skin, b_skin), ICON_ADD)
-
-			overlays_standing[TAIL_LAYER]	= image(tail_s)
-
+	var/icon/tail_s = tail_icon()
+	if (tail_s)
+		overlays_standing[TAIL_LAYER] = image(tail_s)
 	if(update_icons)
 		update_icons()
 

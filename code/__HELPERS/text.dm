@@ -241,6 +241,9 @@ proc/checkhtml(var/t, var/whitelist = paper_tag_whitelist)
 //Returns a string with the first element of the string capitalized.
 /proc/capitalize(var/t as text)
 	return uppertext(copytext(t, 1, 2)) + copytext(t, 2)
+	
+/proc/capitalized(var/t as text)
+	return capitalize(lowertext(t))
 
 //Centers text by adding spaces to either side of the string.
 /proc/dd_centertext(message, length)

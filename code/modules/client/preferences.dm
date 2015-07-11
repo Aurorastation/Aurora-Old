@@ -78,6 +78,8 @@ datum/preferences
 	var/species = "Human"               //Species datum to use.
 	var/language = "None"				//Secondary language
 	var/list/gear						//Custom/fluff item loadout.
+	var/covering_type = null 			 //synth covering type
+	var/machine_brain_type = "Posibrain" //synth brain type
 
 		//Some faction information.
 	var/home_system = "Unset"           //System of birth.
@@ -240,226 +242,213 @@ datum/preferences
 /datum/preferences/proc/ShowChoices(mob/user)
 	if(!user || !user.client)	return
 	update_preview_icon()
-	user << browse_rsc(preview_icon_front, "previewicon.png")
 	user << browse_rsc(preview_icon_side, "previewicon2.png")
-	var/dat = "<html><body><center>"
+	user << browse_rsc(preview_icon_front, "previewicon1.png")
+	spawn(0)
+		var/dat = "<html><body><center>"
 
-	if(path)
-		dat += "<center>"
-		dat += "Slot <b>[slot_name]</b> - "
-		dat += "<a href=\"byond://?src=\ref[user];preference=open_load_dialog\">Load slot</a> - "
-		dat += "<a href=\"byond://?src=\ref[user];preference=save\">Save slot</a> - "
-		dat += "<a href=\"byond://?src=\ref[user];preference=reload\">Reload slot</a>"
-		dat += "</center>"
+		if(path)
+			dat += "<center>"
+			dat += "Slot <b>[slot_name]</b> - "
+			dat += "<a href=\"byond://?src=\ref[user];preference=open_load_dialog\">Load slot</a> - "
+			dat += "<a href=\"byond://?src=\ref[user];preference=save\">Save slot</a> - "
+			dat += "<a href=\"byond://?src=\ref[user];preference=reload\">Reload slot</a>"
+			dat += "</center>"
 
-	else
-		dat += "Please create an account to save your preferences."
+		else
+			dat += "Please create an account to save your preferences."
 
-	dat += "</center><hr><table><tr><td width='340px' height='320px'>"
+		dat += "</center><hr><table><tr><td width='340px' height='320px'>"
 
-	dat += "<b>Name:</b> "
-	dat += "<a href='?_src_=prefs;preference=name;task=input'><b>[real_name]</b></a><br>"
-	dat += "(<a href='?_src_=prefs;preference=name;task=random'>Random Name</A>) "
-	dat += "(<a href='?_src_=prefs;preference=name'>Always Random Name: [be_random_name ? "Yes" : "No"]</a>)"
-	dat += "<br>"
-
-	dat += "<b>Gender:</b> <a href='?_src_=prefs;preference=gender'><b>[gender == MALE ? "Male" : "Female"]</b></a><br>"
-	dat += "<b>Age:</b> <a href='?_src_=prefs;preference=age;task=input'>[age]</a><br>"
-	dat += "<b>Spawn Point</b>: <a href='byond://?src=\ref[user];preference=spawnpoint;task=input'>[spawnpoint]</a>"
-
-	dat += "<br>"
-	dat += "<b>UI Style:</b> <a href='?_src_=prefs;preference=ui'><b>[UI_style]</b></a><br>"
-	dat += "<b>Custom UI</b>(recommended for White UI):<br>"
-	dat += "-Color: <a href='?_src_=prefs;preference=UIcolor'><b>[UI_style_color]</b></a> <table style='display:inline;' bgcolor='[UI_style_color]'><tr><td>__</td></tr></table><br>"
-	dat += "-Alpha(transparency): <a href='?_src_=prefs;preference=UIalpha'><b>[UI_style_alpha]</b></a><br>"
-	dat += "<b>Play admin midis:</b> <a href='?_src_=prefs;preference=hear_midis'><b>[(toggles & SOUND_MIDI) ? "Yes" : "No"]</b></a><br>"
-	dat += "<b>Play lobby music:</b> <a href='?_src_=prefs;preference=lobby_music'><b>[(toggles & SOUND_LOBBY) ? "Yes" : "No"]</b></a><br>"
-	dat += "<b>Ghost ears:</b> <a href='?_src_=prefs;preference=ghost_ears'><b>[(toggles & CHAT_GHOSTEARS) ? "All Speech" : "Nearest Creatures"]</b></a><br>"
-	dat += "<b>Ghost sight:</b> <a href='?_src_=prefs;preference=ghost_sight'><b>[(toggles & CHAT_GHOSTSIGHT) ? "All Emotes" : "Nearest Creatures"]</b></a><br>"
-	dat += "<b>Ghost radio:</b> <a href='?_src_=prefs;preference=ghost_radio'><b>[(toggles & CHAT_GHOSTRADIO) ? "All Chatter" : "Nearest Speakers"]</b></a><br>"
-
-	if(config.allow_Metadata)
-		dat += "<b>OOC Notes:</b> <a href='?_src_=prefs;preference=metadata;task=input'> Edit </a><br>"
-
-	dat += "<br><b>Custom Loadout:</b> "
-	var/total_cost = 0
-
-	if(isnull(gear) || !islist(gear)) gear = list()
-
-	if(gear && gear.len)
+		dat += "<b>Name:</b> "
+		dat += "<a href='?_src_=prefs;preference=name;task=input'><b>[real_name]</b></a><br>"
+		dat += "(<a href='?_src_=prefs;preference=name;task=random'>Random Name</A>) "
+		dat += "(<a href='?_src_=prefs;preference=name'>Always Random Name: [be_random_name ? "Yes" : "No"]</a>)"
 		dat += "<br>"
-		for(var/gear_name in gear)
-			if(gear_datums[gear_name])
-				var/datum/gear/G = gear_datums[gear_name]
-				total_cost += G.cost
-				dat += "[gear_name] <a href='byond://?src=\ref[user];preference=loadout;task=remove;gear=[gear_name]'>\[remove\]</a><br>"
 
-		dat += "<b>Used:</b> [total_cost] points."
-	else
-		dat += "none."
+		dat += "<b>Gender:</b> <a href='?_src_=prefs;preference=gender'><b>[gender == MALE ? "Male" : "Female"]</b></a><br>"
+		dat += "<b>Age:</b> <a href='?_src_=prefs;preference=age;task=input'>[age]</a><br>"
+		dat += "<b>Spawn Point</b>: <a href='byond://?src=\ref[user];preference=spawnpoint;task=input'>[spawnpoint]</a>"
 
-	if(total_cost < MAX_GEAR_COST)
-		dat += " <a href='byond://?src=\ref[user];preference=loadout;task=input'>\[add\]</a>"
+		dat += "<br>"
+		dat += "<b>UI Style:</b> <a href='?_src_=prefs;preference=ui'><b>[UI_style]</b></a><br>"
+		dat += "<b>Custom UI</b>(recommended for White UI):<br>"
+		dat += "-Color: <a href='?_src_=prefs;preference=UIcolor'><b>[UI_style_color]</b></a> <table style='display:inline;' bgcolor='[UI_style_color]'><tr><td>__</td></tr></table><br>"
+		dat += "-Alpha(transparency): <a href='?_src_=prefs;preference=UIalpha'><b>[UI_style_alpha]</b></a><br>"
+		dat += "<b>Play admin midis:</b> <a href='?_src_=prefs;preference=hear_midis'><b>[(toggles & SOUND_MIDI) ? "Yes" : "No"]</b></a><br>"
+		dat += "<b>Play lobby music:</b> <a href='?_src_=prefs;preference=lobby_music'><b>[(toggles & SOUND_LOBBY) ? "Yes" : "No"]</b></a><br>"
+		dat += "<b>Ghost ears:</b> <a href='?_src_=prefs;preference=ghost_ears'><b>[(toggles & CHAT_GHOSTEARS) ? "All Speech" : "Nearest Creatures"]</b></a><br>"
+		dat += "<b>Ghost sight:</b> <a href='?_src_=prefs;preference=ghost_sight'><b>[(toggles & CHAT_GHOSTSIGHT) ? "All Emotes" : "Nearest Creatures"]</b></a><br>"
+		dat += "<b>Ghost radio:</b> <a href='?_src_=prefs;preference=ghost_radio'><b>[(toggles & CHAT_GHOSTRADIO) ? "All Chatter" : "Nearest Speakers"]</b></a><br>"
+
+		if(config.allow_Metadata)
+			dat += "<b>OOC Notes:</b> <a href='?_src_=prefs;preference=metadata;task=input'> Edit </a><br>"
+
+		dat += "<br><b>Custom Loadout:</b> "
+		var/total_cost = 0
+
+		if(isnull(gear) || !islist(gear)) gear = list()
+
 		if(gear && gear.len)
-			dat += " <a href='byond://?src=\ref[user];preference=loadout;task=remove'>\[remove\]</a>"
+			dat += "<br>"
+			for(var/gear_name in gear)
+				if(gear_datums[gear_name])
+					var/datum/gear/G = gear_datums[gear_name]
+					total_cost += G.cost
+					dat += "[gear_name] <a href='byond://?src=\ref[user];preference=loadout;task=remove;gear=[gear_name]'>\[remove\]</a><br>"
 
-	dat += "<br><br><b>Occupation Choices</b><br>"
-	dat += "\t<a href='?_src_=prefs;preference=job;task=menu'><b>Set Preferences</b></a><br>"
+			dat += "<b>Used:</b> [total_cost] points."
+		else
+			dat += "none."
 
-	dat += "<br><table><tr><td><b>Body</b> "
-	dat += "(<a href='?_src_=prefs;preference=all;task=random'>&reg;</A>)"
-	dat += "<br>"
-	dat += "Species: <a href='byond://?src=\ref[user];preference=species;task=input'>[species]</a><br>"
-	dat += "Secondary Language:<br><a href='byond://?src=\ref[user];preference=language;task=input'>[language]</a><br>"
-	dat += "Blood Type: <a href='byond://?src=\ref[user];preference=b_type;task=input'>[b_type]</a><br>"
-	dat += "Skin Tone: <a href='?_src_=prefs;preference=s_tone;task=input'>[-s_tone + 35]/220<br></a>"
-	//dat += "Skin pattern: <a href='byond://?src=\ref[user];preference=skin_style;task=input'>Adjust</a><br>"
-	dat += "Needs Glasses: <a href='?_src_=prefs;preference=disabilities'><b>[disabilities == 0 ? "No" : "Yes"]</b></a><br>"
-	dat += "Limbs: <a href='byond://?src=\ref[user];preference=limbs;task=input'>Adjust</a><br>"
-	dat += "Internal Organs: <a href='byond://?src=\ref[user];preference=organs;task=input'>Adjust</a><br>"
+		if(total_cost < MAX_GEAR_COST)
+			dat += " <a href='byond://?src=\ref[user];preference=loadout;task=input'>\[add\]</a>"
+			if(gear && gear.len)
+				dat += " <a href='byond://?src=\ref[user];preference=loadout;task=remove'>\[remove\]</a>"
 
-	//display limbs below
-	var/ind = 0
-	for(var/name in organ_data)
-		//world << "[ind] \ [organ_data.len]"
-		var/status = organ_data[name]
-		var/organ_name = null
-		switch(name)
-			if("l_arm")
-				organ_name = "left arm"
-			if("r_arm")
-				organ_name = "right arm"
-			if("l_leg")
-				organ_name = "left leg"
-			if("r_leg")
-				organ_name = "right leg"
-			if("l_foot")
-				organ_name = "left foot"
-			if("r_foot")
-				organ_name = "right foot"
-			if("l_hand")
-				organ_name = "left hand"
-			if("r_hand")
-				organ_name = "right hand"
-			if("heart")
-				organ_name = "heart"
-			if("eyes")
-				organ_name = "eyes"
+		dat += "<br><br><b>Occupation Choices</b><br>"
+		dat += "\t<a href='?_src_=prefs;preference=job;task=menu'><b>Set Preferences</b></a><br>"
 
-		if(status == "cyborg")
-			++ind
-			if(ind > 1)
-				dat += ", "
-			dat += "\tMechanical [organ_name] prothesis"
-		else if(status == "amputated")
-			++ind
-			if(ind > 1)
-				dat += ", "
-			dat += "\tAmputated [organ_name]"
-		else if(status == "mechanical")
-			++ind
-			if(ind > 1)
-				dat += ", "
-			dat += "\tMechanical [organ_name]"
-		else if(status == "assisted")
-			++ind
-			if(ind > 1)
-				dat += ", "
-			switch(organ_name)
-				if("heart")
-					dat += "\tPacemaker-assisted [organ_name]"
-				if("voicebox") //on adding voiceboxes for speaking skrell/similar replacements
-					dat += "\tSurgically altered [organ_name]"
-				if("eyes")
-					dat += "\tRetinal overlayed [organ_name]"
-				else
-					dat += "\tMechanically assisted [organ_name]"
-	if(!ind)
-		dat += "\[...\]<br><br>"
-	else
+		dat += "<br><table><tr><td><b>Body</b> "
+		dat += "(<a href='?_src_=prefs;preference=all;task=random'>&reg;</A>)"
+		dat += "<br>"
+		dat += "Species: <a href='byond://?src=\ref[user];preference=species;task=input'>[species]</a><br>"
+		dat += "Secondary Language:<br><a href='byond://?src=\ref[user];preference=language;task=input'>[language]</a><br>"
+		dat += "Blood Type: <a href='byond://?src=\ref[user];preference=b_type;task=input'>[b_type]</a><br>"
+		dat += "Skin Tone: <a href='?_src_=prefs;preference=s_tone;task=input'>[-s_tone + 35]/220<br></a>"
+		//dat += "Skin pattern: <a href='byond://?src=\ref[user];preference=skin_style;task=input'>Adjust</a><br>"
+		dat += "Needs Glasses: <a href='?_src_=prefs;preference=disabilities'><b>[disabilities == 0 ? "No" : "Yes"]</b></a><br>"
+		if (species=="Machine") // brain and covering type for shells
+			make_sure_we_have_a_brain_type_for_machines()
+			dat += "Brain Type: <a href='byond://?src=\ref[user];preference=set_machine_brain;task=input'><b>[machine_brain_type]</b></a><br>"
+			dat += "Exterior Coating: <a href='byond://?src=\ref[user];preference=set_machine_covering;task=input'><b>[isnull(covering_type) ? "None" : covering_type]</b></a><br>"
+		dat += "Limbs: <a href='byond://?src=\ref[user];preference=limbs;task=input'>Adjust</a><br>"
+		dat += "Internal Organs: <a href='byond://?src=\ref[user];preference=organs;task=input'>Adjust</a><br>"
+
+		//display limbs below
+		var/ind = 0
+		var/list/organ_names = get_limb_name_to_descriptive_name()
+		var/mechanical_organ_string = (species!="Machine" ? "Mechanical" : "Custom")
+		for(var/name in organ_data)
+			var/status = organ_data[name]
+			var/organ_name = organ_names[name]
+			if(status == "amputated")
+				++ind
+				if(ind > 1)
+					dat += ", "
+				dat += "\tAmputated [organ_name]"
+			else if(status == "mechanical")
+				++ind
+				if(ind > 1)
+					dat += ", "
+				dat += "\tMechanical [organ_name]"
+			else if(status == "assisted")
+				++ind
+				if(ind > 1)
+					dat += ", "
+				switch(organ_name)
+					if("heart")
+						dat += "\tPacemaker-assisted [organ_name]"
+					if("voicebox") //on adding voiceboxes for speaking skrell/similar replacements
+						dat += "\tSurgically altered [organ_name]"
+					if("eyes")
+						dat += "\tRetinal overlayed [organ_name]"
+					else
+						dat += "\tMechanically assisted [organ_name]"
+			var/list/status_as_list=status
+			if (istype(status_as_list)) // we got a robot here
+				++ind
+				if(ind > 1)
+					dat += ", "
+				dat += "\t[mechanical_organ_string] [organ_name]"
+				if (status_as_list[1]!="None")
+					dat += " covered in [lowertext(status_as_list[1])]"
+		if(!ind)
+			dat += "\[...\]<br><br>"
+		else
+			dat += ".<br><br>"
+
+		if(gender == MALE)
+			dat += "Underwear: <a href ='?_src_=prefs;preference=underwear;task=input'><b>[underwear_m[underwear]]</b></a><br>"
+		else
+			dat += "Underwear: <a href ='?_src_=prefs;preference=underwear;task=input'><b>[underwear_f[underwear]]</b></a><br>"
+
+		dat += "Undershirt: <a href='?_src_=prefs;preference=undershirt;task=input'><b>[undershirt_t[undershirt]]</b></a><br>"
+
+		dat += "Backpack Type:<br><a href ='?_src_=prefs;preference=bag;task=input'><b>[backbaglist[backbag]]</b></a><br>"
+
+		dat += "Nanotrasen Relation:<br><a href ='?_src_=prefs;preference=nt_relation;task=input'><b>[nanotrasen_relation]</b></a><br>"
+
+		dat += "</td><td><b>Preview</b><br><img src=previewicon1.png height=64 width=64><img src=previewicon2.png height=64 width=64></td></tr></table>"
+
+		dat += "</td><td width='300px' height='300px'>"
+
+		if(jobban_isbanned(user, "Records"))
+			dat += "<b>You are banned from using character records.</b><br>"
+		else
+			dat += "<b><a href=\"byond://?src=\ref[user];preference=records;record=1\">Character Records</a></b><br>"
+
+		dat += "<b><a href=\"byond://?src=\ref[user];preference=antagoptions;active=0\">Set Antag Options</b></a><br>"
+
+		dat += "\t<a href=\"byond://?src=\ref[user];preference=skills\"><b>Set Skills</b> (<i>[GetSkillClass(used_skillpoints)][used_skillpoints > 0 ? " [used_skillpoints]" : "0"])</i></a><br>"
+
+		dat += "<a href='byond://?src=\ref[user];preference=flavor_text;task=open'><b>Set Flavor Text</b></a><br>"
+
+		dat += "<a href='byond://?src=\ref[user];preference=pAI'><b>pAI Configuration</b></a><br>"
+		dat += "<br>"
+
+		dat += "<b>Character's Signature</b><br>"
+		dat += "<a href='byond://?src=\ref[user];preference=signature;task=input'>Edit</a> <a href='byond://?src=\ref[user];preference=signature;task=font'>Font</a> <a href='byond://?src=\ref[user];preference=signature;task=help'>Help</a><br>"
+		dat += "<font face=\"[signature_font ? signature_font : "Verdanta"]\">[signature]</font><br>"
+
+
+		dat += "<br><b>Hair</b><br>"
+		dat += "<a href='?_src_=prefs;preference=hair;task=input'>Change Color</a> <font face='fixedsys' size='3' color='#[num2hex(r_hair, 2)][num2hex(g_hair, 2)][num2hex(b_hair, 2)]'><table style='display:inline;' bgcolor='#[num2hex(r_hair, 2)][num2hex(g_hair, 2)][num2hex(b_hair)]'><tr><td>__</td></tr></table></font> "
+		dat += " Style: <a href='?_src_=prefs;preference=h_style;task=input'>[h_style]</a><br>"
+
+		dat += "<br><b>Facial</b><br>"
+		dat += "<a href='?_src_=prefs;preference=facial;task=input'>Change Color</a> <font face='fixedsys' size='3' color='#[num2hex(r_facial, 2)][num2hex(g_facial, 2)][num2hex(b_facial, 2)]'><table  style='display:inline;' bgcolor='#[num2hex(r_facial, 2)][num2hex(g_facial, 2)][num2hex(b_facial)]'><tr><td>__</td></tr></table></font> "
+		dat += " Style: <a href='?_src_=prefs;preference=f_style;task=input'>[f_style]</a><br>"
+
+		dat += "<br><b>Eyes</b><br>"
+		dat += "<a href='?_src_=prefs;preference=eyes;task=input'>Change Color</a> <font face='fixedsys' size='3' color='#[num2hex(r_eyes, 2)][num2hex(g_eyes, 2)][num2hex(b_eyes, 2)]'><table  style='display:inline;' bgcolor='#[num2hex(r_eyes, 2)][num2hex(g_eyes, 2)][num2hex(b_eyes)]'><tr><td>__</td></tr></table></font><br>"
+
+		dat += "<br><b>Body Color</b><br>"
+		dat += "<a href='?_src_=prefs;preference=skin;task=input'>Change Color</a> <font face='fixedsys' size='3' color='#[num2hex(r_skin, 2)][num2hex(g_skin, 2)][num2hex(b_skin, 2)]'><table style='display:inline;' bgcolor='#[num2hex(r_skin, 2)][num2hex(g_skin, 2)][num2hex(b_skin)]'><tr><td>__</td></tr></table></font>"
+
+		dat += "<br><br><b>Background Information</b><br>"
+		dat += "<b>Home system</b>: <a href='byond://?src=\ref[user];preference=home_system;task=input'>[home_system]</a><br/>"
+		dat += "<b>Citizenship</b>: <a href='byond://?src=\ref[user];preference=citizenship;task=input'>[citizenship]</a><br/>"
+		dat += "<b>Faction</b>: <a href='byond://?src=\ref[user];preference=faction;task=input'>[faction]</a><br/>"
+		dat += "<b>Religion</b>: <a href='byond://?src=\ref[user];preference=religion;task=input'>[religion]</a><br/>"
+
 		dat += "<br><br>"
 
-	if(gender == MALE)
-		dat += "Underwear: <a href ='?_src_=prefs;preference=underwear;task=input'><b>[underwear_m[underwear]]</b></a><br>"
-	else
-		dat += "Underwear: <a href ='?_src_=prefs;preference=underwear;task=input'><b>[underwear_f[underwear]]</b></a><br>"
-
-	dat += "Undershirt: <a href='?_src_=prefs;preference=undershirt;task=input'><b>[undershirt_t[undershirt]]</b></a><br>"
-
-	dat += "Backpack Type:<br><a href ='?_src_=prefs;preference=bag;task=input'><b>[backbaglist[backbag]]</b></a><br>"
-
-	dat += "Nanotrasen Relation:<br><a href ='?_src_=prefs;preference=nt_relation;task=input'><b>[nanotrasen_relation]</b></a><br>"
-
-	dat += "</td><td><b>Preview</b><br><img src=previewicon.png height=64 width=64><img src=previewicon2.png height=64 width=64></td></tr></table>"
-
-	dat += "</td><td width='300px' height='300px'>"
-
-	if(jobban_isbanned(user, "Records"))
-		dat += "<b>You are banned from using character records.</b><br>"
-	else
-		dat += "<b><a href=\"byond://?src=\ref[user];preference=records;record=1\">Character Records</a></b><br>"
-
-	dat += "<b><a href=\"byond://?src=\ref[user];preference=antagoptions;active=0\">Set Antag Options</b></a><br>"
-
-	dat += "\t<a href=\"byond://?src=\ref[user];preference=skills\"><b>Set Skills</b> (<i>[GetSkillClass(used_skillpoints)][used_skillpoints > 0 ? " [used_skillpoints]" : "0"])</i></a><br>"
-
-	dat += "<a href='byond://?src=\ref[user];preference=flavor_text;task=open'><b>Set Flavor Text</b></a><br>"
-
-	dat += "<a href='byond://?src=\ref[user];preference=pAI'><b>pAI Configuration</b></a><br>"
-	dat += "<br>"
-
-	dat += "<b>Character's Signature</b><br>"
-	dat += "<a href='byond://?src=\ref[user];preference=signature;task=input'>Edit</a> <a href='byond://?src=\ref[user];preference=signature;task=font'>Font</a> <a href='byond://?src=\ref[user];preference=signature;task=help'>Help</a><br>"
-	dat += "<font face=\"[signature_font ? signature_font : "Verdanta"]\">[signature]</font><br>"
-
-
-	dat += "<br><b>Hair</b><br>"
-	dat += "<a href='?_src_=prefs;preference=hair;task=input'>Change Color</a> <font face='fixedsys' size='3' color='#[num2hex(r_hair, 2)][num2hex(g_hair, 2)][num2hex(b_hair, 2)]'><table style='display:inline;' bgcolor='#[num2hex(r_hair, 2)][num2hex(g_hair, 2)][num2hex(b_hair)]'><tr><td>__</td></tr></table></font> "
-	dat += " Style: <a href='?_src_=prefs;preference=h_style;task=input'>[h_style]</a><br>"
-
-	dat += "<br><b>Facial</b><br>"
-	dat += "<a href='?_src_=prefs;preference=facial;task=input'>Change Color</a> <font face='fixedsys' size='3' color='#[num2hex(r_facial, 2)][num2hex(g_facial, 2)][num2hex(b_facial, 2)]'><table  style='display:inline;' bgcolor='#[num2hex(r_facial, 2)][num2hex(g_facial, 2)][num2hex(b_facial)]'><tr><td>__</td></tr></table></font> "
-	dat += " Style: <a href='?_src_=prefs;preference=f_style;task=input'>[f_style]</a><br>"
-
-	dat += "<br><b>Eyes</b><br>"
-	dat += "<a href='?_src_=prefs;preference=eyes;task=input'>Change Color</a> <font face='fixedsys' size='3' color='#[num2hex(r_eyes, 2)][num2hex(g_eyes, 2)][num2hex(b_eyes, 2)]'><table  style='display:inline;' bgcolor='#[num2hex(r_eyes, 2)][num2hex(g_eyes, 2)][num2hex(b_eyes)]'><tr><td>__</td></tr></table></font><br>"
-
-	dat += "<br><b>Body Color</b><br>"
-	dat += "<a href='?_src_=prefs;preference=skin;task=input'>Change Color</a> <font face='fixedsys' size='3' color='#[num2hex(r_skin, 2)][num2hex(g_skin, 2)][num2hex(b_skin, 2)]'><table style='display:inline;' bgcolor='#[num2hex(r_skin, 2)][num2hex(g_skin, 2)][num2hex(b_skin)]'><tr><td>__</td></tr></table></font>"
-
-	dat += "<br><br><b>Background Information</b><br>"
-	dat += "<b>Home system</b>: <a href='byond://?src=\ref[user];preference=home_system;task=input'>[home_system]</a><br/>"
-	dat += "<b>Citizenship</b>: <a href='byond://?src=\ref[user];preference=citizenship;task=input'>[citizenship]</a><br/>"
-	dat += "<b>Faction</b>: <a href='byond://?src=\ref[user];preference=faction;task=input'>[faction]</a><br/>"
-	dat += "<b>Religion</b>: <a href='byond://?src=\ref[user];preference=religion;task=input'>[religion]</a><br/>"
-
-	dat += "<br><br>"
-
-	if(jobban_isbanned(user, "Syndicate"))
-		dat += "<b>You are banned from antagonist roles.</b>"
-		src.be_special = 0
-	else
-		var/n = 0
-		for (var/i in special_roles)
-			if(special_roles[i]) //if mode is available on the server
-				if(jobban_isbanned(user, i))
-					dat += "<b>Be [i]:</b> <font color=red><b> \[BANNED]</b></font><br>"
-				else if(i == "pai candidate")
-					if(jobban_isbanned(user, "pAI"))
+		if(jobban_isbanned(user, "Syndicate"))
+			dat += "<b>You are banned from antagonist roles.</b>"
+			src.be_special = 0
+		else
+			var/n = 0
+			for (var/i in special_roles)
+				if(special_roles[i]) //if mode is available on the server
+					if(jobban_isbanned(user, i))
 						dat += "<b>Be [i]:</b> <font color=red><b> \[BANNED]</b></font><br>"
-				else
-					dat += "<b>Be [i]:</b> <a href='?_src_=prefs;preference=be_special;num=[n]'><b>[src.be_special&(1<<n) ? "Yes" : "No"]</b></a><br>"
-			n++
-	dat += "</td></tr></table><hr><center>"
+					else if(i == "pai candidate")
+						if(jobban_isbanned(user, "pAI"))
+							dat += "<b>Be [i]:</b> <font color=red><b> \[BANNED]</b></font><br>"
+					else
+						dat += "<b>Be [i]:</b> <a href='?_src_=prefs;preference=be_special;num=[n]'><b>[src.be_special&(1<<n) ? "Yes" : "No"]</b></a><br>"
+				n++
+		dat += "</td></tr></table><hr><center>"
 
-	if(!IsGuestKey(user.key))
-		dat += "<a href='?_src_=prefs;preference=load'>Undo</a> - "
-		dat += "<a href='?_src_=prefs;preference=save'>Save Setup</a> - "
+		if(!IsGuestKey(user.key))
+			dat += "<a href='?_src_=prefs;preference=load'>Undo</a> - "
+			dat += "<a href='?_src_=prefs;preference=save'>Save Setup</a> - "
 
-	dat += "<a href='?_src_=prefs;preference=reset_all'>Reset Setup</a>"
-	dat += "</center></body></html>"
+		dat += "<a href='?_src_=prefs;preference=reset_all'>Reset Setup</a>"
+		dat += "</center></body></html>"
 
-	user << browse(dat, "window=preferences;size=560x736")
+		user << browse(dat, "window=preferences;size=560x736")
 
 /datum/preferences/proc/SetChoices(mob/user, limit = 16, list/splitJobs = list("Chief Medical Officer"), width = 550, height = 660)
 	if(!job_master)
@@ -1112,7 +1101,6 @@ datum/preferences
 					if(new_age)
 						age = max(min( round(text2num(new_age)), AGE_MAX),AGE_MIN)
 				if("species")
-
 					var/list/new_species = list("Human")
 					var/prev_species = species
 					var/whitelisted = 0
@@ -1131,41 +1119,8 @@ datum/preferences
 
 					if(prev_species != species)
 						//grab one of the valid hair styles for the newly chosen species
-						var/list/valid_hairstyles = list()
-						for(var/hairstyle in hair_styles_list)
-							var/datum/sprite_accessory/S = hair_styles_list[hairstyle]
-							if(gender == MALE && S.gender == FEMALE)
-								continue
-							if(gender == FEMALE && S.gender == MALE)
-								continue
-							if( !(species in S.species_allowed))
-								continue
-							valid_hairstyles[hairstyle] = hair_styles_list[hairstyle]
-
-						if(valid_hairstyles.len)
-							h_style = pick(valid_hairstyles)
-						else
-							//this shouldn't happen
-							h_style = hair_styles_list["Bald"]
-
-						//grab one of the valid facial hair styles for the newly chosen species
-						var/list/valid_facialhairstyles = list()
-						for(var/facialhairstyle in facial_hair_styles_list)
-							var/datum/sprite_accessory/S = facial_hair_styles_list[facialhairstyle]
-							if(gender == MALE && S.gender == FEMALE)
-								continue
-							if(gender == FEMALE && S.gender == MALE)
-								continue
-							if( !(species in S.species_allowed))
-								continue
-
-							valid_facialhairstyles[facialhairstyle] = facial_hair_styles_list[facialhairstyle]
-
-						if(valid_facialhairstyles.len)
-							f_style = pick(valid_facialhairstyles)
-						else
-							//this shouldn't happen
-							f_style = facial_hair_styles_list["Shaved"]
+						h_style = random_hair_style(gender,get_hair_species())
+						f_style = random_facial_hair_style(gender,get_hair_species())
 
 						//reset hair colour and skin colour
 						r_hair = 0//hex2num(copytext(new_hair, 2, 4))
@@ -1173,6 +1128,9 @@ datum/preferences
 						b_hair = 0//hex2num(copytext(new_hair, 6, 8))
 
 						s_tone = 0
+						
+						organ_data = list()
+						
 
 				if("language")
 					var/languages_available
@@ -1208,24 +1166,14 @@ datum/preferences
 						b_type = new_b_type
 
 				if("hair")
-					if(species == "Human" || species == "Unathi" || species == "Tajaran" || species == "Skrell")
-						var/new_hair = input(user, "Choose your character's hair colour:", "Character Preference") as color|null
-						if(new_hair)
-							r_hair = hex2num(copytext(new_hair, 2, 4))
-							g_hair = hex2num(copytext(new_hair, 4, 6))
-							b_hair = hex2num(copytext(new_hair, 6, 8))
-					else if (species == "Machine")
-						alert("Please select the Body Color instead.")
+					var/new_hair = input(user, "Choose your character's hair colour:", "Character Preference") as color|null
+					if(new_hair)
+						r_hair = hex2num(copytext(new_hair, 2, 4))
+						g_hair = hex2num(copytext(new_hair, 4, 6))
+						b_hair = hex2num(copytext(new_hair, 6, 8))
 
 				if("h_style")
-					var/list/valid_hairstyles = list()
-					for(var/hairstyle in hair_styles_list)
-						var/datum/sprite_accessory/S = hair_styles_list[hairstyle]
-						if( !(species in S.species_allowed))
-							continue
-
-						valid_hairstyles[hairstyle] = hair_styles_list[hairstyle]
-
+					var/list/valid_hairstyles = get_valid_hairstyles(gender,get_hair_species())
 					var/new_h_style = input(user, "Choose your character's hair style:", "Character Preference")  as null|anything in valid_hairstyles
 					if(new_h_style)
 						h_style = new_h_style
@@ -1238,18 +1186,7 @@ datum/preferences
 						b_facial = hex2num(copytext(new_facial, 6, 8))
 
 				if("f_style")
-					var/list/valid_facialhairstyles = list()
-					for(var/facialhairstyle in facial_hair_styles_list)
-						var/datum/sprite_accessory/S = facial_hair_styles_list[facialhairstyle]
-						if(gender == MALE && S.gender == FEMALE)
-							continue
-						if(gender == FEMALE && S.gender == MALE)
-							continue
-						if( !(species in S.species_allowed))
-							continue
-
-						valid_facialhairstyles[facialhairstyle] = facial_hair_styles_list[facialhairstyle]
-
+					var/list/valid_facialhairstyles = get_valid_facialhairstyles(gender,get_hair_species())
 					var/new_f_style = input(user, "Choose your character's facial-hair style:", "Character Preference")  as null|anything in valid_facialhairstyles
 					if(new_f_style)
 						f_style = new_f_style
@@ -1296,10 +1233,6 @@ datum/preferences
 							r_skin = hex2num(copytext(new_skin, 2, 4))
 							g_skin = hex2num(copytext(new_skin, 4, 6))
 							b_skin = hex2num(copytext(new_skin, 6, 8))
-							if(species == "Machine")
-								r_hair = r_skin
-								g_hair = g_skin
-								b_hair = b_skin
 
 				if("ooccolor")
 					var/new_ooccolor = input(user, "Choose your OOC colour:", "Game Preference") as color|null
@@ -1325,57 +1258,22 @@ datum/preferences
 					else
 						user << browse(null, "window=disabil")
 
+				if("set_machine_brain") // shell customization junk
+					var/new_brain = input(user, "Choose your brain.", "Character Preference")  as null|anything in list("MMI", "Posibrain") // not differentiating brain species at the moment
+					if(new_brain)
+						machine_brain_type=new_brain
+					make_sure_we_have_a_brain_type_for_machines()
+
+				if("set_machine_covering")
+					var/new_coating = input(user, "Choose your exterior coating.", "Character Preference")  as null|anything in get_limb_covering_names()
+					if(new_coating)
+						covering_type=(new_coating!="None" ? new_coating : null)
+						h_style = random_hair_style(gender, get_hair_species())
+						f_style = random_facial_hair_style(gender, get_hair_species())
+						
 				if("limbs")
-					var/limb_name = input(user, "Which limb do you want to change?") as null|anything in list("Left Leg","Right Leg","Left Arm","Right Arm","Left Foot","Right Foot","Left Hand","Right Hand")
-					if(!limb_name) return
+					customize_limbs(user,species!="Machine")
 
-					var/limb = null
-					var/second_limb = null // if you try to change the arm, the hand should also change
-					var/third_limb = null  // if you try to unchange the hand, the arm should also change
-					switch(limb_name)
-						if("Left Leg")
-							limb = "l_leg"
-							second_limb = "l_foot"
-						if("Right Leg")
-							limb = "r_leg"
-							second_limb = "r_foot"
-						if("Left Arm")
-							limb = "l_arm"
-							second_limb = "l_hand"
-						if("Right Arm")
-							limb = "r_arm"
-							second_limb = "r_hand"
-						if("Left Foot")
-							limb = "l_foot"
-							third_limb = "l_leg"
-						if("Right Foot")
-							limb = "r_foot"
-							third_limb = "r_leg"
-						if("Left Hand")
-							limb = "l_hand"
-							third_limb = "l_arm"
-						if("Right Hand")
-							limb = "r_hand"
-							third_limb = "r_arm"
-
-					var/new_state = input(user, "What state do you wish the limb to be in?") as null|anything in list("Normal","Amputated","Prothesis")
-					if(!new_state) return
-
-					switch(new_state)
-						if("Normal")
-							organ_data[limb] = null
-							if(third_limb)
-								organ_data[third_limb] = null
-						if("Amputated")
-							organ_data[limb] = "amputated"
-							if(second_limb)
-								organ_data[second_limb] = "amputated"
-						if("Prothesis")
-							organ_data[limb] = "cyborg"
-							if(second_limb)
-								organ_data[second_limb] = "cyborg"
-							if(third_limb && organ_data[third_limb] == "amputated")
-								organ_data[third_limb] = null
 				if("organs")
 					var/organ_name = input(user, "Which internal function do you want to change?") as null|anything in list("Heart", "Eyes")
 					if(!organ_name) return
@@ -1594,29 +1492,44 @@ datum/preferences
 	character.h_style = h_style
 	character.f_style = f_style
 
-
 	character.skills = skills
 	character.used_skillpoints = used_skillpoints
 
-	// Destroy/cyborgize organs
+	var/list/covering_name_to_type = get_limb_covering_list()
 
+	if (species=="Machine")
+		var/datum/organ/internal/brain/robot/brain_datum = character.get_organ("brain")
+		if (brain_datum) // sanity check
+			make_sure_we_have_a_brain_type_for_machines()
+			brain_datum.machine_brain_type=machine_brain_type // set the brain type
+		for (var/datum/organ/external/organ in character.organs) // provide default covering for shells
+			if (organ) // gotta make sure we're getting an actual organ here
+				if (covering_type)
+					var/covering_path = covering_name_to_type[covering_type]
+					organ.covering = new covering_path(organ,rgb(r_skin,g_skin,b_skin))
+					organ.covering.limb_datum=organ
+
+	// Destroy or cyborgize organs
 	for(var/name in organ_data)
 		var/datum/organ/external/O = character.organs_by_name[name]
 		var/datum/organ/internal/I = character.internal_organs_by_name[name]
 		var/status = organ_data[name]
-
 		if(status == "amputated")
 			O.amputated = 1
 			O.status |= ORGAN_DESTROYED
 			O.destspawn = 1
-		if(status == "cyborg")
-			O.status |= ORGAN_ROBOT
 		if(status == "assisted")
 			I.mechassist()
-		else if(status == "mechanical")
+		if(status == "mechanical")
 			I.mechanize()
-
-		else continue
+		var/list/status_as_list=status
+		if (istype(status_as_list)) // we got a robot here
+			O.status |= ORGAN_ROBOT
+			O.covering = null // wipe any old covering we might have
+			if (status_as_list[1]!="None")
+				var/covering_path = covering_name_to_type[status_as_list[1]]
+				O.covering = new covering_path(O,status_as_list[2])
+				O.covering.limb_datum=O
 
 	if(underwear > underwear_m.len || underwear < 1)
 		underwear = 0 //I'm sure this is 100% unnecessary, but I'm paranoid... sue me. //HAH NOW NO MORE MAGIC CLONING UNDIES
@@ -1657,5 +1570,114 @@ datum/preferences
 	dat += "</center></tt>"
 	user << browse(dat, "window=saves;size=300x390")
 
+
 /datum/preferences/proc/close_load_dialog(mob/user)
 	user << browse(null, "window=saves")
+
+
+/datum/preferences/proc/get_hair_species()
+	// this is incredibly snowflakey but I don't see an alternative
+	if (species!="Machine")
+		return species
+	var/head_coat=covering_type // we get the base coating
+	if (organ_data["head"]) // if we're customizing the head we should get their coating
+		head_coat=organ_data["head"][1]
+	if (!head_coat) // no coating?
+		return
+	var/list/refs=get_limb_covering_references()
+	for(var/skin_type in refs)
+		var/datum/synthetic_limb_cover/temp=refs[skin_type]
+		if (temp.icon_key_type==head_coat)
+			return temp.hair_species
+
+
+/datum/preferences/proc/custom_robot_limb(mob/user,)
+	var/covering_name = input(user, "What kind of covering do you want?") as null|anything in get_limb_covering_names()
+	if (!covering_name)
+		return
+	if (covering_name=="None") // don't want no colour
+		return list(covering_name,rgb(128,128,128))
+	var/new_colour = input(user, "Pick the colour for your limb:", "Character Preference") as color|null
+	if(!new_colour)
+		return
+	return list(covering_name,new_colour)
+
+
+var/list/limb_name_to_descriptive_names
+/datum/preferences/proc/get_limb_name_to_descriptive_name()
+	if (isnull(limb_name_to_descriptive_names))
+		limb_name_to_descriptive_names=list()
+		for(var/organ_type in typesof(/datum/organ/external)-/datum/organ/external)
+			var/datum/organ/external/temp = new organ_type()
+			limb_name_to_descriptive_names[temp.name]=temp.display_name
+			del(temp)
+	return limb_name_to_descriptive_names
+
+
+var/list/limb_connection_data
+/datum/preferences/proc/get_limb_connection_data()
+	if (isnull(limb_connection_data))
+		limb_connection_data = list()
+		limb_connection_data["Left Leg"]=list("l_leg","l_foot",null)
+		limb_connection_data["Right Leg"]=list("r_leg","r_foot",null)
+		limb_connection_data["Left Arm"]=list("l_arm","l_hand",null)
+		limb_connection_data["Right Arm"]=list("r_arm","r_hand",null)
+		limb_connection_data["Left Foot"]=list("l_foot",null,"l_leg")
+		limb_connection_data["Right Foot"]=list("r_foot",null,"r_leg")
+		limb_connection_data["Left Hand"]=list("l_hand",null,"l_arm")
+		limb_connection_data["Right Hand"]=list("r_hand",null,"r_arm")
+		limb_connection_data["Chest"]=list("chest",null,null)
+		limb_connection_data["Groin"]=list("groin",null,null)
+		limb_connection_data["Head"]=list("head",null,null)
+	return limb_connection_data
+
+
+/datum/preferences/proc/pick_organ_to_customize(mob/user,var/is_organic_species)
+	var/list/valid_targets = list("Left Leg","Right Leg","Left Arm","Right Arm","Left Foot","Right Foot","Left Hand","Right Hand")
+	if (!is_organic_species)
+		valid_targets.Add(list("Head","Chest","Groin"))
+	var/limb_name = input(user, "Which limb do you want to change?") as null|anything in valid_targets
+	if(!limb_name) // you have picked nothing
+		return
+	var/list/limb_info=get_limb_connection_data()
+	return limb_info[limb_name]
+
+
+/datum/preferences/proc/customize_limbs(mob/user,var/is_organic_species)
+	var/list/limb_info = pick_organ_to_customize(user,is_organic_species)
+	if (!limb_info)
+		return
+	var/limb=limb_info[1]
+	var/limb_child=limb_info[2]
+	var/limb_parent=limb_info[3]
+	var/new_state = input(user, "What state do you wish the limb to be in?") as null|anything in (is_organic_species ? list("Normal","Amputated","Prosthesis") : list("Normal","Custom"))
+	if(!new_state)
+		return // cancel
+	var/hair_species=get_hair_species()
+	switch(new_state)
+		if("Normal")
+			organ_data-= limb
+			if(!isnull(limb_parent))
+				organ_data-=limb_parent
+		if("Amputated")
+			organ_data[limb] = "amputated"
+			if(!isnull(limb_child))
+				organ_data[limb_child] = "amputated"
+		if("Prosthesis")
+			var/list/custom = custom_robot_limb(user)
+			organ_data[limb] = custom
+			if(!isnull(limb_child))
+				organ_data[limb_child] = custom
+			if(!isnull(limb_parent) && organ_data[limb_parent] == "amputated")
+				organ_data-=limb_parent
+		if("Custom")
+			organ_data[limb] = custom_robot_limb(user) // robots have no dependencies
+	var/new_hair_species=get_hair_species()
+	if(hair_species!=new_hair_species)
+		h_style = random_hair_style(gender, new_hair_species)
+		f_style = random_facial_hair_style(gender, new_hair_species)
+
+/datum/preferences/proc/make_sure_we_have_a_brain_type_for_machines()
+	if (species=="Machine")
+		if(!machine_brain_type)
+			machine_brain_type="Posibrain"
