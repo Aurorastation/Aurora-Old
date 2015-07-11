@@ -105,6 +105,11 @@
 			//H.jitteriness = 0
 			H.update_hair()
 	return
+	
+	
+/datum/species/proc/get_eye_icon()
+	return eyes
+
 
 /datum/species/human
 	name = "Human"
@@ -328,6 +333,9 @@
 
 	blood_color = "#1F181F"
 	flesh_color = "#575757"
+	
+	var/brain_type = 'posibrain' // default is robots
+	
 
 //Species unarmed attacks
 
