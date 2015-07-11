@@ -74,9 +74,26 @@
 
 var/world_topic_spam_protect_ip = "0.0.0.0"
 var/world_topic_spam_protect_time = world.timeofday
+var/master_server_password
 
 /world/Topic(T, addr, master, key)
-	diary << "TOPIC: \"[T]\", from:[addr], master:[master], key:[key][log_end]"
+	if(addr != topic_safe_address)
+		diary << "TOPIC: \"[T]\", from:[addr], master:[master], key:[key][log_end]"
+/*	else
+		if(T == "ping")
+			return 1 //I just want to know if you're up not the clients connected
+		if(copytext(T,1,9) == "shutdown")
+			var/input[] = params2list(T)
+			if(input["key"] == master_server_password)
+				world << "<font size=4 color='#ff2222'>Server shutdown by master server</font>"
+				log_admin("Master server initiated an immediate shutdown.")
+				feedback_set_details("end_error","immediate shutdown - by master server [addr]")
+				if(blackbox)
+					blackbox.save_all_data_to_sql()
+
+				shutdown()
+				return 1
+*/
 
 	if (T == "ping")
 		var/x = 1

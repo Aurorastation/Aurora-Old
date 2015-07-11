@@ -41,7 +41,7 @@
 	//parse the language code and consume it
 	var/datum/language/speaking = parse_language(message)
 	if(speaking)
-		if(speaking.flags & INNATE)
+		if(speaking.flags & INNATE && !findtext(message,"! ", 1, 3))
 			message = copytext(message,2)
 		else
 			message = copytext(message,3)
