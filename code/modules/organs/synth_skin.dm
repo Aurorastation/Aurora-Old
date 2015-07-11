@@ -294,8 +294,9 @@ proc/create_tinted_icon(icon_name, icon_state_name, target_colour)
 	return " It looks like there are [current_charges] charges left."
 	
 
-/obj/item/weapon/synth_skin_cartridge/examine(mob/user)
-	user << src.desc + get_charges_string()
+/obj/item/weapon/synth_skin_cartridge/examine()
+	set src in usr
+	usr << src.desc + get_charges_string()
 	
 	
 /obj/item/weapon/synth_skin_cartridge/attack_self(mob/user)
