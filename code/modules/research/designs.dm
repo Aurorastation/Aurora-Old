@@ -1514,7 +1514,7 @@ datum/design/bluespacebeaker
 
 datum/design/noreactbeaker
 	name = "cryostasis beaker"
-	desc = "A cryostasis beaker that allows for chemical storage without reactions. Can hold up to 50 units."
+	desc = "A cryostasis beaker that allows for chemical storage without reactions. Can hold up to 60 units."
 	id = "splitbeaker"
 	req_tech = list("materials" = 2)
 	build_type = PROTOLATHE

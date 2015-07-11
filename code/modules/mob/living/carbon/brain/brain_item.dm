@@ -39,7 +39,6 @@
 	brainmob.timeofhostdeath = H.timeofdeath
 	if(H.mind)
 		H.mind.transfer_to(brainmob)
-
 	brainmob << "\blue You feel slightly disoriented. That's normal when you're just a brain."
 	callHook("debrain", list(brainmob))
 
@@ -53,20 +52,24 @@
 		usr << "You can feel the small spark of life still left in this one."
 	else
 		usr << "This one seems particularly lifeless. Perhaps it will regain some of its luster later.."
-
+	
+		
 /obj/item/organ/brain/removed(var/mob/living/target,var/mob/living/user)
-
 	..()
-
 	var/mob/living/simple_animal/borer/borer = target.has_brain_worms()
-
 	if(borer)
 		borer.detatch() //Should remove borer if the brain is removed - RR
-
 	var/mob/living/carbon/human/H = target
 	var/obj/item/organ/brain/B = src
 	if(istype(B) && istype(H))
 		B.transfer_identity(target)
+		
+/obj/item/organ/brain/exposed_to_the_world()
+	var/datum/organ/internal/brain/robot/robotic_brain=organ_data
+	if (istype(robotic_brain))
+		var/new_mmi=robotic_brain.create_robot_brain_replacement(brainmob,src.loc)
+		del(src)
+		return new_mmi
 
 /obj/item/organ/brain/replaced(var/mob/living/target)
 

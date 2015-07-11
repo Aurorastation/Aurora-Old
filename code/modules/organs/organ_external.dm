@@ -43,6 +43,10 @@
 
 	// how often wounds should be updated, a higher number means less often
 	var/wound_update_accuracy = 1
+	
+	var/datum/synthetic_limb_cover/covering = null // paint or synth skin
+	
+	var/gendered = FALSE
 
 
 /datum/organ/external/New(var/datum/organ/external/P)
@@ -513,17 +517,36 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	if (open && !clamped && (H && !(H.species.flags & NO_BLOOD)))	//things tend to bleed if they are CUT OPEN
 		status |= ORGAN_BLEEDING
-
-
+			
+			
+/datum/organ/external/proc/can_take_covering() // is this organ functional enough to take a covering
+	if (status&(ORGAN_DESTROYED|ORGAN_BROKEN|ORGAN_DEAD))
+		return
+	return (burn_dam + brute_dam) <= (max_damage * 0.1) // you get hurt you're going to lose your covering
+			
+			
 // new damage icon system
 // adjusted to set damage_state to brute/burn code only (without r_name0 as before)
 /datum/organ/external/proc/update_icon()
 	var/n_is = damage_state_text()
 	if (n_is != damage_state)
 		damage_state = n_is
-		return 1
-	return 0
-
+		return TRUE
+	if (covering) // check to see if we lose the covering
+		if (covering.coverage==SYNTHETIC_COVERING_WORKING)
+			if (!can_take_covering()) // if your limbs get badly damaged you lose the covering
+				covering.coverage = SYNTHETIC_COVERING_DAMAGED
+				owner.update_body(TRUE)
+				return TRUE
+	return FALSE
+	
+/datum/organ/external/head/update_icon()
+	var/result = ..()
+	if (result)
+		owner.update_hair()
+	return result
+	
+	
 // new damage icon system
 // returns just the brute/burn damage code
 /datum/organ/external/proc/damage_state_text()
@@ -550,6 +573,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		tbrute = 2
 	else
 		tbrute = 3
+		
+		
 	return "[tbrute][tburn]"
 
 /****************************************************
@@ -804,14 +829,52 @@ Note that amputating the affected organ does in fact remove the infection from t
 			return 1
 	return 0
 
-/datum/organ/external/get_icon(var/icon/race_icon, var/icon/deform_icon,gender="")
-	if (status & ORGAN_ROBOT && !(owner.species && owner.species.flags & IS_SYNTHETIC))
-		return new /icon('icons/mob/human_races/robotic.dmi', "[icon_name][gender ? "_[gender]" : ""]")
+	
+/datum/organ/external/proc/get_icon_key()
+	if (status & ORGAN_DESTROYED)
+		return "L" // l for lost
+	if (status & ORGAN_DEAD)
+		return "D" // d for dead
+	if (status & ORGAN_ROBOT)
+		return get_synthetic_icon_key()
+	return "G" // regular old limb
 
-	if (status & ORGAN_MUTATED)
-		return new /icon(deform_icon, "[icon_name][gender ? "_[gender]" : ""]")
 
-	return new /icon(race_icon, "[icon_name][gender ? "_[gender]" : ""]")
+/datum/organ/external/proc/valid_covering()
+	if (status & ORGAN_ROBOT)
+		if (covering) 
+			return (covering.coverage) // is our covering working?
+		return FALSE // if we have no covering at all 
+	return TRUE // squishies always have skin
+	
+
+/datum/organ/external/proc/get_synthetic_icon_key()
+	if (!covering) // no covering at all, this should not happen
+		return "R" // regular old robot
+	return covering.get_icon_key()
+	
+		
+/datum/organ/external/proc/get_synthetic_icon()
+	if (!covering) // no covering at all, this should not happen
+		return new /icon('icons/mob/human_races/robotic.dmi', "[icon_name][get_gender_string()]")
+	return covering.get_icon()
+	
+	
+/datum/organ/external/proc/get_gender_string()
+	if (!gendered) // most organs aren't gender specific
+		return ""
+	if (owner) // if we're a gender specific organ with an owner
+		return (owner.gender == FEMALE ? "_f" : "_m")
+	return "_f"
+	
+		
+/datum/organ/external/get_icon(var/icon/race_icon, var/icon/deform_icon, var/list/skin_info)
+	if (status & ORGAN_ROBOT)
+		return get_synthetic_icon()
+	var/icon/result = new /icon((status & ORGAN_MUTATED) ? deform_icon : race_icon, "[icon_name][get_gender_string()]")
+	if (skin_info["blend"])
+		result.Blend(skin_info["rgb"],skin_info["mode"])
+	return result
 
 
 /datum/organ/external/proc/is_usable()
@@ -867,6 +930,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	body_part = UPPER_TORSO
 	vital = 1
 	encased = "ribcage"
+	gendered = TRUE
 
 /datum/organ/external/groin
 	name = "groin"
@@ -876,6 +940,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	min_broken_damage = 30
 	body_part = LOWER_TORSO
 	vital = 1
+	gendered = TRUE
 
 /datum/organ/external/l_arm
 	name = "l_arm"
@@ -971,16 +1036,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/disfigured = 0
 	vital = 1
 	encased = "skull"
-
-/datum/organ/external/head/get_icon(var/icon/race_icon, var/icon/deform_icon)
-	if (!owner)
-	 return ..()
-	var/g = "m"
-	if(owner.gender == FEMALE)	g = "f"
-	if (status & ORGAN_MUTATED)
-		. = new /icon(deform_icon, "[icon_name]_[g]")
-	else
-		. = new /icon(race_icon, "[icon_name]_[g]")
+	gendered = TRUE
+	
 
 /datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
 	..(brute, burn, sharp, edge, used_weapon, forbidden_limbs)
@@ -1012,6 +1069,7 @@ obj/item/weapon/organ
 	icon = 'icons/mob/human_races/r_human.dmi'
 	var/op_stage = 0
 	var/list/organs_internal = list()
+	
 
 obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 	..(loc)
@@ -1026,12 +1084,12 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 	for(var/datum/organ/internal/I in H.internal_organs)
 		if(I.parent_organ != name)
 			continue
-		var/obj/item/organ/current_organ = I.remove()
-		current_organ.removed(H)
-		current_organ.loc = src
-		if(current_organ.organ_data)
-			organs_internal |= current_organ.organ_data
-
+		var/obj/item/organ/new_organ_object = I.remove()
+		if(new_organ_object && istype(new_organ_object))
+			new_organ_object.removed(H)
+			if(new_organ_object.organ_data)
+				organs_internal |= new_organ_object.organ_data
+		new_organ_object.loc = src // put the organ inside the severed external organ
 	// Forming icon for the limb
 	// Setting base icon for this mob's race
 	var/icon/base
@@ -1039,24 +1097,13 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 		base = icon(H.species.icobase)
 	else
 		base = icon('icons/mob/human_races/r_human.dmi')
-
-	if(base)
-		//Changing limb's skin tone to match owner
-		if(!H.species || H.species.flags & HAS_SKIN_TONE)
-			if (H.s_tone >= 0)
-				base.Blend(rgb(H.s_tone, H.s_tone, H.s_tone), ICON_ADD)
-			else
-				base.Blend(rgb(-H.s_tone,  -H.s_tone,  -H.s_tone), ICON_SUBTRACT)
-
-	if(base)
-		//Changing limb's skin color to match owner
-		if(!H.species || H.species.flags & HAS_SKIN_COLOR)
-			base.Blend(rgb(H.r_skin, H.g_skin, H.b_skin), ICON_ADD)
-
+	if(base) // handle skin colours
+		var/list/skin_info = H.skin_colour_info() // get the skin tone info
+		base.Blend(skin_info["rgb"],skin_info["mode"])		
 	icon = base
 	set_dir(SOUTH)
 	src.transform = turn(src.transform, rand(70,130))
-
+	
 
 /****************************************************
 			   EXTERNAL ORGAN ITEMS DEFINES
@@ -1090,8 +1137,7 @@ obj/item/weapon/organ/head
 	name = "head"
 	icon_state = "head_m"
 	var/mob/living/carbon/brain/brainmob
-	var/brain_op_stage = 0
-
+	
 /obj/item/weapon/organ/head/posi
 	name = "robotic head"
 
@@ -1136,13 +1182,15 @@ obj/item/weapon/organ/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		if(2)
 			if(istype(W,/obj/item/weapon/hemostat))
 				if(contents.len)
-					var/obj/item/removing = pick(contents)
+					var/obj/item/organ/removing = pick(contents)
+					var/exposed_result
 					removing.loc = get_turf(user.loc)
-					if(!(user.l_hand && user.r_hand))
-						user.put_in_hands(removing)
-					if(istype(removing,/obj/item/organ))
+					if(istype(removing))
 						var/obj/item/organ/removed_organ = removing
 						organs_internal -= removed_organ.organ_data
+						exposed_result = removing.exposed_to_the_world()
+					if(!(user.l_hand && user.r_hand))
+						user.put_in_hands((isnull(exposed_result)) ? removing : exposed_result)
 					user.visible_message("<span class='danger'><b>[user]</b> extracts [removing] from [src] with [W]!")
 				else
 					user.visible_message("<span class='danger'><b>[user]</b> fishes around fruitlessly in [src] with [W].")

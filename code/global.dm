@@ -250,6 +250,8 @@ var/forumsqlpass = ""
 var/forum_activated_group = "2"
 var/forum_authenticated_group = "10"
 
+var/topic_safe_address = null //Here because uneditable once loaded
+
 	// For FTP requests. (i.e. downloading runtime logs.)
 	// However it'd be ok to use for accessing attack logs and such too, which are even laggier.
 var/fileaccess_timer = 0

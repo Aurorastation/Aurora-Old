@@ -38,8 +38,8 @@
 	var/del_new_on_log = 1				// del's new players if they log before they spawn in
 	var/feature_object_spell_system = 0 //spawns a spellbook which gives object-type spells instead of verb-type spells for the wizard
 	var/traitor_scaling = 0 			//if amount of traitors scales based on amount of players
-	var/objectives_disabled = 1 			//if objectives are disabled or not
-	var/protect_roles_from_antagonist = 1// If security and such can be traitor/cult/other
+	var/objectives_disabled = 0 			//if objectives are disabled or not
+	var/protect_roles_from_antagonist = 0// If security and such can be traitor/cult/other
 	var/continous_rounds = 1			// Gamemodes which end instantly will instead keep on going until the round ends by escape shuttle or nuke.
 	var/allow_Metadata = 0				// Metadata is supported.
 	var/popup_admin_pm = 0				//adminPMs to non-admins show in a pop-up 'reply' window when set to 1.
@@ -55,7 +55,7 @@
 	var/list/probabilities = list()		// relative probability of each mode
 	var/humans_need_surnames = 0
 	var/allow_random_events = 0			// enables random events mid-round when set to 1
-	var/allow_ai = 1					// allow ai job
+	var/allow_ai = 0					// allow ai job
 	var/hostedby = null
 	var/respawn = 1
 	var/guest_jobban = 1
@@ -522,6 +522,9 @@
 
 				if("invasive_directives")
 					config.invasive_directives = 1
+
+				if("topic_safe_address")
+					topic_safe_address = value
 
 				else
 					log_misc("Unknown setting in configuration: '[name]'")
