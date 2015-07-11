@@ -9,12 +9,12 @@
 	var/list/construction_cost = list("metal"=20000,"glass"=5000)
 	var/list/part = null
 	var/sabotaged = 0 //Emagging limbs can have repercussions when installed as prosthetics.
-	
-	
+
+
 /obj/item/robot_parts/proc/attach_to_robot(mob/user as mob, obj/item/robot_parts/robot_suit/assembly as obj)
 	user << "\red This is not used to construct robots."
-	
-	
+
+
 /obj/item/robot_parts/proc/move_into_robot(mob/user as mob, obj/item/robot_parts/robot_suit/assembly as obj)
 	user.drop_item()
 	src.loc = assembly
@@ -74,7 +74,7 @@
 			return
 		assembly.r_leg = src
 		move_into_robot(user,assembly)
-		
+
 
 /obj/item/robot_parts/chest
 	name = "robot torso"
@@ -95,7 +95,7 @@
 			return
 		assembly.chest = src
 		move_into_robot(user,assembly)
-		
+
 
 /obj/item/robot_parts/head
 	name = "robot head"
@@ -113,7 +113,7 @@
 			return
 		assembly.head = src
 		move_into_robot(user,assembly)
-	
+
 
 /obj/item/robot_parts/robot_suit
 	name = "robot endoskeleton"
@@ -147,7 +147,7 @@
 		src.overlays += "r_leg+o"
 	if(src.head)
 		src.overlays += "head+o"
-		
+
 
 /obj/item/robot_parts/robot_suit/proc/check_completion()
 	if(src.l_arm && src.r_arm)
@@ -156,16 +156,16 @@
 				feedback_inc("cyborg_frames_built",1)
 				return 1
 	return 0
-	
-	
+
+
 /obj/item/robot_parts/robot_suit/proc/allowed_to_build(mob/user as mob, obj/item/device/mmi/brain as obj)
 	if(!check_completion()) // not complete? not allowed
-		return 
+		return
 	if(!check_allowed_to_install_brain(user,brain)) // not allowed to put the brain in there
 		return
 	return TRUE
-		
-		
+
+
 /obj/item/robot_parts/robot_suit/proc/check_allowed_to_install_brain(mob/user as mob, obj/item/device/mmi/brain as obj)
 	if(!istype(loc,/turf))
 		user << "\red You can't put the [brain] in, the frame has to be standing on the ground to be perfectly precise."
@@ -193,8 +193,8 @@
 		user << "\red This [brain] does not seem to fit."
 		return
 	return TRUE
-	
-	
+
+
 /obj/item/robot_parts/robot_suit/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	// HANDLE ED209 ASSEMBLY
@@ -229,14 +229,14 @@
 				create_robot(brain)
 			else // otherwise we're making a shell
 				create_shell(brain)
-				
-				
+
+
 /obj/item/robot_parts/robot_suit/proc/create_robot(obj/item/device/mmi/brain as obj)
 	var/mob/living/silicon/robot/new_robot = new(get_turf(loc), unfinished = 1)
 	if(!new_robot) // something has gone poorly
 		return
 	// move the brain
-	new_robot.mmi = brain 
+	new_robot.mmi = brain
 	new_robot.invisibility = 0
 	new_robot.custom_name = created_name
 	new_robot.updatename("Default")
@@ -254,11 +254,10 @@
 	feedback_inc("cyborg_birth",1)
 	new_robot.Namepick()
 	del(src)
-	
-	
+
+
 /obj/item/robot_parts/robot_suit/proc/create_shell(obj/item/device/mmi/brain as obj)
 	var/mob/living/carbon/human/machine/new_shell = new(src.loc)
-	var/key=brain.brainmob.mind.key
 	brain.brainmob.mind.transfer_to(new_shell) // transfer brain
 	var/datum/organ/internal/brain/robot/brain_datum=new_shell.internal_organs_by_name["brain"] // put the brain in the head
 	brain_datum.machine_brain_type=brain.machine_brain_type
@@ -266,7 +265,7 @@
 	give_option_to_rename(new_shell)
 	del(brain)
 	del(src)
-	
+
 proc/give_option_to_rename(var/mob/living/carbon/human/new_shell)
 	spawn(0)
 		var/newname
@@ -297,7 +296,7 @@ proc/give_option_to_rename(var/mob/living/carbon/human/new_shell)
 			user << "\blue You insert the wire!"
 	return
 
-	
+
 /obj/item/robot_parts/head/attack_hand(mob/user)
 	var/obj/item/inactive_item = user.get_inactive_hand()
 	if (src==inactive_item) // if we are clicking on this in our hand
@@ -314,7 +313,7 @@ proc/give_option_to_rename(var/mob/living/carbon/human/new_shell)
 			src.camera = null
 			return
 	return ..()
-		
+
 
 /obj/item/robot_parts/head/attackby(obj/item/W as obj, mob/user as mob)
 	..()
@@ -346,7 +345,7 @@ proc/give_option_to_rename(var/mob/living/carbon/human/new_shell)
 		del(src)
 		return
 	return
-	
+
 
 /obj/item/robot_parts/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/weapon/card/emag))

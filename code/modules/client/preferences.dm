@@ -319,6 +319,7 @@ datum/preferences
 		//dat += "Skin pattern: <a href='byond://?src=\ref[user];preference=skin_style;task=input'>Adjust</a><br>"
 		dat += "Needs Glasses: <a href='?_src_=prefs;preference=disabilities'><b>[disabilities == 0 ? "No" : "Yes"]</b></a><br>"
 		if (species=="Machine") // brain and covering type for shells
+			make_sure_we_have_a_brain_type_for_machines()
 			dat += "Brain Type: <a href='byond://?src=\ref[user];preference=set_machine_brain;task=input'><b>[machine_brain_type]</b></a><br>"
 			dat += "Exterior Coating: <a href='byond://?src=\ref[user];preference=set_machine_covering;task=input'><b>[isnull(covering_type) ? "None" : covering_type]</b></a><br>"
 		dat += "Limbs: <a href='byond://?src=\ref[user];preference=limbs;task=input'>Adjust</a><br>"
@@ -1100,8 +1101,6 @@ datum/preferences
 					if(new_age)
 						age = max(min( round(text2num(new_age)), AGE_MAX),AGE_MIN)
 				if("species")
-					config.usealienwhitelist=0 // REMOVE ME
-
 					var/list/new_species = list("Human")
 					var/prev_species = species
 					var/whitelisted = 0
@@ -1129,6 +1128,9 @@ datum/preferences
 						b_hair = 0//hex2num(copytext(new_hair, 6, 8))
 
 						s_tone = 0
+						
+						organ_data = list()
+						
 
 				if("language")
 					var/languages_available
@@ -1260,12 +1262,15 @@ datum/preferences
 					var/new_brain = input(user, "Choose your brain.", "Character Preference")  as null|anything in list("MMI", "Posibrain") // not differentiating brain species at the moment
 					if(new_brain)
 						machine_brain_type=new_brain
+					make_sure_we_have_a_brain_type_for_machines()
 
 				if("set_machine_covering")
 					var/new_coating = input(user, "Choose your exterior coating.", "Character Preference")  as null|anything in get_limb_covering_names()
 					if(new_coating)
 						covering_type=(new_coating!="None" ? new_coating : null)
-
+						h_style = random_hair_style(gender, get_hair_species())
+						f_style = random_facial_hair_style(gender, get_hair_species())
+						
 				if("limbs")
 					customize_limbs(user,species!="Machine")
 
@@ -1495,6 +1500,7 @@ datum/preferences
 	if (species=="Machine")
 		var/datum/organ/internal/brain/robot/brain_datum = character.get_organ("brain")
 		if (brain_datum) // sanity check
+			make_sure_we_have_a_brain_type_for_machines()
 			brain_datum.machine_brain_type=machine_brain_type // set the brain type
 		for (var/datum/organ/external/organ in character.organs) // provide default covering for shells
 			if (organ) // gotta make sure we're getting an actual organ here
@@ -1574,8 +1580,8 @@ datum/preferences
 	if (species!="Machine")
 		return species
 	var/head_coat=covering_type // we get the base coating
-	if (organ_data["Head"]) // if we're customizing the head we should get their coating
-		head_coat=organ_data["Head"][0]
+	if (organ_data["head"]) // if we're customizing the head we should get their coating
+		head_coat=organ_data["head"][1]
 	if (!head_coat) // no coating?
 		return
 	var/list/refs=get_limb_covering_references()
@@ -1647,6 +1653,7 @@ var/list/limb_connection_data
 	var/new_state = input(user, "What state do you wish the limb to be in?") as null|anything in (is_organic_species ? list("Normal","Amputated","Prosthesis") : list("Normal","Custom"))
 	if(!new_state)
 		return // cancel
+	var/hair_species=get_hair_species()
 	switch(new_state)
 		if("Normal")
 			organ_data-= limb
@@ -1665,3 +1672,12 @@ var/list/limb_connection_data
 				organ_data-=limb_parent
 		if("Custom")
 			organ_data[limb] = custom_robot_limb(user) // robots have no dependencies
+	var/new_hair_species=get_hair_species()
+	if(hair_species!=new_hair_species)
+		h_style = random_hair_style(gender, new_hair_species)
+		f_style = random_facial_hair_style(gender, new_hair_species)
+
+/datum/preferences/proc/make_sure_we_have_a_brain_type_for_machines()
+	if (species=="Machine")
+		if(!machine_brain_type)
+			machine_brain_type="Posibrain"
