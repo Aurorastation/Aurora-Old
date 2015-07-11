@@ -46,10 +46,11 @@
 		return stars(input)
 
 	// If the input is cached already, move it to the end of the cache and return it
-	if(input in scramble_cache)
-		var/n = scramble_cache[input]
-		scramble_cache -= input
-		scramble_cache[input] = n
+	var/preword = lowertext(input)
+	if(preword in scramble_cache)
+		var/n = scramble_cache[preword]
+		scramble_cache -= preword
+		scramble_cache[preword] = n
 		return n
 
 	var/input_size = length(input)
@@ -78,7 +79,7 @@
 		scrambled_text += input_ending
 
 	// Add it to cache, cutting old entries if the list is too long
-	scramble_cache[input] = scrambled_text
+	scramble_cache[preword] = scrambled_text
 	if(scramble_cache.len > SCRAMBLE_CACHE_LEN)
 		scramble_cache.Cut(1, scramble_cache.len-SCRAMBLE_CACHE_LEN-1)
 
