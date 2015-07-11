@@ -1,5 +1,5 @@
 #define SAVEFILE_VERSION_MIN	8
-#define SAVEFILE_VERSION_MAX	11
+#define SAVEFILE_VERSION_MAX	12
 
 //handles converting savefiles to new formats
 //MAKE SURE YOU KEEP THIS UP TO DATE!
@@ -19,7 +19,13 @@
 					fdel(delpath)
 				break
 		return 0
-
+	if(savefile_version < 12)
+		if (species=="Machine") // give IPC's posibrains and paint by default
+			machine_brain_type="Posibrain"
+			covering_type="Paint"
+		for(var/name in organ_data)
+			if (organ_data[name]=="Cyborg")
+				organ_data[name]=list("None",rgb(128,128,128)) // standard robo limbs
 	if(savefile_version == SAVEFILE_VERSION_MAX)	//update successful.
 		save_preferences()
 		save_character()
@@ -173,6 +179,10 @@
 	S["citizenship"] 		>> citizenship
 	S["faction"] 			>> faction
 	S["religion"] 			>> religion
+	
+	//Robot
+	S["machine_brain_type"] >> machine_brain_type
+	S["covering_type"]		>> covering_type
 
 	S["nanotrasen_relation"] >> nanotrasen_relation
 	//S["skin_style"]			>> skin_style
@@ -278,6 +288,8 @@
 	S["backbag"]			<< backbag
 	S["b_type"]				<< b_type
 	S["spawnpoint"]			<< spawnpoint
+	S["machine_brain_type"] << machine_brain_type
+	S["covering_type"]		<< covering_type
 
 	//Jobs
 	S["alternate_option"]	<< alternate_option
@@ -303,26 +315,26 @@
 	S["flavor_texts_feet"]		<< flavor_texts["feet"]
 
 	//Miscellaneous
-	S["med_record"]			<< med_record
-	S["sec_record"]			<< sec_record
-	S["gen_record"]			<< gen_record
+	S["med_record"]				<< med_record
+	S["sec_record"]				<< sec_record
+	S["gen_record"]				<< gen_record
 	S["player_alt_titles"]		<< player_alt_titles
-	S["be_special"]			<< be_special
-	S["disabilities"]		<< disabilities
-	S["used_skillpoints"]	<< used_skillpoints
-	S["skills"]				<< skills
-	S["skill_specialization"] << skill_specialization
-	S["organ_data"]			<< organ_data
-	S["gear"]				<< gear
-	S["home_system"] 		<< home_system
-	S["citizenship"] 		<< citizenship
-	S["faction"] 			<< faction
-	S["religion"] 			<< religion
+	S["be_special"]				<< be_special
+	S["disabilities"]			<< disabilities
+	S["used_skillpoints"]		<< used_skillpoints
+	S["skills"]					<< skills
+	S["skill_specialization"] 	<< skill_specialization
+	S["organ_data"]				<< organ_data
+	S["gear"]					<< gear
+	S["home_system"] 			<< home_system
+	S["citizenship"] 			<< citizenship
+	S["faction"] 				<< faction
+	S["religion"] 				<< religion
 
-	S["nanotrasen_relation"] << nanotrasen_relation
+	S["nanotrasen_relation"] 	<< nanotrasen_relation
 	//S["skin_style"]			<< skin_style
 
-	S["uplinklocation"] << uplinklocation
+	S["uplinklocation"] 	<< uplinklocation
 
 	S["UI_style_color"]		<< UI_style_color
 	S["UI_style_alpha"]		<< UI_style_alpha

@@ -51,6 +51,7 @@
 						/obj/item/robot_parts/robot_component/actuator,
 						/obj/item/robot_parts/robot_component/diagnosis_unit,
 						/obj/item/robot_parts/robot_component/camera,
+						/obj/item/robot_parts/robot_component/law_computer,
 						/obj/item/robot_parts/robot_component/armour
 					),
 	"Ripley"=list(
@@ -118,23 +119,21 @@
 //						/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar
 //						/obj/item/mecha_parts/mecha_equipment/weapon/honker
 						),
-
 	"Robotic Upgrade Modules" = list(
 						/obj/item/borg/upgrade/reset,
 						/obj/item/borg/upgrade/rename,
 						/obj/item/borg/upgrade/restart,
 						/obj/item/borg/upgrade/vtec,
 						/obj/item/borg/upgrade/tasercooler,
-						/obj/item/borg/upgrade/jetpack
-						),
-
-
-
-
-
-
-	"Engineering Equipment"=list(/obj/item/mecha_parts/mecha_tracking)
-	)
+						/obj/item/borg/upgrade/jetpack),
+						
+	"Synthetic Coverings" = list(	/obj/item/weapon/synth_skin_spray,
+									/obj/item/weapon/synth_skin_cartridge/paint,
+									/obj/item/weapon/synth_skin_cartridge/skin,
+									/obj/item/weapon/synth_skin_cartridge/fur,
+									/obj/item/weapon/synth_skin_cartridge/scales),
+	
+	"Engineering Equipment"=list(/obj/item/mecha_parts/mecha_tracking))
 
 
 
