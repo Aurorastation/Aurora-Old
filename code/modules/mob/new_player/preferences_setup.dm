@@ -193,21 +193,24 @@ datum/preferences
 			job_type="DEFAULT"
 			job_index=1
 		return list(job_type,job_index)
-		
-	proc/update_preview_icon() //this is a little better - jf
+
+	proc/update_preview_icon(var/rem_floor = 0) //this is a little better - jf
 		del(preview_icon_front)
 		del(preview_icon_side)
 		del(preview_icon)
 		var/datum/species/current_species = all_species[species]
 		if(!current_species) // no species? no preview for you
 			return
-		preview_icon = new/icon("icons/turf/floors.dmi","floor")		
-		preview_icon.Blend(current_species.create_body_preview_icon(src),ICON_OVERLAY) // create the body icon
+		if(!rem_floor)
+			preview_icon = new/icon("icons/turf/floors.dmi","floor")
+			preview_icon.Blend(current_species.create_body_preview_icon(src),ICON_OVERLAY) // create the body icon
+		else
+			preview_icon = new/icon(current_species.create_body_preview_icon(src),ICON_OVERLAY) // create the body icon
 		if(disabilities & NEARSIGHTED)
 			preview_icon.Blend(new /icon('icons/mob/eyes.dmi', "glasses"), ICON_OVERLAY)
 		if (current_species.flags & HAS_UNDERWEAR) // do we even need to handle underwear?
 			if(underwear > 0 && underwear < 7)
-				preview_icon.Blend(new/icon("icon" = 'icons/mob/human.dmi', "icon_state" = "underwear[underwear]_[(gender==FEMALE) ? "f" : "m"]_s"),ICON_OVERLAY)			
+				preview_icon.Blend(new/icon("icon" = 'icons/mob/human.dmi', "icon_state" = "underwear[underwear]_[(gender==FEMALE) ? "f" : "m"]_s"),ICON_OVERLAY)
 			if(undershirt > 0 && undershirt < 16)
 				preview_icon.Blend(new/icon("icon" = 'icons/mob/human.dmi', "icon_state" = "undershirt[undershirt]_s"),ICON_OVERLAY)
 		var/list/job_types=job_type_info()
