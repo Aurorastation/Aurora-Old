@@ -82,21 +82,19 @@
 	
 	
 /mob/living/simple_animal/hostile/carp/hologram/New(loc)
-	var/result = ..(loc)
+	. = ..(loc)
 	spark_system = new /datum/effect/effect/system/spark_spread()
 	spark_system.set_up(5, 0, src)
 	spark_system.attach(src)
-	return result
 	
 	
 /mob/living/simple_animal/hostile/carp/hologram/death()
 	src.spark_system.start() // sparks for holograms! Hurray!
 	stat = DEAD
 	density = 0
-	var/result=..()
+	. = ..()
 	src.visible_message("[src] sparks and then flickers out of existence.")
 	del(src)
-	return result
 	
 	
 /mob/living/simple_animal/hostile/carp/hologram/gib()
