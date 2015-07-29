@@ -220,16 +220,49 @@
 		var/obj/item/robot_parts/part = W
 		part.attach_to_robot(user,src)
 		return
+	// Handle PART REMOVAL
+	if(istype(W, /obj/item/weapon/crowbar))
+		switch(user.zone_sel.selecting)
+			if("head")
+				if(head)
+					head.loc = loc
+					head = null
+			if("chest")
+				if(chest)
+					chest.loc = loc
+					chest = null
+			if("l_arm","l_hand")
+				if(l_arm)
+					l_arm.loc = loc
+					l_arm = null
+			if("r_arm","r_hand")
+				if(r_arm)
+					r_arm.loc = loc
+					r_arm = null
+			if("l_leg","l_foot")
+				if(l_leg)
+					l_leg.loc = loc
+					l_leg = null
+			if("r_leg","r_foot")
+				if(r_leg)
+					r_leg.loc = loc
+					r_leg = null
+		updateicon()
+		return
 	// HANDLE ROBOT CREATION
 	if(istype(W, /obj/item/device/mmi))
 		var/obj/item/device/mmi/brain = W
 		if (allowed_to_build(user,brain)) // we are allowed to build this robot
-			user.drop_item() // drop this thing
 			if (src.head.law_computer) // do we have a law computer? If so, we're making a standard robot
+				user.drop_item() // We only drop it if it's compatible
 				create_robot(brain)
 			else // otherwise we're making a shell
-				create_shell(brain)
-
+				if(is_alien_whitelisted(brain.brainmob, "Machine")) //They still need a whitelist! Scopes.
+					user.drop_item() // We only drop it if it's compatible
+					create_shell(brain)
+				else
+					user << "The shell refuses to intergate with [brain]"
+					return
 
 /obj/item/robot_parts/robot_suit/proc/create_robot(obj/item/device/mmi/brain as obj)
 	var/mob/living/silicon/robot/new_robot = new(get_turf(loc), unfinished = 1)
@@ -257,7 +290,7 @@
 
 
 /obj/item/robot_parts/robot_suit/proc/create_shell(obj/item/device/mmi/brain as obj)
-	var/mob/living/carbon/human/machine/new_shell = new(src.loc)
+	var/mob/living/carbon/human/new_shell = new(src.loc, "Machine")
 	brain.brainmob.mind.transfer_to(new_shell) // transfer brain
 	var/datum/organ/internal/brain/robot/brain_datum=new_shell.internal_organs_by_name["brain"] // put the brain in the head
 	brain_datum.machine_brain_type=brain.machine_brain_type
