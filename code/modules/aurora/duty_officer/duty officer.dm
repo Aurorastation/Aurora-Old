@@ -16,6 +16,10 @@
 		src << "\red The game hasn't started yet!"
 		return
 
+	if(istype(mob, /mob/new_player))
+		src << "\red You can't be in the lobby to join as a duty officer"
+		return
+
 	if(mob.mind && mob.mind.special_role == "Duty Officer")
 		src << "\red You are already a Duty Officer"
 		verbs += /client/proc/returntobody
