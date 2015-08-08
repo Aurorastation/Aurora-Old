@@ -72,7 +72,10 @@ CREATE TABLE `ss13_news` (
     `channel` VARCHAR(64) NOT NULL,
     `author` VARCHAR(64) NOT NULL,
     `body` TEXT NOT NULL,
-    `notpublishing` TINYINT(1) DEFAULT NULL,
+	`status` TINYINT(1) NOT NULL DEFAULT 1,
+	`uploadip` VARCHAR(18) NOT NULL,
+	`uploadtime` DATETIME NOT NULL,
+	`approvetime` DATETIME DEFAULT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
