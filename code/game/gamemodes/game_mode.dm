@@ -48,7 +48,7 @@ Stealthy and Inconspicuous Weapons;
 /obj/item/weapon/cartridge/syndicate:3:Detomatix PDA Cartridge;
 Whitespace:Seperator;
 Stealth and Camouflage Items;
-/obj/item/weapon/storage/box/syndie_kit/chameleon:3:Chameleon Kit;
+/obj/item/weapon/storage/box/syndie_kit/chameleon:6:Chameleon Kit;
 /obj/item/weapon/storage/box/syndie_kit/masks:1:Disguised Breathe Mask;
 /obj/item/weapon/storage/box/syndie_kit/masks_gas:2:Disguised Gasmask;
 /obj/item/clothing/under/chameleon:3:Chameleon Jumpsuit;
