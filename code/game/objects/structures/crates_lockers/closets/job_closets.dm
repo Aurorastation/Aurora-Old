@@ -105,6 +105,7 @@
 	new /obj/item/clothing/under/rank/ert/nco(src)
 	new /obj/item/clothing/under/rank/ert/nco(src)
 	new /obj/item/clothing/under/rank/ert/officer(src)
+/* --NO ICONS
 	new /obj/item/weapon/storage/backpack/ert/leader(src)
 	new /obj/item/weapon/storage/backpack/ert/sapper(src)
 	new /obj/item/weapon/storage/backpack/ert/sapper(src)
@@ -112,3 +113,4 @@
 	new /obj/item/weapon/storage/backpack/ert/medic(src)
 	new /obj/item/weapon/storage/backpack/ert/security(src)
 	new /obj/item/weapon/storage/backpack/ert/security(src)
+*/

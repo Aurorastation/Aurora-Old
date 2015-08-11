@@ -212,6 +212,7 @@
 	icon_state = "ert_ruck"
 	item_state = "ert_ruck"
 
+/* ----NO ICONS
 /obj/item/weapon/storage/backpack/ert/leader
 	name = "commander's combat ruck"
 	desc = "A large rucksack with supports and webbing, specifically designed for combat operations and equipment carrying. This one has blue highlights, denoting a squad leader."
@@ -235,3 +236,4 @@
 	desc = "A large rucksack with supports and webbing, specifically designed for combat operations and equipment carrying. This one has bright red highlights, denoting a squad combat trooper."
 	icon_state = "ert_security"
 	item_state = "ert_security"
+*/
