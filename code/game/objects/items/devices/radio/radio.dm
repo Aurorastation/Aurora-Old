@@ -707,6 +707,8 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	var/obj/item/device/encryptionkey/keyslot = null//Borg radios can handle a single encryption key
 	icon = 'icons/obj/robot_component.dmi' // Cyborgs radio icons should look like the component.
 	icon_state = "radio"
+	var/emagged = 0 // getting emagged gives you the syndicate channels
+	var/external_speakers = TRUE
 
 /obj/item/device/radio/borg/attackby(obj/item/weapon/W as obj, mob/user as mob)
 //	..()
@@ -749,9 +751,12 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 
 	return
 
+/obj/item/device/radio/borg/proc/update_speaker_range()
+	canhear_range = external_speakers ? 3 : 0 // if your speakers are on, people can hear you, if not, they can't
+	
 /obj/item/device/radio/borg/proc/recalculateChannels()
 	src.channels = list()
-	src.syndie = 0
+	src.syndie = FALSE
 
 	var/mob/living/silicon/robot/D = src.loc
 	if(D.module)
@@ -760,30 +765,30 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 				continue
 			src.channels += ch_name
 			src.channels[ch_name] += D.module.channels[ch_name]
+	if(emagged) // emagged cyborgs get the syndicate channel
+		src.channels["Syndicate"]=TRUE
+		src.syndie = TRUE
+		external_speakers = FALSE // if you're emagged, no speakers for you
+	update_speaker_range()
 	if(keyslot)
 		for(var/ch_name in keyslot.channels)
 			if(ch_name in src.channels)
 				continue
 			src.channels += ch_name
 			src.channels[ch_name] += keyslot.channels[ch_name]
-
 		if(keyslot.syndie)
-			src.syndie = 1
-
-
+			src.syndie = TRUE
 	for (var/ch_name in src.channels)
 		if(!radio_controller)
 			sleep(30) // Waiting for the radio_controller to be created.
 		if(!radio_controller)
 			src.name = "broken radio"
 			return
-
 		secure_radio_connections[ch_name] = radio_controller.add_object(src, radiochannels[ch_name],  RADIO_CHAT)
-
 	return
 
 /obj/item/device/radio/borg/Topic(href, href_list)
-	if(usr.stat || !on)
+	if (usr.stat || !on)
 		return
 	if (href_list["mode"])
 		if(subspace_transmission != 1)
@@ -796,6 +801,8 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 			channels = list()
 		else
 			recalculateChannels()
+	if (href_list["external_speakers"])
+		external_speakers = !external_speakers
 	..()
 
 /obj/item/device/radio/borg/interact(mob/user as mob)
@@ -803,8 +810,12 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 		return
 
 	var/dat = "<html><head><title>[src]</title></head><body><TT>"
+	var/external_speaker_line = "" // external speakers
+	if (!emagged)
+		external_speaker_line = "External Speakers: " + (external_speakers ? "<A href='byond://?src=\ref[src];external_speakers=1'>Engaged</A>" : "<A href='byond://?src=\ref[src];external_speakers=1'>Disengaged</A>") + "<BR>"
 	dat += {"
-				Speaker: [listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>
+				Internal Speaker: [listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>
+				[external_speaker_line]
 				Frequency:
 				<A href='byond://?src=\ref[src];freq=-10'>-</A>
 				<A href='byond://?src=\ref[src];freq=-2'>-</A>
@@ -822,6 +833,11 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	onclose(user, "radio")
 	return
 
+	
+/obj/item/device/radio/borg/proc/set_emag(var/is_emagged)
+	emagged=is_emagged
+	recalculateChannels()
+	
 
 /obj/item/device/radio/proc/config(op)
 	if(radio_controller)
