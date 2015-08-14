@@ -349,8 +349,6 @@
 
 	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
 		return ..()
-	if(isrobot(user))
-		return
 	user.drop_item()
 	if (O.loc != src.loc)
 		step(O, get_dir(O, src))
