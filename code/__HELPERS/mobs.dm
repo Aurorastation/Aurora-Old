@@ -97,3 +97,49 @@ proc/RoundHealth(health)
 		else
 			return "health-100"
 	return "0"
+
+
+/proc/this_guy_is_allowed_to_drag_that_guy_into_something(atom/movable/target as mob|obj, mob/user as mob, obj/target_object as obj)
+	if(istype(target, /obj/screen))	//fix for HUD elements making their way into the world - Pete
+		return
+	if(target.loc == user) //no you can't pull things out of your ass
+		return
+	if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis || user.resting) //are you cuffed, dying, lying, stunned or other
+		return
+	if(get_dist(user, target_object) > 1 || get_dist(user, target) > 1 || user.contents.Find(target_object)) // is the mob anchored, too far away from you, or are you too far away from the source
+		return
+	if(!ismob(target)) //mobs only
+		return
+	if(!ishuman(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
+		return
+	if(user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
+		return
+	if(!istype(user.loc, /turf) || !istype(target.loc, /turf)) // are you in a container/closet/pod/etc?
+		return
+	var/mob/living/L = target
+	if(!istype(L) || L.buckled)
+		return
+	return TRUE
+
+
+/proc/this_is_an_animal_or_a_robot(atom/movable/target as mob|obj)
+	return (istype(target, /mob/living/simple_animal) || istype(target, /mob/living/silicon))
+
+
+/proc/allowed_to_add_this_person_to_a_medical_machine(atom/movable/target as mob|obj, mob/user as mob, obj/target_object as obj, var/occupant)
+	if(!this_guy_is_allowed_to_drag_that_guy_into_something(target,user,target_object))
+		return
+	if(this_is_an_animal_or_a_robot(target))
+		return
+	if(occupant)
+		user << "\blue <B>The [target_object] is already occupied!</B>"
+		return
+	var/mob/living/L = target
+	if(L.abiotic())
+		user << "\red <B>Subject cannot have abiotic items on.</B>"
+		return
+	for(var/mob/living/carbon/slime/M in range(1,L))
+		if(M.Victim == L)
+			usr << "\red [L.name] will not fit into the [target_object] because they have a slime latched onto their head."
+			return
+	return TRUE
