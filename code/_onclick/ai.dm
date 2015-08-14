@@ -153,6 +153,12 @@
 	Topic(src, list("src"= "\ref[src]", "command"="enable", "value"="[!enabled]"), 1)
 	return 1
 
+/obj/machinery/power/emitter/AICtrlClick() // locks emitters
+	if(emagged) // can't lock emagged stuff
+		return 1
+	locked = !locked
+	return 1
+	
 /atom/proc/AIAltClick(var/atom/A)
 	AltClick(A)
 
