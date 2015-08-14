@@ -49,7 +49,7 @@
 
 	set name = "Drop Item"
 	set desc = "Release an item from your magnetic gripper."
-	set category = "Drone"
+	set category = "Robot Commands"
 
 	if(!wrapped)
 		//There's some weirdness with items being lost inside the arm. Trying to fix all cases. ~Z
@@ -64,14 +64,14 @@
 	src.loc << "\red You drop \the [wrapped]."
 	wrapped.loc = get_turf(src)
 	wrapped = null
-	//update_icon()
+	update_wrapped()
 
 /obj/item/weapon/gripper/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	return
 
 /obj/item/weapon/gripper/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, proximity, params)
-
 	if(!target || !proximity) //Target is invalid or we are not adjacent.
+		update_wrapped()
 		return
 
 	//There's some weirdness with items being lost inside the arm. Trying to fix all cases. ~Z
@@ -93,6 +93,7 @@
 			wrapped.loc = src
 		else
 			wrapped = null
+			update_wrapped()
 			return
 
 	else if(istype(target,/obj/item)) //Check that we're not pocketing a mob.
@@ -115,27 +116,42 @@
 			user << "You collect \the [I]."
 			I.loc = src
 			wrapped = I
+			update_wrapped()
 			return
 		else
 			user << "\red Your gripper cannot hold \the [target]."
-
+			update_wrapped()
 	else if(istype(target,/obj/machinery/power/apc))
 		var/obj/machinery/power/apc/A = target
 		if(A.opened)
 			if(A.cell)
-
 				wrapped = A.cell
-
 				A.cell.add_fingerprint(user)
 				A.cell.updateicon()
 				A.cell.loc = src
 				A.cell = null
-
 				A.charging = 0
 				A.update_icon()
-
 				user.visible_message("\red [user] removes the power cell from [A]!", "You remove the power cell.")
-
+				update_wrapped()
+				
+/obj/item/weapon/gripper/proc/update_wrapped()
+	update_name()
+	update_overlay()
+	
+				
+/obj/item/weapon/gripper/proc/update_name()
+	name = initial(name)
+	if (wrapped)
+		name += " ([wrapped])"
+		
+				
+/obj/item/weapon/gripper/proc/update_overlay()
+	overlays.Cut()
+	if (wrapped)
+		overlays+=wrapped
+		
+				
 //TODO: Matter decompiler.
 /obj/item/weapon/matter_decompiler
 
