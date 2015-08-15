@@ -349,6 +349,8 @@
 
 	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
 		return ..()
+	if(istype(user, /mob/living/silicon/robot/drone)) // drones don't get to table people
+		return ..()
 	user.drop_item()
 	if (O.loc != src.loc)
 		step(O, get_dir(O, src))

@@ -112,6 +112,8 @@ proc/RoundHealth(health)
 		return
 	if(!ishuman(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
 		return
+	if(istype(user, /mob/living/silicon/robot/drone)) // drones don't get to use medical machinery
+		return
 	if(user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
 		return
 	if(!istype(user.loc, /turf) || !istype(target.loc, /turf)) // are you in a container/closet/pod/etc?
