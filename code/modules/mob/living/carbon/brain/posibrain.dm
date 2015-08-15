@@ -34,22 +34,24 @@
 					transfer_personality(O)
 			reset_search()
 		
-
 /obj/item/device/mmi/posibrain/proc/request_player()
 	for(var/mob/dead/observer/O in player_list)
-		if(O.client && O.client.prefs.be_special & BE_PAI && !jobban_isbanned(O, "Cyborg") && !jobban_isbanned(O,"nonhumandept"))
-			if(check_observer(O))
-				O << "\blue <b>\A [src] has been activated. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)"
+		if(check_observer(O))
+			O << "\blue <b>\A [src] has been activated. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)"
 
 
-/obj/item/device/mmi/posibrain/proc/check_observer(var/mob/dead/observer/O)
-	if(O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
-		return 0
-	if(jobban_isbanned(O, "Cyborg") || jobban_isbanned(O,"nonhumandept"))
-		return 0
-	if(O.client)
-		return 1
-	return 0
+/obj/item/device/mmi/posibrain/proc/check_observer(var/mob/dead/observer/test)
+	if (!test) // no person ?
+		return
+	if (!test.client) // is someone actually home?
+		return
+	if (!test.client.prefs.be_special & BE_PAI) // do they want to be a pAI?
+		return
+	if(test.has_enabled_antagHUD == 1 && config.antag_hud_restricted) // have they activated the antagHUD?
+		return
+	if ((jobban_isbanned(test, "Cyborg") || jobban_isbanned(test,"nonhumandept")) && !is_alien_whitelisted(test,"Machine")) // if you can't play as either role that uses posibrains, then you can't get into a posibrain
+		return
+	return TRUE
 				
 				
 /obj/item/device/mmi/posibrain/transfer_identity(var/mob/living/carbon/H)
@@ -71,8 +73,20 @@
 	icon_state = "posibrain-occupied"
 	return
 
+/obj/item/device/mmi/posibrain/proc/get_possible_uses_string(var/mob/test)
+	if (!(jobban_isbanned(test, "Cyborg") || jobban_isbanned(test,"nonhumandept")))
+		if (is_alien_whitelisted(test,"Machine"))
+			return "This posibrain's personality is compatible with assignment to either a tool-robot or a shell."
+		else
+			return "This posibrain's personality is compatible only with tool-robots."
+	else
+		if (is_alien_whitelisted(test,"Machine"))
+			return "This posibrain's personality is compatible only with shells."
+		else
+			return "This posibrain's personality is not compatible with any chassis. Something has gone wrong. Please call a bluespace technician to correct the issue."
+	
 /obj/item/device/mmi/posibrain/proc/transfer_personality(var/mob/candidate)
-
+	var/uses = get_possible_uses_string(candidate)
 	src.searching = 0
 	src.brainmob.mind = candidate.mind
 	src.brainmob.ckey = candidate.ckey
@@ -82,10 +96,9 @@
 	src.brainmob << "<b>Remember, the purpose of your existence is to serve the crew and the station. Above all else, do no harm.</b>"
 	src.brainmob << "<b>Use say :b to speak to other artificial intelligences.</b>"
 	src.brainmob.mind.assigned_role = "Positronic Brain"
-
 	var/turf/T = get_turf_or_move(src.loc)
 	for (var/mob/M in viewers(T))
-		M.show_message("\blue The positronic brain chimes quietly.")
+		M.show_message("\blue The positronic brain chimes quietly as it loads a new personality. [uses]")
 	icon_state = "posibrain-occupied"
 	
 
