@@ -160,10 +160,16 @@
 
 /obj/item/robot_parts/robot_suit/proc/allowed_to_build(mob/user as mob, obj/item/device/mmi/brain as obj)
 	if(!check_completion()) // not complete? not allowed
-		return
+		return 0
 	if(!check_allowed_to_install_brain(user,brain)) // not allowed to put the brain in there
-		return
-	return TRUE
+		return 0
+	if(src.head.law_computer) // Ok they are what are we making?
+		if(!jobban_isbanned(brain.brainmob, "Cyborg")) // Are you banned?
+			return "BORG"
+	else //Ok IPC then
+		if(is_alien_whitelisted(brain.brainmob, "Machine")) // They still need a whitelist! Scopes.
+			return "IPC"
+	return 0
 
 
 /obj/item/robot_parts/robot_suit/proc/check_allowed_to_install_brain(mob/user as mob, obj/item/device/mmi/brain as obj)
@@ -188,9 +194,6 @@
 		return
 	if(brain.brainmob.mind in ticker.mode.head_revolutionaries)
 		user << "\red The frame's firmware lets out a shrill sound, and flashes 'Abnormal Memory Engram'. It refuses to accept the [brain]."
-		return
-	if(jobban_isbanned(brain.brainmob, "Cyborg"))
-		user << "\red This [brain] does not seem to fit."
 		return
 	return TRUE
 
@@ -252,17 +255,17 @@
 	// HANDLE ROBOT CREATION
 	if(istype(W, /obj/item/device/mmi))
 		var/obj/item/device/mmi/brain = W
-		if (allowed_to_build(user,brain)) // we are allowed to build this robot
-			if (src.head.law_computer) // do we have a law computer? If so, we're making a standard robot
+		switch(allowed_to_build(user,brain)) // we are allowed to build this robot
+			if("BORG") // do we have a law computer? If so, we're making a standard robot
 				user.drop_item() // We only drop it if it's compatible
 				create_robot(brain)
-			else // otherwise we're making a shell
-				if(is_alien_whitelisted(brain.brainmob, "Machine")) //They still need a whitelist! Scopes.
-					user.drop_item() // We only drop it if it's compatible
-					create_shell(brain)
-				else
-					user << "The shell refuses to intergate with [brain]"
-					return
+				return
+			if("IPC")
+				user.drop_item() // We only drop it if it's compatible
+				create_shell(brain)
+				return
+		user << "The frame refuses to intergate with [brain]"
+		return
 
 /obj/item/robot_parts/robot_suit/proc/create_robot(obj/item/device/mmi/brain as obj)
 	var/mob/living/silicon/robot/new_robot = new(get_turf(loc), unfinished = 1)
