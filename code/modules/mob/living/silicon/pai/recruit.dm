@@ -26,6 +26,13 @@ var/datum/paiController/paiController			// Global handler for pAI candidates
 	var/askDelay = 10 * 60 * 1	// One minute [ms * sec * min]
 
 /datum/paiController/Topic(href, href_list[])
+	if("signup" in href_list)
+		var/mob/dead/observer/O = locate(href_list["signup"])
+		if(!O) return
+		if(!check_recruit(O)) return
+		recruitWindow(O)
+		return
+		
 	if(href_list["download"])
 		var/datum/paiCandidate/candidate = locate(href_list["candidate"])
 		var/obj/item/device/paicard/card = locate(href_list["device"])
@@ -346,33 +353,16 @@ var/datum/paiController/paiController			// Global handler for pAI candidates
 
 
 /datum/paiController/proc/requestRecruits(var/mob/user)
-	inquirer = user
 	for(var/mob/dead/observer/O in player_list)
-		if(O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
-			continue
-		if(jobban_isbanned(O, "pAI"))
-			continue
-		if(asked.Find(O.key))
-			if(world.time < asked[O.key] + askDelay)
-				continue
-			else
-				asked.Remove(O.key)
-		if(O.client)
-			if(O.client.prefs.be_special & BE_PAI)
-				question(O.client)
-
-/datum/paiController/proc/question(var/client/C)
-	spawn(0)
-		if(!C)	return
-		asked.Add(C.key)
-		asked[C.key] = world.time
-		var/response = alert(C, "[inquirer] is requesting a pAI personality. Would you like to play as a personal AI?", "pAI Request", "Yes", "No", "Never for this round")
-		if(!C)	return		//handle logouts that happen whilst the alert is waiting for a response.
-		if(response == "Yes")
-			recruitWindow(C.mob)
-		else if (response == "Never for this round")
-			var/warning = alert(C, "Are you sure? This action will be undoable and you will need to wait until next round.", "You sure?", "Yes", "No")
-			if(warning == "Yes")
-				asked[C.key] = INFINITY
-			else
-				question(C)
+		if(O.client && O.client.prefs.be_special & BE_PAI)
+			if(check_recruit(O))
+				O << "\blue <b>A pAI card is looking for personalities. (<a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</b>"
+					
+					
+/datum/paiController/proc/check_recruit(var/mob/dead/observer/O)
+	if(jobban_isbanned(O, "pAI") || jobban_isbanned(O,"nonhumandept"))
+		return
+	if(O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
+		return
+	if(O.client)
+		return TRUE
