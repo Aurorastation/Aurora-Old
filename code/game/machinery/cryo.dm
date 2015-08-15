@@ -32,6 +32,20 @@
 			node = target
 			break
 
+
+/obj/machinery/atmospherics/unary/cryo_cell/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
+	if(!allowed_to_add_this_person_to_a_medical_machine(O,user,src,occupant))
+		return
+	var/mob/living/L = O
+	if(put_mob(L))
+		if(L == user)
+			visible_message("[user] climbs into the cryo cell.", 3)
+		else
+			visible_message("[user] puts [L.name] into the cryo cell.", 3)
+			if(user.pulling == L)
+				user.pulling = null
+
+
 /obj/machinery/atmospherics/unary/cryo_cell/process()
 	..()
 	if(!node)
