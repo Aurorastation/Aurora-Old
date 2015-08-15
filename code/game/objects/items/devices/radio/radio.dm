@@ -707,7 +707,7 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	var/obj/item/device/encryptionkey/keyslot = null//Borg radios can handle a single encryption key
 	icon = 'icons/obj/robot_component.dmi' // Cyborgs radio icons should look like the component.
 	icon_state = "radio"
-	var/emagged = 0 // getting emagged gives you the syndicate channels
+	var/emagged = 0 // getting emagged gives you the syndicate channels and access to the external speaker
 	var/external_speakers = TRUE
 
 /obj/item/device/radio/borg/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -768,7 +768,6 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	if(emagged) // emagged cyborgs get the syndicate channel
 		src.channels["Syndicate"]=TRUE
 		src.syndie = TRUE
-		external_speakers = FALSE // if you're emagged, no speakers for you
 	update_speaker_range()
 	if(keyslot)
 		for(var/ch_name in keyslot.channels)
@@ -811,7 +810,7 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 
 	var/dat = "<html><head><title>[src]</title></head><body><TT>"
 	var/external_speaker_line = "" // external speakers
-	if (!emagged)
+	if (emagged)
 		external_speaker_line = "External Speakers: " + (external_speakers ? "<A href='byond://?src=\ref[src];external_speakers=1'>Engaged</A>" : "<A href='byond://?src=\ref[src];external_speakers=1'>Disengaged</A>") + "<BR>"
 	dat += {"
 				Internal Speaker: [listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>
