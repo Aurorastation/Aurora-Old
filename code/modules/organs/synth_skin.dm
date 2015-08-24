@@ -29,7 +29,8 @@ datum/synthetic_limb_cover/New(	var/datum/organ/external/datum_target=null,var/i
 datum/synthetic_limb_cover/proc/get_icon() // default mechanical limbs return robo versions
 	var/icon/temp = new /icon((coverage ? main_icon : damage_icon), "[limb_datum.icon_name][limb_datum.get_gender_string()]") // only add a gender if it's necessary
 	var/icon/result = icon(temp)
-	result.Blend(colour, ICON_ADD)
+	if (coverage)
+		result.Blend(colour, ICON_ADD)
 	return result
 	
 
@@ -213,7 +214,8 @@ proc/create_tinted_icon(icon_name, icon_state_name, target_colour)
 	if (target in list("mouth","eyes")) // we don't paint these individually
 		target="head"
 	if (allowed_to_paint(human_target,user,target))
-		paint_organ(human_target, user, human_target.get_organ(target))
+		if (do_after_to_target(user,human_target,20))
+			paint_organ(human_target, user, human_target.get_organ(target))
 		
 		
 /obj/item/weapon/synth_skin_spray/proc/paint_organ(mob/M, mob/user, datum/organ/external/datum_target)
@@ -229,13 +231,11 @@ proc/create_tinted_icon(icon_name, icon_state_name, target_colour)
 		human_target.r_facial = hair_colour_as_list[1]
 		human_target.g_facial = hair_colour_as_list[2]
 		human_target.b_facial = hair_colour_as_list[3]
-		human_target.h_style=random_hair_style(human_target.gender,human_target.species)
 		human_target.update_hair()
-		
-		
 	if (istype(datum_target,/datum/organ/external/groin)) // this is a bit reductive, but whatever
 		var/gender_string = input(user,"What sex do you want this shell to appear as?") in list("Male","Female")
 		human_target.gender = (gender_string=="Male") ? MALE : FEMALE
+		human_target.update_tail_showing(FALSE)
 	human_target.update_body(TRUE)
 	cartridge.current_charges--
 	user.visible_message("<span class='notice'>[user] has covered [M]'s [datum_target.display_name] with [cartridge.covering_description].</span>")
@@ -294,8 +294,9 @@ proc/create_tinted_icon(icon_name, icon_state_name, target_colour)
 	return " It looks like there are [current_charges] charges left."
 	
 
-/obj/item/weapon/synth_skin_cartridge/examine(mob/user)
-	user << src.desc + get_charges_string()
+/obj/item/weapon/synth_skin_cartridge/examine()
+	set src in usr
+	usr << src.desc + get_charges_string()
 	
 	
 /obj/item/weapon/synth_skin_cartridge/attack_self(mob/user)
