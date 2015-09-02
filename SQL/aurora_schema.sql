@@ -48,6 +48,8 @@ CREATE TABLE `ss13_warnings` (
     `computerid` VARCHAR(32) NOT NULL,
     `ip` VARCHAR(32) NOT NULL,
     `a_ckey` VARCHAR(32) NOT NULL,
+    `acknowledged` TINYINT(1) NULL DEFAULT '0',
+    `visible` TINYINT(1) NULL DEFAULT '1';
     PRIMARY KEY (`id`)
 )  ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
@@ -71,8 +73,12 @@ CREATE TABLE `ss13_news` (
     `publishtime` INT(11) NOT NULL,
     `channel` VARCHAR(64) NOT NULL,
     `author` VARCHAR(64) NOT NULL,
+	`title` VARCHAR(64) NOT NULL,
     `body` TEXT NOT NULL,
-    `notpublishing` TINYINT(1) DEFAULT NULL,
+	`status` TINYINT(1) NOT NULL DEFAULT 1,
+	`uploadip` VARCHAR(18) NOT NULL,
+	`uploadtime` DATETIME NOT NULL,
+	`approvetime` DATETIME DEFAULT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
