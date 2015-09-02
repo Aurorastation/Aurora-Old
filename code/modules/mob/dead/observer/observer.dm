@@ -76,6 +76,27 @@
 		if(target)
 			ManualFollow(target)
 
+	if (href_list["follow"])
+		var/atom/target = locate(href_list["follow"])
+		if(target)
+			ManualFollow(target)
+
+	if (href_list["jump"])
+		var/mob/target = locate(href_list["jump"])
+		var/mob/A = usr;
+		A << "Teleporting to [target]..."
+		if(target && target != usr)
+			spawn(0)
+				var/turf/pos = get_turf(A)
+				var/turf/T=get_turf(target)
+				if(T != pos)
+					if(!T)
+						return
+					if(!client)
+						return
+					loc = T
+				following = null
+	..()
 
 
 /mob/dead/attackby(obj/item/W, mob/user)

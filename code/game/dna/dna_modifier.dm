@@ -120,6 +120,19 @@
 	src.add_fingerprint(usr)
 	return
 
+
+/obj/machinery/dna_scannernew/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
+	if(!allowed_to_add_this_person_to_a_medical_machine(O,user,src,occupant))
+		return
+	var/mob/living/L = O
+	if(L == user)
+		return
+	visible_message("[user] puts [L.name] into the DNA Scanner.", 3)
+	put_in(L)
+	if(user.pulling == L)
+		user.pulling = null
+
+
 /obj/machinery/dna_scannernew/attackby(var/obj/item/weapon/item as obj, var/mob/user as mob)
 	if(istype(item, /obj/item/weapon/reagent_containers/glass))
 		if(beaker)
@@ -827,6 +840,7 @@
 			src.disk.name = "data disk - '[buf.dna.real_name]'"
 			//src.temphtml = "Data saved."
 			return 1
+
 
 
 /////////////////////////// DNA MACHINES
