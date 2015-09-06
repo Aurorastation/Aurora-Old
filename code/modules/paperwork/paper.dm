@@ -497,6 +497,10 @@
 	name = "paper scrap"
 	icon_state = "scrap"
 
+/obj/item/weapon/paper/armoury
+	name = "Armoury Inventory"
+	info = "<center><img src = http://wiki.baystation12.net/logo.png><br><center><font size=4>ARMORY INVENTORY</font></center><br><table border=2><tr><td><center><b>Amount</b></center></td><td><center><b>Item</b></center></td><tr><td><center>4</center></td><td> Deployable Barriers</td><tr><td><center>4</center></td><td> Portable Flashers + Wrench </td><tr><td><center>3</center></td><td> Sets of Riot Armor </td><tr><td><center>1</center></td><td> Bulletproof Vest </td><tr><td><center>1</center></td><td> Ablative Vest </td><tr><td><center>1</center></td><td> Bomb Suit </td><tr><td><center>1</center></td><td> Biohazard Suit </td><tr><td><center>1</center></td><td> Chemical Implant Kit </td><tr><td><center>1</center></td><td> Tracking Implant Kit </td><tr><td><center>1</center></td><td> Loyalty Implant Kit </td><tr><td><center>1</center></td><td> Box of Spare Handcuffs </td><tr><td><center>1</center></td><td> Box of flashbangs </td><tr><td><center>1</center></td><td> Box of spare R.O.B.U.S.T. cartridges </td><tr><td><center>3</center></td><td> Riot shields </td><tr><td><center>3</center></td><td> Stun Batons </td><tr><td><center>3</center></td><td> Energy Guns </td><tr><td><center>3</center></td><td> Laser Rifles </td><tr><td><center>6</center></td><td> Gas Masks</td></center>"
+
 /obj/item/weapon/paper/crumpled/update_icon()
 	return
 
