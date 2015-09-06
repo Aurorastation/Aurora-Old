@@ -45,7 +45,7 @@ datum/sqlnews/proc/update()		//Updates the stored variables and preppes it for a
 		fails++
 		return
 
-	var/DBQuery/query = dbcon.NewQuery("SELECT id, publishtime FROM ss13_news WHERE isnull(notpublishing) ORDER BY publishtime ASC LIMIT [count],1")
+	var/DBQuery/query = dbcon.NewQuery("SELECT id, publishtime FROM ss13_news WHERE status = '2' ORDER BY publishtime ASC LIMIT [count],1")
 	query.Execute()
 
 	if(!query.RowCount())

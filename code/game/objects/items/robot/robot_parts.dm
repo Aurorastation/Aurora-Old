@@ -160,10 +160,16 @@
 
 /obj/item/robot_parts/robot_suit/proc/allowed_to_build(mob/user as mob, obj/item/device/mmi/brain as obj)
 	if(!check_completion()) // not complete? not allowed
-		return
+		return 0
 	if(!check_allowed_to_install_brain(user,brain)) // not allowed to put the brain in there
-		return
-	return TRUE
+		return 0
+	if(src.head.law_computer) // Ok they are what are we making?
+		if(!jobban_isbanned(brain.brainmob, "Cyborg")) // Are you banned?
+			return "BORG"
+	else //Ok IPC then
+		if(is_alien_whitelisted(brain.brainmob, "Machine")) // They still need a whitelist! Scopes.
+			return "IPC"
+	return 0
 
 
 /obj/item/robot_parts/robot_suit/proc/check_allowed_to_install_brain(mob/user as mob, obj/item/device/mmi/brain as obj)
@@ -188,9 +194,6 @@
 		return
 	if(brain.brainmob.mind in ticker.mode.head_revolutionaries)
 		user << "\red The frame's firmware lets out a shrill sound, and flashes 'Abnormal Memory Engram'. It refuses to accept the [brain]."
-		return
-	if(jobban_isbanned(brain.brainmob, "Cyborg"))
-		user << "\red This [brain] does not seem to fit."
 		return
 	return TRUE
 
@@ -220,16 +223,49 @@
 		var/obj/item/robot_parts/part = W
 		part.attach_to_robot(user,src)
 		return
+	// Handle PART REMOVAL
+	if(istype(W, /obj/item/weapon/crowbar))
+		switch(user.zone_sel.selecting)
+			if("head")
+				if(head)
+					head.loc = loc
+					head = null
+			if("chest")
+				if(chest)
+					chest.loc = loc
+					chest = null
+			if("l_arm","l_hand")
+				if(l_arm)
+					l_arm.loc = loc
+					l_arm = null
+			if("r_arm","r_hand")
+				if(r_arm)
+					r_arm.loc = loc
+					r_arm = null
+			if("l_leg","l_foot")
+				if(l_leg)
+					l_leg.loc = loc
+					l_leg = null
+			if("r_leg","r_foot")
+				if(r_leg)
+					r_leg.loc = loc
+					r_leg = null
+		updateicon()
+		return
 	// HANDLE ROBOT CREATION
 	if(istype(W, /obj/item/device/mmi))
 		var/obj/item/device/mmi/brain = W
-		if (allowed_to_build(user,brain)) // we are allowed to build this robot
-			user.drop_item() // drop this thing
-			if (src.head.law_computer) // do we have a law computer? If so, we're making a standard robot
+		switch(allowed_to_build(user,brain)) // we are allowed to build this robot
+			if("BORG") // do we have a law computer? If so, we're making a standard robot
+				user.drop_item() // We only drop it if it's compatible
 				create_robot(brain)
-			else // otherwise we're making a shell
+				return
+			if("IPC")
+				user.drop_item() // We only drop it if it's compatible
 				create_shell(brain)
-
+				return
+		user << "The frame refuses to intergate with [brain]"
+		return
 
 /obj/item/robot_parts/robot_suit/proc/create_robot(obj/item/device/mmi/brain as obj)
 	var/mob/living/silicon/robot/new_robot = new(get_turf(loc), unfinished = 1)
@@ -257,7 +293,7 @@
 
 
 /obj/item/robot_parts/robot_suit/proc/create_shell(obj/item/device/mmi/brain as obj)
-	var/mob/living/carbon/human/machine/new_shell = new(src.loc)
+	var/mob/living/carbon/human/new_shell = new(src.loc, "Machine")
 	brain.brainmob.mind.transfer_to(new_shell) // transfer brain
 	var/datum/organ/internal/brain/robot/brain_datum=new_shell.internal_organs_by_name["brain"] // put the brain in the head
 	brain_datum.machine_brain_type=brain.machine_brain_type
