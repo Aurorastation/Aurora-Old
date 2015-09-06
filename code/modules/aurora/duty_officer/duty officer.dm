@@ -134,6 +134,8 @@
 			bag.name = "officer's leather satchel"
 			bag.desc = "A well cared for leather satchel for Nanotrasen officers."
 			M.equip_if_possible(bag, slot_back)
+			if(M.backbag == 1)
+				M.equip_to_slot_or_del(new /obj/item/weapon/stamp/centcomm(M.back), slot_in_backpack)
 
 			var /obj/item/weapon/storage/lockbox/lockbox = new(M)
 			lockbox.req_access = list(access_cent_captain)
