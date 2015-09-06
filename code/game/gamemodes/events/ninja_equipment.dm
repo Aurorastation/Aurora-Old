@@ -1384,6 +1384,8 @@ It is possible to destroy the net by the occupant or someone else.
 
 		else//And they are free.
 			M << "\blue You are free of the net!"
+			M.captured = 0 //Important.
+			M.anchored = initial(M.anchored) //Changes the mob's anchored status to the original one; this is not handled by the can_move proc.
 		return
 
 	bullet_act(var/obj/item/projectile/Proj)
