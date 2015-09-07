@@ -1080,7 +1080,7 @@ datum/preferences
 					g_skin = rand(0,255)
 					b_skin = rand(0,255)
 				if("bag")
-					backbag = rand(1,5)
+					backbag = rand(1,4)
 				/*if("skin_style")
 					h_style = random_skin_style(gender)*/
 				if("all")
@@ -1128,9 +1128,9 @@ datum/preferences
 						b_hair = 0//hex2num(copytext(new_hair, 6, 8))
 
 						s_tone = 0
-
+						
 						organ_data = list()
-
+						
 
 				if("language")
 					var/languages_available
@@ -1270,7 +1270,7 @@ datum/preferences
 						covering_type=(new_coating!="None" ? new_coating : null)
 						h_style = random_hair_style(gender, get_hair_species())
 						f_style = random_facial_hair_style(gender, get_hair_species())
-
+						
 				if("limbs")
 					customize_limbs(user,species!="Machine")
 
@@ -1539,7 +1539,7 @@ datum/preferences
 		undershirt = 0
 	character.undershirt = undershirt
 
-	if(backbag > 5 || backbag < 1)
+	if(backbag > 4 || backbag < 1)
 		backbag = 1 //Same as above
 	character.backbag = backbag
 
