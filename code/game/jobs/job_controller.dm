@@ -462,6 +462,10 @@ var/global/datum/controller/occupations/job_master
 							var/obj/item/weapon/storage/backpack/BPK = new/obj/item/weapon/storage/backpack/satchel(H)
 							new /obj/item/weapon/storage/box/survival(BPK)
 							H.equip_to_slot_or_del(BPK, slot_back,1)
+						if(5)
+							var/obj/item/weapon/storage/backpack/BPK = new/obj/item/weapon/storage/backpack/duffel(H)
+							new /obj/item/weapon/storage/box/survival(BPK)
+							H.equip_to_slot_or_del(BPK, slot_back,1)
 
 					//Deferred item spawning.
 					if(spawn_in_storage && spawn_in_storage.len)
