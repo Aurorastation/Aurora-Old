@@ -45,17 +45,16 @@
 	name = "\improper Resource Vender"
 	desc = "For various resources!"
 	icon = 'icons/obj/vending.dmi'
+	var/accepts = list(/obj/item/stack/sheet/metal,
+						/obj/item/stack/sheet/glass,
+						/obj/item/stack/sheet/mineral/diamond,
+						/obj/item/stack/sheet/mineral/uranium,
+						/obj/item/stack/sheet/mineral/plasma,
+						/obj/item/stack/sheet/mineral/gold
+						)
 
 /obj/machinery/smartfridge/resources/accept_check(var/obj/item/O as obj)
-	if(istype(O,/obj/item/stack/sheet/metal/))
-		return 1
-	if(istype(O,/obj/item/stack/sheet/glass/))
-		return 1
-	if(istype(O,/obj/item/stack/sheet/mineral/diamond/))
-		return 1
-	if(istype(O,/obj/item/stack/sheet/mineral/uranium/))
-		return 1
-	if(istype(O,/obj/item/stack/sheet/mineral/plasma/))
+	if(O.type in accepts)
 		return 1
 	return 0
 

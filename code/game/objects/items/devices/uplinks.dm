@@ -176,7 +176,6 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		randomItems.Add("/obj/item/clothing/shoes/syndigaloshes") //No-Slip Syndicate Shoes
 		randomItems.Add("/obj/item/weapon/plastique") //C4
 		randomItems.Add("/obj/item/weapon/storage/box/syndie_kit/masks_gas")
-		randomItems.Add("/obj/item/shoe_cover")
 
 	if(uses > 0)
 		randomItems.Add("/obj/item/weapon/soap/syndie") //Syndicate Soap
@@ -208,7 +207,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 				uses -= 3
 			if("/obj/item/ammo_magazine/a357" , "/obj/item/clothing/shoes/syndigaloshes" , "/obj/item/weapon/plastique", "/obj/item/weapon/card/id/syndicate" , "/obj/item/weapon/storage/box/syndie_kit/masks_gas")
 				uses -= 2
-			if("/obj/item/weapon/soap/syndie" , "/obj/item/weapon/storage/toolbox/syndicate" , "/obj/item/weapon/storage/box/syndie_kit/masks", "/obj/item/shoe_cover")
+			if("/obj/item/weapon/soap/syndie" , "/obj/item/weapon/storage/toolbox/syndicate" , "/obj/item/weapon/storage/box/syndie_kit/masks")
 				uses -= 1
 		del(randomItems)
 		return buyItem
@@ -282,10 +281,6 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 			feedback_add_details("traitor_uplink_items_bought","SR")
 		if("/obj/item/clothing/gloves/force/syndicate")
 			feedback_add_details("traitor_uplink_items_bought","FG")
-		if("/obj/item/shoe_cover")
-			feedback_add_details("traitor_uplink_items_bought","SFS")
-/obj/item/shoe_cover
-
 
 /obj/item/device/uplink/Topic(href, href_list)
 	if (href_list["buy_item"])

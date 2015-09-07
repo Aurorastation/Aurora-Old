@@ -345,6 +345,11 @@ This function restores the subjects blood to max.
 This function restores all organs.
 */
 /mob/living/carbon/human/restore_all_organs()
+	for(var/species_organ in species.has_organ)
+		if(!(species_organ in internal_organs_by_name))
+			var/organ_type = species.has_organ[species_organ]
+			internal_organs_by_name[species_organ] = new organ_type(src)
+
 	for(var/datum/organ/external/current_organ in organs)
 		current_organ.rejuvenate()
 
