@@ -711,6 +711,12 @@
 		icon_state = "hair_messy"
 		species_allowed = list("Tajaran")
 
+	taj_ears_curls
+		name = "Tajara Curly"
+		icon_state = "hair_curly"
+		gender = FEMALE
+		species_allowed = list("Tajaran")
+
 	taj_ears_wife
 		name = "Tajara Housewife"
 		icon_state = "hair_wife"

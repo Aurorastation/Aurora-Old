@@ -231,10 +231,8 @@
 		src.modules += new /obj/item/device/flashlight(src)
 		src.modules += new /obj/item/device/flash(src)
 		src.modules += new /obj/item/borg/sight/meson(src)
-		src.emag = new /obj/item/borg/stun(src)
 		src.modules += new /obj/item/weapon/rcd/borg(src)
 		src.modules += new /obj/item/weapon/extinguisher(src)
-//		src.modules += new /obj/item/device/flashlight(src)
 		src.modules += new /obj/item/weapon/weldingtool/largetank(src)
 		src.modules += new /obj/item/weapon/screwdriver(src)
 		src.modules += new /obj/item/weapon/wrench(src)
@@ -244,7 +242,10 @@
 		src.modules += new /obj/item/device/t_scanner(src)
 		src.modules += new /obj/item/device/analyzer(src)
 		src.modules += new /obj/item/taperoll/engineering(src)
-
+		src.modules += new /obj/item/weapon/gripper(src)
+		
+		src.emag = new /obj/item/borg/stun(src)
+		
 		var/obj/item/stack/sheet/metal/cyborg/M = new /obj/item/stack/sheet/metal/cyborg(src)
 		M.amount = 50
 		src.modules += M

@@ -9,6 +9,10 @@ var/global/list/blacklist = list()
 
 //Blocks an attempt to connect before even creating our client datum thing.
 world/IsBanned(key,address,computer_id)
+	if(!computer_id)
+		message_admins("\blue Failed Login: [key] ([address]) Null computerID")
+		return list("reason"="Bad computerID", "desc"="\nReason: Blank computerID returned from client.")
+
 	if(ckey(key) in admin_datums)
 		return ..()
 

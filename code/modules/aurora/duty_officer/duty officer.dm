@@ -16,6 +16,10 @@
 		src << "\red The game hasn't started yet!"
 		return
 
+	if(istype(mob, /mob/new_player))
+		src << "\red You can't be in the lobby to join as a duty officer"
+		return
+
 	if(mob.mind && mob.mind.special_role == "Duty Officer")
 		src << "\red You are already a Duty Officer"
 		verbs += /client/proc/returntobody
@@ -130,6 +134,8 @@
 			bag.name = "officer's leather satchel"
 			bag.desc = "A well cared for leather satchel for Nanotrasen officers."
 			M.equip_if_possible(bag, slot_back)
+			if(M.backbag == 1)
+				M.equip_to_slot_or_del(new /obj/item/weapon/stamp/centcomm(M.back), slot_in_backpack)
 
 			var /obj/item/weapon/storage/lockbox/lockbox = new(M)
 			lockbox.req_access = list(access_cent_captain)

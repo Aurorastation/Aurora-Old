@@ -14,8 +14,23 @@
 	idle_power_usage = 60
 	active_power_usage = 10000	//10 kW. It's a big all-body scanner.
 
-/*/obj/machinery/bodyscanner/allow_drop()
-	return 0*/
+
+/obj/machinery/bodyscanner/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
+	if(!allowed_to_add_this_person_to_a_medical_machine(O,user,src,occupant))
+		return
+	var/mob/living/L = O
+	if(L == user)
+		visible_message("[user] climbs into the body scanner.", 3)
+	else
+		visible_message("[user] puts [L.name] into the body scanner.", 3)
+	if (L.client)
+		L.client.perspective = EYE_PERSPECTIVE
+		L.client.eye = src
+	L.loc = src
+	src.occupant = L
+	src.icon_state = "body_scanner_1"
+	src.add_fingerprint(user)
+	return
 
 /obj/machinery/bodyscanner/relaymove(mob/user as mob)
 	if (user.stat)
