@@ -133,7 +133,7 @@
 
 	var/lcolor = "#ffeeee"	//light colour, severity = 0
 	var/dcolor = "#ffaaaa"	//dark colour, severity = 1
-	var/ecolor = "#808080"	//gray colour, expired = 1
+	var/ecolor = "#e3e3e3"	//gray colour, expired = 1
 
 	establish_db_connection()
 	if(!dbcon.IsConnected())
@@ -231,6 +231,7 @@
 		var/id = text2num(expireQuery.item[1])
 		var/DBQuery/updateQuery = dbcon.NewQuery("UPDATE ss13_warnings SET expired = 1 WHERE id = [id];")
 		updateQuery.Execute()
+		countExpire++
 
 	var/DBQuery/query = dbcon.NewQuery("SELECT id FROM ss13_warnings WHERE (visible = 1 AND acknowledged = 0 AND expired = 0) AND (ckey='[sqlkey]' OR computerid='[computer_id]' OR ip='[address]');")
 	query.Execute()
@@ -263,7 +264,7 @@
 
 	var/lcolor = "#ffeeee"	//light colour, severity = 0
 	var/dcolor = "#ffdddd"	//dark colour, severity = 1
-	var/ecolor = "#808080"	//gray colour, expired = 1
+	var/ecolor = "#e3e3e3"	//gray colour, expired = 1
 
 	establish_db_connection()
 	if(!dbcon.IsConnected())
@@ -335,14 +336,10 @@
 			dat += "<tr>"
 			dat += "<td align='center' colspan='5'><b>Staff Notes:</b> <cite>\"[notes]\"</cite></td>"
 			dat += "</tr>"
-			if(ackn)
-				dat += "<tr><td align='center' colspan='5'>Warning has been acknolwedged by recipient.</td></tr>"
-			else
+			if(!ackn)
 				dat += "<tr><td align='center' colspan='5'>Warning has not been acknolwedged by recipient.</td></tr>"
 			if(expired)
 				dat += "<tr><td align='center' colspan='5'>The warning has expired.</td></tr>"
-			else
-				dat += "<tr><td align='center' colspan='5'>The warning is currently active.</td></tr>"
 			if(edited)
 				var/lastEditor = search_query.item[11]
 				var/lastEditDate = search_query.item[12]
@@ -350,9 +347,9 @@
 			dat += "<tr>"
 			dat += "<td align='center' colspan='5'><b>Options:</b> "
 			if(check_rights(R_ADMIN) || a_ckey == sanitizeSQL(ckey))
-				dat += "<a href=\"byond://?src=\ref[src];dbwarningedit=editReason;dbwarningid=[id]\">Edit Message</a> "
-				dat += "<a href=\"byond://?src=\ref[src];dbwarningedit=editNotes;dbwarningid[id]\">Edit Note</a> "
-				dat += "<a href=\"byond://?src=\ref[src];dbwarningedit=delete;dbwarningid[id]\">Delete Warning</a>"
+				dat += "<a href=\"byond://?src=\ref[src];dbwarningedit=editReason;dbwarningid=[id]\">Edit Reason</a> "
+				dat += "<a href=\"byond://?src=\ref[src];dbwarningedit=editNotes;dbwarningid=[id]\">Edit Note</a> "
+				dat += "<a href=\"byond://?src=\ref[src];dbwarningedit=delete;dbwarningid=[id]\">Delete Warning</a>"
 			else
 				dat += "You can only edit or delete notes that you have issued."
 			dat += "</td>"
