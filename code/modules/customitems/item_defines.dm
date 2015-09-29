@@ -1247,3 +1247,15 @@ END R I P HAZERI
 /obj/item/clothing/tie/fluff/straughan_necklace/attack_self(mob/user as mob)
 	if(isliving(user))
 		user.visible_message("\red [user] holds up their [src].\nIt reads: Prosthetic rejection syndrome. Patient's body rejects mechanical eyes. Shaded eyewear required.","\red You display the [src], showing the room your medical condition.")
+
+
+// Hayden Green's Mech Helmet - Doomberg
+/obj/item/clothing/head/helmet/fluff/hayden_mechhelmet
+	name = "mech pilot helmet"
+	desc = "A sturdy green helmet with a dark visor. Not brand new, but well maintained."
+	icon = 'icons/obj/custom_items/hayden_mechhelmet.dmi'
+	icon_state = "hayden_mechhelmet"
+	item_state = "hayden_mechhelmet"
+	flags_inv = HIDEEARS
+	contained_sprite = 1
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
