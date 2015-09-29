@@ -36,7 +36,7 @@
 	item_color = "med"
 
 /obj/item/clothing/tie/armband/medgreen
-	name = "medical guard armband"
+	name = "paramedic armband"
 	desc = "An armband, worn by the station's security forces to display which department they're assigned to. This one is white and green."
-	icon_state = "medgreen"
-	item_color = "medgreen"
+	icon_state = "emt"
+	item_color = "emt"
