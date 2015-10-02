@@ -1302,3 +1302,12 @@ END R I P HAZERI
 	contained_sprite = 1
 	sharp = 1
 	force = 1
+
+// Varan Truesight's Dataslate - Gollee
+/obj/item/fluff/varan_dataslate
+	name = "data slate"
+	desc = "A chrome-silver data slate. Along the side, there is a stylised brand mark, with 'Biesel Electronics Ophreion 4000' written underneath."
+	icon = 'icons/obj/custom_items/varan_dataslate.dmi'
+	icon_state = "varan_dataslate"
+	item_state = "varan_dataslate"
+	contained_sprite = 1
