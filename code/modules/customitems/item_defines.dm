@@ -97,12 +97,44 @@
 	icon_state = "raieed_sandals"
 	contained_sprite = 1
 
-/obj/item/clothing/suit/storage/fluff/raieed_labcoat //Treasured Labcoat - Raieed Amari - nikolaithebeast - DONE
-	name = "torn labcoat"
-	desc = "A old labcoat, torn beyond reorganization, but yet it still seems to be kept for."
+// Rai Amari - nikolaithebeast - Stitched Labcoat
+/obj/item/clothing/suit/storage/labcoat/fluff/raieed_labcoat
+	name = "stitched labcoat"
+	desc = "A stiched up labcoat. It looks particularly torn up, but someone has spent a great deal of time fixing the damage."
 	icon = 'icons/obj/custom_items/raieed_labcoat.dmi'
-	icon_state = "raieed_labcoat"
+	icon_state = "raieed_labcoat_open"
 	contained_sprite = 1
+
+	 // verb/toggle() as normally defined in labcoat.dm
+	toggle()
+		set name = "Toggle Labcoat Buttons"
+		set category = "Object"
+		set src in usr
+
+		if(!usr.canmove || usr.stat || usr.restrained())
+			return 0
+
+		switch(icon_state)
+			if("raieed_labcoat_open")
+				icon_state = "raieed_labcoat_closed"
+				usr << "You button up the stitched labcoat."
+			if("raieed_labcoat_closed")
+				icon_state = "raieed_labcoat_open"
+				usr << "You unbutton the stiched labcoat."
+
+			else
+				usr << "SierraKomodo broke a thing. Bug report time!"
+				return
+
+		usr.update_inv_wear_suit()
+
+// Old item
+// /obj/item/clothing/suit/storage/fluff/raieed_labcoat //Treasured Labcoat - Raieed Amari - nikolaithebeast - DONE
+	// name = "torn labcoat"
+	// desc = "A old labcoat, torn beyond reorganization, but yet it still seems to be kept for."
+	// icon = 'icons/obj/custom_items/raieed_labcoat.dmi'
+	// icon_state = "raieed_labcoat"
+	// contained_sprite = 1
 
 /obj/item/weapon/folder/fluff/may_notebook //May Izumi's Notebook - May Izumi - lk600 - DONE
 	name = "May Izumi's Notebook"
