@@ -1291,3 +1291,14 @@ END R I P HAZERI
 	flags_inv = HIDEEARS
 	contained_sprite = 1
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+
+// Chive's Engraved Auto Injector - cobracoco007
+/obj/item/fluff/chive_engravedautoinjector
+	name = "engraved broken autoinjector"
+	desc = "A slightly rusty auto-injector that appears to have the initials 'W.N.' engraved on it."
+	icon = 'icons/obj/custom_items/chive_engravedautoinjector.dmi'
+	icon_state = "chive_engravedautoinjector"
+	item_state = "chive_engravedautoinjector"
+	contained_sprite = 1
+	sharp = 1
+	force = 1
