@@ -1311,3 +1311,16 @@ END R I P HAZERI
 	icon_state = "varan_dataslate"
 	item_state = "varan_dataslate"
 	contained_sprite = 1
+
+// Fortune Bloise - swat43 - Shield Pendant
+/obj/item/clothing/tie/fluff/fortune_shieldpendant
+	name = "shield pendant"
+	desc = "A small blue shield shaped pendant with two small wings attached to it."
+	icon = 'icons/obj/custom_items/fortune_shieldpendant.dmi'
+	icon_state = "fortune_shieldpendant"
+	item_color = "fortune_shieldpendant"
+	contained_sprite = 1
+	slot_flags = SLOT_MASK
+
+/obj/item/clothing/tie/fluff/fortune_shieldpendant/New()
+	inv_overlay = image("icon" = 'icons/obj/custom_items/fortune_shieldpendant.dmi', "icon_state" = "fortune_shieldpendant_w")
