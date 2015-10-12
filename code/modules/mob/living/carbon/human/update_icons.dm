@@ -234,7 +234,7 @@ proc/get_damage_icon_part(damage_state, body_part)
 	overlays_standing[DAMAGE_LAYER]	= standing_image
 
 	if(update_icons)   update_icons()
-	
+
 
 /mob/living/carbon/human/proc/get_skin_tone_key()
 	if (species.flags & HAS_SKIN_COLOR)
@@ -242,7 +242,7 @@ proc/get_damage_icon_part(damage_state, body_part)
 	if(species.flags & HAS_SKIN_TONE)
 		return "[s_tone]"
 	return ""
-	
+
 
 /mob/living/carbon/human/proc/get_icon_key(var/list/mutations=list())
 	if (!mutations)
@@ -316,13 +316,13 @@ proc/get_damage_icon_part(damage_state, body_part)
 		var/deform_icon = (mutations["skeleton"] ? 'icons/mob/human_races/r_skeleton.dmi' : species.icobase)
 
 		var/list/skin_info = skin_colour_info(mutations) // get the skin tone info
-		
+
 		//Robotic limbs are handled in get_icon() so all we worry about are missing or dead limbs.
 		//No icon stored, so we need to start with a basic one.
 		var/datum/organ/external/chest = get_organ("chest")
 		base_icon = chest.get_icon(race_icon,deform_icon,skin_info)
-		
-		
+
+
 
 		if(chest.status & ORGAN_DEAD)
 			base_icon.ColorTone(necrosis_color_mod)
@@ -419,7 +419,7 @@ proc/get_damage_icon_part(damage_state, body_part)
 
 /mob/living/carbon/human/proc/create_hair_icon()
 	if(!should_we_show_hair()) // if we're missing our head or we're wearing a mask, no hair
-		return 
+		return
 	validate_hair() // make sure our hair is valid
 	var/icon/face_standing	= new /icon('icons/mob/human_face.dmi',"bald_s") //base icons
 	var/icon/facial_s = facial_hair_icon()
@@ -437,7 +437,7 @@ proc/get_damage_icon_part(damage_state, body_part)
 	create_hair_icon() // do the hair blending
 	if(update_icons)
 		update_icons()
-		
+
 
 /mob/living/carbon/human/update_mutations(var/update_icons=1)
 	var/fat
@@ -583,22 +583,34 @@ proc/get_damage_icon_part(damage_state, body_part)
 		if(w_uniform:hastie)	//WE CHECKED THE TYPE ABOVE. THIS REALLY SHOULD BE FINE.
 			var/tie_color = w_uniform:hastie.item_color
 			if(!tie_color) tie_color = w_uniform:hastie.icon_state
-			standing.overlays	+= image("icon" = 'icons/mob/ties.dmi', "icon_state" = "[tie_color]")
+			if (w_uniform:hastie.contained_sprite == 1)
+				standing.overlays += image("icon" = w_uniform:hastie.icon, "icon_state" = "[tie_color]_w")
+			else
+				standing.overlays	+= image("icon" = 'icons/mob/ties.dmi', "icon_state" = "[tie_color]")
 
 		if(w_uniform:aband)	//SAME THING AS ABOVE, WHY AM I TYPING LIKE THIS, BECAUSE ABOVE
 			var/aband_color = w_uniform:aband.item_color
 			if(!aband_color) aband_color = w_uniform:aband.icon_state
-			standing.overlays	+= image("icon" = 'icons/mob/ties.dmi', "icon_state" = "[aband_color]")
+			if (w_uniform:aband.contained_sprite == 1)
+				standing.overlays += image("icon" = w_uniform:aband.icon, "icon_state" = "[aband_color]_w")
+			else
+				standing.overlays	+= image("icon" = 'icons/mob/ties.dmi', "icon_state" = "[aband_color]")
 
 		if(w_uniform:webbing)	//SAME THING AS ABOVE, LETS ADD TWO MORE FOR LOLS
 			var/webbing_color = w_uniform:webbing.item_color
 			if(!webbing_color) webbing_color = w_uniform:webbing.icon_state
-			standing.overlays	+= image("icon" = 'icons/mob/ties.dmi', "icon_state" = "[webbing_color]")
+			if (w_uniform:webbing.contained_sprite == 1)
+				standing.overlays += image("icon" = w_uniform:webbing.icon, "icon_state" = "[webbing_color]_w")
+			else
+				standing.overlays	+= image("icon" = 'icons/mob/ties.dmi', "icon_state" = "[webbing_color]")
 
 		if(w_uniform:holster)	//SAME THING AS ABOVE, THIS IS FUN
 			var/holster_color = w_uniform:holster.item_color
 			if(!holster_color) holster_color = w_uniform:holster.icon_state
-			standing.overlays	+= image("icon" = 'icons/mob/ties.dmi', "icon_state" = "[holster_color]")
+			if (w_uniform:holster.contained_sprite == 1)
+				standing.overlays += image("icon" = w_uniform:holster.icon, "icon_state" = "[holster_color]_w")
+			else
+				standing.overlays	+= image("icon" = 'icons/mob/ties.dmi', "icon_state" = "[holster_color]")
 
 		overlays_standing[UNIFORM_LAYER]	= standing
 	else
