@@ -19,11 +19,13 @@
 		message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
 		if (!message)
 			return
-		log_say("[key_name(src)] : [message]")
+
+		var/mob/living/simple_animal/borer/B = src.loc
+		log_say("[key_name(src)] :(in key_name(B.host.name)) [message]")
+
 		if (stat == 2)
 			return say_dead(message)
 
-		var/mob/living/simple_animal/borer/B = src.loc
 		src << "You whisper silently, \"[message]\""
 		B.host << "The captive mind of [src] whispers, \"[message]\""
 
