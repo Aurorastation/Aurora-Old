@@ -2875,3 +2875,12 @@
 
 		show_notes_sql(playerckey, adminckey)
 		return
+
+	else if(href_list["dbwarningedit"])
+		var/warningEdit = href_list["dbwarningedit"]
+		var/warningId = text2num(href_list["dbwarningid"])
+		if(!warningEdit || !warningId)
+			return
+
+		warningsEdit(warningId, warningEdit)
+		return
