@@ -116,9 +116,6 @@
 /obj/item/seeds/cornseed
 	seed_type = "corn"
 
-/obj/item/seeds/poppyseed
-	seed_type = "poppies"
-
 /obj/item/seeds/potatoseed
 	seed_type = "potato"
 
