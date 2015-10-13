@@ -49,7 +49,11 @@ CREATE TABLE `ss13_warnings` (
     `ip` VARCHAR(32) NOT NULL,
     `a_ckey` VARCHAR(32) NOT NULL,
     `acknowledged` TINYINT(1) NULL DEFAULT '0',
-    `visible` TINYINT(1) NULL DEFAULT '1';
+    `expired` TINYINT(1) NULL DEFAULT '0',
+    `visible` TINYINT(1) NULL DEFAULT '1',
+    `edited` TINYINT(1) NULL DEFAULT '0',
+    `lasteditor` VARCHAR(32) NULL DEFAULT NULL,
+    `lasteditdate` DATETIME NULL DEFAULT NULL,
     PRIMARY KEY (`id`)
 )  ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 

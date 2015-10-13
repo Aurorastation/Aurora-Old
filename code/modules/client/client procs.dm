@@ -14,6 +14,7 @@
 
 	Because of this certain things MUST be considered whenever adding a Topic() for something:
 		- Can it be fed harmful values which could cause runtimes?
+
 		- Is the Topic call an admin-only thing?
 		- If so, does it have checks to see if the person who called it (usr.client) is an admin?
 		- Are the processes being called by Topic() particularly laggy?
@@ -89,19 +90,30 @@
 	..()	//redirect to hsrc.Topic()
 
 /client/proc/handle_spam_prevention(var/message, var/mute_type)
-	if(config.automute_on && !holder && src.last_message == message)
-		src.last_message_count++
-		if(src.last_message_count >= SPAM_TRIGGER_AUTOMUTE)
-			src << "\red You have exceeded the spam filter limit for identical messages. An auto-mute was applied."
-			cmd_admin_mute(src.mob, mute_type, 1)
-			return 1
-		if(src.last_message_count >= SPAM_TRIGGER_WARNING)
-			src << "\red You are nearing the spam filter limit for identical messages."
+	if(config.automute_on && !holder)
+		if(src.last_message_time > world.time - SPAM_TIMER * 10)
+			if(src.last_message_timer > SPAM_TRIGGER_AUTOMUTE)
+				src << "\red You have exceeded the spam filter limit for speaking too fast. An auto-mute was applied."
+				cmd_admin_mute(src.mob, mute_type, 1)
+				return 1
+			src.last_message_timer++
+		else
+			src.last_message_timer = 0
+			src.last_message_time = world.time
+
+		if(src.last_message == message)
+			src.last_message_count++
+			if(src.last_message_count >= SPAM_TRIGGER_AUTOMUTE)
+				src << "\red You have exceeded the spam filter limit for identical messages. An auto-mute was applied."
+				cmd_admin_mute(src.mob, mute_type, 1)
+				return 1
+			if(src.last_message_count >= SPAM_TRIGGER_WARNING)
+				src << "\red You are nearing the spam filter limit for identical messages."
+				return 0
+		else
+			last_message = message
+			src.last_message_count = 0
 			return 0
-	else
-		last_message = message
-		src.last_message_count = 0
-		return 0
 
 //This stops files larger than UPLOAD_LIMIT being sent from client to server via input(), client.Import() etc.
 /client/AllowUpload(filename, filelength)
@@ -190,7 +202,6 @@
 
 	if(prefs.lastchangelog != changelog_hash) //bolds the changelog button on the interface so we know there are updates.
 		winset(src, "rpane.changelog", "background-color=#eaeaea;font-style=bold")
-
 
 	//////////////
 	//DISCONNECT//
