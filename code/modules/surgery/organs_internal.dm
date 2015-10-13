@@ -320,7 +320,8 @@
 
 /datum/surgery_step/internal/replace_organ
 	allowed_tools = list(
-	/obj/item/organ = 100
+	/obj/item/organ = 100,
+	/obj/item/robot_parts/robot_component = 100
 	)
 
 	min_duration = 60
@@ -334,7 +335,16 @@
 		var/organ_compatible
 		var/organ_missing
 
-		if(!istype(O))
+		if(!istype(O) && istype(O, /obj/item/robot_parts/robot_component))
+			msg_scopes("Component's type: [tool.type].")
+			var/obj/item/robot_parts/robot_component/A = tool
+			msg_scopes("Component's organ_type: [A.organ_type].")
+			if(A.organ_type)
+				O = new A.organ_type()
+				O.update()
+			else
+				return 0
+		else
 			return 0
 
 		if(!target.species)
@@ -356,6 +366,19 @@
 			else
 				user << "\red \The [target] already has [o_a][O.organ_tag]."
 				return 2
+
+			msg_scopes("Affected.name: [affected.name].")
+			msg_scopes("Parent_organ: [O.organ_data.parent_organ].")
+			msg_scopes("Organ_data.type: [O.organ_data.type].")
+			if(O.organ_data)
+				msg_scopes("We have organ data.")
+			else
+				msg_scopes("No organ data.")
+
+			if(affected.name == O.organ_data.parent_organ)
+				msg_scopes("Affected name matches parent_organ.")
+			else
+				msg_scopes("Affected name does not match parent_organ.")
 
 			if(O.organ_data && affected.name == O.organ_data.parent_organ)
 				organ_compatible = 1
@@ -383,6 +406,11 @@
 		var/obj/item/organ/O = tool
 		if(istype(O))
 			O.replaced(target,affected)
+		else if(istype(tool, /obj/item/robot_parts/robot_component))
+			var/obj/item/robot_parts/robot_component/A = tool
+			if(A.organ_type)
+				O = A.organ_type
+				O.replaced(target,affected)
 
 	fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("\red [user]'s hand slips, damaging \the [tool]!", \

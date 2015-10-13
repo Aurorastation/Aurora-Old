@@ -127,7 +127,9 @@
 						/obj/item/borg/upgrade/tasercooler,
 						/obj/item/borg/upgrade/jetpack),
 
-	"Synthetic Coverings" = list(	/obj/item/weapon/synth_skin_spray,
+	"Synthetic Shell Components" = list(
+									/obj/item/organ/eyes/robot,
+									/obj/item/weapon/synth_skin_spray,
 									/obj/item/weapon/synth_skin_cartridge/paint,
 									/obj/item/weapon/synth_skin_cartridge/skin,
 									/obj/item/weapon/synth_skin_cartridge/fur,
