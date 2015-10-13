@@ -7,6 +7,8 @@
 
 	var/last_message	= "" //Contains the last message sent by this client - used to protect against copy-paste spamming.
 	var/last_message_count = 0 //contins a number of how many times a message identical to last_message was sent.
+	var/last_message_time = 0 ////contins the last time a message was sent
+	var/last_message_timer  = 0 //contins a number of how quickly messages are sent
 
 		/////////
 		//OTHER//
