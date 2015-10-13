@@ -43,7 +43,7 @@ var/global/list/underwear_f = list("Red", "White", "Yellow", "Blue", "Black", "T
 	//undershirt
 var/global/list/undershirt_t = list("Black Tank top", "White Tank top", "Black shirt", "White shirt", "Blue Tank top", "Rainbow Tank top", "Happy Tank top", "Neutral Tank top", "Sad Tank top", "Sunny Tank top", "Red Tank top", "Telnyashka Tank top", "Telnyashka shirt", "Space Station shirt", "Ian shirt", "None")
 	//Backpacks
-var/global/list/backbaglist = list("Nothing", "Backpack", "Satchel", "Satchel Alt")
+var/global/list/backbaglist = list("Nothing", "Backpack", "Satchel", "Satchel Alt", "Duffel Bag")
 
 //////////////////////////
 /////Initial Building/////
@@ -100,7 +100,7 @@ var/global/list/backbaglist = list("Nothing", "Backpack", "Satchel", "Satchel Al
 	for(var/T in paths)
 		var/datum/language/L = new T
 		all_languages[L.name] = L
-	
+
 	for (var/language_name in all_languages)
 		var/datum/language/L = all_languages[language_name]
 		language_keys[":[lowertext(L.key)]"] = L

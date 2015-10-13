@@ -107,10 +107,10 @@
 				if(IS_AI)
 					return AI.holopad_talk(message)
 				if(IS_ROBOT)
-					log_say("[key_name(src)] : [message]")
+					log_say("[key_name(src)] :([message_mode]/[speaking.name]) [message]")
 					R.radio.talk_into(src,message,message_mode,verb,speaking)
 				if(IS_PAI)
-					log_say("[key_name(src)] : [message]")
+					log_say("[key_name(src)] :([message_mode]/[speaking.name]) [message]")
 					P.radio.talk_into(src,message,message_mode,verb,speaking)
 			return 1
 
@@ -122,13 +122,13 @@
 						src << "\red System Error - Transceiver Disabled"
 						return
 					else
-						log_say("[key_name(src)] : [message]")
+						log_say("[key_name(src)] :(General/[speaking.name]) [message]")
 						AI.aiRadio.talk_into(src,message,null,verb,speaking)
 				if(IS_ROBOT)
-					log_say("[key_name(src)] : [message]")
+					log_say("[key_name(src)] :(General/[speaking.name]) [message]")
 					R.radio.talk_into(src,message,null,verb,speaking)
 				if(IS_PAI)
-					log_say("[key_name(src)] : [message]")
+					log_say("[key_name(src)] :(General/[speaking.name]) [message]")
 					P.radio.talk_into(src,message,null,verb,speaking)
 			return 1
 
@@ -140,13 +140,13 @@
 							src << "\red System Error - Transceiver Disabled"
 							return
 						else
-							log_say("[key_name(src)] : [message]")
+							log_say("[key_name(src)] :([message_mode]/[speaking.name]) [message]")
 							AI.aiRadio.talk_into(src,message,message_mode,verb,speaking)
 					if(IS_ROBOT)
-						log_say("[key_name(src)] : [message]")
+						log_say("[key_name(src)] :([message_mode]/[speaking.name]) [message]")
 						R.radio.talk_into(src,message,message_mode,verb,speaking)
 					if(IS_PAI)
-						log_say("[key_name(src)] : [message]")
+						log_say("[key_name(src)] :([message_mode]/[speaking.name]) [message]")
 						P.radio.talk_into(src,message,message_mode,verb,speaking)
 				return 1
 
@@ -154,9 +154,6 @@
 
 //For holopads only. Usable by AI.
 /mob/living/silicon/ai/proc/holopad_talk(var/message)
-
-	log_say("[key_name(src)] : [message]")
-
 	message = trim(message)
 
 	if (!message)
@@ -164,6 +161,9 @@
 
 	var/obj/machinery/hologram/holopad/T = src.holo
 	if(T && T.hologram && T.master == src)//If there is a hologram and its master is the user.
+
+		log_say("[key_name(src)] :(Holopad) [message]") //Log here to get holopad location
+
 		var/verb = say_quote(message)
 
 		//Human-like, sorta, heard by those who understand humans.

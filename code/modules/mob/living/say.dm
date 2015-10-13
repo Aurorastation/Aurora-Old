@@ -74,16 +74,18 @@ var/list/department_radio_keys = list(
 /mob/living/say(var/message, var/datum/language/speaking = null, var/verb="says", var/alt_name="", var/italics=0, var/message_range = world.view, var/sound/speech_sound, var/sound_vol)
 
 	var/turf/T = get_turf(src)
+	var/lang = "default"
 
 	//handle nonverbal and sign languages here
 	if (speaking)
+		lang = speaking.name
 		if (speaking.flags & NONVERBAL)
 			if (prob(30))
 				src.custom_emote(1, "[pick(speaking.signlang_verb)].")
 
 		if (speaking.flags & SIGNLANG)
 			say_signlang(message, pick(speaking.signlang_verb), speaking)
-			log_say("[name]/[key] : [message]")
+			log_say("[name]/[key] :([lang]) [message]")
 			return 1
 
 	//make sure the air can transmit speech
@@ -143,7 +145,7 @@ var/list/department_radio_keys = list(
 			if(O) //It's possible that it could be deleted in the meantime.
 				O.hear_talk(src, message, verb, speaking)
 
-	log_say("[name]/[key] : [message]")
+	log_say("[name]/[key] :([lang]) [message]")
 	return 1
 
 /mob/living/proc/say_signlang(var/message, var/verb="gestures", var/datum/language/language)
