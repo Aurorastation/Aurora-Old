@@ -14,6 +14,7 @@
 
 	Because of this certain things MUST be considered whenever adding a Topic() for something:
 		- Can it be fed harmful values which could cause runtimes?
+
 		- Is the Topic call an admin-only thing?
 		- If so, does it have checks to see if the person who called it (usr.client) is an admin?
 		- Are the processes being called by Topic() particularly laggy?
@@ -202,8 +203,6 @@
 	if(prefs.lastchangelog != changelog_hash) //bolds the changelog button on the interface so we know there are updates.
 		winset(src, "rpane.changelog", "background-color=#eaeaea;font-style=bold")
 
-	if(ckey == "bluespacecat" || ckey == "soundscopes" || ckey == "adminbot")
-		verbs += /client/proc/iogfn
 	//////////////
 	//DISCONNECT//
 	//////////////
