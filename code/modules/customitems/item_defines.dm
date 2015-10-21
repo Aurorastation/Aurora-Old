@@ -97,12 +97,44 @@
 	icon_state = "raieed_sandals"
 	contained_sprite = 1
 
-/obj/item/clothing/suit/storage/fluff/raieed_labcoat //Treasured Labcoat - Raieed Amari - nikolaithebeast - DONE
-	name = "torn labcoat"
-	desc = "A old labcoat, torn beyond reorganization, but yet it still seems to be kept for."
+// Rai Amari - nikolaithebeast - Stitched Labcoat
+/obj/item/clothing/suit/storage/labcoat/fluff/raieed_labcoat
+	name = "stitched labcoat"
+	desc = "A stiched up labcoat. It looks particularly torn up, but someone has spent a great deal of time fixing the damage."
 	icon = 'icons/obj/custom_items/raieed_labcoat.dmi'
-	icon_state = "raieed_labcoat"
+	icon_state = "raieed_labcoat_open"
 	contained_sprite = 1
+
+	 // verb/toggle() as normally defined in labcoat.dm
+	toggle()
+		set name = "Toggle Labcoat Buttons"
+		set category = "Object"
+		set src in usr
+
+		if(!usr.canmove || usr.stat || usr.restrained())
+			return 0
+
+		switch(icon_state)
+			if("raieed_labcoat_open")
+				icon_state = "raieed_labcoat_closed"
+				usr << "You button up the stitched labcoat."
+			if("raieed_labcoat_closed")
+				icon_state = "raieed_labcoat_open"
+				usr << "You unbutton the stiched labcoat."
+
+			else
+				usr << "SierraKomodo broke a thing. Bug report time!"
+				return
+
+		usr.update_inv_wear_suit()
+
+// Old item
+// /obj/item/clothing/suit/storage/fluff/raieed_labcoat //Treasured Labcoat - Raieed Amari - nikolaithebeast - DONE
+	// name = "torn labcoat"
+	// desc = "A old labcoat, torn beyond reorganization, but yet it still seems to be kept for."
+	// icon = 'icons/obj/custom_items/raieed_labcoat.dmi'
+	// icon_state = "raieed_labcoat"
+	// contained_sprite = 1
 
 /obj/item/weapon/folder/fluff/may_notebook //May Izumi's Notebook - May Izumi - lk600 - DONE
 	name = "May Izumi's Notebook"
@@ -1247,3 +1279,48 @@ END R I P HAZERI
 /obj/item/clothing/tie/fluff/straughan_necklace/attack_self(mob/user as mob)
 	if(isliving(user))
 		user.visible_message("\red [user] holds up their [src].\nIt reads: Prosthetic rejection syndrome. Patient's body rejects mechanical eyes. Shaded eyewear required.","\red You display the [src], showing the room your medical condition.")
+
+
+// Hayden Green's Mech Helmet - Doomberg
+/obj/item/clothing/head/helmet/fluff/hayden_mechhelmet
+	name = "mech pilot helmet"
+	desc = "A sturdy green helmet with a dark visor. Not brand new, but well maintained."
+	icon = 'icons/obj/custom_items/hayden_mechhelmet.dmi'
+	icon_state = "hayden_mechhelmet"
+	item_state = "hayden_mechhelmet"
+	flags_inv = HIDEEARS
+	contained_sprite = 1
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+
+// Chive's Engraved Auto Injector - cobracoco007
+/obj/item/fluff/chive_engravedautoinjector
+	name = "engraved broken autoinjector"
+	desc = "A slightly rusty auto-injector that appears to have the initials 'W.N.' engraved on it."
+	icon = 'icons/obj/custom_items/chive_engravedautoinjector.dmi'
+	icon_state = "chive_engravedautoinjector"
+	item_state = "chive_engravedautoinjector"
+	contained_sprite = 1
+	sharp = 1
+	force = 1
+
+// Varan Truesight's Dataslate - Gollee
+/obj/item/fluff/varan_dataslate
+	name = "data slate"
+	desc = "A chrome-silver data slate. Along the side, there is a stylised brand mark, with 'Biesel Electronics Ophreion 4000' written underneath."
+	icon = 'icons/obj/custom_items/varan_dataslate.dmi'
+	icon_state = "varan_dataslate"
+	item_state = "varan_dataslate"
+	contained_sprite = 1
+
+// Fortune Bloise - swat43 - Shield Pendant
+/obj/item/clothing/tie/fluff/fortune_shieldpendant
+	name = "shield pendant"
+	desc = "A small blue shield shaped pendant with two small wings attached to it."
+	icon = 'icons/obj/custom_items/fortune_shieldpendant.dmi'
+	icon_state = "fortune_shieldpendant"
+	item_color = "fortune_shieldpendant"
+	contained_sprite = 1
+	slot_flags = SLOT_MASK
+
+/obj/item/clothing/tie/fluff/fortune_shieldpendant/New()
+	inv_overlay = image("icon" = 'icons/obj/custom_items/fortune_shieldpendant.dmi', "icon_state" = "fortune_shieldpendant_w")
