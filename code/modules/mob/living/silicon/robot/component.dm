@@ -149,6 +149,13 @@
 	var/icon_state_broken = "broken"
 	var/obj/item/organ/organ_type = null	// for shells. Only define if this can be placed inside an IPC during organ replacement surgery.
 
+// In case the robot_component has a child organ, it is updated to have the proper datums and so on.
+/obj/item/robot_parts/robot_component/New()
+	..()
+	spawn(5)
+		if(organ_type)
+			organ_type.update()
+
 // TODO: actual icons ;)
 /obj/item/robot_parts/robot_component/binary_communication_device
 	name = "binary communication device"
@@ -169,7 +176,7 @@
 	name = "camera"
 	icon_state = "camera"
 	icon_state_broken = "camera_broken"
-	organ_type = /obj/item/organ/eyes/robot
+	organ_type = new /obj/item/organ/eyes/robot()
 
 /obj/item/robot_parts/robot_component/law_computer
 	name = "law computer"
@@ -180,7 +187,7 @@
 	name = "diagnosis unit"
 	icon_state = "analyser"
 	icon_state_broken = "analyser_broken"
-	organ_type = /obj/item/organ/machine/diagnosis_unit
+	organ_type = new /obj/item/organ/machine/diagnosis_unit()
 
 /obj/item/robot_parts/robot_component/radio
 	name = "radio"
@@ -191,13 +198,13 @@
 	name = "radiator"
 	icon_state = "radiator"
 	icon_state_broken = "radiator_broken"
-	organ_type = /obj/item/organ/machine/radiator
+	organ_type = new /obj/item/organ/machine/radiator()
 
 /obj/item/robot_parts/robot_component/bladder
 	name = "chemical containment"
 	icon_state = "bladder"
 	icon_state_broken = "bladder_broken"
-	organ_type = /obj/item/organ/machine/bladder
+	organ_type = new /obj/item/organ/machine/bladder()
 
 //
 //Robotic Component Analyser, basically a health analyser for robots

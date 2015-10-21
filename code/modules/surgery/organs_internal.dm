@@ -336,12 +336,9 @@
 		var/organ_missing
 
 		if(!istype(O) && istype(O, /obj/item/robot_parts/robot_component))
-			msg_scopes("Component's type: [tool.type].")
 			var/obj/item/robot_parts/robot_component/A = tool
-			msg_scopes("Component's organ_type: [A.organ_type].")
 			if(A.organ_type)
-				O = new A.organ_type()
-				O.update()
+				O = A.organ_type
 			else
 				return 0
 		else
@@ -366,19 +363,6 @@
 			else
 				user << "\red \The [target] already has [o_a][O.organ_tag]."
 				return 2
-
-			msg_scopes("Affected.name: [affected.name].")
-			msg_scopes("Parent_organ: [O.organ_data.parent_organ].")
-			msg_scopes("Organ_data.type: [O.organ_data.type].")
-			if(O.organ_data)
-				msg_scopes("We have organ data.")
-			else
-				msg_scopes("No organ data.")
-
-			if(affected.name == O.organ_data.parent_organ)
-				msg_scopes("Affected name matches parent_organ.")
-			else
-				msg_scopes("Affected name does not match parent_organ.")
 
 			if(O.organ_data && affected.name == O.organ_data.parent_organ)
 				organ_compatible = 1
