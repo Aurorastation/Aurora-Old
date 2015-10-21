@@ -52,7 +52,9 @@
 						/obj/item/robot_parts/robot_component/diagnosis_unit,
 						/obj/item/robot_parts/robot_component/camera,
 						/obj/item/robot_parts/robot_component/law_computer,
-						/obj/item/robot_parts/robot_component/armour
+						/obj/item/robot_parts/robot_component/armour,
+						/obj/item/robot_parts/robot_component/radiator,
+						/obj/item/robot_parts/robot_component/bladder
 					),
 	"Ripley"=list(
 						/obj/item/mecha_parts/chassis/ripley,
