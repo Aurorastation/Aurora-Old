@@ -801,16 +801,18 @@
 
 	proc/stabilize_body_temperature()
 		if (species.flags & IS_SYNTHETIC)
-		//TODO: Test these constants
-			var/temperatureModifier = 0						//all IS_SYNTHETIC species -need- radiators
-			if(!has_organ("radiator"))
-				temperatureModifier = 25
-			else
-				var/datum/organ/internal/Radiator = internal_organs_by_name["radiator"]
-				if(Radiator.is_broken())
+			var/temperatureModifier = 0
+			if(species.has_organ["radiator"])
+				if(internal_organs_by_name["radiator"])
+					var/datum/organ/internal/Radiator = internal_organs_by_name["radiator"]
+					if(Radiator.is_broken())
+						temperatureModifier = 25
+						if(bodytemperature > 450 && prob(10))
+							apply_damage(rand(1, 5), BURN)
+					else if(Radiator.is_bruised())
+						temperatureModifier = 18
+				else
 					temperatureModifier = 25
-				else if(Radiator.is_bruised())
-					temperatureModifier = 17
 			bodytemperature += species.synth_temp_gain + temperatureModifier	//just keep putting out heat.
 			return
 
@@ -1443,11 +1445,14 @@
 						if(2)	healths.icon_state = "health7"
 						else
 							var/numb = 0
-							if (species && (species.flags & IS_SYNTHETIC))
-								var/datum/organ/internal/machine/Diagnosis_unit = internal_organs_by_name["diagnosis unit"]
-								if (Diagnosis_unit.is_broken())
-									numb = 1
-								else if (Diagnosis_unit.is_bruised() && prob(35))
+							if (species.has_organ["diagnosis unit"])
+								if (internal_organs_by_name["diagnosis unit"])
+									var/datum/organ/internal/machine/Diagnosis_unit = internal_organs_by_name["diagnosis unit"]
+									if (Diagnosis_unit.is_broken())
+										numb = 1
+									else if (Diagnosis_unit.is_bruised() && prob(35))
+										numb = 1
+								else
 									numb = 1
 
 							if (numb)
@@ -1505,12 +1510,14 @@
 				else
 					var/temp_step
 					var/numb = 0
-					if (species && (species.flags & IS_SYNTHETIC))
-						var/datum/organ/internal/machine/Diagnosis_unit = internal_organs_by_name["diagnosis unit"]
-						if (Diagnosis_unit.is_broken())
-							numb = 1
-						else if (Diagnosis_unit.is_bruised() && prob(35))
-							numb = 1
+					if (species.has_organ["diagnosis unit"])
+						if(internal_organs_by_name["diagnosis unit"])
+							var/datum/organ/internal/machine/Diagnosis_unit = internal_organs_by_name["diagnosis unit"]
+							if (Diagnosis_unit.is_broken())
+								numb = 1
+							else if (Diagnosis_unit.is_bruised() && prob(35))
+								numb = 1
+						else numb = 1
 
 					if (numb)
 						bodytemp.icon_state = "temp_numb"
