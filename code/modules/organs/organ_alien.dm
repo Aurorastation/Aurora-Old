@@ -265,8 +265,11 @@
 	removed_type = /obj/item/organ/machine/bladder
 
 /datum/organ/internal/machine/bladder/process()
+	if(status & ORGAN_CUT_AWAY)
+		return
+
 	if(is_bruised())
-		var/leakSmall = rand(1,25)
+		var/leakSmall = rand(1,5)
 		if(owner.reagents.total_volume > 0)
 			owner.reagents.remove_any(leakSmall)
 		if(owner.reagents.maximum_volume > 500)
@@ -281,9 +284,6 @@
 				owner.reagents.maximum_volume = 0
 			else
 				owner.reagents.maximum_volume -= leakLarge
-
-	if(!is_bruised() && !is_broken() && owner.reagents.maximum_volume < 1000)
-		owner.reagents.maximum_volume = 1000
 
 	if(owner.reagents.reagent_list.len)
 		if(owner.reagents.has_reagent("sacid") || owner.reagents.has_reagent("pacid"))
@@ -313,7 +313,6 @@
 			Machine.reagents.maximum_volume = 0
 
 /obj/item/organ/machine/bladder/exposed_to_the_world()
-	msg_scopes("We went here x2.")
 	var/obj/item/robot_parts/robot_component/bladder/Bladder = new(src.loc)
 	if(organ_data.damage)
 		Bladder.brute = organ_data.damage
@@ -334,7 +333,6 @@
 	robotic = 2
 
 /obj/item/organ/machine/diagnosis_unit/exposed_to_the_world()
-	msg_scopes("We went here.")
 	var/obj/item/robot_parts/robot_component/diagnosis_unit/Diagnosis_unit = new(src.loc)
 	if(organ_data.damage)
 		Diagnosis_unit.brute = organ_data.damage
