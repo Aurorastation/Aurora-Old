@@ -1224,7 +1224,7 @@ Code shamelessly copied from apc_frame
 	if (!istype(loc, /turf/simulated/floor))
 		usr << "\red Air Alarm cannot be placed on this spot."
 		return
-	if (A.requires_power == 0 || A.name == "Space")
+	if (A.requires_power == 0 || A.name == "\improper Space")
 		usr << "\red Air Alarm cannot be placed in this area."
 		return
 
@@ -1547,7 +1547,7 @@ Code shamelessly copied from apc_frame
 	if (!istype(loc, /turf/simulated/floor))
 		usr << "\red Fire Alarm cannot be placed on this spot."
 		return
-	if (A.requires_power == 0 || A.name == "Space")
+	if (A.requires_power == 0 || A.name == "\improper Space")
 		usr << "\red Fire Alarm cannot be placed in this area."
 		return
 
