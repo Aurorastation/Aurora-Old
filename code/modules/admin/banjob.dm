@@ -26,6 +26,10 @@ var/jobban_keylist[0]		//to store the keys & ranks
 			if(config.usewhitelist && !check_whitelist(M))
 				return "Whitelisted Job"
 
+		if (config.use_age_restriction_for_jobs)
+			if (config.age_restrictions[rank] && M.client.player_age < config.age_restrictions[rank])
+				return "Age Restricted"
+
 		for (var/s in jobban_keylist)
 			if( findtext(s,"[M.ckey] - [rank]") == 1 )
 				var/startpos = findtext(s, "## ")+3
