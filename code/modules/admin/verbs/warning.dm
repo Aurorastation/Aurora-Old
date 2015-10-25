@@ -88,7 +88,11 @@
 	if(!reason)
 		return
 
+	reason = sql_sanitize_text(reason)
+
 	var/notes = input("Add Additional Information. This is visible to staff only.") as null|text
+
+	notes = sql_sanitize_text(notes)
 
 	var/severity
 	switch(alert("Set Warning Severity",,"Standard","Severe"))
