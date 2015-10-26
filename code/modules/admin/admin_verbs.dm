@@ -639,3 +639,17 @@
 	else
 		usr << "Your varedits will now be shown to developers"
 	return
+
+/client/proc/toggle_visibily()
+	set category = "Server"
+	set name = "Toggle Hub Visibility"
+	set desc = "Toggle between public and hidden"
+
+	if(!check_rights(R_SERVER|R_STEALTH))
+		return
+
+	world.visibility = !world.visibility
+
+	message_admins("[src] has toggled the hub [world.visibility ? "public" : "hidden"]")
+	world.save_visibility(world.visibility)
+	return

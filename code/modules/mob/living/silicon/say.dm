@@ -101,16 +101,19 @@
 		src << "\red Your radio isn't functional at this time."
 		return
 
+	var/langName = "default"
+	if(speaking && speaking.name)
+		langName = speaking.name
 	switch(message_mode)
 		if("department")
 			switch(bot_type)
 				if(IS_AI)
 					return AI.holopad_talk(message)
 				if(IS_ROBOT)
-					log_say("[key_name(src)] :([message_mode]/[speaking.name]) [message]")
+					log_say("[key_name(src)] :([message_mode]/[langName]) [message]")
 					R.radio.talk_into(src,message,message_mode,verb,speaking)
 				if(IS_PAI)
-					log_say("[key_name(src)] :([message_mode]/[speaking.name]) [message]")
+					log_say("[key_name(src)] :([message_mode]/[langName]) [message]")
 					P.radio.talk_into(src,message,message_mode,verb,speaking)
 			return 1
 
@@ -122,13 +125,13 @@
 						src << "\red System Error - Transceiver Disabled"
 						return
 					else
-						log_say("[key_name(src)] :(General/[speaking.name]) [message]")
+						log_say("[key_name(src)] :(General/[langName]) [message]")
 						AI.aiRadio.talk_into(src,message,null,verb,speaking)
 				if(IS_ROBOT)
-					log_say("[key_name(src)] :(General/[speaking.name]) [message]")
+					log_say("[key_name(src)] :(General/[langName]) [message]")
 					R.radio.talk_into(src,message,null,verb,speaking)
 				if(IS_PAI)
-					log_say("[key_name(src)] :(General/[speaking.name]) [message]")
+					log_say("[key_name(src)] :(General/[langName]) [message]")
 					P.radio.talk_into(src,message,null,verb,speaking)
 			return 1
 
@@ -140,13 +143,13 @@
 							src << "\red System Error - Transceiver Disabled"
 							return
 						else
-							log_say("[key_name(src)] :([message_mode]/[speaking.name]) [message]")
+							log_say("[key_name(src)] :([message_mode]/[langName]) [message]")
 							AI.aiRadio.talk_into(src,message,message_mode,verb,speaking)
 					if(IS_ROBOT)
-						log_say("[key_name(src)] :([message_mode]/[speaking.name]) [message]")
+						log_say("[key_name(src)] :([message_mode]/[langName]) [message]")
 						R.radio.talk_into(src,message,message_mode,verb,speaking)
 					if(IS_PAI)
-						log_say("[key_name(src)] :([message_mode]/[speaking.name]) [message]")
+						log_say("[key_name(src)] :([message_mode]/[langName]) [message]")
 						P.radio.talk_into(src,message,message_mode,verb,speaking)
 				return 1
 

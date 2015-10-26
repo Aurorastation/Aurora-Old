@@ -17,10 +17,11 @@
 			return 0
 		if (affected.status & ORGAN_DESTROYED)
 			return 0
-		if (target_zone == "head" && target.species && (target.species.flags & IS_SYNTHETIC))
-			return 1
 		if (affected.status & ORGAN_ROBOT)
-			return 0
+			if (target.species && (target.species.flags & IS_SYNTHETIC) && affected.internal_organs.len)
+				return 1
+			else
+				return 0
 		return 1
 
 /datum/surgery_step/generic/cut_with_laser

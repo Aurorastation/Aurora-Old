@@ -87,6 +87,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/toggledrones,
 	/client/proc/toggleprayers,
 	/client/proc/toggle_view_range,		/*changes how far we can see*/
+	/client/proc/toggle_visibily,
 	/client/proc/secrets,
 	/client/proc/set_ooc
 )
@@ -206,7 +207,8 @@ var/list/admin_verbs_server = list(
 	/client/proc/Set_Holiday,
 	/client/proc/ToRban,
 	/client/proc/toggle_log_hrefs,
-	/client/proc/toggle_random_events
+	/client/proc/toggle_random_events,
+	/client/proc/toggle_visibily
 	)
 
 var/list/admin_verbs_debug = list(

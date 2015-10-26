@@ -22,6 +22,7 @@
 		world.log << "Your server's byond version does not meet the recommended requirements for this server. Please update BYOND"
 
 	load_configuration()
+	load_visibility()
 
 	if(config && config.server_name != null && config.server_suffix && world.port > 0)
 		// dumb and hardcoded but I don't care~
@@ -253,6 +254,19 @@ var/master_server_password
 	fdel(F)
 	F << the_mode
 
+/world/proc/load_visibility()
+	var/list/Lines = file2list("data/hubsetting.txt")
+	if(Lines.len)
+		if(Lines[1])
+			if(istext(Lines[1]))
+				Lines[1] = text2num(Lines[1])
+			visibility = Lines[1]
+			log_misc("Are we visible '[Lines[1]]'")
+
+/world/proc/save_visibility(var/the_visibility)
+	var/F = file("data/hubsetting.txt")
+	fdel(F)
+	F << the_visibility
 
 /hook/startup/proc/loadMOTD()
 	world.load_motd()
