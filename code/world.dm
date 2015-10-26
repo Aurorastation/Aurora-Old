@@ -22,6 +22,7 @@
 		world.log << "Your server's byond version does not meet the recommended requirements for this server. Please update BYOND"
 
 	load_configuration()
+	load_visibility()
 
 	if(config && config.server_name != null && config.server_suffix && world.port > 0)
 		// dumb and hardcoded but I don't care~
@@ -253,6 +254,25 @@ var/master_server_password
 	fdel(F)
 	F << the_mode
 
+/world/proc/load_visibility()
+	var/list/Lines = file2list("data/hubsetting.txt")
+	if (Lines.len)
+		if (Lines[1] && Lines[2])
+			log_misc("Saved visibility is: [Lines[1]]; saved override is: [Lines[2]].")
+			if (text2num(Lines[2]) == 1)
+				visibility = text2num(Lines[1])
+			else
+				if (time2text(realtime, "Day") == ("Saturday" || "Sunday"))
+					visibility = 0
+				else
+					visibility = 1
+				save_visibility(visibility, 0)
+
+/world/proc/save_visibility(var/the_visibility, var/override = 0)
+	var/F = file("data/hubsetting.txt")
+	fdel(F)
+	F << the_visibility
+	F << override
 
 /hook/startup/proc/loadMOTD()
 	world.load_motd()
@@ -271,6 +291,8 @@ var/master_server_password
 	// apply some settings from config..
 	abandon_allowed = config.respawn
 
+	if (config.use_age_restriction_for_jobs)
+		config.load("config/age_restrictions.txt","age_restrictions")
 
 /hook/startup/proc/loadMods()
 	world.load_mods()

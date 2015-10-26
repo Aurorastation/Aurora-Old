@@ -25,7 +25,8 @@
 		"/obj/item/weapon/airlock_electronics",
 		"/obj/item/weapon/module/power_control",
 		"/obj/item/weapon/cell",
-		"/obj/item/weapon/hand_tele")
+		"/obj/item/weapon/hand_tele",
+		"/obj/item/weapon/soap/fluff/jace_toothbrush")
 	storage_slots = 14
 	max_combined_w_class = 42
 	max_w_class = 3
@@ -1324,3 +1325,37 @@ END R I P HAZERI
 
 /obj/item/clothing/tie/fluff/fortune_shieldpendant/New()
 	inv_overlay = image("icon" = 'icons/obj/custom_items/fortune_shieldpendant.dmi', "icon_state" = "fortune_shieldpendant_w")
+
+
+// Jace Evan's toothbrush - Wittly
+/obj/item/weapon/soap/fluff/jace_toothbrush
+	name = "toothbrush"
+	desc = "An old toothbrush. It looks well used."
+	icon = 'icons/obj/custom_items/jace_toothbrush.dmi'
+	icon_state = "jace_toothbrush"
+	var/cleanspeed = 20
+
+/obj/item/weapon/soap/fluff/jace_toothbrush/Crossed(AM as mob|obj)
+	return
+
+/obj/item/weapon/soap/fluff/jace_toothbrush/afterattack(atom/target, mob/user as mob, proximity)
+	if(!proximity) return
+
+	if(user.client && (target in user.client.screen))
+		return
+	if (istype(target,/obj/effect/decal/cleanable))
+		user.visible_message("<span class='warning'>[user] begins to scrub \the [target.name] out with [src].</span>")
+		if(do_after(user, src.cleanspeed) && target)
+			user << "<span class='notice'>You scrub \the [target.name] out.</span>"
+			del(target)
+	else
+		user.visible_message("<span class='warning'>[user] begins to clean \the [target.name] with [src].</span>")
+		if(do_after(user, src.cleanspeed))
+			user << "<span class='notice'>You clean \the [target.name].</span>"
+			var/obj/effect/decal/cleanable/C = locate() in target
+			del(C)
+			target.clean_blood()
+	return
+
+/obj/item/weapon/soap/fluff/jace_toothbrush/attack(mob/target as mob, mob/user as mob)
+	return

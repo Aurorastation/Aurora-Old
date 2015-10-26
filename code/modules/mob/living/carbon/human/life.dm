@@ -801,7 +801,19 @@
 
 	proc/stabilize_body_temperature()
 		if (species.flags & IS_SYNTHETIC)
-			bodytemperature += species.synth_temp_gain		//just keep putting out heat.
+			var/temperatureModifier = 0
+			if(species.has_organ["radiator"])
+				if(internal_organs_by_name["radiator"])
+					var/datum/organ/internal/Radiator = internal_organs_by_name["radiator"]
+					if(Radiator.is_broken())
+						temperatureModifier = 25
+						if(bodytemperature > 450 && prob(10))
+							apply_damage(rand(1, 5), BURN)
+					else if(Radiator.is_bruised())
+						temperatureModifier = 18
+				else
+					temperatureModifier = 25
+			bodytemperature += species.synth_temp_gain + temperatureModifier	//just keep putting out heat.
 			return
 
 		var/body_temperature_difference = species.body_temperature - bodytemperature
@@ -1432,15 +1444,29 @@
 						if(1)	healths.icon_state = "health6"
 						if(2)	healths.icon_state = "health7"
 						else
-							//switch(health - halloss)
-							switch(100 - ((species && species.flags & NO_PAIN & !IS_SYNTHETIC) ? 0 : traumatic_shock))
-								if(100 to INFINITY)		healths.icon_state = "health0"
-								if(80 to 100)			healths.icon_state = "health1"
-								if(60 to 80)			healths.icon_state = "health2"
-								if(40 to 60)			healths.icon_state = "health3"
-								if(20 to 40)			healths.icon_state = "health4"
-								if(0 to 20)				healths.icon_state = "health5"
-								else					healths.icon_state = "health6"
+							var/numb = 0
+							if (species.has_organ["diagnosis unit"])
+								if (internal_organs_by_name["diagnosis unit"])
+									var/datum/organ/internal/machine/Diagnosis_unit = internal_organs_by_name["diagnosis unit"]
+									if (Diagnosis_unit.is_broken())
+										numb = 1
+									else if (Diagnosis_unit.is_bruised() && prob(35))
+										numb = 1
+								else
+									numb = 1
+
+							if (numb)
+								healths.icon_state = "health_numb"
+							else
+								//switch(health - halloss)
+								switch(100 - ((species && species.flags & NO_PAIN & !IS_SYNTHETIC) ? 0 : traumatic_shock))
+									if(100 to INFINITY)		healths.icon_state = "health0"
+									if(80 to 100)			healths.icon_state = "health1"
+									if(60 to 80)			healths.icon_state = "health2"
+									if(40 to 60)			healths.icon_state = "health3"
+									if(20 to 40)			healths.icon_state = "health4"
+									if(0 to 20)				healths.icon_state = "health5"
+									else					healths.icon_state = "health6"
 
 			if(nutrition_icon)
 				switch(nutrition)
@@ -1483,7 +1509,20 @@
 						else					bodytemp.icon_state = "temp-4"
 				else
 					var/temp_step
-					if (bodytemperature >= species.body_temperature)
+					var/numb = 0
+					if (species.has_organ["diagnosis unit"])
+						if(internal_organs_by_name["diagnosis unit"])
+							var/datum/organ/internal/machine/Diagnosis_unit = internal_organs_by_name["diagnosis unit"]
+							if (Diagnosis_unit.is_broken())
+								numb = 1
+							else if (Diagnosis_unit.is_bruised() && prob(35))
+								numb = 1
+						else numb = 1
+
+					if (numb)
+						bodytemp.icon_state = "temp_numb"
+
+					else if (bodytemperature >= species.body_temperature)
 						temp_step = (species.heat_level_1 - species.body_temperature)/4
 
 						if (bodytemperature >= species.heat_level_1)

@@ -35,6 +35,51 @@
 
 	flick("e_flash", target.flash)
 
+//A spell for reversing the curse.
+/obj/effect/proc_holder/spell/targeted/remove_horsemask
+	name = "Free the Horseman"
+	desc = "This spell lifts the Curse of the Horseman from the target. This spell does not require robes."
+	school = "transmutation"
+	charge_type = "recharge"
+	charge_max = 150
+	charge_counter = 0
+	clothes_req = 0
+	stat_allowed = 0
+	invocation = "KN'A EUTH, PUCK 'BTHIK!"
+	invocation_type = "shout"
+	range = 7
+	selection_type = "range"
+	var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
+
+/obj/effect/proc_holder/spell/targeted/remove_horsemask/cast(list/targets, mob/user = usr)
+	if (!targets.len)
+		user << "<span class='notice'>No target found in range.</span>"
+		return
+
+	var/mob/living/carbon/target = targets[1]
+
+	if (!(target.type in compatible_mobs))
+		user << "<span class='notice'>It'd be stupid to curse [target] with a horse's head!</span>"
+		return
+
+	if (!(target in oview(range)))//If they are not  in overview after selection.
+		user << "<span class='notice'>They are too far away!</span>"
+		return
+
+	if (istype(target.wear_mask, /obj/item/clothing/mask/horsehead/magic))
+		var/obj/item/clothing/mask/horsehead/magic/to_be_removed = target.wear_mask
+		target.visible_message(	"<span class='danger'>The [to_be_removed] on [target]'s face lights up and burns away, revealing \his face.</span>", \
+								"<span class='danger'>Your face burns up once more, but you suddenly realize that you are no longer wearing a silly horsemask!</span>")
+		target.u_equip(to_be_removed)
+
+		if (prob(40))
+			del(to_be_removed)
+	else
+		user << "<span class='notice'>They aren't cursed, as such, there is nothing to reverse!</span>"
+		return
+
+	flick("e_flash", target.flash)
+
 //item used by the horsehead spell
 /obj/item/clothing/mask/horsehead/magic
 	//flags_inv = null	//so you can still see their face... no. How can you recognize someone when their face is completely different?
@@ -43,7 +88,7 @@
 	dropped(mob/user as mob)
 		canremove = 1
 		..()
-	
+
 	equipped(var/mob/user, var/slot)
 		if (slot == slot_wear_mask)
 			canremove = 0		//curses!

@@ -52,7 +52,9 @@
 						/obj/item/robot_parts/robot_component/diagnosis_unit,
 						/obj/item/robot_parts/robot_component/camera,
 						/obj/item/robot_parts/robot_component/law_computer,
-						/obj/item/robot_parts/robot_component/armour
+						/obj/item/robot_parts/robot_component/armour,
+						/obj/item/robot_parts/robot_component/radiator,
+						/obj/item/robot_parts/robot_component/bladder
 					),
 	"Ripley"=list(
 						/obj/item/mecha_parts/chassis/ripley,
@@ -127,7 +129,9 @@
 						/obj/item/borg/upgrade/tasercooler,
 						/obj/item/borg/upgrade/jetpack),
 
-	"Synthetic Coverings" = list(	/obj/item/weapon/synth_skin_spray,
+	"Synthetic Shell Components" = list(
+									/obj/item/organ/eyes/robot,
+									/obj/item/weapon/synth_skin_spray,
 									/obj/item/weapon/synth_skin_cartridge/paint,
 									/obj/item/weapon/synth_skin_cartridge/skin,
 									/obj/item/weapon/synth_skin_cartridge/fur,

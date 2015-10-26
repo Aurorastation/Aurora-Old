@@ -916,6 +916,21 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		message = "\red" + message
 		M.show_message(message, 1)
 
+/obj/item/device/pda/verb/verb_reset_pda()
+	set category = "Object"
+	set name = "Reset PDA"
+	set src in usr
+
+	if(issilicon(usr))
+		return
+
+	if(can_use(usr))
+		mode = 0
+		nanomanager.update_uis(src)
+		usr << "<span class='notice'>You press the reset button on \the [src].</span>"
+	else
+		usr << "<span class='notice'>You cannot do this while restrained.</span>"
+
 /obj/item/device/pda/proc/remove_id()
 	if (id)
 		if (ismob(loc))
