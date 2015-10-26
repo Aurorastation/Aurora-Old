@@ -266,7 +266,7 @@ var/master_server_password
 					visibility = 0
 				else
 					visibility = 1
-				save_visibility(visibility, 0)
+			save_visibility(visibility, 0)
 
 /world/proc/save_visibility(var/the_visibility, var/override = 0)
 	var/F = file("data/hubsetting.txt")
