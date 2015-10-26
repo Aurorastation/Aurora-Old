@@ -8,6 +8,8 @@
 	var/ckey = sanitizeSQL(key)
 	var/content = sanitizeSQL(note)
 
+	note = sql_sanitize_text(note)
+
 	var/a_ckey
 	if(usr)
 		a_ckey = sanitizeSQL(usr.key)

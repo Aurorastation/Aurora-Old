@@ -139,7 +139,7 @@
 
 
 /area/proc/firealert()
-	if(name == "Space") //no fire alarms in space
+	if(name == "\improper Space") //no fire alarms in space
 		return
 	if( !fire )
 		fire = 1
