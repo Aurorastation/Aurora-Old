@@ -71,3 +71,7 @@
 		return 0
 
 	return max(0, minimal_player_age - C.player_age)
+
+/datum/job/proc/fetch_age_restriction()
+	if (config.age_restrictions[lowertext(title)])
+		minimal_player_age = config.age_restrictions[lowertext(title)]

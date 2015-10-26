@@ -285,6 +285,8 @@ var/master_server_password
 	// apply some settings from config..
 	abandon_allowed = config.respawn
 
+	if (config.use_age_restriction_for_jobs)
+		config.load("config/age_restrictions.txt","age_restrictions")
 
 /hook/startup/proc/loadMods()
 	world.load_mods()
