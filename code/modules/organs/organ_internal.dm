@@ -249,12 +249,12 @@
 	parent_organ = "head"
 	removed_type = /obj/item/organ/brain
 	vital = 1
-	
-	
+
+
 /datum/organ/internal/brain/robot // brains for shells
-	var/machine_brain_type=null 
-	
-	
+	var/machine_brain_type=null
+
+
 /datum/organ/internal/brain/robot/proc/create_robot_brain_replacement(var/target,var/new_location)
 	var/obj/item/device/mmi/new_mmi
 	if (machine_brain_type=="Posibrain")
@@ -267,7 +267,7 @@
 	new_mmi.transfer_identity(target)
 	new_mmi.loc = new_location
 	return new_mmi
-	
+
 
 /datum/organ/internal/brain/xeno
 	removed_type = /obj/item/organ/brain/xeno
@@ -283,6 +283,11 @@
 			owner.eye_blurry = 20
 		if(is_broken())
 			owner.eye_blind = 20
+
+/datum/organ/internal/eyes/robot // eyes for shells
+	name = "charge-coupled device"
+	parent_organ = "head"
+	removed_type = /obj/item/organ/eyes/robot
 
 /datum/organ/internal/appendix
 	name = "appendix"
