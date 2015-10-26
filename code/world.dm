@@ -256,17 +256,23 @@ var/master_server_password
 
 /world/proc/load_visibility()
 	var/list/Lines = file2list("data/hubsetting.txt")
-	if(Lines.len)
-		if(Lines[1])
-			if(istext(Lines[1]))
-				Lines[1] = text2num(Lines[1])
-			visibility = Lines[1]
-			log_misc("Are we visible '[Lines[1]]'")
+	if (Lines.len)
+		if (Lines[1] && Lines[2])
+			log_misc("Saved visibility is: [Lines[1]]; saved override is: [Lines[2]].")
+			if (text2num(Lines[2]) == 1)
+				visibility = text2num(Lines[1])
+			else
+				if (time2text(realtime, "Day") == ("Saturday" || "Sunday"))
+					visibility = 0
+				else
+					visibility = 1
+				save_visibility(visibility, 0)
 
-/world/proc/save_visibility(var/the_visibility)
+/world/proc/save_visibility(var/the_visibility, var/override = 0)
 	var/F = file("data/hubsetting.txt")
 	fdel(F)
 	F << the_visibility
+	F << override
 
 /hook/startup/proc/loadMOTD()
 	world.load_motd()
