@@ -259,9 +259,9 @@ var/list/slot_equipment_priority = list( \
 		if (W)
 			W.attack_self(src)
 			update_inv_r_hand()
-	
+
 	AllowedToClickAgainAfter(CLICK_CD_ACTIVATE_OBJECT) // this is probably imperceptible
-	
+
 	return
 
 /*
@@ -757,6 +757,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 			stat(null, "Round Time: [round(world.time / 36000)]:[(world.time / 600 % 60) < 10 ? add_zero(world.time / 600 % 60, 1) : world.time / 600 % 60]")
 			if(round(world.time / 36000) >= 2)
 				stat(null, "Last Vote: [last_vote_time_game]")
+			stat(null, "The Server Is [world.visibility ? "Public" : "Hidden"].")
 
 	if(listed_turf && client)
 		if(!TurfAdjacent(listed_turf))
