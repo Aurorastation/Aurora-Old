@@ -2,7 +2,8 @@
 	name = "Operating Table"
 	desc = "Used for advanced medical procedures."
 	icon = 'icons/obj/surgery.dmi'
-	icon_state = "table2"
+	icon_state = "table2-idle"
+	var/modify_state = "table2"
 	density = 1
 	anchored = 1.0
 	use_power = 1
@@ -95,10 +96,10 @@
 		var/mob/living/carbon/human/M = locate(/mob/living/carbon/human, src.loc)
 		if(M.lying)
 			src.victim = M
-			icon_state = M.pulse ? "[initial(icon_state)]-active" : "[initial(icon_state)]-idle"
+			icon_state = M.pulse ? "[initial(modify_state)]-active" : "[initial(modify_state)]-idle"
 			return 1
 	src.victim = null
-	icon_state = "[initial(icon_state)]-idle"
+	icon_state = "[initial(modify_state)]-idle"
 	return 0
 
 /obj/machinery/optable/process()
@@ -115,9 +116,9 @@
 	if(ishuman(C))
 		var/mob/living/carbon/human/H = C
 		src.victim = H
-		icon_state = H.pulse ? "[initial(icon_state)]-active" : "[initial(icon_state)]-idle"
+		icon_state = H.pulse ? "[initial(modify_state)]-active" : "[initial(modify_state)]-idle"
 	else
-		icon_state = "[initial(icon_state)]-idle"
+		icon_state = "[initial(modify_state)]-idle"
 
 /obj/machinery/optable/verb/climb_on()
 	set name = "Climb On Table"
@@ -164,7 +165,7 @@
 					if (computer)
 						computer.table = null
 						computer = null
-					icon_state = "[initial(icon_state)]-open"
+					icon_state = "[initial(modify_state)]-open"
 					user << "You open the maintenance hatch of [src]."
 					return 1
 				if (1)
@@ -174,7 +175,7 @@
 						if (computer)
 							computer.table = src
 							break
-					icon_state = "[initial(icon_state)]-idle"
+					icon_state = "[initial(modify_state)]-idle"
 					user << "You close the maintenance hatch of [src]."
 					return 1
 

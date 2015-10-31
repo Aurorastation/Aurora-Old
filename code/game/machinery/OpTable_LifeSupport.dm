@@ -2,6 +2,7 @@
 #define AUTO_AIR 2
 #define TRANSFUSE_ACTIVE 4
 #define AIR_ACTIVE 8
+#define VAMPIRE 16
 
 /*
  * The more advanced life support table
@@ -9,7 +10,8 @@
 /obj/machinery/optable/lifesupport
 	name = "Life Support Enabled Operating Table"
 	desc = "A more advanced version of the standard operating table."
-	icon_state = "table2"
+	icon_state = "table3-idle"
+	modify_state = "table3"
 	flags = OPENCONTAINER
 	idle_power_usage = 3
 	active_power_usage = 8
@@ -17,6 +19,7 @@
 	var/movable = 0											//For buckling!
 	var/buckled = 0											//Is the patient hooked up to the machine properly?
 	var/active = 0											//Is the machine active, and providing lifesupport?
+	var/expired = 0											//Have we alerted the folks about a dead patient yet?
 	var/activeoverlay										//Stores an overlay to be added/removed, depending on that machine's status.
 	var/program = 0											//Bitfield for containing the programmable settings.
 	var/obj/item/weapon/reagent_containers/blood/bloodbag	//Stores the bloodbag that you can add to the machine, for IV dripping shenanigans.
@@ -26,6 +29,7 @@
 							"clonexadone" = 0.06,
 							"cryoxadone" = 0.2)				//Details what chemicals (use ids, not names) it keeps track of, and the minimum quantities required for operation. Each time process() is called, the associated amount of that chemical is removed from storage.
 															//Cryoxadone will last you around 10 minutes, Clonexadone around 30. (Provided you use the standard, 60 unit beaker.)
+	var/list/internallog = list()								//A log of everything that has happened on the table. Has two keys per entry: "time" and "message".
 
 /obj/machinery/optable/lifesupport/New()
 	..()
@@ -40,7 +44,7 @@
 	component_parts += new /obj/item/clothing/mask/breath/medical(src)
 	RefreshParts()
 
-	var/image/i = image('icons/obj/surgery.dmi', icon_state = "table-lifesupport-disabledoverlay")
+	var/image/i = image('icons/obj/surgery.dmi', icon_state = "table3-disabledoverlay")
 	activeoverlay = i
 	overlays += activeoverlay
 
@@ -74,6 +78,15 @@
 			user << "<span class='notice'>There is already [airsupply] in [src]!</span>"
 			return
 
+	if (istype(W, /obj/item/weapon/card/emag))
+		if (!emagged)
+			emagged = 1
+			user << "<span class='notice'>You run [W] through [src], hear the machine quietly whirr. A new option has been unlocked.</span>"
+			return
+		else
+			user << "<span class='notice'>[src] is already emagged!</span>"
+			return
+
 /obj/machinery/optable/lifesupport/process()
 	..()
 
@@ -99,6 +112,11 @@
 		else
 			reagents.remove_reagent(id, requiredchems[id])
 
+		if (victim.stat == 2 && !expired)
+			broadcastalert("ALERT! Patient death detected!")
+			addtolog("Patient death detected.")
+			expired = 1
+
 		var/bloodvolume = round(victim.vessel.get_reagent_amount("blood"))
 		if ((program & AUTO_TRANSFUSE) && bloodbag && bloodbag.reagents.total_volume)
 			if (bloodvolume < BLOOD_VOLUME_SAFE && !(program & TRANSFUSE_ACTIVE))
@@ -118,6 +136,9 @@
 
 		if ((program & AIR_ACTIVE) && (!airsupply || airsupply.air_contents.return_pressure() < 10))
 			toggleprogram(AIR_ACTIVE)
+
+		if (program & VAMPIRE)
+			victim.vessel.remove_reagent("blood", 5)
 
 /obj/machinery/optable/lifesupport/check_table(mob/living/carbon/patient as mob)
 	if (victim)
@@ -150,6 +171,14 @@
 
 	return 0
 
+/obj/machinery/optable/lifesupport/proc/addtolog(var/log as text)
+	var/time = worldtime2text()
+	internallog.Add(list(list("time" = time, "message" = log)))
+
+/obj/machinery/optable/lifesupport/proc/clearlog()
+	if (internallog.len)
+		internallog = list()
+
 /obj/machinery/optable/lifesupport/proc/eject(var/item as text)
 	switch (item)
 		if ("airsupply")
@@ -161,6 +190,7 @@
 					airsupply.loc = loc
 					airsupply = null
 					broadcastalert("Internal air supply ejected.")
+					addtolog("Internal air supply ejected.")
 					return
 		if ("bloodbag")
 			if (bloodbag)
@@ -170,15 +200,17 @@
 				else
 					bloodbag.loc = loc
 					bloodbag = null
-					broadcastalert("Internal bloodsupply ejected.")
+					broadcastalert("Internal blood supply ejected.")
+					addtolog("Internal blood supply ejected.")
 					return
 		if ("chems")
 			if (reagents.total_volume)
 				if (active)
-					broadcastalert("ERROR: Lifesupport systems enabled, unable to flush chemicals. Aborting!")
+					broadcastalert("ERROR: Life support systems enabled, unable to flush chemicals. Aborting!")
 					return
 				else
 					broadcastalert("Stored chemicals flushed.")
+					addtolog("Stored chemicals flushed.")
 					reagents.clear_reagents()
 
 /obj/machinery/optable/lifesupport/proc/buckle(mob/living/carbon/human/patient as mob, mob/living/carbon/human/user as mob)
@@ -211,6 +243,7 @@
 			patient.buckled = src
 			patient.update_canmove()
 			patient.equip_to_slot(airmask, slot_wear_mask)
+			addtolog("Restraints activated.")
 			return
 		if (1)
 			user.visible_message("<span class='notice'>[user] unbuckles \the [victim] from \the [src], disconnecting them from the tubing and straps.</span>", "<span class='notice'>You remove \the [victim]'s restraints, and unhook them from the life-support machine.</span>")
@@ -222,6 +255,7 @@
 			patient.update_canmove()
 			patient.u_equip(airmask)
 			airmask.loc = src
+			addtolog("Restraints deactivated.")
 			return
 
 /obj/machinery/optable/lifesupport/verb/bucklepatient()
@@ -254,18 +288,19 @@
 				return
 
 			if (victim.stat == DEAD)
-				broadcastalert("ERROR: No lifesigns detected from the patient. Unable to enable lifesupport systems.")
+				broadcastalert("ERROR: No life signs detected from the patient. Unable to enable life support systems.")
 				return
 
 			if (checkrequiredchems())
 				if (activeoverlay)
 					overlays -= activeoverlay
 					activeoverlay = null
-				var/image/i = image('icons/obj/surgery.dmi', icon_state = "table-lifesupport-activeoverlay")
+				var/image/i = image('icons/obj/surgery.dmi', icon_state = "table3-activeoverlay")
 				activeoverlay = i
 				overlays += activeoverlay
 				active = 1
-				broadcastalert("Patient detected. Lifesupport systems enabled.")
+				broadcastalert("Patient detected. Life support systems enabled.")
+				addtolog("Life support systems enabled.")
 				return
 			else
 				broadcastalert("ERROR: Required chemicals not detected in the machine. Aborting!")
@@ -292,15 +327,17 @@
 			if (activeoverlay)
 				overlays -= activeoverlay
 				activeoverlay = null
-			var/image/i = image('icons/obj/surgery.dmi', icon_state = "table-lifesupport-disabledoverlay")
+			var/image/i = image('icons/obj/surgery.dmi', icon_state = "table3-disabledoverlay")
 			activeoverlay = i
 			overlays += activeoverlay
 			active = 0
 
 			if (override)
 				broadcastalert("ERROR: Not enough chemicals to sustain lifesupport functionality! Shutting down lifesupport systems!")
+				addtolog("Emergency shutdown of life support systems.")
 			else
 				broadcastalert("Lifesupport systems disabled.")
+				addtolog("Life support systems disabled.")
 
 			return
 
@@ -315,11 +352,14 @@
 				setting = TRANSFUSE_ACTIVE
 			if ("AIR_ACTIVE")
 				setting = AIR_ACTIVE
+			if ("VAMPIRE")
+				setting = VAMPIRE
 
 	if (program & setting)
 		switch (setting)
 			if (TRANSFUSE_ACTIVE)
 				broadcastalert("Transfusion processes deactivated.")
+				addtolog("Transfusion processes deactivated.")
 				program &= ~setting
 				return
 			if (AIR_ACTIVE)
@@ -328,15 +368,31 @@
 				if (victim.internals)
 					victim.internals.icon_state = "internal0"
 				broadcastalert("Internal air supply deactivated.")
+				addtolog("Internal air supply deactivated.")
 				program &= ~setting
 				return
+			if (VAMPIRE)
+				if (!emagged)
+					return
+				else
+					program &= ~setting
+					return
 			else
+				var/textname
+				if (setting == AUTO_TRANSFUSE)
+					textname = "Automatic transfusion control"
+				else if (setting == AUTO_AIR)
+					textname = "Automatic air supply control"
+				else
+					textname = "Unknown program"
+				addtolog("[textname] deactivated.")
 				program &= ~setting
 	else
 		switch (setting)
 			if (TRANSFUSE_ACTIVE)
 				if (bloodbag && bloodbag.reagents.total_volume)
 					broadcastalert("Transfusion processes activated.")
+					addtolog("Transfusion processes activated.")
 					program |= setting
 					return
 				else
@@ -349,12 +405,26 @@
 					if (victim.internals)
 						victim.internals.icon_state = "internal1"
 					broadcastalert("Internal air supply activated.")
+					addtolog("Internal air supply activated.")
 					program |= setting
 					return
 				else
 					broadcastalert("Air supply empty or not connected!")
 					return
+			if (VAMPIRE)
+				if (!emagged)
+					return
+				else
+					program |= setting
 			else
+				var/textname
+				if (setting == AUTO_TRANSFUSE)
+					textname = "Automatic transfusion control"
+				else if (setting == AUTO_AIR)
+					textname = "Automatic air supply control"
+				else
+					textname = "Unknown program"
+				addtolog("[textname] activated.")
 				program |= setting
 
 /obj/machinery/optable/lifesupport/proc/checkprogram(var/textsetting as text)
@@ -368,6 +438,8 @@
 			setting = TRANSFUSE_ACTIVE
 		if ("AIR_ACTIVE")
 			setting = AIR_ACTIVE
+		if ("VAMPIRE")
+			setting = VAMPIRE
 
 	if (program & setting)
 		return 1
@@ -378,3 +450,4 @@
 #undef AUTO_AIR
 #undef TRANSFUSE_ACTIVE
 #undef AIR_ACTIVE
+#undef VAMPIRE

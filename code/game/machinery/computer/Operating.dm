@@ -7,6 +7,7 @@
 	icon_state = "operating"
 	circuit = "/obj/item/weapon/circuitboard/operating"
 	interact_offline = 0
+	var/screen = 1
 	var/obj/machinery/optable/table = null
 
 /obj/machinery/computer/operating/New()
@@ -41,72 +42,86 @@
 	var/data[0]
 
 	data["table"] = 0
+	data["screen"] = screen
 	if (table)
 		if (istype(table, /obj/machinery/optable/lifesupport))
 			data["table"] = 2
 		else
 			data["table"] = 1
 
-		var/patientgeneral[0]
-		var/patienthealth[0]
-		if (table.victim)
-			var/mob/living/carbon/human/patient = table.victim
-			patientgeneral["Name"] = patient.real_name
-			patientgeneral["Age"] = patient.age
-			patientgeneral["BloodType"] = patient.b_type
-			data["patientgeneral"] = patientgeneral;
+		if (screen == 1)
+			var/patientgeneral[0]
+			var/patienthealth[0]
+			if (table.victim)
+				var/mob/living/carbon/human/patient = table.victim
+				patientgeneral["Name"] = patient.real_name
+				patientgeneral["Age"] = patient.age
+				patientgeneral["BloodType"] = patient.b_type
+				data["patientgeneral"] = patientgeneral;
 
-			patienthealth["Health"] = patient.health
-			patienthealth["Brute"] = patient.getBruteLoss()
-			patienthealth["Toxins"] = patient.getToxLoss()
-			patienthealth["Burn"] = patient.getFireLoss()
-			patienthealth["Suffocation"] = patient.getOxyLoss()
-			patienthealth["Status"] = patient.stat ? "Non-response" : "Stable"
-			patienthealth["Heartrate"] = patient.get_pulse(GETPULSE_TOOL)
-			data["patienthealth"] = patienthealth;
+				patienthealth["Health"] = round(patient.health)
+				patienthealth["Brute"] = round(patient.getBruteLoss())
+				patienthealth["Toxins"] = round(patient.getToxLoss())
+				patienthealth["Burn"] = round(patient.getFireLoss())
+				patienthealth["Suffocation"] = round(patient.getOxyLoss())
+				patienthealth["Status"] = patient.stat ? "Non-responsive" : "Stable"
+				patienthealth["Heartrate"] = patient.get_pulse(GETPULSE_TOOL)
+				if (data["table"] == 2)
+					patienthealth["BloodLevel"] = round(patient.vessel.get_reagent_amount("blood"))
+				data["patienthealth"] = patienthealth;
 
-		if (data["table"] == 2)
-			var/obj/machinery/optable/lifesupport/A = table
-			data["buckled"] = A.buckled
-			data["lifesupport"] = A.onlifesupport()
+			if (data["table"] == 2)
+				var/obj/machinery/optable/lifesupport/A = table
+				data["buckled"] = A.buckled
+				data["lifesupport"] = A.onlifesupport()
 
-			if (A.reagents.reagent_list.len)
-				data["hasreagents"] = 1
-				var/loadedreagents[0]
-				for(var/datum/reagent/chem in A.reagents.reagent_list)
-					loadedreagents.Add(list(list("name" = chem.name, "volume" = chem.volume)))
-				data["loadedreagents"] = loadedreagents;
-			else
-				data["hasreagents"] = 0
-
-			if (A.airsupply)
-				data["hasair"] = 1
-				var/air[0]
-				air["internalpressure"] = round(A.airsupply.air_contents.return_pressure())
-				air["releasepressure"] = round(A.airsupply.distribute_pressure)
-				data["air"] = air;
-			else
-				data["hasair"] = 0
-
-			if (A.bloodbag)
-				data["hasblood"] = 1
-				var/blood[0]
-				blood["volume"] = A.bloodbag.reagents.total_volume
-				if (A.bloodbag.reagents.reagent_list.len)
-					for (var/datum/reagent/blood/Blood in A.bloodbag.reagents.reagent_list)
-						blood["type"] = Blood.data["blood_type"]
+				if (A.reagents.reagent_list.len)
+					data["hasreagents"] = 1
+					var/loadedreagents[0]
+					for(var/datum/reagent/chem in A.reagents.reagent_list)
+						loadedreagents.Add(list(list("name" = chem.name, "volume" = round(chem.volume))))
+					data["loadedreagents"] = loadedreagents;
 				else
-					blood["type"] = "N/A"
-				data["blood"] = blood;
-			else
-				data["hasblood"] = 0
+					data["hasreagents"] = 0
 
-			var/program[0]
-			program["autotransfuse"] = A.checkprogram("AUTO_TRANSFUSE")
-			program["transfuseactive"] = A.checkprogram("TRANSFUSE_ACTIVE")
-			program["autoair"] = A.checkprogram("AUTO_AIR")
-			program["airactive"] = A.checkprogram("AIR_ACTIVE")
-			data["program"] = program;
+				if (A.airsupply)
+					data["hasair"] = 1
+					var/air[0]
+					air["internalpressure"] = round(A.airsupply.air_contents.return_pressure())
+					air["releasepressure"] = round(A.airsupply.distribute_pressure)
+					data["air"] = air;
+				else
+					data["hasair"] = 0
+
+				if (A.bloodbag)
+					data["hasblood"] = 1
+					var/blood[0]
+					blood["volume"] = A.bloodbag.reagents.total_volume
+					if (A.bloodbag.reagents.reagent_list.len)
+						for (var/datum/reagent/blood/Blood in A.bloodbag.reagents.reagent_list)
+							blood["type"] = Blood.data["blood_type"]
+					else
+						blood["type"] = "N/A"
+					data["blood"] = blood;
+				else
+					data["hasblood"] = 0
+
+				var/program[0]
+				program["autotransfuse"] = A.checkprogram("AUTO_TRANSFUSE")
+				program["transfuseactive"] = A.checkprogram("TRANSFUSE_ACTIVE")
+				program["autoair"] = A.checkprogram("AUTO_AIR")
+				program["airactive"] = A.checkprogram("AIR_ACTIVE")
+				program["vampire"] = A.checkprogram("VAMPIRE")
+				program["emagged"] = A.emagged
+				data["program"] = program;
+
+		else if (screen == 2)
+			if (data["table"] == 1)
+				screen = 1
+				return
+
+			var/obj/machinery/optable/lifesupport/B = table
+			data["log"] = B.internallog;
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
@@ -134,5 +149,11 @@
 			return 1
 		if (href_list["toggle_program"])
 			A.toggleprogram(null, href_list["toggle_program"])
+			return 1
+		if (href_list["select_screen"])
+			screen = text2num(href_list["select_screen"])
+			return 1
+		if (href_list["clear_log"])
+			A.clearlog()
 			return 1
 	return 1

@@ -67,13 +67,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		if(species && species.has_organ["heart"])
 			var/datum/organ/internal/heart/heart = internal_organs_by_name["heart"]
 
-			// Before we do that, we check for lifesupport.
-			var/onlifesupport = 0
-			if (buckled && istype(buckled, /obj/machinery/optable/lifesupport))
-				var/obj/machinery/optable/lifesupport/A = buckled
-				onlifesupport = A.onlifesupport()
-
-			if (!onlifesupport)
+			if (!isonlifesupport())
 				if(!heart)
 					blood_volume = 0
 				else if(heart.damage > 1 && heart.damage < heart.min_bruised_damage)

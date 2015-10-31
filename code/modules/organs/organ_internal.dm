@@ -42,10 +42,8 @@
 
 /datum/organ/internal/process()
 	//Check if we're on lifesupport, and whether or not organs should be processing.
-	if (owner.buckled && istype(owner.buckled, /obj/machinery/optable/lifesupport))
-		var/obj/machinery/optable/lifesupport/A = owner.buckled
-		if (A.onlifesupport())
-			return 1
+	if (owner.isonlifesupport())
+		return 1
 
 	//Process infections
 	if (robotic >= 2 || (owner.species && owner.species.flags & IS_PLANT))	//TODO make robotic internal and external organs separate types of organ instead of a flag
