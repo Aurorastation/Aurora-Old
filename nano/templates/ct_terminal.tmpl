@@ -1,0 +1,135 @@
+<!--
+Title: Credit Transfer Terminal UI
+Used In File(s): \code\modules\economy\ctterminal.dm
+ -->
+<div class="item">
+    <div class="itemLabel">
+        Machine:
+    </div>
+    <div class="itemContent">
+        {{:data.machineid}}
+    </div>
+</div>
+
+<h3>Menu:</h3>
+
+{{:helper.link('Main Menu', 'home', {'screen' : '1'}, data.screen == 1 ? 'disabled' : null, 'fixedLeft')}}
+{{:helper.link('Linked Devices', 'gear', {'screen' : '2'}, data.screen == 2 ? 'disabled' : null, 'fixedLeft')}}
+{{:helper.link('Saved Transactions', 'notepad', {'screen' : '3'}, data.screen == 3 ? 'disabled' : null, 'fixedLeft')}}
+{{:helper.link('Transaction Log', 'notepad', {'screen' : '4'}, data.screen == 4 ? 'disabled' : null, 'fixedLeft')}}
+
+{{if data.screen == 1}}
+    <h3>Linked Account Information:</h3>
+
+    <form name="link_account" action="?src{{:data.src}}" method="get">
+        <input type="hidden" name="src" value="{{:data.src}}">
+        <input type="hidden" name="choice" value="link_account">
+        <div class="item">
+            <div class="itemLabel">
+                Account Holder:
+            </div>
+            <div class="itemContent">
+                <input type="text" value="{{:data.linkedaccount.name}}" disabled>
+            </div>
+        </div>
+        <div class="item">
+            <div class="itemLabel">
+                Account Number:
+            </div>
+            <div class="itemContent">
+                <input type="text" name="account_number" value="{{:data.linkedaccount.number}}">
+            </div>
+        </div>
+        {{if data.linkedaccount.suspended}}
+            <div class="item">
+                <span class="bad">Account Suspended!</span>
+            </div>
+        {{/if}}
+        <div class="item">
+            <input type="submit" value="Update">
+        </div>
+    </form>
+
+    <h3>Public Accounts:</h3>
+
+    <table style="width: 100%">
+    {{for data.departmentalaccounts}}
+        <tr class="{{:value.suspended ? "bad" : ""}}">
+            <td>{{:helper.link('#' + value.number, '', {'choice' : 'link_account', 'account_number' : value.number})}}</td>
+            <td>{{:value.name}}</td>
+        </tr>
+    {{/for}}
+    </table>
+
+    <h3>Authorised Users:</h3>
+
+    <div class="item">
+		<div class="itemLabel">
+			Authorise New User
+		</div>
+		<div class="itemContent">
+			Scan their ID: {{:helper.link('-----', 'eject', {'choice' : 'authorise_user'})}}
+		</div>
+	</div>
+
+    <table style="width: 100%">
+    {{for data.authorisedids}}
+        <tr><td>{{:value.owner}}</td><td>{{:helper.link('Unlink', '', {'choice' : 'unlink_id', 'id_card' : value.ref})}}</td></tr>
+    {{/for}}
+    </table>
+{{else data.screen == 2}}
+    <h3>Linked Devices:</h3>
+
+    <table style="width: 100%">
+    {{for data.linkeddevices}}
+        <tr><td>CT Handheld Device #{{:value.deviceid}}</td><td>{{:helper.link('Unlink', '', {'choice' : 'unlink_device', 'device_id' : value.ref})}}</td></tr>
+    {{/for}}
+    </table>
+{{else data.screen == 3}}
+    <h3>Create New Transaction:</h3>
+
+    <form name="create_transaction" action="?src{{:data.src}}" method="get">
+        <input type="hidden" name="src" value="{{:data.src}}">
+        <input type="hidden" name="choice" value="create_transaction">
+        <div class="item">
+            <div class="itemLabel">
+                Transaction Reason:
+            </div>
+            <div class="itemContent">
+                <input type="text" name="transaction_reason">
+            </div>
+        </div>
+        <div class="item">
+            <div class="itemLabel">
+                Transaction Value:
+            </div>
+            <div class="itemContent">
+                <input type="text" name="transaction_value">
+            </div>
+        </div>
+        <div class="item">
+            <input type="submit" value="Save">
+        </div>
+    </form>
+
+    <h3>Saved Transactions:</h3>
+
+    <table style="width: 100%">
+    {{for data.storedtransactions}}
+        <tr><td>{{:value.amount}}</td><td>{{:value.reason}}</td><td>{{:helper.link('Remove', 'close', {'choice' : 'remove_transaction', 'transaction_id' : value.index})}}</td>
+    {{/for}}
+    </table>
+{{else data.screen == 4}}
+    <h3>Transaction Log:</h3>
+
+    <table style="width: 100%">
+        <thead>
+            <tr><td><b>Device ID</b></td><td><b>Customer</b></td><td><b>Value</b></td><td><b>Reason</b></td></tr>
+        </thead>
+        <tbody>
+        {{for data.transactionlog}}
+            <tr><td>{{:value.deviceid}}</td><td>{{:value.customer}}</td><td>{{:value.amount}}</td><td>{{:value.reason}}</td></tr>
+        {{/for}}
+        </tbody>
+    </table>
+{{/if}}

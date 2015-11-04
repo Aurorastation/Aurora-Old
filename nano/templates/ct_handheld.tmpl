@@ -1,0 +1,92 @@
+<!--
+Title: Handheld Credit Transfer Device UI
+Used In File(s): \code\modules\economy\cthandheld.dm
+ -->
+{{if !data.linked}}
+	<div class="wholeScreen">
+		<br><br><br><br><br><br><br>Device not linked to a terminal!
+	</div>
+{{else}}
+	<h3>Current Transaction:</h3>
+
+	<form name="reason" action="?src={{:data.src}}" method="get">
+		<div class="item">
+			<div class="itemLabel">
+				<input type="hidden" name="src" value="{{:data.src}}">
+				<input type="hidden" name="choice" value="transaction_reason">
+				Transaction Reason:
+			</div>
+			<div class="itemContent">
+				<input type="text" id="namefield" name="transaction_reason" value="{{:data.currenttransaction.reason}}">
+				<input type="submit" value="Rename" {{:data.mode == 1 ? 'disabled' : ''}}>
+			</div>
+		</div>
+	</form>
+
+	<form name="amount" action="?src={{:data.src}}" method="get">
+		<div class="item">
+			<div class="itemLabel">
+				<input type="hidden" name="src" value="{{:data.src}}">
+				<input type="hidden" name="choice" value="transaction_amount">
+				Transaction Amount:
+			</div>
+			<div class="itemContent">
+				<input type="text" id="amountfield" name="transaction_amount" value="{{:data.currenttransaction.amount}}">
+				<input type="submit" value="Update" {{:data.mode == 1 ? 'disabled' : ''}}>
+			</div>
+		</div>
+	</form>
+
+	<div class="item">
+		<div class="itemLabel">
+			Customer:
+		</div>
+		<div class="itemContent">
+			{{:helper.link('-----', 'eject', {'choice' : 'transaction_customer'})}}
+		</div>
+	</div>
+
+	<div class="item">
+		<div class="itemContent">
+			{{:helper.link('Complete Transaction', 'check', {'choice' : 'transaction_complete'})}}
+		</div>
+	</div>
+
+	{{if data.mode == 2}}
+		<div class="item">
+			<div class="itemContent">
+				{{:helper.link('Clear Transaction', 'close', {'choice' : 'transaction_clear'})}}
+			</div>
+		</div>
+
+		<div class="item">
+			<div class="itemContent">
+				{{:helper.link('Lock Transaction', 'check', {'choice' : 'transaction_lock'})}}
+			</div>
+		</div>
+		<hr>
+
+		<h3>Stored Transactions:</h3>
+
+		<table width="100%">
+			<thead>
+				<tr>
+					<td><b>Transaction Name:</b></td>
+					<td><b>Value:</b></td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody>
+			{{for data.storedtransactions}}
+				<tr><td>{{:value.reason}}</td><td>{{:value.amount}}</td><td>{{:helper.link('Select', 'check', {'select_transaction' : value.index})}}</td>
+			{{/for}}
+			</tbody>
+		</table>
+	{{else}}
+		<div class="item">
+			<div class="itemContent">
+				{{:helper.link('Unlock Transaction', 'eject', {'choice' : 'transaction_lock'})}}
+			</div>
+		</div>
+	{{/if}}
+{{/if}}
