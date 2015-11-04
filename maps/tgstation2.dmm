@@ -4701,7 +4701,7 @@
 "bMu" = (/obj/structure/stool/bed/chair,/obj/machinery/atmospherics/unary/vent_pump/on{tag = "icon-map_vent_out (NORTH)"; icon_state = "map_vent_out"; dir = 1},/turf/simulated/floor{icon_state = "dark"},/area/medical/surgery)
 "bMv" = (/obj/structure/table,/obj/item/weapon/hemostat{pixel_y = 4},/obj/item/weapon/cautery{pixel_y = 4},/obj/item/weapon/circular_saw,/obj/machinery/power/apc{dir = 8; name = "west bump"; pixel_x = -24},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor{dir = 10; icon_state = "whitepurple"},/area/medical/genetics)
 "bMw" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor{dir = 2; icon_state = "whitepurple"},/area/medical/genetics)
-"bMx" = (/obj/machinery/optable,/turf/simulated/floor{dir = 2; icon_state = "whitepurple"},/area/medical/genetics)
+"bMx" = (/obj/machinery/optable/lifesupport,/turf/simulated/floor{dir = 2; icon_state = "whitepurple"},/area/medical/genetics)
 "bMy" = (/obj/machinery/computer/operating,/turf/simulated/floor{dir = 2; icon_state = "whitepurple"},/area/medical/genetics)
 "bMz" = (/obj/structure/closet/secure_closet/medical2{req_access = 29},/turf/simulated/floor{dir = 6; icon_state = "whitepurple"},/area/medical/genetics)
 "bMA" = (/turf/simulated/floor/engine,/area/toxins/telesci)
