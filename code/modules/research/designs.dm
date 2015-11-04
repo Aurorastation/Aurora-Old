@@ -1983,6 +1983,7 @@ datum/design/security_glasses //added to list 6/4/15
 	req_tech = list("magnets" = 5, "combat" = 2)
 	build_type = PROTOLATHE
 	materials = list("$metal" = 50, "$glass" = 50, "$gold" = 50, "$silver" = 50)
+	build_path = "/obj/item/clothing/glasses/sunglasses/sechud"
 	category = "Information Technology"
 
 /////////////////////////////////////////
