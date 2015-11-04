@@ -157,6 +157,8 @@
 	var/list/contact_levels = list(1, 5)			// Defines which Z-levels which, for example, a Code Red announcement may affect
 	var/list/player_levels = list(1, 3, 4, 5, 6)	// Defines all Z-levels a character can typically reach
 
+	var/list/age_restrictions = list()				// Holds all of the age restrictions for jobs and antag roles in a single associated list
+
 /datum/configuration/New()
 	var/list/L = typesof(/datum/game_mode) - /datum/game_mode
 	for (var/T in L)
@@ -575,6 +577,11 @@
 					config.use_loyalty_implants = 1
 				else
 					log_misc("Unknown setting in configuration: '[name]'")
+
+		else if (type == "age_restrictions")
+			name = replacetext(name, "_", " ")
+			age_restrictions += name
+			age_restrictions[name] = text2num(value)
 
 /datum/configuration/proc/loadsql(filename)  // -- TLE
 	var/list/Lines = file2list(filename)

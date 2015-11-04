@@ -320,7 +320,8 @@
 
 /datum/surgery_step/internal/replace_organ
 	allowed_tools = list(
-	/obj/item/organ = 100
+	/obj/item/organ = 100,
+	/obj/item/robot_parts/robot_component = 100
 	)
 
 	min_duration = 60
@@ -334,7 +335,13 @@
 		var/organ_compatible
 		var/organ_missing
 
-		if(!istype(O))
+		if(!istype(O) && istype(O, /obj/item/robot_parts/robot_component))
+			var/obj/item/robot_parts/robot_component/A = tool
+			if(A.organ_type)
+				O = A.organ_type
+			else
+				return 0
+		else
 			return 0
 
 		if(!target.species)
@@ -383,6 +390,11 @@
 		var/obj/item/organ/O = tool
 		if(istype(O))
 			O.replaced(target,affected)
+		else if(istype(tool, /obj/item/robot_parts/robot_component))
+			var/obj/item/robot_parts/robot_component/A = tool
+			if(A.organ_type)
+				O = A.organ_type
+				O.replaced(target,affected)
 
 	fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("\red [user]'s hand slips, damaging \the [tool]!", \

@@ -639,3 +639,29 @@
 	else
 		usr << "Your varedits will now be shown to developers"
 	return
+
+/client/proc/toggle_visibily()
+	set category = "Server"
+	set name = "Toggle Hub Visibility"
+	set desc = "Toggle between public and hidden"
+
+	if(!check_rights(R_SERVER|R_STEALTH))
+		return
+
+	var/override
+
+	switch (alert(usr, "Do you want this to only affect the current round, or do you want the server to stay [world.visibility ? "hidden" : "public"] until toggled again?",,"Only affect this round.", "Stay as chosen until toggled again.", "Reset override."))
+		if ("Only affect this round.")
+			override = 0
+		if ("Stay as chosen until toggled again.")
+			override = 1
+		if ("Reset override.")
+			world.save_visibility(world.visibility, 0)
+			message_admins("[src] has reset the hub [world.visibility ? "public" : "hidden"] override")
+			return
+
+	world.visibility = !world.visibility
+
+	message_admins("[src] has toggled the hub [world.visibility ? "public" : "hidden"]")
+	world.save_visibility(world.visibility, override)
+	return

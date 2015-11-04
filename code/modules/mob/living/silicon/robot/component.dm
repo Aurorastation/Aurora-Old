@@ -147,6 +147,14 @@
 	var/brute = 0
 	var/burn = 0
 	var/icon_state_broken = "broken"
+	var/obj/item/organ/organ_type = null	// for shells. Only define if this can be placed inside an IPC during organ replacement surgery.
+
+// In case the robot_component has a child organ, it is updated to have the proper datums and so on.
+/obj/item/robot_parts/robot_component/New()
+	..()
+	spawn(5)
+		if(organ_type)
+			organ_type.update()
 
 // TODO: actual icons ;)
 /obj/item/robot_parts/robot_component/binary_communication_device
@@ -168,7 +176,8 @@
 	name = "camera"
 	icon_state = "camera"
 	icon_state_broken = "camera_broken"
-	
+	organ_type = new /obj/item/organ/eyes/robot()
+
 /obj/item/robot_parts/robot_component/law_computer
 	name = "law computer"
 	icon_state = "radio"
@@ -178,11 +187,24 @@
 	name = "diagnosis unit"
 	icon_state = "analyser"
 	icon_state_broken = "analyser_broken"
+	organ_type = new /obj/item/organ/machine/diagnosis_unit()
 
 /obj/item/robot_parts/robot_component/radio
 	name = "radio"
 	icon_state = "radio"
 	icon_state_broken = "radio_broken"
+
+/obj/item/robot_parts/robot_component/radiator
+	name = "radiator"
+	icon_state = "radiator"
+	icon_state_broken = "radiator_broken"
+	organ_type = new /obj/item/organ/machine/radiator()
+
+/obj/item/robot_parts/robot_component/bladder
+	name = "chemical containment"
+	icon_state = "bladder"
+	icon_state_broken = "bladder_broken"
+	organ_type = new /obj/item/organ/machine/bladder()
 
 //
 //Robotic Component Analyser, basically a health analyser for robots
@@ -227,7 +249,7 @@
 	user.show_message("\t Damage Specifics: <font color='#FFA500'>[BU]</font> - <font color='red'>[BR]</font>")
 	if(M.tod && M.stat == DEAD)
 		user.show_message("\blue Time of Disable: [M.tod]")
-	
+
 	if (istype(M, /mob/living/silicon/robot))
 		var/mob/living/silicon/robot/H = M
 		var/list/damaged = H.get_damaged_components(1,1,1)
@@ -245,7 +267,7 @@
 			user.show_message("\blue \t Components are OK.",1)
 		if(H.emagged && prob(5))
 			user.show_message("\red \t ERROR: INTERNAL SYSTEMS COMPROMISED",1)
-	
+
 	if (ishuman(M) && (M:species.flags & IS_SYNTHETIC))
 		var/mob/living/carbon/human/H = M
 		var/list/damaged = H.get_damaged_organs(1,1)
@@ -258,8 +280,8 @@
 				(org.burn_dam > 0)	?	"<font color='#FFA500'>[org.burn_dam]</font>"	:0),1)
 		else
 			user.show_message("\blue \t Components are OK.",1)
-	
+
 	user.show_message("\blue Operating Temperature: [M.bodytemperature-T0C]&deg;C ([M.bodytemperature*1.8-459.67]&deg;F)", 1)
-	
+
 	src.add_fingerprint(user)
 	return
