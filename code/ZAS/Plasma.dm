@@ -121,7 +121,7 @@ obj/var/contaminated = 0
 		return
 
 	var/datum/organ/internal/eyes/E = internal_organs_by_name["eyes"]
-	if(E)
+	if(E && E.robotic != 2)
 		if(prob(20)) src << "\red Your eyes burn!"
 		E.damage += 2.5
 		eye_blurry = min(eye_blurry+1.5,50)
