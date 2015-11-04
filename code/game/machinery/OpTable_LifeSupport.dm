@@ -20,7 +20,6 @@
 	var/buckled = 0											//Is the patient hooked up to the machine properly?
 	var/active = 0											//Is the machine active, and providing lifesupport?
 	var/expired = 0											//Have we alerted the folks about a dead patient yet?
-	var/activeoverlay										//Stores an overlay to be added/removed, depending on that machine's status.
 	var/program = 0											//Bitfield for containing the programmable settings.
 	var/obj/item/weapon/reagent_containers/blood/bloodbag	//Stores the bloodbag that you can add to the machine, for IV dripping shenanigans.
 	var/obj/item/weapon/tank/airsupply						//Stores the airtank used for anesthesia.
@@ -43,10 +42,6 @@
 	component_parts += new /obj/item/weapon/stock_parts/scanning_module/adv(src)
 	component_parts += new /obj/item/clothing/mask/breath/medical(src)
 	RefreshParts()
-
-	var/image/i = image('icons/obj/surgery.dmi', icon_state = "table3-disabledoverlay")
-	activeoverlay = i
-	overlays += activeoverlay
 
 /obj/machinery/optable/lifesupport/attackby(obj/item/weapon/W as obj, mob/living/carbon/user as mob)
 	. = ..()
@@ -139,6 +134,16 @@
 
 		if (program & VAMPIRE)
 			victim.vessel.remove_reagent("blood", 5)
+
+/obj/machinery/optable/lifesupport/update_icon()
+	if (opened)
+		icon_state = "[modify_state]-open"
+	else if (victim && active)
+		icon_state = victim.pulse ? "[modify_state]-lifeactive" : "[modify_state]-lifeidle"
+	else if (victim)
+		icon_state = victim.pulse ? "[modify_state]-active" : "[modify_state]-idle"
+	else
+		icon_state = "[modify_state]-idle"
 
 /obj/machinery/optable/lifesupport/check_table(mob/living/carbon/patient as mob)
 	if (victim)
@@ -292,12 +297,6 @@
 				return
 
 			if (checkrequiredchems())
-				if (activeoverlay)
-					overlays -= activeoverlay
-					activeoverlay = null
-				var/image/i = image('icons/obj/surgery.dmi', icon_state = "table3-activeoverlay")
-				activeoverlay = i
-				overlays += activeoverlay
 				active = 1
 				broadcastalert("Patient detected. Life support systems enabled.")
 				addtolog("Life support systems enabled.")
@@ -324,12 +323,6 @@
 				else
 					toggleprogram(AIR_ACTIVE)
 
-			if (activeoverlay)
-				overlays -= activeoverlay
-				activeoverlay = null
-			var/image/i = image('icons/obj/surgery.dmi', icon_state = "table3-disabledoverlay")
-			activeoverlay = i
-			overlays += activeoverlay
 			active = 0
 
 			if (override)

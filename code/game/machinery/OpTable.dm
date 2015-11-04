@@ -81,7 +81,6 @@
 	else
 		return 0
 
-
 /obj/machinery/optable/MouseDrop_T(obj/O as obj, mob/user as mob)
 
 	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
@@ -91,19 +90,26 @@
 		step(O, get_dir(O, src))
 	return
 
+/obj/machinery/optable/update_icon()
+	if (opened)
+		icon_state = "[modify_state]-open"
+	else if (victim)
+		icon_state = victim.pulse ? "[modify_state]-active" : "[modify_state]-idle"
+	else
+		icon_state = "[modify_state]-idle"
+
 /obj/machinery/optable/proc/check_victim()
-	if(locate(/mob/living/carbon/human, src.loc))
-		var/mob/living/carbon/human/M = locate(/mob/living/carbon/human, src.loc)
+	if(locate(/mob/living/carbon/human, loc))
+		var/mob/living/carbon/human/M = locate(/mob/living/carbon/human, loc)
 		if(M.lying)
-			src.victim = M
-			icon_state = M.pulse ? "[initial(modify_state)]-active" : "[initial(modify_state)]-idle"
+			victim = M
 			return 1
-	src.victim = null
-	icon_state = "[initial(modify_state)]-idle"
+	victim = null
 	return 0
 
 /obj/machinery/optable/process()
 	check_victim()
+	update_icon()
 
 /obj/machinery/optable/proc/take_victim(mob/living/carbon/C, mob/living/carbon/user as mob)
 	if (C == user)
@@ -116,9 +122,9 @@
 	if(ishuman(C))
 		var/mob/living/carbon/human/H = C
 		src.victim = H
-		icon_state = H.pulse ? "[initial(modify_state)]-active" : "[initial(modify_state)]-idle"
+		icon_state = H.pulse ? "[modify_state]-active" : "[modify_state]-idle"
 	else
-		icon_state = "[initial(modify_state)]-idle"
+		icon_state = "[modify_state]-idle"
 
 /obj/machinery/optable/verb/climb_on()
 	set name = "Climb On Table"
@@ -141,7 +147,6 @@
 			M.state = 2
 			M.icon_state = "box_1"
 			for(var/obj/I in component_parts)
-				msg_scopes("Why are we in this loop?")
 				if(istype(I, /obj/item/weapon/reagent_containers/glass/beaker))
 					reagents.trans_to(I, reagents.total_volume)
 				if(I.reliability != 100 && crit_fail)
@@ -165,7 +170,7 @@
 					if (computer)
 						computer.table = null
 						computer = null
-					icon_state = "[initial(modify_state)]-open"
+					icon_state = "[modify_state]-open"
 					user << "You open the maintenance hatch of [src]."
 					return 1
 				if (1)
@@ -175,7 +180,7 @@
 						if (computer)
 							computer.table = src
 							break
-					icon_state = "[initial(modify_state)]-idle"
+					icon_state = "[modify_state]-idle"
 					user << "You close the maintenance hatch of [src]."
 					return 1
 

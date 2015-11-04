@@ -1295,6 +1295,23 @@ datum/design/mechfab
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = "/obj/item/weapon/circuitboard/mechfab"
 
+datum/design/optable
+	name = "Operating Table"
+	desc = "The circuit board for an Operating Table"
+	id = "optable"
+	req_tech = list("programming" = 1, "biotech" = 2)
+	build_type = IMPRINTER
+	materials = list("$glass" = 2000, "sacid" = 20)
+	build_path = "/obj/item/weapon/circuitboard/optable"
+
+datum/design/optable_lifesupport
+	name = "Life Support Enabled Operating Table"
+	desc = "The circuit board for an advanced Operating Table"
+	id = "adv_optable"
+	req_tech = list("programming" = 3, "biotech" = 4)
+	build_type = IMPRINTER
+	materials = list("$glass" = 2000, "sacid" = 20)
+	build_path = "/obj/item/weapon/circuitboard/optable_lifesupport"
 
 /////////////////////////////////////////
 ////////////Power Stuff//////////////////
