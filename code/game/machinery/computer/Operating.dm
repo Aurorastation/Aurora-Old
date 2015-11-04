@@ -22,7 +22,7 @@
 	add_fingerprint(user)
 	if(stat & (BROKEN|NOPOWER))
 		return
-	interact(user)
+	ui_interact(user)
 
 
 /obj/machinery/computer/operating/attack_hand(mob/user)
