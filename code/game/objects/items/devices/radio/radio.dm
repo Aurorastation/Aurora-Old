@@ -320,6 +320,12 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	  /* ###### Radio headsets can only broadcast through subspace ###### */
 
 		if(subspace_transmission)
+			//Actually, first we check if we're being jammed or not!
+			if (active_radio_jammers && active_radio_jammers.len)
+				for (var/obj/item/device/radiojammer/Jammer in active_radio_jammers)
+					if (get_dist(src, Jammer) <= Jammer.radius)
+						return
+
 			// First, we want to generate a new radio signal
 			var/datum/signal/signal = new
 			signal.transmission_method = 2 // 2 would be a subspace transmission.
@@ -632,6 +638,10 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 		return -1
 	if(!listening)
 		return -1
+	if (subspace_transmission == 1 && active_radio_jammers && active_radio_jammers.len)
+		for (var/obj/item/device/radiojammer/Jammer in active_radio_jammers)
+			if (get_dist(src, Jammer) <= Jammer.radius)
+				return -1
 	if(!(0 in level))
 		var/turf/position = get_turf(src)
 		if(!position || !(position.z in level))
@@ -753,7 +763,7 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 
 /obj/item/device/radio/borg/proc/update_speaker_range()
 	canhear_range = external_speakers ? 3 : 0 // if your speakers are on, people can hear you, if not, they can't
-	
+
 /obj/item/device/radio/borg/proc/recalculateChannels()
 	src.channels = list()
 	src.syndie = FALSE
@@ -832,11 +842,11 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	onclose(user, "radio")
 	return
 
-	
+
 /obj/item/device/radio/borg/proc/set_emag(var/is_emagged)
 	emagged=is_emagged
 	recalculateChannels()
-	
+
 
 /obj/item/device/radio/proc/config(op)
 	if(radio_controller)
