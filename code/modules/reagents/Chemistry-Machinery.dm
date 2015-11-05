@@ -345,6 +345,7 @@
 			if(href_list["amount"])
 				var/id = href_list["add"]
 				var/amount = text2num(href_list["amount"])
+				amount = isgoodnumber(amount) //Sanity check hrefs people -Scopes
 				R.trans_id_to(src, id, amount)
 
 		else if (href_list["addcustom"])
@@ -359,6 +360,7 @@
 			if(href_list["amount"])
 				var/id = href_list["remove"]
 				var/amount = text2num(href_list["amount"])
+				amount = isgoodnumber(amount) //Sanity check hrefs people -Scopes
 				if(mode)
 					reagents.trans_id_to(beaker, id, amount)
 				else
