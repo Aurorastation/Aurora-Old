@@ -964,15 +964,16 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	//var/telecomms_intact = telecomms_process(P.owner, owner, t)
 	var/obj/machinery/message_server/useMS = null
 	if(message_servers)
-		for (var/obj/machinery/message_server/MS in message_servers)
-		//PDAs are now dependent on the Message Server.
-			if (active_radio_jammers && active_radio_jammers.len)
-				for (var/obj/item/device/radiojammer/Jammer in active_radio_jammers)
-					if (get_dist(MS, Jammer) <= Jammer.radius && prob(75))
-						continue
-			if(MS.active)
-				useMS = MS
-				break
+		finding_server:
+			for (var/obj/machinery/message_server/MS in message_servers)
+			//PDAs are now dependent on the Message Server.
+				if(MS.active)
+					if (active_radio_jammers && active_radio_jammers.len)
+						for (var/obj/item/device/radiojammer/Jammer in active_radio_jammers)
+							if (get_dist(MS, Jammer) <= Jammer.radius && prob(75))
+								continue finding_server
+						useMS = MS
+						break
 
 	var/datum/signal/signal = src.telecomms_process()
 
