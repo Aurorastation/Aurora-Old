@@ -320,11 +320,8 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	  /* ###### Radio headsets can only broadcast through subspace ###### */
 
 		if(subspace_transmission)
-			//Actually, first we check if we're being jammed or not!
-			if (active_radio_jammers && active_radio_jammers.len)
-				for (var/obj/item/device/radiojammer/Jammer in active_radio_jammers)
-					if (get_dist(src, Jammer) <= Jammer.radius)
-						return
+			if (within_jamming_range(src)) //Actually, first we check if we're being jammed or not!
+				return
 
 			// First, we want to generate a new radio signal
 			var/datum/signal/signal = new
@@ -638,10 +635,8 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 		return -1
 	if(!listening)
 		return -1
-	if (subspace_transmission == 1 && active_radio_jammers && active_radio_jammers.len)
-		for (var/obj/item/device/radiojammer/Jammer in active_radio_jammers)
-			if (get_dist(src, Jammer) <= Jammer.radius)
-				return -1
+	if (subspace_transmission == 1 && within_jamming_range(src))
+		return -1
 	if(!(0 in level))
 		var/turf/position = get_turf(src)
 		if(!position || !(position.z in level))
