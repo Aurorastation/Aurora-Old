@@ -1371,3 +1371,12 @@ END R I P HAZERI
 	species_restricted = list("exclude") // So that any species can wear it (It's a wristband, not full-fingered gloves).
 	sprite_sheets = list() // To remove the 'Vox' entry that would override the sprite if worn by a vox
 	gender = "neuter" // Makes it read 'Has a medical wristband on his hands' instead of 'Has some medical wristband on his hands'
+
+
+// Halo O'Kyle's Research Notebook - Nogo3
+/obj/item/weapon/folder/fluff/halo_researchnotebook
+	name = "research notebook"
+	desc = "A plain notebook with a blue binding that has 'RESEARCH NOTES' sprawled on the cover, and the letters 'H.K.' dotting the bottom right. Post-it notes and loose papers stick out haphazardly, and it looks like it's been repaired with tape more than once."
+	icon = 'icons/obj/custom_items/halo_researchnotebook.dmi'
+	icon_state = "halo_researchnotebook"
+	contained_sprite = 1
