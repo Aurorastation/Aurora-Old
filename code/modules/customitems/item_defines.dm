@@ -1380,3 +1380,13 @@ END R I P HAZERI
 	icon = 'icons/obj/custom_items/halo_researchnotebook.dmi'
 	icon_state = "halo_researchnotebook"
 	contained_sprite = 1
+
+
+// Lua Saudosa's 'Lucky' chip - Killerhurtz
+/obj/item/fluff/lua_luckychip
+	name = "'Lucky' chip"
+	desc = "A round, grey, plastic object - a chip or coin of some sort. On one side there is a logo engraved into it, though it is not familiar. On the other, the words 'One key, ten thousand minds' surround engraved text much too small to read."
+	icon = 'icons/obj/custom_items/lua_luckychip.dmi'
+	icon_state = "lua_luckychip"
+	contained_sprite = 1
+	slot_flags = SLOT_EARS
