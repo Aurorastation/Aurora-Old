@@ -1390,3 +1390,16 @@ END R I P HAZERI
 	icon_state = "lua_luckychip"
 	contained_sprite = 1
 	slot_flags = SLOT_EARS
+
+
+// Miko Du'Razhu's sake bottle - Jakers457
+/obj/item/weapon/reagent_containers/food/drinks/bottle/fluff/miko_sakebottle
+	name = "sake bottle"
+	desc = "A stone bottle of Sake with a Blue Moon painted on it."
+	icon = 'icons/obj/custom_items/miko_sakebottle.dmi'
+	icon_state = "miko_sakebottle"
+	isGlass = 0 // Description says stone bottle, not glass
+
+	New()
+		..()
+		reagents.add_reagent("sake", 100)
