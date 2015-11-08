@@ -1359,3 +1359,15 @@ END R I P HAZERI
 
 /obj/item/weapon/soap/fluff/jace_toothbrush/attack(mob/target as mob, mob/user as mob)
 	return
+
+
+// Inis Truesight's Medical Wristband - Gollee
+/obj/item/clothing/gloves/fluff/inis_medicalwristband
+	name = "medical wristband - EPILEPSY"
+	desc = "A stainless steel tag on a plastic wristband. The tag reads 'ABSENCE EPILEPSY-2U CITALOPRAM'"
+	icon = 'icons/obj/custom_items/inis_medicalwristband.dmi'
+	icon_state = "inis_medicalwristband"
+	contained_sprite = 1
+	species_restricted = list("exclude") // So that any species can wear it (It's a wristband, not full-fingered gloves).
+	sprite_sheets = list() // To remove the 'Vox' entry that would override the sprite if worn by a vox
+	gender = "neuter" // Makes it read 'Has a medical wristband on his hands' instead of 'Has some medical wristband on his hands'
