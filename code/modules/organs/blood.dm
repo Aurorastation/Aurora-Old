@@ -67,14 +67,15 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		if(species && species.has_organ["heart"])
 			var/datum/organ/internal/heart/heart = internal_organs_by_name["heart"]
 
-			if(!heart)
-				blood_volume = 0
-			else if(heart.damage > 1 && heart.damage < heart.min_bruised_damage)
-				blood_volume *= 0.8
-			else if(heart.damage >= heart.min_bruised_damage && heart.damage < heart.min_broken_damage)
-				blood_volume *= 0.6
-			else if(heart.damage >= heart.min_broken_damage && heart.damage < INFINITY)
-				blood_volume *= 0.3
+			if (!isonlifesupport())
+				if(!heart)
+					blood_volume = 0
+				else if(heart.damage > 1 && heart.damage < heart.min_bruised_damage)
+					blood_volume *= 0.8
+				else if(heart.damage >= heart.min_bruised_damage && heart.damage < heart.min_broken_damage)
+					blood_volume *= 0.6
+				else if(heart.damage >= heart.min_broken_damage && heart.damage < INFINITY)
+					blood_volume *= 0.3
 
 		//Effects of bloodloss
 		switch(blood_volume)

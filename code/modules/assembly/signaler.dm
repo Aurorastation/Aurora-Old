@@ -99,8 +99,12 @@
 
 
 	proc/signal()
-		if(!radio_connection) return
-
+		if(!radio_connection) 
+			return
+		
+		if(within_jamming_range(src)) // can't send a signal through jammers
+			return
+			
 		var/datum/signal/signal = new
 		signal.source = src
 		signal.encryption = code
@@ -126,6 +130,8 @@
 
 
 	receive_signal(datum/signal/signal)
+		if(within_jamming_range(src)) // can't receive signals while jammed
+			return 
 		if(!signal)	return 0
 		if(signal.encryption != code)	return 0
 		if(!(src.wires & WIRE_RADIO_RECEIVE))	return 0
