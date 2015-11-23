@@ -102,6 +102,13 @@
 		return 1
 	return 0
 
+	
+/mob/proc/drop_item_if_in_either_hand(var/obj/item/W,var/atom/Target)
+	if (l_hand==W)
+		return drop_l_hand(Target)
+	if (r_hand==W)
+		return drop_r_hand(Target)
+		
 
 //Drops the item in our left hand
 /mob/proc/drop_l_hand(var/atom/Target)

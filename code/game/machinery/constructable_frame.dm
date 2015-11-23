@@ -129,7 +129,7 @@
 							new_machine.RefreshParts()
 							del(src)
 					else
-						if(istype(P, /obj/item/weapon))
+						if(istype(P, /obj/item))
 							for(var/I in req_components)
 								if(istype(P, text2path(I)) && (req_components[I] > 0))
 									playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -408,6 +408,28 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/subspace/crystal" = 1,
 							"/obj/item/weapon/stock_parts/micro_laser/high" = 2)
 
+/obj/item/weapon/circuitboard/optable
+	name = "Circuit Board (Operating Table)"
+	build_path = "/obj/machinery/optable"
+	board_type = "machine"
+	origin_tech = "biotech=2;programming=1"
+	frame_desc = "Requires 1 Cable Coil, 1 Health Analyzer, 1 Console Screen and 1 capacitor."
+	req_components = list(
+							"/obj/item/weapon/cable_coil" = 1,
+							"/obj/item/weapon/stock_parts/console_screen" = 1,
+							"/obj/item/weapon/stock_parts/capacitor" = 1,
+							"/obj/item/device/healthanalyzer" = 1)
 
-
-
+/obj/item/weapon/circuitboard/optable_lifesupport
+	name = "Circuit Board (Life Support Enable Operating Table)"
+	build_path = "/obj/machinery/optable/lifesupport"
+	board_type = "machine"
+	origin_tech = "biotech=4;programming=3"
+	frame_desc = "Requires 1 Cable Coil, 1 Health Analyzer, 1 Console Screen, 1 Advanced Capacitor, 1 Beaker, 1 Advanced Sensor Module."
+	req_components = list(
+							"/obj/item/weapon/cable_coil" = 1,
+							"/obj/item/weapon/stock_parts/console_screen" = 1,
+							"/obj/item/weapon/stock_parts/capacitor/adv" = 1,
+							"/obj/item/device/healthanalyzer" = 1,
+							"/obj/item/weapon/reagent_containers/glass/beaker" = 1,
+							"/obj/item/weapon/stock_parts/scanning_module/adv" = 1)
