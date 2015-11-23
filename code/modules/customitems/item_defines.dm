@@ -1359,3 +1359,18 @@ END R I P HAZERI
 
 /obj/item/weapon/soap/fluff/jace_toothbrush/attack(mob/target as mob, mob/user as mob)
 	return
+
+
+// Lori Alvarez's pink screwdriver - NebulaFlare
+/obj/item/weapon/screwdriver/fluff/lori_pinkscrewdriver
+	name = "Pink Screwdriver"
+	desc = "A pink screwdriver. 'Margrite' is etched into the handle."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "screwdriver3"
+	item_state = "screwdriver_purple"
+
+/obj/item/weapon/screwdriver/fluff/lori_pinkscrewdriver/New()
+	if (prob(75))
+		src.pixel_y = rand(0, 16)
+
+	return
