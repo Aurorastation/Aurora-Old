@@ -834,7 +834,10 @@ About the new airlock wires panel:
 	playsound(src.loc, door_sound, door_sound_distance, 1)
 
 /obj/machinery/door/airlock/open(var/forced=0)
-	if( operating || welded || locked || bracer)
+	if( operating || welded || locked)
+		return 0
+	if (bracer)
+		visible_message("<span class='notice'>[src]'s actuators whirr, but the door does not open.</span>")
 		return 0
 	if(!forced)
 		if( !arePowerSystemsOn() || isWireCut(AIRLOCK_WIRE_OPEN_DOOR) )

@@ -12,6 +12,7 @@
 	icon_state = "inactive"
 	w_class = 3
 	req_access = list(103)
+	health = 90
 
 	var/department = "CENTCOM"
 	var/status = 0
@@ -29,10 +30,13 @@
 	req_access = null
 	req_one_access = list(11, 24)
 
-/obj/item/device/doorbrace/examine(mob/user)
-	..(user)
+/obj/item/device/doorbrace/examine()
+	..()
 
-	user << "\blue This device has [department] department markings on it."
+	if (status == STATUS_BROKEN)
+		usr << "<span class='danger'>It looks broken!</span>"
+	else
+		usr << "\blue This device has [department] department markings on it."
 
 /obj/item/device/doorbrace/attack_hand(var/mob/user)
 	if (status == STATUS_ACTIVE)
@@ -40,10 +44,23 @@
 	else
 		..()
 
+/obj/item/device/doorbrace/bullet_act(var/obj/item/projectile/Proj)
+	takedamage(Proj.damage)
+	..()
+
 /obj/item/device/doorbrace/attackby(var/obj/item/I, var/mob/user)
 	if (status == STATUS_BROKEN)
 		user << "<span class='danger'>[src] is broken beyond repair!</span>"
 		return
+
+	if (istype(I, /obj/item/weapon) && user.a_intent == "hurt")
+		if (I.force >= 8)
+			user.visible_message("<span class='danger'>[user] bashes [src] with [I]!</span>", "<span class='danger'>You strike [src] with [I], damaging it!</span>")
+			takedamage(I.force)
+			return
+		else
+			user.visible_message("<span class='notice'>[user] hits [src] with [I] to no visible effect.</span>", "<span class='notice'>You hit [src] with [I], but it appears to have no effect.</span>")
+			return
 
 	switch (constructionstate)
 		if (0)
@@ -97,7 +114,7 @@
 				return
 		if (3)
 			if (istype(I, /obj/item/weapon/wirecutters))
-				user << "<span class='notice'>You cut the wires connecting the [src]'s magnets to their powersupply, [status ? "rendering the device unusable." : "making the device fall off  and rendering it unusable."]</span>"
+				user << "<span class='notice'>You cut the wires connecting the [src]'s magnets to their powersupply, [target ? "making the device fall off [target] and rendering it unusable." : "rendering the device unusable."]</span>"
 				playsound(loc, 'sound/items/Wirecutter.ogg', 50, 1)
 				setconstructionstate(4)
 				return
@@ -158,14 +175,14 @@
 			status = newstatus
 
 		if (STATUS_BROKEN)
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(5, 1, src)
-			s.start()
-			spawn(5)
-				del(s)
+			spark()
 
 			if (target)
-				detach()
+				var/playflick = 1
+				if (constructionstate)
+					playflick = 0
+
+				detach(playflick)
 
 			icon_state = "broken"
 			status = newstatus
@@ -177,11 +194,19 @@
 			icon_state = "active"
 		else
 			icon_state = "inactive"
+	else if (newstate == 2)
+		flick("deconstruct_2_anim", src)
+	else if (newstate == 4)
+		setstatus(STATUS_BROKEN)
 	else
-		icon_state = "construction-[constructionstate]"
+		icon_state = "deconstruct_[constructionstate]"
 
-/obj/item/device/doorbrace/proc/detach()
+/obj/item/device/doorbrace/proc/detach(var/playflick = 1)
 	if (target)
+
+		if (playflick)
+			spawn(-15) flick("release", src)
+
 		adjustsprite(null)
 		layer = LAYER_NORMAL
 
@@ -192,6 +217,7 @@
 /obj/item/device/doorbrace/proc/attach(var/obj/machinery/door/airlock/newtarget as obj)
 	adjustsprite(newtarget)
 	layer = LAYER_ATTACHED
+	flick("deploy", src)
 
 	newtarget.bracer = src
 	target = newtarget
@@ -228,6 +254,32 @@
 	else
 		pixel_x = 0
 		pixel_y = 0
+
+/obj/item/device/doorbrace/proc/takedamage(var/damage)
+	health -= damage
+
+	if (damage >= 40 && prob(50))
+		health = 0
+
+	if (health <= 0)
+		visible_message("<span class='danger'>[src] sparks[target ? " and falls off of \the [target]!" : "!"] It is now completely unusable!</span>")
+		setstatus(STATUS_BROKEN)
+		return
+
+	if (prob(50))
+		spark()
+
+/obj/item/device/doorbrace/proc/spark()
+	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+
+	if (target)
+		s.set_up(5, 1, target)
+	else
+		s.set_up(5, 1, src)
+
+	s.start()
+	spawn(5)
+		del(s)
 
 #undef STATUS_INACTIVE
 #undef STATUS_ACTIVE
