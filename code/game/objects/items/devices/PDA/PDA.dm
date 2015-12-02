@@ -964,11 +964,16 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	//var/telecomms_intact = telecomms_process(P.owner, owner, t)
 	var/obj/machinery/message_server/useMS = null
 	if(message_servers)
-		for (var/obj/machinery/message_server/MS in message_servers)
-		//PDAs are now dependent on the Message Server.
-			if(MS.active)
-				useMS = MS
-				break
+		finding_server:
+			for (var/obj/machinery/message_server/MS in message_servers)
+			//PDAs are now dependent on the Message Server.
+				if(MS.active)
+					if (active_radio_jammers && active_radio_jammers.len)
+						for (var/obj/item/device/radiojammer/Jammer in active_radio_jammers)
+							if (get_dist(MS, Jammer) <= Jammer.radius && prob(75))
+								continue finding_server
+						useMS = MS
+						break
 
 	var/datum/signal/signal = src.telecomms_process()
 
@@ -979,11 +984,24 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			var/turf/pos = get_turf(P)
 			if(pos.z in signal.data["level"])
 				useTC = 2
+				//Jamming the recipient
+				if (active_radio_jammers && active_radio_jammers.len)
+					for (var/obj/item/device/radiojammer/Jammer in active_radio_jammers)
+						if (get_dist(P, Jammer) <= Jammer.radius)
+							useTC = 1
+							break
 				//Let's make this barely readable
 				if(signal.data["compression"] > 0)
 					t = Gibberish(t, signal.data["compression"] + 50)
 
-	if(useMS && useTC) // only send the message if it's stable
+	var/isjammed = 0
+	if (active_radio_jammers && active_radio_jammers.len)
+		for (var/obj/item/device/radiojammer/Jammer in active_radio_jammers)
+			if (get_dist(src, Jammer) <= Jammer.radius)
+				isjammed = 1
+				break
+
+	if(useMS && useTC && !isjammed) // only send the message if it's stable
 		if(useTC != 2) // Does our recipient have a broadcaster on their level?
 			U << "ERROR: Cannot reach recipient."
 			return

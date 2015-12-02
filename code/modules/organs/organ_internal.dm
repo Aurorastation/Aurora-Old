@@ -41,11 +41,14 @@
 			E.internal_organs |= src
 
 /datum/organ/internal/process()
+	//Check if we're on lifesupport, and whether or not organs should be processing.
+	if (owner.isonlifesupport())
+		return 1
 
 	//Process infections
 	if (robotic >= 2 || (owner.species && owner.species.flags & IS_PLANT))	//TODO make robotic internal and external organs separate types of organ instead of a flag
 		germ_level = 0
-		return
+		return 0
 
 	if(owner.bodytemperature >= 170)	//cryo stops germs from moving and doing their bad stuffs
 		//** Handle antibiotics and curing infections
@@ -91,6 +94,8 @@
 						if(501 to INFINITY)
 							take_damage(4)
 							owner.reagents.add_reagent("toxin", rand(3,5))
+
+	return 0
 
 /datum/organ/internal/proc/take_damage(amount, var/silent=0)
 	if(src.robotic == 2)
@@ -152,7 +157,10 @@
 	removed_type = /obj/item/organ/lungs
 
 	process()
-		..()
+		. = ..()
+		if (.)
+			return
+
 		if (germ_level > INFECTION_LEVEL_ONE)
 			if(prob(5))
 				owner.emote("cough")		//respitory tract infection
@@ -174,7 +182,9 @@
 
 	process()
 
-		..()
+		. = ..()
+		if (.)
+			return
 
 		if (germ_level > INFECTION_LEVEL_ONE)
 			if(prob(1))
@@ -232,7 +242,9 @@
 
 	process()
 
-		..()
+		. = ..()
+		if (.)
+			return
 
 		// Coffee is really bad for you with busted kidneys.
 		// This should probably be expanded in some way, but fucked if I know
