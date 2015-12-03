@@ -1345,3 +1345,23 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	containername = "Pill Bottle Kit"
 	access = access_medical
 	group = "Medical / Science"
+
+/datum/supply_packs/doorbracers_engineering
+	name = "Engineering Doorbracer Crate"
+	contains = list(/obj/item/device/doorbrace/engineering,
+					/obj/item/device/doorbrace/engineering,
+					/obj/item/device/doorbrace/engineering)
+	cost = 30
+	containertype = /obj/structure/closet/crate
+	containername = "engineering doorbracers"
+	group = "Engineering"
+
+/datum/supply_packs/doorbracers_security
+	name = "Security Doorbracer Crate"
+	contains = list(/obj/item/device/doorbrace/security,
+					/obj/item/device/doorbrace/security,
+					/obj/item/device/doorbrace/security)
+	cost = 30
+	containertype = /obj/structure/closet/crate
+	containername = "security doorbracers"
+	group = "Security"
