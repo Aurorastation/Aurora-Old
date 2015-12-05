@@ -14,8 +14,8 @@
 	anchored = 1
 	density = 1
 
-	icon = 'icons/obj/robot_component.dmi'
-	icon_state = "analyser"
+	icon = 'icons/obj/secret_santa.dmi'
+	icon_state = "sign-up-box"
 
 	var/daysLeft
 	var/signupStatus
