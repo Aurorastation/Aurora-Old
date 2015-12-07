@@ -15,7 +15,7 @@
 	density = 1
 
 	icon = 'icons/obj/secret_santa.dmi'
-	icon_state = "sign-up-box"
+	icon_state = "sign_up_box"
 
 	var/daysLeft
 	var/signupStatus
