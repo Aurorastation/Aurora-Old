@@ -351,8 +351,8 @@
 /obj/item/organ/vaurca/neuralsocket
     name = "neural socket"
     organ_tag = "neural socket"
-    icon = 'icons/mob/alien_organs.dmi' //placeholder
-    icon_state = "neural_socket"          //placeholder
+    icon = 'icons/mob/alien_organs.dmi'
+    icon_state = "neural_socket"
 
 /obj/item/organ/vaurca/neuralsocket/removed()
 	return
@@ -360,8 +360,8 @@
 /obj/item/organ/vaurca/breathingapparatus
     name = "breathing apparatus"
     organ_tag = "breathing apparatus"
-    icon = 'icons/mob/alien_organs.dmi' //placeholder
-    icon_state = "breathing_app"          //placeholder
+    icon = 'icons/mob/alien_organs.dmi'
+    icon_state = "breathing_app"
 
 /obj/item/organ/vaurca/breathingapparatus/removed()
 	return
@@ -369,7 +369,7 @@
 /obj/item/organ/vaurca/tracheae
     name = "tracheae"
     organ_tag = "tracheae"
-    icon = 'icons/mob/alien_organs.dmi' //placeholder
-    icon_state = "tracheae"          //placeholder
+    icon = 'icons/mob/alien_organs.dmi'
+    icon_state = "tracheae"
 /obj/item/organ/vaurca/tracheae/removed()
 	return
