@@ -324,3 +324,21 @@
 		organ_holder = removed_organ
 
 	return removed_organ
+
+
+	//VAURCA EXPERIMENTAL
+/datum/organ/internal/vaurca/process()
+	return
+
+/datum/organ/internal/vaurca/neuralsocket
+	name = "neural socket"
+	parent_organ = "head"
+	robotic = 2
+	removed_type = /obj/item/organ/vaurca/neuralsocket
+/datum/organ/internal/vaurca/breathingapparatus
+	name = "breathing apparatus"
+	parent_organ = "chest"
+	robotic = 2
+	removed_type = /obj/item/organ/vaurca/breathingapparatus
+
+
