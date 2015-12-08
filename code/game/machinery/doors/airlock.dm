@@ -51,6 +51,7 @@
 	var/door_sound='sound/machines/airlock.ogg'
 	var/door_sound_distance=30
 	autoclose = 1
+	var/obj/item/device/doorbrace/bracer = null
 
 /obj/machinery/door/airlock/command
 	name = "Airlock"
@@ -717,6 +718,15 @@ About the new airlock wires panel:
 		set_frequency(ST.change_freq(frequency))
 		return
 
+	if (istype(C, /obj/item/device/doorbrace))
+		if (bracer)
+			user << "<span class='notice'>There is already a [bracer] on [src]!</span>"
+			return
+
+		var/obj/item/device/doorbrace/newbracer = C
+		newbracer.attachto(src, user)
+		return
+
 	src.add_fingerprint(user)
 	if((istype(C, /obj/item/weapon/weldingtool) && !( src.operating > 0 ) && src.density))
 		var/obj/item/weapon/weldingtool/W = C
@@ -824,7 +834,10 @@ About the new airlock wires panel:
 	playsound(src.loc, door_sound, door_sound_distance, 1)
 
 /obj/machinery/door/airlock/open(var/forced=0)
-	if( operating || welded || locked )
+	if( operating || welded || locked)
+		return 0
+	if (bracer)
+		visible_message("<span class='notice'>[src]'s actuators whirr, but the door does not open.</span>")
 		return 0
 	if(!forced)
 		if( !arePowerSystemsOn() || isWireCut(AIRLOCK_WIRE_OPEN_DOOR) )
@@ -915,6 +928,8 @@ About the new airlock wires panel:
 					break
 
 /obj/machinery/door/airlock/proc/prison_open()
+	if (bracer)
+		return
 	src.unlock()
 	src.open()
 	src.lock()
