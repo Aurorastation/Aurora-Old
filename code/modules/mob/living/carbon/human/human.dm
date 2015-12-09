@@ -1665,24 +1665,24 @@
 	if (head_organ.covering)
 		return head_organ.covering.hair_species
 	return species.name
-		
-	
+
+
 /mob/living/carbon/human/proc/valid_hairstyles_for_this_mob()
 	return get_valid_hairstyles(gender, hair_species_name())
 
-	
+
 /mob/living/carbon/human/proc/valid_facialhairstyles_for_this_mob()
 	return get_valid_facialhairstyles(gender, hair_species_name())
-	
-	
+
+
 /mob/living/carbon/human/proc/should_we_show_hair()
 	var/datum/organ/external/head/head_organ = get_organ("head")
 	if(!head_organ || (head_organ.status & ORGAN_DESTROYED))
-		return 
+		return
 	if( (head && (head.flags & BLOCKHAIR)) || (wear_mask && (wear_mask.flags & BLOCKHAIR)))
 		return
 	return TRUE
-	
+
 /mob/living/carbon/human/proc/validate_hair()
 	var/list/hair=valid_hairstyles_for_this_mob()
 	if (!(h_style in hair))
@@ -1691,7 +1691,7 @@
 	if (!(f_style in face))
 		f_style=null
 
-		
+
 /mob/living/carbon/human/proc/hair_icon()
 	if (h_style)
 		var/datum/sprite_accessory/hair_style = hair_styles_list[h_style]
@@ -1699,8 +1699,8 @@
 		if(hair_style.do_colouration)
 			hair.Blend(rgb(r_hair, g_hair, b_hair), ICON_ADD)
 		return hair
-		
-	
+
+
 /mob/living/carbon/human/proc/facial_hair_icon()
 	if (f_style)
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[f_style]
@@ -1708,15 +1708,15 @@
 		if(facial_hair_style.do_colouration)
 			facial_s.Blend(rgb(r_facial, g_facial, b_facial), ICON_ADD)
 		return facial_s
-		
-		
+
+
 /mob/living/carbon/human/proc/get_eye_icon_state()
 	var/datum/organ/external/head/head_organ = get_organ("head")
 	if (head_organ.covering)
 		return head_organ.covering.eyes_state
 	return species.eyes
-	
-	
+
+
 /mob/living/carbon/human/proc/eye_icon()
 	var/icon/result_icon = new/icon('icons/mob/human_face.dmi', get_eye_icon_state())
 	result_icon.Blend(rgb(r_eyes, g_eyes, b_eyes), ICON_ADD)
@@ -1729,8 +1729,8 @@
 		return list(groin_organ.covering.tail,groin_organ.covering.colour)
 	if (species.tail)
 		return list(species.tail,rgb(r_skin, g_skin, b_skin))
-		
-	
+
+
 /mob/living/carbon/human/proc/tail_icon()
 	var/list/tail_info = tail_icon_state()
 	if(!isnull(tail_info))
@@ -1738,3 +1738,10 @@
 			var/icon/tail_s = new/icon("icon" = 'icons/effects/species.dmi', "icon_state" = "[tail_info[1]]_s")
 			tail_s.Blend(tail_info[2], ICON_ADD)
 			return tail_s
+
+/mob/living/carbon/human/proc/isonlifesupport()
+	if (buckled && istype(buckled, /obj/machinery/optable/lifesupport))
+		var/obj/machinery/optable/lifesupport/A = buckled
+		return A.onlifesupport()
+	else
+		return 0

@@ -619,8 +619,8 @@ See code\modules\mob\new_player\preferences_setup.dm for where it's used.
 	name = "Vaurca"
 	name_plural = "varucae"
 
-	icobase = 'icons/mob/human_races/r_machine.dmi' //placeholders
-	deform = 'icons/mob/human_races/r_machine.dmi' //bloop blop butts
+	icobase = 'icons/mob/human_races/r_vaurca.dmi' //Experimental as fuck
+	deform = 'icons/mob/human_races/r_vaurca.dmi' //bloop blop butts
 	language = "Vaurcese"
 	unarmed_type = /datum/unarmed_attack/claws //literally butts
 	secondary_unarmed_type = /datum/unarmed_attack/bite/strong
@@ -645,7 +645,7 @@ See code\modules\mob\new_player\preferences_setup.dm for where it's used.
 
 	flags = IS_WHITELISTED | NO_SLIP | IS_BUG //IS_BUG doesn't do much at the moment.  proc up top + radiation resistance.
 	//use IS_BUG when you do the make their eyes die from being flashed thing, sounds/skull.  okay thanks.
-	blood_color = "#1F181F" // note: discover hex for yellow
+	blood_color = "#E6E600" // dark yellow
 	flesh_color = "#575757" //this is a placeholder also.
 
 	inherent_verbs = list(
@@ -653,6 +653,16 @@ See code\modules\mob\new_player\preferences_setup.dm for where it's used.
 		)
 
 	//make has_organ list when we can be bothered with bug gut sprites.  it'll be cool, i promise
+	has_organ = list(
+        "neural socket" =  /datum/organ/internal/vaurca/neuralsocket,
+		"breathing apparatus" =  /datum/organ/internal/vaurca/breathingapparatus,
+        "heart" =    /datum/organ/internal/heart,
+        "second heart" =    /datum/organ/internal/heart,
+		"liver" =    /datum/organ/internal/liver,
+		"kidneys" =  /datum/organ/internal/kidney,
+		"brain" =    /datum/organ/internal/brain,
+		"eyes" =     /datum/organ/internal/eyes,
+)
 
 // Called when using the shredding behavior.
 /datum/species/proc/can_shred(var/mob/living/carbon/human/H)

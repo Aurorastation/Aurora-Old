@@ -79,7 +79,6 @@
 	w_class = 1
 	wired = 1
 	species_restricted = null
-//	var/time = 1
 
 	verb/checktime()
 		set category = "Object"
@@ -87,7 +86,9 @@
 		set src in usr
 
 		if(wired && !clipped)
-			usr << "You check your watch, spotting a digital collection of numbers reading '[worldtime2text()]'"
+			usr << "You check your watch, spotting a digital collection of numbers reading '[worldtime2text()]'. Today's date is '[time2text(world.time, "Month DD")]. [game_year]'."
+			if (emergency_shuttle.get_status_panel_eta())
+				usr << "\red The shuttle's status is reported as: [emergency_shuttle.get_status_panel_eta()]."
 		else if(wired && clipped)
 			usr << "You check your watch realising it's still open"
 		else
@@ -104,6 +105,11 @@
 			usr.visible_message ("<span class='notice'>[usr] taps their foot on the floor, arrogantly pointing at the [src] on their wrist with a look of derision in their eyes, not noticing it's open</span>", "<span class='notice'>You point down at the [src], an arrogant look about your eyes.</span>")
 		else
 			usr.visible_message ("<span class='notice'>[usr] taps their foot on the floor, arrogantly pointing at the [src] on their wrist with a look of derision in their eyes, not noticing it's broken</span>", "<span class='notice'>You point down at the [src], an arrogant look about your eyes.</span>")
+
+	examine(mob/user)
+		..()
+		if (get_dist(src, user) <= 1)
+			checktime()
 
 	attackby(obj/item/weapon/W, mob/user)
 		if(istype(W, /obj/item/weapon/screwdriver))

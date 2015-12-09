@@ -484,6 +484,15 @@
 			else if(L.is_bruised())
 				safe_pressure_min *= 1.25
 
+		if(species.has_organ["breathing apparatus"])
+			var/datum/organ/internal/vaurca/breathingapparatus/L = internal_organs_by_name["breathing apparatus"]
+			if(!L)
+				safe_pressure_min = INFINITY //No wannabe-lungs, how are you breathing? FOR VAURCA
+			else if(L.is_broken())
+				safe_pressure_min *= 1.5
+			else if(L.is_bruised())
+				safe_pressure_min *= 1.25
+
 		var/safe_exhaled_max = 10
 		var/safe_toxins_max = 0.005
 		var/SA_para_min = 1
@@ -1136,7 +1145,7 @@
 				handle_organs()	//Optimized.
 				handle_blood()
 
-			if(health <= config.health_threshold_dead || (species.has_organ["brain"] && !has_brain()))
+			if(health <= config.health_threshold_dead || (species.has_organ["brain"] && !has_brain() && !isonlifesupport()))
 				death()
 				blinded = 1
 				silent = 0

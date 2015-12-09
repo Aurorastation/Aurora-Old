@@ -90,7 +90,7 @@ var/global/datum/controller/occupations/job_master
 			if(player.client.prefs.GetJobDepartment(job, level) & job.flag)
 				Debug("FOC pass, Player: [player], Level:[level]")
 				candidates += player
-		return candidates
+		return shuffle(candidates)
 
 	proc/GiveRandomJob(var/mob/new_player/player)
 		Debug("GRJ Giving random job, Player: [player]")
@@ -188,33 +188,51 @@ var/global/datum/controller/occupations/job_master
 
 
 	proc/FillAIPosition()
+		msg_scopes("Doing AI check Start")
 		var/ai_selected = 0
 		var/datum/job/job = GetJob("AI")
 		if(!job)	return 0
 		if((job.title == "AI") && (config) && (!config.allow_ai))	return 0
+		msg_scopes("Doing AI check Configs")
 
 		for(var/i = job.total_positions, i > 0, i--)
+			msg_scopes("Entered AI loop")
 			for(var/level = 1 to 3)
 				var/list/candidates = list()
 				if(ticker.mode.name == "AI malfunction")//Make sure they want to malf if its malf
+					msg_scopes("I want an AI for malf, lets look")
 					candidates = FindOccupationCandidates(job, level, BE_MALF)
 				else
+					msg_scopes("I want an AI, lets look")
 					candidates = FindOccupationCandidates(job, level)
+				msg_scopes_list(candidates, "Candidates:malf")
 				if(candidates.len)
+					if(ticker.mode.name == "AI malfunction")//Make sure they can malf if its malf
+						for(var/mob/new_player/NP in candidates)
+							if(jobban_isbanned(NP, "MALFAI"))
+								msg_scopes("[NP] Is Malf banned")
+								candidates -= NP
+					msg_scopes_list(candidates, "Candidates:malf")
 					var/mob/new_player/candidate = pick(candidates)
 					if(AssignRole(candidate, "AI"))
+						msg_scopes("I selected [candidate]")
 						ai_selected++
 						break
-			//Malf NEEDS an AI so force one if we didn't get a player who wanted it
-			if((ticker.mode.name == "AI malfunction")&&(!ai_selected))
-				unassigned = shuffle(unassigned)
-				for(var/mob/new_player/player in unassigned)
-					if(jobban_isbanned(player, "AI"))	continue
-					if(AssignRole(player, "AI"))
-						ai_selected++
-						break
-			if(ai_selected)	return 1
-			return 0
+		msg_scopes("Broke out of AI loop")
+		//Malf NEEDS an AI so force one if we didn't get a player who wanted it
+		if((ticker.mode.name == "AI malfunction")&&(!ai_selected))
+			msg_scopes("I need an AI for malf")
+			unassigned = shuffle(unassigned)
+			for(var/mob/new_player/player in unassigned)
+				msg_scopes("Checking [player]")
+				if(jobban_isbanned(player, "AI"))	continue
+				if(jobban_isbanned(player, "MALFAI")) continue
+				msg_scopes("[player] isn't banned")
+				if(AssignRole(player, "AI"))
+					ai_selected++
+					break
+		if(ai_selected)	return 1
+		return 0
 
 
 /** Proc DivideOccupations

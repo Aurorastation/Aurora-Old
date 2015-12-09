@@ -226,10 +226,6 @@
 /obj/item/organ/stack/vox
 	name = "vox cortical stack"
 
-//IPC/SHELL ORGANS.
-//TODO: Make the robot_components required for these
-//TODO: Make said components printable
-//TODO: sprites
 /datum/organ/internal/machine
 	removed_type = /obj/item/organ/machine
 
@@ -338,3 +334,42 @@
 		Diagnosis_unit.brute = organ_data.damage
 	del(src)
 	return Diagnosis_unit
+
+/obj/item/organ/eyes/robot
+	name = "camera"
+	organ_tag = "eyes"
+	organ_type = /datum/organ/internal/eyes/robot
+	robotic = 2
+
+/obj/item/organ/eyes/robot/exposed_to_the_world()
+	var/obj/item/robot_parts/robot_component/camera/Eyes = new(src.loc)
+	if(organ_data.damage)
+		Eyes.brute = organ_data.damage
+	del(src)
+	return Eyes
+
+/obj/item/organ/vaurca/neuralsocket
+    name = "neural socket"
+    organ_tag = "neural socket"
+    icon = 'icons/mob/alien_organs.dmi'
+    icon_state = "neural_socket"
+
+/obj/item/organ/vaurca/neuralsocket/removed()
+	return
+
+/obj/item/organ/vaurca/breathingapparatus
+    name = "breathing apparatus"
+    organ_tag = "breathing apparatus"
+    icon = 'icons/mob/alien_organs.dmi'
+    icon_state = "breathing_app"
+
+/obj/item/organ/vaurca/breathingapparatus/removed()
+	return
+
+/obj/item/organ/vaurca/tracheae
+    name = "tracheae"
+    organ_tag = "tracheae"
+    icon = 'icons/mob/alien_organs.dmi'
+    icon_state = "tracheae"
+/obj/item/organ/vaurca/tracheae/removed()
+	return
