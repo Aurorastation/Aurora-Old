@@ -1,4 +1,4 @@
-/mob/living/carbon/human/say(var/message)
+/mob/living/carbon/human/say(var/message, var/usergen = 0)
 
 	var/verb = "says"
 	var/alt_name = ""
@@ -24,7 +24,7 @@
 	var/message_mode = parse_message_mode(message, "headset")
 
 	if(copytext(message,1,2) == "*")
-		return emote(copytext(message,2))
+		return emote(copytext(message,2),usergen)
 
 	if(name != GetVoice())
 		alt_name = "(as [get_id_name("Unknown")])"

@@ -59,6 +59,7 @@ var/list/ai_verbs_default = list(
 	var/obj/item/device/multitool/aiMulti = null
 	var/obj/item/device/radio/headset/heads/ai_integrated/aiRadio = null
 	var/custom_sprite = 0 //For our custom sprites
+	var/custom_hologram = null
 //Hud stuff
 
 	//MALFUNCTION
@@ -665,6 +666,23 @@ var/list/ai_verbs_default = list(
 		return
 
 	var/input
+	if(!custom_hologram)
+		var/file = file2text("config/custom_sprites.txt")
+		var/lines = text2list(file, "\n")
+
+		for(var/line in lines)
+			var/list/Entry = text2list(line, "*")
+			for(var/i = 1 to Entry.len)
+				Entry[i] = trim(Entry[i])
+
+			if(Entry.len < 2)
+				continue;
+
+			if(Entry[1] == src.ckey && Entry[2] == src.real_name)
+				custom_hologram = "[src.ckey]-[src.real_name]-h"
+		if(!custom_hologram)
+			custom_hologram = "none"
+
 	if(alert("Would you like to select a hologram based on a crew member or switch to unique avatar?",,"Crew Member","Unique")=="Crew Member")
 
 		var/personnel_list[] = list()
@@ -686,6 +704,9 @@ var/list/ai_verbs_default = list(
 		"default",
 		"floating face"
 		)
+		if(custom_hologram && custom_hologram != "none")
+			icon_list += "custom"
+
 		input = input("Please select a hologram:") as null|anything in icon_list
 		if(input)
 			del(holo_icon)
@@ -694,6 +715,8 @@ var/list/ai_verbs_default = list(
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo1"))
 				if("floating face")
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo2"))
+				if("custom")
+					holo_icon = getHologramIcon(icon('icons/mob/custom-synthetic.dmi', custom_hologram))
 	return
 
 /*/mob/living/silicon/ai/proc/corereturn()

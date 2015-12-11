@@ -104,3 +104,19 @@ CREATE TABLE `ss13_notes` (
   `lasteditdate` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
+
+-- ------------------------------
+-- SQL based secret santi klaus table
+-- tgstation.ss13_santa
+-- ------------------------------
+CREATE TABLE `ss13_santa` (
+  `character_name` varchar(32) NOT NULL,
+  `participation_status` tinyint(1) NOT NULL DEFAULT '1',
+  `mark_name` varchar(32) DEFAULT NULL,
+  `character_gender` varchar(32) NOT NULL,
+  `character_species` varchar(32) NOT NULL,
+  `character_job` varchar(32) NOT NULL,
+  `character_like` mediumtext NOT NULL,
+  `gift_assigned` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`character_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
