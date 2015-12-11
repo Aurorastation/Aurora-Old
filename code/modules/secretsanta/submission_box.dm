@@ -156,9 +156,9 @@
 	else
 		var/list/storeArray = list("character_name", "character_gender", "character_species", "character_job", "character_like")
 
-		storeArray["character_name"] = user.real_name
-		storeArray["character_gender"] = user.gender
-		storeArray["character_species"] = user.species.name
+		storeArray["character_name"] = sanitizeSQL(user.real_name)
+		storeArray["character_gender"] = sanitizeSQL(user.gender)
+		storeArray["character_species"] = sanitizeSQL(user.species.name)
 		storeArray["character_job"] = input(user, "Please type in your character's normal job", "Character Job") as text
 		storeArray["character_like"] = input(user, "Please specific 1 of your character's likes", "Character Like") as message
 
