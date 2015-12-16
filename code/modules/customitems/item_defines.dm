@@ -1417,3 +1417,38 @@ END R I P HAZERI
 		src.pixel_y = rand(0, 16)
 
 	return
+
+// Jaylor Rameau's turtleneck - EvilBrage
+/obj/item/clothing/under/syndicate/tacticool/fluff/jaylor_turtleneck
+	name = "borderworlds turtleneck"
+	desc = "A loose-fitting turtleneck, common among borderworld pilots and criminals. One criminal in particular is missing his, apparently."
+
+// Miracle Kifer's cargo jacket - Jboy2000000
+/obj/item/clothing/suit/storage/fluff/miracle_jacket
+	name = "cargo jacket"
+	desc = "A yellow and brown jacket similar in design to a cargo uniform."
+	icon = 'icons/obj/custom_items/miracle_jacket.dmi'
+	icon_state = "miracle_jacket_open"
+	contained_sprite = 1
+
+	verb/toggle()
+		set name = "Toggle Jacket Zipper"
+		set category = "Object"
+		set src in usr
+
+		if(!usr.canmove || usr.stat || usr.restrained())
+			return 0
+
+		switch(icon_state)
+			if("miracle_jacket_open")
+				icon_state = "miracle_jacket_closed"
+				usr << "You zip up \the [src]."
+			if("miracle_jacket_closed")
+				icon_state = "miracle_jacket_open"
+				usr << "You unzip \the [src]."
+
+			else
+				usr << "SierraKomodo broke a thing. Bug report time!"
+				return
+
+		usr.update_inv_wear_suit()
