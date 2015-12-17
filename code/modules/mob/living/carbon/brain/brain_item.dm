@@ -15,7 +15,7 @@
 	prosthetic_icon = "brain-prosthetic"
 	organ_tag = "brain"
 	organ_type = /datum/organ/internal/brain
-	
+
 	var/mob/living/carbon/brain/brainmob = null
 
 /obj/item/organ/brain/xeno
@@ -52,8 +52,8 @@
 		usr << "You can feel the small spark of life still left in this one."
 	else
 		usr << "This one seems particularly lifeless. Perhaps it will regain some of its luster later.."
-	
-		
+
+
 /obj/item/organ/brain/removed(var/mob/living/target,var/mob/living/user)
 	..()
 	var/mob/living/simple_animal/borer/borer = target.has_brain_worms()
@@ -63,7 +63,7 @@
 	var/obj/item/organ/brain/B = src
 	if(istype(B) && istype(H))
 		B.transfer_identity(target)
-		
+
 /obj/item/organ/brain/exposed_to_the_world()
 	var/datum/organ/internal/brain/robot/robotic_brain=organ_data
 	if (istype(robotic_brain))
@@ -81,3 +81,5 @@
 			brainmob.mind.transfer_to(target)
 		else
 			target.key = brainmob.key
+
+	..()
