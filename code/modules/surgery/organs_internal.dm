@@ -335,13 +335,14 @@
 		var/organ_compatible
 		var/organ_missing
 
-		if(!istype(O) && istype(O, /obj/item/robot_parts/robot_component))
-			var/obj/item/robot_parts/robot_component/A = tool
-			if(A.organ_type)
-				O = A.organ_type
-			else
-				return 0
-		else
+		if (!istype(O))
+			if (istype(O, /obj/item/robot_parts/robot_component))
+				var/obj/item/robot_parts/robot_component/A = tool
+				if(A.organ_type)
+					O = A.organ_type
+				else
+					return 0
+
 			return 0
 
 		if(!target.species)

@@ -89,15 +89,15 @@
 
 			if (STATUS_GIFTS)
 				if (isSignedUp(M))
-					if (hasMark(M))
-						var/list/markInfo = getMarkInfo(hasMark(M))
+					if (hasMark(M) && getMarkInfo(hasMark(M)))
+						var/datum/santaMark/D = getMarkInfo(hasMark(M))
 
-						dat += "<center>Your mark is: <b>[hasMark(M)]</b>!</center><br>"
+						dat += "<center>Your mark is: <b>[D.name]</b>!</center><br>"
 						dat += "<center>Figure out what they may like for Christmas, and submit the idea for NanoTrasen approval!</center><br>"
-						dat += "<center>Your mark is a [markInfo["character_gender"]] [markInfo["character_species"]] working aboard the NSS Aurora as a [markInfo["character_job"]]. They like [markInfo["character_like"]].</center><br><br>"
+						dat += "<center>Your mark is a [D.gender] [D.species] working aboard the NSS Aurora as a [D.job]. They like [D.like].</center><br><br>"
 
-						if (markInfo["assigned_gift"])
-							dat += "<center>You are giving them a [markInfo["assigned_gift"]]. <a href='?src=\ref[src];choice=reviseGift;user=\ref[user]'>Revise</a></center>"
+						if (D.gift)
+							dat += "<center>You are giving them a [D.gift]. <a href='?src=\ref[src];choice=reviseGift;user=\ref[user]'>Revise</a></center>"
 						else
 							dat += "<center><a href='?src=\ref[src];choice=submitGift;user=\ref[user]'>Submit Gift Idea</a></center>"
 
@@ -108,6 +108,11 @@
 				else
 					dat += "<br><br><br><center>You didn't sign up in time! Sorry!</center><br>"
 					dat += "<center>Better luck next time!</center>"
+
+				if (user.client.holder && (user.client.holder.rights & R_ADMIN))
+					dat += "<br><br><br><center><b><font color='red'>Admin Area</font></b></center><br><br>"
+					dat += "<center><a href='?src=\ref[src];choice=assignMarks;user=\ref[user]'>Assign everyone a mark</a></center>"
+
 	else
 		dat += "<center>No database connection! System unable to operate!</center>"
 
@@ -125,9 +130,11 @@
 		if ("signup")
 			signUp(user)
 		if ("reviseGift")
-			alterGift(user)
+			assignGift(user)
 		if ("submitGift")
 			assignGift(user)
+		if ("assignMarks")
+			assignMarks(user)
 
 	ui_interact(user)
 	return
@@ -156,9 +163,9 @@
 	else
 		var/list/storeArray = list("character_name", "character_gender", "character_species", "character_job", "character_like")
 
-		storeArray["character_name"] = user.real_name
-		storeArray["character_gender"] = user.gender
-		storeArray["character_species"] = user.species.name
+		storeArray["character_name"] = sanitizeSQL(user.real_name)
+		storeArray["character_gender"] = sanitizeSQL(user.gender)
+		storeArray["character_species"] = sanitizeSQL(user.species.name)
 		storeArray["character_job"] = input(user, "Please type in your character's normal job", "Character Job") as text
 		storeArray["character_like"] = input(user, "Please specific 1 of your character's likes", "Character Like") as message
 
@@ -213,6 +220,14 @@
 
 	return 0
 
+/datum/santaMark
+	var/name
+	var/gender
+	var/species
+	var/job
+	var/like
+	var/gift
+
 /obj/structure/santa_signup_box/proc/getMarkInfo(var/markName)
 	if (!markName)
 		return 0
@@ -222,17 +237,23 @@
 	if (!dbcon.IsConnected())
 		return 0
 
-	var/list/returnArray = list("character_name", "character_gender", "character_species", "character_job", "character_like")
-	var/DBQuery/query = dbcon.NewQuery("SELECT character_gender, character_species, character_job, character_like, assigned_gift WHERE character_name = '[markName]'")
+	var/DBQuery/query = dbcon.NewQuery("SELECT character_gender, character_species, character_job, character_like, gift_assigned FROM ss13_santa WHERE character_name = '[markName]'")
 	query.Execute()
-	if (query.NextRow())
-		returnArray["character_gender"] = query.item[1]
-		returnArray["character_species"] = query.item[2]
-		returnArray["character_job"] = query.item[3]
-		returnArray["character_like"] = query.item[4]
-		returnArray["assigned_gift"] = query.item[5]
 
-		return returnArray
+	if (query.ErrorMsg())
+		msg_scopes(query.ErrorMsg())
+
+	if (query.NextRow())
+		var/datum/santaMark/A = new /datum/santaMark()
+
+		A.name = markName
+		A.gender = query.item[1]
+		A.species = query.item[2]
+		A.job = query.item[3]
+		A.like = query.item[4]
+		A.gift = query.item[5]
+
+		return A
 
 	return 0
 
@@ -245,20 +266,59 @@
 	var/gift = input(user, "What would you like to gift your mark?", "Pick a Gift!") as text
 	gift = sanitizeSQL(gift)
 
-	var/DBQuery/query = dbcon.NewQuery("INSERT INTO ss13_santa (gift_assigned) VALUES ('[gift]') WHERE character_name = '[hasMark(user)]'")
+	var/DBQuery/query = dbcon.NewQuery("UPDATE ss13_santa SET gift_assigned = '[gift]' WHERE character_name = '[hasMark(user)]'")
 	query.Execute()
 
-/obj/structure/santa_signup_box/proc/alterGift(var/mob/living/carbon/user)
+/obj/structure/santa_signup_box/proc/assignMarks(var/mob/user)
+	if (!user.client.holder || !(user.client.holder.rights & R_ADMIN))
+		user << "\red You are not an admin! How did you even get here...?"
+		return
+
+	if (signupStatus != STATUS_GIFTS)
+		user << "\red Sign-ups are still open! They should close first!"
+		return
+
 	establish_db_connection()
 
 	if (!dbcon.IsConnected())
+		user << "\red No database connection! Aborting!"
 		return
 
-	var/gift = input(user, "What would you like to gift your mark?", "Pick a Gift!") as text
-	gift = sanitizeSQL(gift)
+	var/people = list()
 
-	var/DBQuery/query = dbcon.NewQuery("UPDATE ss13_santa SET gift_assigned = '[gift]' WHERE character_name = '[hasMark(user)]'")
+	var/DBQuery/query = dbcon.NewQuery("SELECT character_name FROM ss13_santa WHERE participation_status = '1'")
 	query.Execute()
+
+	if (query.ErrorMsg())
+		user << "\red [query.ErrorMsg()]"
+		user << "\red Stopping."
+		return
+
+	while (query.NextRow())
+		people += query.item[1]
+
+	for (var/A in people)
+		var/DBQuery/markQuery = dbcon.NewQuery("SELECT character_name FROM ss13_santa WHERE participation_status = '1' AND character_name != '[A]' ORDER BY RAND() LIMIT 1")
+		markQuery.Execute()
+
+		if (markQuery.ErrorMsg())
+			user << "\red [markQuery.ErrorMsg()]"
+			user << "\red Stopping."
+			return
+
+		if (markQuery.NextRow())
+			var/markName = sanitizeSQL(markQuery.item[1])
+			var/characterName = sanitizeSQL(A)
+			var/DBQuery/assignQuery = dbcon.NewQuery("UPDATE ss13_santa SET mark_name = '[markName]' WHERE character_name = '[characterName]'")
+			assignQuery.Execute()
+
+			if (assignQuery.ErrorMsg())
+				user << "\red [assignQuery.ErrorMsg()]"
+				user << "\red Stopping."
+				return
+
+	user << "\blue Assignment completed! Have a merry Christmas!"
+	return
 
 #undef CUTOFF_DATE
 #undef STATUS_CLOSED
