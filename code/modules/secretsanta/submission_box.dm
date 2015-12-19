@@ -237,6 +237,8 @@
 	if (!dbcon.IsConnected())
 		return 0
 
+	markName = sanitizeSQL(markName)
+
 	var/DBQuery/query = dbcon.NewQuery("SELECT character_gender, character_species, character_job, character_like, gift_assigned FROM ss13_santa WHERE character_name = '[markName]'")
 	query.Execute()
 
@@ -266,7 +268,7 @@
 	var/gift = input(user, "What would you like to gift your mark?", "Pick a Gift!") as text
 	gift = sanitizeSQL(gift)
 
-	var/DBQuery/query = dbcon.NewQuery("UPDATE ss13_santa SET gift_assigned = '[gift]' WHERE character_name = '[hasMark(user)]'")
+	var/DBQuery/query = dbcon.NewQuery("UPDATE ss13_santa SET gift_assigned = '[gift]' WHERE character_name = '[sanitizeSQL(hasMark(user))]'")
 	query.Execute()
 
 /obj/structure/santa_signup_box/proc/assignMarks(var/mob/user)
