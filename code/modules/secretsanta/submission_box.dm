@@ -284,9 +284,9 @@
 		user << "\red No database connection! Aborting!"
 		return
 
-	var/people = list()
+	var/list/people = list()
 
-	var/DBQuery/query = dbcon.NewQuery("SELECT character_name FROM ss13_santa WHERE participation_status = '1'")
+	var/DBQuery/query = dbcon.NewQuery("SELECT character_name FROM ss13_santa WHERE participation_status = '1' AND mark_name IS NULL")
 	query.Execute()
 
 	if (query.ErrorMsg())
@@ -295,27 +295,47 @@
 		return
 
 	while (query.NextRow())
-		people += query.item[1]
+		people += sanitizeSQL(query.item[1])
+
+	var/DBQuery/initQuery = dbcon.NewQuery("SELECT character_name FROM ss13_santa WHERE participation_status = '1' AND is_assigned = '0' ORDER BY RAND()")
+	initQuery.Execute()
+
+	if (initQuery.ErrorMsg())
+		user << "\red [initQuery.ErrorMsg()]"
+		user << "\red Stopping."
+		return
+
+	var/list/marks = list()
+
+	while (initQuery.NextRow())
+		marks += sanitizeSQL(initQuery.item[1])
+
+	var/i = 0
+
+	user << "\blue Marks: [marks.len]"
+	user << "\blue People: [people.len]"
 
 	for (var/A in people)
-		var/DBQuery/markQuery = dbcon.NewQuery("SELECT character_name FROM ss13_santa WHERE participation_status = '1' AND character_name != '[A]' ORDER BY RAND() LIMIT 1")
-		markQuery.Execute()
+		i++
+		var/mark = marks[rand(1, marks.len)]
 
-		if (markQuery.ErrorMsg())
-			user << "\red [markQuery.ErrorMsg()]"
-			user << "\red Stopping."
+		var/DBQuery/assignQuery = dbcon.NewQuery("UPDATE ss13_santa SET mark_name = '[mark]' WHERE character_name = '[A]'")
+		assignQuery.Execute()
+
+		if (assignQuery.ErrorMsg())
+			user << "\red [assignQuery.ErrorMsg()]"
+			user << "\red Stopping at mark [i]."
 			return
 
-		if (markQuery.NextRow())
-			var/markName = sanitizeSQL(markQuery.item[1])
-			var/characterName = sanitizeSQL(A)
-			var/DBQuery/assignQuery = dbcon.NewQuery("UPDATE ss13_santa SET mark_name = '[markName]' WHERE character_name = '[characterName]'")
-			assignQuery.Execute()
+		var/DBQuery/updateMark = dbcon.NewQuery("UPDATE ss13_santa SET is_assigned = '1' WHERE character_name = '[mark]'")
+		updateMark.Execute()
 
-			if (assignQuery.ErrorMsg())
-				user << "\red [assignQuery.ErrorMsg()]"
-				user << "\red Stopping."
-				return
+		if (updateMark.ErrorMsg())
+			user << "\red [updateMark.ErrorMsg()]"
+			user << "\red Stopping at mark [i]."
+			return
+
+		marks -= mark
 
 	user << "\blue Assignment completed! Have a merry Christmas!"
 	return
