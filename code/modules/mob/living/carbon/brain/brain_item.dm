@@ -81,3 +81,4 @@
 			brainmob.mind.transfer_to(target)
 		else
 			target.key = brainmob.key
+	..()
