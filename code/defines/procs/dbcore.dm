@@ -85,7 +85,8 @@ DBConnection/proc/SelectDB(database_name,dbi)
 	//return Connect("[dbi?"[dbi]":"dbi:mysql:[database_name]:[DB_SERVER]:[DB_PORT]"]",user,password)
 	return Connect("[dbi?"[dbi]":"dbi:mysql:[database_name]:[sqladdress]:[sqlport]"]", user, password)
 
-DBConnection/proc/NewQuery(sql_query, cursor_handler = default_cursor) return new/DBQuery(sql_query, src, cursor_handler)
+DBConnection/proc/NewQuery(sql_query, cursor_handler = default_cursor)
+	return new/DBQuery(sql_query, src, cursor_handler)
 
 DBQuery
 	var/sql // The sql query being executed.
@@ -110,8 +111,12 @@ DBQuery/New(var/sql_query, var/DBConnection/connection_handler, var/cursor_handl
 DBQuery/proc/Connect(DBConnection/connection_handler)
 	db_connection = connection_handler
 
-DBQuery/proc/Execute(sql_query=src.sql,cursor_handler=default_cursor)
+DBQuery/proc/Execute(var/list/argumentList = null, var/passNotFound = 0, sql_query = sql, cursor_handler = default_cursor)
 	Close()
+
+	if (argumentList)
+		parseArguments(argumentList, passNotFound)
+
 	return _dm_db_execute(_db_query, sql_query, db_connection._db_con, cursor_handler, null)
 
 DBQuery/proc/NextRow()
@@ -159,6 +164,41 @@ DBQuery/proc/SetConversion(column,conversion)
 	else if (conversions.len < column)
 		conversions.len = column
 	conversions[column] = conversion
+
+/* Works similarly to the PDO object's Execute() method in PHP.
+* Insert a list of keys/values, it searches the SQL syntax for the keys,
+* and replaces them with sanitized versions of the values.
+* Can be called independently, or through dbcon.Execute(), where the list would be the first argument.
+* passNotFound controls whether or not is passes keys not found in the SQL query.
+* Keys are /case-sensitive/, be careful!
+* Returns FALSE upon failure, TRUE otherwise, so it can be used in checks and so on.
+* - Skull132
+*/
+DBQuery/proc/parseArguments(var/list/argumentList, var/passNotFound = 0)
+	if (!sql || !argumentList || !argumentList.len)
+		return 0
+
+	for (var/placeholder in argumentList)
+		if (!findtextEx(sql, placeholder))
+			if (passNotFound)
+				continue
+			else
+				return 0
+
+		var/argument = argumentList[placeholder]
+
+		if (isnull(argument))
+			argument = "NULL"
+		else if (istext(argument))
+			argument = dbcon.Quote(argument)
+		else if (isnum(argument))
+			argument = "'[argument]'"
+		else
+			return 0
+
+		sql = replacetextEx(sql, placeholder, argument)
+
+	return 1
 
 
 DBColumn
