@@ -120,3 +120,17 @@ CREATE TABLE `ss13_santa` (
   `gift_assigned` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`character_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ------------------------------
+-- SQL based connection log
+-- tgstation.ss13_connection_log
+-- ------------------------------
+CREATE TABLE `ss13_connection_log` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `datetime` DATETIME NOT NULL,
+    `serverip` VARCHAR(32) NOT NULL,
+    `ckey` VARCHAR(32) NOT NULL,
+    `ip` VARCHAR(32) NOT NULL,
+    `computerid` VARCHAR(32) NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
