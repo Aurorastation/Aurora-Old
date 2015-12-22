@@ -9,29 +9,39 @@ obj/effect/decal/cleanable/liquid_fuel
 	New(newLoc,amt=1)
 		src.amount = amt
 
+		var/has_spread = 0
 		//Be absorbed by any other liquid fuel in the tile.
 		for(var/obj/effect/decal/cleanable/liquid_fuel/other in newLoc)
 			if(other != src)
 				other.amount += src.amount
-				spawn other.Spread()
-				del src
+				other.Spread()
+				has_spread = 1
+				break
 
-		Spread()
 		. = ..()
+		if (!has_spread)
+			Spread()
+		else
+			del(src)
 
-	proc/Spread()
+	proc/Spread(exclude = list())
 		//Allows liquid fuels to sometimes flow into other tiles.
-		if(amount < 5.0) return
+		if(amount < 15) return
 		var/turf/simulated/S = loc
 		if(!istype(S)) return
 		for(var/d in cardinal)
-			if(rand(25))
-				var/turf/simulated/target = get_step(src,d)
-				var/turf/simulated/origin = get_turf(src)
-				if(origin.CanPass(null, target, 0, 0) && target.CanPass(null, origin, 0, 0))
-					if(!locate(/obj/effect/decal/cleanable/liquid_fuel) in target)
-						new/obj/effect/decal/cleanable/liquid_fuel(target, amount*0.25)
-						amount *= 0.75
+			var/turf/simulated/target = get_step(src, d)
+			var/turf/simulated/origin = get_turf(src)
+			if (origin.CanPass(null, target, 0, 0) && target.CanPass(null, origin, 0, 0))
+				var/obj/effect/decal/cleanable/liquid_fuel/other_fuel = locate() in target
+				if (other_fuel)
+					other_fuel.amount += amount * 0.25
+					if (!(other_fuel in exclude))
+						exclude += src
+						other_fuel.Spread(exclude)
+				else
+					new/obj/effect/decal/cleanable/liquid_fuel(target, amount * 0.25, 1)
+				amount *= 0.75
 
 	flamethrower_fuel
 		icon_state = "mustard"

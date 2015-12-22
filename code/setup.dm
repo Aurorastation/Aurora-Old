@@ -135,6 +135,18 @@
 #define PLASMA_MINIMUM_OXYGEN_PLASMA_RATIO	20
 #define PLASMA_OXYGEN_FULLBURN				10
 
+//For other fires
+#define FIRE_REACTION_OXIDIZER_AMOUNT		3
+#define FIRE_REACTION_FUEL_AMOUNT 			2
+
+#define FIRE_GAS_BURNRATE_MULT				1
+#define FIRE_LIQUID_BURNRATE_MULT			0.5
+
+#define LIQUIDFUEL_AMOUNT_TO_MOL			1
+
+#define FIRE_GAS_MIN_BURNRATE				0.1
+#define FIRE_LIQUD_MIN_BURNRATE				0.05
+
 #define T0C 273.15					// 0degC
 #define T20C 293.15					// 20degC
 #define TCMB 2.7					// -270.3degC
