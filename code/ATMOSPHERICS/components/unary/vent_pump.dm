@@ -26,6 +26,7 @@
 	var/area_uid
 	var/id_tag = null
 
+	var/hibernate = 0 //Do we even process?
 	var/pump_direction = 1 //0 = siphoning, 1 = releasing
 
 	var/external_pressure_bound = EXTERNAL_PRESSURE_BOUND
@@ -88,7 +89,7 @@
 /obj/machinery/atmospherics/unary/vent_pump/engine
 	name = "Engine Core Vent"
 	power_channel = ENVIRON
-	power_rating = 15000	//15 kW ~ 20 HP
+	power_rating = 30000	//15 kW ~ 20 HP
 
 /obj/machinery/atmospherics/unary/vent_pump/engine/New()
 	..()
@@ -150,8 +151,8 @@
 /obj/machinery/atmospherics/unary/vent_pump/process()
 	..()
 
-	last_power_draw = 0
-	last_flow_rate = 0
+	if (hibernate)
+		return 1
 
 	if (!node)
 		use_power = 0
@@ -168,14 +169,25 @@
 
 	if((environment.temperature || air_contents.temperature) && pressure_delta > 0.5)
 		if(pump_direction) //internal -> external
-			var/transfer_moles = calculate_transfer_moles(air_contents, environment)
+			var/transfer_moles = calculate_transfer_moles(air_contents, environment, pressure_delta)
 			power_draw = pump_gas(src, air_contents, environment, transfer_moles, power_rating)
 		else //external -> internal
-			var/transfer_moles = calculate_transfer_moles(environment, air_contents, (network)? network.volume : 0)
+			var/transfer_moles = calculate_transfer_moles(environment, air_contents, pressure_delta, (network)? network.volume : 0)
 
 			//limit flow rate from turfs
 			transfer_moles = min(transfer_moles, environment.total_moles*air_contents.volume/environment.volume)	//group_multiplier gets divided out here
 			power_draw = pump_gas(src, environment, air_contents, transfer_moles, power_rating)
+
+	else
+		//If we're in an area that is fucking ideal, and we don't have to do anything, chances are we won't next tick either so why redo these calculations?
+		//JESUS FUCK.  THERE ARE LITERALLY 250 OF YOU MOTHERFUCKERS ON ZLEVEL ONE AND YOU DO THIS SHIT EVERY TICK WHEN VERY OFTEN THERE IS NO REASON TO
+
+		if(pump_direction && pressure_checks == PRESSURE_CHECK_EXTERNAL && controller_iteration > 10)	//99% of all vents
+			//Fucking hibernate because you ain't doing shit.
+			hibernate = 1
+			spawn(rand(100,200))	//hibernate for 10 or 20 seconds randomly
+				hibernate = 0
+
 
 	if (power_draw >= 0)
 		last_power_draw = power_draw
@@ -238,54 +250,41 @@
 		initial_loc.air_vent_names[id_tag] = new_name
 		src.name = new_name
 	initial_loc.air_vent_info[id_tag] = signal.data
-
 	radio_connection.post_signal(src, signal, radio_filter_out)
-
 	return 1
-
-
 /obj/machinery/atmospherics/unary/vent_pump/initialize()
 	..()
-
 	//some vents work his own spesial way
 	radio_filter_in = frequency==1439?(RADIO_FROM_AIRALARM):null
 	radio_filter_out = frequency==1439?(RADIO_TO_AIRALARM):null
 	if(frequency)
 		set_frequency(frequency)
-
 /obj/machinery/atmospherics/unary/vent_pump/receive_signal(datum/signal/signal)
 	if(stat & (NOPOWER|BROKEN))
 		return
+	hibernate = 0
 	//log_admin("DEBUG \[[world.timeofday]\]: /obj/machinery/atmospherics/unary/vent_pump/receive_signal([signal.debug_print()])")
 	if(!signal.data["tag"] || (signal.data["tag"] != id_tag) || (signal.data["sigtype"]!="command"))
 		return 0
-
 	if(signal.data["purge"] != null)
 		pressure_checks &= ~1
 		pump_direction = 0
-
 	if(signal.data["stabalize"] != null)
 		pressure_checks |= 1
 		pump_direction = 1
-
 	if(signal.data["power"] != null)
 		use_power = text2num(signal.data["power"])
-
 	if(signal.data["power_toggle"] != null)
 		use_power = !use_power
-
 	if(signal.data["checks"] != null)
 		if (signal.data["checks"] == "default")
 			pressure_checks = pressure_checks_default
 		else
 			pressure_checks = text2num(signal.data["checks"])
-
 	if(signal.data["checks_toggle"] != null)
 		pressure_checks = (pressure_checks?0:3)
-
 	if(signal.data["direction"] != null)
 		pump_direction = text2num(signal.data["direction"])
-
 	if(signal.data["set_internal_pressure"] != null)
 		if (signal.data["set_internal_pressure"] == "default")
 			internal_pressure_bound = internal_pressure_bound_default
@@ -295,7 +294,6 @@
 				text2num(signal.data["set_internal_pressure"]),
 				ONE_ATMOSPHERE*50
 			)
-
 	if(signal.data["set_external_pressure"] != null)
 		if (signal.data["set_external_pressure"] == "default")
 			external_pressure_bound = external_pressure_bound_default
@@ -305,32 +303,25 @@
 				text2num(signal.data["set_external_pressure"]),
 				ONE_ATMOSPHERE*50
 			)
-
 	if(signal.data["adjust_internal_pressure"] != null)
 		internal_pressure_bound = between(
 			0,
 			internal_pressure_bound + text2num(signal.data["adjust_internal_pressure"]),
 			ONE_ATMOSPHERE*50
 		)
-
 	if(signal.data["adjust_external_pressure"] != null)
-
-
 		external_pressure_bound = between(
 			0,
 			external_pressure_bound + text2num(signal.data["adjust_external_pressure"]),
 			ONE_ATMOSPHERE*50
 		)
-
 	if(signal.data["init"] != null)
 		name = signal.data["init"]
 		return
-
 	if(signal.data["status"] != null)
 		spawn(2)
 			broadcast_status()
 		return //do not update_icon
-
 		//log_admin("DEBUG \[[world.timeofday]\]: vent_pump/receive_signal: unknown command \"[signal.data["command"]]\"\n[signal.debug_print()]")
 	spawn(2)
 		broadcast_status()
@@ -368,13 +359,11 @@
 		user << "You are too far away to read the gauge."
 	if(welded)
 		user << "It seems welded shut."
-
 /obj/machinery/atmospherics/unary/vent_pump/power_change()
 	var/old_stat = stat
 	..()
 	if(old_stat != stat)
 		update_icon()
-
 /obj/machinery/atmospherics/unary/vent_pump/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	if (!istype(W, /obj/item/weapon/wrench))
 		return ..()
@@ -400,14 +389,12 @@
 			"You hear ratchet.")
 		new /obj/item/pipe(loc, make_from=src)
 		del(src)
-
 /obj/machinery/atmospherics/unary/vent_pump/Del()
 	if(initial_loc)
 		initial_loc.air_vent_info -= id_tag
 		initial_loc.air_vent_names -= id_tag
 	..()
 	return
-
 /*
 	Alt-click to vent crawl - Monkeys, aliens, slimes and mice.
 	This is a little buggy but somehow that just seems to plague ventcrawl.
