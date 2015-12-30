@@ -134,3 +134,26 @@ CREATE TABLE `ss13_connection_log` (
     `computerid` VARCHAR(32) NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ------------------------------
+-- SQL based whitelist index
+-- tgstation.ss13_whitelist_statuses
+-- ------------------------------
+CREATE TABLE `ss13_whitelist_statuses` (
+    `flag` INT(10) UNSIGNED NOT NULL,
+    `status_name` VARCHAR(32) NOT NULL,
+    PRIMARY KEY (`flag`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ------------------------------
+-- SQL based whitelist modification log
+-- tgstation.ss13_whitelist_log
+-- ------------------------------
+CREATE TABLE `ss13_whitelist_log` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `datetime` DATETIME NOT NULL,
+    `user` VARCHAR(32) NOT NULL,
+    `action_method` VARCHAR(32) NOT NULL DEFAULT 'Game Server',
+    `action` VARCHAR(32) NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
