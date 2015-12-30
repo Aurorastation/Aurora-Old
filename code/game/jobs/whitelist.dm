@@ -52,7 +52,7 @@ var/list/whitelist = list()
 			var/DBQuery/query = dbcon.NewQuery("SELECT status_name, flag FROM ss13_whitelist_statuses")
 			query.Execute()
 
-			for (query.NextRow())
+			while (query.NextRow())
 				if (query.item[1] in whitelisted_species)
 					whitelisted_species[query.item[1]] = text2num(query.item[2])
 
