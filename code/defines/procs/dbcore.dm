@@ -111,11 +111,11 @@ DBQuery/New(var/sql_query, var/DBConnection/connection_handler, var/cursor_handl
 DBQuery/proc/Connect(DBConnection/connection_handler)
 	db_connection = connection_handler
 
-DBQuery/proc/Execute(var/list/argumentList = null, var/passNotFound = 0, sql_query = sql, cursor_handler = default_cursor)
+DBQuery/proc/Execute(var/list/argument_list = null, var/pass_not_found = 0, sql_query = sql, cursor_handler = default_cursor)
 	Close()
 
-	if (argumentList)
-		parseArguments(argumentList, passNotFound)
+	if (argument_list)
+		sql_query = parseArguments(sql_query, argument_list, pass_not_found)
 
 	return _dm_db_execute(_db_query, sql_query, db_connection._db_con, cursor_handler, null)
 
@@ -171,21 +171,21 @@ DBQuery/proc/SetConversion(column,conversion)
 * Can be called independently, or through dbcon.Execute(), where the list would be the first argument.
 * passNotFound controls whether or not is passes keys not found in the SQL query.
 * Keys are /case-sensitive/, be careful!
-* Returns FALSE upon failure, TRUE otherwise, so it can be used in checks and so on.
+* Returns the parsed SQL query upon completion.
 * - Skull132
 */
-DBQuery/proc/parseArguments(var/list/argumentList, var/passNotFound = 0)
-	if (!sql || !argumentList || !argumentList.len)
+DBQuery/proc/parseArguments(var/query_to_parse = null, var/list/argument_list, var/pass_not_found = 0)
+	if (!query_to_parse || !argument_list || !argument_list.len)
 		return 0
 
-	for (var/placeholder in argumentList)
+	for (var/placeholder in argument_list)
 		if (!findtextEx(sql, placeholder))
-			if (passNotFound)
+			if (pass_not_found)
 				continue
 			else
 				return 0
 
-		var/argument = argumentList[placeholder]
+		var/argument = argument_list[placeholder]
 
 		if (isnull(argument))
 			argument = "NULL"
@@ -196,9 +196,9 @@ DBQuery/proc/parseArguments(var/list/argumentList, var/passNotFound = 0)
 		else
 			return 0
 
-		sql = replacetextEx(sql, placeholder, argument)
+		query_to_parse = replacetextEx(sql, placeholder, argument)
 
-	return 1
+	return query_to_parse
 
 
 DBColumn
