@@ -88,6 +88,8 @@
 	var/aurorawikiurl
 	var/githuburl
 
+	var/whitelists_on_sql = 0			//Changes how whitelists are handled. SQL connection required to run this!
+
 	//Alert level description
 	var/alert_desc_green = "All threats to the station have passed. Security may not have weapons visible, privacy laws are once again fully enforced."
 	var/alert_desc_blue_upto = "The station has received reliable information about possible hostile activity on the station. Security staff may have weapons visible, random searches are permitted."
@@ -527,6 +529,9 @@
 
 				if("topic_safe_address")
 					topic_safe_address = value
+
+				if ("whitelists_on_sql")
+					config.whitelists_on_sql = 1
 
 				else
 					log_misc("Unknown setting in configuration: '[name]'")
