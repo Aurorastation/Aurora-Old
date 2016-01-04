@@ -51,7 +51,7 @@
 	var/door_sound='sound/machines/airlock.ogg'
 	var/door_sound_distance=30
 	autoclose = 1
-	var/obj/item/device/doorbrace/bracer = null
+	var/obj/item/device/magnetic_lock/bracer = null
 
 /obj/machinery/door/airlock/command
 	name = "Airlock"
@@ -718,12 +718,12 @@ About the new airlock wires panel:
 		set_frequency(ST.change_freq(frequency))
 		return
 
-	if (istype(C, /obj/item/device/doorbrace))
+	if (istype(C, /obj/item/device/magnetic_lock))
 		if (bracer)
 			user << "<span class='notice'>There is already a [bracer] on [src]!</span>"
 			return
 
-		var/obj/item/device/doorbrace/newbracer = C
+		var/obj/item/device/magnetic_lock/newbracer = C
 		newbracer.attachto(src, user)
 		return
 
