@@ -75,6 +75,7 @@
 	var/blood_color = "#A10808" //Red.
 	var/flesh_color = "#FFC896" //Pink.
 	var/base_color      //Used when setting species.
+	var/darkness_view
 
 	//Used in icon caching.
 	var/race_key = 0
@@ -626,7 +627,8 @@ See code\modules\mob\new_player\preferences_setup.dm for where it's used.
 	secondary_unarmed_type = /datum/unarmed_attack/bite/strong
 	rarity_value = 2 //according to the code this does nothing but upset me so i guess it can stay
 	slowdown = 1 //slow
-	darksight = 666 //good at seeing
+	darksight = 8 //good at seeing
+	darkness_view = 7
 	eyes = "blank_eyes" //made out of butts
 	brute_mod = 0.5 //note to self: remove is_synthetic checks for brmod and burnmod
 	burn_mod = 2 //bugs on fire

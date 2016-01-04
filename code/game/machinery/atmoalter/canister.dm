@@ -193,9 +193,7 @@ update_flag
 	else
 		can_label = 0
 
-	if(air_contents.temperature > PLASMA_FLASHPOINT)
-		air_contents.zburn()
-	return
+	air_contents.react()
 
 /obj/machinery/portable_atmospherics/canister/return_air()
 	return air_contents

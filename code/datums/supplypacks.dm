@@ -1346,22 +1346,22 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	access = access_medical
 	group = "Medical / Science"
 
-/datum/supply_packs/doorbracers_engineering
-	name = "Engineering Doorbracer Crate"
-	contains = list(/obj/item/device/doorbrace/engineering,
-					/obj/item/device/doorbrace/engineering,
-					/obj/item/device/doorbrace/engineering)
+/datum/supply_packs/maglocks_engineering
+	name = "Engineering Magnetic Lock Crate"
+	contains = list(/obj/item/device/magnetic_lock/engineering,
+					/obj/item/device/magnetic_lock/engineering,
+					/obj/item/device/magnetic_lock/engineering)
 	cost = 30
 	containertype = /obj/structure/closet/crate
-	containername = "engineering doorbracers"
+	containername = "engineering magnetic locks"
 	group = "Engineering"
 
-/datum/supply_packs/doorbracers_security
-	name = "Security Doorbracer Crate"
-	contains = list(/obj/item/device/doorbrace/security,
-					/obj/item/device/doorbrace/security,
-					/obj/item/device/doorbrace/security)
+/datum/supply_packs/maglocks_security
+	name = "Security Magnetic Lock Crate"
+	contains = list(/obj/item/device/magnetic_lock/security,
+					/obj/item/device/magnetic_lock/security,
+					/obj/item/device/magnetic_lock/security)
 	cost = 30
 	containertype = /obj/structure/closet/crate
-	containername = "security doorbracers"
+	containername = "security magnetic locks"
 	group = "Security"

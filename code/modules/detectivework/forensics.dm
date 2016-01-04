@@ -3,7 +3,7 @@
 /obj/item/weapon/storage/box/swabs
 	name = "box of swab kits"
 	desc = "Sterilized equipment within. Do not contaminate."
-	icon = 'forensics.dmi'
+	icon = 'icons/obj/forensics.dmi'
 	icon_state = "dnakit"
 	storage_slots=14
 	can_hold = list("/obj/item/weapon/forensics/swab")
@@ -29,7 +29,7 @@
 /obj/item/weapon/forensics/swab
 	name = "swab kit"
 	desc = "A sterilized cotton swab and vial used to take forensic samples."
-	icon = 'forensics.dmi'
+	icon = 'icons/obj/forensics.dmi'
 	icon_state = "swab"
 	flags = FPRINT | TABLEPASS | CONDUCT | NOBLUDGEON
 	w_class = 1.0
@@ -132,7 +132,7 @@
 /obj/item/weapon/storage/briefcase/crimekit
 	name = "Crime Scene Kit"
 	desc = "A stainless steel-plated carrycase for all your forensic needs. Feels heavy."
-	icon = 'forensics.dmi'
+	icon = 'icons/obj/forensics.dmi'
 	icon_state = "case"
 	item_state = "case"
 	storage_slots=14
@@ -156,7 +156,7 @@
 /obj/item/weapon/forensics/slide
 	name = "microscope slide"
 	desc = "A pair of thin glass panes used in the examination of samples beneath a microscope."
-	icon = 'forensics.dmi'
+	icon = 'icons/obj/forensics.dmi'
 	icon_state = "slide"
 	flags = FPRINT | TABLEPASS | CONDUCT | NOBLUDGEON
 	w_class = 1.0
@@ -219,7 +219,7 @@
 /obj/machinery/microscope
 	name = "high powered electron microscope"
 	desc = "A highly advanced microscope capable of zooming up to 3000x."
-	icon = 'forensics.dmi'
+	icon = 'icons/obj/forensics.dmi'
 	icon_state = "microscope"
 	anchored = 1
 	var/obj/item/weapon/forensics/sample = null
@@ -367,7 +367,7 @@
 /obj/item/weapon/forensics/powder
 	name = "fingerprint powder"
 	desc = "A jar containing aluminum powder and a specialized brush."
-	icon = 'forensics.dmi'
+	icon = 'icons/obj/forensics.dmi'
 	icon_state = "dust"
 	var/list/complete_prints = list()
 	var/stored = list()
@@ -432,7 +432,7 @@
 /obj/item/weapon/forensics/fiberkit
 	name = "Fiber Collection Kit"
 	desc = "A magnifying glass and tweezers. Used to lift suit fibers."
-	icon = 'forensics.dmi'
+	icon = 'icons/obj/forensics.dmi'
 	icon_state = "m_glass"
 	var/list/fibers_complete = list()
 	var/stored = list()
