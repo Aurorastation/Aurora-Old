@@ -294,6 +294,8 @@
 
 			if(H.species.flags & IS_SYNTHETIC)
 				return
+			if(istype(H) && H.species.insulated)//Insulation
+				return
 
 			if(M.buckled && istype(M.buckled, /obj/structure/stool/bed/chair/wheelchair))
 				return ..()

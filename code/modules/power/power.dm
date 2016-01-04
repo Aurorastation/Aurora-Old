@@ -273,11 +273,13 @@
 //No animations will be performed by this proc.
 /proc/electrocute_mob(mob/living/carbon/M as mob, var/power_source, var/obj/source, var/siemens_coeff = 1.0)
 	if(istype(M.loc,/obj/mecha))	return 0	//feckin mechs are dumb
+	var/mob/living/carbon/human/H = M //29/12/2015 INSULATION INITIATION
+	if(istype(H) && H.species.insulated)	return 0
 
 	//This is for performance optimization only.
 	//DO NOT modify siemens_coeff here. That is checked in human/electrocute_act()
 	if(istype(M,/mob/living/carbon/human))
-		var/mob/living/carbon/human/H = M
+		//var/mob/living/carbon/human/H = M Changed for inulation 29/12/15
 		if(H.gloves)
 			var/obj/item/clothing/gloves/G = H.gloves
 			if(G.siemens_coefficient == 0)	return 0		//to avoid spamming with insulated glvoes on
