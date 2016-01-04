@@ -293,9 +293,10 @@
 				M.current.remove_vampire_blood(150)
 				M.current.verbs -= /client/vampire/proc/vampire_enthrall
 				spawn(1800) M.current.verbs += /client/vampire/proc/vampire_enthrall
-		else
-			M.current << "\red You or your target either moved or you dont have enough usable blood."
-			return
+		return
+	else
+		M.current << "\red You or your target either moved or you dont have enough usable blood."
+		return
 
 /client/vampire/proc/vampire_cloak()
 	set category = "Abilities"
@@ -327,14 +328,14 @@
 
 /mob/proc/can_enthrall(mob/living/carbon/C)
 	var/enthrall_safe = 0
-/*	for(var/obj/item/weapon/implant/loyalty/L in C)
+	for(var/obj/item/weapon/implant/loyalty/L in C)
 		if(L && L.implanted)
 			enthrall_safe = 1
 			break
-	for(var/obj/item/weapon/implant/traitor/T in C)
-		if(T && T.implanted)
-			enthrall_safe = 1
-			break*/
+//	for(var/obj/item/weapon/implant/traitor/T in C)
+//		if(T && T.implanted)
+//			enthrall_safe = 1
+//			break
 	if(!C)
 		world.log << "something bad happened on enthralling a mob src is [src] [src.key] \ref[src]"
 		return 0
