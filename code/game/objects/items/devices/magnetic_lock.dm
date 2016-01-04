@@ -5,10 +5,10 @@
 #define LAYER_ATTACHED 3.2
 #define LAYER_NORMAL 3
 
-/obj/item/device/doorbrace
+/obj/item/device/magnetic_lock
 	name = "magnetic door lock"
 	desc = "A large, ID locked device used for completely locking down airlocks."
-	icon = 'icons/obj/door_braces/centcom.dmi'
+	icon = 'icons/obj/magnetic_locks/centcom.dmi'
 	icon_state = "inactive"
 	w_class = 3
 	req_access = list(103)
@@ -17,38 +17,49 @@
 	var/department = "CENTCOM"
 	var/status = 0
 	var/constructionstate = 0
+	var/drainamount = 20
 	var/obj/machinery/door/airlock/target = null
+	var/obj/item/weapon/cell/powercell
 
-/obj/item/device/doorbrace/security
-	icon = 'icons/obj/door_braces/security.dmi'
+/obj/item/device/magnetic_lock/security
+	icon = 'icons/obj/magnetic_locks/security.dmi'
 	department = "Security"
 	req_access = list(1)
 
-/obj/item/device/doorbrace/engineering
-	icon = 'icons/obj/door_braces/engineering.dmi'
+/obj/item/device/magnetic_lock/engineering
+	icon = 'icons/obj/magnetic_locks/engineering.dmi'
 	department = "Engineering"
 	req_access = null
 	req_one_access = list(11, 24)
 
-/obj/item/device/doorbrace/examine()
+/obj/item/device/magnetic_lock/New()
+	..()
+
+	powercell = new /obj/item/weapon/cell/high()
+
+/obj/item/device/magnetic_lock/examine()
 	..()
 
 	if (status == STATUS_BROKEN)
 		usr << "<span class='danger'>It looks broken!</span>"
 	else
-		usr << "\blue This device has [department] department markings on it."
+		if (powercell)
+			var/power = round(powercell.charge / powercell.maxcharge * 100)
+			usr << "\blue The powercell is at [power]% charge."
+		else
+			usr << "\red It has no powercell to power it!"
 
-/obj/item/device/doorbrace/attack_hand(var/mob/user)
+/obj/item/device/magnetic_lock/attack_hand(var/mob/user)
 	if (status == STATUS_ACTIVE)
 		ui_interact(user)
 	else
 		..()
 
-/obj/item/device/doorbrace/bullet_act(var/obj/item/projectile/Proj)
+/obj/item/device/magnetic_lock/bullet_act(var/obj/item/projectile/Proj)
 	takedamage(Proj.damage)
 	..()
 
-/obj/item/device/doorbrace/attackby(var/obj/item/I, var/mob/user)
+/obj/item/device/magnetic_lock/attackby(var/obj/item/I, var/mob/user)
 	if (status == STATUS_BROKEN)
 		user << "<span class='danger'>[src] is broken beyond repair!</span>"
 		return
@@ -97,6 +108,16 @@
 				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
 				setconstructionstate(0)
 				return
+			if (istype(I, /obj/item/weapon/cell))
+				user.drop_item()
+				I.loc = src
+				powercell = I
+				return
+			if (istype(I, /obj/item/weapon/crowbar))
+				user << "<span class='notice'>You remove \the [powercell] from \the [src].</span>"
+				powercell.loc = loc
+				powercell = null
+				return
 			if (istype(I, /obj/item/weapon/weldingtool))
 				var/obj/item/weapon/weldingtool/WT = I
 				if (WT.remove_fuel(1, user))
@@ -119,7 +140,16 @@
 				setconstructionstate(4)
 				return
 
-/obj/item/device/doorbrace/proc/attachto(var/obj/machinery/door/airlock/newtarget, var/mob/user as mob)
+/obj/item/device/magnetic_lock/process()
+	if (powercell && powercell.charge > drainamount)
+		powercell.charge -= drainamount
+	else
+		if (powercell)
+			powercell.charge = 0
+		visible_message("<span class='danger'>[src] beeps loudly and falls off \the [target]; its powercell having run out of power.</span>")
+		setstatus(STATUS_INACTIVE)
+
+/obj/item/device/magnetic_lock/proc/attachto(var/obj/machinery/door/airlock/newtarget, var/mob/user as mob)
 	if (status == STATUS_BROKEN)
 		user << "<span class='danger'>[src] is damaged beyond repair! It cannot be used!</span>"
 		return
@@ -152,7 +182,7 @@
 		setstatus(STATUS_ACTIVE, newtarget)
 		return
 
-/obj/item/device/doorbrace/proc/setstatus(var/newstatus, var/obj/machinery/door/airlock/newtarget as obj)
+/obj/item/device/magnetic_lock/proc/setstatus(var/newstatus, var/obj/machinery/door/airlock/newtarget as obj)
 	switch (newstatus)
 		if (STATUS_INACTIVE)
 			if (status != STATUS_ACTIVE)
@@ -187,7 +217,7 @@
 			icon_state = "broken"
 			status = newstatus
 
-/obj/item/device/doorbrace/proc/setconstructionstate(var/newstate)
+/obj/item/device/magnetic_lock/proc/setconstructionstate(var/newstate)
 	constructionstate = newstate
 	if (newstate == 0)
 		if (status == STATUS_ACTIVE)
@@ -201,7 +231,7 @@
 	else
 		icon_state = "deconstruct_[constructionstate]"
 
-/obj/item/device/doorbrace/proc/detach(var/playflick = 1)
+/obj/item/device/magnetic_lock/proc/detach(var/playflick = 1)
 	if (target)
 
 		if (playflick)
@@ -212,9 +242,11 @@
 
 		target.bracer = null
 
+		processing_objects.Remove(src)
+
 		anchored = 0
 
-/obj/item/device/doorbrace/proc/attach(var/obj/machinery/door/airlock/newtarget as obj)
+/obj/item/device/magnetic_lock/proc/attach(var/obj/machinery/door/airlock/newtarget as obj)
 	adjustsprite(newtarget)
 	layer = LAYER_ATTACHED
 	flick("deploy", src)
@@ -222,9 +254,11 @@
 	newtarget.bracer = src
 	target = newtarget
 
+	processing_objects.Add(src)
+
 	anchored = 1
 
-/obj/item/device/doorbrace/proc/adjustsprite(var/obj/target as obj)
+/obj/item/device/magnetic_lock/proc/adjustsprite(var/obj/target as obj)
 	if (target)
 		switch (get_dir(src, target))
 			if (NORTH)
@@ -255,7 +289,7 @@
 		pixel_x = 0
 		pixel_y = 0
 
-/obj/item/device/doorbrace/proc/takedamage(var/damage)
+/obj/item/device/magnetic_lock/proc/takedamage(var/damage)
 	health -= damage
 
 	if (damage >= 40 && prob(50))
@@ -269,7 +303,7 @@
 	if (prob(50))
 		spark()
 
-/obj/item/device/doorbrace/proc/spark()
+/obj/item/device/magnetic_lock/proc/spark()
 	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 
 	if (target)

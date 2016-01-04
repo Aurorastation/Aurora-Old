@@ -1132,6 +1132,10 @@
 		return //TODO: DEFERRED
 
 	proc/handle_regular_status_updates()
+		if(species.flags & IS_BUG)
+			adjustBruteLoss(0)
+			adjustFireLoss(0)
+
 
 		if(status_flags & GODMODE)	return 0
 
@@ -1407,6 +1411,9 @@
 				sight |= SEE_TURFS|SEE_MOBS|SEE_OBJS
 				see_in_dark = 8
 				if(!druggy)		see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
+
+			if(species.flags & IS_BUG) //Vaurca nightvision 29/12/15
+				see_in_dark = 8
 
 			if(seer==1)
 				var/obj/effect/rune/R = locate() in loc
@@ -1817,13 +1824,6 @@
 			holder2.icon_state = "hudxeno"
 		else if(foundVirus)
 			holder.icon_state = "hudill"
-		else if(has_brain_worms())
-			var/mob/living/simple_animal/borer/B = has_brain_worms()
-			if(B.controlling)
-				holder.icon_state = "hudbrainworm"
-			else
-				holder.icon_state = "hudhealthy"
-			holder2.icon_state = "hudbrainworm"
 		else
 			holder.icon_state = "hudhealthy"
 			if(virus2.len)
