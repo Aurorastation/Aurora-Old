@@ -72,6 +72,7 @@ Devices and Tools;
 Whitespace:Seperator;
 Implants;
 /obj/item/weapon/storage/box/syndie_kit/imp_freedom:3:Freedom Implant;
+/obj/item/weapon/storage/box/syndie_kit/imp_adrenalin:3:Adrenalin Implant;
 /obj/item/weapon/storage/box/syndie_kit/imp_uplink:10:Uplink Implant (Contains 5 Telecrystals);
 /obj/item/weapon/storage/box/syndie_kit/imp_explosive:6:Explosive Implant (DANGER!);
 /obj/item/weapon/storage/box/syndie_kit/imp_compress:4:Compressed Matter Implant;Whitespace:Seperator;

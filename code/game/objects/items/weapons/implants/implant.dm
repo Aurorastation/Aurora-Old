@@ -333,22 +333,20 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 
 	implanted(mob/M)
-		if(!istype(M, /mob/living/carbon/human))	return 0
+		if(!istype(M, /mob/living/carbon/human))
+			return 0
 		var/mob/living/carbon/human/H = M
-		if(H.mind in ticker.mode.head_revolutionaries)
+		if (H.mind in ticker.mode.head_revolutionaries)
 			H.visible_message("[H] seems to resist the implant!", "You feel the corporate tendrils of Nanotrasen try to invade your mind!")
 			return 0
-		else if(H.mind in ticker.mode:revolutionaries)
+		else if (H.mind in ticker.mode:revolutionaries)
 			ticker.mode:remove_revolutionary(H.mind)
-		H << "\blue You feel a surge of loyalty towards Nanotrasen."
-		return 1
-
-	implanted(mob/M)
-		if(!istype(M, /mob/living/carbon/human))	return 0
-		var/mob/living/carbon/human/H = M
-		if(H.mind in ticker.mode:cult)
+		else if (H.mind in ticker.mode:cult)
 			ticker.mode:remove_cultist(M.mind)
-		H << "\blue The implant robs you of your faith in Nar-Sie, leaving only obedience to NanoTrasen."
+			H << "\blue The implant robs you of your faith in Nar-Sie, leaving only obedience to NanoTrasen."
+		else if (H.mind in ticker.mode:changelings)
+			H << "\blue <b>We have weaved our flesh around and isolated the simple chip. It has no effect on us.</b> But they do not know it yet..."
+		H << "\blue You feel a surge of loyalty towards Nanotrasen."
 		return 1
 
 //Alternatively!  This is the null-rod deconversion, if the above doesn't work.  There's two things down there and I don't know if that's okay.
@@ -386,14 +384,21 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		return dat
 
 
-	trigger(emote, mob/source as mob)
-		if (src.uses < 1)	return 0
+	trigger(emote, mob/living/carbon/human/source as mob)
+		if (src.uses < 1)
+			return 0
+		if (!istype(source))
+			return 0
 		if (emote == "pale")
 			src.uses--
 			source << "\blue You feel a sudden surge of energy!"
+			source.stat = 0
+			source.SetParalysis(0)
 			source.SetStunned(0)
 			source.SetWeakened(0)
-			source.SetParalysis(0)
+			source.lying = 0
+			source.setHalLoss(0)
+			source.update_canmove()
 
 		return
 
