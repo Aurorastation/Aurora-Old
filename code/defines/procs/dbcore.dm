@@ -117,7 +117,12 @@ DBQuery/proc/Execute(var/list/argument_list = null, var/pass_not_found = 0, sql_
 	if (argument_list)
 		sql_query = parseArguments(sql_query, argument_list, pass_not_found)
 
-	return _dm_db_execute(_db_query, sql_query, db_connection._db_con, cursor_handler, null)
+	var/return_value = _dm_db_execute(_db_query, sql_query, db_connection._db_con, cursor_handler, null)
+
+	if (ErrorMsg())
+		log_debug("SQL Error: [ErrorMsg()]")
+
+	return return_value
 
 DBQuery/proc/NextRow()
 	return _dm_db_next_row(_db_query,item,conversions)
@@ -176,13 +181,15 @@ DBQuery/proc/SetConversion(column,conversion)
 */
 DBQuery/proc/parseArguments(var/query_to_parse = null, var/list/argument_list, var/pass_not_found = 0)
 	if (!query_to_parse || !argument_list || !argument_list.len)
+		log_debug("SQL Error: parseArguments() called with an empty query_to_parse or argument_list.")
 		return 0
 
 	for (var/placeholder in argument_list)
-		if (!findtextEx(sql, placeholder))
+		if (!findtextEx(query_to_parse, placeholder))
 			if (pass_not_found)
 				continue
 			else
+				log_debug("SQL Error: parseArguments() failed to find placeholder. Placeholder value: [placeholder].")
 				return 0
 
 		var/argument = argument_list[placeholder]
@@ -194,9 +201,10 @@ DBQuery/proc/parseArguments(var/query_to_parse = null, var/list/argument_list, v
 		else if (isnum(argument))
 			argument = "'[argument]'"
 		else
+			log_debug("SQL Error: parseArguments() failed to identify argument type. Placeholder value: [placeholder].")
 			return 0
 
-		query_to_parse = replacetextEx(sql, placeholder, argument)
+		query_to_parse = replacetextEx(query_to_parse, placeholder, argument)
 
 	return query_to_parse
 
