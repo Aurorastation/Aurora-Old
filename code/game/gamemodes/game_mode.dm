@@ -214,7 +214,7 @@ Implants;
 		for (var/species_name in species_stats)
 			species_stats_string += "[species_name]: [species_stats[species_name]], "
 
-		feedback_set("species_statistics", species_stats_string)
+		feedback_set_details("species_statistics", species_stats_string)
 	if(surviving_total > 0)
 		feedback_set("survived_total",surviving_total)
 	if(escaped_humans > 0)
