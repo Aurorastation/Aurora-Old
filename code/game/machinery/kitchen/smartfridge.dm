@@ -50,7 +50,8 @@
 						/obj/item/stack/sheet/mineral/diamond,
 						/obj/item/stack/sheet/mineral/uranium,
 						/obj/item/stack/sheet/mineral/plasma,
-						/obj/item/stack/sheet/mineral/gold
+						/obj/item/stack/sheet/mineral/gold,
+						/obj/item/stack/sheet/mineral/silver
 						)
 
 /obj/machinery/smartfridge/resources/accept_check(var/obj/item/O as obj)
