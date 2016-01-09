@@ -84,7 +84,7 @@
 	if(istype(M,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
 		var/target_zone = ran_zone(check_zone(user.zone_sel.selecting, H))
-		if(H.getarmor(target_zone, "melee") > 5 && prob(50))
+		if(H.getarmor(target_zone, "melee") > 5)
 			user << "\red You can't find a way to use that through [M]'s armor."
 			return
 
@@ -119,7 +119,7 @@
 	if(istype(M,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
 		var/target_zone = ran_zone(check_zone(user.zone_sel.selecting, H))
-		if(H.getarmor(target_zone, "melee") > 5 && prob(50))
+		if(H.getarmor(target_zone, "melee") > 5)
 			user << "\red You can't find a way to use that through [M]'s armor."
 			return
 
