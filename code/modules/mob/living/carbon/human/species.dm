@@ -645,7 +645,7 @@ See code\modules\mob\new_player\preferences_setup.dm for where it's used.
 	heat_level_2 = 380 //Default 400
 	heat_level_3 = 600 //Default 1000 //bugs do not like fire because exoskeletons are poor ventilation
 
-	flags = IS_WHITELISTED | NO_SLIP | IS_BUG //IS_BUG doesn't do much at the moment.  proc up top + radiation resistance.
+	flags = IS_WHITELISTED | NO_SLIP | IS_BUG | NO_SCAN //IS_BUG doesn't do much at the moment.  proc up top + radiation resistance.
 	//use IS_BUG when you do the make their eyes die from being flashed thing, sounds/skull.  okay thanks.
 	blood_color = "#E6E600" // dark yellow
 	flesh_color = "#575757" //this is a placeholder also.
