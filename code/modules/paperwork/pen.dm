@@ -23,6 +23,7 @@
 	throw_range = 15
 	matter = list("metal" = 10)
 	var/colour = "black"	//what colour the ink is!
+	var/time = 60 //time to inject (equivalent to hardsuit)
 	pressure_resistance = 2
 
 
@@ -79,9 +80,23 @@
 /obj/item/weapon/pen/sleepypen/attack(mob/M as mob, mob/user as mob)
 	if(!(istype(M,/mob)))
 		return
-	..()
+
+	if(istype(M,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = M
+		var/target_zone = ran_zone(check_zone(user.zone_sel.selecting, H))
+		if(H.getarmor(target_zone, "melee") > 5)
+			user << "\red You can't find a way to use that through [M]'s armor."
+			return
+
+		if(H.wear_suit)
+			if(istype(H.wear_suit, /obj/item/clothing/suit/space))
+				user << "\red You begin discretely hunting for an injection port.."
+				if(!do_mob(user, M, time))
+					return //until the time is up, you're still hunting for that port
+
 	if(reagents.total_volume)
 		if(M.reagents) reagents.trans_to(M, 50) //used to be 150
+		..()
 	return
 
 
@@ -100,9 +115,23 @@
 /obj/item/weapon/pen/paralysis/attack(mob/M as mob, mob/user as mob)
 	if(!(istype(M,/mob)))
 		return
-	..()
+
+	if(istype(M,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = M
+		var/target_zone = ran_zone(check_zone(user.zone_sel.selecting, H))
+		if(H.getarmor(target_zone, "melee") > 5)
+			user << "\red You can't find a way to use that through [M]'s armor."
+			return
+
+		if(H.wear_suit)
+			if(istype(H.wear_suit, /obj/item/clothing/suit/space))
+				user << "\red You begin discretely hunting for an injection port.."
+				if(!do_mob(user, M, time))
+					return //until the time is up, you're still hunting for that port
+
 	if(reagents.total_volume)
 		if(M.reagents) reagents.trans_to(M, 50)
+		..()
 	return
 
 
