@@ -18,7 +18,7 @@
 	var/obj/screen/inv1 = null
 	var/obj/screen/inv2 = null
 	var/obj/screen/inv3 = null
-	
+
 	var/shown_robot_modules = 0	//Used to determine whether they have the module menu shown or not
 	var/obj/screen/robot_modules_background
 
@@ -79,7 +79,7 @@
 	robot_modules_background = new()
 	robot_modules_background.icon_state = "block"
 	robot_modules_background.layer = 19	//Objects that appear on screen are on layer 20, UI should be just below it.
-	
+
 	ident = rand(1, 999)
 	updatename("Default")
 	updateicon()
@@ -204,13 +204,13 @@
 
 	// languages
 	module.add_languages(src)
-	
-	// cameras 
+
+	// cameras
 	module.add_to_camera_network(src)
-	
+
 	// sensors
 	module.add_sensor_modification(src)
-	
+
 	// create sprite list
 	var/list/module_sprites = module.sprites.Copy()
 
@@ -373,7 +373,7 @@
 		updatehealth()
 		return 1
 	return 0
-	
+
 /mob/living/silicon/robot/proc/sensor_mode()
 	set name = "Set Sensor Augmentation"
 	set desc = "Augment visual feed with internal sensor overlays."
@@ -1267,3 +1267,9 @@
 		use_power(RC.energy_consumption)
 		return 1
 	return 0
+
+/mob/living/silicon/robot/verb/station_bounced_radio()
+	set name = "Configure Radio"
+	set category = "Robot Commands"
+	set desc = "Configures your station bounced radio"
+	radio_menu()

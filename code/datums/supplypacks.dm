@@ -652,8 +652,8 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	name = "Weapons crate"
 	contains = list(/obj/item/weapon/melee/baton,
 					/obj/item/weapon/melee/baton,
-					/obj/item/weapon/gun/energy/laser,
-					/obj/item/weapon/gun/energy/laser,
+					/obj/item/weapon/gun/energy/rifle/laser,
+					/obj/item/weapon/gun/energy/rifle/laser,
 					/obj/item/weapon/gun/energy/taser,
 					/obj/item/weapon/gun/energy/taser,
 					/obj/item/weapon/storage/box/flashbangs,
