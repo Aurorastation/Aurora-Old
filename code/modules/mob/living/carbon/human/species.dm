@@ -146,6 +146,10 @@
 			I.mechanize()
 
 	if(flags & IS_BUG)
+		for (var/datum/organ/external/E in H.organs)
+			if ((E.status & ORGAN_CUT_AWAY) || (E.status & ORGAN_DESTROYED))
+				continue
+			E.status |= ORGAN_ADV_ROBOT
 		for(var/datum/organ/internal/I in H.internal_organs)
 			I.mechanize()
 

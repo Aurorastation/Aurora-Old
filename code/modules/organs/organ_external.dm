@@ -43,9 +43,9 @@
 
 	// how often wounds should be updated, a higher number means less often
 	var/wound_update_accuracy = 1
-	
+
 	var/datum/synthetic_limb_cover/covering = null // paint or synth skin
-	
+
 	var/gendered = FALSE
 
 
@@ -438,7 +438,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 //Updating wounds. Handles wound natural I had some free spachealing, internal bleedings and infections
 /datum/organ/external/proc/update_wounds()
 
-	if((status & ORGAN_ROBOT)) //Robotic limbs don't heal or get worse.
+	if((status & ORGAN_ROBOT) || (status & ORGAN_ADV_ROBOT)) //Robotic limbs don't heal or get worse.
 		return
 
 	for(var/datum/wound/W in wounds)
@@ -517,14 +517,14 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	if (open && !clamped && (H && !(H.species.flags & NO_BLOOD)))	//things tend to bleed if they are CUT OPEN
 		status |= ORGAN_BLEEDING
-			
-			
+
+
 /datum/organ/external/proc/can_take_covering() // is this organ functional enough to take a covering
 	if (status&(ORGAN_DESTROYED|ORGAN_BROKEN|ORGAN_DEAD))
 		return
 	return (burn_dam + brute_dam) <= (max_damage * 0.1) // you get hurt you're going to lose your covering
-			
-			
+
+
 // new damage icon system
 // adjusted to set damage_state to brute/burn code only (without r_name0 as before)
 /datum/organ/external/proc/update_icon()
@@ -539,14 +539,14 @@ Note that amputating the affected organ does in fact remove the infection from t
 				owner.update_body(TRUE)
 				return TRUE
 	return FALSE
-	
+
 /datum/organ/external/head/update_icon()
 	var/result = ..()
 	if (result)
 		owner.update_hair()
 	return result
-	
-	
+
+
 // new damage icon system
 // returns just the brute/burn damage code
 /datum/organ/external/proc/damage_state_text()
@@ -573,8 +573,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		tbrute = 2
 	else
 		tbrute = 3
-		
-		
+
+
 	return "[tbrute][tburn]"
 
 /****************************************************
@@ -812,6 +812,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if(T)
 			T.robotize()
 
+/datum/organ/external/proc/robotize_advanced()
+	status |= ORGAN_ADV_ROBOT
+	for (var/datum/organ/external/T in children)
+		if (T)
+			T.robotize_advanced()
+
 /datum/organ/external/proc/mutate()
 	src.status |= ORGAN_MUTATED
 	owner.update_body()
@@ -829,7 +835,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 			return 1
 	return 0
 
-	
+
 /datum/organ/external/proc/get_icon_key()
 	if (status & ORGAN_DESTROYED)
 		return "L" // l for lost
@@ -842,32 +848,32 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/proc/valid_covering()
 	if (status & ORGAN_ROBOT)
-		if (covering) 
+		if (covering)
 			return (covering.coverage) // is our covering working?
-		return FALSE // if we have no covering at all 
+		return FALSE // if we have no covering at all
 	return TRUE // squishies always have skin
-	
+
 
 /datum/organ/external/proc/get_synthetic_icon_key()
 	if (!covering) // no covering at all, this should not happen
 		return "R" // regular old robot
 	return covering.get_icon_key()
-	
-		
+
+
 /datum/organ/external/proc/get_synthetic_icon()
 	if (!covering) // no covering at all, this should not happen
 		return new /icon('icons/mob/human_races/robotic.dmi', "[icon_name][get_gender_string()]")
 	return covering.get_icon()
-	
-	
+
+
 /datum/organ/external/proc/get_gender_string()
 	if (!gendered) // most organs aren't gender specific
 		return ""
 	if (owner) // if we're a gender specific organ with an owner
 		return (owner.gender == FEMALE ? "_f" : "_m")
 	return "_f"
-	
-		
+
+
 /datum/organ/external/get_icon(var/icon/race_icon, var/icon/deform_icon, var/list/skin_info)
 	if (status & ORGAN_ROBOT)
 		return get_synthetic_icon()
@@ -1037,7 +1043,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	vital = 1
 	encased = "skull"
 	gendered = TRUE
-	
+
 
 /datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
 	..(brute, burn, sharp, edge, used_weapon, forbidden_limbs)
@@ -1069,7 +1075,7 @@ obj/item/weapon/organ
 	icon = 'icons/mob/human_races/r_human.dmi'
 	var/op_stage = 0
 	var/list/organs_internal = list()
-	
+
 
 obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 	..(loc)
@@ -1099,11 +1105,11 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 		base = icon('icons/mob/human_races/r_human.dmi')
 	if(base) // handle skin colours
 		var/list/skin_info = H.skin_colour_info() // get the skin tone info
-		base.Blend(skin_info["rgb"],skin_info["mode"])		
+		base.Blend(skin_info["rgb"],skin_info["mode"])
 	icon = base
 	set_dir(SOUTH)
 	src.transform = turn(src.transform, rand(70,130))
-	
+
 
 /****************************************************
 			   EXTERNAL ORGAN ITEMS DEFINES
@@ -1137,7 +1143,7 @@ obj/item/weapon/organ/head
 	name = "head"
 	icon_state = "head_m"
 	var/mob/living/carbon/brain/brainmob
-	
+
 /obj/item/weapon/organ/head/posi
 	name = "robotic head"
 

@@ -620,6 +620,7 @@ var/list/liftable_structures = list(\
 #define SALVED 512
 #define ORGAN_DEAD 1024
 #define ORGAN_MUTATED 2048
+#define ORGAN_ADV_ROBOT 4096
 
 #define ROUNDSTART_LOGOUT_REPORT_TIME 6000 //Amount of time (in deciseconds) after the rounds starts, that the player disconnect report is issued.
 
