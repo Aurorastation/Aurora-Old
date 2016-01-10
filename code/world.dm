@@ -424,3 +424,11 @@ proc/establish_db_connection()
 		return 1
 
 #undef FAILED_DB_CONNECTION_CUTOFF
+
+// stores world.timeofday when the world starts for use in worldtime2text()
+
+var/world_timeofday_at_start
+
+hook/startup/proc/store_timeofday_at_start()
+	world_timeofday_at_start = world.timeofday
+	return 1
