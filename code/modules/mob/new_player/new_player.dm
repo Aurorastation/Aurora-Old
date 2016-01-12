@@ -219,10 +219,7 @@
 				usr << "<b>Thank you for your vote!</b>"
 				usr << browse(null,"window=privacypoll")
 
-		if(!ready && href_list["preference"])
-			if(client)
-				client.prefs.process_link(src, href_list)
-		else if(!href_list["late_join"])
+		if(!href_list["late_join"])
 			new_player_panel()
 
 		if(href_list["showpoll"])
