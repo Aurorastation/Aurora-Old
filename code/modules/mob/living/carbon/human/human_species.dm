@@ -32,3 +32,6 @@
 /mob/living/carbon/human/machine/New(var/new_loc)
 	h_style = "Bald"
 	..(new_loc, "Machine")
+
+/mob/living/carbon/human/bug/New(var/new_loc)
+	..(new_loc, "Vaurca")
