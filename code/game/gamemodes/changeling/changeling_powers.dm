@@ -236,6 +236,7 @@
 
 	T.death(0)
 	T.Drain()
+	T.mutations += NOCLONE
 	return 1
 
 

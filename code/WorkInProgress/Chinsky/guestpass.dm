@@ -62,7 +62,7 @@
 	if(contents.len > 0)
 		attack_hand(user)
 		return
-	if(istype(O, /obj/item/weapon/card/id))
+	if(istype(O, /obj/item/weapon/card/id) && !istype(O, /obj/item/weapon/card/id/guest))
 		user.drop_item()
 		O.loc = src
 		giver = O

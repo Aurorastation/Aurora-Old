@@ -75,7 +75,6 @@
 	var/blood_color = "#A10808" //Red.
 	var/flesh_color = "#FFC896" //Pink.
 	var/base_color      //Used when setting species.
-	var/darkness_view
 
 	//Used in icon caching.
 	var/race_key = 0
@@ -146,6 +145,10 @@
 			I.mechanize()
 
 	if(flags & IS_BUG)
+		for (var/datum/organ/external/E in H.organs)
+			if ((E.status & ORGAN_CUT_AWAY) || (E.status & ORGAN_DESTROYED))
+				continue
+			E.status |= ORGAN_ADV_ROBOT
 		for(var/datum/organ/internal/I in H.internal_organs)
 			I.mechanize()
 
@@ -627,8 +630,7 @@ See code\modules\mob\new_player\preferences_setup.dm for where it's used.
 	secondary_unarmed_type = /datum/unarmed_attack/bite/strong
 	rarity_value = 2 //according to the code this does nothing but upset me so i guess it can stay
 	slowdown = 1 //slow
-	darksight = 8 //good at seeing
-	darkness_view = 7
+	darksight = 5 //good at seeing
 	eyes = "blank_eyes" //made out of butts
 	brute_mod = 0.5 //note to self: remove is_synthetic checks for brmod and burnmod
 	burn_mod = 2 //bugs on fire
@@ -645,7 +647,7 @@ See code\modules\mob\new_player\preferences_setup.dm for where it's used.
 	heat_level_2 = 380 //Default 400
 	heat_level_3 = 600 //Default 1000 //bugs do not like fire because exoskeletons are poor ventilation
 
-	flags = IS_WHITELISTED | NO_SLIP | IS_BUG //IS_BUG doesn't do much at the moment.  proc up top + radiation resistance.
+	flags = IS_WHITELISTED | NO_SLIP | IS_BUG | NO_SCAN //IS_BUG doesn't do much at the moment.  proc up top + radiation resistance.
 	//use IS_BUG when you do the make their eyes die from being flashed thing, sounds/skull.  okay thanks.
 	blood_color = "#E6E600" // dark yellow
 	flesh_color = "#575757" //this is a placeholder also.

@@ -423,4 +423,23 @@ proc/establish_db_connection()
 	else
 		return 1
 
+//This proc disconnects the database forcefully, and then establishes connection again.
+proc/cycle_db_connection()
+	if (!dbcon)
+		return 0
+
+	log_debug("Cycling database connection.")
+	dbcon.Disconnect()
+
+	sleep(5)
+	setup_database_connection()
+
 #undef FAILED_DB_CONNECTION_CUTOFF
+
+// stores world.timeofday when the world starts for use in worldtime2text()
+
+var/world_timeofday_at_start
+
+hook/startup/proc/store_timeofday_at_start()
+	world_timeofday_at_start = world.timeofday
+	return 1

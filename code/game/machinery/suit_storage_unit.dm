@@ -1123,7 +1123,7 @@
 				helmet.name = "blood-red hardsuit helmet"
 				helmet.icon_state = "rig0-syndi"
 				helmet.item_state = "syndie_helm"
-				helmet.item_color = "syndie"
+				helmet.item_color = "syndi"
 			if(suit)
 				suit.name = "blood-red hardsuit"
 				suit.item_state = "syndie_hardsuit"

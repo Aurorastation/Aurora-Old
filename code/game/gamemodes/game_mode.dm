@@ -148,6 +148,7 @@ Implants;
 	var/surviving_total = 0
 	var/ghosts = 0
 	var/escaped_humans = 0
+	var/species_stats = list("Humans" = 0, "Unathi" = 0, "Tajaran" = 0, "Skrell" = 0, "Vaurca" = 0, "IPC" = 0, "Diona" = 0)
 	var/escaped_total = 0
 	var/escaped_on_pod_1 = 0
 	var/escaped_on_pod_2 = 0
@@ -165,6 +166,23 @@ Implants;
 					surviving_humans++
 					if(M.loc && M.loc.loc && M.loc.loc.type in escape_locations)
 						escaped_humans++
+				var/mob/living/carbon/human/H = M
+				if (H.species)
+					switch (H.species.name)
+						if ("Human")
+							species_stats["Human"]++
+						if ("Unathi")
+							species_stats["Unathi"]++
+						if ("Tajaran")
+							species_stats["Tajaran"]++
+						if ("Skrell")
+							species_stats["Skrell"]++
+						if ("Vaurca")
+							species_stats["Vaurca"]++
+						if ("Machine")
+							species_stats["IPC"]++
+						if ("Diona")
+							species_stats["Diona"]++
 			if(!M.stat)
 				surviving_total++
 				if(M.loc && M.loc.loc && M.loc.loc.type in escape_locations)
@@ -191,6 +209,12 @@ Implants;
 		feedback_set("round_end_ghosts",ghosts)
 	if(surviving_humans > 0)
 		feedback_set("survived_human",surviving_humans)
+
+		var/species_stats_string = ""
+		for (var/species_name in species_stats)
+			species_stats_string += "[species_name]: [species_stats[species_name]], "
+
+		feedback_set_details("species_statistics", species_stats_string)
 	if(surviving_total > 0)
 		feedback_set("survived_total",surviving_total)
 	if(escaped_humans > 0)
