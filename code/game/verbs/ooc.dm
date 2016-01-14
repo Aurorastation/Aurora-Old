@@ -31,12 +31,7 @@ var/global/normal_ooc_colour = "#002eb8"
 		if(prefs.muted & MUTE_OOC)
 			src << "\red You cannot use OOC (muted)."
 			return
-		if(handle_spam_prevention(msg,MUTE_OOC))
-			return
-		if(findtext(msg, "byond://"))
-			src << "<B>Advertising other servers is not allowed.</B>"
-			log_admin("[key_name(src)] has attempted to advertise in OOC: [msg]")
-			message_admins("[key_name_admin(src)] has attempted to advertise in OOC: [msg]")
+		if(handle_spam_prevention(msg,MUTE_OOC,0))
 			return
 
 	if(holder)
@@ -148,12 +143,7 @@ var/global/normal_ooc_colour = "#002eb8"
 		if(prefs.muted & MUTE_OOC)
 			src << "\red You cannot use OOC (muted)."
 			return
-		if(handle_spam_prevention(msg,MUTE_OOC))
-			return
-		if(findtext(msg, "byond://"))
-			src << "<B>Advertising other servers is not allowed.</B>"
-			log_admin("[key_name(src)] has attempted to advertise in OOC: [msg]")
-			message_admins("[key_name_admin(src)] has attempted to advertise in OOC: [msg]")
+		if(handle_spam_prevention(msg,MUTE_OOC,0))
 			return
 
 	if(holder)

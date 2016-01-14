@@ -12,6 +12,15 @@
 	if(say_disabled)	//This is here to try to identify lag problems
 		usr << "\red Speech is currently admin-disabled."
 		return
+
+	if (client)
+		if (istype(src, /mob/dead/observer))
+			if (client.handle_spam_prevention(message, MUTE_DEADCHAT, 0))
+				return
+		else
+			if (client.handle_spam_prevention(message, MUTE_IC, 0))
+				return
+
 	//Let's try to make users fix their errors - we try to detect single, out-of-place letters and 'unintended' words
 	/*
 	var/first_letter = copytext(message,1,2)
@@ -36,6 +45,14 @@
 	if(say_disabled)	//This is here to try to identify lag problems
 		usr << "\red Speech is currently admin-disabled."
 		return
+
+	if (client)
+		if (istype(src, /mob/dead/observer))
+			if (client.handle_spam_prevention(message, MUTE_DEADCHAT, 0))
+				return
+		else
+			if (client.handle_spam_prevention(message, MUTE_IC, 0))
+				return
 
 	message = strip_html_properly(message)
 //We do not have typing indicator code yet - Waiting for the okay from Skull before considering adding - Jamini
