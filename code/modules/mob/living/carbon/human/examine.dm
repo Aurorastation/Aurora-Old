@@ -61,6 +61,9 @@
 
 	msg += "<EM>[src.name]</EM>!\n"
 
+	if (species && species.has_organ["ipc tag"] && internal_organs_by_name["ipc tag"])
+		msg += "[t_He] [t_is] wearing a tag designating them as an Integrated Positronic Chassis/Shell.\n"
+
 	//uniform
 	if(w_uniform && !skipjumpsuit)
 		//Ties
