@@ -129,3 +129,68 @@
 			S.remove_from_storage(A)
 		A.loc.contents.Remove(A)
 		update()
+
+/obj/item/weapon/implanter/ipc_tag
+	name = "IPC/Shell tag implanter"
+	desc = "A special implanter used for implanting synthetics with a special tag."
+	var/obj/item/robot_parts/robot_component/ipc_tag/ipc_tag = null
+
+/obj/item/weapon/implanter/ipc_tag/New()
+	ipc_tag = new(src)
+	..()
+	update()
+
+/obj/item/weapon/implanter/ipc_tag/update()
+	if (ipc_tag)
+		icon_state = "cimplanter1"
+	else
+		icon_state = "cimplanter0"
+	return
+
+/obj/item/weapon/implanter/ipc_tag/attack(mob/M as mob, mob/user as mob)
+	if (!ishuman(M))
+		return
+
+	if (!ipc_tag)
+		user << "\red [src] is empty!"
+		return
+
+	var/mob/living/carbon/human/H = M
+	if (!H.species || !istype(H.species, /datum/species/machine) || !H.organs_by_name["head"])
+		user << "\red You cannot use this on a non-synthetic organism!"
+		return
+
+	if (H.internal_organs_by_name["ipc tag"])
+		user << "\red [H] is already tagged!"
+		return
+
+	for (var/mob/O in viewers(M, null))
+		O.show_message("\red [M] has been implanted by [user].", 1)
+
+	M.attack_log += text("\[[time_stamp()]\] <font color='orange'> Implanted with [src.name] ([src.ipc_tag.name])  by [user.name] ([user.ckey])</font>")
+	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] ([src.ipc_tag.name]) to implant [M.name] ([M.ckey])</font>")
+	msg_admin_attack("[key_name_admin(user)] implanted [key_name_admin(M)] with [src.name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+
+	user.show_message("\red You implanted the implant into [M].")
+
+	ipc_tag.organ_type.replaced(H, H.organs_by_name["head"])
+
+	del(ipc_tag)
+	update()
+
+	var/datum/species/machine/machine = H.species
+	machine.update_tag(H, H.client)
+
+/obj/item/weapon/implanter/ipc_tag/attackby(var/obj/item/robot_parts/robot_component/ipc_tag/new_tag, mob/user as mob)
+	..()
+
+	if (!istype(new_tag))
+		return
+
+	if (ipc_tag)
+		return
+
+	ipc_tag = new_tag
+	user.drop_item()
+	new_tag.loc = src
+	update()
