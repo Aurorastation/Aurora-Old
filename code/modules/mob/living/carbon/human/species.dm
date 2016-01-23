@@ -665,6 +665,8 @@ See code\modules\mob\new_player\preferences_setup.dm for where it's used.
 			if (sql_status == status)
 				return
 
+			query_details.Add(":status")
+			query_details[":status"] = status
 			var/DBQuery/update_query = dbcon.NewQuery("UPDATE ss13_ipc_tracking SET tag_status = :status WHERE player_ckey = :ckey AND character_name = :character_name")
 			update_query.Execute(query_details)
 
