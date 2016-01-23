@@ -13,7 +13,7 @@
 		if(usr.client.prefs.muted & MUTE_PRAY)
 			usr << "\red You cannot pray (muted)."
 			return
-		if(src.client.handle_spam_prevention(msg,MUTE_PRAY))
+		if(src.client.handle_spam_prevention(msg,MUTE_PRAY,0))
 			return
 
 	var/image/cross = image('icons/obj/storage.dmi',"bible")

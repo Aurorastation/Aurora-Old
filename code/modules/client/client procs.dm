@@ -95,7 +95,9 @@
 		prefs.process_link(src, href_list)
 	..()	//redirect to hsrc.Topic()
 
-/client/proc/handle_spam_prevention(var/message, var/mute_type)
+/client/proc/handle_spam_prevention(var/message, var/mute_type, var/pass = 1)
+	if (pass)
+		return 0
 	if(config.automute_on && !holder)
 		if(src.last_message_time > world.time - SPAM_TIMER * 10)
 			if(src.last_message_timer > SPAM_TRIGGER_AUTOMUTE)
