@@ -1365,3 +1365,12 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	containertype = /obj/structure/closet/crate
 	containername = "security magnetic locks"
 	group = "Security"
+
+/datum/supply_packs/ipc_tag_pack
+	name = "IPC/Shell Tag Implanter Crate"
+	contains = list(/obj/item/weapon/implanter/ipc_tag,
+					/obj/item/weapon/implanter/ipc_tag)
+	cost = 40
+	containertype = /obj/structure/closet/crate
+	containername = "IPC/Shell tag implanters"
+	group = "Medical / Science"

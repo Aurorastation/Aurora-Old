@@ -401,6 +401,10 @@
 			if(is_species_whitelisted(chosen_species) || has_admin_rights())
 				new_character = new(loc, client.prefs.species)
 
+				if (istype(chosen_species, /datum/species/machine))
+					var/datum/species/machine/chose_machine = chosen_species
+					chose_machine.check_tag(new_character, client)
+
 		if(!new_character)
 			new_character = new(loc)
 
