@@ -268,7 +268,7 @@
 	if (organ_data)
 		var/datum/organ/internal/machine/radiator/old_radiator = organ_data
 		if (old_radiator.seized)
-			Radiator.desc += " <font color='blue'>It looks seized.</font>"
+			Radiator.desc += "<font color='blue'>It looks seized.</font>"
 	del(src)
 	return Radiator
 
@@ -381,14 +381,14 @@
 
 /obj/item/organ/machine/ipc_tag
 	name = "IPC tag"
-	organ_tag = "ipc_tag"
+	organ_tag = "ipc tag"
 	organ_type = /datum/organ/internal/machine/ipc_tag
 
 /obj/item/organ/machine/ipc_tag/removed(var/mob/living/carbon/human/target, var/mob/living/user)
 	..()
 
-	if (istype(target) && target.internal_organs_by_name["diagnosis_unit"])
-		var/datum/organ/internal/machine/diagnosis_unit/diagnosis_unit = target.internal_organs_by_name["diagnosis_unit"]
+	if (istype(target) && target.internal_organs_by_name["diagnosis unit"])
+		var/datum/organ/internal/machine/diagnosis_unit/diagnosis_unit = target.internal_organs_by_name["diagnosis unit"]
 		diagnosis_unit.overload = 1
 
 /obj/item/organ/machine/ipc_tag/exposed_to_the_world()
