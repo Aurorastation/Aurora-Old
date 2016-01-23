@@ -208,8 +208,6 @@
 
 /obj/item/robot_parts/robot_component/ipc_tag
 	name = "IPC tag"
-	icon_state = "tag"
-	icon_state_broken = "tag_broken"
 	organ_type = new /obj/item/organ/machine/ipc_tag()
 
 //
