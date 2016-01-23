@@ -232,11 +232,31 @@ proc/populate_gear_list()
 	cost = 1
 //	slot = slot_gloves
 
+/datum/gear/black_gloves_unathi
+	display_name = "black gloves, unathi"
+	path = /obj/item/clothing/gloves/black/unathi
+	cost = 1
+
+/datum/gear/black_gloves_tajara
+	display_name = "black gloves, tajaran"
+	path = /obj/item/clothing/gloves/black/tajara
+	cost = 1
+
 /datum/gear/red_gloves
 	display_name = "red gloves"
 	path = /obj/item/clothing/gloves/red
 	cost = 1
 //	slot = slot_gloves
+
+/datum/gear/red_gloves_unathi
+	display_name = "red gloves, unathi"
+	path = /obj/item/clothing/gloves/red/unathi
+	cost = 1
+
+/datum/gear/red_gloves_tajaran
+	display_name = "red gloves, tajaran"
+	path = /obj/item/clothing/gloves/red/tajara
+	cost = 1
 
 /datum/gear/blue_gloves
 	display_name = "blue gloves"
@@ -244,11 +264,31 @@ proc/populate_gear_list()
 	cost = 1
 //	slot = slot_gloves
 
+/datum/gear/blue_gloves_unathi
+	display_name = "blue gloves, unathi"
+	path = /obj/item/clothing/gloves/blue/unathi
+	cost = 1
+
+/datum/gear/blue_gloves_tajaran
+	display_name = "blue gloves, tajaran"
+	path = /obj/item/clothing/gloves/blue/tajara
+	cost = 1
+
 /datum/gear/orange_gloves
 	display_name = "orange gloves"
 	path = /obj/item/clothing/gloves/orange
 	cost = 1
-//	slot = slot_gloves
+	//	slot = slot_gloves
+
+/datum/gear/orange_gloves_unathi
+	display_name = "orange gloves, unathi"
+	path = /obj/item/clothing/gloves/orange/unathi
+	cost = 1
+
+/datum/gear/orange_gloves_tajaran
+	display_name = "orange gloves, tajaran"
+	path = /obj/item/clothing/gloves/orange/tajara
+	cost = 1
 
 /datum/gear/purple_gloves
 	display_name = "purple gloves"
@@ -256,11 +296,31 @@ proc/populate_gear_list()
 	cost = 1
 //	slot = slot_gloves
 
+/datum/gear/purple_gloves_unathi
+	display_name = "purple gloves, unathi"
+	path = /obj/item/clothing/gloves/purple/unathi
+	cost = 1
+
+/datum/gear/purple_gloves_tajaran
+	display_name = "purple gloves, tajaran"
+	path = /obj/item/clothing/gloves/purple/tajara
+	cost = 1
+
 /datum/gear/brown_gloves
 	display_name = "brown gloves"
 	path = /obj/item/clothing/gloves/brown
 	cost = 1
 //	slot = slot_gloves
+
+/datum/gear/brown_gloves_unathi
+	display_name = "brown gloves, unathi"
+	path = /obj/item/clothing/gloves/brown/unathi
+	cost = 1
+
+/datum/gear/brown_gloves_tajaran
+	display_name = "brown gloves, tajaran"
+	path = /obj/item/clothing/gloves/brown/tajara
+	cost = 1
 
 /datum/gear/green_gloves
 	display_name = "green gloves"
@@ -268,11 +328,31 @@ proc/populate_gear_list()
 	cost = 1
 //	slot = slot_gloves
 
+/datum/gear/green_gloves_unathi
+	display_name = "green gloves, unathi"
+	path = /obj/item/clothing/gloves/green/unathi
+	cost = 1
+
+/datum/gear/green_gloves_tajaran
+	display_name = "green gloves, tajaran"
+	path = /obj/item/clothing/gloves/green/tajara
+	cost = 1
+
 /datum/gear/white_gloves
 	display_name = "white gloves"
 	path = /obj/item/clothing/gloves/white
 	cost = 1
 //	slot = slot_gloves
+
+/datum/gear/white_gloves_unathi
+	display_name = "white gloves, unathi"
+	path = /obj/item/clothing/gloves/white/unathi
+	cost = 1
+
+/datum/gear/white_gloves_tajaran
+	display_name = "white gloves, tajaran"
+	path = /obj/item/clothing/gloves/white/tajara
+	cost = 1
 
 /datum/gear/black_shoes
 	display_name = "black shoes"
@@ -372,6 +452,11 @@ proc/populate_gear_list()
 /datum/gear/armband_emt
 	display_name = "EMT armband"
 	path = /obj/item/clothing/tie/armband/medgreen
+	cost = 1
+
+/datum/gear/armband_iac
+	display_name = "IAC armband"
+	path = /obj/item/clothing/tie/armband/iac_armband
 	cost = 1
 
 /datum/gear/skirt_blue
@@ -592,4 +677,66 @@ proc/populate_gear_list()
 /datum/gear/cigar_case
 	display_name = "cigar case"
 	path = /obj/item/weapon/storage/fancy/cigars
-	cost = 3
+	cost = 2
+
+/datum/gear/smoking_pipe
+	display_name = "smoking pipe"
+	path = /obj/item/clothing/mask/cigarette/pipe
+	cost = 2
+
+/datum/gear/cigarettes
+	display_name = "pack of DromedaryCo cigarettes"
+	path = /obj/item/weapon/storage/fancy/cigarettes/dromedaryco
+	cost = 2
+
+/datum/gear/red_lipstick
+	display_name = "lipstick, red"
+	path = /obj/item/weapon/lipstick
+	cost = 1
+
+/datum/gear/purple_lipstick
+	display_name = "lipstick, purple"
+	path = /obj/item/weapon/lipstick/purple
+	cost = 1
+
+/datum/gear/jade_lipstick
+	display_name = "lipstick, jade"
+	path = /obj/item/weapon/lipstick/jade
+	cost = 1
+
+/datum/gear/black_lipstick
+	display_name = "lipstick, black"
+	path = /obj/item/weapon/lipstick/black
+	cost = 1
+
+/datum/gear/cigarettes
+	display_name = "pack of cigarettes"
+	path = /obj/item/weapon/storage/fancy/cigarettes
+	cost = 1
+
+datum/gear/lighterg
+	display_name = "lighter, green"
+	path = /obj/item/weapon/lighter/green
+	cost = 1
+
+/datum/gear/lighterr
+	display_name = "lighter, red"
+	path = /obj/item/weapon/lighter/red
+	cost = 1
+
+/datum/gear/lightery
+	display_name = "lighter, yellow"
+	path = /obj/item/weapon/lighter/yellow
+	cost = 1
+
+/datum/gear/lighterc
+	display_name = "lighter, cyan"
+	path = /obj/item/weapon/lighter/cyan
+	cost = 1
+
+datum/gear/matches
+	display_name = "matchbook"
+	path = /obj/item/weapon/storage/box/matches
+	cost = 1
+
+

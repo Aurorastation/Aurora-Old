@@ -1531,49 +1531,18 @@
 		H << "An encripted connection was made and a file was uploaded to your systems.  \"Please stand by for a message from Central Command.  Message as follows. <b>\"[input]\"</b>  Message ends.\""
 
 	else if(href_list["CentcommFaxView"])
-		var/info = locate(href_list["CentcommFaxView"])
+		if (!href_list["CentcommFaxReceived"] || !ticker)
+			return
 
-		usr << browse("<HTML><HEAD><TITLE>Centcomm Fax Message</TITLE></HEAD><BODY>[info]</BODY></HTML>", "window=Centcomm Fax Message")
+		var/list/fax = ticker.fax_repository.get_fax(text2num(href_list["CentcommFaxView"]), text2num(href_list["CentcommFaxReceived"]))
+
+		usr << browse("<HTML><HEAD><TITLE>Centcomm Fax Message</TITLE></HEAD><BODY>[fax["data"]]</BODY></HTML>", "window=Centcomm Fax Message")
 
 	else if(href_list["CentcommFaxReply"])
-		var/mob/living/carbon/human/H = locate(href_list["CentcommFaxReply"])
+		usr.client.send_admin_fax()
 
-		var/input = input(src.owner, "Please enter a message to reply to [key_name(H)] via secure connection. NOTE: BBCode does not work, but HTML tags do! Use <br> for line breaks.", "Outgoing message from Centcomm", "") as message|null
-		if(!input)	return
-
-		var/customname = input(src.owner, "Pick a title for the report", "Title") as text|null
-
-		//so that we alert people with certain cartidges with a PDA message.
-		alertFaxes()
-
-		for(var/obj/machinery/faxmachine/F in machines)
-			if(! (F.stat & (BROKEN|NOPOWER) ) )
-
-				// animate! it's alive!
-				flick("faxreceive", F)
-
-				// give the sprite some time to flick
-				spawn(20)
-					var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( F.loc )
-					P.name = "[command_name()]- [customname]"
-					P.info = input
-					P.update_icon()
-
-					playsound(F.loc, "sound/items/polaroid1.ogg", 50, 1)
-
-					// Stamps
-					var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
-					stampoverlay.icon_state = "paper_stamp-cent"
-					if(!P.stamped)
-						P.stamped = new
-					P.stamped += /obj/item/weapon/stamp
-					P.overlays += stampoverlay
-					P.stamps += "<HR><i>This paper has been stamped by the Central Command Quantum Relay.</i>"
-
-		src.owner << "Message reply to transmitted successfully."
-		log_admin("[key_name(src.owner)] replied to a fax message from [key_name(H)]: [input]")
-		message_admins("[key_name_admin(src.owner)] replied to a fax message from [key_name_admin(H)] <a href='?_src_=holder;CentcommFaxView=\ref[input]'>view message</a>", 1)
-
+	else if (href_list["CentcommFaxHistory"])
+		usr.client.check_fax_history(text2num(href_list["CentcommFaxHistory"]))
 
 	else if(href_list["jumpto"])
 		if(!check_rights(R_ADMIN|R_FUN))	return

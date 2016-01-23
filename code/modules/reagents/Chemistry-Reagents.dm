@@ -2102,11 +2102,14 @@ datum
 								H << "<span class='warning'>Your mask protects you from the acid.</span>"
 							return
 
-						if(H.glasses) //Doesn't protect you from the acid but can melt anyways!
+						if(H.glasses) //Doesn't protect you from the acid but can melt anyways, unless SCIENCE!
 							if(prob(meltprob) && !H.glasses.unacidable)
 								H << "<span class='danger'>Your glasses melts away!</span>"
 								del (H.glasses)
 								H.update_inv_glasses(0)
+							else
+								H << "<span class='danger'>Your glasses protect you from the acid!</span>"
+								return
 
 					else if(ismonkey(M))
 						var/mob/living/carbon/monkey/MK = M

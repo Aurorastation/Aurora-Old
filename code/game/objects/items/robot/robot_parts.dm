@@ -114,6 +114,10 @@
 		assembly.head = src
 		move_into_robot(user,assembly)
 
+/obj/item/robot_parts/head/New()
+	..()
+
+	law_computer = new()
 
 /obj/item/robot_parts/robot_suit
 	name = "robot endoskeleton"

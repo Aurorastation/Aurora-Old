@@ -326,6 +326,8 @@
 		toggle_filter()
 	if(!src.occupant)
 		return
+	for(var/obj/O in src) //why was this never here?
+		O.loc = src.loc
 	if(src.occupant.client)
 		src.occupant.client.eye = src.occupant.client.mob
 		src.occupant.client.perspective = MOB_PERSPECTIVE

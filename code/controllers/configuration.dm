@@ -161,6 +161,13 @@
 
 	var/list/age_restrictions = list()				// Holds all of the age restrictions for jobs and antag roles in a single associated list
 
+	var/use_discord_bot = 0
+	var/discord_login = ""
+	var/discord_password = ""
+	var/discord_mention_everyone = 1
+	var/discord_admin_url = ""
+	var/discord_cciaa_url = ""
+
 /datum/configuration/New()
 	var/list/L = typesof(/datum/game_mode) - /datum/game_mode
 	for (var/T in L)
@@ -532,6 +539,24 @@
 
 				if ("whitelists_on_sql")
 					config.whitelists_on_sql = 1
+
+				if ("use_discord_bot")
+					config.use_discord_bot = 1
+
+				if ("discord_login")
+					config.discord_login = value
+
+				if ("discord_password")
+					config.discord_password = value
+
+				if ("discord_mention_everyone")
+					config.discord_mention_everyone = text2num(value)
+
+				if ("discord_admin_url")
+					config.discord_admin_url = value
+
+				if ("discord_cciaa_url")
+					config.discord_cciaa_url = value
 
 				else
 					log_misc("Unknown setting in configuration: '[name]'")

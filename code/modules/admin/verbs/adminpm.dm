@@ -56,7 +56,7 @@
 			else		adminhelp(msg)	//admin we are replying to has vanished, adminhelp instead
 			return
 
-	if (src.handle_spam_prevention(msg,MUTE_ADMINHELP))
+	if (src.handle_spam_prevention(msg,MUTE_ADMINHELP,0))
 		return
 
 	//clean the message if it's not sent by a high-rank admin
@@ -161,4 +161,3 @@
 			continue
 		if(X.holder.rights & (R_ADMIN|R_MOD))
 			X << "<B><font color='blue'>PM: [key_name(src, X, 0)]-&gt;IRC-Admins:</B> \blue [msg]</font>"
-

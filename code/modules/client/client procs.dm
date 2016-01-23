@@ -87,9 +87,17 @@
 	if(href_list["warnview"])
 		warnings_check()
 
+	if(href_list["preference"])
+		if(istype(mob, /mob/new_player))
+			var/mob/new_player/P = mob
+			if(P.ready)
+				return
+		prefs.process_link(src, href_list)
 	..()	//redirect to hsrc.Topic()
 
-/client/proc/handle_spam_prevention(var/message, var/mute_type)
+/client/proc/handle_spam_prevention(var/message, var/mute_type, var/pass = 1)
+	if (pass)
+		return 0
 	if(config.automute_on && !holder)
 		if(src.last_message_time > world.time - SPAM_TIMER * 10)
 			if(src.last_message_timer > SPAM_TRIGGER_AUTOMUTE)
@@ -333,3 +341,9 @@
 		'icons/spideros_icons/sos_13.png',
 		'icons/spideros_icons/sos_14.png'
 		)
+
+/client/verb/edit_character()
+	set name = "Edit Character"
+	set category = "Preferences"
+	set desc = "Allows you to edit your character and preferences"
+	prefs.ShowChoices(src)

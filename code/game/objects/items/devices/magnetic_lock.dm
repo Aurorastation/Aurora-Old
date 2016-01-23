@@ -115,7 +115,11 @@
 				return
 			if (istype(I, /obj/item/weapon/crowbar))
 				user << "<span class='notice'>You remove \the [powercell] from \the [src].</span>"
-				powercell.loc = loc
+				if (ismob(loc))
+					var/mob/M = loc
+					M.put_in_hands(powercell)
+				else
+					powercell.loc = loc
 				powercell = null
 				return
 			if (istype(I, /obj/item/weapon/weldingtool))
@@ -148,6 +152,20 @@
 			powercell.charge = 0
 		visible_message("<span class='danger'>[src] beeps loudly and falls off \the [target]; its powercell having run out of power.</span>")
 		setstatus(STATUS_INACTIVE)
+
+/obj/item/device/magnetic_lock/update_icon()
+	if (constructionstate && status != STATUS_BROKEN)
+		icon_state = "deconstruct_[constructionstate]"
+		return
+	else
+		switch (status)
+			if (STATUS_INACTIVE)
+				icon_state = "inactive"
+			if (STATUS_ACTIVE)
+				icon_state = "active"
+			if (STATUS_BROKEN)
+				icon_state = "broken"
+		return
 
 /obj/item/device/magnetic_lock/proc/attachto(var/obj/machinery/door/airlock/newtarget, var/mob/user as mob)
 	if (status == STATUS_BROKEN)
@@ -191,7 +209,6 @@
 				return
 
 			detach()
-			icon_state = "inactive"
 			status = newstatus
 
 		if (STATUS_ACTIVE)
@@ -201,7 +218,6 @@
 				return
 
 			attach(newtarget)
-			icon_state = "active"
 			status = newstatus
 
 		if (STATUS_BROKEN)
@@ -214,22 +230,19 @@
 
 				detach(playflick)
 
-			icon_state = "broken"
 			status = newstatus
+
+	update_icon()
 
 /obj/item/device/magnetic_lock/proc/setconstructionstate(var/newstate)
 	constructionstate = newstate
-	if (newstate == 0)
-		if (status == STATUS_ACTIVE)
-			icon_state = "active"
-		else
-			icon_state = "inactive"
-	else if (newstate == 2)
+	if (newstate == 2)
 		flick("deconstruct_2_anim", src)
-	else if (newstate == 4)
+
+	if (newstate == 4)
 		setstatus(STATUS_BROKEN)
-	else
-		icon_state = "deconstruct_[constructionstate]"
+
+	update_icon()
 
 /obj/item/device/magnetic_lock/proc/detach(var/playflick = 1)
 	if (target)
@@ -241,6 +254,7 @@
 		layer = LAYER_NORMAL
 
 		target.bracer = null
+		target = null
 
 		processing_objects.Remove(src)
 
