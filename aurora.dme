@@ -959,6 +959,7 @@
 #include "code\modules\events\spontaneous_appendicitis.dm"
 #include "code\modules\events\viral_infection.dm"
 #include "code\modules\events\wallrot.dm"
+#include "code\modules\ext_scripts\discord.dm"
 #include "code\modules\ext_scripts\irc.dm"
 #include "code\modules\ext_scripts\python.dm"
 #include "code\modules\flufftext\Dreaming.dm"
