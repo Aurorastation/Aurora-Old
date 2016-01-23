@@ -483,6 +483,22 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	icon_on = "zippoon"
 	icon_off = "zippo"
 
+/obj/item/weapon/lighter/green
+	icon_on = "lighter-g-on"
+	icon_off = "lighter-g"
+
+/obj/item/weapon/lighter/red
+	icon_on = "lighter-r-on"
+	icon_off = "lighter-r"
+
+/obj/item/weapon/lighter/yellow
+	icon_on = "lighter-y-on"
+	icon_off = "lighter-y"
+
+/obj/item/weapon/lighter/cyan
+	icon_on = "lighter-c-on"
+	icon_off = "lighter-c"
+
 /obj/item/weapon/lighter/random
 	New()
 		var/color = pick("r","c","y","g")
