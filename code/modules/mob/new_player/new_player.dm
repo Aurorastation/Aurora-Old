@@ -219,10 +219,7 @@
 				usr << "<b>Thank you for your vote!</b>"
 				usr << browse(null,"window=privacypoll")
 
-		if(!ready && href_list["preference"])
-			if(client)
-				client.prefs.process_link(src, href_list)
-		else if(!href_list["late_join"])
+		if(!href_list["late_join"])
 			new_player_panel()
 
 		if(href_list["showpoll"])
@@ -403,6 +400,10 @@
 			// Have to recheck admin due to no usr at roundstart. Latejoins are fine though.
 			if(is_species_whitelisted(chosen_species) || has_admin_rights())
 				new_character = new(loc, client.prefs.species)
+
+				if (istype(chosen_species, /datum/species/machine))
+					var/datum/species/machine/chose_machine = chosen_species
+					chose_machine.check_tag(new_character, client)
 
 		if(!new_character)
 			new_character = new(loc)

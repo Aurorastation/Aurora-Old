@@ -54,7 +54,8 @@
 						/obj/item/robot_parts/robot_component/law_computer,
 						/obj/item/robot_parts/robot_component/armour,
 						/obj/item/robot_parts/robot_component/radiator,
-						/obj/item/robot_parts/robot_component/bladder
+						/obj/item/robot_parts/robot_component/bladder,
+						/obj/item/robot_parts/robot_component/ipc_tag
 					),
 	"Ripley"=list(
 						/obj/item/mecha_parts/chassis/ripley,

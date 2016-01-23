@@ -15,7 +15,7 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 	if(prefs.muted & MUTE_ADMINHELP)
 		src << "<font color='red'>Error: Admin-PM: You cannot send adminhelps (Muted).</font>"
 		return
-	if(src.handle_spam_prevention(msg,MUTE_ADMINHELP))
+	if(src.handle_spam_prevention(msg,MUTE_ADMINHELP,0))
 		return
 
 	adminhelped = 2 //Determines if they get the message to reply by clicking the name.
@@ -124,8 +124,10 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 	if(admin_number_present <= 0)
 		if(!admin_number_afk)
 			send2adminirc("ADMINHELP from [key_name(src)]: [html_decode(original_msg)] - !!No admins online!!")
+			send_to_discord("admin_channel", "@everyone ADMINHELP from [key_name(src)]: [html_decode(original_msg)] - !!No admins online!!")
 		else
 			send2adminirc("ADMINHELP from [key_name(src)]: [html_decode(original_msg)] - !!All admins AFK ([admin_number_afk])!!")
+			send_to_discord("admin_channel", "@everyone ADMINHELP from [key_name(src)]: [html_decode(original_msg)] - !!All admins AFK ([admin_number_afk])!!")
 	else
 		send2adminirc("ADMINHELP from [key_name(src)]: [html_decode(original_msg)]")
 	feedback_add_details("admin_verb","AH") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!

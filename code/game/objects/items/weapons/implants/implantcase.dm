@@ -44,6 +44,8 @@
 					I.reagents.trans_to(src.imp, 5)
 					user << "\blue You inject 5 units of the solution. The syringe now contains [I.reagents.total_volume] units."
 		else if (istype(I, /obj/item/weapon/implanter))
+			if (istype(I, /obj/item/weapon/implanter/ipc_tag))
+				return
 			if (I:imp)
 				if ((src.imp || I:imp.implanted))
 					return
@@ -172,4 +174,3 @@
 		src.imp = new /obj/item/weapon/implant/compressed( src )
 		..()
 		return
-

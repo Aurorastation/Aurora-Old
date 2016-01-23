@@ -31,8 +31,6 @@
 		if(client.prefs.muted & MUTE_IC)
 			src << "You cannot send IC messages (muted)."
 			return
-		if (src.client.handle_spam_prevention(message,MUTE_IC))
-			return
 
 	message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
 
