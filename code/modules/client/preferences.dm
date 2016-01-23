@@ -203,7 +203,7 @@ datum/preferences
 		if(24 to 1000)
 			return "God"
 
-/datum/preferences/proc/SetSkills(mob/user)
+/datum/preferences/proc/SetSkills(client/user)
 	if(SKILLS == null)
 		setup_skills()
 
@@ -239,8 +239,8 @@ datum/preferences
 	user << browse(HTML, "window=show_skills;size=600x800")
 	return
 
-/datum/preferences/proc/ShowChoices(mob/user)
-	if(!user || !user.client)	return
+/datum/preferences/proc/ShowChoices(client/user)
+	if(!user)	return
 	update_preview_icon()
 	user << browse_rsc(preview_icon_side, "previewicon2.png")
 	user << browse_rsc(preview_icon_front, "previewicon1.png")
@@ -437,7 +437,7 @@ datum/preferences
 						banned = jobban_isbanned(user, "pAI")
 
 					if (banned == "Age Restricted")
-						var/time = config.age_restrictions[i] - user.client.player_age
+						var/time = config.age_restrictions[i] - user.player_age
 						dat += "<b>Be [i]:</b> <font color=black>\[IN [time] DAYS]</font><br>"
 					else if (banned)
 						dat += "<b>Be [i]:</b> <font color=red><b>\[BANNED]</b></font><br>"
@@ -455,7 +455,7 @@ datum/preferences
 
 		user << browse(dat, "window=preferences;size=560x736")
 
-/datum/preferences/proc/SetChoices(mob/user, limit = 16, list/splitJobs = list("Chief Medical Officer"), width = 550, height = 660)
+/datum/preferences/proc/SetChoices(client/user, limit = 16, list/splitJobs = list("Chief Medical Officer"), width = 550, height = 660)
 	if(!job_master)
 		return
 
@@ -497,8 +497,8 @@ datum/preferences
 		else if(jobban_isbanned(user, rank))
 			HTML += "<del>[rank]</del></td><td><b> \[BANNED]</b></td></tr>"
 			continue
-		if(!job.player_old_enough(user.client))
-			var/available_in_days = job.available_in_days(user.client)
+		if(!job.player_old_enough(user))
+			var/available_in_days = job.available_in_days(user)
 			HTML += "<del>[rank]</del></td><td> \[IN [(available_in_days)] DAYS]</td></tr>"
 			continue
 		if((job_civilian_low & ASSISTANT) && (rank != "Assistant"))
@@ -552,7 +552,7 @@ datum/preferences
 	user << browse(HTML, "window=mob_occupation;size=[width]x[height]")
 	return
 
-/datum/preferences/proc/SetDisabilities(mob/user)
+/datum/preferences/proc/SetDisabilities(client/user)
 	var/HTML = "<body>"
 	HTML += "<tt><center>"
 	HTML += "<b>Choose disabilities</b><br>"
@@ -572,7 +572,7 @@ datum/preferences
 	user << browse(HTML, "window=disabil;size=350x300")
 	return
 
-/datum/preferences/proc/SetRecords(mob/user)
+/datum/preferences/proc/SetRecords(client/user)
 	var/HTML = "<body>"
 	HTML += "<tt><center>"
 	HTML += "<b>Set Character Records</b><br>"
@@ -597,7 +597,7 @@ datum/preferences
 	user << browse(HTML, "window=records;size=350x300")
 	return
 
-/datum/preferences/proc/SetAntagoptions(mob/user)
+/datum/preferences/proc/SetAntagoptions(client/user)
 	if(uplinklocation == "" || !uplinklocation)
 		uplinklocation = "PDA"
 	var/HTML = "<body>"
@@ -615,7 +615,7 @@ datum/preferences
 	user << browse(HTML, "window=antagoptions")
 	return
 
-/datum/preferences/proc/SetFlavorText(mob/user)
+/datum/preferences/proc/SetFlavorText(client/user)
 	var/HTML = "<body>"
 	HTML += "<tt><center>"
 	HTML += "<b>Set Flavour Text</b> <hr />"
@@ -667,7 +667,7 @@ datum/preferences
 	if(job.title != new_title)
 		player_alt_titles[job.title] = new_title
 
-/datum/preferences/proc/SetJob(mob/user, role)
+/datum/preferences/proc/SetJob(client/user, role)
 	var/datum/job/job = job_master.GetJob(role)
 	if(!job)
 		user << browse(null, "window=mob_occupation")
@@ -786,10 +786,10 @@ datum/preferences
 					job_engsec_low |= job.flag
 	return 1
 
-/datum/preferences/proc/process_link(mob/user, list/href_list)
+/datum/preferences/proc/process_link(client/user, list/href_list)
 	if(!user)	return
 
-	if(!istype(user, /mob/new_player))	return
+	//if(!istype(user, /mob/new_player))	return //WE CAN EDIT CHARACTER WHENEVER
 	if(href_list["preference"] == "job")
 		switch(href_list["task"])
 			if("close")
@@ -1554,7 +1554,7 @@ datum/preferences
 			message_admins("[character] ([character.ckey]) has spawned with their gender as plural or neuter. Please notify coders.")
 			character.gender = MALE
 
-/datum/preferences/proc/open_load_dialog(mob/user)
+/datum/preferences/proc/open_load_dialog(client/user)
 	var/dat = "<body>"
 	dat += "<tt><center>"
 
@@ -1576,7 +1576,7 @@ datum/preferences
 	user << browse(dat, "window=saves;size=300x390")
 
 
-/datum/preferences/proc/close_load_dialog(mob/user)
+/datum/preferences/proc/close_load_dialog(client/user)
 	user << browse(null, "window=saves")
 
 
@@ -1596,7 +1596,7 @@ datum/preferences
 			return temp.hair_species
 
 
-/datum/preferences/proc/custom_robot_limb(mob/user,)
+/datum/preferences/proc/custom_robot_limb(client/user,)
 	var/covering_name = input(user, "What kind of covering do you want?") as null|anything in get_limb_covering_names()
 	if (!covering_name)
 		return
@@ -1637,7 +1637,7 @@ var/list/limb_connection_data
 	return limb_connection_data
 
 
-/datum/preferences/proc/pick_organ_to_customize(mob/user,var/is_organic_species)
+/datum/preferences/proc/pick_organ_to_customize(client/user,var/is_organic_species)
 	var/list/valid_targets = list("Left Leg","Right Leg","Left Arm","Right Arm","Left Foot","Right Foot","Left Hand","Right Hand")
 	if (!is_organic_species)
 		valid_targets.Add(list("Head","Chest","Groin"))
@@ -1648,7 +1648,7 @@ var/list/limb_connection_data
 	return limb_info[limb_name]
 
 
-/datum/preferences/proc/customize_limbs(mob/user,var/is_organic_species)
+/datum/preferences/proc/customize_limbs(client/user,var/is_organic_species)
 	var/list/limb_info = pick_organ_to_customize(user,is_organic_species)
 	if (!limb_info)
 		return

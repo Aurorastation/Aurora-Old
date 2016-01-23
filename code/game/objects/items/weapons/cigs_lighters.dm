@@ -508,7 +508,6 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 					else
 						user.apply_damage(2,BURN,"r_hand")
 					user.visible_message("<span class='notice'>After a few attempts, [user] manages to light the [src], they however burn their finger in the process.</span>")
-
 			user.SetLuminosity(user.luminosity + 2)
 			processing_objects.Add(src)
 		else
@@ -554,7 +553,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 
 
 /obj/item/weapon/lighter/pickup(mob/user)
-	if(lit)
+	if(lit && !(user.resting))
 		SetLuminosity(0)
 		user.SetLuminosity(user.luminosity+2)
 	return
