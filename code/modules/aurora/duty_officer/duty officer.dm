@@ -341,6 +341,6 @@
 	data += "<hr><center><b>Sent Faxes:</b></center><br>"
 	for (var/i = 1, i <= faxes.len, i++)
 		var/list/a = faxes[i]
-		data += "<a href='?_src_=holder;CentcommFaxView=[i];CentcommFaxReceived=1'>#[i] - '[a["subject"]]' from [a["sender"]]</a><br>"
+		data += "<a href='?_src_=holder;CentcommFaxView=[i];CentcommFaxReceived=0'>#[i] - '[a["subject"]]' from [a["sender"]]</a><br>"
 
 	usr << browse("<HTML><HEAD><TITLE>Centcomm Fax History</TITLE></HEAD><BODY>[data]</BODY></HTML>", "window=Centcomm Fax History")
