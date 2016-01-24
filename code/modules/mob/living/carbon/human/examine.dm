@@ -61,6 +61,14 @@
 
 	msg += "<EM>[src.name]</EM>!\n"
 
+	if (species && species.has_organ["ipc tag"] && internal_organs_by_name["ipc tag"])
+		var/datum/organ/internal/brain/robot/robot_brain = internal_organs_by_name["brain"]
+		var/machine_type = "cyborg/Shell"
+		if (robot_brain.machine_brain_type == "Posibrain")
+			machine_type = "Integrated Positronic Chassis/Shell"
+
+		msg += "[t_He] [t_is] wearing a tag designating [t_him] as an unlawed [machine_type].\n"
+
 	//uniform
 	if(w_uniform && !skipjumpsuit)
 		//Ties

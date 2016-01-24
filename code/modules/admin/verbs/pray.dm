@@ -13,7 +13,7 @@
 		if(usr.client.prefs.muted & MUTE_PRAY)
 			usr << "\red You cannot pray (muted)."
 			return
-		if(src.client.handle_spam_prevention(msg,MUTE_PRAY))
+		if(src.client.handle_spam_prevention(msg,MUTE_PRAY,0))
 			return
 
 	var/image/cross = image('icons/obj/storage.dmi',"bible")
@@ -53,7 +53,7 @@
 			else
 				C << "[msg_start][key_name(Sender, 0, 1, 0)][msg_end]"
 
-	send_to_discord("cciaa_channel", "@everyone **Emergency Message** from [Sender]: [text]!")
+	send_to_discord("cciaa_channel", "@everyone **Emergency Message** received from [Sender]: '[text]' !!!")
 
 /proc/Syndicate_announce(var/text , var/mob/Sender)
 	var/msg = copytext(sanitize(text), 1, MAX_MESSAGE_LEN)

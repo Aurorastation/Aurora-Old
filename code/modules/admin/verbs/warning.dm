@@ -42,7 +42,7 @@
 		feedback_inc("ban_warn",1)
 	else
 		if(C)
-			C << "<font color='red'><BIG><B>You have been formally warned by an administrator.</B></BIG><br>Further warnings will result in an autoban.</font>"
+			C << "<font color='red'><BIG><B>You have been warned by an administrator.</B></BIG><br>Further warnings will result in an autoban.</font>"
 			message_admins("[key_name_admin(src)] has warned [key_name_admin(C)]. They have [MAX_WARNS-D.warns] strikes remaining.")
 			message_mods("[key_name_admin(src)] has warned [key_name_admin(C)]. They have [MAX_WARNS-D.warns] strikes remaining.")
 		else
@@ -122,7 +122,7 @@
 
 	feedback_add_details("admin_verb","WARN-DB")
 	if(C)
-		C << "<font color='red'><BIG><B>You have been formally warned by an administrator.</B></BIG><br>Click <a href='byond://?src=\ref[src];warnview=1'>here</a> to review and acknowledge them!</font>"
+		C << "<font color='red'><BIG><B>You have been warned by an administrator.</B></BIG><br>Click <a href='byond://?src=\ref[src];warnview=1'>here</a> to review and acknowledge them!</font>"
 	message_admins("[key_name_admin(src)] has warned [warned_ckey] for: [reason].")
 	message_mods("[key_name_admin(src)] has warned [warned_ckey].")
 

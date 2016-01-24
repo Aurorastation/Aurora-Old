@@ -48,9 +48,10 @@
 
 /obj/item/clothing/glasses/science
 	name = "Science Goggles"
-	desc = "The goggles do nothing!"
+	desc = "Protects against harmful chemicals!"
 	icon_state = "purple"
 	item_state = "glasses"
+	unacidable = 1
 
 /obj/item/clothing/glasses/night
 	name = "Night Vision Goggles"
