@@ -610,6 +610,7 @@ See code\modules\mob\new_player\preferences_setup.dm for where it's used.
 		"radiator" = /datum/organ/internal/machine/radiator,
 		"chemical containment" = /datum/organ/internal/machine/bladder,
 		"diagnosis unit" = /datum/organ/internal/machine/diagnosis_unit,
+		"ipc tag" = /datum/organ/internal/machine/ipc_tag
 		)
 /datum/species/machine/create_organs(var/mob/living/carbon/human/H)
 	..()
@@ -618,6 +619,56 @@ See code\modules\mob\new_player\preferences_setup.dm for where it's used.
 		if (isnull(brain_datum.machine_brain_type))
 			brain_datum.machine_brain_type="Posibrain"
 
+/datum/species/machine/proc/check_tag(var/mob/living/carbon/human/new_machine, var/client/player)
+	if (!new_machine || !player)
+		return
+
+	establish_db_connection()
+
+	if (dbcon.IsConnected())
+		var/datum/organ/internal/machine/ipc_tag/tag = new_machine.internal_organs_by_name["ipc tag"]
+
+		var/status = 0
+		var/list/query_details = list(":ckey" = player.ckey, ":character_name" = player.prefs.real_name)
+		var/DBQuery/query = dbcon.NewQuery("SELECT tag_status FROM ss13_ipc_tracking WHERE player_ckey = :ckey AND character_name = :character_name")
+		query.Execute(query_details)
+
+		if (query.NextRow())
+			status = text2num(query.item[1])
+		else
+			var/DBQuery/log_query = dbcon.NewQuery("INSERT INTO ss13_ipc_tracking (player_ckey, character_name) VALUES (:ckey, :character_name)")
+			log_query.Execute(query_details)
+
+		if (!status)
+			new_machine.internal_organs_by_name.Remove("ipc tag")
+			new_machine.internal_organs.Remove(tag)
+			del(tag)
+
+/datum/species/machine/proc/update_tag(var/mob/living/carbon/human/target, var/client/player)
+	if (!target || !player)
+		return
+
+	establish_db_connection()
+
+	if (dbcon.IsConnected())
+		var/status = 0
+		var/sql_status = 0
+		if (target.internal_organs_by_name["ipc tag"])
+			status = 1
+
+		var/list/query_details = list(":ckey" = player.ckey, ":character_name" = target.real_name)
+		var/DBQuery/query = dbcon.NewQuery("SELECT tag_status FROM ss13_ipc_tracking WHERE player_ckey = :ckey AND character_name = :character_name")
+		query.Execute(query_details)
+
+		if (query.NextRow())
+			sql_status = text2num(query.item[1])
+			if (sql_status == status)
+				return
+
+			query_details.Add(":status")
+			query_details[":status"] = status
+			var/DBQuery/update_query = dbcon.NewQuery("UPDATE ss13_ipc_tracking SET tag_status = :status WHERE player_ckey = :ckey AND character_name = :character_name")
+			update_query.Execute(query_details)
 
 /datum/species/bug
 	name = "Vaurca"

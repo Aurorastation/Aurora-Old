@@ -157,3 +157,15 @@ CREATE TABLE `ss13_connection_log` (
     `computerid` VARCHAR(32) NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = latin1;
+
+-- ------------------------------
+-- The missing connection log table
+-- tgstation.ss13_ipc_tracking
+-- ------------------------------
+CREATE TABLE `ss13_ipc_tracking` (
+    `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `player_ckey` VARCHAR(32) NOT NULL,
+    `character_name` VARCHAR(255) NOT NULL,
+    `tag_status` TINYINT(1) NOT NULL DEFAULT '0',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = latin1;

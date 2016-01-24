@@ -89,7 +89,9 @@ var/list/admin_verbs_admin = list(
 	/client/proc/toggle_view_range,		/*changes how far we can see*/
 	/client/proc/toggle_visibily,
 	/client/proc/secrets,
-	/client/proc/set_ooc
+	/client/proc/set_ooc,
+	/client/proc/send_admin_fax,
+	/client/proc/check_fax_history
 )
 
 var/list/admin_verbs_ban = list(
@@ -145,7 +147,9 @@ var/list/admin_verbs_fun = list(
 	/client/proc/player_panel,
 	/client/proc/secrets,
 	/client/proc/send_space_ninja,
-	/client/proc/toggle_view_range
+	/client/proc/toggle_view_range,
+	/client/proc/send_admin_fax,
+	/client/proc/check_fax_history
 	)
 
 var/list/admin_verbs_dev = list(
@@ -403,7 +407,9 @@ var/list/admin_verbs_duty = list(
 	/client/proc/cmd_admin_create_centcom_report,
 	/client/proc/cmd_duty_say,
 	/client/proc/returntobody,
-	/client/proc/view_duty_log
+	/client/proc/view_duty_log,
+	/client/proc/send_admin_fax,
+	/client/proc/check_fax_history
 )
 
 /client/proc/add_admin_verbs()

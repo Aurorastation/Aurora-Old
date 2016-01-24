@@ -87,6 +87,12 @@
 	if(href_list["warnview"])
 		warnings_check()
 
+	if(href_list["preference"])
+		if(istype(mob, /mob/new_player))
+			var/mob/new_player/P = mob
+			if(P.ready)
+				return
+		prefs.process_link(src, href_list)
 	..()	//redirect to hsrc.Topic()
 
 /client/proc/handle_spam_prevention(var/message, var/mute_type, var/pass = 1)
@@ -335,3 +341,9 @@
 		'icons/spideros_icons/sos_13.png',
 		'icons/spideros_icons/sos_14.png'
 		)
+
+/client/verb/edit_character()
+	set name = "Edit Character"
+	set category = "Preferences"
+	set desc = "Allows you to edit your character and preferences"
+	prefs.ShowChoices(src)

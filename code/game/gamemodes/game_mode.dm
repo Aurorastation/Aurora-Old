@@ -162,11 +162,14 @@ Implants;
 		if(M.client)
 			clients++
 			if(ishuman(M))
+				var/mob/living/carbon/human/H = M
 				if(!M.stat)
 					surviving_humans++
 					if(M.loc && M.loc.loc && M.loc.loc.type in escape_locations)
 						escaped_humans++
-				var/mob/living/carbon/human/H = M
+					if (istype(H.species, /datum/species/machine))
+						var/datum/species/machine/machine = H.species
+						machine.update_tag(H, H.client)
 				if (H.species)
 					switch (H.species.name)
 						if ("Human")

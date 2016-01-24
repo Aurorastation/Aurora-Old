@@ -206,6 +206,10 @@
 	icon_state_broken = "bladder_broken"
 	organ_type = new /obj/item/organ/machine/bladder()
 
+/obj/item/robot_parts/robot_component/ipc_tag
+	name = "IPC tag"
+	organ_type = new /obj/item/organ/machine/ipc_tag()
+
 //
 //Robotic Component Analyser, basically a health analyser for robots
 //
