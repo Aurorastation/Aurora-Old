@@ -330,15 +330,17 @@
 	var/data = "<center><a href='?_src_=holder;CentcommFaxReply=1'>Send New Fax</a></center>"
 	data += "<hr>"
 	data += "<center><b>Received Faxes:</b></center><br>"
-	var/list/faxes = ticker.fax_repository.get_subjects(1)
+	var/list/faxes = ticker.fax_repository.received_faxes
 
-	for (var/i in faxes)
-		data += "<a href='?_src_=holder;CentcommFaxView=[faxes[i]];CentcommFaxReceived=1'>[i]</a><br>"
+	for (var/i = 1, i <= faxes.len, i++)
+		var/list/a = faxes[i]
+		data += "<a href='?_src_=holder;CentcommFaxView=[i];CentcommFaxReceived=1'>#[i] - '[a["subject"]]' from [a["sender"]]</a><br>"
 
-	faxes = ticker.fax_repository.get_subjects(0)
+	faxes = ticker.fax_repository.sent_faxes
 
 	data += "<hr><center><b>Sent Faxes:</b></center><br>"
-	for (var/i in faxes)
-		data += "<a href='?_src_=holder;CentcommFaxView=[faxes[i]];CentcommFaxReceived=0'>[i]</a><br>"
+	for (var/i = 1, i <= faxes.len, i++)
+		var/list/a = faxes[i]
+		data += "<a href='?_src_=holder;CentcommFaxView=[i];CentcommFaxReceived=1'>#[i] - '[a["subject"]]' from [a["sender"]]</a><br>"
 
 	usr << browse("<HTML><HEAD><TITLE>Centcomm Fax History</TITLE></HEAD><BODY>[data]</BODY></HTML>", "window=Centcomm Fax History")

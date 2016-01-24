@@ -28,21 +28,6 @@ var/list/alldepartments = list("Central Command")
 		if (0)
 			return sent_faxes[id]
 
-/datum/fax_repository/proc/get_subjects(var/received = 1)
-	var/list/target_list = null
-	switch (received)
-		if (1)
-			target_list = received_faxes
-		if (0)
-			target_list = sent_faxes
-
-	var/list/return_list = list()
-	for (var/i = 1, i <= target_list.len, i++)
-		return_list.Add(target_list[i]["subject"])
-		return_list[target_list[i]["subject"]] = i
-
-	return return_list
-
 /obj/machinery/faxmachine
 	name = "fax machine"
 	icon = 'icons/obj/library.dmi'
@@ -226,6 +211,8 @@ var/list/alldepartments = list("Central Command")
 
 	var/fax_id = ticker.fax_repository.add_fax(sent, sentname, Sender.name)
 
+	send_to_discord("cciaa_channel", "Received fax from [Sender], with ID [fax_id]. Subject: [sentname].")
+
 	for(var/client/C in admins)
 		var/msg = "\blue <b><font color='orange'>CENTCOMM FAX: </font>"
 		if(C.holder.rights & (R_ADMIN|R_FUN|R_MOD))
@@ -237,8 +224,6 @@ var/list/alldepartments = list("Central Command")
 
 		if(C.holder.rights & (R_ADMIN|R_DUTYOFF|R_FUN))
 			C << msg
-
-	send_to_discord("cciaa_channel", "@everyone Received fax from [Sender]. Subject: [sentname].")
 
 /proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt)
 

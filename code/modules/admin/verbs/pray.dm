@@ -53,7 +53,7 @@
 			else
 				C << "[msg_start][key_name(Sender, 0, 1, 0)][msg_end]"
 
-	send_to_discord("cciaa_channel", "@everyone **Emergency Message** from [Sender]: [text]!")
+	send_to_discord("cciaa_channel", "@everyone **Emergency Message** received from [Sender]: '[text]' !!!")
 
 /proc/Syndicate_announce(var/text , var/mob/Sender)
 	var/msg = copytext(sanitize(text), 1, MAX_MESSAGE_LEN)
