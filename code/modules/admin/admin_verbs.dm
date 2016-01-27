@@ -648,20 +648,21 @@
 	if(!check_rights(R_SERVER|R_STEALTH))
 		return
 
-	var/override
+//	var/override
 
-	switch (alert(usr, "Do you want this to only affect the current round, or do you want the server to stay [world.visibility ? "hidden" : "public"] until toggled again?",,"Only affect this round.", "Stay as chosen until toggled again.", "Reset override."))
-		if ("Only affect this round.")
-			override = 0
-		if ("Stay as chosen until toggled again.")
-			override = 1
-		if ("Reset override.")
-			world.save_visibility(world.visibility, 0)
-			message_admins("[src] has reset the hub [world.visibility ? "public" : "hidden"] override")
-			return
+//	switch (alert(usr, "Do you want this to only affect the current round, or do you want the server to stay [world.visibility ? "hidden" : "public"] until toggled again?",,"Only affect this round.", "Stay as chosen until toggled again.", "Reset override."))
+//		if ("Only affect this round.")
+//			override = 0
+//		if ("Stay as chosen until toggled again.")
+//			override = 1
+//		if ("Reset override.")
+//			world.save_visibility(world.visibility, 0)
+///			message_admins("[src] has reset the hub [world.visibility ? "public" : "hidden"] override")
+//			return
 
-	world.visibility = !world.visibility
+	if (alert(usr, "The server is set as [world.visibility ? "public" : "hidden"], do you want to toggle it?",,"Yes","No") == "yes")
+		world.visibility = !world.visibility
 
-	message_admins("[src] has toggled the hub [world.visibility ? "public" : "hidden"]")
-	world.save_visibility(world.visibility, override)
-	return
+		message_admins("[src] has toggled the hub [world.visibility ? "public" : "hidden"]")
+		world.save_visibility(world.visibility)
+		return
