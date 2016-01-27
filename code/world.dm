@@ -259,17 +259,19 @@ var/master_server_password
 
 /world/proc/load_visibility()
 	var/list/saved_settings = file2list("data/hubsetting.txt")
-	var/list/invisible_days = list("Saturday", "Sunday")
-	if (saved_settings.len == 2)
-		log_misc("Saved visibility is: [saved_settings[1]]; saved override is: [saved_settings[2]].")
-		if (text2num(saved_settings[2]) == 1)
-			world.visibility = text2num(saved_settings[1])
-		else
-			if (time2text(realtime, "Day") in invisible_days)
-				world.visibility = 0
-			else
-				world.visibility = 1
-			save_visibility(world.visibility, 0)
+//	var/list/invisible_days = list("Saturday", "Sunday")
+	log_debug("World loaded with visibility [saved_settings[1]].")
+	world.visibility = text2num(saved_settings[1])
+//	if (saved_settings.len == 2)
+//		log_misc("Saved visibility is: [saved_settings[1]]; saved override is: [saved_settings[2]].")
+//		if (text2num(saved_settings[2]) == 1)
+//			world.visibility = text2num(saved_settings[1])
+//		else
+//			if (time2text(realtime, "Day") in invisible_days)
+//				world.visibility = 0
+//			else
+//				world.visibility = 1
+//			save_visibility(world.visibility, 0)
 
 /world/proc/save_visibility(var/visibility, var/override = 0)
 	var/F = file("data/hubsetting.txt")
