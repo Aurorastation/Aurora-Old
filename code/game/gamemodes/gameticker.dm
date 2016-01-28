@@ -157,12 +157,17 @@ var/global/datum/controller/gameticker/ticker
 	//new random event system is handled from the MC.
 
 	var/admins_number = 0
-	for(var/client/C)
-		if(C.holder)
-			admins_number++
-	if(admins_number == 0)
-		send2adminirc("Round has started with no admins online.")
-		send_to_discord("admin_channel", "@everyone Round has started with no staff online.")
+	var/afk_admins = 0
+	for (var/client/C)
+		if (C.holder && C.holder.rights & (R_ADMIN|R_MOD))
+			if (C.is_afk())
+				afk_admins++
+			else
+				admins_number++
+	if (admins_number == 0)
+		send_to_discord("admin_channel", "@everyone Round has started with no staff online. Gamemode is [master_mode].")
+	else if (admins_number == afk_admins)
+		send_to_discord("admin_channel", "@everyone Round has started with all staff ([admins_number]) AFK. Gamemode is [master_mode].")
 
 	supply_controller.process() 		//Start the supply shuttle regenerating points -- TLE
 	master_controller.process()		//Start master_controller.process()
