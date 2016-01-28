@@ -24,9 +24,15 @@ var/list/alldepartments = list("Central Command")
 
 	switch (received)
 		if (1)
-			return received_faxes[id]
+			if (id > received_faxes.len)
+				return
+			else
+				return received_faxes[id]
 		if (0)
-			return sent_faxes[id]
+			if (id > sent_faxes.len)
+				return
+			else
+				return sent_faxes[id]
 
 /obj/machinery/faxmachine
 	name = "fax machine"
