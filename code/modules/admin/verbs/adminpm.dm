@@ -134,30 +134,25 @@
 		if(X.key != key && X.key != C.key && (X.holder.rights & (R_ADMIN|R_MOD)))
 			X << "<B><font color='blue'>PM: [key_name(src, X, 0)]-&gt;[key_name(C, X, 0)]:</B> \blue [msg]</font>" //inform X
 
-/client/proc/cmd_admin_irc_pm()
+/client/proc/cmd_admin_discord_pm()
 	if(prefs.muted & MUTE_ADMINHELP)
 		src << "<font color='red'>Error: Private-Message: You are unable to use PM-s (muted).</font>"
 		return
 
-	var/msg = input(src,"Message:", "Private message to admins on IRC / 400 character limit") as text|null
+	var/msg = input(src,"Message:", "Private message to admins on Discord") as text|null
 
 	if(!msg)
 		return
 
 	sanitize(msg)
 
-	if(length(msg) > 400) // TODO: if message length is over 400, divide it up into seperate messages, the message length restriction is based on IRC limitations.  Probably easier to do this on the bots ends.
-		src << "\red Your message was not sent because it was more then 400 characters find your message below for ease of copy/pasting"
-		src << "\blue [msg]"
-		return
+	send_to_discord("admin_channel", "PlayerPM from [key_name(src)]: [html_decode(msg)]")
 
-	send2adminirc("PlayerPM from [key_name(src)]: [html_decode(msg)]")
+	src << "<font color='blue'>Discord PM to-<b>Discord-Admins</b>: [msg]</font>"
 
-	src << "<font color='blue'>IRC PM to-<b>IRC-Admins</b>: [msg]</font>"
-
-	log_admin("PM: [key_name(src)]->IRC: [msg]")
+	log_admin("PM: [key_name(src)]->Discord: [msg]")
 	for(var/client/X in admins)
 		if(X == src)
 			continue
 		if(X.holder.rights & (R_ADMIN|R_MOD))
-			X << "<B><font color='blue'>PM: [key_name(src, X, 0)]-&gt;IRC-Admins:</B> \blue [msg]</font>"
+			X << "<B><font color='blue'>PM: [key_name(src, X, 0)]-&gt;Discord-Admins:</B> \blue [msg]</font>"
