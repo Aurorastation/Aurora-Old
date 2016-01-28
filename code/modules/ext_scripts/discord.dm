@@ -1,14 +1,18 @@
 /proc/send_to_discord(var/channel, var/message)
 	if (!config.use_discord_bot)
 		return
+	if (!channel)
+		log_game("send_to_discord() called without channel arg.")
+		return
 
-	if (channel == "admin_channel")
-		channel = config.discord_admin_url
-	else if (channel == "cciaa_channel")
-		channel = config.discord_cciaa_url
+	var/arguments = " --key=\"[config.comms_password]\""
+	arguments += " --channel=\"[channel]\""
+	if (config.discord_bot_host)
+		arguments += " --host=\"[config.discord_bot_host]\""
+	if (config.discord_bot_port)
+		arguments += " --port=\"[config.discord_bot_port]\""
 
-	if (!config.discord_mention_everyone && findtext(message, "@everyone"))
-		replacetextEx(message, "@everyone", "")
+	message = replacetext(message, "\"", "\\\"")
 
-	ext_python("discordbot_message.py", "[config.discord_login] [config.discord_password] [channel] [message]")
+	ext_python("discordbot_message.py", "[arguments] [message]")
 	return
