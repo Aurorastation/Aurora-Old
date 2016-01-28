@@ -324,9 +324,6 @@ class DiscordBot(discord.Client):
 			to = None
 			msg = None
 
-			print(truedata['key'])
-			print(truedata['channel'])
-
 			if truedata.get('key', '') != self.nudge_config['key']:
 				continue
 
