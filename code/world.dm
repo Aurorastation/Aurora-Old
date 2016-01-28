@@ -74,26 +74,10 @@
 
 var/world_topic_spam_protect_ip = "0.0.0.0"
 var/world_topic_spam_protect_time = world.timeofday
-var/master_server_password
 
 /world/Topic(T, addr, master, key)
-	if(addr != topic_safe_address)
-		diary << "TOPIC: \"[T]\", from:[addr], master:[master], key:[key][log_end]"
-/*	else
-		if(T == "ping")
-			return 1 //I just want to know if you're up not the clients connected
-		if(copytext(T,1,9) == "shutdown")
-			var/input[] = params2list(T)
-			if(input["key"] == master_server_password)
-				world << "<font size=4 color='#ff2222'>Server shutdown by master server</font>"
-				log_admin("Master server initiated an immediate shutdown.")
-				feedback_set_details("end_error","immediate shutdown - by master server [addr]")
-				if(blackbox)
-					blackbox.save_all_data_to_sql()
-
-				shutdown()
-				return 1
-*/
+	if (config.log_world_topic)
+		log_game("world/Topic(): T: \"[T]\"; From: [addr]; Master: [master]; Key: [key].")
 
 	if (T == "ping")
 		var/x = 1
@@ -107,6 +91,25 @@ var/master_server_password
 			if(M.client)
 				n++
 		return n
+
+	else if (T == "admins")
+		var/n = 0
+		for (var/client/client in clients)
+			if (client.holder && client.holder.rights & (R_MOD|R_ADMIN))
+				n++
+
+		return n
+
+	else if (T == "docount")
+		var/n = 0
+		for (var/client/client in clients)
+			if (client.holder && (client.holder.rights & R_DUTYOFF) && !(client.holder.rights & R_ADMIN))
+				n++
+
+		return n
+
+	else if (T == "gamemode")
+		return master_mode
 
 	else if (T == "status")
 		var/list/s = list()
@@ -135,7 +138,7 @@ var/master_server_password
 
 		return list2params(s)
 
-	else if(copytext(T,1,9) == "adminmsg")
+	else if (copytext(T,1,9) == "adminmsg")
 		/*
 			We got an adminmsg from IRC bot lets split the input then validate the input.
 			expected output:
@@ -147,53 +150,56 @@ var/master_server_password
 
 
 		var/input[] = params2list(T)
-		if(input["key"] != config.comms_password)
-			if(world_topic_spam_protect_ip == addr && abs(world_topic_spam_protect_time - world.time) < 50)
-
-				spawn(50)
-					world_topic_spam_protect_time = world.time
-					return "Bad Key (Throttled)"
-
-			world_topic_spam_protect_time = world.time
-			world_topic_spam_protect_ip = addr
-
-			return "Bad Key"
+		if (input["key"] != config.comms_password)
+			return do_topic_spam_protection(addr)
 
 		var/client/C
 
-		for(var/client/K in clients)
-			if(K.ckey == input["adminmsg"])
+		for (var/client/K in clients)
+			if(K.ckey == ckey(input["adminmsg"]))
 				C = K
 				break
-		if(!C)
+		if (!C)
 			return "No client with that name on server"
 
-		var/message =	"<font color='red'>IRC-Admin PM from <b><a href='?irc_msg=1'>[C.holder ? "IRC-" + input["sender"] : "Administrator"]</a></b>: [input["msg"]]</font>"
-		var/amessage =  "<font color='blue'>IRC-Admin PM from <a href='?irc_msg=1'>IRC-[input["sender"]]</a> to <b>[key_name(C)]</b> : [input["msg"]]</font>"
+		var/message =	"<font color='red'>Discord-Admin PM from <b><a href='?irc_msg=1'>[C.holder ? "Discord-" + input["sender"] : "Administrator"]</a></b>: [input["msg"]]</font>"
+		var/amessage =  "<font color='blue'>Discord-Admin PM from <a href='?irc_msg=1'>Discord-[input["sender"]]</a> to <b>[key_name(C)]</b> : [input["msg"]]</font>"
 
-		C.received_irc_pm = world.time
-		C.irc_admin = input["sender"]
+		C.received_discord_pm = world.time
+		C.discord_admin = input["sender"]
 
 		C << 'sound/effects/adminhelp.ogg'
 		C << message
 
 
-		for(var/client/A in admins)
-			if(A != C)
+		for (var/client/A in admins)
+			if (A != C)
 				A << amessage
 
 		return "Message Successful"
 
-	else if(copytext(T,1,6) == "notes")
-		/*
-			We got a request for notes from the IRC Bot
-			expected output:
-				1. notes = ckey of person the notes lookup is for
-				2. validationkey = the key the bot has, it should match the gameservers commspassword in it's configuration.
-		*/
+	else if (copytext(T, 1, 8) == "restart")
 		var/input[] = params2list(T)
-		if(input["key"] != config.comms_password)
-			if(world_topic_spam_protect_ip == addr && abs(world_topic_spam_protect_time - world.time) < 50)
+		if (input["key"] == config.comms_password)
+			world << "<font size=4 color='#ff2222'>Server restarting by remote command.</font>"
+			message_admins("World restart initiated by [input["restart"]].")
+			feedback_set_details("end_error","remote restart")
+
+			if (blackbox)
+				blackbox.save_all_data_to_sql()
+
+			sleep(50)
+			log_game("Rebooting due to remote command. Dumping topic call data.")
+			log_game("TOPIC: \"[T]\", from: [addr], master: [master], key: [key][log_end].")
+			world.Reboot(2)
+
+			return "Server successfully restarted."
+		else
+			message_admins("Remote restart attempted and stopped. Dumping topic call data.")
+			message_admins("TOPIC: \"[T]\", from: [addr], master: [master], key: [key][log_end]")
+			log_game("Remote restart attempted and stopped. Dumping topic call data.")
+			log_game("TOPIC: \"[T]\", from: [addr], master: [master], key: [key][log_end]")
+			if (world_topic_spam_protect_ip == addr && abs(world_topic_spam_protect_time - world.time) < 50)
 
 				spawn(50)
 					world_topic_spam_protect_time = world.time
@@ -201,13 +207,72 @@ var/master_server_password
 
 			world_topic_spam_protect_time = world.time
 			world_topic_spam_protect_ip = addr
+
 			return "Bad Key"
 
-		return show_player_info_irc(input["notes"])
+	else if (copytext(T, 1, 9) == "announce")
+		var/input[] = params2list(T)
+		if (input["key"] == config.comms_password)
+			world << "\blue <b>[input["announce"] ? input["announce"] : "Administrator"] Announces Via Discord:</b>\n \t [input["msg"]]"
+			log_admin("Announce Remote: [input["announce"]] : [input["msg"]]")
 
+			return "Announcement successfully sent."
+		else
+			return do_topic_spam_protection(addr)
 
+	else if (copytext(T, 1, 8) == "faxlist")
+		var/input[] = params2list(T)
+		if (input["key"] == config.comms_password)
+			var/list/output = list()
+			if (!ticker || !ticker.fax_repository)
+				output += "error"
+				output["error"] = "Ticker not found!"
+				output = list2params(output)
+				return output
 
+			var/list/faxes = list()
+			switch (input["faxlist"])
+				if ("received")
+					faxes = ticker.fax_repository.received_faxes
+				if ("sent")
+					faxes = ticker.fax_repository.sent_faxes
 
+			if (!faxes || !faxes.len)
+				output += "error"
+				output["error"] = "No faxes found!"
+				output = list2params(output)
+				return output
+
+			for (var/i = 1, i <= faxes.len, i++)
+				var/list/a = faxes[i]
+				output += "ID [i]"
+				output["ID [i]"] = a["subject"]
+
+			output = list2params(output)
+			return output
+		else
+			return do_topic_spam_protection(addr, 1)
+
+	else if (copytext(T, 1, 7) == "getfax")
+		var/input[] = params2list(T)
+		if (input["key"] == config.comms_password)
+			if (!ticker || !ticker.fax_repository)
+				return "Ticker not found!"
+
+			var/list/fax = list()
+			switch (input["received"])
+				if ("received")
+					fax = ticker.fax_repository.get_fax(text2num(input["getfax"]), 1)
+				if ("sent")
+					fax = ticker.fax_repository.get_fax(text2num(input["getfax"]), 0)
+
+			if (!fax || !fax.len)
+				return "No fax with that ID found!"
+
+			fax["data"] = replacetext(fax["data"], "<br>", "\n")
+			return strip_html_properly(fax["data"], 0)
+		else
+			return do_topic_spam_protection(addr)
 
 /world/Reboot(var/reason)
 	/*spawn(0)
@@ -255,9 +320,11 @@ var/master_server_password
 
 /hook/startup/proc/loadVisibility()
 	world.load_visibility()
+	testing("Loading visibility.")
 	return 1
 
 /world/proc/load_visibility()
+	testing("Loading visibility 2.")
 	var/list/saved_settings = file2list("data/hubsetting.txt")
 	var/list/invisible_days = list("Saturday", "Sunday")
 	if (saved_settings.len == 2)
@@ -446,3 +513,34 @@ var/world_timeofday_at_start
 hook/startup/proc/store_timeofday_at_start()
 	world_timeofday_at_start = world.timeofday
 	return 1
+
+/world/proc/do_topic_spam_protection(var/addr, var/return_params = 0)
+	if (!return_params)
+		if (world_topic_spam_protect_ip == addr && abs(world_topic_spam_protect_time - world.time) < 50)
+
+			spawn(50)
+				world_topic_spam_protect_time = world.time
+				return "Bad Key (Throttled)"
+
+		world_topic_spam_protect_time = world.time
+		world_topic_spam_protect_ip = addr
+
+		return "Bad Key"
+	else
+		var/list/output = list()
+		if (world_topic_spam_protect_ip == addr && abs(world_topic_spam_protect_time - world.time) < 50)
+
+			spawn(50)
+				world_topic_spam_protect_time = world.time
+				output += "error"
+				output["error"] = "Bad key (Throttled)"
+				output = list2params(output)
+				return output
+
+		world_topic_spam_protect_time = world.time
+		world_topic_spam_protect_ip = addr
+
+		output += "error"
+		output["error"] = "Bad key"
+		output = list2params(output)
+		return output
