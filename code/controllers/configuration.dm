@@ -143,13 +143,7 @@
 	var/gateway_delay = 18000 //How long the gateway takes before it activates. Default is half an hour.
 	var/ghost_interaction = 0
 
-	var/comms_password = ""
-
-	var/use_irc_bot = 0
-	var/irc_bot_host = ""
-	var/main_irc = ""
-	var/admin_irc = ""
-	var/python_path = "" //Path to the python executable.  Defaults to "python" on windows and "/usr/bin/env python2" on unix
+	var/python_path = "python" //Path to the python executable.  Defaults to "python" on windows and "/usr/bin/env python2" on unix
 	var/use_lib_nudge = 0 //Use the C library nudge instead of the python nudge.
 	var/use_overmap = 0
 	var/invasive_directives = 0
@@ -162,11 +156,11 @@
 	var/list/age_restrictions = list()				// Holds all of the age restrictions for jobs and antag roles in a single associated list
 
 	var/use_discord_bot = 0
-	var/discord_login = ""
-	var/discord_password = ""
-	var/discord_mention_everyone = 1
-	var/discord_admin_url = ""
-	var/discord_cciaa_url = ""
+	var/discord_bot_host = "localhost"
+	var/discord_bot_port = 0
+	var/comms_password = ""
+
+	var/log_world_topic = 0
 
 /datum/configuration/New()
 	var/list/L = typesof(/datum/game_mode) - /datum/game_mode
@@ -435,9 +429,6 @@
 				if("allow_holidays")
 					Holiday = 1
 
-				if("use_irc_bot")
-					use_irc_bot = 1
-
 				if("ticklag")
 					Ticklag = text2num(value)
 
@@ -489,18 +480,6 @@
 				if("uneducated_mice")
 					config.uneducated_mice = 1
 
-				if("comms_password")
-					config.comms_password = value
-
-				if("irc_bot_host")
-					config.irc_bot_host = value
-
-				if("main_irc")
-					config.main_irc = value
-
-				if("admin_irc")
-					config.admin_irc = value
-
 				if("python_path")
 					if(value)
 						config.python_path = value
@@ -543,20 +522,17 @@
 				if ("use_discord_bot")
 					config.use_discord_bot = 1
 
-				if ("discord_login")
-					config.discord_login = value
+				if ("discord_bot_host")
+					config.discord_bot_host = value
 
-				if ("discord_password")
-					config.discord_password = value
+				if ("discord_bot_port")
+					config.discord_bot_port = value
 
-				if ("discord_mention_everyone")
-					config.discord_mention_everyone = text2num(value)
+				if ("comms_password")
+					config.comms_password = value
 
-				if ("discord_admin_url")
-					config.discord_admin_url = value
-
-				if ("discord_cciaa_url")
-					config.discord_cciaa_url = value
+				if ("log_world_topic")
+					config.log_world_topic = 1
 
 				else
 					log_misc("Unknown setting in configuration: '[name]'")
