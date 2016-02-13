@@ -1,5 +1,5 @@
 
-datum/admins/proc/DB_ban_record(var/bantype, var/mob/banned_mob, var/duration = -1, var/reason, var/job = "", var/rounds = 0, var/banckey = null, var/autobanner = 0, var/autoip = null, var/autocid = null)
+datum/admins/proc/DB_ban_record(var/bantype, var/mob/banned_mob, var/duration = -1, var/reason, var/job = "", var/rounds = 0, var/banckey = null, var/autobanner = 0, var/autoip = null, var/autocid = null, var/mirrorid = null)
 
 	if(!check_rights(R_MOD,0) && !check_rights(R_BAN) && !autobanner)	return
 
@@ -88,9 +88,14 @@ datum/admins/proc/DB_ban_record(var/bantype, var/mob/banned_mob, var/duration = 
 
 	reason = sql_sanitize_text(reason)
 
-	var/sql = "INSERT INTO ss13_ban (`id`,`bantime`,`serverip`,`bantype`,`reason`,`job`,`duration`,`rounds`,`expiration_time`,`ckey`,`computerid`,`ip`,`a_ckey`,`a_computerid`,`a_ip`,`who`,`adminwho`,`edits`,`unbanned`,`unbanned_datetime`,`unbanned_ckey`,`unbanned_computerid`,`unbanned_ip`) VALUES (null, Now(), '[serverip]', '[bantype_str]', '[reason]', '[job]', [(duration)?"[duration]":"0"], [(rounds)?"[rounds]":"0"], Now() + INTERVAL [(duration>0) ? duration : 0] MINUTE, '[ckey]', '[computerid]', '[ip]', '[a_ckey]', '[a_computerid]', '[a_ip]', '[who]', '[adminwho]', '', null, null, null, null, null)"
+	message_admins("Mirror ID: [mirrorid ? mirrorid : "NOT A MIRROR!"].")
+	world.log << "Mirror ID: [mirrorid ? mirrorid : "NOT A MIRROR!"]."
+
+	var/sql = "INSERT INTO ss13_ban (`id`,`mirrorid`,`bantime`,`serverip`,`bantype`,`reason`,`job`,`duration`,`rounds`,`expiration_time`,`ckey`,`computerid`,`ip`,`a_ckey`,`a_computerid`,`a_ip`,`who`,`adminwho`,`edits`,`unbanned`,`unbanned_datetime`,`unbanned_ckey`,`unbanned_computerid`,`unbanned_ip`) VALUES (null, [mirrorid ? "'[mirrorid]'" : "null"], Now(), '[serverip]', '[bantype_str]', '[reason]', '[job]', [(duration)?"[duration]":"0"], [(rounds)?"[rounds]":"0"], Now() + INTERVAL [(duration>0) ? duration : 0] MINUTE, '[ckey]', '[computerid]', '[ip]', '[a_ckey]', '[a_computerid]', '[a_ip]', '[who]', '[adminwho]', '', null, null, null, null, null)"
 	var/DBQuery/query_insert = dbcon.NewQuery(sql)
 	query_insert.Execute()
+	if (query_insert.ErrorMsg())
+		message_admins("ERROR: [query_insert.ErrorMsg()].")
 	usr << "\blue Ban saved to database."
 	message_admins("[autobanner ? "Adminbot" : key_name_admin(usr)] has added a [bantype_str] for [ckey] [(job)?"([job])":""] [(duration > 0)?"([duration] minutes)":""] with the reason: \"[reason]\" to the ban database.",1)
 
@@ -127,7 +132,7 @@ datum/admins/proc/DB_ban_unban(var/ckey, var/bantype, var/job = "")
 	else
 		bantype_sql = "bantype = '[bantype_str]'"
 
-	var/sql = "SELECT id FROM ss13_ban WHERE ckey = '[ckey]' AND [bantype_sql] AND (unbanned is null OR unbanned = false)"
+	var/sql = "SELECT id, mirrorid FROM ss13_ban WHERE ckey = '[ckey]' AND [bantype_sql] AND (unbanned is null OR unbanned = false)"
 	if(job)
 		sql += " AND job = '[job]'"
 
@@ -136,12 +141,14 @@ datum/admins/proc/DB_ban_unban(var/ckey, var/bantype, var/job = "")
 		return
 
 	var/ban_id
+	var/mirrorid
 	var/ban_number = 0 //failsafe
 
 	var/DBQuery/query = dbcon.NewQuery(sql)
 	query.Execute()
 	while(query.NextRow())
 		ban_id = query.item[1]
+		mirrorid = text2num(query.item[2])
 		ban_number++;
 
 	if(ban_number == 0)
@@ -158,7 +165,24 @@ datum/admins/proc/DB_ban_unban(var/ckey, var/bantype, var/job = "")
 		usr << "\red Database update failed due to a ban ID mismatch. Contact the database admin."
 		return
 
-	DB_ban_unban_by_id(ban_id)
+	if (mirrorid)
+		if (alert(usr, "This ban is mirrored from another ban. Do you wish to lift the original, or this one specifically?", "Original Ban?", "Lift The Original", "Lift This One") == "Lift The Original")
+			ban_id = mirrorid
+
+	var/mirrored = 0
+	var/DBQuery/mirrorquery = dbcon.NewQuery("SELECT id FROM ss13_ban WHERE mirrorid = '[ban_id]' AND (unbanned is null OR unbanned = false);")
+	mirrorquery.Execute()
+	if (mirrorquery.ErrorMsg())
+		message_admins("Error: [mirrorquery.ErrorMsg()].")
+	while (mirrorquery.NextRow())
+		mirrored++
+
+	var/liftmirrored = 0
+	if (mirrored)
+		if (alert(usr, "Do you wish to lift [mirrored] mirrored ban(s) tied to this one?", "Mirrored Bans", "Yes", "No") == "Yes")
+			liftmirrored = 1
+
+	DB_ban_unban_by_id(ban_id, liftmirrored)
 
 datum/admins/proc/DB_ban_edit(var/banid = null, var/param = null)
 
@@ -220,7 +244,7 @@ datum/admins/proc/DB_ban_edit(var/banid = null, var/param = null)
 			usr << "Cancelled"
 			return
 
-datum/admins/proc/DB_ban_unban_by_id(var/id)
+datum/admins/proc/DB_ban_unban_by_id(var/id, var/liftmirrored = 0)
 
 	if(!check_rights(R_BAN))	return
 
@@ -260,6 +284,11 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 	var/DBQuery/query_update = dbcon.NewQuery(sql_update)
 	query_update.Execute()
 
+	if (liftmirrored)
+		var/DBQuery/updatemirrored = dbcon.NewQuery("UPDATE ss13_ban SET unbanned = 1, unbanned_datetime = Now(), unbanned_ckey = '[unban_ckey]', unbanned_computerid = '[unban_computerid]', unbanned_ip = '[unban_ip]' WHERE mirrorid = [id];")
+		updatemirrored.Execute()
+		if (updatemirrored.ErrorMsg())
+			message_admins("Error: [updatemirrored.ErrorMsg()].")
 
 /client/proc/DB_ban_panel()
 	set category = "Admin"
