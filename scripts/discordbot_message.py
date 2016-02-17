@@ -1,34 +1,49 @@
-import discord
+# nudge.py --channel="nudges|ahelps" --id="Server ID" --key="access key" Message! More message!
+# Credit to the gents at VGStation13 for this code.
+
 import sys
+import pickle
+import socket
+import argparse
+import html
 
-client = discord.Client()
+def pack(host, port, key, channel, message):
 
-def run_bot():
-	global invite
-	global message
-	global client
+    data = {}
 
-	login = sys.argv[1]
-	password = sys.argv[2]
-	invite_url = sys.argv[3]
+    data['key'] = key
+    data['channel'] = channel
 
-	message = sys.argv[4]
-	if len(sys.argv) > 5:
-		for in_data in sys.argv[5:]:
-			message += " " + in_data
+    try:
+        d = []
+        for in_data in message:  # The rest of the arguments is data
+            d += [html.unescape(in_data)]
+        data['data'] = ' '.join(d)
 
-	client.login(login, password)
-	invite = client.get_invite(invite_url)
+        # Buffer overflow prevention.
+        if len(data['data']) > 400:
+            data['data'] = data['data'][:400]
+    except:
+        data['data'] = "NO DATA SPECIFIED"
+    pickled = pickle.dumps(data)
+    nudge(host, port, pickled)
 
-	client.run()
+def nudge(hostname, port, data):
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((hostname, port))
+    s.send(data)
+    s.close()
 
-@client.event
-def on_ready():
-	client.accept_invite(invite)
-	client.send_message(invite.channel, message)
+if __name__ == "__main__" and len(sys.argv) > 1:  # If not imported and more than one argument
+    argp = argparse.ArgumentParser()
 
-	client.logout()
-	sys.exit()
+    argp.add_argument('message', nargs='*', type=str, help='String to send to the server.')
 
-if __name__ == "__main__" and len(sys.argv) > 3:
-	run_bot()
+    argp.add_argument('--host', dest='hostname', default='localhost', help='Hostname expecting a nudge.')
+    argp.add_argument('--port', dest='port', type=int, default=5555, help='Port expecting a nudge.')
+    argp.add_argument('--channel', dest='channel', default='lobby', help='Channel flag to direct this message to.')
+    argp.add_argument('--key', dest='key', default='', help='Access key of the bot or receiving script.')
+
+    args = argp.parse_args()
+
+    pack(args.hostname, args.port, args.key, args.channel, args.message)

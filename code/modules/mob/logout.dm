@@ -2,14 +2,18 @@
 	nanomanager.user_logout(src) // this is used to clean up (remove) this user's Nano UIs
 	player_list -= src
 	log_access("Logout: [key_name(src)]")
-	if(admin_datums[src.ckey])
+	if (admin_datums[src.ckey])
 		if (ticker && ticker.current_state == GAME_STATE_PLAYING) //Only report this stuff if we are currently playing.
-			var/admins_number = admins.len
+
+			var/admins_number = 0
+			for (var/client/C)
+				if (C.holder && C.holder.rights & (R_ADMIN|R_MOD))
+					admins_number++
 
 			message_admins("Admin logout: [key_name(src)]")
 			message_mods("Staff logout: [key_name(src)]")
-			if(admins_number == 0) //Apparently the admin logging out is no longer an admin at this point, so we have to check this towards 0 and not towards 1. Awell.
-				send2adminirc("[key_name(src)] logged out - no more admins online.")
+			if (admins_number == 0) //Apparently the admin logging out is no longer an admin at this point, so we have to check this towards 0 and not towards 1. Awell.
+				send_to_discord("admin_channel", "[key_name(src)] logged out - no more admins or mods online.")
 	..()
 
 	return 1
