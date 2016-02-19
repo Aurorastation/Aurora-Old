@@ -41,7 +41,7 @@
 
 /obj/item/borg/upgrade/rename
 	name = "robot reclassification board"
-	desc = "Used to rename a cyborg."
+	desc = "Used to rename a cyborg. Use a pen, click the board, or simply insert to set the desired name of a Cyborg."
 	icon_state = "cyborg_upgrade1"
 	construction_cost = list("metal"=35000)
 	var/heldname = "default name"
@@ -49,11 +49,20 @@
 /obj/item/borg/upgrade/rename/attack_self(mob/user as mob)
 	heldname = stripped_input(user, "Enter new robot name", "Robot Reclassification", heldname, MAX_NAME_LEN)
 
+/obj/item/borg/upgrade/rename/attackby(var/obj/item/W as obj, var/mob/user as mob)
+	if (istype(W, /obj/item/weapon/pen))
+		heldname = stripped_input(user, "Enter new robot name", "Robot Reclassification", heldname, MAX_NAME_LEN)
+
 /obj/item/borg/upgrade/rename/action(var/mob/living/silicon/robot/R)
 	if(..()) return 0
-	R.name = heldname
-	R.custom_name = heldname
-	R.real_name = heldname
+	if(heldname == "default name")
+		R << "You may now use the name pick verb."
+		R.custom_name = null
+		R.Namepick()
+	else
+		R.name = heldname
+		R.custom_name = heldname
+		R.real_name = heldname
 
 	return 1
 
