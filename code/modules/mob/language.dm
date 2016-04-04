@@ -251,6 +251,16 @@
 	new_name += " [pick(list("the Void","the Sky","Encroaching Night","Planetsong","Starsong","the Wandering Star","the Empty Day","Daybreak","Nightfall","the Rain"))]"
 	return new_name
 
+/datum/language/machine
+	name = "Encoded Audio Language"
+	desc = "A fast paced array of beeps and buzzes."
+	speech_verb = "beeps"
+	whisp = "softly beeps"
+	colour = "machine"
+	key = "y"
+	flags = RESTRICTED
+	syllables = list("00","01","10","11") // Beep boop. I am a robit.
+
 /datum/language/common
 	name = "Ceti Basic"
 	desc = "The common galactic tongue."

@@ -577,7 +577,7 @@ See code\modules\mob\new_player\preferences_setup.dm for where it's used.
 
 	icobase = 'icons/mob/human_races/r_machine.dmi'
 	deform = 'icons/mob/human_races/r_machine.dmi'
-	language = "Tradeband"
+	language = "Encoded Audio Language"
 	unarmed_type = /datum/unarmed_attack/punch
 	rarity_value = 2
 
