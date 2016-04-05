@@ -189,6 +189,10 @@ h1.alert, h2.alert {
 .solcom {
   color: #22228B;
 }
+.machine {
+  color: #444444;
+  font-weight: bold;
+}
 .changeling {
   color: #800080;
 }
