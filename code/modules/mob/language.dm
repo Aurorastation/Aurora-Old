@@ -255,7 +255,8 @@
 	name = "Encoded Audio Language"
 	desc = "A fast paced array of beeps and buzzes."
 	speech_verb = "beeps"
-	whisp = "softly beeps"
+	whisper_verb = "softly beeps"
+	exclaim_verb = "loudly beeps"
 	colour = "machine"
 	key = "y"
 	flags = RESTRICTED
