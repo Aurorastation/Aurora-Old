@@ -1,3 +1,7 @@
+# This codebase is old and no longer maintained!
+
+## We have moved over to the new codebase that can be found [here](https://github.com/Aurorastation/Aurora.3).
+
 # Aurorastation
 
 [Aurorastation Forums](http://auroraserver.freeforums.net/)
