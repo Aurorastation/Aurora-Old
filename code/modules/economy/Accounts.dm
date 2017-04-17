@@ -6,9 +6,49 @@
 	var/money = 0
 	var/list/transaction_log = list()
 	var/suspended = 0
+	var/isdepartmental = 0
 	var/security_level = 0	//0 - auto-identify from worn ID, require only account number
 							//1 - require manual login / account number and pin
 							//2 - require card and manual login
+
+/datum/money_account/proc/checkbalance(var/amount)
+	return money >= amount
+
+/datum/money_account/proc/transferto(var/amount, var/reason, var/source)
+	if (suspended)
+		return 0
+
+	if (amount < 0)
+		amount = !amount
+
+	money += amount
+	var/datum/transaction/A = new(owner_name, reason, amount, source)
+	transaction_log += A
+	return 1
+
+/datum/money_account/proc/transferfrom(var/datum/money_account/targetaccount, var/amount, var/reason, var/source)
+	if (!targetaccount || !amount || !reason || !source)
+		return 0
+
+	if (suspended)
+		return 0
+
+	if (!(targetaccount in all_money_accounts))
+		return 0
+
+	if (!checkbalance(amount))
+		return 0
+
+	if (!targetaccount.transferto(amount, reason, source))
+		return 0
+
+	if (amount < 0)
+		amount = !amount
+
+	money -= amount
+	var/datum/transaction/A = new(owner_name, reason, !amount, source)
+	transaction_log += A
+	return 1
 
 /datum/transaction
 	var/target_name = ""
@@ -17,6 +57,23 @@
 	var/date = ""
 	var/time = ""
 	var/source_terminal = ""
+
+/datum/transaction/New(var/target, var/reason, var/newamount, var/source)
+	..()
+	if (target)
+		target_name = target
+	if (reason)
+		purpose = reason
+	if (amount)
+		if (amount > 0)
+			amount = "[newamount]"
+		else
+			amount = "([newamount])"
+	if (source)
+		source_terminal = source
+
+	date = current_date_string
+	time = worldtime2text()
 
 /proc/create_account(var/new_owner_name = "Default user", var/starting_funds = 0, var/obj/machinery/account_database/source_db)
 
@@ -79,6 +136,9 @@
 /proc/charge_to_account(var/attempt_account_number, var/source_name, var/purpose, var/terminal_id, var/amount)
 	for(var/datum/money_account/D in all_money_accounts)
 		if(D.account_number == attempt_account_number && !D.suspended)
+			if (!D.checkbalance(amount))
+				return 0
+
 			D.money += amount
 
 			//create a transaction log entry

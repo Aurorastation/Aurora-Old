@@ -117,6 +117,7 @@ var/global/economy_init = 0
 		station_account.account_number = rand(111111, 999999)
 		station_account.remote_access_pin = rand(1111, 111111)
 		station_account.money = 75000
+		station_account.isdepartmental = 1
 
 		//create an entry in the account transaction log for when it was created
 		var/datum/transaction/T = new()
@@ -139,6 +140,7 @@ var/global/economy_init = 0
 	department_account.account_number = rand(111111, 999999)
 	department_account.remote_access_pin = rand(1111, 111111)
 	department_account.money = 5000
+	department_account.isdepartmental = 1
 
 	//create an entry in the account transaction log for when it was created
 	var/datum/transaction/T = new()
